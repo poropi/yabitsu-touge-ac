@@ -2,6 +2,7 @@ import numpy as np
 
 from . import features as ft
 from . import meshgen as mg
+from . import trees as tree_mod
 from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 
 GROUP = "yabitsu_s1"
@@ -42,3 +43,9 @@ def add_features(m, sec, feats):
             m.add_mesh(GROUP, f"1WALL_s1_rail_{k:03d}", *col, "guardrail", renderable=False)
         else:
             m.add_mesh(GROUP, f"1WALL_s1_retaining_{k:03d}", *ft.retaining_wall_mesh(sec, f), "concrete")
+
+
+def add_trees(m, trees):
+    ids = tree_mod.chunk_ids(trees)
+    for k, cid in enumerate(np.unique(ids)):
+        m.add_mesh(GROUP, f"TREES_s1_{k:03d}", *tree_mod.cards(trees[ids == cid]), "tree")
