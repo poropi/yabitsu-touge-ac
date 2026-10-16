@@ -1,4 +1,6 @@
 import numpy as np
+import shapely
+from shapely.geometry import Polygon
 
 from .crosssection import GUTTER_DEPTH, GUTTER_WIDTH, SKIRT_DEPTH, surface_height
 
@@ -95,3 +97,15 @@ def wall_ribbon(sec, sl, side, lat_bottom, lat_top, z_bottom, z_top):
     lat = np.stack([side * np.asarray(lat_bottom, float), side * np.asarray(lat_top, float)], 1)
     z = np.stack([np.asarray(z_bottom, float), np.asarray(z_top, float)], 1)
     return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], u_scale=2.0, flip=side < 0)
+
+
+def pad_mesh(polygon, z):
+    tris = shapely.constrained_delaunay_triangles(Polygon(polygon))
+    verts, faces = [], []
+    for t in tris.geoms:
+        c = np.asarray(t.exterior.coords)[:3]
+        if (c[1, 0] - c[0, 0]) * (c[2, 1] - c[0, 1]) - (c[1, 1] - c[0, 1]) * (c[2, 0] - c[0, 0]) < 0:
+            c = c[::-1]
+        b = len(verts); verts += [(p[0], p[1], z) for p in c]; faces.append((b, b + 1, b + 2))
+    v = np.array(verts, float)
+    return v, np.array(faces, np.int32), v[:, :2] / 4.0

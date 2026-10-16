@@ -19,6 +19,8 @@ def main():
     assembly.add_features(m, sec, features.load_features_csv(config.DATA_MANUAL / "s1_features.csv"))
     pads = json.loads((P / "s1_pads.json").read_text(encoding="utf-8"))
     assembly.add_trees(m, trees.scatter(near, pads))
+    assembly.add_pads(m, pads)
+    assembly.add_layout_objects(m, sec, pads)
     print(m.save()); print(m.summary())
 
 

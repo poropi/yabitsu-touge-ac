@@ -2,6 +2,7 @@ import numpy as np
 
 from . import features as ft
 from . import meshgen as mg
+from . import s1_layouts
 from . import trees as tree_mod
 from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 
@@ -49,3 +50,14 @@ def add_trees(m, trees):
     ids = tree_mod.chunk_ids(trees)
     for k, cid in enumerate(np.unique(ids)):
         m.add_mesh(GROUP, f"TREES_s1_{k:03d}", *tree_mod.cards(trees[ids == cid]), "tree")
+
+
+def add_pads(m, pads):
+    for k, p in enumerate(pads):
+        m.add_mesh(GROUP, f"1ROAD_s1_pad_{k:02d}", *mg.pad_mesh(p["polygon"], p["z"]), "asphalt")
+
+
+def add_layout_objects(m, sec, pads):
+    for name, direction in s1_layouts.LAYOUTS.items():
+        for d in s1_layouts.layout_objects(sec, pads, direction):
+            m.add_empty(f"{name}_objects", d)
