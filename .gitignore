@@ -1,3 +1,8 @@
 .venv/
 __pycache__/
 .superpowers/
+data/raw/
+data/processed/
+export/
+blender/*.blend1
+*.kn5
