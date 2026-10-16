@@ -1,5 +1,6 @@
 import numpy as np
 import shapely
+from scipy.ndimage import distance_transform_edt
 from scipy.spatial import cKDTree
 from shapely.geometry import Polygon
 
@@ -40,7 +41,11 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None):
     cr_ = np.full(sec.n, CUT_SLOPE) if cut_right is None else np.asarray(cut_right)
     cut = np.where(left, cl_[idx], cr_[idx])
     z = np.clip(np.ravel(Z_nat), z_edge - FILL_SLOPE * e, z_edge + cut * e)
-    z = np.where(e == 0, surface_height(np.clip(lat, -hw, hw), zc, sl, cr) - UNDER_DEPTH, z)
+    # 道の下は、外側の切り土の斜面を内側へ延長した高さにする。境目をまたぐ三角形が同じ斜面上に乗り、
+    # 側溝や路面の上に地形がはみ出さない
+    e_in = np.maximum(form - np.abs(lat), 0)
+    z_under = np.minimum(surface_height(np.clip(lat, -hw, hw), zc, sl, cr) - UNDER_DEPTH, z_edge - cut * e_in)
+    z = np.where(e == 0, z_under, z)
     if pads:
         pts = shapely.points(np.c_[np.ravel(X), np.ravel(Y)])
         for p in pads:
@@ -65,12 +70,17 @@ def grid_mesh_chunks(xs, ys, Z, face_keep, block=100, uv_scale=8.0):
     return out
 
 
+def fill_nan_nearest(Z):
+    m = np.isnan(Z)
+    if not m.any():
+        return Z
+    idx = distance_transform_edt(m, return_distances=False, return_indices=True)
+    return Z[tuple(idx)]
+
+
 def _sample(sampler, unproject, X, Y):
     lat, lon = unproject(X.ravel(), Y.ravel())
-    z = sampler.sample(lat, lon)
-    if np.isnan(z).any():
-        z[np.isnan(z)] = np.nanmedian(z)
-    return z.reshape(X.shape)
+    return fill_nan_nearest(sampler.sample(lat, lon).reshape(X.shape))
 
 
 def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local):

@@ -12,7 +12,7 @@ from . import geo
 DEFAULT_WIDTH_BY_LANES = {0: 4.0, 1: 4.0, 2: 6.0}
 GUTTER_WIDTH = 0.6
 GUTTER_DEPTH = 0.12
-SKIRT_DEPTH = 0.5
+SKIRT_DEPTH = 1.0  # 盛り土側で地形と側溝の縁の間にすき間が見えないよう、縁から下へ垂らす深さ
 CROWN_SLOPE = 0.02
 
 

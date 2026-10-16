@@ -108,4 +108,6 @@ class FallbackSampler:
 
 def default_sampler(cache=None):
     cache = cache or TileCache()
-    return FallbackSampler([DemSampler(cache, "dem5a_png", 15), DemSampler(cache, "dem10b_png", 14)])
+    # 5m（航空レーザー）→ 5m（写真測量）→ 10m の順に補う
+    return FallbackSampler([DemSampler(cache, "dem5a_png", 15), DemSampler(cache, "dem5b_png", 15),
+                            DemSampler(cache, "dem_png", 14)])

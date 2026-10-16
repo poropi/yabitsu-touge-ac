@@ -35,7 +35,8 @@ def test_under_road_is_below_surface():
     sec = _straight()
     X, Y = _pts(sec, [0.0, 2.9, -3.3])
     Z, E = tr.carve(X, Y, np.full_like(X, 300.0), sec)
-    assert (E == 0).all() and Z[0, 0] == pytest.approx(100.0 - tr.UNDER_DEPTH)
+    surf = cs.surface_height(np.array([0.0, 2.9, -3.3]).clip(-3, 3), 100.0, sec.slope[100], sec.crown[100])
+    assert (E == 0).all() and (Z[0] <= surf - tr.UNDER_DEPTH + 1e-9).all()
 
 
 def test_beyond_section_end_is_natural():
@@ -63,3 +64,19 @@ def test_grid_mesh_chunks_respect_keep_and_vertex_limit():
     v, f, _ = chunks[0]
     from yabitsu.meshgen import face_normals
     assert (face_normals(v, f)[:, 2] > 0).all()
+
+
+def test_no_teeth_across_formation_edge_on_cut_side():
+    # 道の端の内側と外側の格子点を結ぶ三角形が、側溝の外側の縁より上に出ないこと
+    sec = _straight()
+    X, Y = _pts(sec, [3.0, 4.6])
+    Z, _ = tr.carve(X, Y, np.full_like(X, 200.0), sec)
+    z_edge = cs.surface_height(3.0, 100.0, sec.slope[100], sec.crown[100])
+    z_at_form = Z[0, 0] + (Z[0, 1] - Z[0, 0]) * (3.6 - 3.0) / (4.6 - 3.0)
+    assert z_at_form <= z_edge + 0.02
+
+
+def test_nan_filled_with_nearest_value():
+    Z = np.array([[1.0, 2.0, np.nan], [4.0, np.nan, 6.0]])
+    out = tr.fill_nan_nearest(Z)
+    assert not np.isnan(out).any() and out[0, 2] in (2.0, 6.0) and out[1, 1] in (2.0, 4.0, 6.0)

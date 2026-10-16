@@ -78,3 +78,8 @@ class _Const:
 def test_fallback_fills_nan():
     out = gsi.FallbackSampler([_Const(np.nan), _Const(5.0)]).sample(np.array([1.0, 2.0]), np.array([3.0, 4.0]))
     assert np.allclose(out, 5.0)
+
+
+def test_default_sampler_uses_real_gsi_layer_names():
+    s = gsi.default_sampler(gsi.TileCache(fetch=lambda u: (404, b""), delay=0))
+    assert [(d.layer, d.z) for d in s.samplers] == [("dem5a_png", 15), ("dem5b_png", 15), ("dem_png", 14)]
