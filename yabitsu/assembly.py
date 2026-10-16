@@ -1,6 +1,7 @@
 import numpy as np
 
 from . import meshgen as mg
+from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 
 GROUP = "yabitsu_s1"
 
@@ -21,3 +22,12 @@ def add_road(m, sec, rows_per_chunk=200):
         v, f, uv = mg.compact(*mg.line(sec, sl, np.zeros(i1 - i0 + 1), dash=(5.0, 5.0), row_mask=sec.lanes[sl][:-1] >= 2))
         if len(f):
             m.add_mesh(GROUP, f"LINES_s1_centre_{k:02d}", v, f, uv, "line_white")
+
+
+def add_terrain(m, near, far):
+    D = near["D"]
+    keep = (D[:-1, :-1] <= NEAR_BAND) & (D[:-1, 1:] <= NEAR_BAND) & (D[1:, 1:] <= NEAR_BAND) & (D[1:, :-1] <= NEAR_BAND)
+    for k, (v, f, uv) in enumerate(grid_mesh_chunks(near["xs"], near["ys"], near["Z"], keep)):
+        m.add_mesh(GROUP, f"1GRASS_s1_terrain_{k:03d}", v, f, uv, "ground")
+    for k, (v, f, uv) in enumerate(grid_mesh_chunks(far["xs"], far["ys"], far["Z"], far["Dc"] >= FAR_HOLE, block=50, uv_scale=40.0)):
+        m.add_mesh(GROUP, f"TERRAIN_FAR_s1_{k:02d}", v, f, uv, "ground")
