@@ -1,5 +1,6 @@
 import numpy as np
 
+from . import features as ft
 from . import meshgen as mg
 from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 
@@ -31,3 +32,13 @@ def add_terrain(m, near, far):
         m.add_mesh(GROUP, f"1GRASS_s1_terrain_{k:03d}", v, f, uv, "ground")
     for k, (v, f, uv) in enumerate(grid_mesh_chunks(far["xs"], far["ys"], far["Z"], far["Dc"] >= FAR_HOLE, block=50, uv_scale=40.0)):
         m.add_mesh(GROUP, f"TERRAIN_FAR_s1_{k:02d}", v, f, uv, "ground")
+
+
+def add_features(m, sec, feats):
+    for k, f in enumerate(feats):
+        if f.type == "guardrail":
+            vis, col = ft.guardrail_meshes(sec, f)
+            m.add_mesh(GROUP, f"GUARDRAIL_s1_{k:03d}", *vis, "guardrail")
+            m.add_mesh(GROUP, f"1WALL_s1_rail_{k:03d}", *col, "guardrail", renderable=False)
+        else:
+            m.add_mesh(GROUP, f"1WALL_s1_retaining_{k:03d}", *ft.retaining_wall_mesh(sec, f), "concrete")
