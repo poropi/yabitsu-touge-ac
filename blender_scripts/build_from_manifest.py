@@ -1,5 +1,6 @@
 import argparse
 import json
+import shutil
 import sys
 from pathlib import Path
 
@@ -86,6 +87,11 @@ def main():
     if a.fbx:
         Path(a.fbx).parent.mkdir(parents=True, exist_ok=True)
         bpy.ops.export_scene.fbx(filepath=str(Path(a.fbx).resolve()), use_selection=False, **FBX_SETTINGS)
+        # ksEditor は FBX の隣の texture/ からテクスチャを探す（.fbm は見ない）
+        tex_dir = Path(a.fbx).resolve().parent / "texture"; tex_dir.mkdir(exist_ok=True)
+        for img in bpy.data.images:
+            if img.filepath:
+                shutil.copy2(bpy.path.abspath(img.filepath), tex_dir / Path(img.filepath).name)
         print(f"FBX {a.fbx}")
 
 
