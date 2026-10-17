@@ -50,6 +50,7 @@ def test_s1_road_unchanged_beyond_join():
         assert abs(sec.z[m][i] - z) <= 0.1, (s_local, sec.z[m][i] - z)
 
 
+@pytest.mark.skipif(not (config.DATA_MANUAL / "layouts.json").exists(), reason="layouts.json（Task 4）がまだない")
 def test_s1_layout_objects_unchanged():
     from yabitsu import layouts
     sec, pads, bounds = _track()
