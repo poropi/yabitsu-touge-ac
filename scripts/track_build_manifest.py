@@ -26,7 +26,9 @@ def main():
                              gaps=[z.main_skip for z in sps])
     from yabitsu import crosssection as cs
     assembly.add_bay_lines(m, sec, cs.parse_bay_rows(track.load_section_rows("busbays", bounds)))
-    assembly.add_features(m, sec, features.load_features_rows(track.load_section_rows("features", bounds)))
+    pads0 = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
+    stubs, feats = nagoki.track_stubs(sec, pads0, features.load_features_rows(track.load_section_rows("features", bounds)))
+    assembly.add_features(m, sec, feats)   # 分かれ道の入口で切った壁・ガードレール
     for name, v, f, uv, mat in pavements.meshes(sec, pavements.load_rows(
             assembly._cut_rows(track.load_section_rows("pavements", bounds), [z.main_skip for z in sps]))):
         m.add_mesh(assembly.GROUP, name, v, f, uv, mat)
@@ -48,8 +50,7 @@ def main():
     sampler = gsi.default_sampler()
     base_pads = [p for p in pads if p.get("kind") != "stub"]
     from shapely.ops import unary_union as _uu
-    excl = _uu([tw.region] + [z.area() for z in sps])
-    stubs = side_roads.for_track(sec, base_pads, sampler, exclude=excl)
+    # stubs は上で作った（入口は本線と歩道から離してある）
     assembly.add_meshes(m, side_roads.stub_meshes(stubs))
     from yabitsu import geo
     for k, (la, lo) in enumerate(json.loads((config.DATA_MANUAL / "s3_side_crosswalks.json").read_text(encoding="utf-8"))):

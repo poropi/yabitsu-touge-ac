@@ -48,6 +48,35 @@ def load_features_csv(path):
         return load_features_rows(list(csv.DictReader(f)))
 
 
+CUT_TYPES = ("retaining_wall", "parapet", "fence", "hedge", "guardrail")
+
+
+MIN_PIECE_M = 3.0   # 切ったあとの切れ端はこれより短ければ作らない
+
+
+def cut_at(feats, gaps):
+    """分かれ道の入口（gaps = {"L": [(s0, s1)], "R": [...]}）で、壁・欄干・柵・生け垣・ガードレールを切る。歩道などはそのまま。"""
+    out = []
+    for f in feats:
+        pieces = [(f.s_from, f.s_to)]
+        if f.type in CUT_TYPES:
+            for g0, g1 in gaps.get(f.side, []):
+                nxt = []
+                for a, b in pieces:
+                    if b <= g0 or a >= g1:
+                        nxt.append((a, b))
+                    else:
+                        if a < g0:
+                            nxt.append((a, g0))
+                        if b > g1:
+                            nxt.append((g1, b))
+                pieces = nxt
+        cut = pieces != [(f.s_from, f.s_to)]
+        out += [Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m) for a, b in pieces
+                if b - a >= (MIN_PIECE_M if cut else 0.0)]
+    return out
+
+
 def rows_of(sec, f):
     if f.side not in SIDES or f.type not in TYPES:
         raise ValueError(f"side は L/R、type は {TYPES} のどれか: {f}")

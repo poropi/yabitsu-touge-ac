@@ -105,3 +105,30 @@ def test_barricade_only_on_real_branch_roads():
     st = {s.osm_id: s for s in sr.stubs([road, alley, drive], sec, _Flat(), keep_out=[])}
     ways = {w["id"]: w for w in (road, alley, drive)}
     assert sr.needs_barricade(st[11], ways) and not sr.needs_barricade(st[12], ways) and not sr.needs_barricade(st[13], ways)
+
+
+def test_mouth_is_set_back_from_road_and_sidewalk():
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 60]])], sec, _Flat(), keep_out=[])
+    walk = box(0, 3.6, 200, 3.6 + 2.0)                       # 本線の左の歩道（幅 2m）
+    sr.set_back_mouth(st, sec, [walk])
+    (x0, y0), (x1, y1) = st.mouth.coords
+    assert min(y0, y1) >= 3.6 + 2.0 + sr.CLEAR_M - 1e-6
+    assert st.surface.contains(Point(100, 4.5))              # 路面は本線から切れずにつながる
+
+
+def test_branch_gaps_on_the_main_road():
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 60]])], sec, _Flat(), keep_out=[])
+    gaps = sr.branch_gaps([st], sec)
+    (s0, s1), = gaps["L"]
+    assert s0 <= 100 - st.width / 2 - 1.0 + 0.3 and s1 >= 100 + st.width / 2 + 1.0 - 0.3 and gaps["R"] == []
+
+
+def test_branch_gap_is_only_the_opening_even_when_the_branch_turns_back_along_the_road():
+    """入口から少し入って本線ぞいに戻っていく分かれ道でも、壁を切るのは入口の開いている所だけ（b12：798m 左）。"""
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [98, 7], [60, 21]])], sec, _Flat(), keep_out=[])
+    sr.set_back_mouth(st, sec, [box(0, 3.6, 200, 3.6 + 1.5)])
+    (s0, s1), = sr.branch_gaps([st], sec)["L"]
+    assert 93.0 <= s0 and s1 <= 104.0 and s1 - s0 >= st.width

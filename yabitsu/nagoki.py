@@ -65,3 +65,31 @@ def load_splits(sec):
     from . import split
     specs = json.loads((config.DATA_MANUAL / "s3_split.json").read_text(encoding="utf-8"))
     return [split.Split(sp, side_roads.load_elements(), sec) for sp in specs.values()]
+
+
+def sidewalk_polygons(sec, feats):
+    """道ぞいの歩道（features の sidewalk）の範囲の多角形。"""
+    from .crosssection import GUTTER_WIDTH
+    from .town import side_band
+    out = []
+    for f in feats:
+        if f.type != "sidewalk":
+            continue
+        sd = 1 if f.side == "L" else -1
+        i = int(np.argmin(np.abs(sec.s - (f.s_from + f.s_to) / 2)))
+        hw = float(sec.hw_left[i] if sd > 0 else sec.hw_right[i]) + GUTTER_WIDTH
+        out.append(side_band(sec, f.s_from, f.s_to, sd, hw - 0.05, hw + f.width_m))
+    return out
+
+
+def track_stubs(sec, pads, feats, sampler=None):
+    """分かれ道（入口の柵・見えない壁は、本線の路面と歩道から離して置く）と、道ぞいの壁などを入口で切った features。"""
+    from shapely.ops import unary_union
+    from . import features as ft
+    tw = load_town(sec); sps = load_splits(sec)
+    base = [p for p in pads if p.get("kind") != "stub"]
+    stubs = side_roads.for_track(sec, base, sampler, exclude=unary_union([tw.region] + [z.area() for z in sps]))
+    walks = sidewalk_polygons(sec, feats)
+    for st in stubs:
+        side_roads.set_back_mouth(st, sec, walks)
+    return stubs, ft.cut_at(feats, side_roads.branch_gaps(stubs, sec))

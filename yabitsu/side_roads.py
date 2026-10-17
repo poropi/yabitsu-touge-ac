@@ -9,7 +9,7 @@ from dataclasses import dataclass
 import numpy as np
 import shapely
 from shapely.geometry import LineString, Point, Polygon
-from shapely.ops import substring
+from shapely.ops import substring, unary_union
 
 from . import geo, osm, site
 from .crosssection import GUTTER_WIDTH
@@ -247,6 +247,49 @@ def needs_barricade(st, ways):
     if w.get("tags", {}).get("highway") not in BARRICADE_TYPES:
         return False
     return _line(w).length >= BARRICADE_MIN_M
+
+
+CLEAR_M = 1.0   # 柵と見えない壁は、本線の路面（側溝まで）と歩道の外側から、これだけ離す
+
+
+def set_back_mouth(st, sec, walks=()):
+    """入口（柵・見えない壁）を、本線の路面＋側溝と歩道（walks）から CLEAR_M 離れた所まで、分かれ道の奥へ下げる。
+    路面は切らない（本線から入口までつながる）。柵の幅は、本線・歩道にかからない長さに切る。"""
+    area = unary_union([road_formation(sec, 0.0, float(sec.s[-1]))] + list(walks)).buffer(CLEAR_M)
+    rest = st.axis.difference(area)
+    pieces = [rest] if rest.geom_type == "LineString" else [g for g in getattr(rest, "geoms", []) if g.geom_type == "LineString"]
+    if not pieces:
+        return st
+    piece = min(pieces, key=lambda g: st.axis.project(Point(g.coords[0])))
+    t0 = st.axis.project(Point(piece.coords[0]))
+    a = np.array(st.axis.interpolate(t0).coords[0]); b = np.array(st.axis.interpolate(min(t0 + 1.0, st.axis.length)).coords[0])
+    d = (b - a) / max(np.linalg.norm(b - a), 1e-9); n = np.array([-d[1], d[0]])
+    half = st.width / 2 + MOUTH_OVERHANG_M
+    ln = LineString([a - n * half, a + n * half]).difference(area.buffer(-0.5))
+    ln = max(([ln] if ln.geom_type == "LineString" else [g for g in getattr(ln, "geoms", []) if g.geom_type == "LineString"]),
+             key=lambda g: g.length, default=None)
+    if ln is not None and ln.length > st.width * 0.6:
+        st.mouth = LineString([ln.coords[0], ln.coords[-1]])
+    return st
+
+
+def branch_gaps(stubs_, sec, margin=1.0):
+    """分かれ道の入口で、本線の道ぞいの壁・ガードレールなどを切る s の範囲（左右ごと）：{"L": [(s0, s1)], "R": [...]}
+    入口（柵の線、set_back_mouth で道ぞいの壁の線あたりに下げたもの）の中心の s から、
+    分かれ道の幅を本線と交わる角度で割った長さ＋margin だけ前後。入口の先で本線ぞいに曲がる道でも、開いている所だけを切る。"""
+    main = LineString(np.c_[sec.x, sec.y])
+    out = {"L": [], "R": []}
+    for st in stubs_:
+        c = st.mouth.interpolate(0.5, normalized=True)
+        s = main.project(c); i = int(np.argmin(np.abs(sec.s - s))); h = sec.heading[i]
+        lat = -(c.x - sec.x[i]) * np.sin(h) + (c.y - sec.y[i]) * np.cos(h)
+        t = st.axis.project(c)
+        a = np.array(st.axis.interpolate(max(t - 1.0, 0.0)).coords[0]); b = np.array(st.axis.interpolate(min(t + 1.0, st.axis.length)).coords[0])
+        d = (b - a) / max(np.linalg.norm(b - a), 1e-9)
+        sin = max(abs(d[0] * np.sin(h) - d[1] * np.cos(h)), 0.3)   # 本線の向きとの角度の sin（浅すぎる時は 0.3 で止める）
+        half = st.width / 2 / sin + margin
+        out["L" if lat > 0 else "R"].append((s - half, s + half))
+    return out
 
 
 def move_mouth_out(st, area):

@@ -31,7 +31,7 @@ s_from,s_to,side,type,height_m,width_m,note
 1280,1560,L,sidewalk,,1.5,歩道（s=1300〜1550）
 1300,1560,R,sidewalk,,1.8,歩道（s=1300〜1500）
 1440,1470,R,retaining_wall,1.5,,低い石積み（s=1450）
-1530,1640,R,retaining_wall,4.0,,歩道の外の高い間知石の石積み（s=1550・1600）
+1540,1640,R,retaining_wall,4.0,,歩道の外の高い間知石の石積み（s=1550・1600）
 1610,1900,L,sidewalk,,1.5,歩道（s=1650〜1850）
 1610,1900,R,sidewalk,,1.8,歩道（s=1650〜1850）
 1640,1720,L,retaining_wall,1.5,,ブロック塀（s=1650・1700）

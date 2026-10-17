@@ -18,6 +18,7 @@ def main():
     for x in motorway.from_osm(side_roads.load_elements(), sec, gsi.default_sampler(), overpasses.load_overrides()):
         extra.append(np.asarray(x.footprint().buffer(15.0).exterior.coords).tolist())   # 新東名のまわりも細かい地形に
     feats = features.load_features_rows(track.load_section_rows("features", track.load_bounds()))
+    _, feats = nagoki.track_stubs(sec, pads, feats)   # 分かれ道の入口では壁の裏の切り土もしない
     cut_left, cut_right = features.cut_slopes(sec, feats)
     sampler = gsi.default_sampler()
     tw = nagoki.load_town(sec)   # 町の範囲：地形は町の地面に合わせる（舗装の下は少し下げる）

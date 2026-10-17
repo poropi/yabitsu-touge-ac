@@ -66,7 +66,8 @@ def _cone(c, z):
 
 
 def barricade_meshes(a, b, z_fn, front, k=0):
-    """封鎖の線 a→b に、工事中の柵（横板2枚・脚）、柵の手前（front の側）にカラーコーン、真ん中に「工事中」の看板。"""
+    """封鎖の線 a→b に、工事中の柵（横板2枚・脚）、真ん中に「工事中」の看板（front＝走ってくる側を向く）。
+    カラーコーンは柵の奥（front の反対側）に置き、道へ飛び出さないようにする。"""
     a, b = np.asarray(a, float), np.asarray(b, float)
     L = float(np.linalg.norm(b - a)); d = (b - a) / max(L, 1e-9)
     front = np.asarray(front, float) / max(np.linalg.norm(front), 1e-9)
@@ -81,7 +82,7 @@ def barricade_meshes(a, b, z_fn, front, k=0):
         for q in (p0 + d * 0.1, p1 - d * 0.1):
             legs.append(_box(q, front, 0.05, 0.5, zz, zz + 1.0))
     for t in np.arange(CONE_EVERY / 2, L, CONE_EVERY):
-        q = a + d * t + front * CONE_FRONT
+        q = a + d * t - front * CONE_FRONT
         cones.append(_cone(q, z(q)))
     mid = a + d * L / 2 + front * 0.05
     zm = z(mid)

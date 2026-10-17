@@ -186,3 +186,19 @@ def test_fence_is_see_through_railing_on_collision_wall():
         assembly.add_features(m, sec, [ft.Feature(10, 60, "L", "fence", 1.1, "")])
         (name, info), = m.meshes.items()
         assert name.startswith("1WALL_track_fence_") and info["material"] == "railing_bars"
+
+
+def test_features_are_cut_at_branch_mouths():
+    feats = [ft.Feature(0, 100, "L", "retaining_wall", 3.0, ""), ft.Feature(0, 100, "R", "guardrail", 0.0, ""),
+             ft.Feature(0, 100, "L", "sidewalk", 0.0, "", width_m=2.0)]
+    cut = ft.cut_at(feats, {"L": [(40.0, 50.0)], "R": []})
+    walls = [(f.s_from, f.s_to) for f in cut if f.type == "retaining_wall"]
+    assert walls == [(0.0, 40.0), (50.0, 100.0)]
+    assert [(f.s_from, f.s_to) for f in cut if f.type == "guardrail"] == [(0.0, 100.0)]
+    assert [(f.s_from, f.s_to) for f in cut if f.type == "sidewalk"] == [(0.0, 100.0)]   # 歩道は切らない
+
+
+def test_tiny_leftovers_after_a_cut_are_dropped():
+    feats = [ft.Feature(10.3, 52.1, "L", "hedge", 1.2, "")]
+    cut = ft.cut_at(feats, {"L": [(12.0, 50.0)], "R": []})
+    assert cut == []          # 1.7m と 2.1m の切れ端は作らない（面が作れない・意味がない）

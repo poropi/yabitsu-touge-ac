@@ -48,7 +48,7 @@ def test_barricade_spans_closure_line():
     cones = next(p for p in parts if p[0].startswith("cone"))[1]
     xs = np.unique(np.round(cones[np.isclose(cones[:, 2], cones[:, 2].max())][:, 0], 1))
     assert len(xs) >= 4 and np.allclose(np.diff(xs), to.CONE_EVERY, atol=0.2)
-    assert cones[:, 1].max() > -25.0                       # コーンは柵の手前（front の側）
+    assert cones[:, 1].max() < -25.0                       # コーンは柵の奥（front の反対側）
 
 
 def test_block_walls_are_hidden_and_collidable():
@@ -88,7 +88,7 @@ def test_town_object_meshes_have_unique_names_and_barricades_face_drivable_side(
     assert sum(n.startswith("barricade_") and not n.endswith("_legs") for n in names) == len(t.closures)
     south = next(k for k, c in enumerate(t.closures) if tw._xy([c["a"]])[0][1] < -5)
     cones = next(m for m in ms if m[0] == f"cone_{south:03d}")[1]
-    assert cones[:, 1].mean() > -25.0          # 南の柵のコーンは北（交差点）の側
+    assert cones[:, 1].mean() < -25.0          # 南の柵のコーンは南（封鎖した道）の側。交差点に飛び出さない
 
 
 def test_hoarding_is_tall_white_panel_along_points():
@@ -133,3 +133,10 @@ def test_pole_sign_has_pole_and_two_faced_panel_with_its_own_texture(tmp_path):
     assert panel[:, 2].min() == pytest.approx(103.5) and panel[:, 2].max() == pytest.approx(105.9)
     paths = to.write_pole_sign_textures(signs, tmp_path)
     assert (tmp_path / "polesign_0.png").exists() and paths["polesign_0"] == "textures/polesign_0.png"
+
+
+def test_cones_stand_behind_the_barricade_away_from_the_road():
+    g = _ground()
+    parts = to.barricade_meshes(np.array([-3.0, -25.0]), np.array([3.0, -25.0]), g.z, front=np.array([0.0, 1.0]))
+    cones = next(p for p in parts if p[0].startswith("cone"))[1]
+    assert cones[:, 1].max() < -25.0 + 0.01                 # front（+y＝道の側）の反対へ
