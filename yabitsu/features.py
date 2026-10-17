@@ -13,7 +13,8 @@ WALL_LEAN = 0.3
 WALL_CUT_SLOPE = 3.0
 GUARDRAIL_OFFSET = 0.1
 SIDES = {"L": 1, "R": -1}
-TYPES = ("guardrail", "retaining_wall")
+TYPES = ("guardrail", "retaining_wall", "parapet")
+PARAPET_HEIGHT = 0.9
 
 
 @dataclass
@@ -70,6 +71,13 @@ def guardrail_meshes(sec, f):
     visual = wall_ribbon(sec, sl, side, L, L, ze + 0.55, ze + 0.85)
     collision = wall_ribbon(sec, sl, side, L, L, ze - 0.3, ze + 1.2)
     return visual, collision
+
+
+def parapet_mesh(sec, f):
+    """橋の欄干：側溝の外側に、まっすぐ立つ壁（高さが空なら PARAPET_HEIGHT）。"""
+    sl, side, hw, ze = _side_arrays(sec, f)
+    L = hw + GUTTER_WIDTH
+    return wall_ribbon(sec, sl, side, L, L, ze - 0.3, ze + (f.height_m or PARAPET_HEIGHT))
 
 
 def retaining_wall_mesh(sec, f):

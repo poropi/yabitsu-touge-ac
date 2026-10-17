@@ -2,7 +2,7 @@ import json
 
 import numpy as np
 
-from yabitsu import assembly, config, features, layouts, pass_area, start_lot, textures, track, trees
+from yabitsu import assembly, config, features, layouts, pass_area, pavements, start_lot, textures, track, trees
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
 
@@ -18,6 +18,8 @@ def main():
     assembly.add_terrain(m, near, far)
     bounds = track.load_bounds()
     assembly.add_features(m, sec, features.load_features_rows(track.load_section_rows("features", bounds)))
+    for name, v, f, uv, mat in pavements.meshes(sec, pavements.load_rows(track.load_section_rows("pavements", bounds))):
+        m.add_mesh(assembly.GROUP, name, v, f, uv, mat)
     pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
     lot_spec = config.DATA_MANUAL / "s1_start_lot.json"
     # 駐車場や広場には、木の板（幅 最大7m）がかぶらないよう少し広めに空ける

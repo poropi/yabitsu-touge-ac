@@ -20,6 +20,8 @@ MATERIALS = {
     "wood_bars": {"texture": "textures/wood_bars.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
     "roof_metal": {"texture": "textures/roof_metal.png", "shader": "ksPerPixel", "two_sided": True},
     "tiles": {"texture": "textures/tiles.png", "shader": "ksPerPixel"},
+    "paint_red": {"texture": "textures/paint_red.png", "shader": "ksPerPixel"},
+    "concrete_circles": {"texture": "textures/concrete_circles.png", "shader": "ksPerPixel"},
 }
 
 
@@ -96,6 +98,17 @@ def tiles(size=512, tile_px=64, seed=14):
     return _u8(np.stack([g, g * 0.98, g * 0.94], -1))
 
 
+def concrete_circles(size=512, ring_px=32, seed=17):
+    """急坂の滑り止めコンクリート舗装：明るい灰色に、丸い溝（輪）が規則正しく並ぶ。1枚＝2m 四方。"""
+    rng = np.random.default_rng(seed)
+    yy, xx = np.mgrid[0:size, 0:size]
+    cy = (yy % ring_px) - ring_px / 2; cx = (xx % ring_px) - ring_px / 2
+    r = np.hypot(cx, cy)
+    g = 0.66 * (0.93 + 0.14 * periodic_noise(size, 3, rng))
+    g = np.where((r > ring_px * 0.28) & (r < ring_px * 0.36), g * 0.62, g)
+    return _u8(np.stack([g, g * 0.99, g * 0.96], -1))
+
+
 def wood(size=256, seed=15):
     rng = np.random.default_rng(seed)
     grain = 0.8 + 0.2 * periodic_noise(size, 2, rng)[:, :1].repeat(size, 1) * periodic_noise(size, 20, rng)
@@ -127,7 +140,9 @@ def write_textures(out_dir):
             "wood": wood(),
             "wood_bars": railing_bars(rgb=(0.30, 0.19, 0.12), bars=4, bar_px=14),
             "roof_metal": _gray(256, 16, 0.50, 0.06, (0.84, 1.0, 0.94), coarse=24),
-            "tiles": tiles()}
+            "tiles": tiles(),
+            "paint_red": _gray(256, 18, 0.62, 0.08, (1.0, 0.42, 0.36)),
+            "concrete_circles": concrete_circles()}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

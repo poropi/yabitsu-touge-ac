@@ -44,6 +44,8 @@ def add_features(m, sec, feats):
             vis, col = ft.guardrail_meshes(sec, f)
             m.add_mesh(GROUP, f"GUARDRAIL_s1_{k:03d}", *vis, "guardrail")
             m.add_mesh(GROUP, f"1WALL_s1_rail_{k:03d}", *col, "guardrail", renderable=False)
+        elif f.type == "parapet":
+            m.add_mesh(GROUP, f"1WALL_track_parapet_{k:03d}", *ft.parapet_mesh(sec, f), "concrete")
         else:
             m.add_mesh(GROUP, f"1WALL_s1_retaining_{k:03d}", *ft.retaining_wall_mesh(sec, f), "concrete")
 

@@ -1,0 +1,49 @@
+import numpy as np
+import pytest
+
+from yabitsu import pavements as pv
+from yabitsu.crosssection import surface_height
+from yabitsu.meshgen import face_normals
+from tests.test_meshgen import _straight
+
+
+def _mesh(kind, a=10.0, b=28.0):
+    sec = _straight(201)
+    (name, v, f, uv, mat), = pv.meshes(sec, pv.load_rows([{"s_from": a, "s_to": b, "kind": kind, "note": ""}]))
+    return sec, name, v, f, mat
+
+
+def test_red_stripes_count_and_width():
+    sec, name, v, f, mat = _mesh("red_stripes")
+    assert mat == "paint_red" and name == "LINES_track_pave_000"
+    assert len(f) == 10                                     # 18m の範囲、1.8m おき
+    assert v[:, 1].max() == pytest.approx(sec.hw_left[0]) and v[:, 1].min() == pytest.approx(-sec.hw_right[0])
+    widths = [np.ptp(v[q][:, 0]) for q in f]
+    assert np.allclose(widths, 0.6)
+
+
+def test_crosswalk_bars_parallel_to_road():
+    sec, name, v, f, mat = _mesh("crosswalk", 50.0, 54.0)
+    assert mat == "line_white"
+    for q in f:
+        p = v[q]
+        assert np.ptp(p[:, 0]) == pytest.approx(4.0) and np.ptp(p[:, 1]) == pytest.approx(0.45)
+    assert v[:, 1].max() <= sec.hw_left[0] - 0.5 + 1e-9
+
+
+def test_concrete_circles_cover_range():
+    sec, name, v, f, mat = _mesh("concrete_circles", 0.0, 40.0)
+    assert mat == "concrete_circles" and v[:, 0].min() == pytest.approx(0.0) and v[:, 0].max() == pytest.approx(40.0)
+
+
+@pytest.mark.parametrize("kind", ["red_stripes", "crosswalk", "concrete_circles"])
+def test_pavement_faces_point_up_and_sit_above_road(kind):
+    sec, name, v, f, mat = _mesh(kind)
+    assert (face_normals(v, f)[:, 2] > 0).all()
+    z_road = surface_height(v[:, 1], 100.0, np.interp(v[:, 0], sec.s, sec.slope), np.interp(v[:, 0], sec.s, sec.crown))
+    assert np.all((v[:, 2] - z_road > 0.004) & (v[:, 2] - z_road < 0.006))
+
+
+def test_unknown_kind_is_an_error():
+    with pytest.raises(ValueError):
+        pv.load_rows([{"s_from": 0, "s_to": 1, "kind": "zebra", "note": ""}])

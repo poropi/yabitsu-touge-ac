@@ -78,3 +78,20 @@ def test_features_from_shifted_rows_keep_local_meaning():
     assert feats[1].height_m == 0.0 and feats[1].type == "guardrail"
     sl = ft.rows_of(sec, feats[0])
     assert sec.s[sl.start] >= 110.0 - 1e-9 and sec.s[sl.stop - 1] <= 120.0 + 1e-9
+
+
+def test_parapet_is_vertical_and_at_gutter_edge():
+    from yabitsu.crosssection import GUTTER_WIDTH
+    sec = _straight()
+    v, f, _ = ft.parapet_mesh(sec, ft.Feature(10, 30, "R", "parapet", 0, ""))
+    hw = sec.hw_right[10]
+    assert np.allclose(v[:, 1], -(hw + GUTTER_WIDTH))           # 内側の縁＝側溝の外側、まっすぐ立つ
+    assert v[:, 2].max() == pytest.approx(sec.edge_z(-1)[10] + 0.9)  # 高さが空なら 0.9m
+    assert (face_normals(v, f)[:, 1] > 0).all()                  # 道路側を向く
+    v2, _, _ = ft.parapet_mesh(sec, ft.Feature(10, 30, "L", "parapet", 1.2, ""))
+    assert v2[:, 2].max() == pytest.approx(sec.edge_z(1)[10] + 1.2)
+
+
+def test_parapet_type_is_accepted():
+    sec = _straight()
+    assert ft.rows_of(sec, ft.Feature(10, 30, "L", "parapet", 0, "")) == slice(10, 31)

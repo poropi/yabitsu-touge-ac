@@ -25,3 +25,10 @@ def test_register_materials(tmp_path):
     textures.register_materials(m)
     assert m.materials["tree"]["alpha"] and m.materials["tree"]["two_sided"]
     assert m.materials["asphalt"]["texture"] == "textures/asphalt.png"
+
+
+def test_new_textures_are_written(tmp_path):
+    paths = textures.write_textures(tmp_path)
+    assert {"paint_red", "concrete_circles"} <= set(paths)
+    red = np.array(Image.open(paths["paint_red"]).convert("RGB")).reshape(-1, 3).mean(0)
+    assert red[0] > red[1] + 0.2 * 255
