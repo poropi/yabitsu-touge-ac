@@ -7,6 +7,7 @@ import math
 from dataclasses import dataclass
 
 import numpy as np
+import shapely
 from shapely.geometry import LineString, Polygon
 from shapely.ops import substring
 
@@ -23,6 +24,7 @@ SEG_M = 10.0
 MOUTH_SETBACK_M = 0.3   # 入口の壁は、本線の側溝の外側の縁からこれだけ奥
 MOUTH_OVERHANG_M = 2.0  # 入口の壁は、道の両端からこれだけはみ出す（斜めに抜けられないように）
 BLEND_M = 15.0          # 入口から、この長さで本線の高さから地面の高さへ移す
+CW_LEN, CW_BAR, CW_EVERY = 4.0, 0.45, 0.9   # 分かれ道の横断歩道：長さ（道の向き）、帯の幅、帯の間隔
 
 
 def _width(tags):
@@ -104,6 +106,31 @@ class Stub:
         return [{"name": f"side_stub_{self.osm_id}_{k}", "role": "flat", "kind": "stub",
                  "polygon": np.asarray(poly.exterior.coords).tolist(), "z": float(site.plane_z(pl, *poly.centroid.coords[0])),
                  "plane": pl} for k, (poly, pl) in enumerate(self._segments())]
+
+    def z_at(self, x, y):
+        """路面の高さ：axis に下ろした位置の、区切りの高さを直線で補う。"""
+        t = self.axis.project(shapely.Point(x, y))
+        return float(np.interp(t, self.t_knots, self.z_knots))
+
+    def crosswalk_mesh(self, p):
+        """横断歩道：点 p（道の上）を中心に、道の向きに長さ CW_LEN の白い帯を、道幅いっぱいに CW_EVERY おきに並べる。"""
+        t = self.axis.project(shapely.Point(*p))
+        c = np.array(self.axis.interpolate(t).coords[0])
+        a = np.array(self.axis.interpolate(max(t - 1.0, 0)).coords[0]); b = np.array(self.axis.interpolate(min(t + 1.0, self.axis.length)).coords[0])
+        d = (b - a) / max(np.linalg.norm(b - a), 1e-9); n = np.array([-d[1], d[0]])
+        vs, fs = [], []
+        for off in np.arange(-self.width / 2 + 0.4 + CW_BAR / 2, self.width / 2 - 0.4 - CW_BAR / 2 + 1e-9, CW_EVERY):
+            q = c + n * off
+            corners = [q - d * CW_LEN / 2 - n * CW_BAR / 2, q - d * CW_LEN / 2 + n * CW_BAR / 2,
+                       q + d * CW_LEN / 2 + n * CW_BAR / 2, q + d * CW_LEN / 2 - n * CW_BAR / 2]
+            k = len(vs)
+            vs += [[*e, self.z_at(*e) + 0.01] for e in corners]
+            fs.append([k, k + 1, k + 2, k + 3])
+        v = np.array(vs, float)
+        f = np.array(fs, np.int32)
+        if (v[f[0, 1]] - v[f[0, 0]])[0] * (v[f[0, 2]] - v[f[0, 0]])[1] - (v[f[0, 1]] - v[f[0, 0]])[1] * (v[f[0, 2]] - v[f[0, 0]])[0] < 0:
+            f = f[:, ::-1]   # 上向きに
+        return v, f, v[:, :2]
 
     def wall(self, height=3.0):
         """入口をふさぐ見えない壁（両面）。"""
@@ -202,7 +229,7 @@ def stub_meshes(stub_list):
     return out
 
 
-KEEP_OPEN_KINDS = ("lot", "pass", "site")
+KEEP_OPEN_KINDS = ("lot", "pass", "site", "plaza")
 NOT_OPENINGS = ("_house", "_shrine", "side_stub")   # 家・お堂の土台は「ふさがない場所」ではない（家の前の道もふさぐ）
 
 

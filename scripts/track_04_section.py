@@ -16,11 +16,21 @@ def main():
     prof = np.load(P / "track_profile.npz", allow_pickle=True)
     widths = cs.parse_width_rows(track.load_section_rows("widths", track.load_bounds()))
     sec = cs.build_section(cl, prof["z"], widths)
+    bays = cs.parse_bay_rows(track.load_section_rows("busbays", track.load_bounds()))   # バス停の切り込み（片側だけ広い）
+    sec.hw_left, sec.hw_right = cs.apply_bays(sec.s, sec.hw_left, sec.hw_right, bays)
     sec.save_json(P / "track_section.json")
     pads = cs.pads_from_parking(json.loads((P / "track_parking.json").read_text(encoding="utf-8")), sec)
     lot = start_lot.load_spec(config.DATA_MANUAL / "s1_start_lot.json")
     if lot:
         pads = start_lot.apply(pads, lot, sec)
+    # 道ぞいの広場（data/manual/s3_plazas.json）：道の縁の高さの平らな舗装。道と重なる所は下で削る
+    from shapely.geometry import Polygon as _Poly
+    from yabitsu import site
+    for pl in json.loads((config.DATA_MANUAL / "s3_plazas.json").read_text(encoding="utf-8")):
+        poly = _Poly(site.ll_to_xy(pl["points"])).buffer(0)
+        c = poly.centroid; i = int(np.argmin(np.hypot(sec.x - c.x, sec.y - c.y)))
+        pads.append({"name": pl["name"], "role": "flat", "kind": "plaza", "polygon": np.asarray(poly.exterior.coords).tolist(),
+                     "z": float(min(sec.edge_z(1)[i], sec.edge_z(-1)[i]))})
     # OSM の駐車場が道にかぶるところは削る（峠の先へ道を延ばしたので、峠の駐車場が道に接する）
     road = start_lot.road_formation(sec, s_min=0.0, s_max=float(sec.s[-1]))
     for p in pads:

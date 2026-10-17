@@ -71,3 +71,17 @@ def test_stub_pads_are_tilted_planes_matching_the_mesh():
 def test_town_exit_s():
     sec = _straight()
     assert sr.town_exit_s(sec, (0.0, 0.0), 50.0) == pytest.approx(51.0, abs=1.0)
+
+
+def test_crosswalk_on_stub_lies_on_its_surface_and_bars_follow_the_road():
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 80]])], sec, _Flat(100.0, 0.1), keep_out=[])
+    v, f, uv = st.crosswalk_mesh(np.array([100.0, 9.0]))
+    from yabitsu.site import plane_z
+    assert v[:, 1].min() == pytest.approx(9.0 - sr.CW_LEN / 2, abs=0.05) and v[:, 1].max() == pytest.approx(9.0 + sr.CW_LEN / 2, abs=0.05)
+    assert v[:, 0].min() >= 100.0 - st.width / 2 and v[:, 0].max() <= 100.0 + st.width / 2
+    for q in f:
+        p = v[q]
+        assert np.ptp(p[:, 1]) > np.ptp(p[:, 0])                  # 帯は道の向き（y）に長い
+    ex = st.mesh()[0]
+    assert np.all(v[:, 2] > np.interp(v[:, 1], ex[:, 1], ex[:, 2]) - 0.05)

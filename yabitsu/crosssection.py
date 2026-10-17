@@ -34,6 +34,26 @@ def load_widths_csv(path):
         return parse_width_rows(list(csv.DictReader(f)))
 
 
+def parse_bay_rows(rows):
+    """バス停の切り込み（片側だけ広がる所）の表：s_from, s_to, side（L/R）, depth_m, taper_m, note。"""
+    return [{"s_from": float(r["s_from"]), "s_to": float(r["s_to"]), "side": str(r["side"]).strip(),
+             "depth_m": float(r["depth_m"]), "taper_m": float(r.get("taper_m") or 10.0)}
+            for r in rows if r.get("s_from") not in (None, "")]
+
+
+def apply_bays(s, hw_left, hw_right, bays):
+    """s_from〜s_to の間はその側を depth_m 広げ、前後 taper_m でなめらかに（smoothstep）もとの幅へ戻す。"""
+    hl, hr = np.array(hw_left, float), np.array(hw_right, float)
+    for b in bays:
+        t = np.clip(np.minimum((s - (b["s_from"] - b["taper_m"])) / b["taper_m"], ((b["s_to"] + b["taper_m"]) - s) / b["taper_m"]), 0, 1)
+        add = b["depth_m"] * t * t * (3 - 2 * t)
+        if b["side"] == "L":
+            hl = hl + add
+        else:
+            hr = hr + add
+    return hl, hr
+
+
 def widths(s, lanes, rows):
     lanes = np.asarray(lanes).astype(np.int32).copy()
     w = np.array([DEFAULT_WIDTH_BY_LANES.get(int(l), 6.0) for l in lanes])

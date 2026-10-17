@@ -30,7 +30,8 @@ def add_road(m, sec, rows_per_chunk=200, skip=None):
 
 
 CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("line_white", None),
-                 "orange_solid": ("line_orange", None)}
+                 "orange_solid": ("line_orange", None), "orange_flanked": ("line_orange", None)}
+FLANK_OFFSET, FLANK_DASH = 0.9, (2.0, 2.0)   # orange_flanked：オレンジの実線の両側の、白い破線（減速を促す線）
 
 
 def add_centrelines(m, sec, rows, s_min=0.0):
@@ -52,6 +53,12 @@ def add_centrelines(m, sec, rows, s_min=0.0):
         v, f, uv = mg.compact(*mg.line(sec, sl, np.zeros(i1 - i0 + 1), dash=dash))
         if len(f):
             m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}", v, f, uv, mat)
+        if style == "orange_flanked":
+            parts = [mg.compact(*mg.line(sec, sl, np.full(i1 - i0 + 1, sgn * FLANK_OFFSET), dash=FLANK_DASH)) for sgn in (1, -1)]
+            parts = [q for q in parts if len(q[1])]
+            if parts:
+                from .start_lot import _merge
+                m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}_flank", *_merge(parts), "line_white")
 
 
 def add_terrain(m, near, far):

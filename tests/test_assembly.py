@@ -52,3 +52,18 @@ def test_add_centrelines_draws_only_listed_ranges_with_style(tmp_path):
 def test_unknown_centreline_style_is_an_error(tmp_path):
     with pytest.raises(ValueError):
         assembly.add_centrelines(Manifest(tmp_path), _straight(101), [{"s_from": 0, "s_to": 50, "style": "pink", "note": ""}])
+
+
+def test_orange_flanked_adds_white_dashes_both_sides(tmp_path):
+    import numpy as np
+    m = Manifest(tmp_path)
+    sec = _straight(401)
+    assembly.add_centrelines(m, sec, [{"s_from": 0.0, "s_to": 100.0, "style": "orange_flanked", "note": ""}])
+    names = m.groups[assembly.GROUP]["meshes"]
+    assert names == ["LINES_track_centre_000", "LINES_track_centre_000_flank"]
+    assert m.meshes["LINES_track_centre_000"]["material"] == "line_orange"
+    assert m.meshes["LINES_track_centre_000_flank"]["material"] == "line_white"
+    v = np.load(tmp_path / m.meshes["LINES_track_centre_000_flank"]["file"])["verts"]
+    lat = np.unique(np.round(np.abs(v[:, 1]), 2))
+    assert lat.min() >= assembly.FLANK_OFFSET - 0.1 and lat.max() <= assembly.FLANK_OFFSET + 0.1
+    assert (v[:, 1] > 0).any() and (v[:, 1] < 0).any()

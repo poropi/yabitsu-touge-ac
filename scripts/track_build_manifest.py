@@ -41,6 +41,13 @@ def main():
     base_pads = [p for p in pads if p.get("kind") != "stub"]
     stubs = side_roads.for_track(sec, base_pads, sampler, exclude=tw.region)
     assembly.add_meshes(m, side_roads.stub_meshes(stubs))
+    from yabitsu import geo
+    for k, (la, lo) in enumerate(json.loads((config.DATA_MANUAL / "s3_side_crosswalks.json").read_text(encoding="utf-8"))):
+        p = np.array([float(v) for v in geo.to_local(la, lo)])
+        from shapely.geometry import Point
+        near = [st for st in stubs if st.surface.buffer(1.0).contains(Point(*p))]
+        if near:   # 横道の上の横断歩道（OSM）。分かれ道を作っていない所（町の範囲など）は描かない
+            m.add_mesh(assembly.GROUP, f"LINES_side_cw_{k:03d}", *near[0].crosswalk_mesh(p), "line_white")
     road_z = town_objects.road_ground(sec)
     for k, st in enumerate(stubs):   # 分かれ道の入口に工事中の柵（手前＝本線の側）
         (ax, ay), (bx, by) = st.mouth.coords

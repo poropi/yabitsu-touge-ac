@@ -85,3 +85,14 @@ def test_parking_near_the_middle_of_the_road_is_kept():
     parking = [{"name": "mid", "lat": ll(poly)[0], "lon": ll(poly)[1]}, {"name": "far", "lat": ll(far)[0], "lon": ll(far)[1]}]
     pads = cs.pads_from_parking(parking, sec)
     assert [p["name"] for p in pads] == ["mid"] and abs(pads[0]["z"] - sec.z[510]) < 1e-6
+
+
+def test_bus_bay_widens_one_side_with_tapers():
+    s = np.arange(0.0, 201.0)
+    hl, hr = np.full_like(s, 3.0), np.full_like(s, 3.0)
+    rows = [{"s_from": "80", "s_to": "120", "side": "L", "depth_m": "3.0", "taper_m": "10", "note": ""}]
+    l2, r2 = cs.apply_bays(s, hl, hr, cs.parse_bay_rows(rows))
+    assert np.allclose(r2, 3.0)
+    assert l2[100] == pytest.approx(6.0) and l2[80] == pytest.approx(6.0) and l2[120] == pytest.approx(6.0)
+    assert l2[69] == pytest.approx(3.0) and l2[131] == pytest.approx(3.0)
+    assert 3.0 < l2[75] < 6.0 and np.all(np.abs(np.diff(l2)) <= 1.5 * 3.0 / 10 + 0.01)   # smoothstep の一番急な所
