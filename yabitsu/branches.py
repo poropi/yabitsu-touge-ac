@@ -17,6 +17,7 @@ MIN_OFFSET_M = 3.0     # 本線の中心線から、これより離れる県道7
 ISLAND_H = 0.15
 END_NEAR_M = 6.0
 PAD_STEP_M = 8.0
+PAD_MARGIN_M = 2.2
 CLOSE_M = 6.0         # 本線と東側の道の間の、これより狭いすき間は路面で埋める（島は上に乗る）      # もう1本の両はしは、本線の中心線からこの距離の中
 
 
@@ -71,6 +72,9 @@ class Branch:
         mat = self.spec.get("surface", "asphalt")
         for k, (v, f, uv) in enumerate(grid_drape(self.surface, self.z, 0.0, cell=1.0)):
             out.append((f"1ROAD_branch_{self.osm_id}_{k:02d}", v, f, uv, mat, True))
+        sk = self._skirt()
+        if sk is not None:
+            out.append((f"branch_{self.osm_id}_skirt", *sk, "concrete", True))
         if self.island is not None:
             for k, (v, f, uv) in enumerate(grid_drape(self.island, self.z, ISLAND_H, cell=1.0)):
                 out.append((f"branch_{self.osm_id}_island_{k:02d}", v, f, uv, "gravel", True))
@@ -87,6 +91,24 @@ class Branch:
         out += island_objects(self.spec.get("objects", []), lambda x, y: self.z(x, y) + (ISLAND_H if self.island is not None else 0.0),
                               f"branch_{self.osm_id}")
         return out
+
+    def _skirt(self):
+        """路面の外の縁（本線・島に接していない所）から下へ 0.6m の縦の面（地形とのすき間を隠す）。"""
+        form = road_formation(self.sec, 0.0, float(self.sec.s[-1])).buffer(0.3)
+        keep = form.union(self.island.buffer(0.3)) if self.island is not None else form
+        edge = LineString(orient(self.surface, 1.0).exterior.coords).segmentize(1.0).difference(keep)
+        parts = [edge] if edge.geom_type == "LineString" else [g for g in getattr(edge, "geoms", []) if g.geom_type == "LineString"]
+        vs, fs = [], []
+        for ln in parts:
+            p = np.asarray(ln.coords); zg = self.z(p[:, 0], p[:, 1])
+            for i in range(len(p) - 1):
+                b = len(vs)
+                vs += [[*p[i], zg[i] - 0.6], [*p[i + 1], zg[i + 1] - 0.6], [*p[i + 1], zg[i + 1]], [*p[i], zg[i]]]
+                fs.append([b + 1, b, b + 3, b + 2])   # 外向き（反時計回りの外周の右）
+        if not vs:
+            return None
+        v = np.array(vs, float)
+        return v, np.array(fs, np.int32), v[:, [0, 2]] / 2.0
 
     def pads(self, step=PAD_STEP_M):
         """地形合わせ：本線の向きに step ごとに切った、傾いた平面（坂でも地形が路面の上に出ない）。"""
@@ -108,9 +130,19 @@ class Branch:
                 cx, cy = c[:, 0].mean(), c[:, 1].mean()
                 A = np.c_[np.ones(len(c)), c[:, 0] - cx, c[:, 1] - cy]
                 z0, gx, gy = np.linalg.lstsq(A, zc, rcond=None)[0]
-                z0 -= float(np.abs(A @ [z0, gx, gy] - zc).max()) + 0.05   # 平面で表せない分だけ下げる（地形が路面から出ない）
+                # 平面で表せない分だけ下げる（地形が路面から出ない）。外周の点だけでなく、中の 0.5m ごとの点でも測る
+                bx0, by0, bx1, by1 = g.bounds
+                q = np.array([(u, w) for u in np.arange(bx0, bx1 + 0.5, 0.5) for w in np.arange(by0, by1 + 0.5, 0.5)
+                              if g.buffer(1.0).contains(Point(u, w))] + c[:, :2].tolist())
+                zq = self.z(q[:, 0], q[:, 1]) + (ISLAND_H if self.island is not None and self.island.intersects(g) else 0.0)
+                Aq = np.c_[np.ones(len(q)), q[:, 0] - cx, q[:, 1] - cy]
+                z0 -= max(0.0, float((Aq @ [z0, gx, gy] - zq).max())) + 0.05
+                # 地形は 2m 格子なので、縁の外 PAD_MARGIN_M まで下げる（縁の三角形が路面の上へせり上がらない）。外の縁は skirt で隠す
+                gm = g.buffer(PAD_MARGIN_M, join_style="mitre").intersection(cut)
+                gm = site.largest(gm) if gm.geom_type != "Polygon" else gm
                 out.append({"name": f"branch_{self.osm_id}_{k}_{len(out)}", "role": "flat", "kind": "plaza",
-                            "polygon": c.tolist(), "z": float(z0), "plane": [float(cx), float(cy), float(z0), float(gx), float(gy)]})
+                            "polygon": np.asarray(gm.exterior.coords).tolist(), "z": float(z0),
+                            "plane": [float(cx), float(cy), float(z0), float(gx), float(gy)]})
         return out
 
 

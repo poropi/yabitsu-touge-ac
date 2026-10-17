@@ -74,7 +74,10 @@ def test_branch_pads_follow_a_slope():
     b, = br.parallel_branches(ways, sec, {"2": {"width_m": 4.0}})
     pads = b.pads()
     assert len(pads) >= 5 and all("plane" in p for p in pads)
+    from shapely.geometry import Polygon
     for p in pads:
-        c = np.asarray(p["polygon"])[:-1]
+        g = Polygon(p["polygon"]).intersection(b.surface)     # 地形を下げる範囲は路面の外へ少しはみ出す。路面の上で比べる
+        x0, y0, x1, y1 = g.bounds
+        c = np.array([(x, y) for x in np.arange(x0, x1, 0.5) for y in np.arange(y0, y1, 0.5) if g.contains(Point(x, y))])
         dz = b.z(c[:, 0], c[:, 1]) - plane_z(p["plane"], c[:, 0], c[:, 1])
         assert dz.min() >= 0.0 and dz.max() < 0.3              # 平面は路面のすぐ下
