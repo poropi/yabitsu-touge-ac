@@ -6,7 +6,6 @@ PROJECT_ROOT = Path(__file__).resolve().parent.parent
 DATA_RAW = PROJECT_ROOT / "data" / "raw"
 DATA_PROCESSED = PROJECT_ROOT / "data" / "processed"
 DATA_MANUAL = PROJECT_ROOT / "data" / "manual"
-S1_DIR = DATA_PROCESSED / "s1"
 
 AC_ROOT = Path(r"C:\Program Files (x86)\Steam\steamapps\common\assettocorsa")
 AC_TRACKS = AC_ROOT / "content" / "tracks"

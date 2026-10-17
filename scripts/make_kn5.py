@@ -5,14 +5,20 @@ from yabitsu import config, kn5
 TARGETS = {
     "test": (config.DATA_PROCESSED / "test" / "manifest.json", config.TEST_TRACK_DIR,
              ["yabitsu_test", "test_objects"]),
-    "s1": (config.S1_DIR / "manifest.json", config.TRACK_DIR, ["yabitsu_s1", "s1_up_objects", "s1_down_objects"]),
 }
+
+
+def _track_target():
+    from yabitsu import layouts
+    return (config.TRACK_BUILD_DIR / "manifest.json", config.TRACK_DIR,
+            [config.TRACK_GROUP] + [f"{l.name}_objects" for l in layouts.load_layouts()])
 
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("target", choices=TARGETS)
-    manifest, track_dir, groups = TARGETS[ap.parse_args().target]
+    ap.add_argument("target", choices=[*TARGETS, "track"])
+    target = ap.parse_args().target
+    manifest, track_dir, groups = _track_target() if target == "track" else TARGETS[target]
     for g in groups:
         out = kn5.write_from_manifest(manifest, g, track_dir / f"{g}.kn5")
         k = kn5.read_kn5(out)
