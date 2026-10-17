@@ -11,3 +11,12 @@ dependencies = [
     "scipy>=1.18.1",
     "shapely>=2.2.0",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
