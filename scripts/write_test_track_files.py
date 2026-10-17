@@ -16,7 +16,7 @@ def main():
     cam = acdata.Camera("side", acdata.blender_to_ac(12.0, 100.0, 3.0), acdata.blender_to_ac(-12.0, 0.0, -3.0), 0.0, 1.0)
     acdata.write_cameras_ini(T / "a" / "data" / "cameras.ini", [cam])
     acdata.write_ui_track_json(T / "ui" / "a" / "ui_track.json", name="Yabitsu TEST",
-                               description="パイプライン確認用の試験コース", length_m=200, pitboxes=1,
+                               description="パイプライン確認用の試験コース", length_m=200, pitboxes=2,
                                geotags=(35.42782, 139.21934), tags=["test"], credits="")
     y = np.arange(0.0, 201.0); n = len(y); z0 = np.zeros(n)
     road = Section(y, z0, y, z0, np.full(n, math.pi / 2), z0, np.full(n, 2, np.int32), np.zeros(n, bool),

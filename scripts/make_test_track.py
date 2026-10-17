@@ -54,7 +54,7 @@ def main():
     path = {"s": s, "x": np.zeros_like(s), "y": s, "z": np.zeros_like(s), "heading": np.full_like(s, math.pi / 2)}
     o = "test_objects"
     for d in [*start_grid(path, 40, 1, n=2), hotlap_start(path, 25, 1), *timing_gate(path, 50, 1, 4.0, "START"),
-              *timing_gate(path, 180, 1, 4.0, "FINISH"), *pit_boxes((0.0, 15.0), 0.0, math.pi / 2, n=1)]:
+              *timing_gate(path, 180, 1, 4.0, "FINISH"), *pit_boxes((0.0, 15.0), 0.0, math.pi / 2, n=2)]:
         m.add_empty(o, d)
     print(m.save()); print(m.summary())
 
