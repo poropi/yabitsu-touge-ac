@@ -76,4 +76,5 @@ def test_branch_pads_follow_a_slope():
     assert len(pads) >= 5 and all("plane" in p for p in pads)
     for p in pads:
         c = np.asarray(p["polygon"])[:-1]
-        assert np.abs(plane_z(p["plane"], c[:, 0], c[:, 1]) - b.z(c[:, 0], c[:, 1])).max() < 0.15
+        dz = b.z(c[:, 0], c[:, 1]) - plane_z(p["plane"], c[:, 0], c[:, 1])
+        assert dz.min() >= 0.0 and dz.max() < 0.3              # 平面は路面のすぐ下

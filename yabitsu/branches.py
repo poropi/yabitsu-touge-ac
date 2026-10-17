@@ -108,6 +108,7 @@ class Branch:
                 cx, cy = c[:, 0].mean(), c[:, 1].mean()
                 A = np.c_[np.ones(len(c)), c[:, 0] - cx, c[:, 1] - cy]
                 z0, gx, gy = np.linalg.lstsq(A, zc, rcond=None)[0]
+                z0 -= float(np.abs(A @ [z0, gx, gy] - zc).max()) + 0.05   # 平面で表せない分だけ下げる（地形が路面から出ない）
                 out.append({"name": f"branch_{self.osm_id}_{k}_{len(out)}", "role": "flat", "kind": "plaza",
                             "polygon": c.tolist(), "z": float(z0), "plane": [float(cx), float(cy), float(z0), float(gx), float(gy)]})
         return out
