@@ -57,15 +57,27 @@ def add_terrain(m, near, far):
 
 
 def add_features(m, sec, feats):
+    off = dict(zip(("L", "R"), ft.sidewalk_offsets(sec, feats)))  # 壁・生け垣・欄干は歩道の外側に立てる
     for k, f in enumerate(feats):
         if f.type == "guardrail":
             vis, col = ft.guardrail_meshes(sec, f)
             m.add_mesh(GROUP, f"GUARDRAIL_s1_{k:03d}", *vis, "guardrail")
             m.add_mesh(GROUP, f"1WALL_s1_rail_{k:03d}", *col, "guardrail", renderable=False)
         elif f.type == "parapet":
-            m.add_mesh(GROUP, f"1WALL_track_parapet_{k:03d}", *ft.parapet_mesh(sec, f), "concrete")
+            m.add_mesh(GROUP, f"1WALL_track_parapet_{k:03d}", *ft.parapet_mesh(sec, f, off[f.side]), "concrete")
+        elif f.type == "fence":  # 透けて見える柵（欄干と同じ形に、棒の絵を貼る）
+            f2 = ft.Feature(f.s_from, f.s_to, f.side, f.type, f.height_m or ft.FENCE_HEIGHT, f.note, f.width_m)
+            m.add_mesh(GROUP, f"1WALL_track_fence_{k:03d}", *ft.parapet_mesh(sec, f2, off[f.side]), "railing_bars")
+        elif f.type == "sidewalk":
+            m.add_mesh(GROUP, f"1ROAD_track_sidewalk_{k:03d}", *ft.sidewalk_mesh(sec, f), "concrete")
+        elif f.type == "hedge":
+            m.add_mesh(GROUP, f"1WALL_track_hedge_{k:03d}", *ft.hedge_mesh(sec, f, off[f.side]), "hedge")
+        elif f.type == "overpass":  # OSM に無い、道の上を渡る橋（OSM にある橋は add_site_meshes で overpasses から）
+            deck, piers = ft.overpass_meshes(sec, f)
+            m.add_mesh(GROUP, f"track_overpass_{k:03d}_deck", *deck, "concrete")
+            m.add_mesh(GROUP, f"1WALL_track_overpass_{k:03d}_piers", *piers, "concrete")
         else:
-            m.add_mesh(GROUP, f"1WALL_s1_retaining_{k:03d}", *ft.retaining_wall_mesh(sec, f), "concrete")
+            m.add_mesh(GROUP, f"1WALL_s1_retaining_{k:03d}", *ft.retaining_wall_mesh(sec, f, off[f.side]), "concrete")
 
 
 def add_trees(m, trees):
@@ -76,7 +88,7 @@ def add_trees(m, trees):
 
 def add_pads(m, pads):
     for k, p in enumerate(pads):
-        if p.get("kind") in ("lot", "pass", "site"):  # 駐車場・峠・蓑毛は add_start_lot / add_pass_area で作る
+        if p.get("kind") in ("lot", "pass", "site", "stub"):  # 駐車場・峠・蓑毛・分かれ道は、それぞれの部品で作る
             continue
         m.add_mesh(GROUP, f"1ROAD_s1_pad_{k:02d}", *mg.pad_mesh(p["polygon"], p["z"]), "asphalt")
 
@@ -86,6 +98,12 @@ def add_start_lot(m, spec, pads):
         if p.get("kind") == "lot":
             for name, v, f, uv, mat, rend in lot_mod.meshes(spec, p):
                 m.add_mesh(GROUP, name, v, f, uv, mat, renderable=rend)
+
+
+def add_meshes(m, items, group=GROUP):
+    """(名前, 頂点, 面, UV, 材質, 描画するか) の並びをそのまま足す（分かれ道・高架橋・町の部品など）。"""
+    for name, v, f, uv, mat, rend in items:
+        m.add_mesh(group, name, v, f, uv, mat, renderable=rend)
 
 
 def add_pass_area(m, site):

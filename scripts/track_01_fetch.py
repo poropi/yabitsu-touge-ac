@@ -11,10 +11,11 @@ def main():
     route70 = osm.fetch_overpass(osm.ROUTE70_QUERY, config.DATA_RAW / "osm_route70.json")
     town = osm.fetch_overpass(osm.TOWN_QUERY.format(r=260, lat=config.NAGOKI[0], lon=config.NAGOKI[1]),
                               config.DATA_RAW / "osm_nagoki.json")
-    try:  # 道ぞいの横道・建物（Task 3・7 で使う）。サーバーが混んでいても道づくりは止めない
-        osm.fetch_overpass(osm.ROADSIDE_QUERY, config.DATA_RAW / "osm_s3_roadside.json")
-    except RuntimeError as e:
-        print("warning: 道ぞいの OSM が取れませんでした（あとで取り直す）:", e)
+    for q, f in ((osm.ROADSIDE_QUERY, "osm_s3_roadside.json"), (osm.TRACK_ROADS_QUERY, "osm_track_roads.json")):
+        try:  # 道ぞいの分かれ道・建物・橋。サーバーが混んでいても道づくりは止めない
+            osm.fetch_overpass(q, config.DATA_RAW / f)
+        except RuntimeError as e:
+            print(f"warning: {f} が取れませんでした（あとで取り直す）:", e)
     # 交差点のすぐ北の県道70号は ref が「県道70号線」で、ROUTE70_QUERY（ref=70）に入らない
     ways = osm.route70_ways(route70["elements"] + town["elements"])
     routes = [osm.shortest_route(ways, d.start, d.end) for d in config.SECTIONS]

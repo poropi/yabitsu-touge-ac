@@ -2,7 +2,8 @@ import json
 
 import numpy as np
 
-from yabitsu import assembly, config, features, layouts, minoge_area, pass_area, pavements, start_lot, textures, track, trees
+from yabitsu import (assembly, config, features, gsi, layouts, minoge_area, overpasses, pass_area, pavements, side_roads,
+                     start_lot, textures, track, trees)
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
 
@@ -33,6 +34,11 @@ def main():
     minoge = minoge_area.load(config.DATA_MANUAL / "s2_minoge.json")
     if minoge:
         assembly.add_pass_area(m, minoge_area.build(minoge, sec, minoge_area.dem_ground()))
+    sampler = gsi.default_sampler()
+    base_pads = [p for p in pads if p.get("kind") != "stub"]
+    assembly.add_meshes(m, side_roads.stub_meshes(side_roads.for_track(sec, base_pads, sampler)))
+    el = side_roads.load_elements()
+    assembly.add_meshes(m, overpasses.meshes(overpasses.from_osm(el, sec, sampler, overpasses.load_overrides())))
     assembly.add_layout_objects(m, sec, pads, layouts.load_layouts(), bounds)
     print(m.save()); print(m.summary())
 

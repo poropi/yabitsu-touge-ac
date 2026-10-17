@@ -1,4 +1,5 @@
-"""路面に重ねる模様（見た目だけ。走りは下の路面のまま）：ヘアピンの赤い滑り止め、丸い模様のコンクリート舗装、横断歩道。
+"""路面に重ねる模様（見た目だけ。走りは下の路面のまま）：ヘアピンの赤い滑り止め、丸い模様のコンクリート舗装、横断歩道、
+止まれの線（stop_line は上りの車線、stop_line_down は下りの車線）。
 表（data/manual/{区間}_pavements.csv）の列：s_from, s_to, kind, note。"""
 from dataclasses import dataclass
 
@@ -7,11 +8,12 @@ import numpy as np
 from .crosssection import surface_height
 from .meshgen import compact, ribbon
 
-KINDS = ("red_stripes", "concrete_circles", "crosswalk")
+KINDS = ("red_stripes", "concrete_circles", "crosswalk", "stop_line", "stop_line_down")
 LIFT = 0.005
 STRIPE_LEN, STRIPE_EVERY = 0.6, 1.8
 BAR_W, BAR_EVERY, CURB_GAP = 0.45, 0.9, 0.5
-MATERIALS = {"red_stripes": "paint_red", "concrete_circles": "concrete_circles", "crosswalk": "line_white"}
+MATERIALS = {"red_stripes": "paint_red", "concrete_circles": "concrete_circles", "crosswalk": "line_white",
+             "stop_line": "line_white", "stop_line_down": "line_white"}
 
 
 @dataclass
@@ -55,6 +57,10 @@ def meshes(sec, pavements):
         name = f"LINES_track_pave_{k:03d}"
         if p.kind == "concrete_circles":
             v, f, uv = _patch(sec, p.s_from, p.s_to, lambda hl, hr: -hr, lambda hl, hr: hl)
+        elif p.kind == "stop_line":  # 上り（s が増える向き）の車線＝道の左半分
+            v, f, uv = _patch(sec, p.s_from, p.s_to, lambda hl, hr: np.zeros_like(hl), lambda hl, hr: hl, n_lat=2, ends_only=True)
+        elif p.kind == "stop_line_down":  # 下りの車線＝道の右半分
+            v, f, uv = _patch(sec, p.s_from, p.s_to, lambda hl, hr: -hr, lambda hl, hr: np.zeros_like(hl), n_lat=2, ends_only=True)
         elif p.kind == "red_stripes":
             parts = [_patch(sec, a, a + STRIPE_LEN, lambda hl, hr: -hr, lambda hl, hr: hl, n_lat=5, ends_only=True)
                      for a in np.arange(p.s_from, p.s_to - STRIPE_LEN + 1e-9, STRIPE_EVERY)]

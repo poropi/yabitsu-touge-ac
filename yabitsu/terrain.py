@@ -42,13 +42,16 @@ def road_frame(sec, X, Y):
     return {"idx": idx, "lat": -dx * np.sin(h) + dy * np.cos(h), "along": dx * np.cos(h) + dy * np.sin(h), "dist": dist}
 
 
-def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None):
+def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_left=None, side_extra_right=None):
+    """side_extra_*（行ごとの歩道の幅）があれば、そのぶん道の範囲を外へ広げる（歩道の下に地形がかぶらない）。"""
     shape = np.shape(X)
     f = road_frame(sec, X, Y)
     idx, lat, along = f["idx"], f["lat"], f["along"]
     left = lat >= 0
     hw = np.where(left, sec.hw_left[idx], sec.hw_right[idx])
-    form = hw + GUTTER_WIDTH
+    xl = np.zeros(sec.n) if side_extra_left is None else np.asarray(side_extra_left, float)
+    xr = np.zeros(sec.n) if side_extra_right is None else np.asarray(side_extra_right, float)
+    form = hw + GUTTER_WIDTH + np.where(left, xl[idx], xr[idx])
     zc, sl, cr = sec.z[idx], sec.slope[idx], sec.crown[idx]
     z_edge = surface_height(np.where(left, hw, -hw), zc, sl, cr)
     e = np.hypot(np.maximum(np.abs(lat) - form, 0), np.maximum(np.abs(along) - 0.75, 0))
@@ -102,11 +105,11 @@ def _sample(sampler, unproject, X, Y):
     return fill_nan_nearest(sampler.sample(lat, lon).reshape(X.shape))
 
 
-def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=()):
+def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=(), side_extra=(None, None)):
     xs, ys = corridor_grid(sec, extra=extra)
     X, Y = np.meshgrid(xs, ys)
     D = _with_extra(road_frame(sec, X, Y)["dist"].reshape(X.shape), X, Y, extra, EXTRA_NEAR, NEAR_BAND)
-    Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right)
+    Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right, *side_extra)
     return {"xs": xs, "ys": ys, "Z": Z, "E": E, "D": D}
 
 

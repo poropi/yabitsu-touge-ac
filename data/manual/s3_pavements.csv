@@ -1,0 +1,24 @@
+s_from,s_to,kind,note
+240,244,crosswalk,s=250 の後ろ
+372,376,crosswalk,s=350 の先
+710,714,crosswalk,s=700 の先
+978,982,crosswalk,信号のある横断歩道（s=1000 の後ろ）
+974.5,974.95,stop_line,信号の手前（上り）
+983,983.45,stop_line_down,信号の手前（下り）
+1358,1362,crosswalk,s=1350 の先
+1578,1582,crosswalk,信号の交差点の手前（s=1600 の後ろ）
+1574.5,1574.95,stop_line,信号の交差点（上り）
+1603,1607,crosswalk,信号の交差点の先（s=1600）
+1608,1608.45,stop_line_down,信号の交差点（下り）
+1752,1756,crosswalk,s=1750
+1975,1979,crosswalk,s=2000 の後ろ
+2058,2062,crosswalk,s=2050 の先・横道の入口
+2103,2107,crosswalk,信号のある横断歩道（s=2100）
+2099.5,2099.95,stop_line,信号の手前（上り）
+2108,2108.45,stop_line_down,信号の手前（下り）
+2232,2236,crosswalk,s=2250 の後ろ
+2385,2425,red_stripes,赤い滑り止め（s=2400）
+2878,2882,crosswalk,s=2900 の後ろ
+3120,3124,crosswalk,s=3100 の先
+3836,3840,crosswalk,s=3850 の後ろ
+4083,4087,crosswalk,s=4100 の後ろ

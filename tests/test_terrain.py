@@ -99,3 +99,13 @@ def test_near_grid_reaches_extra_areas_far_from_the_road():
     assert near["D"][j, i] <= tr.NEAR_BAND  # 細かい地形が張られる
     ci = np.searchsorted(far["xs"], 105) - 1; cj = np.searchsorted(far["ys"], 145) - 1
     assert far["Dc"][cj, ci] < tr.FAR_HOLE  # 粗い地形には穴があく（重ならない）
+
+
+def test_sidewalk_widens_the_formation():
+    sec = _straight()
+    X, Y = _pts(sec, [3.6 + 1.0, 3.6 + 2.0 + 2.0])   # 歩道（幅 2）の上と、歩道の外側から 2m
+    walk = np.full(sec.n, 2.0)
+    Z, E = tr.carve(X, Y, np.full_like(X, 200.0), sec, side_extra_left=walk)
+    z_edge = cs.surface_height(3.0, 100.0, sec.slope[100], sec.crown[100])
+    assert Z[0, 0] < z_edge + 0.15                          # 歩道の下に地形がかぶらない
+    assert Z[0, 1] == pytest.approx(z_edge + 2.0 * tr.CUT_SLOPE)   # 切り土の斜面は歩道の外側から始まる

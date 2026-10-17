@@ -118,3 +118,69 @@ def test_real_barriers_do_not_cross_parking_lots():
             continue
         line = LineString(np.c_[x, y])
         assert all(line.intersection(lot).length < 0.5 for lot in lots), f
+
+
+def test_width_column_is_optional():
+    rows = [{"s_from": "0", "s_to": "10", "side": "L", "type": "sidewalk", "height_m": "", "width_m": "2.5", "note": ""},
+            {"s_from": "0", "s_to": "10", "side": "L", "type": "guardrail", "height_m": "", "note": ""}]
+    a, b = ft.load_features_rows(rows)
+    assert a.width_m == 2.5 and b.width_m == 0.0
+
+
+def test_sidewalk_top_is_curb_height_above_road_edge():
+    from yabitsu.crosssection import GUTTER_WIDTH
+    sec = _straight()
+    for side in ("L", "R"):
+        v, f, uv = ft.sidewalk_mesh(sec, ft.Feature(10, 60, side, "sidewalk", 0.0, "", width_m=2.0))
+        sgn = 1 if side == "L" else -1
+        hw = sec.hw_left[0] if side == "L" else sec.hw_right[0]
+        ze = sec.edge_z(sgn)[0]
+        top = v[np.isclose(v[:, 2], ze + ft.CURB_HEIGHT)]
+        assert np.abs(top[:, 1]).min() == pytest.approx(hw + GUTTER_WIDTH)
+        assert np.abs(top[:, 1]).max() == pytest.approx(hw + GUTTER_WIDTH + 2.0)
+        n = face_normals(v, f)
+        assert (n[:, 2] > 0.99).sum() > 0 and (n[:, 2] > -0.01).all()   # 上面は上向き、縁石の面は道の側を向く
+
+
+def test_hedge_is_box_outside_gutter():
+    from yabitsu.crosssection import GUTTER_WIDTH
+    sec = _straight()
+    v, f, uv = ft.hedge_mesh(sec, ft.Feature(10, 60, "L", "hedge", 1.5, ""))
+    ze = sec.edge_z(1)[0]
+    assert v[:, 1].min() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH)
+    assert v[:, 2].max() == pytest.approx(ze + 1.5)
+
+
+def test_overpass_deck_clears_road_and_piers_stand_outside():
+    from yabitsu.crosssection import GUTTER_WIDTH
+    sec = _straight()
+    deck, piers = ft.overpass_meshes(sec, ft.Feature(40, 60, "L", "overpass", 6.0, "", width_m=8.0))
+    ze = max(sec.edge_z(1)[50], sec.edge_z(-1)[50])
+    assert deck[0][:, 2].min() >= ze + 6.0 - 1e-6
+    assert deck[0][:, 1].max() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH + 8.0)
+    inner = np.abs(piers[0][:, 1]).min()
+    assert inner >= sec.hw_left[0] + GUTTER_WIDTH + 0.5 - 1e-6
+
+
+def test_walls_stand_behind_the_sidewalk():
+    from yabitsu.crosssection import GUTTER_WIDTH
+    sec = _straight()
+    feats = [ft.Feature(10, 60, "L", "sidewalk", 0.0, "", width_m=2.0), ft.Feature(20, 50, "L", "retaining_wall", 2.0, "")]
+    off_l, off_r = ft.sidewalk_offsets(sec, feats)
+    assert off_l[30] == 2.0 and off_l[80] == 0.0 and off_r[30] == 0.0
+    v, f, uv = ft.retaining_wall_mesh(sec, feats[1], offset=off_l)
+    assert v[:, 1].min() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH + 2.0)
+    v, f, uv = ft.hedge_mesh(sec, ft.Feature(20, 50, "L", "hedge", 1.2, ""), offset=off_l)
+    assert v[:, 1].min() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH + 2.0)
+
+
+def test_fence_is_see_through_railing_on_collision_wall():
+    sec = _straight()
+    from yabitsu.manifest import Manifest
+    from yabitsu import assembly
+    import tempfile
+    with tempfile.TemporaryDirectory() as d:
+        m = Manifest(d)
+        assembly.add_features(m, sec, [ft.Feature(10, 60, "L", "fence", 1.1, "")])
+        (name, info), = m.meshes.items()
+        assert name.startswith("1WALL_track_fence_") and info["material"] == "railing_bars"

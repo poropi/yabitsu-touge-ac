@@ -54,3 +54,15 @@ def test_red_stripes_follow_the_road_crown():
     sec, name, v, f, mat = _mesh("red_stripes")
     assert np.any(np.abs(v[:, 1]) < 1e-9)          # 中央にも頂点がある
     assert len(v) == 10 * 2 * 5                     # 帯ごとに 長さ2 × 横5 点
+
+
+def test_stop_line_covers_left_half_only():
+    sec, name, v, f, mat = _mesh("stop_line", 50.0, 50.45)
+    assert mat == "line_white"
+    assert v[:, 1].min() == pytest.approx(0.0) and v[:, 1].max() == pytest.approx(sec.hw_left[0])
+    assert np.ptp(v[:, 0]) == pytest.approx(0.45)
+
+
+def test_stop_line_down_covers_right_half():
+    sec, name, v, f, mat = _mesh("stop_line_down", 50.0, 50.45)
+    assert v[:, 1].max() == pytest.approx(0.0) and v[:, 1].min() == pytest.approx(-sec.hw_right[0])

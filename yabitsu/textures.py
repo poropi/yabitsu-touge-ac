@@ -23,6 +23,7 @@ MATERIALS = {
     "paint_red": {"texture": "textures/paint_red.png", "shader": "ksPerPixel"},
     "line_orange": {"texture": "textures/line_orange.png", "shader": "ksPerPixel"},
     "concrete_circles": {"texture": "textures/concrete_circles.png", "shader": "ksPerPixel"},
+    "hedge": {"texture": "textures/hedge.png", "shader": "ksPerPixel"},
 }
 
 
@@ -144,7 +145,8 @@ def write_textures(out_dir):
             "tiles": tiles(),
             "paint_red": _gray(256, 18, 0.62, 0.08, (1.0, 0.42, 0.36)),
             "line_orange": _gray(256, 19, 0.80, 0.05, (1.0, 0.62, 0.16)),
-            "concrete_circles": concrete_circles()}
+            "concrete_circles": concrete_circles(),
+            "hedge": _gray(512, 20, 0.42, 0.30, (0.55, 1.0, 0.45), coarse=6, fine=2)}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name
