@@ -212,3 +212,34 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
         else:
             raise ValueError(f"物の kind が分かりません: {ob}")
     return [(f"{prefix}_{mat}", *_merge(parts), mat, True) for mat, parts in groups.items()]
+
+
+def pole_sign_meshes(signs, z_fn):
+    """立て看板：柱（高さ pole_h）と、柱の上の方の板（両面に文字）。signs = [{"text", "bg", "fg", "at", "facing_deg", "w_m", "h_m", "z_m", "pole_h"}]"""
+    out, poles = [], []
+    for k, s in enumerate(signs):
+        p = _xy(s["at"]); z = float(z_fn(np.atleast_1d(p[0]), np.atleast_1d(p[1]))[0])
+        face = _heading(float(s.get("facing_deg", 0.0))); n = np.array([-face[1], face[0]])
+        w, h, z1 = float(s.get("w_m", 1.2)), float(s.get("h_m", 2.0)), z + float(s.get("z_m", 3.0))
+        poles.append(_prism(p - face * 0.15, 0.12, z - 0.3, z + float(s.get("pole_h", z1 - z + h)), 8))
+        front = _quad(p - n * w / 2, p + n * w / 2, z1, z1 + h)          # 表（face の側）
+        back = _quad(p + n * w / 2 - face * 0.3, p - n * w / 2 - face * 0.3, z1, z1 + h)
+        body = _box(p - face * 0.15, face, w, 0.3, z1, z1 + h)
+        out.append((f"town_polesign_{k}", *_merge([front, back]), f"polesign_{k}", True))
+        poles.append(body)
+    if poles:
+        out.append(("1WALL_town_polesign_poles", *_merge(poles), "pole_grey", True))
+    return out
+
+
+def write_pole_sign_textures(signs, out_dir):
+    from pathlib import Path
+    from .textures import sign_texture
+    out = Path(out_dir); out.mkdir(parents=True, exist_ok=True)
+    paths = {}
+    for k, s in enumerate(signs):
+        w, h = float(s.get("w_m", 1.2)), float(s.get("h_m", 2.0))
+        px = 160
+        sign_texture(s["text"], s.get("bg", "#FFFFFF"), s.get("fg", "#000000"), int(w * px), int(h * px), border=s.get("border")).save(out / f"polesign_{k}.png")
+        paths[f"polesign_{k}"] = f"textures/polesign_{k}.png"
+    return paths

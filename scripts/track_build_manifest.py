@@ -101,9 +101,13 @@ def main():
     # 町の範囲（名古木交差点）：別の kn5（config.TOWN_GROUP）
     assembly.add_meshes(m, tw.meshes(), group=config.TOWN_GROUP)
     assembly.add_meshes(m, tw.object_meshes(), group=config.TOWN_GROUP)
+    for name, rel in town_objects.write_pole_sign_textures(tw.spec.get("pole_signs", []), config.TRACK_BUILD_DIR / "textures").items():
+        m.add_material(name, texture=rel)
+    lots = json.loads((config.DATA_MANUAL / "s3_lots.json").read_text(encoding="utf-8"))   # 店の駐車場・敷地の舗装と白線
+    assembly.add_meshes(m, tw.lot_meshes(lots), group=config.TOWN_GROUP)
     for name, rel in buildings.write_textures(blds, config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel)
-    avoid = tw.carriageway.union(tw.sidewalk).union(tw.drivable())
+    avoid = tw.paved_avoid()
     assembly.add_meshes(m, buildings.merge_by_material(buildings.building_meshes(blds, tw.ground.z, avoid)), group=config.TOWN_GROUP)
     el = side_roads.load_elements()
     assembly.add_meshes(m, motorway.meshes(mws))

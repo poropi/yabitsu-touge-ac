@@ -112,3 +112,24 @@ def test_road_ground_follows_nearest_road_height():
     sec = _straight(201); sec.z[:] = 100.0 + 0.1 * sec.s
     z = to.road_ground(sec)
     assert float(z(np.array([50.0]), np.array([6.0]))[0]) == pytest.approx(105.0, abs=0.11)
+
+
+def test_buildings_inside_a_drivable_lot_are_not_swallowed():
+    from shapely.geometry import box
+    sec, t = _auto_town([_node([0, -20], 1, highway="crossing", **{"crossing:markings": "zebra"})])
+    lot = box(10, 8, 40, 30); shop = box(18, 14, 30, 24)
+    t.spec["drivable_extra"] = [{"points": [list(_ll(x, y)) for x, y in lot.exterior.coords]}]
+    assert t.paved_avoid().intersection(shop).area < 0.01        # 建物を消すのに使う範囲に、店の所は入らない
+
+
+def test_pole_sign_has_pole_and_two_faced_panel_with_its_own_texture(tmp_path):
+    g = _ground()
+    signs = [{"text": "セブン\nイレブン", "bg": "#FFFFFF", "fg": "#008C45", "at": _ll(0, 0), "facing_deg": 0.0,
+              "w_m": 1.2, "h_m": 2.4, "z_m": 3.5, "pole_h": 6.0}]
+    ms = to.pole_sign_meshes(signs, g.z)
+    mats = {m[4] for m in ms}
+    assert "pole_grey" in mats and "polesign_0" in mats
+    panel = next(m for m in ms if m[4] == "polesign_0")[1]
+    assert panel[:, 2].min() == pytest.approx(103.5) and panel[:, 2].max() == pytest.approx(105.9)
+    paths = to.write_pole_sign_textures(signs, tmp_path)
+    assert (tmp_path / "polesign_0.png").exists() and paths["polesign_0"] == "textures/polesign_0.png"

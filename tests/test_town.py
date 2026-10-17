@@ -192,3 +192,17 @@ def test_edge_lines_do_not_run_inside_other_roads_and_links_get_none():
     for m in t.markings:
         if m.get("road") == "11" and m["kind"] == "lane_line":
             assert LineString(tw._xy(m["points"])).intersection(other).length < 0.5
+
+
+def test_lots_and_their_lines_are_drawn_on_the_ground_outside_the_road():
+    from shapely.geometry import box
+    sec, t = _town()
+    lot = box(20, 10, 40, 30); line = box(25, 12, 25.15, 17)
+    ll = lambda g: [list(geo.from_local(x, y)) for x, y in g.exterior.coords]
+    ms = t.lot_meshes({"lots": [ll(lot)], "lines": [ll(line)]})
+    names = [m[0] for m in ms]
+    assert any(n.startswith("town_lot_") for n in names) and any(n.startswith("LINES_town_lot_") for n in names)
+    v = next(m for m in ms if m[0].startswith("town_lot_"))[1]
+    assert np.allclose(v[:, 2], 100.0 + tw.LOT_LIFT, atol=1e-6)
+    lv = next(m for m in ms if m[0].startswith("LINES_town_lot_"))[1]
+    assert lv[:, 2].min() > 100.0 + tw.LOT_LIFT

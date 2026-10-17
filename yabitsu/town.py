@@ -37,6 +37,7 @@ CLOSURE_GAP_M = 3.0    # 横断歩道の外側の縁から封鎖の線まで
 STOP_GAP_M = 2.0       # 横断歩道の外側の縁から停止線まで
 SIGNAL_NEAR_M = 10.0   # 横断歩道からこの距離の中に信号があれば、停止線を引く
 CLOSURE_OVERHANG = 0.5
+LOT_LIFT = 0.03       # 店の駐車場・敷地の舗装（地面からの高さ。見た目だけ）
 HOLE_FILL_M2 = 400.0   # 走れる範囲の中の、これより小さい穴（中央の島など）は埋める
 LINED = {"trunk", "primary", "secondary"}  # 線を引く道（連絡路には引かない）
 EDGE_INSET = 0.5       # 外側線は車道の端からこれだけ内側
@@ -346,6 +347,21 @@ class Town:
         holes = [h for h in best.interiors if Polygon(h).area > HOLE_FILL_M2]
         return Polygon(best.exterior, holes)
 
+    def lot_meshes(self, lots):
+        """道の外の舗装（店の駐車場・敷地）と、駐車場の白線（data/manual/s3_lots.json）。車道・歩道の上には描かない。"""
+        road = self.carriageway.union(self.sidewalk)
+        polys = unary_union([Polygon(_xy(p)).buffer(0) for p in lots.get("lots", [])]).difference(road)
+        out = [(f"town_lot_{k:02d}", v, f, uv, "asphalt", True) for k, (v, f, uv) in enumerate(grid_drape(polys, self.ground.z, LOT_LIFT))]
+        lines = unary_union([Polygon(_xy(p)).buffer(0) for p in lots.get("lines", [])]).intersection(polys)
+        if not lines.is_empty:
+            out += [(f"LINES_town_lot_{k:02d}", v, f, uv, "line_white", True)
+                    for k, (v, f, uv) in enumerate(grid_drape(lines, self.ground.z, LOT_LIFT + 0.015))]
+        return out
+
+    def paved_avoid(self):
+        """建物と重ねてはいけない所：車道と歩道（走れる範囲の穴埋めや、駐車場は含めない。建物は駐車場の中にも建つ）。"""
+        return self.carriageway.union(self.sidewalk)
+
     def boundary_walls(self):
         """走れる範囲の外周のうち、封鎖の線と、本線の帯へ出る口を除いた線（見えない壁を立てる所）。"""
         d = self.drivable()
@@ -408,6 +424,7 @@ class Town:
         lines = self.boundary_walls() + [LineString(_xy([c["a"], c["b"]])) for c in self.closures]
         out += to.wall_meshes(lines, self.ground.z)
         out += to.signal_meshes(self.signals(), self.ground.z)
+        out += to.pole_sign_meshes(self.spec.get("pole_signs", []), self.ground.z)
         objects = list(self.spec.get("objects", []))
         for e in self._bus_stops:   # OSM のバス停：道の方を向ける
             p = _xy([[e["lat"], e["lon"]]])[0]
