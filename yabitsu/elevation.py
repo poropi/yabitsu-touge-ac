@@ -42,6 +42,30 @@ def fit_profile(s, z_raw, valid, step, tol=1.5, sigmas=SIGMAS):
     return z, zref, sigmas[-1]
 
 
+def fit_sections(s, z_raw, valid, step, bounds, blend_m=60.0):
+    """区間ごとに fit_profile する。上の区間の値はそのまま使い、境目の下側 blend_m の間だけ、下の区間の値を
+    「上の区間の境目の高さと勾配で延ばした直線」へなめらかに寄せる（高さと勾配が境目でそろう）。"""
+    s = np.asarray(s, float); z_raw = np.asarray(z_raw, float); valid = np.asarray(valid, bool)
+    z = np.empty_like(s); z_ref = np.empty_like(s); sigmas = []
+    for n, (a, b) in enumerate(bounds):
+        m = (s >= a - 1e-6) & (s <= b + 1e-6)
+        # 下の区間は境目の先 blend_m まで含めて合わせる（区間の端でなめらか化が平らになるのを避ける）。
+        # 一番上の区間は、自分の範囲だけで合わせる（つないでも結果が変わらない）
+        ext = m | ((s > b) & (s <= b + blend_m)) if n < len(bounds) - 1 else m
+        zk, rk, sg = fit_profile(s[ext], z_raw[ext], valid[ext], step)
+        keep = m[ext]
+        z[m], z_ref[m] = zk[keep], rk[keep]; sigmas.append(sg)
+    k = max(1, int(round(10.0 / step)))
+    for (_, b), _ in zip(bounds[:-1], bounds[1:]):
+        i = int(np.argmin(np.abs(s - b)))
+        j = min(i + k, len(s) - 1)
+        g = (z[j] - z[i]) / max(s[j] - s[i], 1e-9)
+        w_m = (s >= b - blend_m) & (s < s[i])
+        t = (s[w_m] - (b - blend_m)) / blend_m; w = t * t * (3 - 2 * t)
+        z[w_m] = (1 - w) * z[w_m] + w * (z[i] + g * (s[w_m] - s[i]))
+    return z, z_ref, sigmas
+
+
 def profile_stats(s, z, z_ref, valid, step, tol=1.5):
     k = max(1, int(round(10 / step)))
     grade = (z[k:] - z[:-k]) / (s[k:] - s[:-k]) * 100
