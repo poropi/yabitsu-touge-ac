@@ -112,6 +112,12 @@ class Stub:
         t = self.axis.project(shapely.Point(x, y))
         return float(np.interp(t, self.t_knots, self.z_knots))
 
+    def crosswalk_area(self, p):
+        """分かれ道の入口から横断歩道（点 p を中心に crosswalk_mesh で描く所）の奥の端までの範囲。柵はこの外へ下げる。"""
+        t = self.axis.project(shapely.Point(*p))
+        seg = substring(self.axis, 0.0, min(t + CW_LEN / 2, self.axis.length))
+        return seg.buffer(self.width / 2, cap_style="flat")
+
     def crosswalk_mesh(self, p):
         """横断歩道：点 p（道の上）を中心に、道の向きに長さ CW_LEN の白い帯を、道幅いっぱいに CW_EVERY おきに並べる。"""
         t = self.axis.project(shapely.Point(*p))

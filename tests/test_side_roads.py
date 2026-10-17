@@ -132,3 +132,23 @@ def test_branch_gap_is_only_the_opening_even_when_the_branch_turns_back_along_th
     sr.set_back_mouth(st, sec, [box(0, 3.6, 200, 3.6 + 1.5)])
     (s0, s1), = sr.branch_gaps([st], sec)["L"]
     assert 93.0 <= s0 and s1 <= 104.0 and s1 - s0 >= st.width
+
+
+def test_barricade_stands_behind_the_crosswalk_on_the_branch():
+    """分かれ道の入口に横断歩道があるときは、柵は横断歩道の後ろ（b16：1541m 右）。"""
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 60]])], sec, _Flat(), keep_out=[])
+    cw = st.crosswalk_area((100, 7.0))
+    assert cw.contains(Point(100, 7.0 + sr.CW_LEN / 2 - 0.1))
+    sr.set_back_mouth(st, sec, [cw])
+    (x0, y0), (x1, y1) = st.mouth.coords
+    assert min(y0, y1) >= 7.0 + sr.CW_LEN / 2 + sr.CLEAR_M - 1e-6
+
+
+def test_barricade_goes_behind_a_crosswalk_set_further_into_the_branch():
+    """横断歩道が入口より奥（本線から離れた所）にあっても、柵はその後ろ（b17：1583m 左）。"""
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 60]])], sec, _Flat(), keep_out=[])
+    sr.set_back_mouth(st, sec, [st.crosswalk_area((100, 12.0))])
+    (x0, y0), (x1, y1) = st.mouth.coords
+    assert min(y0, y1) >= 12.0 + sr.CW_LEN / 2 + sr.CLEAR_M - 1e-6

@@ -82,6 +82,12 @@ def sidewalk_polygons(sec, feats):
     return out
 
 
+def side_crosswalk_points():
+    """横道の上の横断歩道（OSM、data/manual/s3_side_crosswalks.json）の位置（ローカル座標）。"""
+    pts = json.loads((config.DATA_MANUAL / "s3_side_crosswalks.json").read_text(encoding="utf-8"))
+    return [tuple(float(v) for v in geo.to_local(la, lo)) for la, lo in pts]
+
+
 def track_stubs(sec, pads, feats, sampler=None):
     """分かれ道（入口の柵・見えない壁は、本線の路面と歩道から離して置く）と、道ぞいの壁などを入口で切った features。"""
     from shapely.ops import unary_union
@@ -90,6 +96,8 @@ def track_stubs(sec, pads, feats, sampler=None):
     base = [p for p in pads if p.get("kind") != "stub"]
     stubs = side_roads.for_track(sec, base, sampler, exclude=unary_union([tw.region] + [z.area() for z in sps]))
     walks = sidewalk_polygons(sec, feats)
-    for st in stubs:
-        side_roads.set_back_mouth(st, sec, walks)
+    cws = side_crosswalk_points()
+    for st in stubs:   # 分かれ道の上の横断歩道があれば、柵はその後ろ
+        own = [st.crosswalk_area(p) for p in cws if st.surface.buffer(1.0).contains(Point(*p))]
+        side_roads.set_back_mouth(st, sec, walks + own)
     return stubs, ft.cut_at(feats, side_roads.branch_gaps(stubs, sec))
