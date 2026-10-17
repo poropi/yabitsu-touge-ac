@@ -1,0 +1,52 @@
+{
+ "note": "名古木交差点（町の範囲 半径200m）。道幅は空中写真（5m の目盛り）とストリートビュー（2025）で測った値。横断歩道・停止線・封鎖は auto=true で OSM の横断歩道・信号から自動で置き、ここで足し引きする",
+ "auto": true,
+ "corner_radius_m": 8.0,
+ "roads": {
+  "main": {
+   "sidewalk_l": 2.0,
+   "sidewalk_r": 2.0
+  },
+  "488626605": {
+   "width_m": 10.0,
+   "sidewalk_l": 2.5,
+   "sidewalk_r": 2.5
+  },
+  "488626604": {
+   "width_m": 10.0,
+   "sidewalk_l": 2.5,
+   "sidewalk_r": 2.5
+  },
+  "488626606": {
+   "width_m": 10.0,
+   "sidewalk_l": 2.5,
+   "sidewalk_r": 2.5
+  },
+  "1036611851": {
+   "width_m": 10.0,
+   "sidewalk_l": 2.5,
+   "sidewalk_r": 2.5
+  },
+  "80142287": {
+   "width_m": 8.0,
+   "sidewalk_l": 2.0,
+   "sidewalk_r": 2.0
+  },
+  "39447481": {
+   "width_m": 6.0,
+   "sidewalk_l": 1.0,
+   "sidewalk_r": 1.0
+  },
+  "80142970": {
+   "width_m": 5.0,
+   "sidewalk_l": 0.0,
+   "sidewalk_r": 0.0
+  }
+ },
+ "closures": [],
+ "markings": [],
+ "signals": [],
+ "objects": [],
+ "drivable_extra": [],
+ "pits": []
+}

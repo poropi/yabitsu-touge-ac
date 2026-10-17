@@ -11,8 +11,11 @@ from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 GROUP = config.TRACK_GROUP
 
 
-def add_road(m, sec, rows_per_chunk=200):
-    for k, (i0, i1) in enumerate(mg.split_rows(sec.n, rows_per_chunk)):
+def add_road(m, sec, rows_per_chunk=200, skip=None):
+    """skip=(s0, s1) の範囲（町の範囲：道は town の多角形で作る）は帯を作らない。今は s0 = 0 だけを扱う。"""
+    first = int(np.searchsorted(sec.s, skip[1] - 1e-9)) if skip else 0
+    for k, (i0, i1) in enumerate(mg.split_rows(sec.n - first, rows_per_chunk)):
+        i0, i1 = i0 + first, i1 + first
         sl = slice(i0, i1 + 1)
         v, f, uv = mg.road_surface(sec, sl)
         bad = mg.folded_faces(v, f)
@@ -30,9 +33,13 @@ CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("li
                  "orange_solid": ("line_orange", None)}
 
 
-def add_centrelines(m, sec, rows):
-    """中央線の表（区間ごとの {区間}_centrelines.csv を通しの距離にしたもの）の範囲にだけ、中央線を引く。"""
+def add_centrelines(m, sec, rows, s_min=0.0):
+    """中央線の表（区間ごとの {区間}_centrelines.csv を通しの距離にしたもの）の範囲にだけ、中央線を引く。
+    s_min より手前（町の範囲）は引かない（町の路面の表示で描く）。"""
     for k, r in enumerate(rows):
+        r = {**r, "s_from": max(float(r["s_from"]), s_min)}
+        if float(r["s_from"]) >= float(r["s_to"]):
+            continue
         style = str(r["style"]).strip()
         if style not in CENTRE_STYLES:
             raise ValueError(f"中央線の style は {list(CENTRE_STYLES)} のどれか: {r}")
