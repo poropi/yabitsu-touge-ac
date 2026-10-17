@@ -228,8 +228,8 @@ def island_objects(objects, zf, prefix):
             leaves.append(_blob(p, float(ob.get("r_m", 0.7)), z, float(ob.get("h_m", 0.9)), seed=k))
         elif kind == "tree":
             h = float(ob.get("h_m", 7.0)); r = float(ob.get("r_m", 2.5))
-            trunks.append(_cyl(p, 0.18, z - 0.2, z + h * 0.55, 8, r1=0.12))
-            leaves.append(_blob(p, r, z + h * 0.4, h * 0.6, seed=k + 50))
+            trunks.append(_cyl(p, 0.2, z - 0.2, z + h * 0.7, 8, r1=0.12))
+            leaves.append(_blob(p, r, z + h * 0.58, h * 0.42, seed=k + 50))   # 葉は幹の上の方だけ（下を見通せる）
     if stones:
         out.append((f"{prefix}_stones", *_merge(stones), "stone", True))
     if leaves:

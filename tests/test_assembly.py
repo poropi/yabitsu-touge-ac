@@ -67,3 +67,19 @@ def test_orange_flanked_adds_white_dashes_both_sides(tmp_path):
     lat = np.unique(np.round(np.abs(v[:, 1]), 2))
     assert lat.min() >= assembly.FLANK_OFFSET - 0.1 and lat.max() <= assembly.FLANK_OFFSET + 0.1
     assert (v[:, 1] > 0).any() and (v[:, 1] < 0).any()
+
+
+def test_bus_bay_gets_dashed_separator_at_the_old_edge(tmp_path):
+    import numpy as np
+    from yabitsu import crosssection as cs
+    m = Manifest(tmp_path)
+    sec = _straight(401)
+    bays = cs.parse_bay_rows([{"s_from": "100", "s_to": "160", "side": "L", "depth_m": "3", "taper_m": "10"}])
+    hw0 = sec.hw_left.copy()
+    sec.hw_left, sec.hw_right = cs.apply_bays(sec.s, sec.hw_left, sec.hw_right, bays)
+    assembly.add_bay_lines(m, sec, bays)
+    (name,) = m.groups[assembly.GROUP]["meshes"]
+    v = np.load(tmp_path / m.meshes[name]["file"])["verts"]
+    assert m.meshes[name]["material"] == "line_white"
+    assert v[:, 0].min() >= 100 - 1e-6 and v[:, 0].max() <= 160 + 1e-6
+    assert np.allclose(np.abs(v[:, 1]).mean(), hw0[0] - 0.25, atol=0.1)

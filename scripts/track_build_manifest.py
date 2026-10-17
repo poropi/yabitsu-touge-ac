@@ -22,6 +22,8 @@ def main():
     ground = terrain.terrain_z(near, mid)   # 景色の建物・道は、できあがった地形の上に置く
     bounds = track.load_bounds()
     assembly.add_centrelines(m, sec, track.load_section_rows("centrelines", bounds), s_min=tw.main_skip[1])
+    from yabitsu import crosssection as cs
+    assembly.add_bay_lines(m, sec, cs.parse_bay_rows(track.load_section_rows("busbays", bounds)))
     assembly.add_features(m, sec, features.load_features_rows(track.load_section_rows("features", bounds)))
     for name, v, f, uv, mat in pavements.meshes(sec, pavements.load_rows(track.load_section_rows("pavements", bounds))):
         m.add_mesh(assembly.GROUP, name, v, f, uv, mat)

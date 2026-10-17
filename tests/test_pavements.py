@@ -66,3 +66,8 @@ def test_stop_line_covers_left_half_only():
 def test_stop_line_down_covers_right_half():
     sec, name, v, f, mat = _mesh("stop_line_down", 50.0, 50.45)
     assert v[:, 1].max() == pytest.approx(0.0) and v[:, 1].min() == pytest.approx(-sec.hw_right[0])
+
+
+def test_red_half_down_paints_the_right_half():
+    sec, name, v, f, mat = _mesh("red_half_down", 50.0, 70.0)
+    assert mat == "paint_red" and v[:, 1].max() == pytest.approx(0.0) and v[:, 1].min() == pytest.approx(-sec.hw_right[0])

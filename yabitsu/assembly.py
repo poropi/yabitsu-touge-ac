@@ -61,6 +61,24 @@ def add_centrelines(m, sec, rows, s_min=0.0):
                 m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}_flank", *_merge(parts), "line_white")
 
 
+def add_bay_lines(m, sec, bays, dash=(3.0, 3.0)):
+    """バス停の切り込みと車線の境の白い破線（広げる前の道の端の位置＝外側線の位置）。"""
+    from .crosssection import apply_bays
+    for k, b in enumerate(bays):
+        add_l, add_r = apply_bays(sec.s, np.zeros(sec.n), np.zeros(sec.n), [b])
+        i0 = int(np.searchsorted(sec.s, b["s_from"])); i1 = int(np.searchsorted(sec.s, b["s_to"], side="right")) - 1
+        if i1 - i0 < 2:
+            continue
+        sl = slice(i0, i1 + 1)
+        if b["side"] == "L":
+            lat = (sec.hw_left - add_l)[sl] - 0.25
+        else:
+            lat = -((sec.hw_right - add_r)[sl] - 0.25)
+        v, f, uv = mg.compact(*mg.line(sec, sl, lat, dash=dash))
+        if len(f):
+            m.add_mesh(GROUP, f"LINES_track_bay_{k:02d}", v, f, uv, "line_white")
+
+
 def add_terrain(m, near, far, mid=None):
     D = near["D"]
     keep = (D[:-1, :-1] <= NEAR_BAND) & (D[:-1, 1:] <= NEAR_BAND) & (D[1:, 1:] <= NEAR_BAND) & (D[1:, :-1] <= NEAR_BAND)
