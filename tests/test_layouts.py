@@ -108,3 +108,27 @@ def test_load_layouts_reads_json(tmp_path):
                  encoding="utf-8")
     (l,) = lay.load_layouts(p)
     assert l.name == "s1_up" and l.direction == 1 and l.grid == (35.4, 139.2)
+
+
+_REAL = __import__("yabitsu.config", fromlist=["x"]).DATA_PROCESSED / "track_section.json"
+
+
+@pytest.mark.skipif(not _REAL.exists(), reason="処理済みデータがまだない")
+def test_real_layouts_start_on_the_road_and_finish_ahead():
+    import json
+    from yabitsu import config, track
+    from yabitsu.crosssection import Section
+    sec = Section.load_json(_REAL); pads = json.loads((config.DATA_PROCESSED / "track_pads.json").read_text(encoding="utf-8"))
+    bounds = track.load_bounds()
+    ls = lay.load_layouts()
+    assert {l.name for l in ls} == {"s1_up", "s1_down", "s2_up", "s2_down"}
+    for l in ls:
+        objs = _by(lay.layout_objects(sec, pads, l, bounds))
+        for i in range(4):
+            d = objs[f"AC_START_{i}"]
+            k = int(np.argmin(np.hypot(sec.x - d.location[0], sec.y - d.location[1])))
+            assert np.hypot(sec.x[k] - d.location[0], sec.y[k] - d.location[1]) <= max(sec.hw_left[k], sec.hw_right[k]), (l.name, i)
+        s_start = lay.s_of(sec, l.timing_start, bounds, l.section); s_fin = lay.s_of(sec, l.finish, bounds, l.section)
+        s_grid = lay.s_of(sec, l.grid, bounds, l.section)
+        assert (s_fin - s_start) * l.direction > 1000, l.name
+        assert 0 < (s_start - s_grid) * l.direction < 80, l.name  # s1_down はユーザーが選んだ地点で 60m
