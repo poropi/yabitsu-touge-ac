@@ -6,25 +6,15 @@
 import math
 
 import numpy as np
-import shapely
 from shapely.geometry import LineString, Point, Polygon
 from shapely.geometry.polygon import orient
 
-from . import geo
+from . import site
 from .acobjects import Dummy
 from .start_lot import Frame, _gable_ends, _gable_roof, _merge, box, road_formation
 
-PLANE_RADIUS = 40.0  # この半径の中の路面の高さに、平面を合わせる
-
-
-def _xy(ll):
-    a = np.asarray(ll, float).reshape(-1, 2)
-    x, y = geo.to_local(a[:, 0], a[:, 1])
-    return np.c_[x, y]
-
-
-def _largest(g):
-    return g if g.geom_type == "Polygon" else max(g.geoms, key=lambda q: q.area)
+_xy = site.ll_to_xy
+_largest = site.largest
 
 
 class Site:
@@ -37,12 +27,7 @@ class Site:
         i0, i1 = ends
         self.line = LineString(lane)
 
-        c = lane.mean(0)
-        m = np.hypot(sec.x - c[0], sec.y - c[1]) <= PLANE_RADIUS
-        A = np.c_[np.ones(m.sum()), sec.x[m] - c[0], sec.y[m] - c[1]]
-        ridge = np.array([[0.0, 1.0, 0.0], [0.0, 0.0, 1.0]])  # 道がまっすぐで横の傾きが決まらないときは 0 にする
-        z0, gx, gy = np.linalg.lstsq(np.r_[A, ridge], np.r_[sec.z[m], 0.0, 0.0], rcond=None)[0]
-        self.plane = [float(c[0]), float(c[1]), float(z0), float(gx), float(gy)]
+        self.plane = site.fit_plane(sec, lane.mean(0))
 
         road = road_formation(sec, s_min=sec.s[max(i0 - 40, 0)], s_max=sec.s[min(i1 + 40, sec.n - 1)])
         lane_band = self.line.buffer(w / 2, cap_style="flat", join_style="mitre")
@@ -54,18 +39,10 @@ class Site:
         }
 
     def z(self, x, y):
-        cx, cy, z0, gx, gy = self.plane
-        return z0 + gx * (np.asarray(x, float) - cx) + gy * (np.asarray(y, float) - cy)
+        return site.plane_z(self.plane, x, y)
 
     def _draped(self, poly, dz=0.0, uv_scale=4.0):
-        verts, faces = [], []
-        for t in shapely.constrained_delaunay_triangles(poly).geoms:
-            p = np.asarray(t.exterior.coords)[:3]
-            if (p[1, 0] - p[0, 0]) * (p[2, 1] - p[0, 1]) - (p[1, 1] - p[0, 1]) * (p[2, 0] - p[0, 0]) < 0:
-                p = p[::-1]
-            b = len(verts); verts += p.tolist(); faces.append((b, b + 1, b + 2))
-        v = np.array(verts, float)
-        return np.c_[v, self.z(v[:, 0], v[:, 1]) + dz], np.array(faces, np.int32), v / uv_scale
+        return site.draped(poly, self.z, dz, uv_scale)
 
     def _curb(self, poly, h):
         ring = np.asarray(orient(poly, 1.0).exterior.coords)  # 反時計回り：進む向きの右側が外

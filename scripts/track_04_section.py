@@ -5,7 +5,7 @@ import numpy as np
 from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
-from yabitsu import config, crosssection as cs, pass_area, start_lot, track
+from yabitsu import config, crosssection as cs, minoge_area, pass_area, start_lot, track
 from yabitsu.centerline import Centerline
 
 P = config.DATA_PROCESSED
@@ -38,6 +38,9 @@ def main():
                 g = g if g.geom_type == "Polygon" else max(g.geoms, key=lambda q: q.area)
                 p["polygon"] = [list(c) for c in g.exterior.coords]
         pads = pads + site_pads
+    minoge = minoge_area.load(config.DATA_MANUAL / "s2_minoge.json")
+    if minoge:
+        pads = pads + minoge_area.build(minoge, sec, minoge_area.dem_ground()).pads()
     (P / "track_pads.json").write_text(json.dumps(pads, ensure_ascii=False), encoding="utf-8")
     print(f"section rows={sec.n} width {2 * sec.hw_left.min():.1f}-{2 * sec.hw_left.max():.1f} m, "
           f"max slope {np.abs(sec.slope).max() * 100:.1f}%, pads={[(p['name'], p['role']) for p in pads]}")

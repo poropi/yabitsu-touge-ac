@@ -56,7 +56,7 @@ def meshes(sec, pavements):
         if p.kind == "concrete_circles":
             v, f, uv = _patch(sec, p.s_from, p.s_to, lambda hl, hr: -hr, lambda hl, hr: hl)
         elif p.kind == "red_stripes":
-            parts = [_patch(sec, a, a + STRIPE_LEN, lambda hl, hr: -hr, lambda hl, hr: hl, n_lat=2, ends_only=True)
+            parts = [_patch(sec, a, a + STRIPE_LEN, lambda hl, hr: -hr, lambda hl, hr: hl, n_lat=5, ends_only=True)
                      for a in np.arange(p.s_from, p.s_to - STRIPE_LEN + 1e-9, STRIPE_EVERY)]
             v, f, uv = _merge(parts)
         else:  # crosswalk：道の向きに平行な白い帯を、路肩から CURB_GAP 内側まで横に並べる

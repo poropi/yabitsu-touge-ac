@@ -2,7 +2,7 @@ import json
 
 import numpy as np
 
-from yabitsu import assembly, config, features, layouts, pass_area, pavements, start_lot, textures, track, trees
+from yabitsu import assembly, config, features, layouts, minoge_area, pass_area, pavements, start_lot, textures, track, trees
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
 
@@ -29,6 +29,9 @@ def main():
     site_spec = pass_area.load(config.DATA_MANUAL / "s1_pass.json")
     if site_spec:
         assembly.add_pass_area(m, pass_area.build(site_spec, sec))
+    minoge = minoge_area.load(config.DATA_MANUAL / "s2_minoge.json")
+    if minoge:
+        assembly.add_pass_area(m, minoge_area.build(minoge, sec, minoge_area.dem_ground()))
     assembly.add_layout_objects(m, sec, pads, layouts.load_layouts(), bounds)
     print(m.save()); print(m.summary())
 

@@ -16,7 +16,7 @@ def _mesh(kind, a=10.0, b=28.0):
 def test_red_stripes_count_and_width():
     sec, name, v, f, mat = _mesh("red_stripes")
     assert mat == "paint_red" and name == "LINES_track_pave_000"
-    assert len(f) == 10                                     # 18m の範囲、1.8m おき
+    assert len(f) == 10 * 4                                 # 18m の範囲、1.8m おきに10本（横に4面ずつ）
     assert v[:, 1].max() == pytest.approx(sec.hw_left[0]) and v[:, 1].min() == pytest.approx(-sec.hw_right[0])
     widths = [np.ptp(v[q][:, 0]) for q in f]
     assert np.allclose(widths, 0.6)
@@ -47,3 +47,10 @@ def test_pavement_faces_point_up_and_sit_above_road(kind):
 def test_unknown_kind_is_an_error():
     with pytest.raises(ValueError):
         pv.load_rows([{"s_from": 0, "s_to": 1, "kind": "zebra", "note": ""}])
+
+
+def test_red_stripes_follow_the_road_crown():
+    # 路面は中央が高い（片勾配・横断勾配）。帯が端から端まで1枚の平面だと、中央が路面の下に隠れる
+    sec, name, v, f, mat = _mesh("red_stripes")
+    assert np.any(np.abs(v[:, 1]) < 1e-9)          # 中央にも頂点がある
+    assert len(v) == 10 * 2 * 5                     # 帯ごとに 長さ2 × 横5 点
