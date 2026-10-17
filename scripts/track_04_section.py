@@ -70,7 +70,10 @@ def main():
     tw = nagoki.load_town(sec, ground)
     pads = pads + tw.pads()
     pads = pads + [q for b in nagoki.load_branches(sec) for q in b.pads()]   # 2本に分かれる所の、もう1本と島
-    pads = pads + [q for st in side_roads.for_track(sec, pads, exclude=tw.region) for q in st.pads()]  # 分かれ道の地形合わせ
+    from shapely.ops import unary_union as _uu
+    brs = nagoki.load_branches(sec)
+    excl = _uu([tw.region] + [b.surface.buffer(0.3) for b in brs] + [b.island for b in brs if b.island is not None])
+    pads = pads + [q for st in side_roads.for_track(sec, pads, exclude=excl) for q in st.pads()]  # 分かれ道の地形合わせ
     # 新東名など（トンネルの入口まで）：低い所は地形を路面に合わせる
     from yabitsu import motorway, overpasses
     for x in motorway.from_osm(side_roads.load_elements(), sec, gsi.default_sampler(), overpasses.load_overrides()):

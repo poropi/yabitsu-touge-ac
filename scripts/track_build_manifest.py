@@ -44,7 +44,10 @@ def main():
         assembly.add_pass_area(m, minoge_area.build(minoge, sec, minoge_area.dem_ground()))
     sampler = gsi.default_sampler()
     base_pads = [p for p in pads if p.get("kind") != "stub"]
-    stubs = side_roads.for_track(sec, base_pads, sampler, exclude=tw.region)
+    from shapely.ops import unary_union as _uu
+    brs = nagoki.load_branches(sec)   # 県道70号が2本に分かれる所（分かれ道の路面と重ねない）
+    excl = _uu([tw.region] + [b.surface.buffer(0.3) for b in brs] + [b.island for b in brs if b.island is not None])
+    stubs = side_roads.for_track(sec, base_pads, sampler, exclude=excl)
     assembly.add_meshes(m, side_roads.stub_meshes(stubs))
     from yabitsu import geo
     for k, (la, lo) in enumerate(json.loads((config.DATA_MANUAL / "s3_side_crosswalks.json").read_text(encoding="utf-8"))):
