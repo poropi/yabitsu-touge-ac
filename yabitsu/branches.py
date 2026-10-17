@@ -16,6 +16,7 @@ from .start_lot import road_formation
 MIN_OFFSET_M = 3.0     # 本線の中心線から、これより離れる県道70号の way を「並ぶもう1本」とする
 ISLAND_H = 0.15
 END_NEAR_M = 6.0
+PAD_STEP_M = 8.0
 CLOSE_M = 6.0         # 本線と東側の道の間の、これより狭いすき間は路面で埋める（島は上に乗る）      # もう1本の両はしは、本線の中心線からこの距離の中
 
 
@@ -87,11 +88,29 @@ class Branch:
                               f"branch_{self.osm_id}")
         return out
 
-    def pads(self):
+    def pads(self, step=PAD_STEP_M):
+        """地形合わせ：本線の向きに step ごとに切った、傾いた平面（坂でも地形が路面の上に出ない）。"""
         poly = self.surface.union(self.island) if self.island is not None else self.surface
-        c = poly.centroid
-        return [{"name": f"branch_{self.osm_id}", "role": "flat", "kind": "plaza", "polygon": np.asarray(site.largest(poly).exterior.coords).tolist(),
-                 "z": float(self.z(c.x, c.y)[0])}]
+        main = LineString(np.c_[self.sec.x, self.sec.y])
+        ring = np.asarray(poly.exterior.coords)
+        ts = [main.project(Point(q)) for q in ring]
+        out = []
+        for k, a in enumerate(np.arange(min(ts), max(ts), step)):
+            pa = np.array(main.interpolate(a).coords[0]); pb = np.array(main.interpolate(a + step).coords[0])
+            d = (pb - pa) / max(np.linalg.norm(pb - pa), 1e-9); n = np.array([-d[1], d[0]])
+            cut = Polygon([pa - n * 40, pb - n * 40, pb + n * 40, pa + n * 40])
+            piece = poly.intersection(cut)
+            for g in ([piece] if piece.geom_type == "Polygon" else [q for q in getattr(piece, "geoms", []) if q.geom_type == "Polygon"]):
+                if g.area < 0.5:
+                    continue
+                c = np.asarray(g.exterior.coords)
+                zc = self.z(c[:, 0], c[:, 1]) + (ISLAND_H if self.island is not None and self.island.intersects(g) else 0.0)
+                cx, cy = c[:, 0].mean(), c[:, 1].mean()
+                A = np.c_[np.ones(len(c)), c[:, 0] - cx, c[:, 1] - cy]
+                z0, gx, gy = np.linalg.lstsq(A, zc, rcond=None)[0]
+                out.append({"name": f"branch_{self.osm_id}_{k}_{len(out)}", "role": "flat", "kind": "plaza",
+                            "polygon": c.tolist(), "z": float(z0), "plane": [float(cx), float(cy), float(z0), float(gx), float(gy)]})
+        return out
 
 
 def _island_wall(island, zf):

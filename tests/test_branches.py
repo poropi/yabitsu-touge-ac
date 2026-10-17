@@ -65,3 +65,15 @@ def test_split_area_has_no_gap_between_road_island_and_branch():
     gap = box(70, 0, 130, 12).intersection(b.line.buffer(2.0).union(box(75, 0, 125, 10))).difference(whole)
     assert gap.area < 1.0                                     # 本線・島・東側の道の間に地面が出ない
     assert b.surface.contains(Point(66, 4.5))                  # 分かれる所の三角の所も路面（本線の側溝の外）
+
+
+def test_branch_pads_follow_a_slope():
+    from yabitsu.site import plane_z
+    sec, ways = _main_and_branch()
+    sec.z[:] = 100.0 + 0.06 * sec.s
+    b, = br.parallel_branches(ways, sec, {"2": {"width_m": 4.0}})
+    pads = b.pads()
+    assert len(pads) >= 5 and all("plane" in p for p in pads)
+    for p in pads:
+        c = np.asarray(p["polygon"])[:-1]
+        assert np.abs(plane_z(p["plane"], c[:, 0], c[:, 1]) - b.z(c[:, 0], c[:, 1])).max() < 0.15
