@@ -155,3 +155,13 @@ def test_s_of_rejects_points_far_from_the_road():
     sec, bounds = _hairpin()
     with pytest.raises(ValueError):
         lay.s_of(sec, _ll(150.0, 40.0), bounds, "s2")
+
+
+def test_gate_width_depends_on_road_at_the_gate_only():
+    sec = _straight(1001)
+    sec.hw_left[600:700] = 4.75; sec.hw_right[600:700] = 4.75   # 遠くの広い交差点
+    d = _by(lay.layout_objects(sec, [LOT], _layout(1), BOUNDS))
+    assert abs(d["AC_OPEN_START_L"].location[1]) == pytest.approx(lay.GATE_HALF_WIDTH_M)   # 計測開始（s=50）は標準の幅
+    sec.hw_left[40:60] = 4.75; sec.hw_right[40:60] = 4.75
+    d = _by(lay.layout_objects(sec, [LOT], _layout(1), BOUNDS))
+    assert abs(d["AC_OPEN_START_L"].location[1]) == pytest.approx(4.75 + 1.0)            # ゲートの所が広ければ広げる

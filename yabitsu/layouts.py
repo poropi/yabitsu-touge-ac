@@ -13,6 +13,7 @@ from .acobjects import DUMMY_Z_OFFSET, Dummy, frame_at, hotlap_start, pit_boxes,
 
 SECTION_SLACK_M = 5.0  # 区間の境目の外側でも、これだけは探してよい（つなぎ目ちょうどの地点のため）
 OFF_ROAD_M = 4.0       # 道の端からこれ以上離れた地点は、別の枝か打ち間違いとして止める
+GATE_HALF_WIDTH_M = 4.5  # 計測ゲートの半分の幅の最小（S1・S2 を作ったときの値）。ゲートの所の道が広ければ 道幅/2＋1m
 
 
 @dataclass(frozen=True)
@@ -72,12 +73,17 @@ def _pits(sec, pads, layout):
 
 def layout_objects(sec, pads, layout, bounds):
     path = sec.path(); d = layout.direction
-    hw = float(max(sec.hw_left.max(), sec.hw_right.max()))
     at = lambda ll: s_of(sec, ll, bounds, layout.section)
+
+    def half(s):
+        i = int(np.argmin(np.abs(sec.s - s)))
+        return max(GATE_HALF_WIDTH_M, float(max(sec.hw_left[i], sec.hw_right[i])) + 1.0)
+
+    s_start, s_finish = at(layout.timing_start), at(layout.finish)
     return [*start_grid(path, at(layout.grid), d),
             hotlap_start(path, at(layout.hotlap), d),
-            *timing_gate(path, at(layout.timing_start), d, hw + 1.0, "START"),
-            *timing_gate(path, at(layout.finish), d, hw + 1.0, "FINISH"),
+            *timing_gate(path, s_start, d, half(s_start), "START"),
+            *timing_gate(path, s_finish, d, half(s_finish), "FINISH"),
             *_pits(sec, pads, layout)]
 
 
