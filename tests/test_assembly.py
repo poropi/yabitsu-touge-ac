@@ -11,7 +11,8 @@ def test_add_road_names_and_materials(tmp_path):
     assembly.add_road(m, sec)
     names = m.groups[assembly.GROUP]["meshes"]
     assert "1ROAD_s1_00" in names and "1ROAD_s1_01" in names
-    assert "1ROAD_s1_gutterL_00" in names and "LINES_s1_edgeR_01" in names and "LINES_s1_centre_00" in names
+    assert "1ROAD_s1_gutterL_00" in names and "LINES_s1_edgeR_01" in names
+    assert not any("centre" in n for n in names)  # 中央線は車線数ではなく、中央線の表（add_centrelines）で引く
     assert m.meshes["1ROAD_s1_00"]["material"] == "asphalt"
 
 
@@ -28,3 +29,26 @@ def test_add_pads_skips_pads_built_elsewhere(tmp_path):
             for n, k in (("a", "lot"), ("b", "pass"), ("c", "site"))] + [{"name": "osm", "role": "end", "polygon": sq, "z": 1.0}]
     assembly.add_pads(m, pads)
     assert [n for n in m.meshes if n.startswith("1ROAD")] == ["1ROAD_s1_pad_03"]
+
+
+def test_add_centrelines_draws_only_listed_ranges_with_style(tmp_path):
+    import numpy as np
+    m = Manifest(tmp_path)
+    sec = _straight(401)
+    rows = [{"s_from": 0.0, "s_to": 100.0, "style": "orange_solid", "note": ""},
+            {"s_from": 200.0, "s_to": 300.0, "style": "white_dashed", "note": ""}]
+    assembly.add_centrelines(m, sec, rows)
+    names = m.groups[assembly.GROUP]["meshes"]
+    assert names == ["LINES_track_centre_000", "LINES_track_centre_001"]
+    assert m.meshes["LINES_track_centre_000"]["material"] == "line_orange"
+    assert m.meshes["LINES_track_centre_001"]["material"] == "line_white"
+    v0 = np.load(tmp_path / m.meshes["LINES_track_centre_000"]["file"])["verts"]
+    v1 = np.load(tmp_path / m.meshes["LINES_track_centre_001"]["file"])["verts"]
+    assert v0[:, 0].min() >= 0.0 and v0[:, 0].max() <= 100.0 and abs(v0[:, 1]).max() < 0.1   # 道の中央
+    assert v1[:, 0].min() >= 200.0 and v1[:, 0].max() <= 300.0
+    assert m.meshes["LINES_track_centre_001"]["faces"] < m.meshes["LINES_track_centre_000"]["faces"]  # 破線は実線より面が少ない
+
+
+def test_unknown_centreline_style_is_an_error(tmp_path):
+    with pytest.raises(ValueError):
+        assembly.add_centrelines(Manifest(tmp_path), _straight(101), [{"s_from": 0, "s_to": 50, "style": "pink", "note": ""}])

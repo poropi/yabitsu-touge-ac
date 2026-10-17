@@ -24,9 +24,27 @@ def add_road(m, sec, rows_per_chunk=200):
             m.add_mesh(GROUP, f"1ROAD_s1_gutter{tag}_{k:02d}", *mg.gutter(sec, sl, side), "concrete")
             hw = (sec.hw_left if side > 0 else sec.hw_right)[sl]
             m.add_mesh(GROUP, f"LINES_s1_edge{tag}_{k:02d}", *mg.line(sec, sl, side * (hw - 0.25)), "line_white")
-        v, f, uv = mg.compact(*mg.line(sec, sl, np.zeros(i1 - i0 + 1), dash=(5.0, 5.0), row_mask=sec.lanes[sl][:-1] >= 2))
+
+
+CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("line_white", None),
+                 "orange_solid": ("line_orange", None)}
+
+
+def add_centrelines(m, sec, rows):
+    """中央線の表（区間ごとの {区間}_centrelines.csv を通しの距離にしたもの）の範囲にだけ、中央線を引く。"""
+    for k, r in enumerate(rows):
+        style = str(r["style"]).strip()
+        if style not in CENTRE_STYLES:
+            raise ValueError(f"中央線の style は {list(CENTRE_STYLES)} のどれか: {r}")
+        mat, dash = CENTRE_STYLES[style]
+        i0 = int(np.searchsorted(sec.s, float(r["s_from"])))
+        i1 = int(np.searchsorted(sec.s, float(r["s_to"]), side="right")) - 1
+        if i1 - i0 < 1:
+            continue
+        sl = slice(i0, i1 + 1)
+        v, f, uv = mg.compact(*mg.line(sec, sl, np.zeros(i1 - i0 + 1), dash=dash))
         if len(f):
-            m.add_mesh(GROUP, f"LINES_s1_centre_{k:02d}", v, f, uv, "line_white")
+            m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}", v, f, uv, mat)
 
 
 def add_terrain(m, near, far):

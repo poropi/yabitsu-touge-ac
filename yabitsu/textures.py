@@ -21,6 +21,7 @@ MATERIALS = {
     "roof_metal": {"texture": "textures/roof_metal.png", "shader": "ksPerPixel", "two_sided": True},
     "tiles": {"texture": "textures/tiles.png", "shader": "ksPerPixel"},
     "paint_red": {"texture": "textures/paint_red.png", "shader": "ksPerPixel"},
+    "line_orange": {"texture": "textures/line_orange.png", "shader": "ksPerPixel"},
     "concrete_circles": {"texture": "textures/concrete_circles.png", "shader": "ksPerPixel"},
 }
 
@@ -142,6 +143,7 @@ def write_textures(out_dir):
             "roof_metal": _gray(256, 16, 0.50, 0.06, (0.84, 1.0, 0.94), coarse=24),
             "tiles": tiles(),
             "paint_red": _gray(256, 18, 0.62, 0.08, (1.0, 0.42, 0.36)),
+            "line_orange": _gray(256, 19, 0.80, 0.05, (1.0, 0.62, 0.16)),
             "concrete_circles": concrete_circles()}
     paths = {}
     for name, a in imgs.items():
