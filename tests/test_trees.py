@@ -38,3 +38,13 @@ def test_cards_shape():
     t = np.array([[0.0, 0.0, 10.0, 12.0], [5.0, 5.0, 11.0, 9.0]])
     v, f, uv = tr.cards(t)
     assert v.shape == (16, 3) and f.shape == (4, 4) and v[:, 2].max() == pytest.approx(10 + 12)
+
+
+def test_trees_avoid_given_polygons():
+    from shapely.geometry import Point, box
+    rng = np.random.default_rng(0)
+    xs = np.arange(0.0, 201.0, 2.0); ys = np.arange(0.0, 201.0, 2.0)
+    near = {"xs": xs, "ys": ys, "Z": np.zeros((len(ys), len(xs))), "E": np.full((len(ys), len(xs)), 50.0),
+            "D": np.full((len(ys), len(xs)), 10.0)}
+    t = tr.scatter(near, avoid=[box(0, 0, 100, 200)])
+    assert len(t) and (t[:, 0] > 100).all()

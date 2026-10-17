@@ -11,7 +11,9 @@ from .meshgen import compact
 FILL_SLOPE, CUT_SLOPE, UNDER_DEPTH = 1.0, 2.0, 0.3
 NEAR_BAND, NEAR_CELL = 110.0, 2.0
 FAR_EXTENT, FAR_CELL, FAR_HOLE, FAR_DROP = 2000.0, 20.0, 95.0, 1.0
-EXTRA_NEAR, EXTRA_HOLE = 20.0, 15.0  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
+EXTRA_NEAR, EXTRA_HOLE = 20.0, 15.0
+TOWN_BLEND_M = 10.0  # 町の範囲の円の外で、町の地面から今までの地形へ移す幅
+PAD_REACH_M = 40.0   # 土台（駐車場・家・分かれ道）が地形を動かす範囲  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
 
 
 def corridor_grid(sec, band=NEAR_BAND, cell=NEAR_CELL, extra=()):
@@ -65,15 +67,23 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
     z_under = np.minimum(surface_height(np.clip(lat, -hw, hw), zc, sl, cr) - UNDER_DEPTH, z_edge - cut * e_in)
     z = np.where(e == 0, z_under, z)
     if pads:
-        pts = shapely.points(np.c_[np.ravel(X), np.ravel(Y)])
+        xr, yr = np.ravel(X), np.ravel(Y)
         for p in pads:
-            d = shapely.distance(pts, Polygon(p["polygon"]))
+            poly = Polygon(p["polygon"])
+            x0, y0, x1, y1 = poly.bounds
+            # 土台が地形を動かすのは、まわり PAD_REACH_M まで（家や分かれ道の土台が千個近くあっても速く）
+            sel = np.nonzero((xr >= x0 - PAD_REACH_M) & (xr <= x1 + PAD_REACH_M) & (yr >= y0 - PAD_REACH_M) & (yr <= y1 + PAD_REACH_M))[0]
+            if not len(sel):
+                continue
+            d = shapely.distance(shapely.points(np.c_[xr[sel], yr[sel]]), poly)
+            near = d <= PAD_REACH_M
+            sel, d = sel[near], d[near]
             zp = p["z"]
             if "plane" in p:  # 傾いた平面 [cx, cy, z0, gx, gy]：z = z0 + gx(x−cx) + gy(y−cy)
                 cx, cy, z0, gx, gy = p["plane"]
-                zp = z0 + gx * (np.ravel(X) - cx) + gy * (np.ravel(Y) - cy)
-            z = np.where(d == 0, zp - UNDER_DEPTH, np.clip(z, zp - FILL_SLOPE * d, zp + CUT_SLOPE * d))
-            e = np.where(d == 0, 0.0, np.minimum(e, d))
+                zp = z0 + gx * (xr[sel] - cx) + gy * (yr[sel] - cy)
+            z[sel] = np.where(d == 0, zp - UNDER_DEPTH, np.clip(z[sel], zp - FILL_SLOPE * d, zp + CUT_SLOPE * d))
+            e[sel] = np.where(d == 0, 0.0, np.minimum(e[sel], d))
     return z.reshape(shape), e.reshape(shape)
 
 
@@ -105,11 +115,26 @@ def _sample(sampler, unproject, X, Y):
     return fill_nan_nearest(sampler.sample(lat, lon).reshape(X.shape))
 
 
-def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=(), side_extra=(None, None)):
+def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=(), side_extra=(None, None),
+               town=None):
+    """town = (町の地面 TownGround, 町の範囲の円, 舗装された所の多角形) なら、円の中は町の地面（舗装の下は UNDER_DEPTH 下げる）、
+    円の外 TOWN_BLEND_M の間で今までの地形へなめらかに移す。"""
+    if town is not None:
+        extra = list(extra) + [np.asarray(town[1].exterior.coords).tolist()]
     xs, ys = corridor_grid(sec, extra=extra)
     X, Y = np.meshgrid(xs, ys)
     D = _with_extra(road_frame(sec, X, Y)["dist"].reshape(X.shape), X, Y, extra, EXTRA_NEAR, NEAR_BAND)
     Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right, *side_extra)
+    if town is not None:
+        ground, circle, paved = town
+        x0, y0, x1, y1 = circle.buffer(TOWN_BLEND_M).bounds
+        m = (X >= x0) & (X <= x1) & (Y >= y0) & (Y <= y1)
+        pts = shapely.points(np.c_[X[m], Y[m]])
+        d = shapely.distance(pts, circle)
+        zt = ground.z(X[m], Y[m]) - np.where(shapely.contains(paved, pts), UNDER_DEPTH, 0.0)
+        t = np.clip(d / TOWN_BLEND_M, 0.0, 1.0); w = t * t * (3 - 2 * t)
+        Z[m] = (1 - w) * zt + w * Z[m]
+        E[m] = np.where(d == 0, 0.0, E[m])
     return {"xs": xs, "ys": ys, "Z": Z, "E": E, "D": D}
 
 

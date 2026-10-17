@@ -27,7 +27,8 @@ def check(processed_dir, manual_dir):
     position_ok = bool(rows) and all(r["ok"].strip().lower() == "yes" and float(r["max_offset_m"]) <= 2.0 for r in rows)
     man = json.loads((P / "track" / "manifest.json").read_text(encoding="utf-8"))
     folds = tris = 0
-    for name in man["groups"][config.TRACK_GROUP]["meshes"]:
+    names = [n for g in (config.TRACK_GROUP, config.TOWN_GROUP) for n in man["groups"].get(g, {}).get("meshes", [])]
+    for name in names:
         d = np.load(P / "track" / man["meshes"][name]["file"])
         tris += len(d["faces"]) * (d["faces"].shape[1] - 2)
         if name.startswith("1ROAD_") and "gutter" not in name:

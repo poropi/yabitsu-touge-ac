@@ -38,7 +38,7 @@ STOP_GAP_M = 2.0       # 横断歩道の外側の縁から停止線まで
 SIGNAL_NEAR_M = 10.0   # 横断歩道からこの距離の中に信号があれば、停止線を引く
 CLOSURE_OVERHANG = 0.5
 HOLE_FILL_M2 = 400.0   # 走れる範囲の中の、これより小さい穴（中央の島など）は埋める
-LINED = {"trunk", "primary", "secondary", "trunk_link", "primary_link", "secondary_link"}  # 線を引く道
+LINED = {"trunk", "primary", "secondary"}  # 線を引く道（連絡路には引かない）
 EDGE_INSET = 0.5       # 外側線は車道の端からこれだけ内側
 
 
@@ -292,7 +292,11 @@ class Town:
                  if w["tags"].get("highway") in LINED]
         hw_main = float(np.median(sec.hw_left[sec.s <= s_exit]))
         major.append(("main", main_line, 2 * hw_main, False))
+        # ほかの道の車道の中には外側線を引かない（同じ道が何本もの線で描かれている所、道が合わさる所）
+        bodies = {str(w.get("id")): ln.buffer(wd / 2 - 0.4, cap_style="flat") for (w, ln, wd, sl, sr) in self._roads}
+        bodies["main"] = main_line.buffer(hw_main - 0.4, cap_style="flat")
         for rid, ln, wd, oneway in major:
+            others = unary_union([g for k, g in bodies.items() if k != rid])
             for piece in _lines(ln.difference(box)):
                 if piece.length < 3.0:
                     continue
@@ -301,7 +305,7 @@ class Town:
                                   "road": rid, "auto": True})
                 for sgn in (1, -1):
                     off = piece.offset_curve(sgn * (wd / 2 - EDGE_INSET))
-                    for o in _lines(off.intersection(self.carriageway)):
+                    for o in _lines(off.intersection(self.carriageway).difference(others)):
                         if o.length >= 3.0:
                             marks.append({"kind": "lane_line", "points": [_ll(q) for q in o.coords], "color": "white",
                                           "road": rid, "auto": True})

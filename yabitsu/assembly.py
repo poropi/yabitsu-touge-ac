@@ -76,7 +76,9 @@ def add_features(m, sec, feats):
             f2 = ft.Feature(f.s_from, f.s_to, f.side, f.type, f.height_m or ft.FENCE_HEIGHT, f.note, f.width_m)
             m.add_mesh(GROUP, f"1WALL_track_fence_{k:03d}", *ft.parapet_mesh(sec, f2, off[f.side]), "railing_bars")
         elif f.type == "sidewalk":
-            m.add_mesh(GROUP, f"1ROAD_track_sidewalk_{k:03d}", *ft.sidewalk_mesh(sec, f), "concrete")
+            top, sides = ft.sidewalk_mesh(sec, f)
+            m.add_mesh(GROUP, f"1ROAD_track_sidewalk_{k:03d}", *top, "concrete")
+            m.add_mesh(GROUP, f"track_sidewalk_{k:03d}_curb", *sides, "concrete")
         elif f.type == "hedge":
             m.add_mesh(GROUP, f"1WALL_track_hedge_{k:03d}", *ft.hedge_mesh(sec, f, off[f.side]), "hedge")
         elif f.type == "overpass":  # OSM に無い、道の上を渡る橋（OSM にある橋は add_site_meshes で overpasses から）

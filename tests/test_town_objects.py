@@ -105,3 +105,10 @@ def test_town_pits_are_inside_drivable_area():
     d = t.drivable()
     assert all(d.contains(Point(x, y)) for x, y, z, h in pad["pit_points"])
     assert abs(pad["pit_points"][0][3] - 0.0) < 1e-6        # 方位 90°（東）＝ +x の向き
+
+
+def test_road_ground_follows_nearest_road_height():
+    from tests.test_meshgen import _straight
+    sec = _straight(201); sec.z[:] = 100.0 + 0.1 * sec.s
+    z = to.road_ground(sec)
+    assert float(z(np.array([50.0]), np.array([6.0]))[0]) == pytest.approx(105.0, abs=0.11)

@@ -11,7 +11,7 @@ TARGETS = {
 def _track_target():
     from yabitsu import layouts
     return (config.TRACK_BUILD_DIR / "manifest.json", config.TRACK_DIR,
-            [config.TRACK_GROUP] + [f"{l.name}_objects" for l in layouts.load_layouts()])
+            [config.TRACK_GROUP, config.TOWN_GROUP] + [f"{l.name}_objects" for l in layouts.load_layouts()])
 
 
 def main():

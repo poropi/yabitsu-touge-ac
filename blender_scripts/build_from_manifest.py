@@ -61,8 +61,11 @@ def main():
     bpy.ops.wm.read_factory_settings(use_empty=True)
     scene = bpy.context.scene
     scene.unit_settings.system = "METRIC"; scene.unit_settings.scale_length = 1.0
-    g = m["groups"][a.group]
-    coll = bpy.data.collections.new(a.group); scene.collection.children.link(coll)
+    # --group は「,」で区切って複数指定できる（確認用の描画で町の kn5 の部品もいっしょに見るため）
+    groups = a.group.split(",")
+    g = {"meshes": [n for gg in groups for n in m["groups"][gg]["meshes"]],
+         "empties": [e for gg in groups for e in m["groups"][gg]["empties"]]}
+    coll = bpy.data.collections.new(groups[0]); scene.collection.children.link(coll)
     mats = {}
     for name in g["meshes"]:
         info = m["meshes"][name]

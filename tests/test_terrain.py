@@ -109,3 +109,41 @@ def test_sidewalk_widens_the_formation():
     z_edge = cs.surface_height(3.0, 100.0, sec.slope[100], sec.crown[100])
     assert Z[0, 0] < z_edge + 0.15                          # 歩道の下に地形がかぶらない
     assert Z[0, 1] == pytest.approx(z_edge + 2.0 * tr.CUT_SLOPE)   # 切り土の斜面は歩道の外側から始まる
+
+
+def _town_case():
+    from shapely.geometry import Point
+    from yabitsu.town_ground import TownGround
+    from tests.test_meshgen import _straight
+    sec = _straight(201)
+    xs = np.arange(-50.0, 251.0); ys = np.arange(-150.0, 151.0)
+    X, Y = np.meshgrid(xs, ys)
+    g = TownGround(xs, ys, 97.0 + 0.01 * X)            # 町の地面（道とは別の高さ）
+    road = Point(100, 0).buffer(3.6)                    # 走れる範囲（の代わり）
+    return sec, g, Point(100, 0).buffer(40.0), road
+
+
+def test_terrain_inside_town_follows_town_ground():
+    sec, g, circle, road = _town_case()
+    near = tr.build_near(sec, _FlatSampler(), [], town=(g, circle, road))
+    i = np.searchsorted(near["xs"], 100); j = np.searchsorted(near["ys"], 25)
+    assert near["Z"][j, i] == pytest.approx(97.0 + 0.01 * near["xs"][i], abs=0.01)     # 道の外：町の地面
+    j0 = np.searchsorted(near["ys"], 0)
+    assert near["Z"][j0, i] == pytest.approx(97.0 + 0.01 * near["xs"][i] - tr.UNDER_DEPTH, abs=0.01)   # 道の下
+
+
+def test_terrain_blends_outside_town_circle():
+    sec, g, circle, road = _town_case()
+    plain = tr.build_near(sec, _FlatSampler(), [])
+    near = tr.build_near(sec, _FlatSampler(), [], town=(g, circle, road))
+    i = np.searchsorted(near["xs"], 100); j = np.searchsorted(near["ys"], 40 + tr.TOWN_BLEND_M + 2)
+    assert near["Z"][j, i] == pytest.approx(plain["Z"][j, i], abs=1e-6)
+
+
+def test_pad_reach_is_limited():
+    sec = _straight()
+    pad = {"polygon": [[100, 40], [110, 40], [110, 50], [100, 50], [100, 40]], "z": 300.0}   # 地面より 200m 高い
+    X, Y = _pts(sec, [40.0 + tr.PAD_REACH_M + 15.0])     # 土台から PAD_REACH_M より遠い点
+    Z0, _ = tr.carve(X, Y, np.full_like(X, 150.0), sec)
+    Z1, _ = tr.carve(X, Y, np.full_like(X, 150.0), sec, pads=[pad])
+    assert np.allclose(Z0, Z1)

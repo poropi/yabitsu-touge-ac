@@ -4,7 +4,8 @@ from scipy.interpolate import RegularGridInterpolator
 from shapely.geometry import Polygon
 
 
-def scatter(near, pads=(), density=1 / 40, clear_m=3.0, band=105.0, seed=7, pad_clear_m=None):
+def scatter(near, pads=(), density=1 / 40, clear_m=3.0, band=105.0, seed=7, pad_clear_m=None, avoid=()):
+    """avoid（多角形）の中には置かない（町の範囲・建物・家の多い道の近くなど）。"""
     rng = np.random.default_rng(seed)
     xs, ys = near["xs"], near["ys"]
     n = int((xs[-1] - xs[0]) * (ys[-1] - ys[0]) * density)
@@ -16,6 +17,10 @@ def scatter(near, pads=(), density=1 / 40, clear_m=3.0, band=105.0, seed=7, pad_
         pts = shapely.points(P)
         for p in pads:
             keep &= shapely.distance(pts, Polygon(p["polygon"])) > (clear_m if pad_clear_m is None else pad_clear_m)
+    if len(avoid):
+        pts = shapely.points(P)
+        for a in avoid:
+            keep &= ~shapely.contains(a, pts)
     P = P[keep]
     z = RegularGridInterpolator((ys, xs), near["Z"])(P[:, ::-1])
     return np.c_[P, z, rng.uniform(8.0, 16.0, len(P))]

@@ -2,7 +2,7 @@ import json
 
 import numpy as np
 
-from yabitsu import config, features, gsi, start_lot, terrain, track
+from yabitsu import config, features, gsi, nagoki, start_lot, terrain, track
 from yabitsu.crosssection import Section
 
 P = config.DATA_PROCESSED
@@ -17,10 +17,13 @@ def main():
     feats = features.load_features_rows(track.load_section_rows("features", track.load_bounds()))
     cut_left, cut_right = features.cut_slopes(sec, feats)
     sampler = gsi.default_sampler()
+    tw = nagoki.load_town(sec)   # 町の範囲：地形は町の地面に合わせる（舗装の下は少し下げる）
+    paved = tw.drivable().union(tw.carriageway).union(tw.sidewalk)
     near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra,
-                              side_extra=features.sidewalk_offsets(sec, feats))  # 歩道の下に地形がかぶらない
+                              side_extra=features.sidewalk_offsets(sec, feats),  # 歩道の下に地形がかぶらない
+                              town=(tw.ground, nagoki.circle(), paved))
     np.savez_compressed(P / "track_terrain_near.npz", **near)
-    far = terrain.build_far(sec, sampler, extra=extra)
+    far = terrain.build_far(sec, sampler, extra=extra + [np.asarray(nagoki.circle().exterior.coords).tolist()])
     np.savez_compressed(P / "track_terrain_far.npz", **far)
     print(f"near grid {near['Z'].shape}, far grid {far['Z'].shape}")
 

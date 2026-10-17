@@ -114,8 +114,13 @@ def _side_ribbon(sec, sl, side, offs, dz, ze, offset=None):
 def sidewalk_mesh(sec, f):
     """歩道：側溝の外側から幅 f.width_m、上面は道の縁＋CURB_HEIGHT。内側の縁に縦の縁石の面（乗り上げられる段差）。"""
     sl, side, hw, ze = _side_arrays(sec, f)
-    # 外側の縁は下へ垂らす（地形との間にすき間が見えないように）
-    return _side_ribbon(sec, sl, side, [0.0, 0.0, f.width_m, f.width_m], [0.0, CURB_HEIGHT, CURB_HEIGHT, -0.5], ze)
+    # (上面＝走る面, 縦の面＝縁石と、地形とのすき間を隠すため下へ垂らした外の縁)
+    top = _side_ribbon(sec, sl, side, [0.0, f.width_m], [CURB_HEIGHT, CURB_HEIGHT], ze)
+    curb = _side_ribbon(sec, sl, side, [0.0, 0.0], [0.0, CURB_HEIGHT], ze)
+    skirt = _side_ribbon(sec, sl, side, [f.width_m, f.width_m], [CURB_HEIGHT, -0.5], ze)
+    from .meshgen import compact
+    v = np.concatenate([curb[0], skirt[0]]); fc = np.concatenate([curb[1], skirt[1] + len(curb[0])])
+    return top, compact(v, fc, np.concatenate([curb[2], skirt[2]]))
 
 
 def hedge_mesh(sec, f, offset=None):

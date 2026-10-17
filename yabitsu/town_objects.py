@@ -116,6 +116,13 @@ def wall_meshes(lines, z_fn, height=WALL_H, prefix="1WALL_town_block", step=2.0)
     return [(f"{prefix}_{k:03d}", *_merge(c), "concrete", False) for k, c in enumerate(out)]
 
 
+def road_ground(sec):
+    """道ぞいの物の地面の高さ：一番近い道の点の高さ（道の外へ水平に延ばす）。"""
+    from scipy.spatial import cKDTree
+    tree = cKDTree(np.c_[sec.x, sec.y])
+    return lambda x, y: sec.z[tree.query(np.c_[np.ravel(x), np.ravel(y)])[1]].reshape(np.shape(x))
+
+
 def _xy(ll):
     x, y = geo.to_local(float(ll[0]), float(ll[1]))
     return np.array([float(x), float(y)])

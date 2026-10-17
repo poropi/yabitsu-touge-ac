@@ -40,3 +40,15 @@ def test_position_ng_in_second_section(tmp_path):
 def test_elevation_ng(tmp_path):
     r = check(*_setup(tmp_path, residual=2.0))
     assert not r["elevation_ok"] and r["sections"]["s1"]["max_residual_m"] > 1.5
+
+
+def test_check_counts_folds_in_both_groups(tmp_path):
+    p, man = _setup(tmp_path)
+    v = np.array([[0, 0, 0], [0, 1, 0], [1, 1, 0], [1, 0, 0]], float)   # 下向き（折り返し）
+    np.savez(p / "track" / "meshes" / "1ROAD_town_00.npz", verts=v, faces=np.array([[0, 1, 2, 3]]), uvs=v[:, :2])
+    m = json.loads((p / "track" / "manifest.json").read_text(encoding="utf-8"))
+    m["meshes"]["1ROAD_town_00"] = {"file": "meshes/1ROAD_town_00.npz", "faces": 1}
+    m["groups"]["yabitsu_nagoki"] = {"meshes": ["1ROAD_town_00"]}
+    (p / "track" / "manifest.json").write_text(json.dumps(m), encoding="utf-8")
+    r = check(p, man)
+    assert r["folds"] == 1 and r["tris"] == 4

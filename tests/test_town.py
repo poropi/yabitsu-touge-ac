@@ -180,3 +180,15 @@ def test_arm_that_passes_beside_the_centre_is_still_closed():
     sec, t = _auto_town([_way([[-40, -18], [40, -18]], wid=12, highway="secondary_link")])
     arm = [c for c in t.closures if c["name"] == "arm_12"]
     assert len(arm) == 2
+
+
+def test_edge_lines_do_not_run_inside_other_roads_and_links_get_none():
+    sec, t = _auto_town([_way([[-60, -10], [-5, -10]], wid=11, highway="trunk"),
+                         _way([[-60, -14], [-5, -10]], wid=12, highway="trunk"),       # 同じ道の別の線（重なる）
+                         _way([[-50, -30], [-10, -12]], wid=13, highway="secondary_link")], radius=80.0)
+    assert not [m for m in t.markings if m.get("road") == "13"]
+    from shapely.geometry import LineString
+    other = tw._way_line(_way([[-60, -14], [-5, -10]], wid=12)).buffer(tw.ROAD_DEFAULTS["trunk"][0] / 2 - 0.4)
+    for m in t.markings:
+        if m.get("road") == "11" and m["kind"] == "lane_line":
+            assert LineString(tw._xy(m["points"])).intersection(other).length < 0.5

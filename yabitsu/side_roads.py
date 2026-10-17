@@ -202,11 +202,23 @@ def stub_meshes(stub_list):
     return out
 
 
-def for_track(sec, pads, sampler=None):
-    """本線全体の分かれ道（町の範囲の中は除く）。ピット・広場・駐車場の入口はふさがない。"""
+KEEP_OPEN_KINDS = ("lot", "pass", "site")
+NOT_OPENINGS = ("_house", "_shrine", "side_stub")   # 家・お堂の土台は「ふさがない場所」ではない（家の前の道もふさぐ）
+
+
+def for_track(sec, pads, sampler=None, exclude=None):
+    """本線全体の分かれ道（町の範囲の中は除く）。ピット・広場・駐車場の入口はふさがない。
+    exclude（町の範囲など）と重なる所は路面から削る（町の道と二重にならないように）。"""
     from . import config, gsi
     cx, cy = geo.to_local(*config.NAGOKI)
     s_min = town_exit_s(sec, (float(cx), float(cy)), config.TOWN_RADIUS_M)
     keep = [Polygon(p["polygon"]) for p in pads
-            if p.get("kind") in ("lot", "pass", "site") or p.get("role") in ("start", "mid", "end")]
-    return stubs(load_elements(), sec, sampler or gsi.default_sampler(), keep, s_min=s_min)
+            if (p.get("kind") in KEEP_OPEN_KINDS or p.get("role") in ("start", "mid", "end"))
+            and not any(k in p.get("name", "") for k in NOT_OPENINGS)]
+    out = stubs(load_elements(), sec, sampler or gsi.default_sampler(), keep, s_min=s_min)
+    if exclude is not None:
+        for st in out:
+            g = st.surface.difference(exclude)
+            if not g.is_empty:
+                st.surface = site.largest(g) if g.geom_type != "Polygon" else g
+    return [st for st in out if st.surface.area >= 1.0]

@@ -131,15 +131,17 @@ def test_sidewalk_top_is_curb_height_above_road_edge():
     from yabitsu.crosssection import GUTTER_WIDTH
     sec = _straight()
     for side in ("L", "R"):
-        v, f, uv = ft.sidewalk_mesh(sec, ft.Feature(10, 60, side, "sidewalk", 0.0, "", width_m=2.0))
+        (v, f, uv), sides = ft.sidewalk_mesh(sec, ft.Feature(10, 60, side, "sidewalk", 0.0, "", width_m=2.0))
+        from yabitsu.meshgen import folded_faces
+        assert len(folded_faces(v, f)) == 0                     # 走る面（上面）に縦の面を混ぜない
+        assert np.isclose(face_normals(*sides[:2])[:, 2], 0.0, atol=1e-6).all()   # 縁石と外の縁は縦の面
         sgn = 1 if side == "L" else -1
         hw = sec.hw_left[0] if side == "L" else sec.hw_right[0]
         ze = sec.edge_z(sgn)[0]
         top = v[np.isclose(v[:, 2], ze + ft.CURB_HEIGHT)]
         assert np.abs(top[:, 1]).min() == pytest.approx(hw + GUTTER_WIDTH)
         assert np.abs(top[:, 1]).max() == pytest.approx(hw + GUTTER_WIDTH + 2.0)
-        n = face_normals(v, f)
-        assert (n[:, 2] > 0.99).sum() > 0 and (n[:, 2] > -0.01).all()   # 上面は上向き、縁石の面は道の側を向く
+        assert (face_normals(v, f)[:, 2] > 0.99).all()           # 上面は上向き
 
 
 def test_hedge_is_box_outside_gutter():
