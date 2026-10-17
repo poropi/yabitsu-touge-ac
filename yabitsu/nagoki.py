@@ -51,3 +51,10 @@ def tree_free_areas(sec, bounds, buildings):
     from shapely.geometry import LineString
     m = sec.s <= bounds["s3"][1]
     return [circle().buffer(10.0), LineString(np.c_[sec.x[m], sec.y[m]]).buffer(60.0)] + [b.footprint.buffer(2.0) for b in buildings]
+
+
+def load_branches(sec):
+    """県道70号が2本に分かれる所の、もう1本と島（data/manual/s3_branches.json）。"""
+    from . import branches
+    specs = json.loads((config.DATA_MANUAL / "s3_branches.json").read_text(encoding="utf-8"))
+    return branches.parallel_branches(side_roads.load_elements(), sec, specs)

@@ -147,3 +147,16 @@ def test_pad_reach_is_limited():
     Z0, _ = tr.carve(X, Y, np.full_like(X, 150.0), sec)
     Z1, _ = tr.carve(X, Y, np.full_like(X, 150.0), sec, pads=[pad])
     assert np.allclose(Z0, Z1)
+
+
+def test_mid_band_overlaps_near_and_reaches_200m():
+    from tests.test_meshgen import _straight
+    sec = _straight(201)
+    mid = tr.build_mid(sec, _FlatSampler(), [])
+    D = mid["D"]
+    keep = tr.mid_keep(D)
+    i = np.searchsorted(mid["xs"], 100)
+    ys = mid["ys"][:-1][keep[:, i]]
+    assert ys.max() >= 195.0 and np.abs(ys).min() <= tr.NEAR_BAND - 3.0      # 200m まで、細かい地形の下にもぐり込む
+    assert np.allclose(mid["Z"][np.abs(mid["ys"] - 150).argmin(), i], 100.0 - tr.MID_DROP)
+    assert tr.FAR_HOLE >= tr.MID_BAND - 10.0

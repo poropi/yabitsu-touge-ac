@@ -10,15 +10,23 @@ from shapely.ops import polygonize, unary_union
 from . import config, geo
 
 
-def gsi_polygons(bbox, z=18):
-    """bbox = (lat0, lon0, lat1, lon1) の地理院の建物の外周線を、ローカル座標の多角形にする（タイルはキャッシュ）。"""
+def gsi_polygons(bbox, z=18, area=None):
+    """bbox = (lat0, lon0, lat1, lon1) の地理院の建物の外周線を、ローカル座標の多角形にする（タイルはキャッシュ）。
+    area（ローカル座標の多角形）を渡すと、それにかかるタイルだけ取る。"""
     n = 2 ** z
     tx = lambda lon: int((lon + 180) / 360 * n)
     ty = lambda lat: int((1 - math.log(math.tan(math.radians(lat)) + 1 / math.cos(math.radians(lat))) / math.pi) / 2 * n)
+    lon_of = lambda x: x / n * 360 - 180
+    lat_of = lambda y: math.degrees(math.atan(math.sinh(math.pi * (1 - 2 * y / n))))
     cache = config.DATA_RAW / "gsi_fgd"; cache.mkdir(parents=True, exist_ok=True)
     lines = []
     for x in range(tx(bbox[1]), tx(bbox[3]) + 1):
         for y in range(ty(bbox[2]), ty(bbox[0]) + 1):
+            if area is not None:
+                from shapely.geometry import box as _box
+                x0, y0 = geo.to_local(lat_of(y + 1), lon_of(x)); x1, y1 = geo.to_local(lat_of(y), lon_of(x + 1))
+                if not _box(float(x0), float(y0), float(x1), float(y1)).intersects(area):
+                    continue
             f = cache / f"{z}_{x}_{y}.geojson"
             if not f.exists():
                 r = requests.get(f"https://cyberjapandata.gsi.go.jp/xyz/experimental_fgd/{z}/{x}/{y}.geojson", timeout=30)
@@ -66,3 +74,20 @@ def merged(gsi, osm):
             out.append((g, "gsi", {}))
     out += [(o, "osm", t) for k, (o, t) in enumerate(osm) if k not in used]
     return out
+
+
+def roof_rgb(cache, poly, px=0.5):
+    """空中写真の、外周線の内側（0.5m 内側）の画素の色の中央値（0〜1）。"""
+    import numpy as np
+    from PIL import Image, ImageDraw
+    from . import photo, site
+    x0, y0, x1, y1 = poly.bounds
+    size = max(x1 - x0, y1 - y0) + 2.0
+    img = photo.render_local_image(cache, geo.from_local, x0 - 1.0, y0 - 1.0, size, px)
+    n = img.shape[0]
+    m = Image.new("L", (n, n), 0)
+    inner = poly.buffer(-0.5)
+    ring = site.largest(inner).exterior if not inner.is_empty else poly.exterior
+    ImageDraw.Draw(m).polygon([((x - (x0 - 1.0)) / px, (y0 - 1.0 + size - y) / px) for x, y in ring.coords], fill=255)
+    q = img[np.array(m) > 0]
+    return np.median(q, axis=0) / 255.0 if len(q) else np.array([0.45, 0.45, 0.45])

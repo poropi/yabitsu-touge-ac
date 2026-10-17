@@ -26,7 +26,20 @@ def main():
     # 道ぞいの広場（data/manual/s3_plazas.json）：道の縁の高さの平らな舗装。道と重なる所は下で削る
     from shapely.geometry import Polygon as _Poly
     from yabitsu import site
-    for pl in json.loads((config.DATA_MANUAL / "s3_plazas.json").read_text(encoding="utf-8")):
+    plazas = json.loads((config.DATA_MANUAL / "s3_plazas.json").read_text(encoding="utf-8"))
+    # OSM の駐車場で、道から 50m 以内のもの（菜の花台・峠・町の範囲の駐車場は別に作っているので除く）
+    from yabitsu import osm, nagoki as _ng
+    from shapely.geometry import LineString as _LS
+    lots = osm.fetch_overpass('[out:json][timeout:90];way["amenity"="parking"](35.374,139.203,35.433,139.244);out tags geom;',
+                              config.DATA_RAW / "osm_track_parking.json")["elements"]
+    main_line = _LS(np.c_[sec.x, sec.y]); made = [_Poly(p["polygon"]) for p in pads]
+    for w in lots:
+        pts = [[g["lat"], g["lon"]] for g in w["geometry"]]
+        poly = _Poly(site.ll_to_xy(pts)).buffer(0)
+        if poly.distance(main_line) > 50 or poly.intersects(_ng.circle()) or any(poly.intersects(q) for q in made):
+            continue
+        plazas.append({"name": f"osm_parking_{w['id']}", "points": pts})
+    for pl in plazas:
         poly = _Poly(site.ll_to_xy(pl["points"])).buffer(0)
         c = poly.centroid; i = int(np.argmin(np.hypot(sec.x - c.x, sec.y - c.y)))
         pads.append({"name": pl["name"], "role": "flat", "kind": "plaza", "polygon": np.asarray(poly.exterior.coords).tolist(),
@@ -56,7 +69,7 @@ def main():
     ground.save(P / "track_town_ground.npz")
     tw = nagoki.load_town(sec, ground)
     pads = pads + tw.pads()
-    pads = pads + nagoki.roadside_houses(sec, minoge_area.dem_ground()).pads()   # S3 の道ぞいの家の土台
+    pads = pads + [q for b in nagoki.load_branches(sec) for q in b.pads()]   # 2本に分かれる所の、もう1本と島
     pads = pads + [q for st in side_roads.for_track(sec, pads, exclude=tw.region) for q in st.pads()]  # 分かれ道の地形合わせ
     # 新東名など（トンネルの入口まで）：低い所は地形を路面に合わせる
     from yabitsu import motorway, overpasses

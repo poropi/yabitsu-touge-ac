@@ -22,6 +22,7 @@ ROADSIDE_QUERY = ('[out:json][timeout:90];(way["highway"](35.378,139.225,35.418,
                   'way["building"](35.378,139.225,35.418,139.241););out tags geom;')
 # S2・S1 の道ぞいの車道（分かれ道と、道の上を渡る橋のため）
 TRACK_ROADS_QUERY = '[out:json][timeout:90];way["highway"](35.400,139.205,35.431,139.232);out tags geom;'
+TRACK_BUILDINGS_QUERY = '[out:json][timeout:90];way["building"](35.398,139.203,35.433,139.234);out tags geom;'
 ROUTE70_NAMES = ("秦野清川線", "県道70号")
 
 

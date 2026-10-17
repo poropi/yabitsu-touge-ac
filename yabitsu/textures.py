@@ -40,6 +40,12 @@ MATERIALS = {
     "text_tomare": {"texture": "textures/text_tomare.png", "shader": "ksPerPixelAT", "alpha": True},
     "hoarding": {"texture": "textures/hoarding.png", "shader": "ksPerPixel", "two_sided": True},
     "tunnel_dark": {"texture": "textures/tunnel_dark.png", "shader": "ksPerPixel"},
+    "gravel": {"texture": "textures/gravel.png", "shader": "ksPerPixel"},
+    "vending": {"texture": "textures/vending.png", "shader": "ksPerPixel"},
+    "vending_front": {"texture": "textures/vending_front.png", "shader": "ksPerPixel"},
+    "post_red": {"texture": "textures/post_red.png", "shader": "ksPerPixel"},
+    "glass_grey": {"texture": "textures/glass_grey.png", "shader": "ksPerPixel", "two_sided": True},
+    "info_board": {"texture": "textures/info_board.png", "shader": "ksPerPixel"},
 }
 
 FONT_FILES = (r"C:\Windows\Fonts\BIZ-UDGothicB.ttc", r"C:\Windows\Fonts\meiryob.ttc", r"C:\Windows\Fonts\YuGothB.ttc")
@@ -186,6 +192,20 @@ def _hoarding(w=256, h=256):
     return _u8(np.stack([g, g, g * 0.99], -1))
 
 
+def _vending_front(w=256, h=256):
+    """自動販売機の見本の窓：缶の並び（3段）と、下の取り出し口。"""
+    rng = np.random.default_rng(33)
+    img = np.full((h, w, 3), 0.92)
+    for r in range(3):
+        y0 = int(h * (0.06 + r * 0.22))
+        img[y0:y0 + int(h * 0.18), int(w * 0.05):int(w * 0.95)] = [0.85, 0.88, 0.9]
+        for c in range(8):
+            x0 = int(w * (0.07 + c * 0.11))
+            img[y0 + 6:y0 + int(h * 0.17), x0:x0 + int(w * 0.07)] = rng.random(3) * 0.7 + 0.2
+    img[int(h * 0.8):int(h * 0.92), int(w * 0.2):int(w * 0.8)] = [0.1, 0.1, 0.1]
+    return _u8(img)
+
+
 def _cone(size=256):
     """カラーコーン：赤橙に、白い帯（下から 45〜70%）。"""
     yy = np.arange(size)[:, None].repeat(size, 1) / size
@@ -256,7 +276,13 @@ def write_textures(out_dir):
             "sign_bus": np.array(sign_texture("バス", "#FFFFFF", "#1B4FA0", 128, 128, border="#1B4FA0")),
             "text_tomare": _text_alpha("止まれ"),
             "hoarding": _hoarding(),
-            "tunnel_dark": _gray(64, 28, 0.04, 0.02)}
+            "tunnel_dark": _gray(64, 28, 0.04, 0.02),
+            "gravel": _gray(512, 29, 0.62, 0.30, (1.02, 1.0, 0.95), coarse=3, fine=1, specks=0.05),
+            "vending": _gray(128, 30, 0.90, 0.03),
+            "vending_front": _vending_front(),
+            "post_red": _gray(128, 31, 0.62, 0.04, (1.45, 0.25, 0.22)),
+            "glass_grey": _gray(128, 32, 0.45, 0.05, (0.9, 0.98, 1.05)),
+            "info_board": np.array(sign_texture("関東ふれあいのみち\nご案内", "#F4F1E6", "#2F4A2A", 384, 256, border="#5A3E22"))}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

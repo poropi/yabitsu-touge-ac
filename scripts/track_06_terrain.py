@@ -26,9 +26,11 @@ def main():
                               side_extra=features.sidewalk_offsets(sec, feats),  # 歩道の下に地形がかぶらない
                               town=(tw.ground, nagoki.circle(), paved))
     np.savez_compressed(P / "track_terrain_near.npz", **near)
+    mid = terrain.build_mid(sec, sampler, pads)   # 道から 200m まで
+    np.savez_compressed(P / "track_terrain_mid.npz", **mid)
     far = terrain.build_far(sec, sampler, extra=extra + [np.asarray(nagoki.circle().exterior.coords).tolist()])
     np.savez_compressed(P / "track_terrain_far.npz", **far)
-    print(f"near grid {near['Z'].shape}, far grid {far['Z'].shape}")
+    print(f"near grid {near['Z'].shape}, mid grid {mid['Z'].shape}, far grid {far['Z'].shape}")
 
 
 if __name__ == "__main__":

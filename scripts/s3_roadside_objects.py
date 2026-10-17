@@ -65,7 +65,7 @@ def main():
         to_road = math.degrees(math.atan2(float(sec.x[i] - x), float(sec.y[i] - y))) % 360.0
         objects.append({"kind": "bus_stop", "points": [[e["lat"], e["lon"]]], "facing_deg": round(to_road, 1),
                         "note": f"バス停「{e.get('tags', {}).get('name', '')}」（OSM）"})
-    for s, lat, kind in ((3405.0, None, "torii"), (3401.0, None, "lantern")):
+    for s, lat, kind in ():   # 鳥居と灯籠は、島の上の物として s3_branches.json に（branches.py）
         i = int(np.argmin(np.abs(sec.s - (s0 + s))))
         off = sec.hw_right[i] + GUTTER_WIDTH + (3.5 if kind == "torii" else 1.8)
         pos, i = at(s0 + s, -off)

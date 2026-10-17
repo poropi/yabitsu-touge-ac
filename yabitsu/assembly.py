@@ -61,11 +61,15 @@ def add_centrelines(m, sec, rows, s_min=0.0):
                 m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}_flank", *_merge(parts), "line_white")
 
 
-def add_terrain(m, near, far):
+def add_terrain(m, near, far, mid=None):
     D = near["D"]
     keep = (D[:-1, :-1] <= NEAR_BAND) & (D[:-1, 1:] <= NEAR_BAND) & (D[1:, 1:] <= NEAR_BAND) & (D[1:, :-1] <= NEAR_BAND)
     for k, (v, f, uv) in enumerate(grid_mesh_chunks(near["xs"], near["ys"], near["Z"], keep)):
         m.add_mesh(GROUP, f"1GRASS_s1_terrain_{k:03d}", v, f, uv, "ground")
+    if mid is not None:   # 道から 200m まで：4m 格子
+        from .terrain import mid_keep
+        for k, (v, f, uv) in enumerate(grid_mesh_chunks(mid["xs"], mid["ys"], mid["Z"], mid_keep(mid["D"]), block=80, uv_scale=8.0)):
+            m.add_mesh(GROUP, f"1GRASS_track_mid_{k:03d}", v, f, uv, "ground")
     for k, (v, f, uv) in enumerate(grid_mesh_chunks(far["xs"], far["ys"], far["Z"], far["Dc"] >= FAR_HOLE, block=50, uv_scale=40.0)):
         m.add_mesh(GROUP, f"TERRAIN_FAR_s1_{k:02d}", v, f, uv, "ground")
 

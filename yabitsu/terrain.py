@@ -10,7 +10,8 @@ from .meshgen import compact
 
 FILL_SLOPE, CUT_SLOPE, UNDER_DEPTH = 1.0, 2.0, 0.3
 NEAR_BAND, NEAR_CELL = 110.0, 2.0
-FAR_EXTENT, FAR_CELL, FAR_HOLE, FAR_DROP = 2000.0, 20.0, 95.0, 1.0
+FAR_EXTENT, FAR_CELL, FAR_HOLE, FAR_DROP = 2000.0, 20.0, 205.0, 1.0
+MID_BAND, MID_CELL, MID_DROP, MID_OVERLAP = 210.0, 4.0, 0.15, 6.0  # 中くらいの地形：道から 200m まで（細かい地形の下へ 6m もぐり込ませる）
 EXTRA_NEAR, EXTRA_HOLE = 20.0, 15.0
 TOWN_BLEND_M = 10.0  # 町の範囲の円の外で、町の地面から今までの地形へ移す幅
 PAD_REACH_M = 40.0   # 土台（駐車場・家・分かれ道）が地形を動かす範囲  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
@@ -145,3 +146,33 @@ def build_far(sec, sampler, unproject=geo.from_local, extra=()):
     cx, cy = np.meshgrid((xs[:-1] + xs[1:]) / 2, (ys[:-1] + ys[1:]) / 2)
     Dc = _with_extra(road_frame(sec, cx, cy)["dist"].reshape(cx.shape), cx, cy, extra, EXTRA_HOLE, FAR_HOLE)
     return {"xs": xs, "ys": ys, "Z": Z, "Dc": Dc}
+
+
+def build_mid(sec, sampler, pads=(), unproject=geo.from_local, extra=()):
+    """細かい地形（NEAR_BAND まで）の外、MID_BAND までの 4m 格子の地形。家などの土台（pads）にも合わせ、MID_DROP 下げる。"""
+    xs, ys = corridor_grid(sec, MID_BAND, MID_CELL, extra=extra)
+    X, Y = np.meshgrid(xs, ys)
+    D = road_frame(sec, X, Y)["dist"].reshape(X.shape)
+    Z, _ = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads)
+    return {"xs": xs, "ys": ys, "Z": Z - MID_DROP, "D": D}
+
+
+def mid_keep(D):
+    """中くらいの地形の、描く四角（4つの角がどれも NEAR_BAND−MID_OVERLAP 以上、MID_BAND 以下）。"""
+    lo, hi = NEAR_BAND - MID_OVERLAP, MID_BAND
+    c = [D[:-1, :-1], D[:-1, 1:], D[1:, 1:], D[1:, :-1]]
+    return np.all([(q >= lo) & (q <= hi) for q in c], axis=0)
+
+
+def terrain_z(near, mid):
+    """地形の高さを返す関数（細かい地形の中はそれ、外は中くらいの地形）。景色の道や家を地形の上に置くため。"""
+    from scipy.interpolate import RegularGridInterpolator
+    fn = RegularGridInterpolator((near["ys"], near["xs"]), near["Z"], bounds_error=False, fill_value=np.nan)
+    fd = RegularGridInterpolator((near["ys"], near["xs"]), near["D"], bounds_error=False, fill_value=np.inf)
+    fm = RegularGridInterpolator((mid["ys"], mid["xs"]), mid["Z"] + MID_DROP, bounds_error=False, fill_value=np.nan)
+
+    def z(x, y):
+        q = np.c_[np.ravel(y), np.ravel(x)]
+        zn, dn, zm = fn(q), fd(q), fm(q)
+        return np.where((dn <= NEAR_BAND - 2.0) & ~np.isnan(zn), zn, zm).reshape(np.shape(x))
+    return z
