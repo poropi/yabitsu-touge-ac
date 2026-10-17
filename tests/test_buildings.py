@@ -116,3 +116,9 @@ def test_same_colours_share_materials_and_meshes_merge_by_material():
     walls = [m for m in ms if m[0].startswith("1WALL_bld_")]
     assert len(walls) == 1 and walls[0][4] == bd.facade_mat(a)
     assert len({m[0] for m in ms}) == len(ms)
+
+
+def test_merge_skips_empty_parts():
+    v, f, uv = bd._merge([(np.zeros((0, 3)), np.zeros((0,)), np.zeros((0, 2))),
+                          (np.zeros((3, 3)), np.array([[0, 1, 2]]), np.zeros((3, 2)))])
+    assert f.shape == (1, 4) and len(v) == 3

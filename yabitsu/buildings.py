@@ -104,6 +104,8 @@ def _merge(parts):
     vs, fs, us, base = [], [], [], 0
     for v, f, uv in parts:
         f = np.asarray(f)
+        if f.size == 0:   # 長さのない辺など、面のない部品
+            continue
         if f.shape[1] == 3:
             f = np.c_[f, f[:, 2]]
         vs.append(np.asarray(v, float)); fs.append(f + base); us.append(np.asarray(uv, float)); base += len(v)
