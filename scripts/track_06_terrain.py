@@ -14,6 +14,9 @@ def main():
     flats = start_lot.flats_for(config.DATA_MANUAL / "s1_start_lot.json", pads)
     pads = pads + flats
     extra = [p["polygon"] for p in flats]  # 展望台の広場など、道から離れた場所にも細かい地形を張る
+    from yabitsu import motorway, overpasses, side_roads
+    for x in motorway.from_osm(side_roads.load_elements(), sec, gsi.default_sampler(), overpasses.load_overrides()):
+        extra.append(np.asarray(x.footprint().buffer(15.0).exterior.coords).tolist())   # 新東名のまわりも細かい地形に
     feats = features.load_features_rows(track.load_section_rows("features", track.load_bounds()))
     cut_left, cut_right = features.cut_slopes(sec, feats)
     sampler = gsi.default_sampler()

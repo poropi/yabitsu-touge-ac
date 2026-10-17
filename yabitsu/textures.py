@@ -39,6 +39,7 @@ MATERIALS = {
     "sign_bus": {"texture": "textures/sign_bus.png", "shader": "ksPerPixel"},
     "text_tomare": {"texture": "textures/text_tomare.png", "shader": "ksPerPixelAT", "alpha": True},
     "hoarding": {"texture": "textures/hoarding.png", "shader": "ksPerPixel", "two_sided": True},
+    "tunnel_dark": {"texture": "textures/tunnel_dark.png", "shader": "ksPerPixel"},
 }
 
 FONT_FILES = (r"C:\Windows\Fonts\BIZ-UDGothicB.ttc", r"C:\Windows\Fonts\meiryob.ttc", r"C:\Windows\Fonts\YuGothB.ttc")
@@ -254,7 +255,8 @@ def write_textures(out_dir):
             "pole_grey": _gray(128, 21, 0.62, 0.05),
             "sign_bus": np.array(sign_texture("バス", "#FFFFFF", "#1B4FA0", 128, 128, border="#1B4FA0")),
             "text_tomare": _text_alpha("止まれ"),
-            "hoarding": _hoarding()}
+            "hoarding": _hoarding(),
+            "tunnel_dark": _gray(64, 28, 0.04, 0.02)}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

@@ -2,7 +2,7 @@ import json
 
 import numpy as np
 
-from yabitsu import (assembly, buildings, config, features, gsi, layouts, minoge_area, nagoki, overpasses, pass_area,
+from yabitsu import (assembly, buildings, config, features, gsi, layouts, minoge_area, motorway, nagoki, overpasses, pass_area,
                      pavements, side_roads, start_lot, textures, town_objects, track, trees)
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
@@ -66,7 +66,11 @@ def main():
     avoid = tw.carriageway.union(tw.sidewalk).union(tw.drivable())
     assembly.add_meshes(m, buildings.merge_by_material(buildings.building_meshes(blds, tw.ground.z, avoid)), group=config.TOWN_GROUP)
     el = side_roads.load_elements()
-    assembly.add_meshes(m, overpasses.meshes(overpasses.from_osm(el, sec, sampler, overpasses.load_overrides())))
+    ov = overpasses.load_overrides()
+    mws = motorway.from_osm(el, sec, sampler, ov)   # 新東名など：両側のトンネルの入口まで
+    assembly.add_meshes(m, motorway.meshes(mws))
+    skip = {i for x in mws for i in x.way_ids}
+    assembly.add_meshes(m, overpasses.meshes(overpasses.from_osm(el, sec, sampler, ov, skip_ids=skip)))
     assembly.add_layout_objects(m, sec, pads, layouts.load_layouts(), bounds)
     print(m.save()); print(m.summary())
 

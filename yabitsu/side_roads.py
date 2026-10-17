@@ -201,7 +201,7 @@ def stubs(elements, sec, sampler, keep_out, s_min=0.0, length_m=STUB_LENGTH_M, u
     return out
 
 
-ROADSIDE_FILES = ("osm_nagoki.json", "osm_s3_roadside.json", "osm_track_roads.json")
+ROADSIDE_FILES = ("osm_nagoki.json", "osm_s3_roadside.json", "osm_track_roads.json", "osm_shintomei.json")
 
 
 def load_elements(raw_dir=None):

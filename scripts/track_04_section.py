@@ -58,6 +58,10 @@ def main():
     pads = pads + tw.pads()
     pads = pads + nagoki.roadside_houses(sec, minoge_area.dem_ground()).pads()   # S3 の道ぞいの家の土台
     pads = pads + [q for st in side_roads.for_track(sec, pads, exclude=tw.region) for q in st.pads()]  # 分かれ道の地形合わせ
+    # 新東名など（トンネルの入口まで）：低い所は地形を路面に合わせる
+    from yabitsu import motorway, overpasses
+    for x in motorway.from_osm(side_roads.load_elements(), sec, gsi.default_sampler(), overpasses.load_overrides()):
+        pads = pads + x.pads()
     (P / "track_pads.json").write_text(json.dumps(pads, ensure_ascii=False), encoding="utf-8")
     print(f"section rows={sec.n} width {2 * sec.hw_left.min():.1f}-{2 * sec.hw_left.max():.1f} m, "
           f"max slope {np.abs(sec.slope).max() * 100:.1f}%, pads={[(p['name'], p['role']) for p in pads]}")

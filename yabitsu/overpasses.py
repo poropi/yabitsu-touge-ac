@@ -105,7 +105,7 @@ class Overpass:
         return vs, fs, vs[:, :2] / 2.0
 
 
-def from_osm(elements, sec, sampler, overrides=None, reach_m=REACH_M, unproject=geo.from_local):
+def from_osm(elements, sec, sampler, overrides=None, reach_m=REACH_M, unproject=geo.from_local, skip_ids=()):
     """本線の上を渡る OSM の橋を Overpass にする。overrides = {osm_id: {"clearance_m":…, "width_m":…}}。"""
     overrides = overrides or {}
     main = LineString(np.c_[sec.x, sec.y])
@@ -114,6 +114,8 @@ def from_osm(elements, sec, sampler, overrides=None, reach_m=REACH_M, unproject=
     for w in elements:
         t = w.get("tags", {})
         if w.get("type") != "way" or t.get("bridge", "no") == "no" or _layer(t) < 1 or t.get("highway") not in BRIDGE_TYPES:
+            continue
+        if w.get("id") in skip_ids:   # トンネルまで伸ばして motorway.py で作る橋
             continue
         pts = np.array([[g["lat"], g["lon"]] for g in w.get("geometry", [])])
         if len(pts) < 2:
