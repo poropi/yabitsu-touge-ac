@@ -5,18 +5,19 @@ import numpy as np
 from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
-from yabitsu import config, crosssection as cs, pass_area, start_lot
+from yabitsu import config, crosssection as cs, pass_area, start_lot, track
 from yabitsu.centerline import Centerline
 
 P = config.DATA_PROCESSED
 
 
 def main():
-    cl = Centerline.load(P / "s1_centerline.npz")
-    prof = np.load(P / "s1_profile.npz")
-    sec = cs.build_section(cl, prof["z"], cs.load_widths_csv(config.DATA_MANUAL / "s1_widths.csv"))
-    sec.save_json(P / "s1_section.json")
-    pads = cs.pads_from_parking(json.loads((P / "s1_parking.json").read_text(encoding="utf-8")), sec)
+    cl = Centerline.load(P / "track_centerline.npz")
+    prof = np.load(P / "track_profile.npz", allow_pickle=True)
+    widths = cs.parse_width_rows(track.load_section_rows("widths", track.load_bounds()))
+    sec = cs.build_section(cl, prof["z"], widths)
+    sec.save_json(P / "track_section.json")
+    pads = cs.pads_from_parking(json.loads((P / "track_parking.json").read_text(encoding="utf-8")), sec)
     lot = start_lot.load_spec(config.DATA_MANUAL / "s1_start_lot.json")
     if lot:
         pads = start_lot.apply(pads, lot, sec)
@@ -37,7 +38,7 @@ def main():
                 g = g if g.geom_type == "Polygon" else max(g.geoms, key=lambda q: q.area)
                 p["polygon"] = [list(c) for c in g.exterior.coords]
         pads = pads + site_pads
-    (P / "s1_pads.json").write_text(json.dumps(pads, ensure_ascii=False), encoding="utf-8")
+    (P / "track_pads.json").write_text(json.dumps(pads, ensure_ascii=False), encoding="utf-8")
     print(f"section rows={sec.n} width {2 * sec.hw_left.min():.1f}-{2 * sec.hw_left.max():.1f} m, "
           f"max slope {np.abs(sec.slope).max() * 100:.1f}%, pads={[(p['name'], p['role']) for p in pads]}")
 

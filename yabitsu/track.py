@@ -58,3 +58,16 @@ def load_section_rows(kind, bounds, manual_dir=None):
                     continue
                 out.append(r)
     return out
+
+
+def section_view(cl, bounds, name):
+    """1つの区間だけを切り出した中心線（s はその区間の始点からの距離）。確認画像や候補探しに使う。"""
+    from types import SimpleNamespace
+    s0, s1 = bounds[name]
+    m = (cl.s >= s0 - 1e-9) & (cl.s <= s1 + 1e-9)
+    return SimpleNamespace(s=cl.s[m] - s0, x=cl.x[m], y=cl.y[m], heading=cl.heading[m])
+
+
+def load_bounds(processed_dir=None):
+    d = np.load(Path(processed_dir or config.DATA_PROCESSED) / "track_profile.npz", allow_pickle=True)
+    return {k: (float(a), float(b)) for k, (a, b) in d["bounds"].item().items()}

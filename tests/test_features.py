@@ -66,3 +66,15 @@ def test_candidate_range_stays_inside_section_at_the_end():
     assert c and all(r["s_to"] <= sec.s[-1] for r in c)
     for r in c:
         ft.rows_of(sec, ft.Feature(r["s_from"], r["s_to"], r["side"], r["type"], r["height_m"], ""))
+
+
+def test_features_from_shifted_rows_keep_local_meaning():
+    # 区間の始点が通しで 100m の表：区間の距離 10〜20m → 通しの 110〜120m
+    sec = _straight(201)
+    rows = [{"s_from": 110.0, "s_to": 120.0, "side": "L", "type": "retaining_wall", "height_m": "2.0", "note": "x"},
+            {"s_from": 130.0, "s_to": 150.0, "side": "R", "type": "guardrail", "height_m": "", "note": ""}]
+    feats = ft.load_features_rows(rows)
+    assert (feats[0].s_from, feats[0].s_to, feats[0].height_m) == (110.0, 120.0, 2.0)
+    assert feats[1].height_m == 0.0 and feats[1].type == "guardrail"
+    sl = ft.rows_of(sec, feats[0])
+    assert sec.s[sl.start] >= 110.0 - 1e-9 and sec.s[sl.stop - 1] <= 120.0 + 1e-9

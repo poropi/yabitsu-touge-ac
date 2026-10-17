@@ -71,3 +71,18 @@ def test_fit_sections_joins_value_and_slope():
     assert abs(z[400] - z[399]) < 0.1
     g_below = (z[400] - z[390]) / 10; g_above = (z[410] - z[400]) / 10
     assert abs(g_below - g_above) < 0.01
+
+
+def test_section_view_has_local_distance():
+    r, joints = track.join_routes(list(_two_routes()))
+    cl = build_centerline(r)
+    defs = [SectionDef("s2", (0, 0), (0, 0)), SectionDef("s1", (0, 0), (0, 0))]
+    b = track.section_bounds(cl, defs, joints)
+    v = track.section_view(cl, b, "s1")
+    assert v.s[0] == 0.0 and abs(v.s[-1] - (b["s1"][1] - b["s1"][0])) < 1e-9
+    assert np.allclose(v.x, cl.x[cl.s >= b["s1"][0] - 1e-9]) and len(v.heading) == len(v.s)
+
+
+def test_load_bounds_roundtrip(tmp_path):
+    np.savez(tmp_path / "track_profile.npz", s=np.arange(3.0), bounds=np.array({"s2": (0.0, 1.0), "s1": (1.0, 2.0)}, dtype=object))
+    assert track.load_bounds(tmp_path) == {"s2": (0.0, 1.0), "s1": (1.0, 2.0)}

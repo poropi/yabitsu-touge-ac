@@ -26,14 +26,19 @@ class Feature:
     note: str
 
 
+def load_features_rows(rows):
+    """表の行（区間の表を通しの距離へずらしたもの、または CSV をそのまま読んだもの）を Feature に。"""
+    return [Feature(float(r["s_from"]), float(r["s_to"]), str(r["side"]).strip(), str(r["type"]).strip(),
+                    float(r["height_m"]) if r.get("height_m") not in (None, "") else 0.0, r.get("note") or "")
+            for r in rows if r.get("s_from") not in (None, "")]
+
+
 def load_features_csv(path):
     p = Path(path)
     if not p.exists():
         return []
     with p.open(encoding="utf-8") as f:
-        return [Feature(float(r["s_from"]), float(r["s_to"]), r["side"].strip(), r["type"].strip(),
-                        float(r["height_m"]) if r.get("height_m") else 0.0, r.get("note") or "")
-                for r in csv.DictReader(f) if r.get("s_from")]
+        return load_features_rows(list(csv.DictReader(f)))
 
 
 def rows_of(sec, f):

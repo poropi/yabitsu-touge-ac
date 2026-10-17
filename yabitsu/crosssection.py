@@ -20,13 +20,18 @@ def surface_height(lat, z_c, slope, crown):
     return z_c + slope * lat - crown * np.abs(lat)
 
 
+def parse_width_rows(rows):
+    return [{"s_from": float(r["s_from"]), "s_to": float(r["s_to"]), "width_m": float(r["width_m"]),
+             "lanes": int(r["lanes"]) if r.get("lanes") not in (None, "") else None}
+            for r in rows if r.get("s_from") not in (None, "")]
+
+
 def load_widths_csv(path):
     p = Path(path)
     if not p.exists():
         return []
     with p.open(encoding="utf-8") as f:
-        return [{"s_from": float(r["s_from"]), "s_to": float(r["s_to"]), "width_m": float(r["width_m"]),
-                 "lanes": int(r["lanes"]) if r.get("lanes") else None} for r in csv.DictReader(f) if r.get("s_from")]
+        return parse_width_rows(list(csv.DictReader(f)))
 
 
 def widths(s, lanes, rows):

@@ -63,3 +63,11 @@ def test_pads_roles():
     pads = cs.pads_from_parking(parking, sec, project=lambda lat, lon: (np.asarray(lon, float), np.asarray(lat, float)))
     assert [(p["name"], p["role"]) for p in pads] == [("A", "start"), ("B", "end")]
     assert pads[0]["z"] == pytest.approx(100.0)
+
+
+def test_width_rows_parse_shifted_rows():
+    rows = [{"s_from": 300.0, "s_to": 350.0, "width_m": "7.0", "lanes": "2", "note": ""},
+            {"s_from": 350.0, "s_to": 400.0, "width_m": "5.0", "lanes": "", "note": ""}]
+    got = cs.parse_width_rows(rows)
+    assert got == [{"s_from": 300.0, "s_to": 350.0, "width_m": 7.0, "lanes": 2},
+                   {"s_from": 350.0, "s_to": 400.0, "width_m": 5.0, "lanes": None}]
