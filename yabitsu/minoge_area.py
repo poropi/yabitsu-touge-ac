@@ -10,21 +10,15 @@ from shapely.geometry import Polygon
 
 from . import site
 from .acobjects import Dummy
+from .houses import Houses, footprint as _footprint
 from .start_lot import Frame, _gable_ends, _gable_roof, _merge, box, road_formation
 
-TWO_STOREY_M2 = 60.0
-WALL_H = {1: 3.0, 2: 5.5}
 PAD_MARGIN = 1.0
 
 
 def _compass_to_heading(deg):
     """方位（北=0、東=90、時計回り）→ 進行方向（+x から反時計回りのラジアン）。"""
     return math.radians(90.0 - deg)
-
-
-def _footprint(f, size):
-    L, W = size
-    return f.rect((-L / 2, L / 2), (-W / 2, W / 2))
 
 
 class Site:
@@ -38,15 +32,10 @@ class Site:
 
         sh = spec.get("shrine")
         shrine_poly = _footprint(Frame(site.ll_to_xy([sh["center"]])[0], sh["axis_deg"]), sh["size"]) if sh else None
-        self.houses = []  # (Frame, size, 床の高さ, 壁の高さ, 屋根の高さ, 軒の出)
-        for b in spec.get("buildings", []):
-            f = Frame(site.ll_to_xy([b["center"]])[0], b["axis_deg"])
-            fp = _footprint(f, b["size"])
-            # 道・折り返し場・待合所（お堂）と重なる建物は置かない（建物データには待合所そのものも入っている）
-            if fp.intersects(road) or fp.intersects(self.turnaround) or (shrine_poly is not None and fp.intersects(shrine_poly)):
-                continue
-            storeys = 2 if b["size"][0] * b["size"][1] >= TWO_STOREY_M2 else 1
-            self.houses.append((f, b["size"], float(ground_z(*f.o)), WALL_H[storeys], b["roof_h"], b["eaves"]))
+        # 道・折り返し場・待合所（お堂）と重なる建物は置かない（建物データには待合所そのものも入っている）
+        avoid = [self.turnaround] + ([shrine_poly] if shrine_poly is not None else [])
+        self.houses = Houses(spec.get("buildings", []), sec, ground_z, prefix="s2_houses", pad_name="minoge_house_{k}",
+                             avoid=avoid)
         self.shrine = None
         if sh:
             f = Frame(site.ll_to_xy([sh["center"]])[0], sh["axis_deg"])
@@ -70,10 +59,7 @@ class Site:
         t = self.turnaround; c = t.centroid
         out = [{"name": "minoge_turnaround", "role": "flat", "kind": "site", "polygon": np.asarray(t.exterior.coords).tolist(),
                 "z": float(self.z(c.x, c.y)), "plane": self.plane, "pit_points": self.pits()}]
-        for k, (f, size, z, *_ ) in enumerate(self.houses):
-            poly = _footprint(f, size).buffer(PAD_MARGIN, join_style="mitre")
-            out.append({"name": f"minoge_house_{k}", "role": "flat", "kind": "site",
-                        "polygon": np.asarray(poly.exterior.coords).tolist(), "z": z})
+        out += self.houses.pads()
         if self.shrine:
             f, size, z, *_ = self.shrine
             poly = _footprint(f, size).buffer(PAD_MARGIN, join_style="mitre")
@@ -84,19 +70,7 @@ class Site:
     def meshes(self):
         """(名前, 頂点, 面, UV, 材質, 描画するか)。中身のない部品は出さない。"""
         out = [("1ROAD_s2_minoge_turnaround", *site.draped(self.turnaround, self.z), "asphalt", True)]
-        walls, gables, roofs = [], [], {"brown": [], "grey": []}
-        for k, (f, (L, W), z, wh, rh, ev) in enumerate(self.houses):
-            a, b = (-L / 2, L / 2), (-W / 2, W / 2)
-            walls.append(box(f, a, b, z - 0.3, z + wh, 2.0))
-            gables.append(_gable_ends(f, a, b, z + wh, rh))
-            roofs["brown" if k % 2 == 0 else "grey"].append(_gable_roof(f, a, b, z + wh, rh, ev))
-        if walls:
-            out.append(("1WALL_s2_houses", *_merge(walls), "wall_white", True))
-            out.append(("s2_houses_gables", *_merge(gables), "wall_white", True))
-        if roofs["brown"]:
-            out.append(("s2_houses_roof_brown", *_merge(roofs["brown"]), "roof", True))
-        if roofs["grey"]:
-            out.append(("s2_houses_roof_grey", *_merge(roofs["grey"]), "roof_metal", True))
+        out += self.houses.meshes()
         if self.shrine:
             f, (L, W), z, wh, rh, ev = self.shrine
             a, b = (-L / 2, L / 2), (-W / 2, W / 2)
