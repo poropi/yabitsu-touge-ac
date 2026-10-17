@@ -116,3 +116,31 @@ def test_footprint_box_keeps_area_of_l_shaped_outline():
     rect = Polygon([(0, 0), (12, 0), (12, 5), (0, 5)])
     c, axis_deg, (L, W) = site.footprint_box(rect)
     assert (L, W) == pytest.approx((12, 5)) and abs(math.remainder(math.radians(axis_deg), math.pi)) < 1e-6
+
+
+def test_turnaround_meets_the_road_edge_without_a_step():
+    from yabitsu.crosssection import GUTTER_WIDTH
+    sec = _sec(); sec.crown[:] = 0.02; sec.slope[:] = -0.06   # 中央が高く、広場の側（左）へ 6% 下がっている（実際の蓑毛と同じくらい）
+    s = ma.build(SPEC, sec, _ground)
+    pad = next(p for p in s.pads() if p["name"] == "minoge_turnaround")
+    x = np.arange(62.0, 88.0, 2.0); y = np.full_like(x, sec.hw_left[0] + GUTTER_WIDTH)
+    i = x.astype(int)
+    assert np.abs(site.plane_z(pad["plane"], x, y) - sec.edge_z(1)[i]).max() < 0.05
+
+
+_REAL_SEC = __import__("yabitsu.config", fromlist=["x"]).DATA_PROCESSED / "track_section.json"
+
+
+@pytest.mark.skipif(not _REAL_SEC.exists(), reason="処理済みデータがまだない")
+def test_real_pit_cars_fit_in_the_turnaround_clear_of_the_hut():
+    from yabitsu import config
+    from yabitsu.crosssection import Section
+    from yabitsu.start_lot import Frame
+    spec = ma.load(config.DATA_MANUAL / "s2_minoge.json")
+    s = ma.build(spec, Section.load_json(_REAL_SEC), lambda x, y: 0.0)
+    sh = spec["shrine"]
+    hut = ma._footprint(Frame(site.ll_to_xy([sh["center"]])[0], sh["axis_deg"]), sh["size"]).buffer(sh["eaves"])
+    for x, y, z, h in s.pits():
+        car = Frame((x, y), math.degrees(h)).rect((-2.3, 2.3), (-0.95, 0.95))
+        assert s.turnaround.buffer(0.01).contains(car), (x, y)
+        assert not car.intersects(hut), (x, y)

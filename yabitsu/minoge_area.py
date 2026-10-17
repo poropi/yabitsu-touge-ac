@@ -34,7 +34,7 @@ class Site:
         turn = Polygon(site.ll_to_xy(spec["turnaround"]["points"])).buffer(0)
         self.turnaround = site.largest(turn.difference(road))
         c = self.turnaround.centroid
-        self.plane = site.fit_plane(sec, (c.x, c.y))
+        self.plane = site.match_road_edge(site.fit_plane(sec, (c.x, c.y)), self.turnaround, sec)
 
         sh = spec.get("shrine")
         shrine_poly = _footprint(Frame(site.ll_to_xy([sh["center"]])[0], sh["axis_deg"]), sh["size"]) if sh else None

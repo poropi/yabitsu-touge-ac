@@ -32,7 +32,7 @@ s_from,s_to,side,type,height_m,note
 3160,3300,L,retaining_wall,3.5,ブロック擁壁（ストリートビュー）
 3300,3340,L,retaining_wall,1.5,低いブロック擁壁（ストリートビュー）
 3460,3500,L,retaining_wall,1.5,石積み（ストリートビュー）
-3500,4165,L,guardrail,,ガードレール（ストリートビュー）
+3500,4155,L,guardrail,,ガードレール（ストリートビュー）。菜の花台の駐車場の入口の手前で終わる
 3500,3700,R,retaining_wall,2.5,石積み（ストリートビュー）
 3860,3900,R,retaining_wall,5.0,ブロック擁壁（ストリートビュー）
 3900,4060,R,retaining_wall,7.0,とても高い石積み（ストリートビュー）

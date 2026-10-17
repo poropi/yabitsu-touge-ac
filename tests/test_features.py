@@ -95,3 +95,26 @@ def test_parapet_is_vertical_and_at_gutter_edge():
 def test_parapet_type_is_accepted():
     sec = _straight()
     assert ft.rows_of(sec, ft.Feature(10, 30, "L", "parapet", 0, "")) == slice(10, 31)
+
+
+_REAL = __import__("yabitsu.config", fromlist=["x"]).DATA_PROCESSED / "track_pads.json"
+
+
+@pytest.mark.skipif(not _REAL.exists(), reason="処理済みデータがまだない")
+def test_real_barriers_do_not_cross_parking_lots():
+    # ガードレール・擁壁が駐車場の中に入ると、出入りできなくなる
+    import json
+    from shapely.geometry import LineString, Polygon
+    from yabitsu import config, track
+    from yabitsu.crosssection import GUTTER_WIDTH, Section
+    sec = Section.load_json(config.DATA_PROCESSED / "track_section.json")
+    drive_in = lambda p: p.get("kind") in ("lot", "pass") or p["name"] == "minoge_turnaround"  # 家の土台は除く（家の前の塀は本物）
+    lots = [Polygon(p["polygon"]) for p in json.loads(_REAL.read_text(encoding="utf-8")) if drive_in(p)]
+    for f in ft.load_features_rows(track.load_section_rows("features", track.load_bounds())):
+        sl = ft.rows_of(sec, f); side = ft.SIDES[f.side]
+        L = (sec.hw_left if side > 0 else sec.hw_right)[sl] + GUTTER_WIDTH + 0.1
+        x = sec.x[sl] - side * L * np.sin(sec.heading[sl]); y = sec.y[sl] + side * L * np.cos(sec.heading[sl])
+        if len(x) < 2:
+            continue
+        line = LineString(np.c_[x, y])
+        assert all(line.intersection(lot).length < 0.5 for lot in lots), f

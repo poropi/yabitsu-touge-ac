@@ -11,7 +11,8 @@ from shapely.geometry import Point, Polygon
 from . import acdata, config, geo
 from .acobjects import DUMMY_Z_OFFSET, Dummy, frame_at, hotlap_start, pit_boxes, start_grid, timing_gate
 
-SECTION_SLACK_M = 40.0  # 区間の境目の外側でも、これだけは探してよい（つなぎ目の近くの地点のため）
+SECTION_SLACK_M = 5.0  # 区間の境目の外側でも、これだけは探してよい（つなぎ目ちょうどの地点のため）
+OFF_ROAD_M = 4.0       # 道の端からこれ以上離れた地点は、別の枝か打ち間違いとして止める
 
 
 @dataclass(frozen=True)
@@ -48,6 +49,9 @@ def s_of(sec, ll, bounds, section):
         d = float(np.linalg.norm(a + t * (b - a) - p))
         if d < best[0]:
             best = (d, float(sec.s[j] + t * (sec.s[j + 1] - sec.s[j])))
+    hw = float(max(sec.hw_left[i], sec.hw_right[i]))
+    if best[0] > hw + OFF_ROAD_M:
+        raise ValueError(f"地点 {ll} は区間 {section} の道から {best[0]:.1f}m 離れています（別の枝か、地点の間違い）")
     return best[1]
 
 

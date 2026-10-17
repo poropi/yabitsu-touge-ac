@@ -77,8 +77,7 @@ def test_s_of_picks_point_on_requested_section():
     sec = _sec_from_xy(x, y)
     b0 = float(sec.s[np.argmin(np.hypot(sec.x - 300, sec.y - 6.5))])
     bounds = {"s2": (0.0, b0), "s1": (b0, float(sec.s[-1]))}
-    p = _ll(200.0, 5.0)
-    s_low = lay.s_of(sec, p, bounds, "s2"); s_up = lay.s_of(sec, p, bounds, "s1")
+    s_low = lay.s_of(sec, _ll(200.0, 5.0), bounds, "s2"); s_up = lay.s_of(sec, _ll(200.0, 8.0), bounds, "s1")
     assert s_low < b0 and abs(s_low - 200.0) < 1.0
     assert s_up > b0 and abs(sec.y[np.argmin(abs(sec.s - s_up))] - 13.0) < 0.5
 
@@ -132,3 +131,27 @@ def test_real_layouts_start_on_the_road_and_finish_ahead():
         s_grid = lay.s_of(sec, l.grid, bounds, l.section)
         assert (s_fin - s_start) * l.direction > 1000, l.name
         assert 0 < (s_start - s_grid) * l.direction < 80, l.name  # s1_down はユーザーが選んだ地点で 60m
+
+
+def _hairpin():
+    x = np.r_[np.arange(0.0, 300.0), 300 + 6.5 * np.sin(np.linspace(0, np.pi, 21))[1:-1], np.arange(300.0, -1.0, -1.0)]
+    y = np.r_[np.zeros(300), 6.5 - 6.5 * np.cos(np.linspace(0, np.pi, 21))[1:-1], np.full(301, 13.0)]
+    sec = _sec_from_xy(x, y)
+    b0 = float(sec.s[np.argmin(np.hypot(sec.x - 306.5, sec.y - 6.5))])
+    return sec, {"s2": (0.0, b0), "s1": (b0, float(sec.s[-1]))}
+
+
+def test_s_of_near_the_joint_stays_on_requested_branch():
+    # つなぎ目のすぐ近く（両方の枝が 13m しか離れていない所）で、少しずれた点を指定しても、指定した区間の枝に乗る
+    sec, bounds = _hairpin()
+    p = _ll(280.0, 9.0)   # 上の枝（y=13）に近いが、区間 s2（下の枝 y=0）を指定
+    with pytest.raises(ValueError):
+        lay.s_of(sec, p, bounds, "s2")   # 下の枝から 9m も離れている → 取り違えとして止める
+    s = lay.s_of(sec, _ll(280.0, 1.5), bounds, "s2")
+    assert s < bounds["s2"][1] and abs(s - 280.0) < 1.0
+
+
+def test_s_of_rejects_points_far_from_the_road():
+    sec, bounds = _hairpin()
+    with pytest.raises(ValueError):
+        lay.s_of(sec, _ll(150.0, 40.0), bounds, "s2")

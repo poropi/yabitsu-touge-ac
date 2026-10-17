@@ -55,3 +55,28 @@ def footprint_box(poly):
     k = min(1.0, np.sqrt(poly.area / max(L * W, 1e-9)))
     c = poly.centroid
     return (float(c.x), float(c.y)), float(np.degrees(np.arctan2(axis[1], axis[0]))), [L * k, W * k]
+
+
+def match_road_edge(plane, poly, sec, tol=0.8):
+    """広場が道の縁（側溝の外側）に接している所で、広場の高さが道の縁の高さに合うよう平面を合わせ直す。
+    接している点が一直線に並ぶと横の傾きが決まらないので、その分は元の平面の傾きに寄せる。"""
+    from .crosssection import GUTTER_WIDTH
+    ring = np.asarray(poly.segmentize(1.0).exterior.coords)
+    pts, zs = [], []
+    for x, y in ring:
+        i = int(np.argmin(np.hypot(sec.x - x, sec.y - y))); h = sec.heading[i]
+        lat = -(x - sec.x[i]) * np.sin(h) + (y - sec.y[i]) * np.cos(h)
+        side = 1 if lat > 0 else -1
+        hw = sec.hw_left[i] if side > 0 else sec.hw_right[i]
+        if abs(abs(lat) - (hw + GUTTER_WIDTH)) < tol:
+            pts.append((x, y)); zs.append(float(sec.edge_z(side)[i]))
+    if len(pts) < 2:
+        return plane
+    cx, cy, z0, gx, gy = plane
+    P = np.asarray(pts)
+    A = np.c_[np.ones(len(P)), P[:, 0] - cx, P[:, 1] - cy]
+    w = 5.0  # 元の傾きに寄せる強さ
+    A = np.r_[A, [[0.0, w, 0.0], [0.0, 0.0, w]]]
+    b = np.r_[zs, w * gx, w * gy]
+    z0n, gxn, gyn = np.linalg.lstsq(A, b, rcond=None)[0]
+    return [cx, cy, float(z0n), float(gxn), float(gyn)]

@@ -58,7 +58,7 @@ def add_trees(m, trees):
 
 def add_pads(m, pads):
     for k, p in enumerate(pads):
-        if p.get("kind") in ("lot", "pass"):  # 手で測った駐車場・峠まわりは add_start_lot / add_pass_area で作る
+        if p.get("kind") in ("lot", "pass", "site"):  # 駐車場・峠・蓑毛は add_start_lot / add_pass_area で作る
             continue
         m.add_mesh(GROUP, f"1ROAD_s1_pad_{k:02d}", *mg.pad_mesh(p["polygon"], p["z"]), "asphalt")
 
