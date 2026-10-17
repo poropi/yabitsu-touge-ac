@@ -83,3 +83,11 @@ def test_bus_bay_gets_dashed_separator_at_the_old_edge(tmp_path):
     assert m.meshes[name]["material"] == "line_white"
     assert v[:, 0].min() >= 100 - 1e-6 and v[:, 0].max() <= 160 + 1e-6
     assert np.allclose(np.abs(v[:, 1]).mean(), hw0[0] - 0.25, atol=0.1)
+
+
+def test_narrowing_rows_get_no_bay_line(tmp_path):
+    from yabitsu import crosssection as cs
+    m = Manifest(tmp_path)
+    sec = _straight(401)
+    assembly.add_bay_lines(m, sec, cs.parse_bay_rows([{"s_from": "100", "s_to": "160", "side": "R", "depth_m": "-1.5", "taper_m": "10"}]))
+    assert m.groups.get(assembly.GROUP, {"meshes": []})["meshes"] == []

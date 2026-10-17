@@ -53,3 +53,15 @@ def test_route70_beyond_the_track_end_is_not_a_branch():
     sec, ways = _main_and_branch()
     ways.append(_way([[200, 0], [260, 30], [400, 40]], id=9, ref="70"))     # 道の終わりの先へ続く県道70号
     assert [b.osm_id for b in br.parallel_branches(ways, sec, {})] == [2]
+
+
+def test_split_area_has_no_gap_between_road_island_and_branch():
+    sec, ways = _main_and_branch()
+    island = [[*br._ll(x, y)] for x, y in [(75, 5.0), (125, 5.0), (125, 8.0), (75, 8.0)]]
+    b, = br.parallel_branches(ways, sec, {"2": {"width_m": 4.0, "island": island}})
+    from shapely.geometry import box
+    from yabitsu.start_lot import road_formation
+    whole = b.surface.union(b.island).union(road_formation(sec, 0.0, 200.0))
+    gap = box(70, 0, 130, 12).intersection(b.line.buffer(2.0).union(box(75, 0, 125, 10))).difference(whole)
+    assert gap.area < 1.0                                     # 本線・島・東側の道の間に地面が出ない
+    assert b.surface.contains(Point(66, 4.5))                  # 分かれる所の三角の所も路面（本線の側溝の外）

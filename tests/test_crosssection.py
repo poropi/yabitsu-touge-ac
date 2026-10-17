@@ -96,3 +96,10 @@ def test_bus_bay_widens_one_side_with_tapers():
     assert l2[100] == pytest.approx(6.0) and l2[80] == pytest.approx(6.0) and l2[120] == pytest.approx(6.0)
     assert l2[69] == pytest.approx(3.0) and l2[131] == pytest.approx(3.0)
     assert 3.0 < l2[75] < 6.0 and np.all(np.abs(np.diff(l2)) <= 1.5 * 3.0 / 10 + 0.01)   # smoothstep の一番急な所
+
+
+def test_negative_bay_narrows_the_road():
+    s = np.arange(0.0, 201.0)
+    l2, r2 = cs.apply_bays(s, np.full_like(s, 3.5), np.full_like(s, 3.5),
+                           cs.parse_bay_rows([{"s_from": "80", "s_to": "120", "side": "R", "depth_m": "-1.8", "taper_m": "12"}]))
+    assert r2[100] == pytest.approx(1.7) and r2[50] == pytest.approx(3.5) and np.allclose(l2, 3.5)

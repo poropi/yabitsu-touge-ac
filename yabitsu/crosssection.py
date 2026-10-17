@@ -35,7 +35,7 @@ def load_widths_csv(path):
 
 
 def parse_bay_rows(rows):
-    """バス停の切り込み（片側だけ広がる所）の表：s_from, s_to, side（L/R）, depth_m, taper_m, note。"""
+    """バス停の切り込み（片側だけ広がる所）の表：s_from, s_to, side（L/R）, depth_m, taper_m, note。depth_m が負なら細くなる所。"""
     return [{"s_from": float(r["s_from"]), "s_to": float(r["s_to"]), "side": str(r["side"]).strip(),
              "depth_m": float(r["depth_m"]), "taper_m": float(r.get("taper_m") or 10.0)}
             for r in rows if r.get("s_from") not in (None, "")]

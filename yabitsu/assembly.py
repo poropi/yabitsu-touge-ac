@@ -65,6 +65,8 @@ def add_bay_lines(m, sec, bays, dash=(3.0, 3.0)):
     """バス停の切り込みと車線の境の白い破線（広げる前の道の端の位置＝外側線の位置）。"""
     from .crosssection import apply_bays
     for k, b in enumerate(bays):
+        if b["depth_m"] <= 0:   # 細くなる所（島の横など）には線を引かない
+            continue
         add_l, add_r = apply_bays(sec.s, np.zeros(sec.n), np.zeros(sec.n), [b])
         i0 = int(np.searchsorted(sec.s, b["s_from"])); i1 = int(np.searchsorted(sec.s, b["s_to"], side="right")) - 1
         if i1 - i0 < 2:

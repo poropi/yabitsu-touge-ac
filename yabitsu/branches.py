@@ -15,7 +15,8 @@ from .start_lot import road_formation
 
 MIN_OFFSET_M = 3.0     # 本線の中心線から、これより離れる県道70号の way を「並ぶもう1本」とする
 ISLAND_H = 0.15
-END_NEAR_M = 6.0      # もう1本の両はしは、本線の中心線からこの距離の中
+END_NEAR_M = 6.0
+CLOSE_M = 6.0         # 本線と東側の道の間の、これより狭いすき間は路面で埋める（島は上に乗る）      # もう1本の両はしは、本線の中心線からこの距離の中
 
 
 def _ll(x, y):
@@ -44,8 +45,13 @@ class Branch:
         self.osm_id, self.line, self.sec, self.spec = osm_id, line, sec, spec
         self.width = float(spec.get("width_m", 4.0))
         form = road_formation(sec, 0.0, float(sec.s[-1]))
-        g = line.buffer(self.width / 2, cap_style="flat").union(line.buffer(self.width / 2 + 0.5).intersection(form.buffer(1.0)))
-        self.surface = site.largest(g.difference(form)) if not g.difference(form).is_empty else Polygon()
+        # 分かれる所から合わさる所までの本線（両はしの前後 CLOSE_M）と東側の道を合わせ、すき間（島のまわりの地面）を埋める
+        main = LineString(np.c_[sec.x, sec.y])
+        s_a, s_b = sorted(main.project(Point(q)) for q in (line.coords[0], line.coords[-1]))
+        seg = road_formation(sec, s_a - CLOSE_M, s_b + CLOSE_M)
+        g = line.buffer(self.width / 2, cap_style="flat").union(seg).buffer(CLOSE_M).buffer(-CLOSE_M)
+        g = g.difference(form)
+        self.surface = site.largest(g) if not g.is_empty else Polygon()
         self.island = orient(Polygon(_xy(spec["island"])).buffer(0), 1.0) if spec.get("island") else None
         if self.island is not None:
             self.surface = site.largest(self.surface.difference(self.island))
