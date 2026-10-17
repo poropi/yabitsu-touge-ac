@@ -44,9 +44,9 @@ def frame(spec):
     return Frame(spec["origin"], spec["axis_deg"])
 
 
-def road_formation(sec, s_max=80.0):
-    """道の始まり付近の、路面＋側溝が占める範囲。"""
-    m = sec.s <= s_max
+def road_formation(sec, s_min=0.0, s_max=80.0):
+    """s_min〜s_max の、路面＋側溝が占める範囲。"""
+    m = (sec.s >= s_min) & (sec.s <= s_max)
     hl, hr = sec.hw_left[m] + GUTTER_WIDTH, sec.hw_right[m] + GUTTER_WIDTH
     nx, ny = -np.sin(sec.heading[m]), np.cos(sec.heading[m])
     left = np.c_[sec.x[m] + hl * nx, sec.y[m] + hl * ny]

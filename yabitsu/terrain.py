@@ -65,7 +65,11 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None):
         pts = shapely.points(np.c_[np.ravel(X), np.ravel(Y)])
         for p in pads:
             d = shapely.distance(pts, Polygon(p["polygon"]))
-            z = np.where(d == 0, p["z"] - UNDER_DEPTH, np.clip(z, p["z"] - FILL_SLOPE * d, p["z"] + CUT_SLOPE * d))
+            zp = p["z"]
+            if "plane" in p:  # 傾いた平面 [cx, cy, z0, gx, gy]：z = z0 + gx(x−cx) + gy(y−cy)
+                cx, cy, z0, gx, gy = p["plane"]
+                zp = z0 + gx * (np.ravel(X) - cx) + gy * (np.ravel(Y) - cy)
+            z = np.where(d == 0, zp - UNDER_DEPTH, np.clip(z, zp - FILL_SLOPE * d, zp + CUT_SLOPE * d))
             e = np.where(d == 0, 0.0, np.minimum(e, d))
     return z.reshape(shape), e.reshape(shape)
 

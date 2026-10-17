@@ -4,7 +4,7 @@ import numpy as np
 from shapely.geometry import Point, Polygon
 
 from . import acdata
-from .acobjects import frame_at, hotlap_start, pit_boxes, start_grid, timing_gate
+from .acobjects import DUMMY_Z_OFFSET, Dummy, frame_at, hotlap_start, pit_boxes, start_grid, timing_gate
 
 LAYOUTS = {"s1_up": 1, "s1_down": -1}
 
@@ -15,6 +15,9 @@ def _s_from_start(sec, direction, d):
 
 def _pits(sec, pads, direction):
     role = "start" if direction > 0 else "end"
+    for p in pads:
+        if p["role"] == role and "pit_points" in p:  # 場所と向きを1台ずつ決めてあるピット（峠のわき道）
+            return [Dummy(f"AC_PIT_{i}", (x, y, z + DUMMY_Z_OFFSET), h) for i, (x, y, z, h) in enumerate(p["pit_points"])]
     for p in pads:
         if p["role"] != role:
             continue
@@ -34,13 +37,21 @@ def _pits(sec, pads, direction):
     return out
 
 
-def layout_objects(sec, pads, direction):
+def layout_objects(sec, pads, direction, top_s=None, down_grid_s=None):
+    """top_s: 峠（上りのゴールと下りの計測開始の基準）。道が峠の先まで続くときに渡す。省略時は道の終わり。
+    down_grid_s: 下りのスタート列の先頭。省略時は top_s の 40m 手前。"""
     path = sec.path()
     hw = float(max(sec.hw_left.max(), sec.hw_right.max()))
-    return [*start_grid(path, _s_from_start(sec, direction, 40.0), direction),
-            hotlap_start(path, _s_from_start(sec, direction, 5.0), direction),
-            *timing_gate(path, _s_from_start(sec, direction, 50.0), direction, hw + 1.0, "START"),
-            *timing_gate(path, _s_from_start(sec, direction, sec.s[-1] - 30.0), direction, hw + 1.0, "FINISH"),
+    top = float(sec.s[-1]) if top_s is None else float(top_s)
+    if direction > 0:
+        grid, hotlap, start, finish = 40.0, 5.0, 50.0, top - 30.0
+    else:
+        grid = top - 40.0 if down_grid_s is None else float(down_grid_s)
+        hotlap, start, finish = float(sec.s[-1]) - 5.0, top - 50.0, 30.0
+    return [*start_grid(path, grid, direction),
+            hotlap_start(path, hotlap, direction),
+            *timing_gate(path, start, direction, hw + 1.0, "START"),
+            *timing_gate(path, finish, direction, hw + 1.0, "FINISH"),
             *_pits(sec, pads, direction)]
 
 
