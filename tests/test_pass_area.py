@@ -6,7 +6,7 @@ from shapely.geometry import LineString, Point, Polygon
 from yabitsu import geo
 from yabitsu import meshgen as mg
 from yabitsu import pass_area as pa
-from yabitsu import s1_layouts as lay
+from yabitsu import layouts as lay
 from yabitsu import start_lot
 from yabitsu import terrain as tr
 from tests.test_meshgen import _sec_from_xy
@@ -79,20 +79,13 @@ def test_meshes_and_pads():
     assert all("plane" in p for p in site.pads())
 
 
-def test_layout_marks_move_top_positions():
-    sec = _sec()
-    objs = {d.name: d for d in lay.layout_objects(sec, [], -1, top_s=150.0, down_grid_s=170.0)}
-    assert abs(objs["AC_START_0"].location[0] - 170.0) < 0.5
-    assert abs(objs["AC_START_3"].location[0] - (170.0 + 24.0)) < 0.5
-    assert abs(objs["AC_OPEN_START_L"].location[0] - 100.0) < 0.5
-    up = {d.name: d for d in lay.layout_objects(sec, [], 1, top_s=150.0)}
-    assert abs(up["AC_OPEN_FINISH_L"].location[0] - 120.0) < 0.5
-
-
-def test_pits_from_site_pad_win_over_parking():
+def test_layout_pits_from_pass_lane():
     sec = _sec(); site = pa.build(SPEC, sec)
     parking = {"name": "P", "role": "end", "polygon": [[150, 20], [180, 20], [180, 50], [150, 50], [150, 20]], "z": 100.0}
-    pits = [d for d in lay.layout_objects(sec, [parking] + site.pads(), -1) if d.name.startswith("AC_PIT")]
+    layout = lay.Layout("t", "t", "s1", -1, _ll([[190.0, 0.0]])[0], _ll([[198.0, 0.0]])[0], _ll([[180.0, 0.0]])[0],
+                        _ll([[10.0, 0.0]])[0], "pass_lane")
+    pits = [d for d in lay.layout_objects(sec, [parking] + site.pads(), layout, {"s1": (0.0, 200.0)})
+            if d.name.startswith("AC_PIT")]
     lane = LineString(LANE)
     assert all(lane.distance(Point(d.location[:2])) < 1.5 for d in pits)
 

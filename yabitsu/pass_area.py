@@ -124,13 +124,3 @@ def load(path):
     from .start_lot import load_spec
     return load_spec(path)
 
-
-def s_of(sec, ll):
-    """緯度経度の地点に、いちばん近い道の s。"""
-    p = _xy(ll)[0]
-    return float(sec.s[int(np.argmin(np.hypot(sec.x - p[0], sec.y - p[1])))])
-
-
-def layout_marks(spec, sec, pass_ll):
-    """上りのゴール・下りの計測開始の基準（峠）と、下りのスタート列の先頭の s。"""
-    return {"top_s": s_of(sec, pass_ll), "down_grid_s": s_of(sec, spec["down_start"])}

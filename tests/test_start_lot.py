@@ -4,13 +4,14 @@ import numpy as np
 from shapely.geometry import Point, Polygon
 
 from yabitsu import meshgen as mg
-from yabitsu import s1_layouts as lay
+from yabitsu import layouts as lay
+from yabitsu import geo
 from yabitsu import start_lot as sl
 from tests.test_meshgen import _straight
 
 # 道は x=0 から +x へ。駐車場は道の始まりの南側から、+y（道の方）へ伸びる
 SPEC = {
-    "origin": [0.0, -20.0], "axis_deg": 90.0,
+    "osm_name": "菜の花台休憩所", "origin": [0.0, -20.0], "axis_deg": 90.0,
     "lot": {"a": [-40.0, 25.0], "b": [-2.5, 9.0]},
     "stalls": {"a": [-36.0, -4.0], "b": [-2.5, 2.5], "pitch": 2.5},
     "fence": {"a": [-40.0, 18.0], "b": -2.6, "height": 1.1, "post_every": 2.0},
@@ -24,7 +25,7 @@ SPEC = {
 
 def _pad():
     sec = _straight(201)
-    pads = [{"name": "P", "role": "start", "polygon": [[0, -30], [5, -30], [5, -25], [0, -25], [0, -30]], "z": 100.0}]
+    pads = [{"name": "菜の花台休憩所", "role": "start", "polygon": [[0, -30], [5, -30], [5, -25], [0, -25], [0, -30]], "z": 100.0}]
     return sec, sl.apply(pads, SPEC, sec)[0]
 
 
@@ -77,7 +78,9 @@ def test_stall_lines_count():
 
 def test_pits_inside_lot_and_face_the_exit():
     sec, pad = _pad()
-    pits = [d for d in lay.layout_objects(sec, [pad], 1) if d.name.startswith("AC_PIT_")]
+    ll = lambda x, y: tuple(float(v) for v in geo.from_local(x, y))
+    layout = lay.Layout("t", "t", "s1", 1, ll(40, 0), ll(5, 0), ll(50, 0), ll(190, 0), "nanohanadai_lot")
+    pits = [d for d in lay.layout_objects(sec, [pad], layout, {"s1": (0.0, 200.0)}) if d.name.startswith("AC_PIT_")]
     poly = Polygon(pad["polygon"]).buffer(-1.0)
     assert len(pits) == 4 and all(poly.contains(Point(d.location[0], d.location[1])) for d in pits)
     assert all(abs(math.remainder(d.heading - math.pi / 2, 2 * math.pi)) < 1e-6 for d in pits)
@@ -144,3 +147,25 @@ def test_octagon_prism_faces_outward():
     v, f, uv = sl._octagon_prism((5.0, 5.0), 2.0, 0.0, 3.0)
     n = mg.face_normals(v, f); out = v[f].mean(1)[:, :2] - [5.0, 5.0]
     assert len(f) == 8 and ((n[:, :2] * out).sum(1) > 0).all()
+
+
+def test_apply_matches_by_osm_name_and_renames():
+    sec = _straight(201)
+    pads = [{"name": "other", "role": "start", "polygon": [[0, -30], [5, -30], [5, -25], [0, -25], [0, -30]], "z": 90.0},
+            {"name": "菜の花台休憩所", "role": "end", "polygon": [[0, -30], [5, -30], [5, -25], [0, -25], [0, -30]], "z": 100.0}]
+    out = sl.apply(pads, SPEC, sec)
+    assert out[0]["name"] == "other" and "kind" not in out[0]
+    assert out[1]["name"] == "nanohanadai_lot" and out[1]["kind"] == "lot" and out[1]["z"] == 100.0
+
+
+def test_lot_in_middle_of_road_is_trimmed_by_both_branches():
+    # 下の枝（y=-3 を +x、x=0..120）→ ヘアピン → 上の枝（y=10 を −x）。駐車場は x=100..125 の帯で両方の枝にかかる
+    import numpy as np
+    from tests.test_meshgen import _sec_from_xy
+    x = np.r_[np.arange(0.0, 120.0), 120 + 6.5 * np.sin(np.linspace(0, np.pi, 21))[1:-1], np.arange(120.0, -1.0, -1.0)]
+    y = np.r_[np.full(120, -3.0), 3.5 - 6.5 * np.cos(np.linspace(0, np.pi, 21))[1:-1], np.full(121, 10.0)]
+    sec = _sec_from_xy(x, y)
+    spec = {**SPEC, "origin": [125.0, -12.0], "axis_deg": 90.0, "lot": {"a": [0.0, 30.0], "b": [-2.5, 9.0]}}
+    poly = sl.lot_polygon(spec, sec)
+    road = sl.road_formation(sec, s_min=0.0, s_max=float(sec.s[-1]))
+    assert poly.intersection(road).area < 0.5 and poly.area > 50

@@ -54,20 +54,29 @@ def road_formation(sec, s_min=0.0, s_max=80.0):
     return Polygon(np.r_[left, right[::-1]]).buffer(0)
 
 
+LOT_ROAD_RANGE_M = 150.0  # 駐車場の原点に一番近い道の点から、前後この距離の道と重ならないように削る
+
+
 def lot_polygon(spec, sec):
-    poly = frame(spec).rect(spec["lot"]["a"], spec["lot"]["b"]).difference(road_formation(sec))
+    o = np.asarray(spec["origin"], float)
+    s_c = float(sec.s[int(np.argmin(np.hypot(sec.x - o[0], sec.y - o[1])))])
+    road = road_formation(sec, s_min=s_c - LOT_ROAD_RANGE_M, s_max=s_c + LOT_ROAD_RANGE_M)
+    poly = frame(spec).rect(spec["lot"]["a"], spec["lot"]["b"]).difference(road)
     if poly.geom_type != "Polygon":
         poly = max(poly.geoms, key=lambda g: g.area)
     return poly
 
 
+LOT_NAME = "nanohanadai_lot"
+
+
 def apply(pads, spec, sec):
-    """スタート側の駐車場（OSM の形）を、測った形に差し替える。高さは元の駐車場と同じ。"""
+    """OSM の駐車場（名前が spec["osm_name"]）を、測った形に差し替える。高さは元の駐車場と同じ。"""
     f = frame(spec); out = []
     for p in pads:
-        if p["role"] == "start":
+        if p["name"] == spec["osm_name"]:
             pit = spec["pits"]
-            p = {**p, "kind": "lot", "polygon": np.asarray(lot_polygon(spec, sec).exterior.coords).tolist(),
+            p = {**p, "name": LOT_NAME, "kind": "lot", "polygon": np.asarray(lot_polygon(spec, sec).exterior.coords).tolist(),
                  "heading": f.heading, "pit_center": f.xy(pit["a"], pit["b"]).tolist(), "pit_spacing": pit["spacing"]}
         out.append(p)
     return out

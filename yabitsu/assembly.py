@@ -2,13 +2,13 @@ import numpy as np
 
 from . import features as ft
 from . import meshgen as mg
-from . import s1_layouts
+from . import config, layouts as layouts_mod
 from . import pass_area
 from . import start_lot as lot_mod
 from . import trees as tree_mod
 from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 
-GROUP = "yabitsu_s1"
+GROUP = config.TRACK_GROUP
 
 
 def add_road(m, sec, rows_per_chunk=200):
@@ -73,7 +73,7 @@ def add_pass_area(m, site):
         m.add_mesh(GROUP, name, v, f, uv, mat, renderable=rend)
 
 
-def add_layout_objects(m, sec, pads, marks=None):
-    for name, direction in s1_layouts.LAYOUTS.items():
-        for d in s1_layouts.layout_objects(sec, pads, direction, **(marks or {})):
-            m.add_empty(f"{name}_objects", d)
+def add_layout_objects(m, sec, pads, layouts, bounds):
+    for layout in layouts:
+        for d in layouts_mod.layout_objects(sec, pads, layout, bounds):
+            m.add_empty(f"{layout.name}_objects", d)
