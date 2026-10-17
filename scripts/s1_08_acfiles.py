@@ -2,7 +2,7 @@ import shutil
 
 import numpy as np
 
-from yabitsu import acdata, config, geo, s1_layouts
+from yabitsu import acdata, ailine, config, geo, s1_layouts
 from yabitsu.crosssection import Section
 
 T = config.TRACK_DIR
@@ -19,6 +19,7 @@ def main():
         acdata.write_models_ini(T / f"models_{name}.ini", ["yabitsu_s1.kn5", f"{name}_objects.kn5"])
         acdata.write_map(T / name / "map.png", T / name / "data" / "map.ini", ac[:, [0, 2]])
         acdata.write_cameras_ini(T / name / "data" / "cameras.ini", s1_layouts.cameras(sec, direction))
+        ailine.write_fast_lane(T / name / "ai" / "fast_lane.ai", sec, direction)
         acdata.write_ui_track_json(T / "ui" / name / "ui_track.json", name=TITLES[name],
                                    description="公開データから再現したヤビツ峠（県道70号 秦野清川線）", length_m=float(sec.s[-1]),
                                    pitboxes=4, geotags=(float(lat), float(lon)), tags=["touge", "japan", "point to point"],

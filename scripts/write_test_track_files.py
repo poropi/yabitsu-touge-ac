@@ -1,6 +1,9 @@
+import math
+
 import numpy as np
 
-from yabitsu import acdata, config
+from yabitsu import acdata, ailine, config
+from yabitsu.crosssection import Section
 
 T = config.TEST_TRACK_DIR
 
@@ -15,6 +18,10 @@ def main():
     acdata.write_ui_track_json(T / "ui" / "a" / "ui_track.json", name="Yabitsu TEST",
                                description="パイプライン確認用の試験コース", length_m=200, pitboxes=1,
                                geotags=(35.42782, 139.21934), tags=["test"], credits="")
+    y = np.arange(0.0, 201.0); n = len(y); z0 = np.zeros(n)
+    road = Section(y, z0, y, z0, np.full(n, math.pi / 2), z0, np.full(n, 2, np.int32), np.zeros(n, bool),
+                   np.full(n, 3.0), np.full(n, 3.0), z0, z0)
+    ailine.write_fast_lane(T / "a" / "ai" / "fast_lane.ai", road, 1)
     print("written", T)
 
 

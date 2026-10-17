@@ -1,17 +1,30 @@
 # AC の規約（Task 2 の試験コースで確認）
 
-試験コース：`content/tracks/yabitsu_test`（レイアウト `a`、北向き 200m の直線）。
-FBX：`export/test/yabitsu_test.fbx`、`export/test/test_objects.fbx`（テクスチャは `export/test/yabitsu_test.fbm/`）。
+2026-10-17 確認。kn5 と AI ラインは ksEditor / AC 内の記録を使わず、Python で直接書き出す（`yabitsu/kn5.py`、`yabitsu/ailine.py`）。
 
 | 項目 | 確認結果 | 使う値 |
 |---|---|---|
-| 座標変換 blender_to_ac | 未確認 | (x, z, -y) |
-| ダミーの向き DUMMY_YAW_OFFSET | 未確認 | math.pi / 2 |
-| ダミーの高さ DUMMY_Z_OFFSET | 未確認 | 0.3 |
-| FBX 書き出し設定 | 未確認 | FBX_SETTINGS のまま |
-| 1WALL の当たり判定 | 未確認 | surfaces.ini に WALL を定義 |
-| 描画しない壁の作り方 | 未確認 | ksEditor で Renderable を外す |
-| ダミーだけの kn5 | 未確認 | |
-| ミニマップの式 | 未確認 | (X + X_OFFSET) / SCALE_FACTOR |
-| AI ラインの記録方法 | 未確認 | |
-| ksEditor の操作手順 | 未確認 | |
+| 座標変換 blender_to_ac | 試験コースで緑の箱（北）が正面、赤い箱（東）が右。実在コース6つの AI ラインの回り方向（スパ・モンツァ等は右回り、イモラは左回り）とも一致 | (x, z, -y) |
+| ダミーの向き DUMMY_YAW_OFFSET | ピットで車が北を向いた（kn5 ではダミーのローカル +Z が前） | math.pi / 2 |
+| ダミーの高さ DUMMY_Z_OFFSET | スタートで落下・跳ねなし | 0.3 |
+| 大きさ | 道幅6m に普通の大きさの車 | 1 単位 = 1 m |
+| 1WALL の当たり判定 | surfaces.ini の WALL で有効（見える壁・見えない壁とも） | |
+| 描画しない壁の作り方 | kn5 のメッシュで castShadows / visible / renderable を外す（実在 kn5 と同じ） | |
+| ダミーだけの kn5 | 読み込み・計測・ピットとも動いた | |
+| ミニマップの式 | 点が線の上を動いた | (X + X_OFFSET) / SCALE_FACTOR |
+| 計測ゲート | スタートでタイムが動き、ゴールで止まった | AC_OPEN_START / FINISH_L/R |
+
+## kn5 形式（実在の kn5 を最後まで読んで確認）
+
+- `sc6969` + バージョン 5。テクスチャは DDS（無圧縮 32bit + ミップマップで書く）
+- マテリアル：ksPerPixel、ksAmbient 0.5 / ksDiffuse 0.6 / ksSpecular 0.05 / ksSpecularEXP 10。アルファ付きは ksPerPixelAT（AlphaRef 0.3）
+- 行列は行ベクトル形式（4行目が位置）。UV の V は上下反転。三角形は右手系の巻き順で法線側が表
+- 両面マテリアルは裏向きのメッシュ `<名前>_back` を足す
+
+## AI ライン（fast_lane.ai、Kunos の spa / magione / imola を読んで確認）
+
+- ヘッダ (7, 点の数, 0, 0) → 点（位置・累積距離・番号）→ 点ごとの 18 値（速さ、アクセル、ブレーキ、横G、半径、左幅、右幅、バンク、曲がる向き、法線、次の点までの距離、前方向、タグ、勾配）→ 範囲 ±350m・10m 格子の近傍 10 点表（列ごと）
+- 曲がる向き = sign(fwd_i × fwd_i+1 の Y)、横G = v²/R/g、半径 = 1/曲率
+- 峠のような片道コースでも AC は線を輪として扱う（参考コースの記録には 681m の飛びがある）。直接作る線は始点→終点の片道
+- バンク（camber）の符号は実在データからは決めきれなかった（atan(左が高い勾配) を入れている）
+- 未確認：AI の車が実際に走るか（試験コース・S1 で確かめる）、リプレイカメラの切り替え位置（IN_POINT/OUT_POINT は s/L で書いている）

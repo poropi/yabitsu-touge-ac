@@ -49,6 +49,7 @@ def main():
     m.add_mesh(g, "1WALL_test_visible", vw, fw[:, ::-1], uw, "concrete")  # 西側の壁は +X を向ける
     m.add_mesh(g, "MARKER_NORTH", *box(0, 230, 4), "marker_green")
     m.add_mesh(g, "MARKER_EAST", *box(30, 100, 4), "marker_red")
+    m.add_mesh(g, "MARKER_EAST_NEAR", *box(10, 25, 3), "marker_red")  # ピットのすぐ右前（見落とし防止）
     s = np.arange(0.0, 201.0)
     path = {"s": s, "x": np.zeros_like(s), "y": s, "z": np.zeros_like(s), "heading": np.full_like(s, math.pi / 2)}
     o = "test_objects"
