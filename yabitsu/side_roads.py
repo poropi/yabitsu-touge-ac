@@ -8,7 +8,7 @@ from dataclasses import dataclass
 
 import numpy as np
 import shapely
-from shapely.geometry import LineString, Polygon
+from shapely.geometry import LineString, Point, Polygon
 from shapely.ops import substring
 
 from . import geo, osm, site
@@ -233,6 +233,29 @@ KEEP_OPEN_KINDS = ("lot", "pass", "site", "plaza", "branch")
 NOT_OPENINGS = ("_house", "_shrine", "side_stub")   # 家・お堂の土台は「ふさがない場所」ではない（家の前の道もふさぐ）
 
 
+def move_mouth_out(st, area):
+    """分かれ道の入口（壁・柵）が area（ほかの道の路面）の中にあるとき、道の線が area を出る所へ移し、路面も area の外だけにする。"""
+    if not st.mouth.intersects(area):
+        g = st.surface.difference(area)
+        if not g.is_empty:
+            st.surface = site.largest(g) if g.geom_type != "Polygon" else g
+        return st
+    rest = st.axis.difference(area.buffer(0.3))
+    pieces = [rest] if rest.geom_type == "LineString" else [g for g in getattr(rest, "geoms", []) if g.geom_type == "LineString"]
+    if not pieces:
+        st.surface = Polygon()
+        return st
+    piece = min(pieces, key=lambda g: st.axis.project(Point(g.coords[0])))
+    t0 = st.axis.project(Point(piece.coords[0]))
+    a = np.array(st.axis.interpolate(t0).coords[0]); b = np.array(st.axis.interpolate(min(t0 + 1.0, st.axis.length)).coords[0])
+    d = (b - a) / max(np.linalg.norm(b - a), 1e-9); n = np.array([-d[1], d[0]])
+    half = st.width / 2 + MOUTH_OVERHANG_M
+    st.mouth = LineString([a - n * half, a + n * half])
+    g = st.surface.difference(area)
+    st.surface = (site.largest(g) if g.geom_type != "Polygon" else g) if not g.is_empty else Polygon()
+    return st
+
+
 def for_track(sec, pads, sampler=None, exclude=None):
     """本線全体の分かれ道（町の範囲の中は除く）。ピット・広場・駐車場の入口はふさがない。
     exclude（町の範囲など）と重なる所は路面から削る（町の道と二重にならないように）。"""
@@ -245,7 +268,5 @@ def for_track(sec, pads, sampler=None, exclude=None):
     out = stubs(load_elements(), sec, sampler or gsi.default_sampler(), keep, s_min=s_min)
     if exclude is not None:
         for st in out:
-            g = st.surface.difference(exclude)
-            if not g.is_empty:
-                st.surface = site.largest(g) if g.geom_type != "Polygon" else g
-    return [st for st in out if st.surface.area >= 1.0]
+            move_mouth_out(st, exclude)
+    return [st for st in out if not st.surface.is_empty and st.surface.area >= 1.0]

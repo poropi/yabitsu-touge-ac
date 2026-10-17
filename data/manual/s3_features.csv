@@ -67,7 +67,7 @@ s_from,s_to,side,type,height_m,width_m,note
 3290,3320,R,retaining_wall,2.0,,石積み（s=3300）
 3340,3370,R,hedge,1.8,,生け垣（s=3350）
 3380,3470,L,retaining_wall,1.5,,田んぼの石積み（s=3400・3450）
-3435,3470,R,guardrail,,,白いガードレール（s=3450）
+3462,3470,R,guardrail,,,白いガードレール（s=3450）：島で分かれる所（〜3459）の先から
 3540,3660,R,retaining_wall,2.5,,野面積みの石積み（s=3550〜3650）
 3590,3620,L,hedge,2.5,,高い生け垣（s=3600）
 3640,3720,L,retaining_wall,2.0,,間知石の石積み（s=3650・3700）

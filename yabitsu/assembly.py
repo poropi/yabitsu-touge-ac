@@ -11,11 +11,32 @@ from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 GROUP = config.TRACK_GROUP
 
 
+def _keep_spans(sec, skip):
+    """skip（(s0, s1) か、その並び）の外の、帯を作る行の範囲 [(i0, i1), ...]。"""
+    if not skip:
+        return [(0, sec.n - 1)]
+    ranges = [skip] if isinstance(skip[0], (int, float, np.floating)) else list(skip)
+    keep = np.ones(sec.n, bool)
+    for s0, s1 in ranges:
+        keep &= ~((sec.s > s0 + 1e-9) & (sec.s < s1 - 1e-9))
+    spans, i = [], 0
+    while i < sec.n:
+        if keep[i]:
+            j = i
+            while j + 1 < sec.n and keep[j + 1]:
+                j += 1
+            if j > i:
+                spans.append((i, j))
+            i = j + 1
+        else:
+            i += 1
+    return spans
+
+
 def add_road(m, sec, rows_per_chunk=200, skip=None):
-    """skip=(s0, s1) の範囲（町の範囲：道は town の多角形で作る）は帯を作らない。今は s0 = 0 だけを扱う。"""
-    first = int(np.searchsorted(sec.s, skip[1] - 1e-9)) if skip else 0
-    for k, (i0, i1) in enumerate(mg.split_rows(sec.n - first, rows_per_chunk)):
-        i0, i1 = i0 + first, i1 + first
+    """skip の範囲（町の範囲・島で分かれる所：道は多角形で作る）は帯を作らない。skip は (s0, s1) かその並び。"""
+    chunks = [(a + i0, a + i1) for a, b in _keep_spans(sec, skip) for i0, i1 in mg.split_rows(b - a + 1, rows_per_chunk)]
+    for k, (i0, i1) in enumerate(chunks):
         sl = slice(i0, i1 + 1)
         v, f, uv = mg.road_surface(sec, sl)
         bad = mg.folded_faces(v, f)
@@ -34,9 +55,30 @@ CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("li
 FLANK_OFFSET, FLANK_DASH = 0.9, (2.0, 2.0)   # orange_flanked：オレンジの実線の両側の、白い破線（減速を促す線）
 
 
-def add_centrelines(m, sec, rows, s_min=0.0):
+def _cut_rows(rows, gaps):
+    """表の行（s_from〜s_to）から、gaps の範囲を切り取る。"""
+    out = []
+    for r in rows:
+        pieces = [(float(r["s_from"]), float(r["s_to"]))]
+        for g0, g1 in gaps:
+            nxt = []
+            for a, b in pieces:
+                if b <= g0 or a >= g1:
+                    nxt.append((a, b))
+                else:
+                    if a < g0:
+                        nxt.append((a, g0))
+                    if b > g1:
+                        nxt.append((g1, b))
+            pieces = nxt
+        out += [{**r, "s_from": a, "s_to": b} for a, b in pieces]
+    return out
+
+
+def add_centrelines(m, sec, rows, s_min=0.0, gaps=()):
     """中央線の表（区間ごとの {区間}_centrelines.csv を通しの距離にしたもの）の範囲にだけ、中央線を引く。
-    s_min より手前（町の範囲）は引かない（町の路面の表示で描く）。"""
+    s_min より手前（町の範囲）と gaps（島で分かれる所）は引かない（多角形の路面の表示で描く）。"""
+    rows = _cut_rows(rows, list(gaps))
     for k, r in enumerate(rows):
         r = {**r, "s_from": max(float(r["s_from"]), s_min)}
         if float(r["s_from"]) >= float(r["s_to"]):

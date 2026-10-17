@@ -120,14 +120,14 @@ def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.
                town=None):
     """town = (町の地面 TownGround, 町の範囲の円, 舗装された所の多角形) なら、円の中は町の地面（舗装の下は UNDER_DEPTH 下げる）、
     円の外 TOWN_BLEND_M の間で今までの地形へなめらかに移す。"""
-    if town is not None:
-        extra = list(extra) + [np.asarray(town[1].exterior.coords).tolist()]
+    towns = [] if town is None else (list(town) if isinstance(town, list) else [town])
+    for tw in towns:
+        extra = list(extra) + [np.asarray(tw[1].exterior.coords).tolist()]
     xs, ys = corridor_grid(sec, extra=extra)
     X, Y = np.meshgrid(xs, ys)
     D = _with_extra(road_frame(sec, X, Y)["dist"].reshape(X.shape), X, Y, extra, EXTRA_NEAR, NEAR_BAND)
     Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right, *side_extra)
-    if town is not None:
-        ground, circle, paved = town
+    for ground, circle, paved in towns:
         x0, y0, x1, y1 = circle.buffer(TOWN_BLEND_M).bounds
         m = (X >= x0) & (X <= x1) & (Y >= y0) & (Y <= y1)
         pts = shapely.points(np.c_[X[m], Y[m]])

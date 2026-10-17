@@ -58,3 +58,10 @@ def load_branches(sec):
     from . import branches
     specs = json.loads((config.DATA_MANUAL / "s3_branches.json").read_text(encoding="utf-8"))
     return branches.parallel_branches(side_roads.load_elements(), sec, specs)
+
+
+def load_splits(sec):
+    """県道70号が島をはさんで2本に分かれる所（data/manual/s3_split.json）。地図の線どおりに作る（split.py）。"""
+    from . import split
+    specs = json.loads((config.DATA_MANUAL / "s3_split.json").read_text(encoding="utf-8"))
+    return [split.Split(sp, side_roads.load_elements(), sec) for sp in specs.values()]

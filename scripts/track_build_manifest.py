@@ -15,17 +15,20 @@ def main():
     m = Manifest(config.TRACK_BUILD_DIR)
     textures.register_materials(m)
     tw = nagoki.load_town(sec)
-    assembly.add_road(m, sec, skip=tw.main_skip)   # 町の範囲の本線は、町の多角形で作る
+    sps = nagoki.load_splits(sec)   # 島をはさんで2本に分かれる所（地図の線どおり）
+    assembly.add_road(m, sec, skip=[tw.main_skip] + [z.main_skip for z in sps])   # 町の範囲と分かれる所は多角形で作る
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
     mid = dict(np.load(P / "track_terrain_mid.npz"))
     assembly.add_terrain(m, near, far, mid)
     ground = terrain.terrain_z(near, mid)   # 景色の建物・道は、できあがった地形の上に置く
     bounds = track.load_bounds()
-    assembly.add_centrelines(m, sec, track.load_section_rows("centrelines", bounds), s_min=tw.main_skip[1])
+    assembly.add_centrelines(m, sec, track.load_section_rows("centrelines", bounds), s_min=tw.main_skip[1],
+                             gaps=[z.main_skip for z in sps])
     from yabitsu import crosssection as cs
     assembly.add_bay_lines(m, sec, cs.parse_bay_rows(track.load_section_rows("busbays", bounds)))
     assembly.add_features(m, sec, features.load_features_rows(track.load_section_rows("features", bounds)))
-    for name, v, f, uv, mat in pavements.meshes(sec, pavements.load_rows(track.load_section_rows("pavements", bounds))):
+    for name, v, f, uv, mat in pavements.meshes(sec, pavements.load_rows(
+            assembly._cut_rows(track.load_section_rows("pavements", bounds), [z.main_skip for z in sps]))):
         m.add_mesh(assembly.GROUP, name, v, f, uv, mat)
     pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
     lot_spec = config.DATA_MANUAL / "s1_start_lot.json"
@@ -45,8 +48,7 @@ def main():
     sampler = gsi.default_sampler()
     base_pads = [p for p in pads if p.get("kind") != "stub"]
     from shapely.ops import unary_union as _uu
-    brs = nagoki.load_branches(sec)   # 県道70号が2本に分かれる所（分かれ道の路面と重ねない）
-    excl = _uu([tw.region] + [b.surface.buffer(0.3) for b in brs] + [b.island for b in brs if b.island is not None])
+    excl = _uu([tw.region] + [z.area() for z in sps])
     stubs = side_roads.for_track(sec, base_pads, sampler, exclude=excl)
     assembly.add_meshes(m, side_roads.stub_meshes(stubs))
     from yabitsu import geo
@@ -63,15 +65,14 @@ def main():
         assembly.add_meshes(m, town_objects.barricade_meshes((ax, ay), (bx, by), road_z, p0 - p1, k=100 + k))
     ov = overpasses.load_overrides()
     mws = motorway.from_osm(side_roads.load_elements(), sec, sampler, ov)   # 新東名など：両側のトンネルの入口まで
-    brs = nagoki.load_branches(sec)   # 県道70号が2本に分かれる所：もう1本（走れる）と島（鳥居・灯籠など）
-    for b in brs:
-        assembly.add_meshes(m, b.meshes())
+    for z in sps:   # 路面（2車線・西の上り・東の下り・導流帯）と島（鳥居・灯籠など）
+        assembly.add_meshes(m, z.meshes())
     # コースから 200m の景色：建物（1棟ずつ外周線の形）と、走れない道
     from shapely.ops import unary_union
     from shapely.geometry import Polygon
     keep_out = unary_union([start_lot.road_formation(sec, 0.0, float(sec.s[-1])).buffer(1.0), tw.region.buffer(1.0)]
                            + [st.surface.buffer(0.5) for st in stubs] + [x.footprint() for x in mws]
-                           + [b.surface.buffer(0.5) for b in brs] + [b.island for b in brs if b.island is not None]
+                           + [z.area().buffer(0.5) for z in sps]
                            + [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch")
                               and "house" not in p["name"]])
     from yabitsu import pois
@@ -96,7 +97,7 @@ def main():
     # 道ぞいの小さな目印（OSM）：自動販売機・ポスト・電話・案内板・待合所・石碑。手で置いた物の近くは除く
     skip = [tuple(float(v) for v in geo.to_local(*o["points"][0])) for o in ro["objects"]]
     skip += [tuple(float(v) for v in geo.to_local(*mo["center"])) for mo in (minoge or {}).get("monuments", [])]
-    skip += [tuple(float(v) for v in geo.to_local(*ob["at"])) for b in brs for ob in b.spec.get("objects", [])]
+    skip += [tuple(float(v) for v in geo.to_local(*ob["at"])) for z in sps for ob in z.spec.get("objects", [])]
     poi_nodes = [e for e in poi_el if e.get("type") == "node" and "lat" in e]
     assembly.add_meshes(m, pois.meshes(pois.place(poi_nodes, sec, skip), ground))
     assembly.add_meshes(m, town_objects.signal_meshes(ro["signals"], road_z, prefix="s3_signal"))

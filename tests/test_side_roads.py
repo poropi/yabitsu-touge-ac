@@ -1,6 +1,6 @@
 import numpy as np
 import pytest
-from shapely.geometry import LineString, Point, Polygon
+from shapely.geometry import LineString, Point, Polygon, box
 
 from yabitsu import geo, side_roads as sr
 from yabitsu.crosssection import GUTTER_WIDTH
@@ -85,3 +85,13 @@ def test_crosswalk_on_stub_lies_on_its_surface_and_bars_follow_the_road():
         assert np.ptp(p[:, 1]) > np.ptp(p[:, 0])                  # 帯は道の向き（y）に長い
     ex = st.mesh()[0]
     assert np.all(v[:, 2] > np.interp(v[:, 1], ex[:, 1], ex[:, 2]) - 0.05)
+
+
+def test_mouth_moves_out_of_excluded_area():
+    sec = _straight()
+    lane = box(90, 3.6, 130, 9.0)          # 下りの車線（本線の右どなりの路面）
+    st, = sr.stubs([_way([[100, 0], [100, 60]])], sec, _Flat(), keep_out=[])
+    sr.move_mouth_out(st, lane)
+    (x0, y0), (x1, y1) = st.mouth.coords
+    assert min(y0, y1) >= 9.0 - 1e-6                     # 入口の壁と柵は、下りの車線の外へ
+    assert st.surface.intersection(lane).area < 0.01

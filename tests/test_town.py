@@ -206,3 +206,16 @@ def test_lots_and_their_lines_are_drawn_on_the_ground_outside_the_road():
     assert np.allclose(v[:, 2], 100.0 + tw.LOT_LIFT, atol=1e-6)
     lv = next(m for m in ms if m[0].startswith("LINES_town_lot_"))[1]
     assert lv[:, 2].min() > 100.0 + tw.LOT_LIFT
+
+
+def test_add_road_skips_several_ranges():
+    from yabitsu import assembly
+    from yabitsu.manifest import Manifest
+    import tempfile
+    sec = _straight(201)
+    with tempfile.TemporaryDirectory() as d:
+        m = Manifest(d)
+        assembly.add_road(m, sec, skip=[(0.0, 50.0), (100.0, 140.0)])
+        xs = np.concatenate([np.load(f"{d}/{m.meshes[n]['file']}")["verts"][:, 0] for n in m.meshes if n.startswith("1ROAD_s1_") and "gutter" not in n])
+        assert xs.min() >= 50.0 - 1e-6 and not ((xs > 100.5) & (xs < 139.5)).any()
+        assert xs.max() == pytest.approx(200.0)

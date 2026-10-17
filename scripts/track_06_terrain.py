@@ -24,7 +24,7 @@ def main():
     paved = tw.drivable().union(tw.carriageway).union(tw.sidewalk)
     near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra,
                               side_extra=features.sidewalk_offsets(sec, feats),  # 歩道の下に地形がかぶらない
-                              town=(tw.ground, nagoki.circle(), paved))
+                              town=[(tw.ground, nagoki.circle(), paved)] + [z.town_override() for z in nagoki.load_splits(sec)])
     np.savez_compressed(P / "track_terrain_near.npz", **near)
     mid = terrain.build_mid(sec, sampler, pads)   # 道から 200m まで
     np.savez_compressed(P / "track_terrain_mid.npz", **mid)
