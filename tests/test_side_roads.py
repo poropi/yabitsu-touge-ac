@@ -95,3 +95,13 @@ def test_mouth_moves_out_of_excluded_area():
     (x0, y0), (x1, y1) = st.mouth.coords
     assert min(y0, y1) >= 9.0 - 1e-6                     # 入口の壁と柵は、下りの車線の外へ
     assert st.surface.intersection(lane).area < 0.01
+
+
+def test_barricade_only_on_real_branch_roads():
+    sec = _straight()
+    road = _way([[100, 0], [100, 80]], id=11)                              # 住宅地の道（80m）
+    alley = _way([[60, 0], [60, 40]], id=12, highway="service", service="alley")
+    drive = _way([[140, 0], [140, 20]], id=13)                            # 20m で行き止まりの道（家の前）
+    st = {s.osm_id: s for s in sr.stubs([road, alley, drive], sec, _Flat(), keep_out=[])}
+    ways = {w["id"]: w for w in (road, alley, drive)}
+    assert sr.needs_barricade(st[11], ways) and not sr.needs_barricade(st[12], ways) and not sr.needs_barricade(st[13], ways)

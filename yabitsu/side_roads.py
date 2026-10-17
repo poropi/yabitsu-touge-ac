@@ -233,6 +233,22 @@ KEEP_OPEN_KINDS = ("lot", "pass", "site", "plaza", "branch")
 NOT_OPENINGS = ("_house", "_shrine", "side_stub")   # 家・お堂の土台は「ふさがない場所」ではない（家の前の道もふさぐ）
 
 
+BARRICADE_TYPES = {"primary", "secondary", "tertiary", "unclassified", "residential", "living_street", "track",
+                   "primary_link", "secondary_link", "tertiary_link", "trunk", "trunk_link"}
+BARRICADE_MIN_M = 30.0   # これより短い道（家の前で行き止まり）には柵を置かない
+
+
+def needs_barricade(st, ways):
+    """工事中の柵を置くのは、車で入っていける分かれ道（公道で、長さ BARRICADE_MIN_M 以上）の入口だけ。
+    路地・私道・駐車場の出入口（service）や短い行き止まりは、見えない壁だけにする。"""
+    w = ways.get(st.osm_id)
+    if w is None:
+        return False
+    if w.get("tags", {}).get("highway") not in BARRICADE_TYPES:
+        return False
+    return _line(w).length >= BARRICADE_MIN_M
+
+
 def move_mouth_out(st, area):
     """分かれ道の入口（壁・柵）が area（ほかの道の路面）の中にあるとき、道の線が area を出る所へ移し、路面も area の外だけにする。"""
     if not st.mouth.intersects(area):

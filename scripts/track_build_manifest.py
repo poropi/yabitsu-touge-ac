@@ -59,7 +59,10 @@ def main():
         if near:   # 横道の上の横断歩道（OSM）。分かれ道を作っていない所（町の範囲など）は描かない
             m.add_mesh(assembly.GROUP, f"LINES_side_cw_{k:03d}", *near[0].crosswalk_mesh(p), "line_white")
     road_z = town_objects.road_ground(sec)
-    for k, st in enumerate(stubs):   # 分かれ道の入口に工事中の柵（手前＝本線の側）
+    ways_by_id = {w["id"]: w for w in side_roads.load_elements() if w.get("type") == "way"}
+    for k, st in enumerate(stubs):   # 車で入っていける分かれ道の入口にだけ工事中の柵（手前＝本線の側）
+        if not side_roads.needs_barricade(st, ways_by_id):
+            continue
         (ax, ay), (bx, by) = st.mouth.coords
         p0, p1 = np.array(st.axis.coords[0]), np.array(st.axis.interpolate(min(2.0, st.axis.length)).coords[0])
         assembly.add_meshes(m, town_objects.barricade_meshes((ax, ay), (bx, by), road_z, p0 - p1, k=100 + k))
