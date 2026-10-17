@@ -65,6 +65,23 @@ def test_fit_sections_keeps_upper_section_exact():
     assert np.allclose(z[m], z_up) and len(sigmas) == 2
 
 
+def test_fit_sections_upper_sections_do_not_move_when_a_section_is_added_below():
+    # 下に区間を足すと通しの s の格子が区間の始点に対してずれる（ここでは 0.37m）。高さは区間の始点からの
+    # 格子で測って合わせるので、上の区間の高さは足す前と同じ（道の上の同じ場所どうしで比べる）
+    rng = np.random.default_rng(3)
+    bumps = rng.normal(0, 1.5, 900)
+    terrain = lambda d: 100 + 0.06 * d + np.interp(d, np.arange(900.0), bumps)  # d = 上の区間の始点からの距離
+    alone = np.arange(0.0, 800.0)
+    z0, _, _ = elevation.fit_sections(alone, terrain(alone), np.ones_like(alone, bool), 1.0, [(0.0, 799.0)],
+                                      sample=terrain)
+    off = 300.37
+    s = np.append(np.arange(0.0, off + 799.0), off + 799.0)  # 中心線の格子と同じく、最後は道の終わりちょうど
+    z1, _, _ = elevation.fit_sections(s, terrain(s - off), np.ones_like(s, bool), 1.0, [(0.0, off), (off, s[-1])],
+                                      sample=lambda q: terrain(q - off))
+    m = s >= off + 30
+    assert np.abs(z1[m] - np.interp(s[m] - off, alone, z0)).max() <= 0.01
+
+
 def test_fit_sections_joins_value_and_slope():
     s, z_raw, valid = _fit_inputs()
     z, _, _ = elevation.fit_sections(s, z_raw, valid, 1.0, [(0.0, 400.0), (400.0, 799.0)])
@@ -131,3 +148,12 @@ def test_join_profile_close_to_dem():
     for (_, b) in list(bounds.values())[:-1]:
         m = (s >= b - 60) & (s <= b + 60) & pr["valid"]
         assert np.abs(pr["z"] - pr["z_ref"])[m].max() <= 1.5
+
+
+@_joined
+def test_s3_starts_at_nagoki():
+    cl, pr, bounds = _real()
+    if "s3" not in bounds:
+        pytest.skip("S3 がまだない")
+    x, y = geo.to_local(*config.NAGOKI)
+    assert np.hypot(cl.x[0] - float(x), cl.y[0] - float(y)) <= 3.0

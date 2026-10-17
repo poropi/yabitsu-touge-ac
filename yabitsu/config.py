@@ -13,6 +13,8 @@ TRACK_DIR = AC_TRACKS / "yabitsu"
 TEST_TRACK_DIR = AC_TRACKS / "yabitsu_test"
 BLENDER_EXE = Path(r"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe")
 
+NAGOKI = (35.3796436, 139.2358251)  # 名古木交差点の中心（OSM node 293317044）。S3 の道の始まり
+TOWN_RADIUS_M = 200.0               # 交差点から、この半径の中を地図どおりの道と建物で作る（町の範囲）
 S2_START = (35.4150771, 139.2289678)  # 道の始まり：蓑毛バス停（OSM node 1312645669）から名古木側へ道に沿って 約95m 下
 S1_START = (35.41025, 139.20926)  # 菜の花台休憩所（駐車場）
 S1_PASS = (35.42782, 139.21934)   # ヤビツ峠（OSM の峠ノード）。上りのゴールと下りの計測開始はここを基準にする
@@ -28,8 +30,9 @@ class SectionDef:
     end: tuple
 
 
-SECTIONS = (SectionDef("s2", S2_START, S1_START), SectionDef("s1", S1_START, S1_END))
+SECTIONS = (SectionDef("s3", NAGOKI, S2_START), SectionDef("s2", S2_START, S1_START), SectionDef("s1", S1_START, S1_END))
 TRACK_GROUP = "yabitsu_main"
+TOWN_GROUP = "yabitsu_nagoki"  # 町の範囲の部品は別の kn5 にする
 TRACK_BUILD_DIR = DATA_PROCESSED / "track"
 
 PROTECTED_DIRS = (AC_TRACKS / "nanohanadai",)

@@ -2,7 +2,7 @@ import json
 
 import numpy as np
 
-from yabitsu import centerline, config, elevation, gsi, track
+from yabitsu import centerline, config, elevation, geo, gsi, track
 from yabitsu.osm import Route
 
 P = config.DATA_PROCESSED
@@ -23,9 +23,14 @@ def main():
         cl = centerline.build_centerline(route, offsets=offsets)
         bounds = track.section_bounds(cl, config.SECTIONS, joints)
     cl.save(P / "track_centerline.npz")
-    z_raw = elevation.raw_profile(cl, gsi.default_sampler())
+    sampler = gsi.default_sampler()
+    z_raw = elevation.raw_profile(cl, sampler)
     valid = elevation.valid_mask(z_raw, cl.bridge, cl.step)
-    z, z_ref, sigmas = elevation.fit_sections(cl.s, z_raw, valid, cl.step, list(bounds.values()))
+
+    def sample(q):  # 区間ごとの格子（区間の始点から 1m ごと）で標高を取る
+        return sampler.sample(*geo.from_local(np.interp(q, cl.s, cl.x), np.interp(q, cl.s, cl.y)))
+
+    z, z_ref, sigmas = elevation.fit_sections(cl.s, z_raw, valid, cl.step, list(bounds.values()), sample=sample)
     np.savez(P / "track_profile.npz", s=cl.s, z_raw=z_raw, z_ref=z_ref, z=z, valid=valid,
              bounds=np.array(bounds, dtype=object))
     st = elevation.profile_stats(cl.s, z, z_ref, valid, cl.step)

@@ -42,19 +42,33 @@ def fit_profile(s, z_raw, valid, step, tol=1.5, sigmas=SIGMAS):
     return z, zref, sigmas[-1]
 
 
-def fit_sections(s, z_raw, valid, step, bounds, blend_m=60.0):
+def fit_sections(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None):
     """区間ごとに fit_profile する。上の区間の値はそのまま使い、境目の下側 blend_m の間だけ、下の区間の値を
-    「上の区間の境目の高さと勾配で延ばした直線」へなめらかに寄せる（高さと勾配が境目でそろう）。"""
+    「上の区間の境目の高さと勾配で延ばした直線」へなめらかに寄せる（高さと勾配が境目でそろう）。
+
+    sample(s) -> 標高 を渡すと、区間ごとに「区間の始点からの格子」で標高を取り直して合わせ、通しの格子へ戻す。
+    下に区間を足して通しの格子が区間に対してずれても、その区間の高さは変わらない。"""
     s = np.asarray(s, float); z_raw = np.asarray(z_raw, float); valid = np.asarray(valid, bool)
     z = np.empty_like(s); z_ref = np.empty_like(s); sigmas = []
     for n, (a, b) in enumerate(bounds):
         m = (s >= a - 1e-6) & (s <= b + 1e-6)
         # 下の区間は境目の先 blend_m まで含めて合わせる（区間の端でなめらか化が平らになるのを避ける）。
         # 一番上の区間は、自分の範囲だけで合わせる（つないでも結果が変わらない）
-        ext = m | ((s > b) & (s <= b + blend_m)) if n < len(bounds) - 1 else m
-        zk, rk, sg = fit_profile(s[ext], z_raw[ext], valid[ext], step)
-        keep = m[ext]
-        z[m], z_ref[m] = zk[keep], rk[keep]; sigmas.append(sg)
+        top = min(b + blend_m, s[-1]) if n < len(bounds) - 1 else b
+        if sample is None:
+            ext = m | ((s > b) & (s <= top))
+            zk, rk, sg = fit_profile(s[ext], z_raw[ext], valid[ext], step)
+            keep = m[ext]
+            z[m], z_ref[m] = zk[keep], rk[keep]
+        else:
+            g = a + np.arange(0.0, top - a + 1e-6, 1.0)  # 中心線の step（L/n）ではなく 1m ちょうど：区間を足しても格子が同じ
+            g = np.append(g, top) if top - g[-1] > 1e-6 else g
+            gi = np.clip(np.rint((g - s[0]) / step).astype(int), 0, len(s) - 1)
+            zg = np.asarray(sample(g), float)
+            vg = valid[gi] & ~np.isnan(zg)
+            zk, rk, sg = fit_profile(g, np.where(np.isnan(zg), z_raw[gi], zg), vg, 1.0)
+            z[m], z_ref[m] = np.interp(s[m], g, zk), np.interp(s[m], g, rk)
+        sigmas.append(sg)
     k = max(1, int(round(10.0 / step)))
     for (_, b), _ in zip(bounds[:-1], bounds[1:]):
         i = int(np.argmin(np.abs(s - b)))

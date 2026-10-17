@@ -14,6 +14,13 @@ ENDPOINTS = ["https://overpass-api.de/api/interpreter",
              "https://overpass.kumi.systems/api/interpreter"]
 ROUTE70_QUERY = '[out:json][timeout:90];way["ref"="70"]["highway"](35.36,139.15,35.52,139.32);out tags geom;'
 PARKING_QUERY = '[out:json][timeout:60];way["amenity"="parking"](around:{r},{lat},{lon});out tags geom;'
+# 名古木交差点のまわり（町の範囲＋余裕）の道・建物・信号など
+TOWN_QUERY = ('[out:json][timeout:90];(way["highway"](around:{r},{lat},{lon});way["building"](around:{r},{lat},{lon});'
+              'node(around:{r},{lat},{lon})["highway"~"traffic_signals|bus_stop|crossing"];);out tags geom;')
+# S3 の道ぞいの横道と建物
+ROADSIDE_QUERY = ('[out:json][timeout:90];(way["highway"](35.378,139.225,35.418,139.241);'
+                  'way["building"](35.378,139.225,35.418,139.241););out tags geom;')
+ROUTE70_NAMES = ("秦野清川線", "県道70号")
 
 
 def _post(url, query):
@@ -44,6 +51,18 @@ def fetch_overpass(query, cache_path, post=None, endpoints=ENDPOINTS, retries_pe
             if wait:
                 time.sleep(wait * (attempt + 1))
     raise RuntimeError("Overpass からの取得に失敗しました: " + "; ".join(errors))
+
+
+def route70_ways(elements):
+    """県道70号の way だけ（ref が 70、または ref・name に路線名を含む）。経路探しが住宅地の近道を通らないように絞る。"""
+    out = []
+    for w in elements:
+        if w.get("type") != "way" or "highway" not in w.get("tags", {}):
+            continue
+        t = w["tags"]
+        if t.get("ref") == "70" or any(n in t.get(k, "") for n in ROUTE70_NAMES for k in ("ref", "name")):
+            out.append(w)
+    return out
 
 
 def parse_lanes(v) -> int:

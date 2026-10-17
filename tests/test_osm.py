@@ -61,3 +61,21 @@ def test_parking_polygons():
            "geometry": [{"lat": 1, "lon": 2}, {"lat": 1.1, "lon": 2}, {"lat": 1.1, "lon": 2.1}, {"lat": 1, "lon": 2}]}]
     p = osm.parking_polygons(el)
     assert p[0]["name"] == "P" and len(p[0]["lat"]) == 4
+
+
+def test_route70_ways_keeps_named_route_and_drops_side_streets():
+    a = _way([(35.0, 139.0), (35.0, 139.001)])
+    b = {"type": "way", "tags": {"highway": "primary", "ref": "県道70号線", "name": "秦野清川線"},
+         "geometry": [{"lat": 35.0, "lon": 139.001}, {"lat": 35.0, "lon": 139.002}]}
+    c = {"type": "way", "tags": {"highway": "residential"}, "geometry": [{"lat": 35.0, "lon": 139.0}, {"lat": 35.001, "lon": 139.0}]}
+    d = {"type": "way", "tags": {"highway": "trunk", "ref": "246", "name": "国道246号"}, "geometry": []}
+    assert osm.route70_ways([a, b, c, d]) == [a, b]
+
+
+def test_shortest_route_on_route70_ways_does_not_cut_through_side_streets():
+    # 県道70号：(0,0)→(0,0.002)→(0.001,0.002)（遠回り）。住宅地の近道：(0,0)→(0.001,0.002)
+    r70 = _way([(35.0, 139.0), (35.0, 139.002), (35.001, 139.002)])
+    side = {"type": "way", "tags": {"highway": "residential"},
+            "geometry": [{"lat": 35.0, "lon": 139.0}, {"lat": 35.001, "lon": 139.002}]}
+    r = osm.shortest_route(osm.route70_ways([r70, side]), (35.0, 139.0), (35.001, 139.002))
+    assert len(r.lat) == 3
