@@ -5,7 +5,7 @@ import numpy as np
 from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
-from yabitsu import config, crosssection as cs, minoge_area, pass_area, side_roads, start_lot, track
+from yabitsu import config, crosssection as cs, geo, gsi, minoge_area, pass_area, side_roads, start_lot, town, town_ground, track
 from yabitsu.centerline import Centerline
 
 P = config.DATA_PROCESSED
@@ -42,6 +42,12 @@ def main():
     if minoge:
         pads = pads + minoge_area.build(minoge, sec, minoge_area.dem_ground()).pads()
     pads = pads + [q for st in side_roads.for_track(sec, pads) for q in st.pads()]  # 分かれ道の地形合わせ
+    # 町の範囲（名古木交差点）：地面の高さを作って保存し、町のピットを足す
+    c = tuple(float(v) for v in geo.to_local(*config.NAGOKI))
+    ground = town_ground.build(sec, gsi.default_sampler(), c)
+    ground.save(P / "track_town_ground.npz")
+    spec = json.loads((config.DATA_MANUAL / "s3_nagoki.json").read_text(encoding="utf-8"))
+    pads = pads + town.Town(spec, side_roads.load_elements(), sec, ground, c, config.TOWN_RADIUS_M).pads()
     (P / "track_pads.json").write_text(json.dumps(pads, ensure_ascii=False), encoding="utf-8")
     print(f"section rows={sec.n} width {2 * sec.hw_left.min():.1f}-{2 * sec.hw_left.max():.1f} m, "
           f"max slope {np.abs(sec.slope).max() * 100:.1f}%, pads={[(p['name'], p['role']) for p in pads]}")

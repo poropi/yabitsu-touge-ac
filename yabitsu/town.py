@@ -373,6 +373,22 @@ class Town:
                 out.append({"at": _ll(e + u * 0.8), "facing_deg": bearing(-u), "kind": "pedestrian", "height_m": 2.6, "auto": True})
         return out
 
+    def pads(self):
+        """町のピット：spec の pits（[[lat, lon, 方位] ×4]）。走れる範囲の中にあること。"""
+        pits = self.spec.get("pits", [])
+        if not pits:
+            return []
+        pts = []
+        for lat, lon, deg in pits:
+            x, y = _xy([[lat, lon]])[0]
+            if not self.drivable().buffer(0.01).contains(Point(x, y)):
+                raise ValueError(f"町のピット {lat}, {lon} が走れる範囲の外にあります")
+            z = float(self.ground.z(np.atleast_1d(x), np.atleast_1d(y))[0])
+            pts.append([float(x), float(y), z, math.radians(90.0 - float(deg))])
+        poly = unary_union([Point(p[0], p[1]).buffer(3.0) for p in pts]).convex_hull
+        return [{"name": "nagoki_pits", "role": "flat", "kind": "site", "polygon": np.asarray(poly.exterior.coords).tolist(),
+                 "z": float(np.mean([p[2] for p in pts])), "pit_points": pts}]
+
     def object_meshes(self):
         """封鎖の柵・見えない壁・信号機・小物（spec の objects）。(名前, 頂点, 面, UV, 材質, 描画するか)"""
         from . import town_objects as to

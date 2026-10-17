@@ -95,3 +95,13 @@ def test_hoarding_is_tall_white_panel_along_points():
     g = _ground()
     (name, v, f, uv, mat, rend), = to.object_meshes([{"kind": "hoarding", "points": [_ll(0, 0), _ll(20, 0)], "height_m": 3.0}], g.z)
     assert mat == "hoarding" and v[:, 2].max() == pytest.approx(103.0) and np.ptp(v[:, 0]) == pytest.approx(20.0)
+
+
+def test_town_pits_are_inside_drivable_area():
+    sec, t = _auto_town([_node([0, -20], 1, highway="crossing", **{"crossing:markings": "zebra"})])
+    t.spec["pits"] = [_ll(20.0 + 6 * i, 1.5) + [90.0] for i in range(4)]
+    (pad,) = t.pads()
+    assert pad["name"] == "nagoki_pits" and len(pad["pit_points"]) == 4
+    d = t.drivable()
+    assert all(d.contains(Point(x, y)) for x, y, z, h in pad["pit_points"])
+    assert abs(pad["pit_points"][0][3] - 0.0) < 1e-6        # 方位 90°（東）＝ +x の向き

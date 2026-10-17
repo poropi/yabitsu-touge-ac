@@ -56,6 +56,12 @@ def s_of(sec, ll, bounds, section):
     return best[1]
 
 
+def point_s(sec, pt, bounds, default_section):
+    """レイアウトの地点（[lat, lon] か [lat, lon, 区間]）の s。区間が書いてあればその区間で、なければ default_section で探す。"""
+    section = pt[2] if len(pt) > 2 else default_section
+    return s_of(sec, (float(pt[0]), float(pt[1])), bounds, section)
+
+
 def _pits(sec, pads, layout):
     for p in pads:
         if p["name"] != layout.pits:
@@ -73,7 +79,7 @@ def _pits(sec, pads, layout):
 
 def layout_objects(sec, pads, layout, bounds):
     path = sec.path(); d = layout.direction
-    at = lambda ll: s_of(sec, ll, bounds, layout.section)
+    at = lambda pt: point_s(sec, pt, bounds, layout.section)
 
     def half(s):
         i = int(np.argmin(np.abs(sec.s - s)))
@@ -88,7 +94,7 @@ def layout_objects(sec, pads, layout, bounds):
 
 
 def timed_length(sec, layout, bounds):
-    return abs(s_of(sec, layout.finish, bounds, layout.section) - s_of(sec, layout.timing_start, bounds, layout.section))
+    return abs(point_s(sec, layout.finish, bounds, layout.section) - point_s(sec, layout.timing_start, bounds, layout.section))
 
 
 def cameras(sec, layout, every=150.0):
