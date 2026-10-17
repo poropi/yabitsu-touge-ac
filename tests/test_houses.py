@@ -30,3 +30,10 @@ def test_houses_avoid_given_polygons():
     b = SPEC["buildings"][:1]
     h = hs.Houses(b, _sec(), _ground, prefix="x", pad_name="x_{k}", avoid=[Point(40.0, 20.0).buffer(3.0)])
     assert h.meshes() == [] and h.pads() == []
+
+
+def test_wall_colour_from_data():
+    b = [dict(SPEC["buildings"][0], wall="cream")]
+    h = hs.Houses(b, _sec(), _ground, prefix="s3_houses", pad_name="s3_house_{k}")
+    names = {m[0]: m[4] for m in h.meshes()}
+    assert names["1WALL_s3_houses_cream"] == "wall_cream"

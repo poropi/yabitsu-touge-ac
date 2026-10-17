@@ -89,6 +89,30 @@ def test_overlap_with_road_is_clipped_and_reported():
 def test_materials_and_textures_for_each_building(tmp_path):
     b = _b(shopfront=[0], signs=[{"text": "店", "bg": "#FF0000", "fg": "#FFFFFF", "edge": 0, "w_m": 3, "h_m": 1, "z_m": 3}])
     mats = bd.write_textures([b], tmp_path)
-    assert {"facade_t1", "roof_t1", "sign_t1_0", "shopfront"} <= set(mats)
+    assert {bd.facade_mat(b), bd.roof_mat(b), "sign_t1_0", "shopfront"} <= set(mats)
     for rel in mats.values():
         assert (tmp_path / rel.split("/")[-1]).exists()
+
+
+def test_canopy_only_building_has_slab_and_columns_but_no_walls():
+    rect = [[0, 0], [16, 0], [16, 9], [0, 9]]
+    ms = bd.building_meshes([_b(footprint=_ll(rect), canopy={"self": True, "z_m": 4.8})], FLAT)
+    names = [m[0] for m in ms]
+    assert "1WALL_bld_t1" not in names and "bld_t1_canopy" in names and "1WALL_bld_t1_columns" in names
+    v = _mesh(ms, "bld_t1_canopy")[1]
+    assert v[:, 2].min() == pytest.approx(104.8) and v[:, 2].max() == pytest.approx(104.8 + bd.CANOPY_T)
+
+
+def test_edge_facing_picks_the_side_towards_a_bearing():
+    rect = [[0, 0], [10, 0], [10, 6], [0, 6]]
+    b = _b(footprint=_ll(rect))
+    assert bd.edge_facing(b, 180.0) == 0 and bd.edge_facing(b, 90.0) == 1 and bd.edge_facing(b, 0.0) == 2
+
+
+def test_same_colours_share_materials_and_meshes_merge_by_material():
+    a = _b(id="a"); b = _b(id="b", footprint=_ll([[30, 0], [40, 0], [40, 8], [30, 8]]))
+    assert bd.facade_mat(a) == bd.facade_mat(b) and bd.roof_mat(a) == bd.roof_mat(b)
+    ms = bd.merge_by_material(bd.building_meshes([a, b], FLAT))
+    walls = [m for m in ms if m[0].startswith("1WALL_bld_")]
+    assert len(walls) == 1 and walls[0][4] == bd.facade_mat(a)
+    assert len({m[0] for m in ms}) == len(ms)

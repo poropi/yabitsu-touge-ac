@@ -56,6 +56,34 @@ class Building:
                    list(d.get("signs", [])), d.get("canopy"), d.get("lot"), d.get("name", ""))
 
 
+def facade_mat(b):
+    """壁の材質：色と窓の有無が同じ建物は同じ絵を使う。"""
+    return f"facade_{b.wall.lstrip('#').upper()}{'_w' if b.windows else ''}"
+
+
+def roof_mat(b):
+    return f"roofc_{b.roof.get('color', '#707070').lstrip('#').upper()}"
+
+
+def merge_by_material(meshes, max_verts=60000):
+    """同じ材質・同じ種類（当たり判定あり 1WALL／なし）の部品を、頂点 max_verts ごとに1つにまとめる（描く回数を減らす）。"""
+    groups = {}
+    for name, v, f, uv, mat, rend in meshes:
+        key = (name.startswith("1WALL_"), mat, rend)
+        groups.setdefault(key, []).append((v, f, uv))
+    out = []
+    for (wall, mat, rend), parts in groups.items():
+        cur, n, k = [], 0, 0
+        for q in parts + [None]:
+            if q is None or (n + len(q[0]) > max_verts and cur):
+                if cur:
+                    out.append((f"{'1WALL_' if wall else ''}bld_{mat}_{k:02d}", *_merge(cur), mat, rend)); k += 1
+                cur, n = [], 0
+            if q is not None:
+                cur.append(q); n += len(q[0])
+    return out
+
+
 def _clip(b, avoid):
     fp = b.footprint
     if avoid is not None and fp.intersection(avoid).area > 0.3:
@@ -171,12 +199,32 @@ def _pitched_roof(b, fp, z_eave):
     return roof, (_merge(gables) if gables else None)
 
 
+def edge_facing(b, bearing):
+    """外周の辺のうち、外向きの向きが方位 bearing（北=0、東=90）に一番近い辺の番号。"""
+    p = np.asarray(b.footprint.exterior.coords)
+    want = np.array([math.sin(math.radians(bearing)), math.cos(math.radians(bearing))])
+    best, k = -2.0, 0
+    for i in range(len(p) - 1):
+        d = p[i + 1] - p[i]; L = float(np.linalg.norm(d))
+        if L < 0.5:
+            continue
+        n = np.array([d[1], -d[0]]) / L
+        if float(n @ want) > best:
+            best, k = float(n @ want), i
+    return k
+
+
 def building_meshes(buildings, ground_z, avoid=None):
-    """(名前, 頂点, 面, UV, 材質, 描画するか)。壁は当たり判定あり（1WALL）。"""
+    """(名前, 頂点, 面, UV, 材質, 描画するか)。壁は当たり判定あり（1WALL）。
+    canopy に "self": true があれば、外周線そのものが屋根だけの建物（ガソリンスタンドの屋根など）。"""
     out = []
     for b in buildings:
         fp = _clip(b, avoid)
         if fp.is_empty or fp.area < 2.0:
+            continue
+        if b.canopy and b.canopy.get("self"):
+            out += _canopy(b, fp, ground_z, fp)
+            out += _signs(b, fp, ground_z, base=float(b.canopy.get("z_m", 4.5)) - 3.0)
             continue
         ring = fp.exterior
         p = np.asarray(ring.coords)
@@ -198,7 +246,7 @@ def building_meshes(buildings, ground_z, avoid=None):
                 walls.append(_edge_quad(p[i], p[i + 1], floor + min(SHOP_H, b.height_m), wall_top, floor, sh))
             else:
                 walls.append(_edge_quad(p[i], p[i + 1], z0, wall_top, floor, sh))
-        out.append((f"1WALL_bld_{b.id}", *_merge(walls), f"facade_{b.id}", True))
+        out.append((f"1WALL_bld_{b.id}", *_merge(walls), facade_mat(b), True))
         if shops:
             out.append((f"bld_{b.id}_shop", *_merge(shops), "shopfront", True))
         if flat:
@@ -209,34 +257,56 @@ def building_meshes(buildings, ground_z, avoid=None):
                 cap = fp.difference(inner)
                 for g in ([cap] if cap.geom_type == "Polygon" else list(getattr(cap, "geoms", []))):
                     parts.append(_tri_poly(g, top + PARAPET_H))
-            out.append((f"bld_{b.id}_roof", *_merge(parts), f"roof_{b.id}", True))
+            out.append((f"bld_{b.id}_roof", *_merge(parts), roof_mat(b), True))
         else:
             roof, gables = _pitched_roof(b, fp, top)
-            out.append((f"bld_{b.id}_roof", *roof, f"roof_{b.id}", True))
+            out.append((f"bld_{b.id}_roof", *roof, roof_mat(b), True))
             if gables is not None:
-                out.append((f"bld_{b.id}_gables", *gables, f"facade_{b.id}", True))
-        for n, s in enumerate(b.signs):
-            e = int(s.get("edge", 0)) % (len(p) - 1)
-            a, bb = p[e], p[e + 1]
-            d = (bb - a) / max(np.linalg.norm(bb - a), 1e-9); out_n = np.array([d[1], -d[0]])   # 反時計回りの辺の右＝外
-            w = min(float(s.get("w_m", 3.0)), float(np.linalg.norm(bb - a)) - 0.2)
-            m = (a + bb) / 2 + out_n * 0.05
-            z1 = floor + float(s.get("z_m", 3.0)); z2 = z1 + float(s.get("h_m", 1.0))
-            v = np.array([[*(m - d * w / 2), z1], [*(m + d * w / 2), z1], [*(m + d * w / 2), z2], [*(m - d * w / 2), z2]])
-            out.append((f"bld_{b.id}_sign{n}", v, np.array([[0, 1, 2, 3]], np.int32),
-                        np.array([[0, 0], [1, 0], [1, 1], [0, 1]], float), f"sign_{b.id}_{n}", True))
+                out.append((f"bld_{b.id}_gables", *gables, facade_mat(b), True))
+        out += _signs(b, fp, ground_z)
         if b.canopy:
-            cp = orient(Polygon(_xy(b.canopy["points"])).buffer(0), 1.0)
-            zc0 = floor + float(b.canopy.get("z_m", 4.5))
-            parts = [_tri_poly(cp, zc0 + CANOPY_T), _wall_quads(cp.exterior, zc0, zc0 + CANOPY_T, zc0, CANOPY_T)]
-            under = _tri_poly(cp, zc0); under = (under[0], under[1][:, ::-1], under[2])
-            parts.append(under)
-            out.append((f"bld_{b.id}_canopy", *_merge(parts), "wall_white", True))
-            from .town_objects import _prism
-            cols = [_prism(np.asarray(q), 0.25, z_low - 0.3, zc0) for q in np.asarray(cp.buffer(-1.5).exterior.coords)[:-1:2]] \
-                if not cp.buffer(-1.5).is_empty else []
-            if cols:
-                out.append((f"1WALL_bld_{b.id}_columns", *_merge(cols), "pole_grey", True))
+            out += _canopy(b, orient(Polygon(_xy(b.canopy["points"])).buffer(0), 1.0), ground_z, fp)
+    return out
+
+
+def _floor(fp, ground_z):
+    p = np.asarray(fp.exterior.coords)
+    zg = np.asarray(ground_z(p[:, 0], p[:, 1]), float)
+    c = fp.centroid
+    zc = float(np.asarray(ground_z(np.atleast_1d(c.x), np.atleast_1d(c.y)), float)[0])
+    return min(float(zg.min()), zc), max(float(zg.max()), zc)
+
+
+def _signs(b, fp, ground_z, base=0.0):
+    out = []
+    p = np.asarray(fp.exterior.coords)
+    floor = _floor(fp, ground_z)[1] + base
+    for n, s in enumerate(b.signs):
+        e = int(s.get("edge", 0)) % (len(p) - 1)
+        a, bb = p[e], p[e + 1]
+        d = (bb - a) / max(np.linalg.norm(bb - a), 1e-9); out_n = np.array([d[1], -d[0]])   # 反時計回りの辺の右＝外
+        w = min(float(s.get("w_m", 3.0)), float(np.linalg.norm(bb - a)) - 0.2)
+        m = (a + bb) / 2 + out_n * 0.05
+        z1 = floor + float(s.get("z_m", 3.0)); z2 = z1 + float(s.get("h_m", 1.0))
+        v = np.array([[*(m - d * w / 2), z1], [*(m + d * w / 2), z1], [*(m + d * w / 2), z2], [*(m - d * w / 2), z2]])
+        out.append((f"bld_{b.id}_sign{n}", v, np.array([[0, 1, 2, 3]], np.int32),
+                    np.array([[0, 0], [1, 0], [1, 1], [0, 1]], float), f"sign_{b.id}_{n}", True))
+    return out
+
+
+def _canopy(b, cp, ground_z, fp):
+    """屋根だけの構造（ガソリンスタンドの屋根）：厚さ CANOPY_T の板と、内側 1.5m の所に柱。"""
+    z_low, floor = _floor(fp, ground_z)
+    zc0 = floor + float(b.canopy.get("z_m", 4.5))
+    parts = [_tri_poly(cp, zc0 + CANOPY_T), _wall_quads(cp.exterior, zc0, zc0 + CANOPY_T, zc0, CANOPY_T)]
+    under = _tri_poly(cp, zc0)
+    parts.append((under[0], under[1][:, ::-1], under[2]))
+    out = [(f"bld_{b.id}_canopy", *_merge(parts), "wall_white", True)]
+    from .town_objects import _prism
+    inner = cp.buffer(-1.5)
+    if not inner.is_empty and inner.geom_type == "Polygon":
+        cols = [_prism(np.asarray(q), 0.25, z_low - 0.3, zc0) for q in np.asarray(inner.exterior.coords)[:-1]]
+        out.append((f"1WALL_bld_{b.id}_columns", *_merge(cols), "pole_grey", True))
     return out
 
 
@@ -276,10 +346,12 @@ def write_textures(buildings, out_dir):
         im.save(out / f"{name}.png"); mats[name] = f"textures/{name}.png"
     save("shopfront", shopfront_image())
     for k, b in enumerate(buildings):
-        save(f"facade_{b.id}", facade_image(b.wall, b.windows, seed=k))
-        r = _hex(b.roof.get("color", "#707070"))
-        g = _gray(128, 100 + k, 1.0, 0.08)
-        save(f"roof_{b.id}", Image.fromarray(np.clip(g.astype(float) * r[None, None, :], 0, 255).astype(np.uint8)))
+        if facade_mat(b) not in mats:
+            save(facade_mat(b), facade_image(b.wall, b.windows, seed=k))
+        if roof_mat(b) not in mats:
+            r = _hex(b.roof.get("color", "#707070"))
+            g = _gray(128, 100 + k, 1.0, 0.08)
+            save(roof_mat(b), Image.fromarray(np.clip(g.astype(float) * r[None, None, :], 0, 255).astype(np.uint8)))
         for n, s in enumerate(b.signs):
             w_px = int(np.clip(float(s.get("w_m", 3.0)) * 96, 96, 1024)); h_px = int(np.clip(float(s.get("h_m", 1.0)) * 96, 48, 512))
             save(f"sign_{b.id}_{n}", sign_texture(s["text"], s.get("bg", "#FFFFFF"), s.get("fg", "#000000"), w_px, h_px))

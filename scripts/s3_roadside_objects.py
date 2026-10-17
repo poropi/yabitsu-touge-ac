@@ -2,7 +2,7 @@
 - 信号機：s3_pavements.csv の停止線（stop_line / stop_line_down）ごとに、その先の横断歩道の向こう側・進む向きの左に車用、
   信号のある横断歩道の両端に歩行者用
 - バス停：OSM のバス停（道から 15m 以内）
-- 鳥居と石灯籠（s=3400 の右、ストリートビュー）"""
+- 鳥居と石灯籠（s=3400 の右、ストリートビュー）、工事の仮囲い（s=205〜262 の右）"""
 import json
 import math
 
@@ -71,6 +71,12 @@ def main():
         pos, i = at(s0 + s, -off)
         objects.append({"kind": kind, "points": [pos], "facing_deg": round(bearing(sec.heading[i] + math.pi / 2), 1),
                         "note": f"s={s:.0f} の右：神社の入口（ストリートビュー s=3400、バス停「鳥居前」）"})
+    # 工事の白い仮囲い：県道70号の東（右）、歩道の外。ストリートビュー（s=200・250）
+    pts = []
+    for s in np.arange(205.0, 262.1, 4.0):
+        i = int(np.argmin(np.abs(sec.s - (s0 + s))))
+        pts.append(at(s0 + s, -(sec.hw_right[i] + GUTTER_WIDTH + SIDEWALK_M + 0.3))[0])
+    objects.append({"kind": "hoarding", "points": pts, "height_m": 3.0, "note": "s=205〜262 の右：工事の仮囲い（ストリートビュー）"})
     out = config.DATA_MANUAL / "s3_objects.json"
     out.write_text(json.dumps({"signals": signals, "objects": objects}, ensure_ascii=False, indent=1) + "\n",
                    encoding="utf-8", newline="\n")

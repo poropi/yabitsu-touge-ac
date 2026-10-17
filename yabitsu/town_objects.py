@@ -196,6 +196,12 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
             add("stone", _prism(p, 0.14, z + 0.6, z + 1.5))
             add("stone", _box(p, (1, 0), 0.5, 0.5, z + 1.5, z + 1.9))
             add("stone", _box(p, (1, 0), 0.8, 0.8, z + 1.9, z + 2.15))
+        elif kind == "hoarding":     # 工事の白い仮囲い（高さ height_m、両面）
+            q = np.asarray(LineString(pts).segmentize(4.0).coords); h = float(ob.get("height_m", 3.0))
+            for i in range(len(q) - 1):
+                za, zb = zf(q[i]), zf(q[i + 1])
+                u0 = float(np.linalg.norm(q[i] - q[0])); u1 = u0 + float(np.linalg.norm(q[i + 1] - q[i]))
+                add("hoarding", _quad(q[i], q[i + 1], min(za, zb) - 0.2, min(za, zb) + h, u0 / 2.0, u1 / 2.0, both=True))
         else:
             raise ValueError(f"物の kind が分かりません: {ob}")
     return [(f"{prefix}_{mat}", *_merge(parts), mat, True) for mat, parts in groups.items()]

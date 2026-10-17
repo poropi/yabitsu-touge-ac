@@ -89,3 +89,9 @@ def test_town_object_meshes_have_unique_names_and_barricades_face_drivable_side(
     south = next(k for k, c in enumerate(t.closures) if tw._xy([c["a"]])[0][1] < -5)
     cones = next(m for m in ms if m[0] == f"cone_{south:03d}")[1]
     assert cones[:, 1].mean() > -25.0          # 南の柵のコーンは北（交差点）の側
+
+
+def test_hoarding_is_tall_white_panel_along_points():
+    g = _ground()
+    (name, v, f, uv, mat, rend), = to.object_meshes([{"kind": "hoarding", "points": [_ll(0, 0), _ll(20, 0)], "height_m": 3.0}], g.z)
+    assert mat == "hoarding" and v[:, 2].max() == pytest.approx(103.0) and np.ptp(v[:, 0]) == pytest.approx(20.0)

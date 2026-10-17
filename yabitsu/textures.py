@@ -14,6 +14,10 @@ MATERIALS = {
     "railing": {"texture": "textures/railing.png", "shader": "ksPerPixel"},
     "railing_bars": {"texture": "textures/railing_bars.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
     "wall_white": {"texture": "textures/wall_white.png", "shader": "ksPerPixel"},
+    "wall_cream": {"texture": "textures/wall_cream.png", "shader": "ksPerPixel"},
+    "wall_beige": {"texture": "textures/wall_beige.png", "shader": "ksPerPixel"},
+    "wall_grey": {"texture": "textures/wall_grey.png", "shader": "ksPerPixel"},
+    "wall_brown": {"texture": "textures/wall_brown.png", "shader": "ksPerPixel"},
     "roof": {"texture": "textures/roof.png", "shader": "ksPerPixel", "two_sided": True},
     "stone": {"texture": "textures/stone.png", "shader": "ksPerPixel"},
     "wood": {"texture": "textures/wood.png", "shader": "ksPerPixel", "two_sided": True},
@@ -34,6 +38,7 @@ MATERIALS = {
     "pole_grey": {"texture": "textures/pole_grey.png", "shader": "ksPerPixel"},
     "sign_bus": {"texture": "textures/sign_bus.png", "shader": "ksPerPixel"},
     "text_tomare": {"texture": "textures/text_tomare.png", "shader": "ksPerPixelAT", "alpha": True},
+    "hoarding": {"texture": "textures/hoarding.png", "shader": "ksPerPixel", "two_sided": True},
 }
 
 FONT_FILES = (r"C:\Windows\Fonts\BIZ-UDGothicB.ttc", r"C:\Windows\Fonts\meiryob.ttc", r"C:\Windows\Fonts\YuGothB.ttc")
@@ -173,6 +178,13 @@ def _barricade(w=512, h=128):
     return _u8(np.where(on[..., None], np.array([0.98, 0.80, 0.05]), np.array([0.06, 0.06, 0.06])))
 
 
+def _hoarding(w=256, h=256):
+    """工事の仮囲い：白い波板（縦の溝）、1枚＝横 2m・縦いっぱい。"""
+    xx = np.arange(w)[None, :].repeat(h, 0)
+    g = 0.90 - 0.08 * (np.sin(xx / w * 2 * np.pi * 12) > 0.6)
+    return _u8(np.stack([g, g, g * 0.99], -1))
+
+
 def _cone(size=256):
     """カラーコーン：赤橙に、白い帯（下から 45〜70%）。"""
     yy = np.arange(size)[:, None].repeat(size, 1) / size
@@ -218,6 +230,10 @@ def write_textures(out_dir):
             "railing": _gray(256, 11, 0.50, 0.06, (0.44, 1.04, 0.84), coarse=24),
             "railing_bars": railing_bars(),
             "wall_white": _gray(512, 12, 0.86, 0.06, (1.0, 1.0, 0.98)),
+            "wall_cream": _gray(512, 24, 0.86, 0.06, (1.02, 0.98, 0.86)),
+            "wall_beige": _gray(512, 25, 0.76, 0.06, (1.04, 0.96, 0.84)),
+            "wall_grey": _gray(512, 26, 0.66, 0.05, (0.98, 1.0, 1.02)),
+            "wall_brown": _gray(512, 27, 0.48, 0.06, (1.10, 0.90, 0.74)),
             "roof": roof(),
             "stone": _gray(512, 13, 0.50, 0.22, (1.05, 0.98, 0.88), coarse=16, fine=2),
             "wood": wood(),
@@ -237,7 +253,8 @@ def write_textures(out_dir):
             "signal_ped": np.array(_lamps(128, 224, 2, 0, (230, 40, 40), vertical=True)),   # 赤（上）が点灯
             "pole_grey": _gray(128, 21, 0.62, 0.05),
             "sign_bus": np.array(sign_texture("バス", "#FFFFFF", "#1B4FA0", 128, 128, border="#1B4FA0")),
-            "text_tomare": _text_alpha("止まれ")}
+            "text_tomare": _text_alpha("止まれ"),
+            "hoarding": _hoarding()}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name
