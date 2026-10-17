@@ -18,6 +18,8 @@ def _pits(sec, pads, direction):
     for p in pads:
         if p["role"] != role:
             continue
+        if "pit_center" in p:  # 手で測った駐車場：ピットの場所と向き（出口向き）も決めてある
+            return pit_boxes(p["pit_center"], p["z"], p["heading"], spacing=p["pit_spacing"])
         poly = Polygon(p["polygon"]); c = poly.centroid
         i = int(np.argmin(np.hypot(sec.x - c.x, sec.y - c.y)))
         h = sec.heading[i] if direction > 0 else sec.heading[i] + math.pi

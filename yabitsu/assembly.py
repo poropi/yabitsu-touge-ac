@@ -3,6 +3,7 @@ import numpy as np
 from . import features as ft
 from . import meshgen as mg
 from . import s1_layouts
+from . import start_lot as lot_mod
 from . import trees as tree_mod
 from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 
@@ -54,7 +55,16 @@ def add_trees(m, trees):
 
 def add_pads(m, pads):
     for k, p in enumerate(pads):
+        if p.get("kind") == "lot":  # 手で測った駐車場は add_start_lot で作る
+            continue
         m.add_mesh(GROUP, f"1ROAD_s1_pad_{k:02d}", *mg.pad_mesh(p["polygon"], p["z"]), "asphalt")
+
+
+def add_start_lot(m, spec, pads):
+    for p in pads:
+        if p.get("kind") == "lot":
+            for name, v, f, uv, mat, rend in lot_mod.meshes(spec, p):
+                m.add_mesh(GROUP, name, v, f, uv, mat, renderable=rend)
 
 
 def add_layout_objects(m, sec, pads):

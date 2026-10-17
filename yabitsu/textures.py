@@ -10,6 +10,12 @@ MATERIALS = {
     "line_white": {"texture": "textures/line_white.png", "shader": "ksPerPixel"},
     "guardrail": {"texture": "textures/guardrail.png", "shader": "ksPerPixel", "two_sided": True},
     "tree": {"texture": "textures/tree.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
+    "pavers": {"texture": "textures/pavers.png", "shader": "ksPerPixel"},
+    "railing": {"texture": "textures/railing.png", "shader": "ksPerPixel"},
+    "railing_bars": {"texture": "textures/railing_bars.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
+    "wall_white": {"texture": "textures/wall_white.png", "shader": "ksPerPixel"},
+    "roof": {"texture": "textures/roof.png", "shader": "ksPerPixel", "two_sided": True},
+    "stone": {"texture": "textures/stone.png", "shader": "ksPerPixel"},
 }
 
 
@@ -54,6 +60,36 @@ def tree_card(w=512, h=1024, seed=5):
     return np.dstack([_u8(rgb), np.where(mask, 255, 0).astype(np.uint8)])
 
 
+def pavers(size=1024, tile_m=4.0, brick=(0.25, 0.125), seed=9):
+    """菜の花台の駐車場のブロック舗装。灰色に赤茶のブロックが混じる。1枚＝tile_m 四方。"""
+    rng = np.random.default_rng(seed)
+    px = size / tile_m; bw, bh = int(round(brick[0] * px)), int(round(brick[1] * px))
+    yy, xx = np.mgrid[0:size, 0:size]
+    row = yy // bh; xs = (xx + (row % 2) * (bw // 2)) % size; col = xs // bw
+    ncol, nrow = size // bw + 1, size // bh + 1
+    pick = rng.random((nrow, ncol)); shade = 0.9 + 0.2 * rng.random((nrow, ncol))
+    grey, red = np.array([0.56, 0.55, 0.52]), np.array([0.55, 0.40, 0.33])
+    base = np.where((pick[row, col] < 0.3)[..., None], red, grey) * shade[row, col][..., None]
+    joint = ((yy % bh) < 2) | ((xs % bw) < 2)
+    base = np.where(joint[..., None], base * 0.55, base)
+    return _u8(base * (0.9 + 0.2 * periodic_noise(size, 3, rng))[..., None])
+
+
+def railing_bars(size=256, bars=4, bar_px=10, rgb=(0.22, 0.52, 0.42)):
+    """緑の柵の縦格子（すき間は透明）。横 1 枚に bars 本。"""
+    xx = np.arange(size)[None, :].repeat(size, 0)
+    on = (xx % (size // bars)) < bar_px
+    return np.dstack([_u8(np.broadcast_to(np.array(rgb), (size, size, 3))), np.where(on, 255, 0).astype(np.uint8)])
+
+
+def roof(size=512, seed=10):
+    rng = np.random.default_rng(seed)
+    yy = np.arange(size)[:, None].repeat(size, 1)
+    plank = 0.85 + 0.15 * ((yy // 32) % 2) - 0.25 * ((yy % 32) < 2)
+    g = (0.75 + 0.25 * periodic_noise(size, 8, rng)) * plank
+    return _u8(np.array([0.42, 0.27, 0.16]) * g[..., None])
+
+
 def write_textures(out_dir):
     out = Path(out_dir); out.mkdir(parents=True, exist_ok=True)
     imgs = {"asphalt": _gray(1024, 1, 0.26, 0.10, (1.0, 1.0, 1.02), specks=0.005),
@@ -61,7 +97,13 @@ def write_textures(out_dir):
             "ground": ground(),
             "line_white": _gray(256, 3, 0.86, 0.06),
             "guardrail": _gray(256, 6, 0.74, 0.08, coarse=24),
-            "tree": tree_card()}
+            "tree": tree_card(),
+            "pavers": pavers(),
+            "railing": _gray(256, 11, 0.50, 0.06, (0.44, 1.04, 0.84), coarse=24),
+            "railing_bars": railing_bars(),
+            "wall_white": _gray(512, 12, 0.86, 0.06, (1.0, 1.0, 0.98)),
+            "roof": roof(),
+            "stone": _gray(512, 13, 0.50, 0.22, (1.05, 0.98, 0.88), coarse=16, fine=2)}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name
