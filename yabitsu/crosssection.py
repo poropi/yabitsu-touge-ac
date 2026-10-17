@@ -103,15 +103,18 @@ def build_section(cl, z, width_rows):
 
 
 def pads_from_parking(parking, sec, project=geo.to_local, max_dist=150.0):
+    """道のどこかから max_dist 以内にある駐車場を、道の高さの平らな場所にする（道の途中の駐車場も含む）。"""
     ends = {"start": np.array([sec.x[0], sec.y[0]]), "end": np.array([sec.x[-1], sec.y[-1]])}
     out = []
     for p in parking:
         x, y = project(np.asarray(p["lat"], float), np.asarray(p["lon"], float))
         poly = Polygon(np.c_[x, y]).buffer(0)
         c = np.array(poly.centroid.coords[0])
-        role, d = min(((r, np.linalg.norm(c - e)) for r, e in ends.items()), key=lambda t: t[1])
-        if d > max_dist:
+        d_road = np.hypot(sec.x - c[0], sec.y - c[1])
+        if d_road.min() > max_dist:
             continue
-        i = int(np.argmin(np.hypot(sec.x - c[0], sec.y - c[1])))
+        role, d = min(((r, np.linalg.norm(c - e)) for r, e in ends.items()), key=lambda t: t[1])
+        role = role if d <= max_dist else "mid"
+        i = int(np.argmin(d_road))
         out.append({"name": p["name"], "role": role, "polygon": np.asarray(poly.exterior.coords).tolist(), "z": float(sec.z[i])})
     return out

@@ -37,17 +37,18 @@ def _xy(lat, lon):
 
 
 def test_s1_road_unchanged_beyond_join():
+    # 中心線の点（1m ごと）どうしではなく、今の中心線（線）までの距離で比べる。区間をつなぐと点の位置は道に沿ってずれる
+    from yabitsu.acobjects import frame_at
+    from yabitsu.layouts import s_of
     sec, pads, bounds = _track()
-    s0 = bounds["s1"][0]
-    m = sec.s >= s0 - 5.0
+    path = sec.path()
     for s_local, lat, lon, z in _ref()["centerline"]:
         if s_local < JOIN_M:
             continue
-        x, y = _xy(lat, lon)
-        d = np.hypot(sec.x[m] - x, sec.y[m] - y)
-        i = int(np.argmin(d))
-        assert d[i] <= 0.1, (s_local, d[i])
-        assert abs(sec.z[m][i] - z) <= 0.1, (s_local, sec.z[m][i] - z)
+        x, y, zc, _ = frame_at(path, s_of(sec, (lat, lon), bounds, "s1"))
+        xr, yr = _xy(lat, lon)
+        assert math.hypot(x - xr, y - yr) <= 0.1, (s_local, math.hypot(x - xr, y - yr))
+        assert abs(zc - z) <= 0.1, (s_local, zc - z)
 
 
 @pytest.mark.skipif(not (config.DATA_MANUAL / "layouts.json").exists(), reason="layouts.json（Task 4）がまだない")
@@ -62,9 +63,9 @@ def test_s1_layout_objects_unchanged():
             d = current[name][dname]
             x, y = _xy(lat, lon)
             near = int(np.argmin(np.hypot(sec.x - x, sec.y - y)))
-            tol = 1.0 if sec.s[near] - s0 < JOIN_M else 0.1
-            assert math.hypot(d.location[0] - x, d.location[1] - y) <= tol, (name, dname)
-            assert abs(math.remainder(d.heading - h, 2 * math.pi)) <= 0.01, (name, dname)
+            in_join = sec.s[near] - s0 < JOIN_M  # つなぎ目の中はヘアピンの形が変わってよい（位置 1m・向き 0.15rad まで）
+            assert math.hypot(d.location[0] - x, d.location[1] - y) <= (1.0 if in_join else 0.1), (name, dname)
+            assert abs(math.remainder(d.heading - h, 2 * math.pi)) <= (0.15 if in_join else 0.01), (name, dname)
 
 
 def test_s1_sites_unchanged():

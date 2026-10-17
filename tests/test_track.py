@@ -86,3 +86,48 @@ def test_section_view_has_local_distance():
 def test_load_bounds_roundtrip(tmp_path):
     np.savez(tmp_path / "track_profile.npz", s=np.arange(3.0), bounds=np.array({"s2": (0.0, 1.0), "s1": (1.0, 2.0)}, dtype=object))
     assert track.load_bounds(tmp_path) == {"s2": (0.0, 1.0), "s1": (1.0, 2.0)}
+
+
+# --- 実データのつなぎ目（S2 を足したあと）。処理済みデータに2区間以上あるときだけ動く ---
+from yabitsu import config  # noqa: E402
+
+_PROF = config.DATA_PROCESSED / "track_profile.npz"
+_CL = config.DATA_PROCESSED / "track_centerline.npz"
+
+
+def _real():
+    from yabitsu.centerline import Centerline
+    pr = np.load(_PROF, allow_pickle=True)
+    return Centerline.load(_CL), pr, pr["bounds"].item()
+
+
+_joined = pytest.mark.skipif(not (_PROF.exists() and _CL.exists() and len(np.load(_PROF, allow_pickle=True)["bounds"].item()) > 1)
+                             if _PROF.exists() else True, reason="2区間の処理済みデータがまだない")
+
+
+@_joined
+def test_join_has_no_kink():
+    cl, pr, bounds = _real()
+    for (_, b) in list(bounds.values())[:-1]:
+        m = (cl.s >= b - 20) & (cl.s <= b + 20)
+        # 折れ＝曲がり方（1m ごとの向きの変化）が急に変わること。ヘアピンの急カーブそのものは折れではない
+        assert np.abs(np.diff(np.diff(cl.heading[m]))).max() <= 0.02
+
+
+@_joined
+def test_join_has_no_grade_jump():
+    cl, pr, bounds = _real()
+    s, z = pr["s"], pr["z"]
+    for (_, b) in list(bounds.values())[:-1]:
+        i = int(np.argmin(np.abs(s - b)))
+        below = (z[i] - z[i - 10]) / (s[i] - s[i - 10]); above = (z[i + 10] - z[i]) / (s[i + 10] - s[i])
+        assert abs(below - above) <= 0.02
+
+
+@_joined
+def test_join_profile_close_to_dem():
+    cl, pr, bounds = _real()
+    s = pr["s"]
+    for (_, b) in list(bounds.values())[:-1]:
+        m = (s >= b - 60) & (s <= b + 60) & pr["valid"]
+        assert np.abs(pr["z"] - pr["z_ref"])[m].max() <= 1.5

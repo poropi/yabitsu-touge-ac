@@ -71,3 +71,17 @@ def test_width_rows_parse_shifted_rows():
     got = cs.parse_width_rows(rows)
     assert got == [{"s_from": 300.0, "s_to": 350.0, "width_m": 7.0, "lanes": 2},
                    {"s_from": 350.0, "s_to": 400.0, "width_m": 5.0, "lanes": None}]
+
+
+def test_parking_near_the_middle_of_the_road_is_kept():
+    from tests.test_meshgen import _straight
+    from yabitsu import geo
+    sec = _straight(1001)
+    poly = [[500, 10], [520, 10], [520, 20], [500, 20], [500, 10]]
+    far = [[500, 400], [520, 400], [520, 420], [500, 420], [500, 400]]
+    def ll(pts):
+        lat, lon = geo.from_local(*np.asarray(pts, float).T)
+        return list(map(float, lat)), list(map(float, lon))
+    parking = [{"name": "mid", "lat": ll(poly)[0], "lon": ll(poly)[1]}, {"name": "far", "lat": ll(far)[0], "lon": ll(far)[1]}]
+    pads = cs.pads_from_parking(parking, sec)
+    assert [p["name"] for p in pads] == ["mid"] and abs(pads[0]["z"] - sec.z[510]) < 1e-6

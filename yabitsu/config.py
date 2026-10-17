@@ -13,6 +13,7 @@ TRACK_DIR = AC_TRACKS / "yabitsu"
 TEST_TRACK_DIR = AC_TRACKS / "yabitsu_test"
 BLENDER_EXE = Path(r"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe")
 
+S2_START = (35.4150771, 139.2289678)  # 道の始まり：蓑毛バス停（OSM node 1312645669）から名古木側へ道に沿って 約95m 下
 S1_START = (35.41025, 139.20926)  # 菜の花台休憩所（駐車場）
 S1_PASS = (35.42782, 139.21934)   # ヤビツ峠（OSM の峠ノード）。上りのゴールと下りの計測開始はここを基準にする
 S1_END = (35.4282221, 139.2190026)  # 道の終わり：峠の先へ約55m（下りのスタート列が並ぶ場所）
@@ -27,7 +28,7 @@ class SectionDef:
     end: tuple
 
 
-SECTIONS = (SectionDef("s1", S1_START, S1_END),)
+SECTIONS = (SectionDef("s2", S2_START, S1_START), SectionDef("s1", S1_START, S1_END))
 TRACK_GROUP = "yabitsu_main"
 TRACK_BUILD_DIR = DATA_PROCESSED / "track"
 
