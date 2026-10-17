@@ -80,3 +80,22 @@ def test_nan_filled_with_nearest_value():
     Z = np.array([[1.0, 2.0, np.nan], [4.0, np.nan, 6.0]])
     out = tr.fill_nan_nearest(Z)
     assert not np.isnan(out).any() and out[0, 2] in (2.0, 6.0) and out[1, 1] in (2.0, 4.0, 6.0)
+
+
+class _FlatSampler:
+    def sample(self, lat, lon):
+        return np.full(np.shape(lat), 100.0)
+
+
+def test_near_grid_reaches_extra_areas_far_from_the_road():
+    from tests.test_meshgen import _straight
+    sec = _straight(201)
+    far_spot = [[100, 140], [110, 140], [110, 150], [100, 150], [100, 140]]  # 道から140m以上
+    plain = tr.build_near(sec, _FlatSampler(), [])
+    near = tr.build_near(sec, _FlatSampler(), [], extra=[far_spot])
+    far = tr.build_far(sec, _FlatSampler(), extra=[far_spot])
+    assert plain["ys"].max() < 140
+    i = np.searchsorted(near["xs"], 105); j = np.searchsorted(near["ys"], 145)
+    assert near["D"][j, i] <= tr.NEAR_BAND  # 細かい地形が張られる
+    ci = np.searchsorted(far["xs"], 105) - 1; cj = np.searchsorted(far["ys"], 145) - 1
+    assert far["Dc"][cj, ci] < tr.FAR_HOLE  # 粗い地形には穴があく（重ならない）

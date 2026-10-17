@@ -16,6 +16,10 @@ MATERIALS = {
     "wall_white": {"texture": "textures/wall_white.png", "shader": "ksPerPixel"},
     "roof": {"texture": "textures/roof.png", "shader": "ksPerPixel", "two_sided": True},
     "stone": {"texture": "textures/stone.png", "shader": "ksPerPixel"},
+    "wood": {"texture": "textures/wood.png", "shader": "ksPerPixel", "two_sided": True},
+    "wood_bars": {"texture": "textures/wood_bars.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
+    "roof_metal": {"texture": "textures/roof_metal.png", "shader": "ksPerPixel", "two_sided": True},
+    "tiles": {"texture": "textures/tiles.png", "shader": "ksPerPixel"},
 }
 
 
@@ -82,6 +86,22 @@ def railing_bars(size=256, bars=4, bar_px=10, rgb=(0.22, 0.52, 0.42)):
     return np.dstack([_u8(np.broadcast_to(np.array(rgb), (size, size, 3))), np.where(on, 255, 0).astype(np.uint8)])
 
 
+def tiles(size=512, tile_px=64, seed=14):
+    """展望台への歩道の四角いタイル。1枚＝2m 四方、タイルは 0.25m 角。"""
+    rng = np.random.default_rng(seed)
+    yy, xx = np.mgrid[0:size, 0:size]
+    n = size // tile_px; shade = 0.92 + 0.12 * rng.random((n, n))
+    g = 0.62 * shade[yy // tile_px, xx // tile_px] * (0.93 + 0.14 * periodic_noise(size, 3, rng))
+    g = np.where(((yy % tile_px) < 2) | ((xx % tile_px) < 2), g * 0.6, g)
+    return _u8(np.stack([g, g * 0.98, g * 0.94], -1))
+
+
+def wood(size=256, seed=15):
+    rng = np.random.default_rng(seed)
+    grain = 0.8 + 0.2 * periodic_noise(size, 2, rng)[:, :1].repeat(size, 1) * periodic_noise(size, 20, rng)
+    return _u8(np.array([0.30, 0.19, 0.12]) * grain[..., None] * 1.1)
+
+
 def roof(size=512, seed=10):
     rng = np.random.default_rng(seed)
     yy = np.arange(size)[:, None].repeat(size, 1)
@@ -103,7 +123,11 @@ def write_textures(out_dir):
             "railing_bars": railing_bars(),
             "wall_white": _gray(512, 12, 0.86, 0.06, (1.0, 1.0, 0.98)),
             "roof": roof(),
-            "stone": _gray(512, 13, 0.50, 0.22, (1.05, 0.98, 0.88), coarse=16, fine=2)}
+            "stone": _gray(512, 13, 0.50, 0.22, (1.05, 0.98, 0.88), coarse=16, fine=2),
+            "wood": wood(),
+            "wood_bars": railing_bars(rgb=(0.30, 0.19, 0.12), bars=4, bar_px=14),
+            "roof_metal": _gray(256, 16, 0.50, 0.06, (0.84, 1.0, 0.94), coarse=24),
+            "tiles": tiles()}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

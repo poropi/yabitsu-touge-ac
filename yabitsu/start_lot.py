@@ -7,7 +7,7 @@ import math
 from pathlib import Path
 
 import numpy as np
-from shapely.geometry import Polygon
+from shapely.geometry import LineString, Polygon
 
 from .crosssection import GUTTER_WIDTH
 from .meshgen import pad_mesh
@@ -77,8 +77,15 @@ def flat_pads(spec, pad):
     """建物と石碑のまわりの平らな地面。地形を削るときと、木をどけるときに使う（路面は張らない）。
     地形は「駐車場の高さ−0.3m」まで下げられるので、そのぶん持ち上げて地面が舗装とほぼ同じ高さになるようにする。"""
     f = frame(spec)
-    return [{"name": "flat", "role": "flat", "polygon": np.asarray(f.rect(r["a"], r["b"]).exterior.coords).tolist(),
-             "z": pad["z"] + 0.25} for r in spec.get("flats", [])]
+    polys = [f.rect(r["a"], r["b"]) for r in spec.get("flats", [])]
+    if "tower" in spec:
+        t = spec["tower"]
+        polys.append(Polygon(_ring(f.xy(t["a"], t["b"]), t["plaza_r"], 16)))
+    if "path" in spec:
+        pa = spec["path"]
+        polys.append(LineString(f.xy(*np.asarray(pa["points"], float).T)).buffer(pa["width"] / 2 + 1.0))
+    return [{"name": "flat", "role": "flat", "polygon": np.asarray(p.exterior.coords).tolist(), "z": pad["z"] + 0.25}
+            for p in polys]
 
 
 def flats_for(spec_path, pads):
@@ -145,6 +152,81 @@ def _gable_ends(f, a, b, z_eave, rise):
     return _merge(parts)
 
 
+def _ring(c, r, n, phase=0.0):
+    ang = phase + np.arange(n) * 2 * np.pi / n
+    return np.c_[c[0] + r * np.cos(ang), c[1] + r * np.sin(ang)]
+
+
+def _wall_quad(p0, p1, z0, z1, uv_scale=1.0):
+    """p0→p1 の上に立つ縦の四角形（p0→p1 の右側が表）。"""
+    v = np.array([[*p0, z0], [*p1, z0], [*p1, z1], [*p0, z1]], float)
+    w = np.linalg.norm(np.subtract(p1, p0))
+    return v, np.array([[0, 1, 2, 3]]), np.array([[0, 0], [w, 0], [w, z1 - z0], [0, z1 - z0]]) / uv_scale
+
+
+def _beam(p0, p1, half_w, normal_xy):
+    """3D の2点を結ぶ平らな帯（縦の面の中にある斜めの筋かい）。両面材質で使う。"""
+    p0 = np.asarray(p0, float); p1 = np.asarray(p1, float)
+    d = p1 - p0; nrm = np.r_[normal_xy, 0.0]
+    side = np.cross(nrm, d); side = side / np.linalg.norm(side) * half_w
+    v = np.array([p0 - side, p1 - side, p1 + side, p0 + side])
+    L = np.linalg.norm(d)
+    return v, np.array([[0, 1, 2, 3]]), np.array([[0, 0], [L, 0], [L, 0.25], [0, 0.25]])
+
+
+def _octagon_prism(c, r, z0, z1, uv_scale=1.0, phase=np.pi / 8):
+    """外向きの八角柱の側面。"""
+    ring = _ring(c, r, 8, phase)  # 反時計回りなので、進む向きの右側が外
+    return _merge([_wall_quad(ring[k], ring[(k + 1) % 8], z0, z1, uv_scale) for k in range(8)])
+
+
+def _fan(c, ring, z_c, z_ring, uv_scale=2.0):
+    """中心と周りの点を結ぶ三角形の扇（上向き）。屋根なら z_c を高くする。"""
+    n = len(ring)
+    v = np.r_[[[*c, z_c]], np.c_[ring, np.full(n, z_ring)]]
+    f = np.array([[0, 1 + k, 1 + (k + 1) % n] for k in range(n)])
+    return v, f, v[:, :2] / uv_scale
+
+
+def tower_meshes(spec, z):
+    """菜の花台展望台：八角形の木の塔。柱8本、下の段はX字の筋かい、高さ deck_h に床と手すり、八角すいの屋根。"""
+    f = frame(spec); t = spec["tower"]
+    c = f.xy(t["a"], t["b"]); R = t["radius"]; hp = t["post"] / 2
+    zd, zt = z + t["deck_h"], z + t["post_top"]
+    ring = _ring(c, R, 8, np.pi / 8)
+    frame_parts = []
+    for k in range(8):
+        p = ring[k]; ang = math.degrees(math.atan2(p[1] - c[1], p[0] - c[0]))
+        frame_parts.append(box(Frame(p, ang), (-hp, hp), (-hp, hp), z - 0.3, zt, 1.0))
+        q = ring[(k + 1) % 8]
+        out_n = (p + q) / 2 - c; out_n = out_n / np.linalg.norm(out_n)
+        for za, zb in ((z + 0.3, zd), (zd, z + 0.3)):  # X字の筋かい
+            frame_parts.append(_beam([*p, za], [*q, zb], 0.08, out_n))
+        for zz in (z + 0.3, zd - 0.15, zt - 0.2):  # 横の梁
+            frame_parts.append(_beam([*p, zz], [*q, zz], 0.1, out_n))
+    frame_parts.append(_octagon_prism(c, 0.6, z - 0.3, zd, 1.0))  # らせん階段の代わりの柱
+    out = [("s1_tower_frame", *_merge(frame_parts), "wood", True)]
+
+    deck_ring = _ring(c, R + 0.3, 8, np.pi / 8)
+    out.append(("s1_tower_deck", *_fan(c, deck_ring, zd, zd), "wood", True))
+    rail = _octagon_prism(c, R + 0.3, zd, zd + t["rail_h"], 0.5)
+    rv, rf, ruv = rail; ruv = ruv.copy(); ruv[:, 1] = np.where(rv[:, 2] > zd + 0.01, 1.0, 0.0)
+    out.append(("s1_tower_rail", rv, rf, ruv, "wood_bars", True))
+    out.append(("s1_tower_roof", *_fan(c, _ring(c, R + t["eaves"], 8, np.pi / 8), zt + t["roof_h"], zt), "roof_metal", True))
+    out.append(("1WALL_s1_tower", *_octagon_prism(c, R + hp, z - 0.3, z + 3.0), "wood", False))
+    return out
+
+
+def path_mesh(spec, z):
+    """トイレの横から展望台までの歩道（タイル）。折れ線の両側に幅の半分ずつ広げる。"""
+    f = frame(spec); pa = spec["path"]
+    line = LineString(f.xy(*np.asarray(pa["points"], float).T))
+    poly = line.buffer(pa["width"] / 2, cap_style="flat", join_style="mitre")
+    v, faces, _ = pad_mesh(np.asarray(poly.exterior.coords), z)
+    a, b = f.ab(v[:, :2])
+    return v, faces, np.c_[a, b] / 2.0
+
+
 def meshes(spec, pad):
     """(名前, 頂点, 面, UV, 材質, 描画するか) の並び。"""
     f = frame(spec); z = pad["z"]
@@ -188,4 +270,14 @@ def meshes(spec, pad):
     out.append(("s1_building_gables", *_gable_ends(f, bu["a"], bu["b"], z + bu["wall_h"], bu["roof_h"]), "wall_white", True))
     out.append(("s1_building_roof", *_gable_roof(f, bu["a"], bu["b"], z + bu["wall_h"], bu["roof_h"], bu["eaves"]),
                 "roof", True))
+
+    if "tower" in spec:
+        out += tower_meshes(spec, z)
+    if "path" in spec:
+        out.append(("1ROAD_s1_path", *path_mesh(spec, z), "tiles", True))
+    if "bollards" in spec:
+        bo = spec["bollards"]
+        posts = [box(Frame(f.xy(bo["a"], b_), spec["axis_deg"]), (-0.075, 0.075), (-0.075, 0.075), z - 0.3, z + bo["height"], 0.5)
+                 for b_ in bo["b"]]
+        out.append(("1WALL_s1_bollards", *_merge(posts), "wood", True))
     return out

@@ -87,3 +87,60 @@ def test_flats_and_clearings_are_at_lot_height():
     sec, pad = _pad()
     flats = sl.flat_pads(SPEC, pad)
     assert len(flats) == 1 and all(abs(p["z"] - pad["z"]) < 0.5 for p in flats)
+
+
+TOWER_SPEC = {**SPEC,
+              "tower": {"a": -80.0, "b": 15.0, "radius": 2.6, "deck_h": 6.0, "post_top": 8.4, "roof_h": 2.0,
+                        "eaves": 0.8, "post": 0.25, "rail_h": 1.1, "plaza_r": 11.0},
+              "path": {"points": [[-42.0, 6.5], [-60.0, 8.0], [-74.0, 13.0]], "width": 3.0},
+              "bollards": {"a": -41.0, "b": [5.2, 6.5, 7.8], "height": 0.8}}
+
+
+def _tower_meshes():
+    sec, pad = _pad()
+    return pad, {m[0]: m[1:] for m in sl.meshes(TOWER_SPEC, pad)}
+
+
+def test_tower_parts_and_height():
+    pad, ms = _tower_meshes()
+    for name in ("s1_tower_frame", "s1_tower_deck", "s1_tower_rail", "s1_tower_roof", "1WALL_s1_tower", "1ROAD_s1_path",
+                 "1WALL_s1_bollards"):
+        assert name in ms, name
+    roof = ms["s1_tower_roof"][0]
+    assert abs(roof[:, 2].max() - (pad["z"] + 8.4 + 2.0)) < 1e-6
+    centre = sl.frame(TOWER_SPEC).xy(-80.0, 15.0)
+    assert np.hypot(*(roof[:, :2] - centre).T).max() <= 2.6 + 0.8 + 1e-6
+    assert ms["1WALL_s1_tower"][4] is False  # 当たり判定だけ（描画しない）
+
+
+def test_tower_roof_and_deck_face_up():
+    pad, ms = _tower_meshes()
+    for name in ("s1_tower_roof", "s1_tower_deck"):
+        v, f = ms[name][0], ms[name][1]
+        n = mg.face_normals(v, f)
+        assert (n[:, 2] > 0).sum() >= len(f) * 0.5, name
+
+
+def test_path_is_on_lot_level_and_points_up():
+    pad, ms = _tower_meshes()
+    v, f = ms["1ROAD_s1_path"][0], ms["1ROAD_s1_path"][1]
+    assert np.allclose(v[:, 2], pad["z"]) and (mg.face_normals(v, f)[:, 2] > 0).all()
+
+
+def test_bollard_gaps_too_narrow_for_a_car():
+    b = TOWER_SPEC["bollards"]["b"]
+    assert max(np.diff(b)) - 0.15 < 1.6
+
+
+def test_flats_cover_plaza_and_path():
+    sec, pad = _pad()
+    polys = [Polygon(p["polygon"]) for p in sl.flat_pads(TOWER_SPEC, pad)]
+    f = sl.frame(TOWER_SPEC)
+    for a, b in [(-80.0, 15.0), (-80.0 + 9.0, 15.0), (-60.0, 8.0)]:
+        assert any(p.contains(Point(*f.xy(a, b))) for p in polys), (a, b)
+
+
+def test_octagon_prism_faces_outward():
+    v, f, uv = sl._octagon_prism((5.0, 5.0), 2.0, 0.0, 3.0)
+    n = mg.face_normals(v, f); out = v[f].mean(1)[:, :2] - [5.0, 5.0]
+    assert len(f) == 8 and ((n[:, :2] * out).sum(1) > 0).all()

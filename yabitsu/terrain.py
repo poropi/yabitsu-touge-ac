@@ -11,12 +11,27 @@ from .meshgen import compact
 FILL_SLOPE, CUT_SLOPE, UNDER_DEPTH = 1.0, 2.0, 0.3
 NEAR_BAND, NEAR_CELL = 110.0, 2.0
 FAR_EXTENT, FAR_CELL, FAR_HOLE, FAR_DROP = 2000.0, 20.0, 95.0, 1.0
+EXTRA_NEAR, EXTRA_HOLE = 20.0, 15.0  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
 
 
-def corridor_grid(sec, band=NEAR_BAND, cell=NEAR_CELL):
-    xs = np.arange(np.floor((sec.x.min() - band) / cell) * cell, sec.x.max() + band + cell, cell)
-    ys = np.arange(np.floor((sec.y.min() - band) / cell) * cell, sec.y.max() + band + cell, cell)
+def corridor_grid(sec, band=NEAR_BAND, cell=NEAR_CELL, extra=()):
+    x0, x1, y0, y1 = sec.x.min() - band, sec.x.max() + band, sec.y.min() - band, sec.y.max() + band
+    for poly in extra:
+        bx0, by0, bx1, by1 = Polygon(poly).bounds
+        x0, y0 = min(x0, bx0 - EXTRA_NEAR), min(y0, by0 - EXTRA_NEAR)
+        x1, y1 = max(x1, bx1 + EXTRA_NEAR), max(y1, by1 + EXTRA_NEAR)
+    xs = np.arange(np.floor(x0 / cell) * cell, x1 + cell, cell)
+    ys = np.arange(np.floor(y0 / cell) * cell, y1 + cell, cell)
     return xs, ys
+
+
+def _with_extra(dist, X, Y, extra, reach, limit):
+    """道からの距離に、追加の場所（多角形）からの距離を混ぜる。多角形から reach 以内なら limit 以下になる。"""
+    if not len(extra):
+        return dist
+    pts = shapely.points(np.c_[np.ravel(X), np.ravel(Y)])
+    d = np.min([shapely.distance(pts, Polygon(p)) for p in extra], axis=0).reshape(np.shape(dist))
+    return np.minimum(dist, d + (limit - reach))
 
 
 def road_frame(sec, X, Y):
@@ -83,18 +98,18 @@ def _sample(sampler, unproject, X, Y):
     return fill_nan_nearest(sampler.sample(lat, lon).reshape(X.shape))
 
 
-def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local):
-    xs, ys = corridor_grid(sec)
+def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=()):
+    xs, ys = corridor_grid(sec, extra=extra)
     X, Y = np.meshgrid(xs, ys)
-    D = road_frame(sec, X, Y)["dist"].reshape(X.shape)
+    D = _with_extra(road_frame(sec, X, Y)["dist"].reshape(X.shape), X, Y, extra, EXTRA_NEAR, NEAR_BAND)
     Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right)
     return {"xs": xs, "ys": ys, "Z": Z, "E": E, "D": D}
 
 
-def build_far(sec, sampler, unproject=geo.from_local):
+def build_far(sec, sampler, unproject=geo.from_local, extra=()):
     xs, ys = corridor_grid(sec, FAR_EXTENT + NEAR_BAND, FAR_CELL)
     X, Y = np.meshgrid(xs, ys)
     Z = _sample(sampler, unproject, X, Y) - FAR_DROP
     cx, cy = np.meshgrid((xs[:-1] + xs[1:]) / 2, (ys[:-1] + ys[1:]) / 2)
-    Dc = road_frame(sec, cx, cy)["dist"].reshape(cx.shape)
+    Dc = _with_extra(road_frame(sec, cx, cy)["dist"].reshape(cx.shape), cx, cy, extra, EXTRA_HOLE, FAR_HOLE)
     return {"xs": xs, "ys": ys, "Z": Z, "Dc": Dc}
