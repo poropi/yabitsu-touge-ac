@@ -37,6 +37,7 @@ CLOSURE_GAP_M = 3.0    # 横断歩道の外側の縁から封鎖の線まで
 STOP_GAP_M = 2.0       # 横断歩道の外側の縁から停止線まで
 SIGNAL_NEAR_M = 10.0   # 横断歩道からこの距離の中に信号があれば、停止線を引く
 CLOSURE_OVERHANG = 0.5
+HOLE_FILL_M2 = 400.0   # 走れる範囲の中の、これより小さい穴（中央の島など）は埋める
 LINED = {"trunk", "primary", "secondary", "trunk_link", "primary_link", "secondary_link"}  # 線を引く道
 EDGE_INSET = 0.5       # 外側線は車道の端からこれだけ内側
 
@@ -240,6 +241,9 @@ class Town:
         self.main_walk = max(float(mw.get("sidewalk_l", 0.0)), float(mw.get("sidewalk_r", 0.0)))
         self.markings = list(spec.get("markings", []))
         self.closures = list(spec.get("closures", []))
+        self._signalised = []  # 信号のある横断歩道：(中心, 交差点から外への向き, 端 a, 端 b, 道幅)
+        self._bus_stops = [e for e in osm_elements if e.get("type") == "node" and e.get("tags", {}).get("highway") == "bus_stop"
+                           and np.hypot(*(_xy([[e["lat"], e["lon"]]])[0] - self.center)) <= radius]
         if spec.get("auto"):
             auto_m, auto_c = self._auto(osm_elements, s_exit)
             self.markings += auto_m
@@ -277,6 +281,7 @@ class Town:
             away = d if np.dot(d, p - c) > 0 else -d
             crossings.append((way, p, away))
             if len(sig) and np.hypot(*(sig - p).T).min() <= SIGNAL_NEAR_M:
+                self._signalised.append((p, away, a, b, wd))
                 q = p + away * (CROSSWALK_W / 2 + STOP_GAP_M)
                 left = np.array([away[1], -away[0]])   # 交差点へ向かう向き（-away）の左
                 reach = max(float(np.dot(e - p, left)) for e in (a, b))
@@ -324,6 +329,75 @@ class Town:
                     closures.append({"name": f"side_{w.get('id')}", "a": _ll(m0 - n * half), "b": _ll(m0 + n * half),
                                      "barricade": True, "auto": True})
         return marks, closures
+
+    def drivable(self):
+        """車で走れる範囲：(車道 ∪ 歩道 ∪ drivable_extra) を封鎖の線で切り、交差点の中心を含むかたまり。
+        中の小さな穴（中央の島など、HOLE_FILL_M2 まで）は埋める（見えない壁を交差点の真ん中に立てない）。"""
+        extra = [Polygon(_xy(e["points"])) for e in self.spec.get("drivable_extra", [])]
+        area = unary_union([self.carriageway, self.sidewalk, *extra])
+        cuts = unary_union([LineString(_xy([c["a"], c["b"]])).buffer(0.05) for c in self.closures]) if self.closures else None
+        pieces = _polys(area.difference(cuts) if cuts is not None else area)
+        c = Point(*self.center)
+        best = min(pieces, key=lambda q: q.distance(c))
+        holes = [h for h in best.interiors if Polygon(h).area > HOLE_FILL_M2]
+        return Polygon(best.exterior, holes)
+
+    def boundary_walls(self):
+        """走れる範囲の外周のうち、封鎖の線と、本線の帯へ出る口を除いた線（見えない壁を立てる所）。"""
+        d = self.drivable()
+        sec, s1 = self.sec, self.main_skip[1]
+        i = int(np.argmin(np.abs(sec.s - s1)))
+        n = np.array([-np.sin(sec.heading[i]), np.cos(sec.heading[i])]); p = np.array([sec.x[i], sec.y[i]])
+        reach = max(sec.hw_left[i], sec.hw_right[i]) + GUTTER_WIDTH + self.main_walk + 0.5
+        mouth = LineString([p - n * reach, p + n * reach]).buffer(0.3)
+        gaps = [mouth] + [LineString(_xy([c["a"], c["b"]])).buffer(0.06) for c in self.closures]  # 封鎖の線そのものにも壁を立てる
+        rings = [LineString(d.exterior.coords)] + [LineString(h.coords) for h in d.interiors]
+        rest = unary_union(rings).difference(unary_union(gaps))
+        return [g for g in _lines(rest) if g.length > 0.05] if rest.geom_type != "LineString" else [rest]
+
+    def signals(self):
+        """信号機：spec の signals に、信号のある横断歩道ごとの自動の信号を足す。
+        車用：交差点の向こう側の左の角に立て、腕を道の上へ伸ばし、交差点へ向かう車に向ける。歩行者用：横断歩道の両端に、向こう岸へ向けて。"""
+        out = list(self.spec.get("signals", []))
+        c = self.center
+        bearing = lambda v: (math.degrees(math.atan2(v[0], v[1])) + 360.0) % 360.0
+        for p, away, a, b, wd in self._signalised:
+            v = -away                                   # 交差点へ向かう向き
+            left = np.array([-v[1], v[0]])
+            far = c + v * float(np.dot(p - c, away))     # 交差点の向こう側（同じ距離）
+            pole = far + left * (wd / 2 + 1.5)
+            out.append({"at": _ll(pole), "facing_deg": bearing(-v), "kind": "vehicle", "arm_m": wd / 2 + 0.5,
+                        "arm_deg": bearing(-left), "height_m": 5.5, "auto": True})
+            for e, o in ((a, b), (b, a)):
+                u = (e - o) / max(np.linalg.norm(e - o), 1e-9)
+                out.append({"at": _ll(e + u * 0.8), "facing_deg": bearing(-u), "kind": "pedestrian", "height_m": 2.6, "auto": True})
+        return out
+
+    def object_meshes(self):
+        """封鎖の柵・見えない壁・信号機・小物（spec の objects）。(名前, 頂点, 面, UV, 材質, 描画するか)"""
+        from . import town_objects as to
+        d = self.drivable()
+        out = []
+        for k, c in enumerate(self.closures):
+            a, b = _xy([c["a"], c["b"]])
+            u = (b - a) / max(np.linalg.norm(b - a), 1e-9); n = np.array([-u[1], u[0]])
+            mid = (a + b) / 2
+            front = n if d.contains(Point(*(mid + n * 1.0))) else -n   # 柵の手前＝走れる側
+            if c.get("barricade", True):
+                out += to.barricade_meshes(a, b, self.ground.z, front, k)
+        lines = self.boundary_walls() + [LineString(_xy([c["a"], c["b"]])) for c in self.closures]
+        out += to.wall_meshes(lines, self.ground.z)
+        out += to.signal_meshes(self.signals(), self.ground.z)
+        objects = list(self.spec.get("objects", []))
+        for e in self._bus_stops:   # OSM のバス停：道の方を向ける
+            p = _xy([[e["lat"], e["lon"]]])[0]
+            q = np.array(self.carriageway.exterior.interpolate(self.carriageway.exterior.project(Point(*p))).coords[0])                 if self.carriageway.geom_type == "Polygon" else p
+            v = q - p
+            objects.append({"kind": "bus_stop", "points": [[e["lat"], e["lon"]]],
+                            "facing_deg": (math.degrees(math.atan2(v[0], v[1])) + 360.0) % 360.0})
+        if objects:
+            out += to.object_meshes(objects, self.ground.z)
+        return out
 
     def _arm_hits(self, ln, dirs):
         """腕の道の線と、中心からの距離 d の円の交わる所（腕の向きごとに1つ）。d は横断歩道があればその外、なければ R_ARM。"""
