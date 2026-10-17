@@ -229,7 +229,7 @@ def stub_meshes(stub_list):
     return out
 
 
-KEEP_OPEN_KINDS = ("lot", "pass", "site", "plaza")
+KEEP_OPEN_KINDS = ("lot", "pass", "site", "plaza", "branch")
 NOT_OPENINGS = ("_house", "_shrine", "side_stub")   # 家・お堂の土台は「ふさがない場所」ではない（家の前の道もふさぐ）
 
 

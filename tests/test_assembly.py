@@ -91,3 +91,10 @@ def test_narrowing_rows_get_no_bay_line(tmp_path):
     sec = _straight(401)
     assembly.add_bay_lines(m, sec, cs.parse_bay_rows([{"s_from": "100", "s_to": "160", "side": "R", "depth_m": "-1.5", "taper_m": "10"}]))
     assert m.groups.get(assembly.GROUP, {"meshes": []})["meshes"] == []
+
+
+def test_branch_pads_are_not_drawn(tmp_path):
+    m = Manifest(tmp_path)
+    pad = {"name": "branch_1_0_0", "role": "flat", "kind": "branch", "polygon": [[0, 0], [5, 0], [5, 5], [0, 5], [0, 0]], "z": 1.0}
+    assembly.add_pads(m, [pad])
+    assert not m.meshes

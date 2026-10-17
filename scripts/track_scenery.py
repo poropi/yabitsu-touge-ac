@@ -30,7 +30,7 @@ def main():
     polys = footprints.merged(footprints.gsi_polygons(BBOX, area=band), footprints.osm_polygons(el))
     minoge = json.loads((config.DATA_MANUAL / "s2_minoge.json").read_text(encoding="utf-8"))
     taken = [house_fp(Frame(site.ll_to_xy([b["center"]])[0], b["axis_deg"]), b["size"]).buffer(1.0) for b in minoge.get("buildings", [])]
-    taken += [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza") and "house" not in p["name"]]
+    taken += [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch") and "house" not in p["name"]]
     taken = unary_union(taken + [nagoki.circle()])
     path = config.DATA_MANUAL / "track_buildings.json"
     old = {b["id"]: b for b in json.loads(path.read_text(encoding="utf-8"))} if path.exists() else {}

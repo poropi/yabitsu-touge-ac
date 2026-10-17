@@ -72,7 +72,7 @@ def main():
     keep_out = unary_union([start_lot.road_formation(sec, 0.0, float(sec.s[-1])).buffer(1.0), tw.region.buffer(1.0)]
                            + [st.surface.buffer(0.5) for st in stubs] + [x.footprint() for x in mws]
                            + [b.surface.buffer(0.5) for b in brs] + [b.island for b in brs if b.island is not None]
-                           + [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza")
+                           + [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch")
                               and "house" not in p["name"]])
     from yabitsu import pois
     poi_el = json.loads((config.DATA_RAW / "osm_track_pois.json").read_text(encoding="utf-8"))["elements"]

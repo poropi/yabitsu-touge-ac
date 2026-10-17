@@ -140,7 +140,7 @@ class Branch:
                 # 地形は 2m 格子なので、縁の外 PAD_MARGIN_M まで下げる（縁の三角形が路面の上へせり上がらない）。外の縁は skirt で隠す
                 gm = g.buffer(PAD_MARGIN_M, join_style="mitre").intersection(cut)
                 gm = site.largest(gm) if gm.geom_type != "Polygon" else gm
-                out.append({"name": f"branch_{self.osm_id}_{k}_{len(out)}", "role": "flat", "kind": "plaza",
+                out.append({"name": f"branch_{self.osm_id}_{k}_{len(out)}", "role": "flat", "kind": "branch",
                             "polygon": np.asarray(gm.exterior.coords).tolist(), "z": float(z0),
                             "plane": [float(cx), float(cy), float(z0), float(gx), float(gy)]})
         return out
