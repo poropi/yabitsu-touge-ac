@@ -35,6 +35,16 @@ class Manifest:
                              "verts": int(len(verts)), "faces": int(len(faces))}
         self._group(group)["meshes"].append(name)
 
+    def split_group(self, src, dst, inside):
+        """src のメッシュのうち、頂点の xy の平均 c で inside(c) が true のものを dst へ移す。移した数を返す。"""
+        keep, move = [], []
+        for name in self._group(src)["meshes"]:
+            v = np.load(self.root / self.meshes[name]["file"])["verts"]
+            (move if inside(v[:, :2].mean(0)) else keep).append(name)
+        self.groups[src]["meshes"] = keep
+        self._group(dst)["meshes"].extend(move)
+        return len(move)
+
     def add_empty(self, group, dummy):
         key = f"{group}/{dummy.name}"
         if key in self.empties:

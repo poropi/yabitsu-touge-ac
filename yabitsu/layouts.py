@@ -113,3 +113,15 @@ def cameras(sec, layout, every=150.0):
         cams.append(acdata.Camera(f"cam{k:02d}", pos, fwd, max(0.0, (dist - every / 2) / L) if k else 0.0,
                                   1.0 if k == len(marks) - 1 else min(1.0, (dist + every / 2) / L)))
     return cams
+
+
+def kn5_groups(layout_names):
+    """make_kn5 で書くグループ：本体・名古木の町・S4（全部のレイアウトが読む）と、レイアウトごとの置き物。"""
+    from . import config
+    return [config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP] + [f"{n}_objects" for n in layout_names]
+
+
+def kn5_files(layout_name):
+    """models_<レイアウト>.ini に書く kn5 の並び。"""
+    from . import config
+    return [f"{g}.kn5" for g in (config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP)] + [f"{layout_name}_objects.kn5"]

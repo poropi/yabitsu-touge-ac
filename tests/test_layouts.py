@@ -190,3 +190,13 @@ def test_load_layouts_keeps_point_sections(tmp_path):
                  encoding="utf-8")
     (l,) = lay.load_layouts(p)
     assert l.finish == (35.4, 139.2, "s1") and l.grid == (35.4, 139.2)
+
+
+def test_every_layout_loads_the_s4_kn5():
+    """峠の北の地形は S4 の kn5 で埋めるので、今のレイアウトも含めて全部が yabitsu_s4.kn5 を読む。"""
+    from yabitsu import config
+    for name in ("s1_up", "full_down", "s4_up"):
+        files = lay.kn5_files(name)
+        assert files[:3] == [f"{config.TRACK_GROUP}.kn5", f"{config.TOWN_GROUP}.kn5", f"{config.S4_GROUP}.kn5"]
+        assert files[-1] == f"{name}_objects.kn5"
+    assert lay.kn5_groups(["s1_up"]) == [config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP, "s1_up_objects"]

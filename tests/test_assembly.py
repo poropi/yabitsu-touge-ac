@@ -98,3 +98,17 @@ def test_branch_pads_are_not_drawn(tmp_path):
     pad = {"name": "branch_1_0_0", "role": "flat", "kind": "branch", "polygon": [[0, 0], [5, 0], [5, 5], [0, 5], [0, 0]], "z": 1.0}
     assembly.add_pads(m, [pad])
     assert not m.meshes
+
+
+def test_road_end_is_closed_across_the_whole_road():
+    """S4 の終わり（S5 はまだ）：道幅＋側溝の全部をふさぐ見えない壁と、その手前に工事中の柵。"""
+    import numpy as np
+    from yabitsu.crosssection import GUTTER_WIDTH
+    sec = _straight()
+    ms = assembly.road_end_closure(sec, 190.0)
+    wall = next(m for m in ms if m[0] == "1WALL_road_end_block")
+    v = wall[1]
+    assert wall[5] is False and v[:, 0].min() > 186.0 and v[:, 0].max() < 192.0
+    assert v[:, 1].min() <= -(sec.hw_right[190] + GUTTER_WIDTH) - 1.0 and v[:, 1].max() >= sec.hw_left[190] + GUTTER_WIDTH + 1.0
+    bars = [m for m in ms if m[0] != "1WALL_road_end_block"]
+    assert bars and max(m[1][:, 0].max() for m in bars) < v[:, 0].min()     # 柵は壁の手前（峠の側）

@@ -18,8 +18,7 @@ def main():
     for layout in layouts.load_layouts():
         name = layout.name
         acdata.write_surfaces_ini(T / name / "data" / "surfaces.ini")
-        acdata.write_models_ini(T / f"models_{name}.ini",
-                                [f"{config.TRACK_GROUP}.kn5", f"{config.TOWN_GROUP}.kn5", f"{name}_objects.kn5"])
+        acdata.write_models_ini(T / f"models_{name}.ini", layouts.kn5_files(name))   # S4 の kn5 も全部のレイアウトが読む
         acdata.write_map(T / name / "map.png", T / name / "data" / "map.ini", ac[:, [0, 2]])
         acdata.write_cameras_ini(T / name / "data" / "cameras.ini", layouts.cameras(sec, layout))
         ailine.write_fast_lane(T / name / "ai" / "fast_lane.ai", sec, layout.direction)

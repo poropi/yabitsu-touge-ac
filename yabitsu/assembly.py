@@ -197,3 +197,23 @@ def add_layout_objects(m, sec, pads, layouts, bounds):
     for layout in layouts:
         for d in layouts_mod.layout_objects(sec, pads, layout, bounds):
             m.add_empty(f"{layout.name}_objects", d)
+
+
+def road_end_closure(sec, s_end):
+    """道の終わり（S4 の終わり。S5 はまだ）を、道幅＋側溝の全部で横切る見えない壁と、その 2m 手前の工事中の柵。"""
+    import math
+    from .crosssection import GUTTER_WIDTH
+    from . import town_objects
+    out = []
+    for s, kind in ((s_end - 1.0, "wall"), (s_end - 3.0, "barricade")):
+        i = int(np.argmin(np.abs(sec.s - s))); h = sec.heading[i]
+        n = np.array([-math.sin(h), math.cos(h)]); c = np.array([sec.x[i], sec.y[i]])
+        a = c - n * (sec.hw_right[i] + GUTTER_WIDTH + 1.5); b = c + n * (sec.hw_left[i] + GUTTER_WIDTH + 1.5)
+        if kind == "wall":
+            z = float(sec.z[i])
+            v = np.array([[*a, z - 1.0], [*b, z - 1.0], [*b, z + 4.0], [*a, z + 4.0]], float)
+            out.append(("1WALL_road_end_block", v, np.array([[0, 1, 2, 3], [3, 2, 1, 0]], np.int32), v[:, :2] / 2.0, "concrete", False))
+        else:
+            d = np.array([math.cos(h), math.sin(h)])
+            out += town_objects.barricade_meshes(a + n * 1.2, b - n * 1.2, lambda x, y: np.full(np.shape(x), float(sec.z[i])), -d, k=900)
+    return out

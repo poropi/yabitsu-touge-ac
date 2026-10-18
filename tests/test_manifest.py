@@ -48,3 +48,16 @@ def test_rejects_duplicate_names(tmp_path):
     m.add_mesh("g", "a", v, f, uv, "x")
     with pytest.raises(ValueError):
         m.add_mesh("g", "a", v, f, uv, "x")
+
+
+def test_split_puts_every_mesh_in_exactly_one_group(tmp_path):
+    """場所で部品を別のグループ（kn5）へ移す：どの部品も、ちょうど1つのグループに入る。"""
+    m = Manifest(tmp_path)
+    f = np.array([[0, 1, 2]], np.int32); uv = np.zeros((3, 2))
+    for k, x in enumerate((0.0, 50.0, 100.0, 150.0)):
+        m.add_mesh("main", f"part_{k}", np.array([[x, 0, 0], [x + 1, 0, 0], [x, 1, 0]], float), f, uv, "asphalt")
+    moved = m.split_group("main", "s4", lambda c: c[0] >= 90.0)
+    assert moved == 2
+    assert m.groups["main"]["meshes"] == ["part_0", "part_1"] and m.groups["s4"]["meshes"] == ["part_2", "part_3"]
+    allm = m.groups["main"]["meshes"] + m.groups["s4"]["meshes"]
+    assert sorted(allm) == sorted(m.meshes) and len(allm) == len(set(allm))
