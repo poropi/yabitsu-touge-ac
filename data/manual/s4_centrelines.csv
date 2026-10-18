@@ -1,1 +1,6 @@
 s_from,s_to,style,note
+800,860,white_dashed,白の破線（ストリートビュー s=800・850）
+3190,3380,white_dashed,白の破線（s=3200〜3350）
+3480,3890,white_dashed,白の破線（s=3500〜3850）
+4090,4300,white_dashed,白の破線（s=4100〜4250）
+5800,6140,white_dashed,白の破線（s=5800〜6100）

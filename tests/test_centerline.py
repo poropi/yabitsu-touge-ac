@@ -61,3 +61,17 @@ def test_build_centerline_carries_attributes(tmp_path):
     c.save(tmp_path / "c.npz")
     c2 = cl.Centerline.load(tmp_path / "c.npz")
     assert np.allclose(c2.x, c.x) and c2.step == pytest.approx(c.step)
+
+
+def test_offsets_only_move_the_line_near_where_they_are_given():
+    """道の位置の直し（offsets）は、その範囲のまわりだけを動かす。ほかの所（受け入れ済みの区間）は1mmも動かさない（S4 の 3600m）。"""
+    t = np.linspace(0, 3 * np.pi, 400)
+    lat = 35.40 + 0.004 * np.sin(t); lon = 139.20 + np.linspace(0, 0.03, 400)
+    r = Route(list(lat), list(lon), [2] * 399, [False] * 399)
+    plain = cl.build_centerline(r)
+    moved = cl.build_centerline(r, offsets=np.array([[2000.0, 0.0], [2050.0, -4.0], [2100.0, 0.0]]))
+    assert np.array_equal(moved.s, plain.s)                # 距離（s）は測り直さない
+    far = plain.s < 1900
+    assert np.allclose(moved.x[far], plain.x[far], atol=1e-6) and np.allclose(moved.y[far], plain.y[far], atol=1e-6)
+    i = int(np.argmin(np.abs(moved.s - 2050)))
+    assert np.hypot(moved.x[i] - plain.x[i], moved.y[i] - plain.y[i]) > 3.0

@@ -78,6 +78,9 @@ def load_offsets_csv(path):
     return np.array(rows, float).reshape(-1, 2)
 
 
+OFFSET_BLEND_M = 20.0
+
+
 def build_centerline(route, project=geo.to_local, step=1.0, sigma_m=4.0, offsets=None):
     x, y = project(np.asarray(route.lat, float), np.asarray(route.lon, float))
     raw = np.c_[x, y]
@@ -88,10 +91,11 @@ def build_centerline(route, project=geo.to_local, step=1.0, sigma_m=4.0, offsets
     xy = smooth_xy(xy, sigma_m, st)
     if offsets is not None and len(offsets):
         h, _ = heading_curvature(xy, st)
-        xy = smooth_xy(apply_offsets(s, xy, h, offsets), 2.0, st)
-        s_old = _cum(xy)
-        s, xy, st = resample_polyline(xy, step)
-        lanes = seg_value_at(s_old, lanes[:-1], s)
-        bridge = seg_value_at(s_old, bridge[:-1], s).astype(bool)
+        moved = apply_offsets(s, xy, h, offsets)
+        # 動かした所のまわり（OFFSET_BLEND_M）だけをなめらかにし、ほかの所は今の線のまま（受け入れ済みの区間を動かさない）
+        lo, hi = float(np.min(offsets[:, 0])) - OFFSET_BLEND_M, float(np.max(offsets[:, 0])) + OFFSET_BLEND_M
+        w = np.clip(np.minimum(s - lo, hi - s) / OFFSET_BLEND_M, 0.0, 1.0)[:, None]
+        xy = moved * (1 - w) + smooth_xy(moved, 2.0, st) * w
+        # s は測り直さない（直していない所の s と点を、直さないときとまったく同じにする）
     h, k = heading_curvature(xy, st)
     return Centerline(s, xy[:, 0], xy[:, 1], h, k, lanes.astype(np.int32), bridge, st)

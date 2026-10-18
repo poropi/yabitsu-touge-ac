@@ -26,7 +26,8 @@ def main():
     # 道ぞいの広場（data/manual/s3_plazas.json）：道の縁の高さの平らな舗装。道と重なる所は下で削る
     from shapely.geometry import Polygon as _Poly
     from yabitsu import site
-    plazas = json.loads((config.DATA_MANUAL / "s3_plazas.json").read_text(encoding="utf-8"))
+    plazas = [pl for f in sorted(config.DATA_MANUAL.glob("s*_plazas.json"))   # 区間ごとの広場（s3・s4 …）
+              for pl in json.loads(f.read_text(encoding="utf-8"))]
     # OSM の駐車場で、道から 50m 以内のもの（菜の花台・峠・町の範囲の駐車場は別に作っているので除く）
     from yabitsu import osm, nagoki as _ng
     from shapely.geometry import LineString as _LS
