@@ -1,6 +1,8 @@
 import json
 
 import numpy as np
+import shapely
+from shapely.geometry import LineString
 
 from yabitsu import (assembly, buildings, config, features, gsi, layouts, minoge_area, motorway, nagoki, overpasses, pass_area,
                      pavements, scenery, side_roads, start_lot, terrain, textures, town_objects, track, trees)
@@ -95,7 +97,8 @@ def main():
         m.add_material(name, texture=rel)
     assembly.add_meshes(m, [(f"{n[:-3]}_trk{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in
                             buildings.merge_by_material(buildings.building_meshes(track_blds, ground, keep_out))])
-    roads = scenery.road_polygons(side_roads.load_elements(), keep_out)
+    band = LineString(np.c_[sec.x, sec.y]).buffer(scenery.BAND_M); shapely.prepare(band)   # コースから 200m だけ
+    roads = scenery.road_polygons(side_roads.load_elements(), keep_out, near=band)
     from yabitsu import town as town_mod
     for k, (v, f, uv) in enumerate(town_mod.grid_drape(roads, ground, scenery.LIFT, cell=2.0)):
         m.add_mesh(assembly.GROUP, f"scenery_road_{k:02d}", v, f, uv, "asphalt")

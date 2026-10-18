@@ -20,3 +20,11 @@ def test_building_spec_defaults_by_size():
     big = sc.default_spec("b", [[35.0, 139.0]] * 4, area=400.0, rgb=np.array([0.6, 0.6, 0.6]))
     assert small["storeys"] == 1 and small["roof"]["type"] == "gable"
     assert big["roof"]["type"] == "flat" and big["storeys"] >= 2
+
+
+def test_scenery_roads_only_within_the_band_around_the_course():
+    """景色の道は、コースから BAND_M 以内だけ（S4 の取得範囲は宮ヶ瀬まで広く、遠い道まで描くと終わらない）。"""
+    near = box(-10, -10, 10, 300)
+    ways = [_way([[0, 0], [0, 250]], id=1), _way([[5000, 0], [5000, 250]], id=2)]
+    g = sc.road_polygons(ways, box(0, 0, 0, 0), near=near)
+    assert g.intersects(Point(0, 100)) and not g.intersects(Point(5000, 100))

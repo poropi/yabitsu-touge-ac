@@ -15,8 +15,9 @@ ROOF_PALETTE = ["#4A4A4A", "#6E6E6E", "#9A9A9A", "#C8C8C8", "#5A4034", "#7A5A44"
 WALL_PALETTE = ["#EDEBE6", "#E9E2CF", "#D8CCB4", "#C9C9C6", "#A88E74", "#E6E1D8"]
 
 
-def road_polygons(elements, keep_out):
-    """県道70号・高速道路を除く OSM の道の線を、種類ごとの幅の多角形にして合わせ、keep_out の所を除く。"""
+def road_polygons(elements, keep_out, near=None):
+    """県道70号・高速道路を除く OSM の道の線を、種類ごとの幅の多角形にして合わせ、keep_out の所を除く。
+    near（コースから BAND_M の範囲）があれば、その中だけ。"""
     r70 = {id(w) for w in osm.route70_ways(elements)}
     parts = []
     for w in elements:
@@ -27,7 +28,12 @@ def road_polygons(elements, keep_out):
             continue
         p = np.array([[g["lat"], g["lon"]] for g in w["geometry"]])
         x, y = geo.to_local(p[:, 0], p[:, 1])
-        parts.append(LineString(np.c_[x, y]).buffer(WIDTH[hw] / 2, cap_style="flat"))
+        ln = LineString(np.c_[x, y])
+        if near is not None:
+            if not near.intersects(ln):
+                continue
+            ln = ln.intersection(near)
+        parts.append(ln.buffer(WIDTH[hw] / 2, cap_style="flat"))
     return unary_union(parts).difference(keep_out) if parts else unary_union([])
 
 

@@ -143,6 +143,15 @@ class Stub:
             f = f[:, ::-1]   # 上向きに
         return v, f, v[:, :2]
 
+    def end_wall(self, height=3.0):
+        """分かれ道の奥の終わりを横切る見えない壁（両面）。柵を外して奥まで走っても、その先へは出られない。"""
+        e = np.array(self.axis.coords[-1]); t = self.axis.length
+        p = np.array(self.axis.interpolate(max(t - 1.0, 0.0)).coords[0])
+        d = (e - p) / max(np.linalg.norm(e - p), 1e-9); n = np.array([-d[1], d[0]]); half = self.width / 2 + MOUTH_OVERHANG_M
+        a, b = e - n * half, e + n * half; z = float(self.z_knots[-1])
+        v = np.array([[*a, z - 1.0], [*b, z - 1.0], [*b, z + height], [*a, z + height]], float)
+        return v, np.array([[0, 1, 2, 3], [3, 2, 1, 0]], np.int32), v[:, :2] / 2.0
+
     def wall(self, height=3.0):
         """入口をふさぐ見えない壁（両面）。"""
         (x0, y0), (x1, y1) = self.mouth.coords
@@ -157,7 +166,8 @@ def stubs(elements, sec, sampler, keep_out, s_min=0.0, length_m=STUB_LENGTH_M, u
     keep_out（ピット・広場の多角形）にかかる道は作らない。"""
     form = road_formation(sec, s_min=0.0, s_max=float(sec.s[-1]))
     r70 = {id(w) for w in osm.route70_ways(elements)}
-    out = []
+    out, ends = [], None
+    near_form = form.buffer(0.5); shapely.prepare(near_form)   # 1回だけ作る（道の数だけ作ると遅い）
     for w in elements:
         t = w.get("tags", {})
         if w.get("type") != "way" or id(w) in r70 or t.get("highway") not in CAR_TYPES or len(w.get("geometry", [])) < 2:
@@ -165,7 +175,7 @@ def stubs(elements, sec, sampler, keep_out, s_min=0.0, length_m=STUB_LENGTH_M, u
         if t.get("bridge", "no") != "no" or t.get("tunnel", "no") != "no":
             continue
         line = _line(w)
-        if not line.intersects(form.buffer(0.5)):
+        if not near_form.intersects(line):
             continue
         rest = line.difference(form)
         pieces = list(rest.geoms) if rest.geom_type.startswith("Multi") else [rest]
@@ -184,6 +194,11 @@ def stubs(elements, sec, sampler, keep_out, s_min=0.0, length_m=STUB_LENGTH_M, u
             if sec.s[i] < s_min:
                 continue
             axis = substring(pc, 0.0, min(length_m, pc.length))
+            if length_m > STUB_LENGTH_M:   # 長い分かれ道（S4）：道の続きをたどり、本線へ戻ってくる手前で終える（S1〜S3 の 40m は今のまま）
+                if pc.length < length_m:
+                    ends = ends if ends is not None else _ends_index(elements, r70)
+                    pc = _follow(pc, w, ends, length_m)
+                axis = _stop_before(substring(pc, 0.0, min(length_m, pc.length)), form, _width(t))
             width = _width(t)
             if any(axis.buffer(width / 2).intersects(Polygon(k) if not isinstance(k, Polygon) else k) for k in keep_out):
                 continue
@@ -212,7 +227,50 @@ def stubs(elements, sec, sampler, keep_out, s_min=0.0, length_m=STUB_LENGTH_M, u
     return out
 
 
-ROADSIDE_FILES = ("osm_nagoki.json", "osm_s3_roadside.json", "osm_track_roads.json", "osm_shintomei.json")
+def _ends_index(elements, r70):
+    """車道の way の両端 → [(way, 端から始まる座標)]（_follow で道の続きを速く探すため）。"""
+    idx = {}
+    for w in elements:
+        tg = w.get("tags", {})
+        if w.get("type") != "way" or id(w) in r70 or tg.get("highway") not in CAR_TYPES or len(w.get("geometry", [])) < 2:
+            continue
+        c = np.asarray(_line(w).coords)
+        for cc in (c, c[::-1]):
+            idx.setdefault((round(cc[0][0]), round(cc[0][1])), []).append((w, cc))
+    return idx
+
+
+def _follow(pc, w0, ends, length_m):
+    """pc の奥の端につながる車道の way を、長さ length_m になるまで（分かれ道が3本以上の所は、向きが一番まっすぐな方へ）たどる。"""
+    used = {id(w0)}; coords = list(pc.coords)
+    while LineString(coords).length < length_m:
+        end = np.array(coords[-1]); prev = np.array(coords[-2]); d0 = (end - prev) / max(np.linalg.norm(end - prev), 1e-9)
+        best = None
+        cands = [c for dx in (-1, 0, 1) for dy in (-1, 0, 1) for c in ends.get((round(end[0]) + dx, round(end[1]) + dy), [])]
+        for w, cc in cands:
+            if id(w) in used:
+                continue
+            if True:
+                if np.hypot(*(cc[0] - end)) < 0.5:
+                    d1 = (cc[1] - cc[0]) / max(np.linalg.norm(cc[1] - cc[0]), 1e-9)
+                    if best is None or d0 @ d1 > best[0]:
+                        best = (float(d0 @ d1), w, cc)
+        if best is None:
+            break
+        used.add(id(best[1])); coords += [tuple(q) for q in best[2][1:]]
+    return LineString(coords)
+
+
+def _stop_before(axis, form, width):
+    """入口から出たあと本線の路面（＋側溝）へまた近づく道は、近づく手前（道幅の半分＋CLEAR_M＋1m）で終える。"""
+    near = width / 2 + CLEAR_M + 1.0
+    for t in np.arange(10.0, axis.length, 1.0):
+        if form.distance(Point(axis.interpolate(t))) < near:
+            return substring(axis, 0.0, max(t - 1.0, 1.0))
+    return axis
+
+
+ROADSIDE_FILES = ("osm_nagoki.json", "osm_s3_roadside.json", "osm_track_roads.json", "osm_shintomei.json", "osm_s4_roads.json")
 
 
 def load_elements(raw_dir=None):
@@ -237,6 +295,8 @@ def stub_meshes(stub_list):
     for k, st in enumerate(stub_list):
         out.append((f"1ROAD_side_stub_{k:03d}", *st.mesh(), "asphalt", True))
         out.append((f"1WALL_side_block_{k:03d}", *st.wall(), "concrete", False))
+        if st.axis.length > STUB_LENGTH_M + 1.0:   # 長い分かれ道（S4）：奥の終わりにも見えない壁（入口の柵・壁とは別の部品）
+            out.append((f"1WALL_side_end_{k:03d}", *st.end_wall(), "concrete", False))
     return out
 
 
@@ -257,7 +317,7 @@ def needs_barricade(st, ways):
         return False
     if w.get("tags", {}).get("highway") not in BARRICADE_TYPES:
         return False
-    return _line(w).length >= BARRICADE_MIN_M
+    return max(_line(w).length, st.axis.length) >= BARRICADE_MIN_M   # 続きの道までたどって作った長さも見る
 
 
 CLEAR_M = 1.0   # 柵と見えない壁は、本線の路面（側溝まで）と歩道の外側から、これだけ離す
@@ -327,6 +387,21 @@ def move_mouth_out(st, area):
     return st
 
 
+S4_BRANCH_M = 200.0   # S4 の分かれ道は、柵の先もこの長さまで道として作る（柵を外せば走れるように）
+
+
+def s4_start(sec):
+    """S4 の始まり（峠の先 config.S1_END）の本線の s。"""
+    from . import config
+    x, y = geo.to_local(*config.S1_END)
+    return float(sec.s[int(np.argmin(np.hypot(sec.x - float(x), sec.y - float(y))))])
+
+
+def _mouth_s(sec, st):
+    p = np.array(st.axis.coords[0])
+    return float(sec.s[int(np.argmin(np.hypot(sec.x - p[0], sec.y - p[1])))])
+
+
 def for_track(sec, pads, sampler=None, exclude=None):
     """本線全体の分かれ道（町の範囲の中は除く）。ピット・広場・駐車場の入口はふさがない。
     exclude（町の範囲など）と重なる所は路面から削る（町の道と二重にならないように）。"""
@@ -336,7 +411,10 @@ def for_track(sec, pads, sampler=None, exclude=None):
     keep = [Polygon(p["polygon"]) for p in pads
             if (p.get("kind") in KEEP_OPEN_KINDS or p.get("role") in ("start", "mid", "end"))
             and not any(k in p.get("name", "") for k in NOT_OPENINGS)]
-    out = stubs(load_elements(), sec, sampler or gsi.default_sampler(), keep, s_min=s_min)
+    el = load_elements(); smp = sampler or gsi.default_sampler()
+    s4 = s4_start(sec)   # S4（峠の先）の分かれ道は S4_BRANCH_M、それより手前は今まで通り STUB_LENGTH_M
+    out = [st for st in stubs(el, sec, smp, keep, s_min=s_min) if _mouth_s(sec, st) < s4]
+    out += [st for st in stubs(el, sec, smp, keep, s_min=s4, length_m=S4_BRANCH_M)]
     if exclude is not None:
         for st in out:
             move_mouth_out(st, exclude)

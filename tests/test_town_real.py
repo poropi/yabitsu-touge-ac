@@ -64,3 +64,23 @@ def test_no_hidden_wall_or_roadside_wall_on_the_split_or_town_paving():
     assert not [st.osm_id for st in stubs if st.mouth.intersects(split_road)]
     paved = unary_union([split_road, tw.carriageway])
     assert len(ft.cut_off(feats, sec, paved)) == len(feats)
+
+
+def test_s4_branches_are_long_and_sealed():
+    """S4（峠の先）の車の入れる分かれ道は、入口から 200m（短ければ道の終わり・本線へ戻る手前）まで作られ、入口と奥に見えない壁がある。"""
+    import json
+    from yabitsu import features as ft, nagoki, side_roads as sr, track
+    from yabitsu.crosssection import Section
+    sec = Section.load_json(_SEC)
+    pads = json.loads((config.DATA_PROCESSED / "track_pads.json").read_text(encoding="utf-8"))
+    stubs, _ = nagoki.track_stubs(sec, pads, ft.load_features_rows(track.load_section_rows("features", track.load_bounds())))
+    s4 = sr.s4_start(sec)
+    mine = [st for st in stubs if sr._mouth_s(sec, st) >= s4]
+    assert len(mine) >= 5
+    ways = {w["id"]: w for w in sr.load_elements() if w.get("type") == "way"}
+    long_ = [st for st in mine if st.axis.length > sr.STUB_LENGTH_M + 1.0]
+    assert len(long_) >= 3
+    names = [m[0] for m in sr.stub_meshes(mine)]
+    assert sum(n.startswith("1WALL_side_block_") for n in names) == len(mine)
+    assert sum(n.startswith("1WALL_side_end_") for n in names) == len(long_)
+    assert all(st.axis.length <= sr.S4_BRANCH_M + 1.0 for st in mine)

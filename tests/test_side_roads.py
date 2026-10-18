@@ -175,3 +175,50 @@ def test_hidden_wall_follows_the_branch_surface_where_the_mouth_was_set_back():
         assert near[:, 2].min() <= z - 0.4 and near[:, 2].max() >= z + 2.5
     zs = st.ground_z(np.array([100.0, 100.0]), np.array([20.0, 30.0]))
     assert zs[0] == pytest.approx(st.z_at(100.0, 20.0)) and zs[1] == pytest.approx(st.z_at(100.0, 30.0))
+
+
+def test_long_branch_is_built_to_its_length_with_a_wall_at_the_far_end():
+    """S4 の分かれ道は、入口から 200m まで道として作り、奥の終わりに見えない壁（柵を外せば奥まで走れる形）。"""
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 300]])], sec, _Flat(), keep_out=[], length_m=200.0)
+    assert st.axis.length == pytest.approx(200.0, abs=1.0)
+    v, f, _ = st.end_wall()
+    end = np.array(st.axis.coords[-1])
+    assert np.abs(v[:, 1] - end[1]).max() < 0.5 and v[:, 0].min() < 100 - st.width / 2 and v[:, 0].max() > 100 + st.width / 2
+    assert v[:, 2].max() - v[:, 2].min() > 3.0
+
+
+def test_long_branch_follows_the_next_way_to_its_length():
+    """OSM の道は途中で別の way に分かれていることが多い。つながる車道をたどって 200m まで作る。"""
+    sec = _straight()
+    ways = [_way([[100, 0], [100, 80]], id=1), _way([[100, 80], [100, 300]], id=2)]
+    st, = sr.stubs(ways, sec, _Flat(), keep_out=[], length_m=200.0)
+    assert st.axis.length == pytest.approx(200.0, abs=1.0)
+
+
+def test_long_branch_stops_before_touching_the_main_road_again():
+    """入口から出て本線へまた戻ってくる道は、本線の路面（＋側溝＋CLEAR_M）に入る手前で終える。"""
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 40], [160, 40], [160, 0]])], sec, _Flat(), keep_out=[], length_m=200.0)
+    from yabitsu.start_lot import road_formation
+    form = road_formation(sec, 0.0, float(sec.s[-1]))
+    assert form.distance(Point(st.axis.coords[-1])) >= st.width / 2 + sr.CLEAR_M
+    assert st.surface.distance(form.difference(form.buffer(-0.01)).buffer(0)) < 1.0   # 入口は本線とつながる
+    assert st.axis.length > 80
+
+
+def test_only_long_branches_get_a_far_end_wall_mesh():
+    sec = _straight()
+    long_, = sr.stubs([_way([[100, 0], [100, 300]])], sec, _Flat(), keep_out=[], length_m=200.0)
+    short, = sr.stubs([_way([[50, 0], [50, 300]], id=2)], sec, _Flat(), keep_out=[])
+    names = [m[0] for m in sr.stub_meshes([long_, short])]
+    assert names.count("1WALL_side_end_000") == 1 and not any(n.endswith("end_001") for n in names)
+    assert next(m for m in sr.stub_meshes([long_]) if m[0] == "1WALL_side_end_000")[5] is False   # 見えない壁
+
+
+def test_barricade_decision_uses_the_built_branch_length():
+    """OSM の1本目の way が短くても、つながる道をたどって長く作った分かれ道には柵を置く（S4 1630m）。"""
+    sec = _straight()
+    ways = [_way([[100, 0], [100, 20]], id=1, highway="unclassified"), _way([[100, 20], [100, 300]], id=2, highway="unclassified")]
+    st, = sr.stubs(ways, sec, _Flat(), keep_out=[], length_m=200.0)
+    assert sr.needs_barricade(st, {w["id"]: w for w in ways})

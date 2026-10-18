@@ -13,15 +13,13 @@ def scatter(near, pads=(), density=1 / 40, clear_m=3.0, band=105.0, seed=7, pad_
     q = P[:, ::-1]
     E = RegularGridInterpolator((ys, xs), near["E"])(q); D = RegularGridInterpolator((ys, xs), near["D"])(q)
     keep = (E >= clear_m) & (D <= band)
-    if pads:
-        pts = shapely.points(P)
-        for p in pads:
-            keep &= shapely.distance(pts, Polygon(p["polygon"])) > (clear_m if pad_clear_m is None else pad_clear_m)
-    if len(avoid):
-        pts = shapely.points(P)
-        for a in avoid:
-            keep &= ~shapely.contains(a, pts)
     P = P[keep]
+    # 土台のまわりと avoid は、1つにまとめてから調べる（1つずつだと、区間を足して点と土台が増えると終わらない）
+    c = clear_m if pad_clear_m is None else pad_clear_m
+    block = [Polygon(p["polygon"]).buffer(c) for p in pads] + list(avoid)
+    if block:
+        g = shapely.union_all(block); shapely.prepare(g)
+        P = P[~shapely.contains_xy(g, P[:, 0], P[:, 1])]
     z = RegularGridInterpolator((ys, xs), near["Z"])(P[:, ::-1])
     return np.c_[P, z, rng.uniform(8.0, 16.0, len(P))]
 
