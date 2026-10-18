@@ -31,7 +31,7 @@ def main():
         return sampler.sample(*geo.from_local(np.interp(q, cl.s, cl.x), np.interp(q, cl.s, cl.y)))
 
     z, z_ref, sigmas = elevation.fit_sections(cl.s, z_raw, valid, cl.step, list(bounds.values()), sample=sample,
-                                              fixed=len(config.ACCEPTED_SECTIONS))   # 受け入れ済みの区間は今の高さのまま
+                                              fixed=len(config.ACCEPTED_SECTIONS), robust=True)   # 受け入れ済みの区間は今の高さのまま。新しい区間は標高データの短い谷を外す
     np.savez(P / "track_profile.npz", s=cl.s, z_raw=z_raw, z_ref=z_ref, z=z, valid=valid,
              bounds=np.array(bounds, dtype=object))
     st = elevation.profile_stats(cl.s, z, z_ref, valid, cl.step)

@@ -66,3 +66,37 @@ def test_new_section_meets_the_fixed_end_without_a_step_or_kink():
     assert abs(z[2001] - z[2000]) < 0.12                       # 1m で 8% の上り＋α：段差がない
     g0 = (z[2000] - z[1990]) / 10.0; g1 = (z[2010] - z[2000]) / 10.0
     assert abs(g1 - g0) <= 0.02                                 # 勾配が折れない（今のつなぎ目と同じ基準：test_join_has_no_grade_jump）
+
+
+def _ravines():
+    """5% の下り坂。道が沢を渡る所（3か所）だけ、標高データが谷底（6m 下、幅 20m）を拾っている。"""
+    s = np.arange(0.0, 3001.0); true = 700 - 0.05 * s
+    rng = np.random.default_rng(1)
+    z = true + 0.3 * rng.standard_normal(len(s))
+    for c in (800.0, 1500.0, 2300.0):
+        z -= 6.0 * np.exp(-((s - c) / 8.0) ** 2)
+    return s, true, z
+
+
+def test_short_dips_in_the_dem_do_not_become_dips_in_the_road():
+    """S4 は標高データの谷（沢を渡る所）に引っぱられて、ジェットコースターのような上り下りになっていた。"""
+    s, true, z = _ravines()
+    zf, _, _ = el.fit_sections(s, z, np.ones_like(s, bool), 1.0, [(0, 1000), (1000, 3000)], fixed=1, robust=True)
+    k = 20; bump = np.abs(zf[2 * k:] - 2 * zf[k:-k] + zf[:-2 * k])[1000:]
+    assert bump.max() < 1.0                              # 20m ごとの曲がり（上り下りの急な変わり方）が小さい
+    assert np.abs(zf - true)[1000:].max() < 1.5           # 本当の坂からは 1.5m 以内
+
+
+def test_fixed_sections_are_untouched_by_the_robust_fit():
+    s, true, z = _ravines()
+    a, _, _ = el.fit_sections(s, z, np.ones_like(s, bool), 1.0, [(0, 1000), (1000, 3000)], fixed=1)
+    b, _, _ = el.fit_sections(s, z, np.ones_like(s, bool), 1.0, [(0, 1000), (1000, 3000)], fixed=1, robust=True)
+    assert np.array_equal(a[:1001], b[:1001])
+
+
+def test_short_humps_in_the_dem_are_ignored_too():
+    """道のすぐ横の土手を拾って、標高データが短く盛り上がる所（S4 1780m）も外す。"""
+    s, true, z = _ravines()
+    z = z + 3.0 * np.exp(-((s - 1900.0) / 12.0) ** 2)
+    zf, _, _ = el.fit_sections(s, z, np.ones_like(s, bool), 1.0, [(0, 1000), (1000, 3000)], fixed=1, robust=True)
+    assert np.abs(zf - true)[1800:2000].max() < 0.8

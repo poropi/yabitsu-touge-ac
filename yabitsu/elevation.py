@@ -42,7 +42,27 @@ def fit_profile(s, z_raw, valid, step, tol=1.5, sigmas=SIGMAS):
     return z, zref, sigmas[-1]
 
 
-def fit_sections(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None, fixed=0):
+DIP_M, DIP_REF_M, DIP_PAD_M = 1.0, 40.0, 8.0
+
+
+def fit_profile_robust(s, z_raw, valid, step, tol=1.5, sigmas=SIGMAS):
+    """fit_profile の前に、標高データの短い谷（道が沢を渡る所で、谷底を拾った所）と盛り上がり（横の土手）を外す。
+    なめらかな線（DIP_REF_M）から DIP_M 以上はなれた所と、そのまわり DIP_PAD_M を、前後から補う（3回くり返す）。"""
+    from scipy.ndimage import binary_dilation
+    zref = despike(_fill(s, z_raw, valid), valid, step)
+    ok = np.asarray(valid, bool).copy()
+    for _ in range(3):
+        sm = gaussian_filter1d(_fill(s, zref, ok), DIP_REF_M / step, mode="nearest")
+        dip = binary_dilation(np.abs(zref - sm) > DIP_M, iterations=max(1, int(round(DIP_PAD_M / step))))   # 短い谷と、横の土手を拾った盛り上がり
+        if not (ok & dip).any():
+            break
+        ok &= ~dip
+    zfill = _fill(s, zref, ok)
+    z, _, sg = fit_profile(s, zfill, ok, step, tol, sigmas)
+    return z, zfill, sg   # 比べる相手（z_ref）も、谷を外して補ったもの（橋と同じ扱い）
+
+
+def fit_sections(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None, fixed=0, robust=False):
     """fixed=n：先頭の n 区間（受け入れ済み）は、bounds[:n] だけで呼んだときとまったく同じ高さにする。
     n 番目より後の区間はそれだけで合わせ、始まりの blend_m を、前の区間の終わりの高さと勾配で延ばした直線へ寄せる
     （S4 を峠の先に足しても S1 の高さを変えない）。fixed=0 は今まで通り（_fit_joined）。"""
@@ -55,7 +75,8 @@ def fit_sections(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None, fixed
     # 後ろの区間は、前の区間の終わり blend_m も入れて合わせる（つなぎ目で高さが近くなり、寄せても勾配が折れにくい）
     a0 = bounds[fixed][0] - blend_m; mx = s >= a0 - 1e-6
     bb = [(a0, bounds[fixed][1])] + list(bounds[fixed + 1:])
-    zx, rx, sb = _fit_joined(s[mx], z_raw[mx], valid[mx], step, bb, blend_m, sample)
+    zx, rx, sb = _fit_joined(s[mx], z_raw[mx], valid[mx], step, bb, blend_m, sample,
+                             fit=fit_profile_robust if robust else fit_profile)   # 新しい区間だけ、短い谷を外して合わせる
     keep = s[mx] >= bounds[fixed][0] - 1e-6
     z = np.empty_like(s); z_ref = np.empty_like(s)
     z[mb], z_ref[mb] = zx[keep], rx[keep]
@@ -69,7 +90,7 @@ def fit_sections(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None, fixed
     return z, z_ref, sa + sb
 
 
-def _fit_joined(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None):
+def _fit_joined(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None, fit=fit_profile):
     """区間ごとに fit_profile する。上の区間の値はそのまま使い、境目の下側 blend_m の間だけ、下の区間の値を
     「上の区間の境目の高さと勾配で延ばした直線」へなめらかに寄せる（高さと勾配が境目でそろう）。
 
@@ -84,7 +105,7 @@ def _fit_joined(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None):
         top = min(b + blend_m, s[-1]) if n < len(bounds) - 1 else b
         if sample is None:
             ext = m | ((s > b) & (s <= top))
-            zk, rk, sg = fit_profile(s[ext], z_raw[ext], valid[ext], step)
+            zk, rk, sg = fit(s[ext], z_raw[ext], valid[ext], step)
             keep = m[ext]
             z[m], z_ref[m] = zk[keep], rk[keep]
         else:
@@ -93,7 +114,7 @@ def _fit_joined(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None):
             gi = np.clip(np.rint((g - s[0]) / step).astype(int), 0, len(s) - 1)
             zg = np.asarray(sample(g), float)
             vg = valid[gi] & ~np.isnan(zg)
-            zk, rk, sg = fit_profile(g, np.where(np.isnan(zg), z_raw[gi], zg), vg, 1.0)
+            zk, rk, sg = fit(g, np.where(np.isnan(zg), z_raw[gi], zg), vg, 1.0)
             z[m], z_ref[m] = np.interp(s[m], g, zk), np.interp(s[m], g, rk)
         sigmas.append(sg)
     k = max(1, int(round(10.0 / step)))
