@@ -120,7 +120,8 @@ def test_real_layouts_start_on_the_road_and_finish_ahead():
     sec = Section.load_json(_REAL); pads = json.loads((config.DATA_PROCESSED / "track_pads.json").read_text(encoding="utf-8"))
     bounds = track.load_bounds()
     ls = lay.load_layouts()
-    assert {l.name for l in ls} == {"s1_up", "s1_down", "s2_up", "s2_down", "s3_up", "s3_down", "full_up", "full_down"}
+    assert {l.name for l in ls} == {"s1_up", "s1_down", "s2_up", "s2_down", "s3_up", "s3_down", "full_up", "full_down",
+                                    "s4_up", "s4_down", "full_north", "full_south"}
     for l in ls:
         objs = _by(lay.layout_objects(sec, pads, l, bounds))
         for i in range(4):
