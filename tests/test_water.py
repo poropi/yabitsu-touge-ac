@@ -81,3 +81,59 @@ def test_water_keeps_going_down_where_one_way_joins_the_next():
         w["tags"].pop("highway")
     a, b = sorted(water.from_osm(ws, sec, _Step(90.0)), key=lambda s: -s.line.coords[0][1])
     assert b.z[0] <= a.z[-1] + 1e-9 and np.all(np.diff(b.z) <= 1e-9)
+
+
+def _lake_rel():
+    """外周 100x100 の正方形を2本の way に分けた湖（x 20〜120, y 20〜120）と、中の島（inner）。"""
+    from yabitsu import geo
+    def node(i, x, y):
+        la, lo = geo.from_local(x, y); return {"type": "node", "id": i, "lat": float(la), "lon": float(lo)}
+    ns = [node(1, 20, 20), node(2, 120, 20), node(3, 120, 120), node(4, 20, 120), node(5, 60, 60), node(6, 70, 60), node(7, 70, 70), node(8, 60, 70)]
+    ws = [{"type": "way", "id": 11, "nodes": [1, 2, 3]}, {"type": "way", "id": 12, "nodes": [3, 4, 1]},
+          {"type": "way", "id": 13, "nodes": [5, 6, 7, 8, 5]}]
+    rel = {"type": "relation", "id": 99, "tags": {"natural": "water", "name": "宮ヶ瀬湖"},
+           "members": [{"type": "way", "ref": 11, "role": "outer"}, {"type": "way", "ref": 12, "role": "outer"},
+                       {"type": "way", "ref": 13, "role": "inner"}]}
+    return ns + ws + [rel]
+
+
+def test_lake_polygon_from_relation():
+    poly = water.lake_from_osm(_lake_rel())
+    assert poly.area == pytest.approx(100 * 100 - 10 * 10, rel=0.01)
+    assert not poly.contains(Point(65, 65)) and poly.contains(Point(30, 30))
+
+
+def test_lake_is_below_every_road_and_bridge():
+    sec = _straight()   # 本線 y=0、高さ 100
+    poly = water.lake_from_osm(_lake_rel()).union(Point(100, 0).buffer(15))   # 湖が道にかかる
+    form = road_formation(sec, 0.0, float(sec.s[-1]))
+    ms = water.lake_meshes(poly, 95.0, form)
+    v = np.concatenate([m[1] for m in ms])
+    assert np.allclose(v[:, 2], 95.0 + water.LIFT) and not any(form.buffer(0.5).contains(Point(x, y)) for x, y in v[:, :2])
+
+
+def test_lake_and_streams_meet_without_a_step():
+    """湖に入る川は、湖の中では描かず、水面は湖の水位より下がらない（段差なくつながる）。"""
+    sec, ways, smp = _scene()
+    lake = Point(100, -80).buffer(25)        # 川の終わり（下流）が湖に入る
+    st, = water.attach_to_lake(water.from_osm(ways, sec, smp), lake, 99.0)
+    assert not st.line.intersects(lake.buffer(-0.5)) and st.z.min() >= 99.0 - 1e-9
+
+
+def test_terrain_under_the_lake_is_below_the_water():
+    from yabitsu import terrain as tr
+    sec = _straight()
+    X, Y = np.meshgrid(np.arange(80.0, 121.0, 5.0), np.arange(30.0, 61.0, 5.0))
+    Z, _ = tr.carve(X, Y, np.full(X.shape, 95.0), sec, lake=(Point(100, 45).buffer(30), 95.0))
+    assert Z.max() <= 95.0 - tr.LAKE_DEPTH + 1e-6
+
+
+def test_manual_falls_stand_on_the_ground_and_face_the_road():
+    sec = _straight()
+    from yabitsu import geo
+    la, lo = geo.from_local(100.0, 10.0)
+    fl = water.manual_falls([{"at": [la, lo], "height_m": 4.0, "width_m": 2.0, "facing_deg": None}], sec, lambda x, y: np.full(np.shape(x), 101.0))
+    assert len(fl) == 1 and fl[0]["z_bottom"] == pytest.approx(101.0) and fl[0]["z_top"] == pytest.approx(105.0)
+    assert fl[0]["down"][1] < -0.9            # 道（南）の方へ落ちる
+    ms = water.feature_meshes(fl, [])
+    assert any(m[4] == "water_fall" for m in ms)

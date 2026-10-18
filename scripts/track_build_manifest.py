@@ -76,6 +76,11 @@ def main():
     streams, falls, springs = water.load(sec)
     form_all = start_lot.road_formation(sec, 0.0, float(sec.s[-1]))
     assembly.add_meshes(m, water.meshes(streams, water.road_area(sec, form_all, stubs)))
+    wspec = json.loads((config.DATA_MANUAL / "s5_water.json").read_text(encoding="utf-8"))   # S5 の滝（ストリートビュー・OSM）
+    assembly.add_meshes(m, water.feature_meshes(water.manual_falls(wspec.get("falls", []), sec, ground), [], prefix="s5_water"))
+    lake_poly, lake_level = water.load_lake()   # 宮ヶ瀬湖の湖面（見える湖の全体）
+    if lake_poly is not None:
+        assembly.add_meshes(m, water.lake_meshes(lake_poly, lake_level, water.road_area(sec, form_all, stubs)))
     assembly.add_meshes(m, water.feature_meshes(falls, water.spring_items(springs, sec, ground, near_m=60.0)))
     from yabitsu import geo
     for k, (la, lo) in enumerate(json.loads((config.DATA_MANUAL / "s3_side_crosswalks.json").read_text(encoding="utf-8"))):

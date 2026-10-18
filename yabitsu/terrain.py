@@ -14,6 +14,7 @@ FAR_EXTENT, FAR_CELL, FAR_HOLE, FAR_DROP = 2000.0, 20.0, 205.0, 1.0
 MID_BAND, MID_CELL, MID_DROP, MID_OVERLAP = 210.0, 4.0, 0.15, 6.0  # 中くらいの地形：道から 200m まで（細かい地形の下へ 6m もぐり込ませる）
 EXTRA_NEAR, EXTRA_HOLE = 20.0, 15.0
 TOWN_BLEND_M = 10.0  # 町の範囲の円の外で、町の地面から今までの地形へ移す幅
+LAKE_DEPTH = 2.0
 TUNNEL_COVER_M, TUNNEL_SIDE_M = 3.0, 4.0   # トンネルの天井の上の土かぶり、その幅（筒の外へ）
 CHANNEL_REACH_M = 6.0   # 川の溝が地形を動かす範囲（溝の外）
 ROAD_CAP_M = 3.0     # 土台があっても、道の縁からこの距離までは道の斜面より上に地形を出さない
@@ -49,7 +50,7 @@ def road_frame(sec, X, Y):
 
 
 def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_left=None, side_extra_right=None, channels=(),
-          keep_rows=None, no_fill_rows=None):
+          keep_rows=None, no_fill_rows=None, lake=None):
     """side_extra_*（行ごとの歩道の幅）があれば、そのぶん道の範囲を外へ広げる（歩道の下に地形がかぶらない）。"""
     shape = np.shape(X)
     f = road_frame(sec, X, Y)
@@ -104,6 +105,10 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
             near = d <= r
             sel, d = sel[near], d[near]
             z[sel] = np.minimum(z[sel], z_bed(xr[sel], yr[sel]) + BANK * d)
+    if lake is not None:   # 湖の中の地形は水位より LAKE_DEPTH 下（湖面と重ならない）
+        poly, level = lake
+        inl = shapely.contains_xy(poly, np.ravel(X), np.ravel(Y))
+        z[inl] = np.minimum(z[inl], level - LAKE_DEPTH)
     if no_fill_rows is not None and np.any(no_fill_rows):   # 大きな橋（S5）の下：谷を盛らない（元の地形より上げない）
         nf = np.asarray(no_fill_rows, bool)[idx]
         z[nf] = np.minimum(z[nf], np.ravel(Z_nat)[nf])
@@ -148,7 +153,7 @@ def _sample(sampler, unproject, X, Y):
 
 
 def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=(), side_extra=(None, None),
-               town=None, channels=(), keep_rows=None, no_fill_rows=None):
+               town=None, channels=(), keep_rows=None, no_fill_rows=None, lake=None):
     """town = (町の地面 TownGround, 町の範囲の円, 舗装された所の多角形) なら、円の中は町の地面（舗装の下は UNDER_DEPTH 下げる）、
     円の外 TOWN_BLEND_M の間で今までの地形へなめらかに移す。"""
     towns = [] if town is None else (list(town) if isinstance(town, list) else [town])
@@ -158,7 +163,7 @@ def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.
     X, Y = np.meshgrid(xs, ys)
     D = _with_extra(road_frame(sec, X, Y)["dist"].reshape(X.shape), X, Y, extra, EXTRA_NEAR, NEAR_BAND)
     Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right, *side_extra, channels=channels,
-                 keep_rows=keep_rows, no_fill_rows=no_fill_rows)
+                 keep_rows=keep_rows, no_fill_rows=no_fill_rows, lake=lake)
     if towns:   # 本線の帯（路面＋側溝）の下。町の地面へ移す帯の中でも、ここは削った高さより上にしない
         f = road_frame(sec, X, Y); idx = f["idx"]
         hw = np.where(f["lat"] >= 0, sec.hw_left[idx], sec.hw_right[idx])
@@ -177,21 +182,26 @@ def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.
     return {"xs": xs, "ys": ys, "Z": Z, "E": E, "D": D}
 
 
-def build_far(sec, sampler, unproject=geo.from_local, extra=()):
+def build_far(sec, sampler, unproject=geo.from_local, extra=(), lake=None):
     xs, ys = corridor_grid(sec, FAR_EXTENT + NEAR_BAND, FAR_CELL)
     X, Y = np.meshgrid(xs, ys)
     Z = _sample(sampler, unproject, X, Y) - FAR_DROP
+    if lake is not None:   # 湖の中（と岸の 1 格子）は水位より LAKE_DEPTH 下（粗い地形が湖面から突き出さない）
+        poly, level = lake
+        inl = shapely.contains_xy(poly.buffer(FAR_CELL), X, Y)
+        Z[inl] = np.minimum(Z[inl], level - LAKE_DEPTH)
     cx, cy = np.meshgrid((xs[:-1] + xs[1:]) / 2, (ys[:-1] + ys[1:]) / 2)
     Dc = _with_extra(road_frame(sec, cx, cy)["dist"].reshape(cx.shape), cx, cy, extra, EXTRA_HOLE, FAR_HOLE)
     return {"xs": xs, "ys": ys, "Z": Z, "Dc": Dc}
 
 
-def build_mid(sec, sampler, pads=(), unproject=geo.from_local, extra=(), channels=(), keep_rows=None, no_fill_rows=None):
+def build_mid(sec, sampler, pads=(), unproject=geo.from_local, extra=(), channels=(), keep_rows=None, no_fill_rows=None, lake=None):
     """細かい地形（NEAR_BAND まで）の外、MID_BAND までの 4m 格子の地形。家などの土台（pads）にも合わせ、MID_DROP 下げる。"""
     xs, ys = corridor_grid(sec, MID_BAND, MID_CELL, extra=extra)
     X, Y = np.meshgrid(xs, ys)
     D = road_frame(sec, X, Y)["dist"].reshape(X.shape)
-    Z, _ = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, channels=channels, keep_rows=keep_rows, no_fill_rows=no_fill_rows)
+    Z, _ = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, channels=channels, keep_rows=keep_rows, no_fill_rows=no_fill_rows,
+                 lake=lake)
     return {"xs": xs, "ys": ys, "Z": Z - MID_DROP, "D": D}
 
 

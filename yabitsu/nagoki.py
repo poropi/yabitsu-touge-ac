@@ -50,7 +50,10 @@ def tree_free_areas(sec, bounds, buildings):
     """木を置かない所：町の範囲、町の建物のまわり 2m、S3 の道から 60m（家の多い町なか。木の作り込みは仕上げで）。"""
     from shapely.geometry import LineString
     m = sec.s <= bounds["s3"][1]
-    return [circle().buffer(10.0), LineString(np.c_[sec.x[m], sec.y[m]]).buffer(60.0)] + [b.footprint.buffer(2.0) for b in buildings]
+    from . import water
+    lake, _ = water.load_lake()   # 宮ヶ瀬湖の中にも木を置かない
+    return ([circle().buffer(10.0), LineString(np.c_[sec.x[m], sec.y[m]]).buffer(60.0)] + [b.footprint.buffer(2.0) for b in buildings]
+            + ([lake.buffer(2.0)] if lake is not None else []))
 
 
 def load_branches(sec):

@@ -212,6 +212,9 @@ def load(sec, sampler=None):
     from . import gsi, side_roads
     ways, springs = load_elements()
     streams = from_osm(ways, sec, sampler or gsi.default_sampler(), s_from=side_roads.s4_start(sec))
+    lake, level = load_lake()
+    if lake is not None:   # 宮ヶ瀬湖に入る川は、湖の手前で湖の水位につなぐ
+        streams = attach_to_lake(streams, lake, level)
     return streams, falls_from_osm(ways, streams), springs
 
 
@@ -237,4 +240,71 @@ def spring_items(springs, sec, ground_z, near_m=200.0):
             continue
         out.append({"x": x, "y": y, "z": float(np.atleast_1d(ground_z(np.array([x]), np.array([y])))[0]),
                     "facing": float(np.arctan2(sec.x[i] - x, sec.y[i] - y)), "name": e["tags"].get("name", "")})
+    return out
+
+
+def lake_from_osm(elements):
+    """湖の relation（outer・inner の way をつなぐ）を多角形（ローカル座標）に。outer・inner は way の向きがばらばらでもよい。"""
+    from shapely.ops import polygonize, linemerge
+    nodes = {e["id"]: e for e in elements if e.get("type") == "node"}
+    ways = {e["id"]: e for e in elements if e.get("type") == "way"}
+    rel = next(e for e in elements if e.get("type") == "relation")
+    rings = {"outer": [], "inner": []}
+    for m in rel.get("members", []):
+        w = ways.get(m.get("ref"))
+        if m.get("type") != "way" or w is None or m.get("role") not in rings:
+            continue
+        pts = [geo.to_local(nodes[n]["lat"], nodes[n]["lon"]) for n in w.get("nodes", []) if n in nodes]
+        if len(pts) >= 2:
+            rings[m["role"]].append(LineString(np.array(pts, float)))
+    outer = unary_union(list(polygonize(linemerge(rings["outer"])))) if rings["outer"] else Polygon()
+    inner = unary_union(list(polygonize(linemerge(rings["inner"])))) if rings["inner"] else Polygon()
+    return outer.difference(inner).buffer(0)
+
+
+def lake_meshes(poly, level, keep_out, cell=8.0):
+    """湖面（平ら、高さ level）。keep_out（本線・橋・分かれ道）の 0.5m 内には描かない。"""
+    g = poly.difference(keep_out.buffer(0.5)) if not keep_out.is_empty else poly
+    return [(f"lake_{k:02d}", v, f, uv, "water", True)
+            for k, (v, f, uv) in enumerate(grid_drape(g, lambda x, y: np.full(np.shape(x), float(level)), LIFT, cell=cell))]
+
+
+def load_lake():
+    """宮ヶ瀬湖（data/raw/osm_s5_lake_rel.json）と水位（data/manual/s5_water.json）。なければ (None, None)。"""
+    import json
+    from . import config
+    p, q = config.DATA_RAW / "osm_s5_lake_rel.json", config.DATA_MANUAL / "s5_water.json"
+    if not (p.exists() and q.exists()):
+        return None, None
+    return lake_from_osm(json.loads(p.read_text(encoding="utf-8"))["elements"]), float(json.loads(q.read_text(encoding="utf-8"))["lake_level_m"])
+
+
+def attach_to_lake(streams, lake, level):
+    """湖の中の川は描かない（線を湖の外だけにする）。水面は湖の水位より下げない（湖に入る所で段差なくつながる）。"""
+    out = []
+    for st in streams:
+        rest = st.line.difference(lake)
+        for piece in _polys_lines(rest):
+            if piece.length < 5.0:
+                continue
+            t0, t1 = st.line.project(Point(piece.coords[0])), st.line.project(Point(piece.coords[-1]))
+            tt = np.linspace(t0, t1, max(2, int(piece.length / STEP_M) + 1))
+            z = np.maximum(st.z_at(tt), level)
+            out.append(Stream(LineString([st.line.interpolate(v).coords[0] for v in tt]), st.width_m, st.kind, np.minimum.accumulate(z), st.osm_id))
+    return out
+
+
+def manual_falls(spec, sec, ground_z):
+    """data/manual/s5_water.json の falls（ストリートビュー・OSM で見た滝）：feature_meshes の形に。
+    facing_deg がなければ一番近い本線の点の方へ落ちる。"""
+    out = []
+    for f in spec:
+        p = np.array([float(v) for v in geo.to_local(*f["at"])])
+        if f.get("facing_deg") is None:
+            i = int(np.argmin(np.hypot(sec.x - p[0], sec.y - p[1]))); d = np.array([sec.x[i], sec.y[i]]) - p
+        else:
+            r = np.radians(float(f["facing_deg"])); d = np.array([np.sin(r), np.cos(r)])
+        d = d / max(np.linalg.norm(d), 1e-9); n = np.array([-d[1], d[0]]); w = float(f.get("width_m", 2.0)) / 2
+        zb = float(np.atleast_1d(ground_z(np.array([p[0]]), np.array([p[1]])))[0])
+        out.append({"line": LineString([p - n * w, p + n * w]), "z_top": zb + float(f.get("height_m", 3.0)), "z_bottom": zb, "down": d})
     return out

@@ -220,3 +220,14 @@ def test_road_clear_edge_points_count_only_ground_above_the_surface():
     assert tr.road_clear_count(sec, {"xs": xs, "ys": ys, "Z": Z}) == 0
     Z[band] = zs + 0.05                                                               # 端で 5cm 上
     assert tr.road_clear_count(sec, {"xs": xs, "ys": ys, "Z": Z}) > 0
+
+
+def test_far_terrain_inside_the_lake_is_below_the_water():
+    from shapely.geometry import Point
+    sec = _straight()
+    lake = Point(100, 600).buffer(300)
+    far = tr.build_far(sec, _FlatSampler(), lake=(lake, 100.0))
+    X, Y = np.meshgrid(far["xs"], far["ys"])
+    import shapely
+    inside = shapely.contains_xy(lake, X, Y)
+    assert inside.any() and far["Z"][inside].max() <= 100.0 - tr.LAKE_DEPTH + 1e-6

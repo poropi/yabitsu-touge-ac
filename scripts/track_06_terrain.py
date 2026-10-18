@@ -30,13 +30,15 @@ def main():
     keep = tunnel.carve_mask(sec.s, tunnel.from_osm(side_roads.load_elements(), sec))
     from yabitsu import bridge_parts   # S5 の橋の下は谷を盛らない（湖・深い谷の上の大きな橋）
     no_fill = bridge_parts.no_fill_mask(sec, s_from=float(track.load_bounds()["s5"][0]))
-    near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra, channels=chans, keep_rows=keep, no_fill_rows=no_fill,
+    lake_poly, lake_level = water.load_lake()   # 宮ヶ瀬湖：湖の中の地形は水位より下
+    lake = (lake_poly, lake_level) if lake_poly is not None else None
+    near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra, channels=chans, keep_rows=keep, no_fill_rows=no_fill, lake=lake,
                               side_extra=features.sidewalk_offsets(sec, feats),  # 歩道の下に地形がかぶらない
                               town=[(tw.ground, nagoki.circle(), paved)] + [z.town_override() for z in nagoki.load_splits(sec)])
     np.savez_compressed(P / "track_terrain_near.npz", **near)
-    mid = terrain.build_mid(sec, sampler, pads, channels=chans, keep_rows=keep, no_fill_rows=no_fill)   # 道から 200m まで
+    mid = terrain.build_mid(sec, sampler, pads, channels=chans, keep_rows=keep, no_fill_rows=no_fill, lake=lake)   # 道から 200m まで
     np.savez_compressed(P / "track_terrain_mid.npz", **mid)
-    far = terrain.build_far(sec, sampler, extra=extra + [np.asarray(nagoki.circle().exterior.coords).tolist()])
+    far = terrain.build_far(sec, sampler, extra=extra + [np.asarray(nagoki.circle().exterior.coords).tolist()], lake=lake)
     np.savez_compressed(P / "track_terrain_far.npz", **far)
     print(f"near grid {near['Z'].shape}, mid grid {mid['Z'].shape}, far grid {far['Z'].shape}")
 
