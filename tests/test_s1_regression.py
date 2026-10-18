@@ -13,6 +13,7 @@ SEC = config.DATA_PROCESSED / "track_section.json"
 PADS = config.DATA_PROCESSED / "track_pads.json"
 PROFILE = config.DATA_PROCESSED / "track_profile.npz"
 JOIN_M = 30.0  # S1 の始点からこの距離までは、つなぎ目として形が変わってよい（設計書 8 章）
+END_JOIN_M = 30.0  # S1 の終わり（峠の先、S4 とのつなぎ目）からこの距離も、形が変わってよい（S4 設計書 6 章）
 
 pytestmark = pytest.mark.skipif(not (SEC.exists() and PADS.exists() and PROFILE.exists()),
                                 reason="track_* の処理済みデータがまだない")
@@ -42,8 +43,9 @@ def test_s1_road_unchanged_beyond_join():
     from yabitsu.layouts import s_of
     sec, pads, bounds = _track()
     path = sec.path()
+    length = bounds["s1"][1] - bounds["s1"][0]
     for s_local, lat, lon, z in _ref()["centerline"]:
-        if s_local < JOIN_M:
+        if s_local < JOIN_M or s_local > length - END_JOIN_M:
             continue
         x, y, zc, _ = frame_at(path, s_of(sec, (lat, lon), bounds, "s1"))
         xr, yr = _xy(lat, lon)

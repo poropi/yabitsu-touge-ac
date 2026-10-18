@@ -19,7 +19,7 @@ def _ll(x, y):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("section", choices=["s2"])
+    ap.add_argument("section", choices=["s2", "s3"])
     name = ap.parse_args().section
     sec = Section.load_json(P / "track_section.json")
     pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
@@ -35,18 +35,20 @@ def main():
         if l.section == name:
             lays[l.name] = {d.name: [*_ll(*d.location[:2]), round(float(d.location[2]), 3), round(float(d.heading), 5)]
                             for d in layouts.layout_objects(sec, pads, l, bounds)}
-    turn = next(p for p in pads if p["name"] == "minoge_turnaround")
-    houses = []
-    for p in pads:
-        if p["name"].startswith("minoge_house_"):
-            c = np.asarray(p["polygon"])[:-1].mean(0)
-            houses.append([*_ll(*c), round(float(p["z"]), 3)])
-    ref = {"note": f"{name} の作り替え前の状態（scripts.snapshot_section で作成）", "centerline": cl, "layouts": lays,
-           "sites": {"turnaround_pits": [[*_ll(x, y), round(z, 3), round(h, 5)] for x, y, z, h in turn["pit_points"]],
-                     "houses": houses}}
+    pits = lambda pad: [[*_ll(x, y), round(z, 3), round(h, 5)] for x, y, z, h in next(p for p in pads if p["name"] == pad)["pit_points"]]
+    if name == "s2":
+        houses = []
+        for p in pads:
+            if p["name"].startswith("minoge_house_"):
+                c = np.asarray(p["polygon"])[:-1].mean(0)
+                houses.append([*_ll(*c), round(float(p["z"]), 3)])
+        sites = {"turnaround_pits": pits("minoge_turnaround"), "houses": houses}
+    else:   # s3：名古木交差点のまん中のピット
+        sites = {"nagoki_pits": pits("nagoki_pits")}
+    ref = {"note": f"{name} の作り替え前の状態（scripts.snapshot_section で作成）", "centerline": cl, "layouts": lays, "sites": sites}
     out = config.DATA_MANUAL / f"{name}_reference.json"
     out.write_text(json.dumps(ref, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
-    print(out, len(cl), "points", {k: len(v) for k, v in lays.items()}, len(houses), "houses")
+    print(out, len(cl), "points", {k: len(v) for k, v in lays.items()}, {k: len(v) for k, v in sites.items()})
 
 
 if __name__ == "__main__":
