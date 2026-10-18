@@ -186,3 +186,14 @@ def test_ground_stays_under_the_main_road_where_the_town_ground_blends_out():
     for y in (0.0, 2.0, -2.0):                    # 格子の点で、路面（片側 3.0m）の中、円のすぐ外
         j = np.searchsorted(near["ys"], y); assert near["ys"][j] == y
         assert near["Z"][j, i] == pytest.approx(plain["Z"][j, i]), y   # 本線の下は削ったままの高さ（町の地面へ持ち上げない）
+
+
+def test_road_clear_counts_places_where_ground_comes_up_to_the_road():
+    """track_check の road_clear：本線（と分かれ道）の路面から 10cm 以内に地形が来る所の数。0 で ok。"""
+    sec = _straight()
+    xs = np.arange(-10.0, 211.0); ys = np.arange(-30.0, 31.0); X, Y = np.meshgrid(xs, ys)
+    Z = np.full(X.shape, float(sec.z[0]) - 1.0)
+    near = {"xs": xs, "ys": ys, "Z": Z}
+    assert tr.road_clear_count(sec, near) == 0
+    Z[(X > 50) & (X < 60) & (np.abs(Y) < 2)] = float(sec.z[0]) + 0.3          # 道の上に土
+    assert tr.road_clear_count(sec, near) > 0

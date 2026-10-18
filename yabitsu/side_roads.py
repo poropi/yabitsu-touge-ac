@@ -198,7 +198,11 @@ def stubs(elements, sec, sampler, keep_out, s_min=0.0, length_m=STUB_LENGTH_M, u
                 if pc.length < length_m:
                     ends = ends if ends is not None else _ends_index(elements, r70)
                     pc = _follow(pc, w, ends, length_m)
-                axis = _stop_before(substring(pc, 0.0, min(length_m, pc.length)), form, _width(t))
+                others = unary_union([q.surface for q in out])
+                if not others.is_empty and pc.interpolate(min(5.0, pc.length)).distance(others) < _width(t):
+                    continue   # 旧道のもう一方の入口：もう作った分かれ道が同じ道をここまで作っている
+                built = unary_union([form, others])   # 本線と、もう作った分かれ道の手前で終える
+                axis = _stop_before(substring(pc, 0.0, min(length_m, pc.length)), built, _width(t))
             width = _width(t)
             if any(axis.buffer(width / 2).intersects(Polygon(k) if not isinstance(k, Polygon) else k) for k in keep_out):
                 continue
@@ -222,6 +226,8 @@ def stubs(elements, sec, sampler, keep_out, s_min=0.0, length_m=STUB_LENGTH_M, u
             zg = np.asarray(sampler.sample(*unproject(pts[:, 0], pts[:, 1])), float)
             zg = np.where(np.isnan(zg), z_edge, zg)
             wgt = np.clip(tk / BLEND_M, 0.0, 1.0); wgt = wgt * wgt * (3 - 2 * wgt)
+            if length_m > STUB_LENGTH_M and len(zg) >= 3:   # 長い分かれ道：標高データの1点だけの穴・出っぱりを消す（3点の中央値）
+                zg = np.r_[zg[0], np.median(np.c_[zg[:-2], zg[1:-1], zg[2:]], axis=1), zg[-1]]
             zk = (1 - wgt) * z_edge + wgt * zg
             out.append(Stub(int(w.get("id", 0)), axis, width, surf, mouth, zk, tk))
     return out

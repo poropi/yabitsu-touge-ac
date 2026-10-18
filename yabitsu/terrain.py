@@ -199,3 +199,26 @@ def terrain_z(near, mid):
         zn, dn, zm = fn(q), fd(q), fm(q)
         return np.where((dn <= NEAR_BAND - 2.0) & ~np.isnan(zn), zn, zm).reshape(np.shape(x))
     return z
+
+
+BRANCH_MARGIN = 0.0
+
+
+def road_clear_count(sec, near, stubs=(), margin=0.1):
+    """本線の路面（1m ごと、横 9 点）と分かれ道の路面（軸の上 1m ごと）で、地形が路面の margin 以内まで来る点の数。"""
+    from scipy.interpolate import RegularGridInterpolator
+    fn = RegularGridInterpolator((near["ys"], near["xs"]), near["Z"], bounds_error=False, fill_value=np.nan)
+    k = np.linspace(-1.0, 1.0, 9)[None, :]
+    lat = np.where(k >= 0, k * (sec.hw_left[:, None] - 0.2), k * (sec.hw_right[:, None] - 0.2))
+    nx, ny = -np.sin(sec.heading)[:, None], np.cos(sec.heading)[:, None]
+    X = sec.x[:, None] + lat * nx; Y = sec.y[:, None] + lat * ny
+    zt = fn(np.c_[Y.ravel(), X.ravel()]).reshape(X.shape)
+    zr = surface_height(lat, sec.z[:, None], sec.slope[:, None], sec.crown[:, None])
+    bad = int(np.sum(zt > zr - margin))
+    for st in stubs:
+        for t in np.arange(0.0, st.axis.length, 1.0):
+            p = st.axis.interpolate(t)
+            z = fn([[p.y, p.x]])[0]
+            if np.isfinite(z) and z > st.z_at(p.x, p.y) - BRANCH_MARGIN:   # 分かれ道は土台の継ぎ目で数cm 寄るので、路面より上に出る所だけ
+                bad += 1
+    return bad

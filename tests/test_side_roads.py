@@ -222,3 +222,27 @@ def test_barricade_decision_uses_the_built_branch_length():
     ways = [_way([[100, 0], [100, 20]], id=1, highway="unclassified"), _way([[100, 20], [100, 300]], id=2, highway="unclassified")]
     st, = sr.stubs(ways, sec, _Flat(), keep_out=[], length_m=200.0)
     assert sr.needs_barricade(st, {w["id"]: w for w in ways})
+
+
+def test_two_ends_of_a_loop_road_do_not_overlap():
+    """本線から出てまた本線へ戻る1本の旧道は、両方の入口から分かれ道として作られる。2本目は1本目の路面の手前で終える（S4 1630m・1672m）。"""
+    sec = _straight()
+    ways = [_way([[100, 0], [100, 40], [130, 40]], id=1, highway="unclassified"),     # OSM では旧道が2本の way に分かれている
+            _way([[160, 0], [160, 40], [130, 40]], id=2, highway="unclassified")]
+    sts = sr.stubs(ways, sec, _Flat(), keep_out=[], length_m=200.0)
+    assert sts and all(p.surface.intersection(q.surface).area < 1.0 for i, p in enumerate(sts) for q in sts[i + 1:])
+
+
+class _Pit(_Flat):
+    def sample(self, lat, lon):
+        x, y = geo.to_local(np.asarray(lat), np.asarray(lon))
+        z = np.full(np.shape(x), self.z, float)
+        return np.where(np.hypot(np.asarray(x) - 100, np.asarray(y) - 64.2) < 3, self.z - 4.0, z)   # 標高データの1点の穴（t=60 の点）
+
+
+def test_long_branch_has_no_pit_from_one_bad_elevation_sample():
+    """長い分かれ道（S4）の高さは、標高データの1点だけの穴や出っぱりに引っぱられない（S4 1672m の 40m に 4m の穴があった）。"""
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 300]])], sec, _Pit(), keep_out=[], length_m=200.0)
+    i = int(np.argmin(np.abs(st.t_knots - 60)))
+    assert abs(st.z_knots[i] - 100.0) < 1.0

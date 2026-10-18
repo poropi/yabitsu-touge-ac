@@ -10,7 +10,7 @@ import numpy as np
 from shapely.geometry import LineString, Point
 from shapely.ops import substring
 
-from . import geo
+from . import geo, osm
 from .crosssection import GUTTER_WIDTH
 from .meshgen import compact, ribbon
 
@@ -111,6 +111,7 @@ def from_osm(elements, sec, sampler, overrides=None, reach_m=REACH_M, unproject=
     main = LineString(np.c_[sec.x, sec.y])
     ground = lambda x, y: float(np.nan_to_num(sampler.sample(*unproject(np.atleast_1d(x), np.atleast_1d(y)))[0], nan=0.0))
     out = []
+    r70 = {id(w) for w in osm.route70_ways(elements)}
     for w in elements:
         t = w.get("tags", {})
         if w.get("type") != "way" or t.get("bridge", "no") == "no" or _layer(t) < 1 or t.get("highway") not in BRIDGE_TYPES:
@@ -122,6 +123,9 @@ def from_osm(elements, sec, sampler, overrides=None, reach_m=REACH_M, unproject=
             continue
         x, y = geo.to_local(pts[:, 0], pts[:, 1])
         line = LineString(np.c_[x, y])
+        along = main.intersection(line.buffer(3.0))
+        if id(w) in r70 or (not along.is_empty and along.length > 0.8 * line.length):
+            continue   # 県道70号そのものの橋（道に沿う）：道の上を渡る橋ではない
         hit = line.intersection(main)
         if hit.is_empty:
             continue

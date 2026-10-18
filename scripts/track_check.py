@@ -33,7 +33,15 @@ def check(processed_dir, manual_dir):
         tris += len(d["faces"]) * (d["faces"].shape[1] - 2)
         if name.startswith("1ROAD_") and "gutter" not in name:
             folds += len(folded_faces(d["verts"], d["faces"]))
-    return {"elevation_ok": st["max_residual_m"] <= 1.5, "max_residual_m": st["max_residual_m"],
+    road_clear = None   # 地形が路面（本線・分かれ道）の 10cm 以内に来る所（処理済みの地形があるときだけ）
+    if (P / "track_terrain_near.npz").exists() and (P / "track_pads.json").exists():
+        from yabitsu import features as ft, nagoki, terrain, track as trk
+        from yabitsu.crosssection import Section
+        sec = Section.load_json(P / "track_section.json")
+        pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
+        stubs, _ = nagoki.track_stubs(sec, pads, ft.load_features_rows(trk.load_section_rows("features", trk.load_bounds())))
+        road_clear = terrain.road_clear_count(sec, dict(np.load(P / "track_terrain_near.npz")), stubs)
+    return {"elevation_ok": st["max_residual_m"] <= 1.5, "road_clear": road_clear, "road_clear_ok": road_clear in (0, None), "max_residual_m": st["max_residual_m"],
             "max_grade_pct": st["max_grade_pct"], "sections": sections, "position_ok": position_ok,
             "position_rows": len(rows), "folds": folds, "tris": tris}
 

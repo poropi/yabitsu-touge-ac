@@ -43,3 +43,11 @@ def test_deck_faces_point_outward():
     bottom = np.isclose(c[:, 2], o.z_under)
     top = np.isclose(c[:, 2], o.z_under + op.GIRDER_DEPTH + op.SLAB) & (np.abs(c[:, 0] - 100) < o.width / 2 - 0.5)
     assert (n[bottom, 2] < -0.99).all() and (n[top, 2] > 0.99).all()
+
+
+def test_bridge_on_the_course_itself_is_not_an_overpass():
+    """県道70号そのものの橋（S4 の札掛橋など、OSM では layer=1）は、道の上を渡る橋ではない（空に橋が浮いていた）。"""
+    sec = _straight()
+    ws = [_way([[90, 0], [110, 0]], id=5, highway="primary", ref="70", bridge="yes", layer="1"),
+          _way([[150, 0.5], [170, 0.3]], id=6, highway="primary", bridge="yes", layer="1")]   # 名前・ref のない本線の橋（線に沿う）
+    assert op.from_osm(ws, sec, _Flat(95.0)) == []
