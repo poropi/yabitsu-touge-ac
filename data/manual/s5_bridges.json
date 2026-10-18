@@ -1,0 +1,154 @@
+[
+ {
+  "osm_id": 1035281074,
+  "name": "栃の木橋",
+  "kana": "栃の木橋",
+  "rail": "concrete",
+  "rail_color": "#B9B4A8",
+  "deck_depth_m": 1.2,
+  "pier_every_m": 0,
+  "note": "コンクリートの欄干・親柱（ストリートビュー S5 4200m）"
+ },
+ {
+  "osm_id": 131561910,
+  "name": "塩水橋",
+  "kana": "塩水橋",
+  "rail": "steel",
+  "rail_color": "#8E8E88",
+  "deck_depth_m": 1.0,
+  "pier_every_m": 0,
+  "note": "灰色の鉄の手すり（s=4570）"
+ },
+ {
+  "osm_id": 785523109,
+  "name": "青宇治橋",
+  "kana": "青宇治橋",
+  "rail": "steel",
+  "rail_color": "#7A5638",
+  "deck_depth_m": 1.5,
+  "pier_every_m": 0,
+  "note": "茶色の鉄の格子の欄干（s=5400）"
+ },
+ {
+  "osm_id": 1336846798,
+  "name": "南沢橋",
+  "kana": "南沢橋",
+  "rail": "steel",
+  "rail_color": "#8E8E88",
+  "deck_depth_m": 1.0,
+  "pier_every_m": 0,
+  "note": "灰色の手すり（s=7570）"
+ },
+ {
+  "osm_id": 1336846794,
+  "name": "前沢橋",
+  "kana": "前沢橋",
+  "rail": "steel",
+  "rail_color": "#3D3D3A",
+  "deck_depth_m": 1.2,
+  "pier_every_m": 0,
+  "note": "黒っぽい鉄の手すり（s=8050）"
+ },
+ {
+  "osm_id": 1336846792,
+  "name": "ヒル沢橋",
+  "kana": "ヒル沢橋",
+  "rail": "steel",
+  "rail_color": "#8E8E88",
+  "deck_depth_m": 1.2,
+  "pier_every_m": 0,
+  "note": "灰色の手すり（s=8660）"
+ },
+ {
+  "osm_id": 131561914,
+  "name": "大門橋",
+  "kana": "大門橋",
+  "rail": "steel",
+  "rail_color": "#A8ABAA",
+  "deck_depth_m": 2.0,
+  "pier_every_m": 30,
+  "note": "灰色の鉄の欄干、湖の上（s=9850〜9900）"
+ },
+ {
+  "osm_id": 131562393,
+  "name": "大門桟道",
+  "kana": "大門桟道",
+  "rail": "concrete",
+  "rail_color": "#B9B4A8",
+  "deck_depth_m": 1.5,
+  "pier_every_m": 15,
+  "note": "崖に張り出した桟道：四角い窓のあるコンクリートの欄干（s=10000〜10200）"
+ },
+ {
+  "osm_id": 131561917,
+  "name": "御殿橋",
+  "kana": "御殿橋",
+  "rail": "concrete",
+  "rail_color": "#B9B4A8",
+  "deck_depth_m": 1.5,
+  "pier_every_m": 20,
+  "note": "四角い窓のあるコンクリートの欄干（s=10300）"
+ },
+ {
+  "osm_id": 131561912,
+  "name": "釜田川橋",
+  "kana": "釜田川橋",
+  "rail": "steel",
+  "rail_color": "#A8ABAA",
+  "deck_depth_m": 2.0,
+  "pier_every_m": 0,
+  "arch": true,
+  "arch_color": "#C0302A",
+  "note": "赤い鉄のアーチ（門形）と灰色の欄干（s=10500〜10550）"
+ },
+ {
+  "osm_id": 131561909,
+  "name": "吹風橋",
+  "kana": "吹風橋",
+  "rail": "concrete",
+  "rail_color": "#B9B4A8",
+  "deck_depth_m": 1.5,
+  "pier_every_m": 20,
+  "note": "トンネルを出てすぐ：コンクリートの欄干と茶色の手すり（s=10950）"
+ },
+ {
+  "osm_id": 131561913,
+  "name": "橋の沢橋",
+  "kana": "橋の沢橋",
+  "rail": "concrete",
+  "rail_color": "#B9B4A8",
+  "deck_depth_m": 1.5,
+  "pier_every_m": 25,
+  "note": "四角い窓のあるコンクリートの欄干（s=11050）"
+ },
+ {
+  "osm_id": 131561918,
+  "name": "山王橋",
+  "kana": "山王橋",
+  "rail": "concrete",
+  "rail_color": "#B9B4A8",
+  "deck_depth_m": 1.5,
+  "pier_every_m": 25,
+  "note": "四角い窓のあるコンクリートの欄干（s=11150〜11200）"
+ },
+ {
+  "osm_id": 131561916,
+  "name": "山の神橋",
+  "kana": "山の神橋",
+  "rail": "concrete",
+  "rail_color": "#B9B4A8",
+  "deck_depth_m": 1.5,
+  "pier_every_m": 25,
+  "note": "コンクリートの欄干（s=11300）"
+ },
+ {
+  "osm_id": 131561911,
+  "name": "熊野橋",
+  "kana": "熊野橋",
+  "rail": "steel",
+  "rail_color": "#5C4330",
+  "deck_depth_m": 1.5,
+  "pier_every_m": 25,
+  "note": "茶色の木目調の手すり（s=11450）"
+ }
+]

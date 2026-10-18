@@ -54,6 +54,14 @@ def main():
     from shapely.ops import unary_union as _uu
     # stubs は上で作った（入口は本線と歩道から離してある）
     assembly.add_meshes(m, side_roads.stub_meshes(stubs))
+    from yabitsu import bridge_parts   # S5 の名前のある橋（親柱・銘板・欄干・桁・橋脚・赤いアーチ）
+    brs = bridge_parts.load(config.DATA_MANUAL / "s5_bridges.json")
+    rng = bridge_parts.ranges(sec, side_roads.load_elements(), {int(b["osm_id"]) for b in brs})
+    for name, rel in bridge_parts.write_plate_textures(brs, config.TRACK_BUILD_DIR / "textures").items():
+        m.add_material(name, texture=rel)
+    for name, rel in bridge_parts.rail_textures(brs, config.TRACK_BUILD_DIR / "textures").items():
+        m.add_material(name, texture=rel, alpha=True, two_sided=True)   # 格子のすき間は透明
+    assembly.add_meshes(m, bridge_parts.meshes(sec, brs, rng, ground))
     from yabitsu import tunnel, textures as _tx   # トンネル（筒・照明・坑口・表札）
     tns = tunnel.from_osm(side_roads.load_elements(), sec)
     tspec = json.loads((config.DATA_MANUAL / "s5_tunnels.json").read_text(encoding="utf-8")) if (config.DATA_MANUAL / "s5_tunnels.json").exists() else {}

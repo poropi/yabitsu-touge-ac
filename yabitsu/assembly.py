@@ -51,7 +51,9 @@ def add_road(m, sec, rows_per_chunk=200, skip=None):
 
 
 CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("line_white", None),
-                 "orange_solid": ("line_orange", None), "orange_flanked": ("line_orange", None)}
+                 "orange_solid": ("line_orange", None), "orange_flanked": ("line_orange", None),
+                 "orange_median": ("line_orange", None)}
+MEDIAN_W, MEDIAN_H = 0.6, 0.12   # orange_median：中央の盛り上がった帯（宮ヶ瀬湖ぞい）の幅・高さ。両側にオレンジの実線
 FLANK_OFFSET, FLANK_DASH = 0.9, (2.0, 2.0)   # orange_flanked：オレンジの実線の両側の、白い破線（減速を促す線）
 
 
@@ -92,6 +94,18 @@ def add_centrelines(m, sec, rows, s_min=0.0, gaps=()):
         if i1 - i0 < 1:
             continue
         sl = slice(i0, i1 + 1)
+        if style == "orange_median":   # 盛り上がった帯（上面と両側の面）と、その両側のオレンジの実線
+            from .start_lot import _merge
+            n = i1 - i0 + 1
+            top = mg.line(sec, sl, np.zeros(n), width=MEDIAN_W, lift=MEDIAN_H)
+            from .crosssection import surface_height
+            zc = lambda sgn: surface_height(sgn * MEDIAN_W / 2, sec.z[sl], sec.slope[sl], sec.crown[sl])
+            sides = [mg.wall_ribbon(sec, sl, sgn, np.full(n, MEDIAN_W / 2), np.full(n, MEDIAN_W / 2), zc(sgn) - 0.02, zc(sgn) + MEDIAN_H)
+                     for sgn in (1, -1)]   # 縦の縁（外向き）
+            m.add_mesh(GROUP, f"track_centre_{k:03d}_median", *_merge([mg.compact(*top)] + [mg.compact(*q) for q in sides]), "concrete")
+            parts = [mg.compact(*mg.line(sec, sl, np.full(n, sgn * (MEDIAN_W / 2 + 0.12)))) for sgn in (1, -1)]
+            m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}", *_merge(parts), mat)
+            continue
         v, f, uv = mg.compact(*mg.line(sec, sl, np.zeros(i1 - i0 + 1), dash=dash))
         if len(f):
             m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}", v, f, uv, mat)

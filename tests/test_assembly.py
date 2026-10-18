@@ -112,3 +112,20 @@ def test_road_end_is_closed_across_the_whole_road():
     assert v[:, 1].min() <= -(sec.hw_right[190] + GUTTER_WIDTH) - 1.0 and v[:, 1].max() >= sec.hw_left[190] + GUTTER_WIDTH + 1.0
     bars = [m for m in ms if m[0] != "1WALL_road_end_block"]
     assert bars and max(m[1][:, 0].max() for m in bars) < v[:, 0].min()     # 柵は壁の手前（峠の側）
+
+
+def test_raised_median_strip_with_double_orange_lines(tmp_path):
+    """宮ヶ瀬湖ぞい（S5 9000〜9570m）の中央：幅 0.6m のコンクリートの盛り上がり（ゼブラ帯の縁石）と、その両側のオレンジの実線。"""
+    import numpy as np
+    m = Manifest(tmp_path)
+    sec = _straight(401)
+    assembly.add_centrelines(m, sec, [{"s_from": 50.0, "s_to": 150.0, "style": "orange_median", "note": ""}])
+    names = m.groups[assembly.GROUP]["meshes"]
+    strip = next(n for n in names if n.endswith("_median"))
+    v = np.load(tmp_path / m.meshes[strip]["file"])["verts"]
+    assert m.meshes[strip]["material"] == "concrete"
+    assert np.abs(v[:, 1]).max() == pytest.approx(assembly.MEDIAN_W / 2, abs=1e-6)
+    assert v[:, 2].max() >= float(sec.z[100]) + assembly.MEDIAN_H - 0.02
+    lines = [n for n in names if m.meshes[n]["material"] == "line_orange"]
+    lv = np.concatenate([np.load(tmp_path / m.meshes[n]["file"])["verts"] for n in lines])
+    assert lv[:, 1].min() < -assembly.MEDIAN_W / 2 and lv[:, 1].max() > assembly.MEDIAN_W / 2
