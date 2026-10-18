@@ -14,26 +14,55 @@ P = config.DATA_PROCESSED
 HOUSE_CLEAR_M = 2.5   # S3 の道ぞいの家は、道（路面＋側溝）からこれより近いものを置かない（歩道の上に建てない）
 
 
-def center():
-    x, y = geo.to_local(*config.NAGOKI)
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class Junction:
+    """町の範囲（半径 TOWN_RADIUS_M）として作る交差点：中心、町の spec、建物、駐車場、地面の保存先、kn5 のグループ。"""
+    name: str
+    latlon: tuple
+    spec: str
+    buildings: str
+    lots: str
+    ground: str
+    group: str
+
+
+JUNCTIONS = {
+    "nagoki": Junction("nagoki", config.NAGOKI, "s3_nagoki.json", "s3_buildings.json", "s3_lots.json", "track_town_ground.npz", config.TOWN_GROUP),
+    "kitahara": Junction("kitahara", config.KITAHARA, "s5_kitahara.json", "s5_kitahara_buildings.json", "s5_kitahara_lots.json",
+                         "track_kitahara_ground.npz", config.KITAHARA_GROUP),
+}
+NAGOKI = JUNCTIONS["nagoki"]
+
+
+def available():
+    """spec のファイルがある交差点（作る交差点）。"""
+    return [j for j in JUNCTIONS.values() if (config.DATA_MANUAL / j.spec).exists()]
+
+
+def center(junction=NAGOKI):
+    x, y = geo.to_local(*junction.latlon)
     return float(x), float(y)
 
 
-def circle():
-    return Point(*center()).buffer(config.TOWN_RADIUS_M, 128)
+def circle(junction=NAGOKI):
+    return Point(*center(junction)).buffer(config.TOWN_RADIUS_M, 128)
 
 
-def load_ground():
-    return town_ground.TownGround.load(P / "track_town_ground.npz")
+def load_ground(junction=NAGOKI):
+    return town_ground.TownGround.load(P / junction.ground)
 
 
-def load_town(sec, ground=None):
-    spec = json.loads((config.DATA_MANUAL / "s3_nagoki.json").read_text(encoding="utf-8"))
-    return town.Town(spec, side_roads.load_elements(), sec, ground or load_ground(), center(), config.TOWN_RADIUS_M)
+def load_town(sec, ground=None, junction=NAGOKI):
+    spec = json.loads((config.DATA_MANUAL / junction.spec).read_text(encoding="utf-8"))
+    return town.Town(spec, side_roads.load_elements(), sec, ground or load_ground(junction), center(junction), config.TOWN_RADIUS_M)
 
 
-def load_buildings():
-    return [bd.Building.from_spec(d) for d in json.loads((config.DATA_MANUAL / "s3_buildings.json").read_text(encoding="utf-8"))]
+def load_buildings(junction=NAGOKI):
+    p = config.DATA_MANUAL / junction.buildings
+    return [bd.Building.from_spec(d) for d in json.loads(p.read_text(encoding="utf-8"))] if p.exists() else []
 
 
 def roadside_houses(sec, ground_z):

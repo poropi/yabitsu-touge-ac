@@ -84,3 +84,18 @@ def test_s4_branches_are_long_and_sealed():
     assert sum(n.startswith("1WALL_side_block_") for n in names) == len(mine)
     assert sum(n.startswith("1WALL_side_end_") for n in names) == len(long_)
     assert all(st.axis.length <= sr.S4_BRANCH_M + 1.0 for st in mine)
+
+
+def test_nagoki_town_unchanged_after_generalising(town):
+    """町の範囲の作りを「交差点ごとの設定」にしても、名古木の町は今と同じ（data/manual/s3_town_reference.json）。"""
+    import json
+    ref = json.loads((config.DATA_MANUAL / "s3_town_reference.json").read_text(encoding="utf-8"))
+    d = town.drivable()
+    for name, g in (("carriageway", town.carriageway), ("sidewalk", town.sidewalk), ("drivable", d)):
+        a, x, y = ref[name]
+        assert abs(g.area - a) < 0.5 and abs(g.centroid.x - x) < 0.01 and abs(g.centroid.y - y) < 0.01, name
+    assert abs(town.region.area - ref["region"][0]) < 0.5
+    assert list(town.main_skip) == pytest.approx(ref["main_skip"], abs=1e-6)
+    assert [[c["name"], c["a"], c["b"]] for c in town.closures] == ref["closures"]
+    assert abs(sum(g.length for g in town.boundary_walls()) - ref["walls_len"]) < 0.05
+    assert len(town.markings) == ref["markings"] and [p["name"] for p in town.pads()] == ref["pads"]

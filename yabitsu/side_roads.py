@@ -48,6 +48,20 @@ def town_exit_s(sec, center_xy, radius):
     return float(sec.s[out[0]]) if len(out) else float(sec.s[-1])
 
 
+def town_range_s(sec, center_xy, radius):
+    """本線が、center_xy を中心とする半径 radius の円の中にある範囲 (s_in, s_out)。円の中心に一番近い行を含む続きの範囲。"""
+    d = np.hypot(sec.x - center_xy[0], sec.y - center_xy[1])
+    i = int(np.argmin(d)); inside = d <= radius
+    a = i
+    while a > 0 and inside[a - 1]:
+        a -= 1
+    b = i
+    while b < sec.n - 1 and inside[b + 1]:
+        b += 1
+    s_out = float(sec.s[b + 1]) if b < sec.n - 1 else float(sec.s[-1])   # town_exit_s と同じく、円を出た最初の行
+    return float(sec.s[a]), s_out
+
+
 @dataclass
 class Stub:
     osm_id: int

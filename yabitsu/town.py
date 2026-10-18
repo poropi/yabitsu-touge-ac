@@ -16,7 +16,7 @@ from shapely.ops import substring, unary_union
 
 from . import geo, osm
 from .crosssection import GUTTER_WIDTH
-from .side_roads import town_exit_s
+from .side_roads import town_exit_s, town_range_s
 
 ROAD_DEFAULTS = {"trunk": (7.0, 2.5), "primary": (6.5, 2.0), "secondary": (6.5, 2.0), "secondary_link": (4.5, 1.5),
                  "tertiary": (5.5, 1.5), "unclassified": (4.5, 0.0), "residential": (4.0, 0.0), "service": (3.5, 0.0),
@@ -200,11 +200,16 @@ class Town:
     def __init__(self, spec, osm_elements, sec, ground, center_xy, radius):
         self.spec, self.sec, self.ground = spec, sec, ground
         self.center = np.asarray(center_xy, float); self.radius = radius
-        s_exit = town_exit_s(sec, center_xy, radius)
-        self.main_skip = (0.0, s_exit)
+        s_in, s_exit = town_range_s(sec, center_xy, radius)   # 本線が円の中にある範囲（名古木は道の始まり、宮ヶ瀬北原は終わり）
+        self.main_skip = (s_in, s_exit)
         circle = Point(*self.center).buffer(radius, 128)
-        main = main_formation(sec, 0.0, s_exit)
-        beyond = main_formation(sec, s_exit, min(s_exit + 400.0, float(sec.s[-1]))).buffer(0.01)
+        main = main_formation(sec, s_in, s_exit)
+        outside = []   # 円の外の本線（帯で作る所）
+        if s_exit < float(sec.s[-1]) - 1e-6:
+            outside.append(main_formation(sec, s_exit, min(s_exit + 400.0, float(sec.s[-1]))))
+        if s_in > float(sec.s[0]) + 1e-6:
+            outside.append(main_formation(sec, max(s_in - 400.0, float(sec.s[0])), s_in))
+        beyond = unary_union(outside).buffer(0.01)
         self.region = circle.union(main).difference(beyond)
         roads = spec.get("roads", {})
         r70 = {id(w) for w in osm.route70_ways(osm_elements)}
@@ -213,9 +218,9 @@ class Town:
         mw = roads.get("main", {})
         for side, key in ((1, "sidewalk_l"), (-1, "sidewalk_r")):
             if mw.get(key):   # その場所の道幅（町の中の行）の外に付ける
-                m = (sec.s >= 0.0) & (sec.s <= s_exit)
+                m = (sec.s >= s_in) & (sec.s <= s_exit)
                 hw = (sec.hw_left if side > 0 else sec.hw_right)[m] + GUTTER_WIDTH
-                walks.append(side_band(sec, 0.0, s_exit, side, hw - 0.01, hw + float(mw[key])))
+                walks.append(side_band(sec, s_in, s_exit, side, hw - 0.01, hw + float(mw[key])))
         for w in osm_elements:
             t = w.get("tags", {})
             hwy = t.get("highway")
@@ -255,11 +260,12 @@ class Town:
         """OSM の横断歩道（zebra）の位置に横断歩道、信号のある横断歩道の手前に停止線、
         ヤビツ方面以外の道の入口に封鎖の線を置く（緯度経度の dict で返す）。"""
         sec, c = self.sec, self.center
-        main_line = LineString(np.c_[sec.x, sec.y][sec.s <= s_exit + 1.0])
+        s_in = self.main_skip[0]; inr = (sec.s >= s_in - 1.0) & (sec.s <= s_exit + 1.0)
+        main_line = LineString(np.c_[sec.x, sec.y][inr])
         nodes = [e for e in elements if e.get("type") == "node"]
         sig = np.array([_xy([[e["lat"], e["lon"]]])[0] for e in nodes
                         if e.get("tags", {}).get("highway") == "traffic_signals"]).reshape(-1, 2)
-        hw_main = float(np.median(sec.hw_left[sec.s <= s_exit])) + GUTTER_WIDTH
+        hw_main = float(np.median(sec.hw_left[inr])) + GUTTER_WIDTH
         lines = [(w, ln, wd) for (w, ln, wd, sl, sr) in self._roads] + [(None, main_line, 2 * hw_main)]
         marks, crossings = [], []
         for e in nodes:
@@ -292,7 +298,7 @@ class Town:
         box = Point(*c).buffer(R_BOX, 128)
         major = [(str(w.get("id")), ln, wd, w["tags"].get("oneway") == "yes") for (w, ln, wd, sl, sr) in self._roads
                  if w["tags"].get("highway") in LINED]
-        hw_main = float(np.median(sec.hw_left[sec.s <= s_exit]))
+        hw_main = float(np.median(sec.hw_left[inr]))
         major.append(("main", main_line, 2 * hw_main, False))
         # ほかの道の車道の中には外側線を引かない（同じ道が何本もの線で描かれている所、道が合わさる所）
         bodies = {str(w.get("id")): ln.buffer(wd / 2 - 0.4, cap_style="flat") for (w, ln, wd, sl, sr) in self._roads}
@@ -312,7 +318,7 @@ class Town:
                             marks.append({"kind": "lane_line", "points": [_ll(q) for q in o.coords], "color": "white",
                                           "road": rid, "auto": True})
         closures = []
-        main_zone = main_formation(sec, 0.0, s_exit).buffer(self.main_walk)
+        main_zone = main_formation(sec, s_in, s_exit).buffer(self.main_walk)
         for (w, ln, wd, sl, sr) in self._roads:
             half = wd / 2 + max(sl, sr) + CLOSURE_OVERHANG
             if ln.distance(Point(*c)) <= R_BOX:   # 交差点の腕：横断歩道の外側、なければ R_ARM で
@@ -343,7 +349,7 @@ class Town:
         area = unary_union([self.carriageway, self.sidewalk, *extra])
         # 走れるのは、県道70号（路面＋側溝＋歩道）と、交差点の中（腕の封鎖の線の端を結んだ多角形）と drivable_extra だけ。
         # 封鎖の線で切るだけだと、線が道幅より短い所で柵の横を回って奥の道へ出られる（最終レビューの指摘 1）
-        keep = [main_formation(self.sec, 0.0, self.main_skip[1]).buffer(self.main_walk), *extra]
+        keep = [main_formation(self.sec, *self.main_skip).buffer(self.main_walk), *extra]
         ends = [q for c in self.closures if not c["name"].startswith("side_") for q in _xy([c["a"], c["b"]])]
         if len(ends) >= 3:
             keep.append(MultiPoint([tuple(q) for q in ends]).convex_hull)
@@ -373,12 +379,14 @@ class Town:
     def boundary_walls(self):
         """走れる範囲の外周のうち、封鎖の線と、本線の帯へ出る口を除いた線（見えない壁を立てる所）。"""
         d = self.drivable()
-        sec, s1 = self.sec, self.main_skip[1]
-        i = int(np.argmin(np.abs(sec.s - s1)))
-        n = np.array([-np.sin(sec.heading[i]), np.cos(sec.heading[i])]); p = np.array([sec.x[i], sec.y[i]])
-        reach = max(sec.hw_left[i], sec.hw_right[i]) + GUTTER_WIDTH + self.main_walk + 0.5
-        mouth = LineString([p - n * reach, p + n * reach]).buffer(0.3)
-        gaps = [mouth] + [LineString(_xy([c["a"], c["b"]])).buffer(0.06) for c in self.closures]  # 封鎖の線そのものにも壁を立てる
+        sec = self.sec
+        mouths = []   # 本線の帯へ出る口（円の外へ本線が続く側だけ）
+        for s1 in [s for s in self.main_skip if float(sec.s[0]) + 1e-6 < s < float(sec.s[-1]) - 1e-6]:
+            i = int(np.argmin(np.abs(sec.s - s1)))
+            n = np.array([-np.sin(sec.heading[i]), np.cos(sec.heading[i])]); p = np.array([sec.x[i], sec.y[i]])
+            reach = max(sec.hw_left[i], sec.hw_right[i]) + GUTTER_WIDTH + self.main_walk + 0.5
+            mouths.append(LineString([p - n * reach, p + n * reach]).buffer(0.3))
+        gaps = mouths + [LineString(_xy([c["a"], c["b"]])).buffer(0.06) for c in self.closures]  # 封鎖の線そのものにも壁を立てる
         rings = [LineString(d.exterior.coords)] + [LineString(h.coords) for h in d.interiors]
         rest = unary_union(rings).difference(unary_union(gaps))
         return [g for g in _lines(rest) if g.length > 0.05] if rest.geom_type != "LineString" else [rest]
