@@ -160,3 +160,29 @@ def test_mid_band_overlaps_near_and_reaches_200m():
     assert ys.max() >= 195.0 and np.abs(ys).min() <= tr.NEAR_BAND - 3.0      # 200m まで、細かい地形の下にもぐり込む
     assert np.allclose(mid["Z"][np.abs(mid["ys"] - 150).argmin(), i], 100.0 - tr.MID_DROP)
     assert tr.FAR_HOLE >= tr.MID_BAND - 10.0
+
+
+def test_house_plot_next_to_the_road_does_not_lift_the_ground_over_the_road():
+    """道のすぐ横の高い家の土台（S3 4297m、蓑毛の家 3.3m 上）が、道の路面の上に地形を持ち上げない。"""
+    sec = _straight()
+    road = float(sec.z[0]); hw = float(sec.hw_left[0])
+    pad = {"polygon": [[90, -hw - 0.3], [110, -hw - 0.3], [110, -20], [90, -20], [90, -hw - 0.3]], "z": road + 3.3}
+    X = np.array([[100.0, 100.0, 100.0]]); Y = np.array([[-(hw - 0.3), -(hw + cs.GUTTER_WIDTH + 0.5), -15.0]])
+    Z, _ = tr.carve(X, Y, np.full_like(X, road), sec, pads=[pad])
+    assert Z[0, 0] < road                                               # 路面の下
+    assert Z[0, 1] <= road + tr.CUT_SLOPE * 0.5 + 1e-6                   # 道の縁からの切り土の斜面より上に出ない
+    assert Z[0, 2] == pytest.approx(road + 3.3 - tr.UNDER_DEPTH)          # 道から離れた所は土台の高さのまま
+
+
+def test_ground_stays_under_the_main_road_where_the_town_ground_blends_out():
+    """町（や島）の地面へなめらかに移す帯の中でも、本線の帯の下の地形は路面より UNDER_DEPTH 下（202m・3330m・3487m）。"""
+    from yabitsu.town_ground import TownGround
+    sec, _, circle, road = _town_case()
+    xs = np.arange(-50.0, 251.0); ys = np.arange(-150.0, 151.0)
+    g = TownGround(xs, ys, np.full((len(ys), len(xs)), float(sec.z[0])))   # 町の地面＝路面の高さ
+    near = tr.build_near(sec, _FlatSampler(), [], town=(g, circle, road))
+    plain = tr.build_near(sec, _FlatSampler(), [])
+    i = np.searchsorted(near["xs"], 142.0)
+    for y in (0.0, 2.0, -2.0):                    # 格子の点で、路面（片側 3.0m）の中、円のすぐ外
+        j = np.searchsorted(near["ys"], y); assert near["ys"][j] == y
+        assert near["Z"][j, i] == pytest.approx(plain["Z"][j, i]), y   # 本線の下は削ったままの高さ（町の地面へ持ち上げない）

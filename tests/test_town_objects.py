@@ -140,3 +140,17 @@ def test_cones_stand_behind_the_barricade_away_from_the_road():
     parts = to.barricade_meshes(np.array([-3.0, -25.0]), np.array([3.0, -25.0]), g.z, front=np.array([0.0, 1.0]))
     cones = next(p for p in parts if p[0].startswith("cone"))[1]
     assert cones[:, 1].max() < -25.0 + 0.01                 # front（+y＝道の側）の反対へ
+
+
+def test_bus_stops_standing_on_the_road_are_moved_just_outside_it():
+    """OSM のバス停の点が路面の中にあるとき（3480m は車線の中）、道の縁＋側溝の外へずらす。道の外の物はそのまま。"""
+    from tests.test_meshgen import _straight
+    from yabitsu.crosssection import GUTTER_WIDTH
+    sec = _straight()                                   # 本線は y=0 に沿って +x 向き、片側 3.6m
+    hw = float(sec.hw_left[0])
+    objs = [{"kind": "bus_stop", "points": [_ll(50.0, -2.0)]}, {"kind": "bus_stop", "points": [_ll(80.0, 7.0)]},
+            {"kind": "stele", "points": [_ll(60.0, 1.0)]}]
+    out = to.off_road(objs, sec)
+    (x0, y0), (x1, y1), (x2, y2) = [geo.to_local(*o["points"][0]) for o in out]
+    assert x0 == pytest.approx(50.0, abs=0.05) and y0 == pytest.approx(-(hw + GUTTER_WIDTH + to.OFF_ROAD_M), abs=0.05)
+    assert (x1, y1) == pytest.approx((80.0, 7.0), abs=1e-6) and (x2, y2) == pytest.approx((60.0, 1.0), abs=1e-6)

@@ -21,6 +21,7 @@ from .branches import ISLAND_H, _island_wall, island_objects
 from .crosssection import GUTTER_WIDTH, surface_height
 from .town import grid_drape, _lines, _polys
 
+FILL_R = 20.0          # 分かれる所・合わさる所の、路面の縁をまっすぐつなぐ範囲
 MARGIN_M = 25.0        # 窓は、分かれる所・合わさる所からこの距離だけ外まで
 WINDOW_HALF = 25.0     # 窓の横の広さ（本線の中心から片側）
 EDGE_INSET, LINE_W, LIFT = 0.3, 0.15, 0.005
@@ -75,7 +76,11 @@ class Split:
         # 2本の車線の間のすき間（島を除く）＝導流帯
         hull = one.convex_hull
         self.zebra = hull.difference(one).difference(self.island).intersection(self.window)
-        self.carriageway = unary_union(list(lanes.values()) + [self.zebra]).difference(self.island).buffer(0)
+        # 分かれる所・合わさる所のまわり（FILL_R）は、2車線の幅から1車線の2本へ、路面の縁をまっすぐつなぐ
+        allr = unary_union(list(lanes.values()))
+        q_ends = [q for k in singles for q in (self.lines[k].coords[0], self.lines[k].coords[-1])]
+        fills = [allr.intersection(Point(q).buffer(FILL_R)).convex_hull for q in q_ends]
+        self.carriageway = unary_union(list(lanes.values()) + [self.zebra] + fills).intersection(self.window).difference(self.island).buffer(0)
         red_ids = [str(k) for k in spec.get("red", [])]
         self.red = unary_union([lanes[k] for k in red_ids]).difference(
             unary_union([lanes[k] for k in lanes if k not in red_ids])).difference(self.island)   # 赤い車線だけ（重なる所は除く）
@@ -83,8 +88,9 @@ class Split:
 
     def _window(self, s0, s1):
         """本線の s0〜s1 の、本線の向きに直角に切った帯（横 ±WINDOW_HALF）。帯の端と同じ所で切れる。"""
-        sec = self.sec
-        m = (sec.s >= s0) & (sec.s <= s1)
+        sec = self.sec   # 本線の帯が終わる行（s0 の手前）から、また始まる行（s1 の先）まで。帯との間にすき間を作らない
+        i0 = max(int(np.searchsorted(sec.s, s0, side="right")) - 1, 0); i1 = min(int(np.searchsorted(sec.s, s1, side="left")), sec.n - 1)
+        m = slice(i0, i1 + 1); self.end_rows = (i0, i1)
         nx, ny = -np.sin(sec.heading[m]), np.cos(sec.heading[m])
         L = np.c_[sec.x[m] + WINDOW_HALF * nx, sec.y[m] + WINDOW_HALF * ny]
         R = np.c_[sec.x[m] - WINDOW_HALF * nx, sec.y[m] - WINDOW_HALF * ny]
@@ -97,8 +103,8 @@ class Split:
     def _ends(self):
         """窓の両はしの切り口（本線の帯とつながる所）。外側線と路肩はここで切る。"""
         out = []
-        for s in self.main_skip:
-            i = int(np.argmin(np.abs(self.sec.s - s))); h = self.sec.heading[i]
+        for i in self.end_rows:
+            h = self.sec.heading[i]
             n = np.array([-math.sin(h), math.cos(h)]); p = np.array([self.sec.x[i], self.sec.y[i]])
             out.append(LineString([p - n * WINDOW_HALF, p + n * WINDOW_HALF]).buffer(0.4))
         return unary_union(out)
@@ -177,4 +183,8 @@ class Split:
 
     def town_override(self):
         """terrain.build_near の town に渡す (地面の高さ, 範囲, 舗装)：路面の下と路肩の外 3m まで地形を路面に合わせる。"""
-        return (self.ground, self.area().buffer(3.0), self.area())
+        from .start_lot import road_formation
+        region = self.area().buffer(3.0)
+        s0, s1 = self.main_skip   # 窓の先の本線の帯（路面＋側溝）の下も、地形を路面の下へ下げる
+        road = road_formation(self.sec, max(s0 - 15.0, 0.0), min(s1 + 15.0, float(self.sec.s[-1])))
+        return (self.ground, region, self.area().union(road.intersection(region)))

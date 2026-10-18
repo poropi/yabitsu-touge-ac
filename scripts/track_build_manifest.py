@@ -105,7 +105,7 @@ def main():
     poi_nodes = [e for e in poi_el if e.get("type") == "node" and "lat" in e]
     assembly.add_meshes(m, pois.meshes(pois.place(poi_nodes, sec, skip), ground))
     assembly.add_meshes(m, town_objects.signal_meshes(ro["signals"], road_z, prefix="s3_signal"))
-    assembly.add_meshes(m, town_objects.object_meshes(ro["objects"], road_z, prefix="s3_obj"))
+    assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(ro["objects"], sec), road_z, prefix="s3_obj"))   # 路面の中のバス停は道の外へ
     # 町の範囲（名古木交差点）：別の kn5（config.TOWN_GROUP）
     assembly.add_meshes(m, tw.meshes(), group=config.TOWN_GROUP)
     assembly.add_meshes(m, tw.object_meshes(), group=config.TOWN_GROUP)

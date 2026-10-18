@@ -59,3 +59,38 @@ def test_red_lane_and_lines():
     orange = [m for m in ms.values() if m[4] == "line_orange"]
     assert orange and all(np.all((m[1][:, 1] < 15) | (m[1][:, 1] > 45)) for m in orange)   # 中央線は島の所にない
     assert any(m[4] == "line_white" for m in ms.values())
+
+
+def test_split_surface_reaches_the_rows_where_the_main_ribbon_starts_again():
+    """窓の端と本線の帯の間に草のすき間を作らない（神社の島の北の端 3484m）。"""
+    sec, ways, spec = _scene()
+    z = split.Split(spec, ways, sec, _Flat(100.0))
+    s0, s1 = z.main_skip
+    i0 = int(np.searchsorted(sec.s, s0, side="right")) - 1     # 帯が終わる行
+    i1 = int(np.searchsorted(sec.s, s1, side="left"))          # 帯がまた始まる行
+    for s in (sec.s[i0] + 0.2, sec.s[i1] - 0.2):
+        i = int(np.argmin(np.abs(sec.s - s)))
+        assert z.carriageway.contains(Point(sec.x[i], sec.y[i] + (s - sec.s[i]))), s
+
+
+def test_road_keeps_its_full_width_where_the_two_lanes_come_together():
+    """1車線の2本が合わさる所の手前でも、路面は2車線の幅いっぱい（3455〜3463m で細くなっていた）。"""
+    sec, ways, spec = _scene()
+    z = split.Split(spec, ways, sec, _Flat(100.0))
+    for x in (-3.0, 3.0):
+        assert z.carriageway.contains(Point(x, 58.0)) and z.carriageway.contains(Point(x, 2.0)), x
+    assert not z.carriageway.contains(Point(4.6, 58.0))
+
+
+def test_ground_override_keeps_under_the_main_road_beyond_the_window_ends():
+    """島のまわりで地形を路面の高さに合わせるとき、窓の先の本線の帯の下も「舗装」に入れて、地形を路面の下へ下げる
+    （3484m の先で、帯の上に草の帯が出ていた）。"""
+    sec, ways, spec = _scene()
+    z = split.Split(spec, ways, sec, _Flat(100.0))
+    _, region, paved = z.town_override()
+    for s in (z.main_skip[0] - 2.0, z.main_skip[1] + 2.0):
+        i = int(np.argmin(np.abs(sec.s - s)))
+        for lat in (-3.0, 0.0, 3.0):
+            p = Point(sec.x[i] - lat * np.sin(sec.heading[i]), sec.y[i] + lat * np.cos(sec.heading[i]))
+            if region.contains(p):
+                assert paved.contains(p), (s, lat)
