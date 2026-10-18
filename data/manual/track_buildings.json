@@ -956,20 +956,21 @@
 139.2120564
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 3.4,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#8C8478"
+"rise_m": 1.4,
+"color": "#5A534C"
 },
-"wall": "#D8CCB4",
+"wall": "#A9A39A",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：林の中の小屋（道から 98m、見えない）"
 },
 {
 "id": "gm562_3729",
@@ -1355,7 +1356,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：建物なし（フェンスで囲まれた広場。地理院の外形は古い）"
 },
 {
 "id": "gm504_3766",
@@ -1483,7 +1486,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：建物なし（フェンスで囲まれた広場。地理院の外形は古い）"
 },
 {
 "id": "gm359_6556",
@@ -1523,7 +1528,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：建物なし（フェンスで囲まれた広場。地理院の外形は古い）"
 },
 {
 "id": "gm326_6573",
@@ -1563,7 +1570,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：建物なし（フェンスで囲まれた広場。地理院の外形は古い）"
 },
 {
 "id": "gm322_6510",
@@ -1603,7 +1612,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：建物なし（フェンスで囲まれた広場。地理院の外形は古い）"
 },
 {
 "id": "gm314_6558",
@@ -1643,7 +1654,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：建物なし（フェンスで囲まれた広場。地理院の外形は古い）"
 },
 {
 "id": "gm294_6512",
@@ -1683,7 +1696,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：建物なし（フェンスで囲まれた広場。地理院の外形は古い）"
 },
 {
 "id": "gm364_6480",
@@ -1723,7 +1738,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：建物なし（フェンスで囲まれた広場。地理院の外形は古い）"
 },
 {
 "id": "osm369868060",
@@ -1899,7 +1916,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：木だけで屋根が見えない"
 },
 {
 "id": "g196_6419",
@@ -1939,7 +1958,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：木だけで屋根が見えない"
 },
 {
 "id": "g209_6444",
@@ -1979,7 +2000,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：木だけで屋根が見えない"
 },
 {
 "id": "g239_6489",
@@ -2027,7 +2050,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：木だけで屋根が見えない"
 },
 {
 "id": "g268_6649",
@@ -2054,20 +2079,21 @@
 139.2217956
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 3.6,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#4A4A4A"
+"rise_m": 1.4,
+"color": "#4E4A46"
 },
-"wall": "#E9E2CF",
+"wall": "#C8C0B0",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：道の下の家（濃い灰色の屋根）"
 },
 {
 "id": "g281_6686",
@@ -2094,20 +2120,21 @@
 139.2219186
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 3.6,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#C8C8C8"
+"rise_m": 1.4,
+"color": "#4E4A46"
 },
-"wall": "#D8CCB4",
+"wall": "#C8C0B0",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：道の下の家（濃い灰色の屋根）"
 },
 {
 "id": "g279_6668",
@@ -2134,20 +2161,21 @@
 139.2219275
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 3.6,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#C8C8C8"
+"rise_m": 1.4,
+"color": "#4E4A46"
 },
-"wall": "#C9C9C6",
+"wall": "#C8C0B0",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：道の下の家（濃い灰色の屋根）"
 },
 {
 "id": "g283_6732",
@@ -2174,20 +2202,21 @@
 139.2219442
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 3.6,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#6E6E6E"
+"rise_m": 1.4,
+"color": "#4E4A46"
 },
-"wall": "#E9E2CF",
+"wall": "#C8C0B0",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：道の下の家（濃い灰色の屋根）"
 },
 {
 "id": "g266_6575",
@@ -2227,7 +2256,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：木だけで屋根が見えない"
 },
 {
 "id": "g252_6476",
@@ -2267,7 +2298,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：木だけで屋根が見えない"
 },
 {
 "id": "g671_7778",
@@ -2302,20 +2335,21 @@
 139.2261373
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 3.4,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#9A9A9A"
+"rise_m": 1.4,
+"color": "#6B6259"
 },
-"wall": "#EDEBE6",
+"wall": "#B5AC9E",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：林の中の小屋（長者屋敷キャンプ場のそば）"
 },
 {
 "id": "osm775820298",
@@ -4395,7 +4429,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"gone": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：木だけで屋根が見えない"
 },
 {
 "id": "osm595991862",
@@ -4427,19 +4463,20 @@
 ]
 ],
 "storeys": 2,
-"height_m": 6.3,
+"height_m": 7.0,
 "roof": {
-"type": "gable",
-"rise_m": 1.8,
-"color": "#C8C8C8"
+"type": "flat",
+"rise_m": 0.0,
+"color": "#C9CCCC"
 },
-"wall": "#C9C9C6",
+"wall": "#D8D6CF",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：白い平屋根の大きな建物（道から 175m）"
 },
 {
 "id": "g863_m1156",
@@ -17875,19 +17912,20 @@
 ]
 ],
 "storeys": 1,
-"height_m": 3.3,
+"height_m": 3.0,
 "roof": {
-"type": "gable",
-"rise_m": 1.4,
-"color": "#C8C8C8"
+"type": "flat",
+"rise_m": 0.0,
+"color": "#8E9090"
 },
-"wall": "#D8CCB4",
+"wall": "#D0CCC2",
 "windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：管理棟の横の小さい建物"
 },
 {
 "id": "osm184602558",
@@ -100670,20 +100708,21 @@
 139.2293112
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 4.5,
 "roof": {
-"type": "gable",
-"rise_m": 1.8,
-"color": "#8C8478"
+"type": "flat",
+"rise_m": 0.0,
+"color": "#9A9C9C"
 },
-"wall": "#C9C9C6",
+"wall": "#CFCCC4",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：大きな建物の横の灰色の屋根"
 },
 {
 "id": "osm595991861",
@@ -100719,19 +100758,20 @@
 ]
 ],
 "storeys": 2,
-"height_m": 6.3,
+"height_m": 7.0,
 "roof": {
-"type": "gable",
-"rise_m": 1.8,
-"color": "#C8C8C8"
+"type": "flat",
+"rise_m": 0.0,
+"color": "#C9CCCC"
 },
-"wall": "#C9C9C6",
+"wall": "#D8D6CF",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：同じ建物の角"
 },
 {
 "id": "osm595991875",
@@ -100759,19 +100799,20 @@
 ]
 ],
 "storeys": 1,
-"height_m": 3.3,
+"height_m": 2.6,
 "roof": {
-"type": "gable",
-"rise_m": 1.4,
-"color": "#C8C8C8"
+"type": "flat",
+"rise_m": 0.0,
+"color": "#8E9090"
 },
-"wall": "#D8CCB4",
+"wall": "#D0CCC2",
 "windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：霊園の中の小さい建物（道から擁壁の上）"
 },
 {
 "id": "osm595991876",
@@ -100799,19 +100840,20 @@
 ]
 ],
 "storeys": 1,
-"height_m": 3.3,
+"height_m": 2.6,
 "roof": {
-"type": "gable",
-"rise_m": 1.4,
-"color": "#C8C8C8"
+"type": "flat",
+"rise_m": 0.0,
+"color": "#8E9090"
 },
-"wall": "#D8CCB4",
+"wall": "#D0CCC2",
 "windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：霊園の中の小さい建物（道から擁壁の上）"
 },
 {
 "id": "osm595991877",
@@ -100839,19 +100881,20 @@
 ]
 ],
 "storeys": 1,
-"height_m": 3.3,
+"height_m": 2.6,
 "roof": {
-"type": "gable",
-"rise_m": 1.4,
-"color": "#C8C8C8"
+"type": "flat",
+"rise_m": 0.0,
+"color": "#8E9090"
 },
-"wall": "#D8CCB4",
+"wall": "#D0CCC2",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：霊園の中の小さい建物（道から擁壁の上）"
 },
 {
 "id": "osm595991879",
@@ -100878,19 +100921,20 @@
 139.2311517
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 4.0,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#C8C8C8"
+"rise_m": 1.4,
+"color": "#4A3A30"
 },
-"wall": "#D8CCB4",
+"wall": "#E6DCC6",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ストリートビュー・空中写真（2026-10-18）：霊園の管理棟（クリーム色の壁・こげ茶の屋根、赤れんがの門柱）"
 }
 ]

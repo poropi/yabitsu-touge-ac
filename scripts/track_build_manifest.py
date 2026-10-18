@@ -39,7 +39,7 @@ def main():
     lot_spec = config.DATA_MANUAL / "s1_start_lot.json"
     # 駐車場や広場には、木の板（幅 最大7m）がかぶらないよう少し広めに空ける
     blds = nagoki.load_buildings()
-    track_blds = [buildings.Building.from_spec(d) for d in json.loads((config.DATA_MANUAL / "track_buildings.json").read_text(encoding="utf-8"))]
+    track_blds = buildings.load(config.DATA_MANUAL / "track_buildings.json")   # gone=true（もう無い建物）は作らない
     for j, _ in others:   # ほかの交差点の町の中の建物は、町の建物リスト（1棟ずつ確かめたもの）で作る
         track_blds = [b for b in track_blds if not nagoki.circle(j).contains(b.footprint.centroid)]
     assembly.add_trees(m, trees.scatter(near, pads + start_lot.flats_for(lot_spec, pads), pad_clear_m=5.0,
@@ -143,11 +143,12 @@ def main():
     assembly.add_meshes(m, pois.meshes(pois.place(poi_nodes, sec, skip), ground))
     assembly.add_meshes(m, town_objects.signal_meshes(ro["signals"], road_z, prefix="s3_signal"))
     assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(ro["objects"], sec), road_z, prefix="s3_obj"))   # 路面の中のバス停は道の外へ
-    s4o = json.loads((config.DATA_MANUAL / "s4_objects.json").read_text(encoding="utf-8"))   # S4 のカーブミラー・標識・看板
-    assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(s4o["objects"], sec), road_z, prefix="s4_obj"))
-    assembly.add_meshes(m, town_objects.pole_sign_meshes(s4o.get("pole_signs", []), ground, prefix="s4"))
-    for name, rel in town_objects.write_pole_sign_textures(s4o.get("pole_signs", []), config.TRACK_BUILD_DIR / "textures", prefix="s4").items():
-        m.add_material(name, texture=rel)
+    for sn in ("s4", "s5"):   # S4・S5 のカーブミラー・標識・看板（data/manual/s4_objects.json・s5_objects.json）
+        so = json.loads((config.DATA_MANUAL / f"{sn}_objects.json").read_text(encoding="utf-8"))
+        assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(so["objects"], sec), road_z, prefix=f"{sn}_obj"))
+        assembly.add_meshes(m, town_objects.pole_sign_meshes(so.get("pole_signs", []), ground, prefix=sn))
+        for name, rel in town_objects.write_pole_sign_textures(so.get("pole_signs", []), config.TRACK_BUILD_DIR / "textures", prefix=sn).items():
+            m.add_material(name, texture=rel)
     # 町の範囲（名古木交差点）：別の kn5（config.TOWN_GROUP）
     assembly.add_meshes(m, tw.meshes(), group=config.TOWN_GROUP)
     assembly.add_meshes(m, tw.object_meshes(), group=config.TOWN_GROUP)

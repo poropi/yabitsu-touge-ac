@@ -56,6 +56,13 @@ class Building:
                    list(d.get("signs", [])), d.get("canopy"), d.get("lot"), d.get("name", ""))
 
 
+def load(path):
+    """建物の json（buildings.py の形）を読む。gone=true（地図にはあるが、もう無い建物）は作らない。"""
+    import json
+    from pathlib import Path
+    return [Building.from_spec(d) for d in json.loads(Path(path).read_text(encoding="utf-8")) if not d.get("gone")]
+
+
 def facade_mat(b):
     """壁の材質：色と窓の有無が同じ建物は同じ絵を使う。"""
     return f"facade_{b.wall.lstrip('#').upper()}{'_w' if b.windows else ''}"

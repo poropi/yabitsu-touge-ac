@@ -122,3 +122,13 @@ def test_merge_skips_empty_parts():
     v, f, uv = bd._merge([(np.zeros((0, 3)), np.zeros((0,)), np.zeros((0, 2))),
                           (np.zeros((3, 3)), np.array([[0, 1, 2]]), np.zeros((3, 2)))])
     assert f.shape == (1, 4) and len(v) == 3
+
+
+def test_buildings_marked_gone_are_not_built(tmp_path):
+    """地図（地理院）にはあるが、もう無い建物（S5 6232〜6367m の広場）：gone=true は作らない。checked なので track_scenery でも戻らない"""
+    import json
+    from yabitsu import buildings as bd
+    fp = [[35.48, 139.21], [35.48, 139.2101], [35.4801, 139.2101], [35.4801, 139.21], [35.48, 139.21]]
+    p = tmp_path / "b.json"
+    p.write_text(json.dumps([{"id": "a", "footprint": fp, "checked": True}, {"id": "b", "footprint": fp, "checked": True, "gone": True}]), encoding="utf-8")
+    assert [b.id for b in bd.load(p)] == ["a"]
