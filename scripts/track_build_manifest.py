@@ -181,6 +181,8 @@ def main():
     # S4（峠の先）の部品は yabitsu_s4.kn5 へ（全部のレイアウトが読む）。メッシュの頂点の平均に一番近い本線の行で決める
     s4_0 = float(bounds["s4"][0]); tree = __import__("scipy.spatial", fromlist=["cKDTree"]).cKDTree(np.c_[sec.x, sec.y])
     print("moved to", config.S4_GROUP, m.split_group(assembly.GROUP, config.S4_GROUP, lambda c: sec.s[tree.query(c)[1]] >= s4_0))
+    s5_0 = float(bounds["s5"][0])   # S5（札掛の先）の部品は yabitsu_s5.kn5 へ
+    print("moved to", config.S5_GROUP, m.split_group(config.S4_GROUP, config.S5_GROUP, lambda c: sec.s[tree.query(c)[1]] >= s5_0))
     print(m.save()); print(m.summary())
 
 

@@ -443,7 +443,7 @@ class Town:
             z = float(self.ground.z(np.atleast_1d(x), np.atleast_1d(y))[0])
             pts.append([float(x), float(y), z, math.radians(90.0 - float(deg))])
         poly = unary_union([Point(p[0], p[1]).buffer(3.0) for p in pts]).convex_hull
-        return [{"name": "nagoki_pits", "role": "flat", "kind": "site", "polygon": np.asarray(poly.exterior.coords).tolist(),
+        return [{"name": "nagoki_pits" if self.prefix == "town" else f"{self.prefix}_pits", "role": "flat", "kind": "site", "polygon": np.asarray(poly.exterior.coords).tolist(),
                  "z": float(np.mean([p[2] for p in pts])), "pit_points": pts}]
 
     def object_meshes(self):

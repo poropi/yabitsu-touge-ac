@@ -54,6 +54,7 @@ MATERIALS = {
     "mirror": {"texture": "textures/mirror.png", "shader": "ksPerPixel", "two_sided": True},
     "sign_speed30": {"texture": "textures/sign_speed30.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
     "sign_warning": {"texture": "textures/sign_warning.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
+    "sign_speed40": {"texture": "textures/sign_speed40.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
     "tunnel_wall": {"texture": "textures/tunnel_wall.png", "shader": "ksPerPixel"},
     "tunnel_lamp": {"texture": "textures/tunnel_lamp.png", "shader": "ksPerPixel", "two_sided": True},
 }
@@ -328,6 +329,7 @@ def write_textures(out_dir):
             "pole_orange": _gray(64, 37, 0.70, 0.04, (1.30, 0.62, 0.22)),
             "mirror": _mirror(),
             "sign_speed30": _round_sign("30"),
+            "sign_speed40": _round_sign("40"),
             "sign_warning": _diamond_sign(),
             "tunnel_wall": _gray(512, 38, 0.46, 0.10, (1.0, 0.99, 0.96), coarse=10, fine=2),
             "tunnel_lamp": _gray(64, 39, 0.97, 0.02, (1.04, 0.88, 0.55))}

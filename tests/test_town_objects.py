@@ -235,3 +235,11 @@ def test_town_retaining_wall_height_is_measured_from_the_sidewalk_not_the_hill_b
     sec, t = _town(spec, ways=[_way([[0, -60], [0, 60]], wid=7)], ground=g)
     wall = next(m for m in t.object_meshes() if m[0] == "1WALL_town_obj_retaining")
     assert wall[1][:, 2].max() == pytest.approx(100.0 + tw.CURB_H + 2.5, abs=0.05)
+
+
+def test_second_junction_pits_are_named_after_the_junction():
+    """宮ヶ瀬北原のピットが名古木の nagoki_pits と同じ名前にならない（レイアウトはピットを名前で選ぶ）"""
+    sec, t = _auto_town([_node([0, -20], 1, highway="crossing", **{"crossing:markings": "zebra"})])
+    t.spec["pits"] = [_ll(20.0 + 6 * i, 1.5) + [90.0] for i in range(4)]
+    t.prefix = "kitahara"
+    assert t.pads()[0]["name"] == "kitahara_pits"

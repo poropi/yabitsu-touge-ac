@@ -116,12 +116,15 @@ def cameras(sec, layout, every=150.0):
 
 
 def kn5_groups(layout_names):
-    """make_kn5 で書くグループ：本体・名古木の町・S4（全部のレイアウトが読む）と、レイアウトごとの置き物。"""
+    """make_kn5 で書くグループ：本体・名古木の町・S4・S5・宮ヶ瀬北原の町（全部のレイアウトが読む）と、レイアウトごとの置き物。"""
+    return shared_groups() + [f"{n}_objects" for n in layout_names]
+
+
+def shared_groups():
     from . import config
-    return [config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP] + [f"{n}_objects" for n in layout_names]
+    return [config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP, config.S5_GROUP, config.KITAHARA_GROUP]
 
 
 def kn5_files(layout_name):
     """models_<レイアウト>.ini に書く kn5 の並び。"""
-    from . import config
-    return [f"{g}.kn5" for g in (config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP)] + [f"{layout_name}_objects.kn5"]
+    return [f"{g}.kn5" for g in shared_groups()] + [f"{layout_name}_objects.kn5"]

@@ -95,6 +95,16 @@ def main():
         hull = _uu([_Poly([(p[0] - 1, p[1] - 1), (p[0] + 1, p[1] - 1), (p[0] + 1, p[1] + 1), (p[0] - 1, p[1] + 1)]) for p in pts]).convex_hull
         pads.append({"name": name, "role": "flat", "kind": "site", "polygon": np.asarray(hull.exterior.coords).tolist(),
                      "z": float(np.mean([p[2] for p in pts])), "pit_points": pts})
+    # S5 下り（札掛 → 宮ヶ瀬北原）のピット（data/manual/s5_fudakake_pits.json）：札掛橋の先、スタート列の手前に北原の方を向けて4台
+    sp = json.loads((config.DATA_MANUAL / "s5_fudakake_pits.json").read_text(encoding="utf-8"))["pits"]
+    pts = []
+    for lat, lon, deg in sp:
+        x, y = (float(v) for v in site.ll_to_xy([[lat, lon]])[0])
+        i = int(np.argmin(np.hypot(sec.x - x, sec.y - y)))
+        pts.append([x, y, float(sec.z[i]), float(np.radians(90.0 - deg))])
+    hull = _uu([_Poly([(p[0] - 1, p[1] - 1), (p[0] + 1, p[1] - 1), (p[0] + 1, p[1] + 1), (p[0] - 1, p[1] + 1)]) for p in pts]).convex_hull
+    pads.append({"name": "s5_fudakake_pits", "role": "flat", "kind": "site", "polygon": np.asarray(hull.exterior.coords).tolist(),
+                 "z": float(np.mean([p[2] for p in pts])), "pit_points": pts})
     (P / "track_pads.json").write_text(json.dumps(pads, ensure_ascii=False), encoding="utf-8")
     print(f"section rows={sec.n} width {2 * sec.hw_left.min():.1f}-{2 * sec.hw_left.max():.1f} m, "
           f"max slope {np.abs(sec.slope).max() * 100:.1f}%, pads={[(p['name'], p['role']) for p in pads]}")

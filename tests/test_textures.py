@@ -58,3 +58,10 @@ def test_water_textures(tmp_path):
     paths = tx.write_textures(tmp_path)
     for name in ("water", "riverbed", "water_fall", "roof_dark"):
         assert paths[name].exists() and name in tx.MATERIALS
+
+
+def test_speed40_sign_texture(tmp_path):
+    """S5 の宮ヶ瀬の近く（11400m）の速度 40 の標識"""
+    from yabitsu import textures as tx
+    paths = tx.write_textures(tmp_path)
+    assert paths["sign_speed40"].exists() and tx.MATERIALS["sign_speed40"]["alpha"]

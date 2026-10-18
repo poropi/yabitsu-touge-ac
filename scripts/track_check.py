@@ -27,7 +27,8 @@ def check(processed_dir, manual_dir):
     position_ok = bool(rows) and all(r["ok"].strip().lower() == "yes" and float(r["max_offset_m"]) <= 2.0 for r in rows)
     man = json.loads((P / "track" / "manifest.json").read_text(encoding="utf-8"))
     folds = tris = 0
-    names = [n for g in (config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP) for n in man["groups"].get(g, {}).get("meshes", [])]
+    from yabitsu import layouts   # 全部のレイアウトが読む kn5（本体・名古木・S4・S5・宮ヶ瀬北原）の部品
+    names = [n for g in layouts.shared_groups() for n in man["groups"].get(g, {}).get("meshes", [])]
     for name in names:
         d = np.load(P / "track" / man["meshes"][name]["file"])
         tris += len(d["faces"]) * (d["faces"].shape[1] - 2)
