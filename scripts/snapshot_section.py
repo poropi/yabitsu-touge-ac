@@ -19,7 +19,7 @@ def _ll(x, y):
 
 def main():
     ap = argparse.ArgumentParser()
-    ap.add_argument("section", choices=["s2", "s3"])
+    ap.add_argument("section", choices=["s2", "s3", "s4"])
     name = ap.parse_args().section
     sec = Section.load_json(P / "track_section.json")
     pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
@@ -43,8 +43,10 @@ def main():
                 c = np.asarray(p["polygon"])[:-1].mean(0)
                 houses.append([*_ll(*c), round(float(p["z"]), 3)])
         sites = {"turnaround_pits": pits("minoge_turnaround"), "houses": houses}
-    else:   # s3：名古木交差点のまん中のピット
+    elif name == "s3":   # 名古木交差点のまん中のピット
         sites = {"nagoki_pits": pits("nagoki_pits")}
+    else:   # s4：札掛と峠の先のピット
+        sites = {"fudakake_pits": pits("fudakake_pits"), "s4_pass_pits": pits("s4_pass_pits")}
     ref = {"note": f"{name} の作り替え前の状態（scripts.snapshot_section で作成）", "centerline": cl, "layouts": lays, "sites": sites}
     out = config.DATA_MANUAL / f"{name}_reference.json"
     out.write_text(json.dumps(ref, ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
