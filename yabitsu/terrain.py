@@ -16,6 +16,7 @@ EXTRA_NEAR, EXTRA_HOLE = 20.0, 15.0
 TOWN_BLEND_M = 10.0  # 町の範囲の円の外で、町の地面から今までの地形へ移す幅
 LAKE_DEPTH = 2.0
 TUNNEL_COVER_M, TUNNEL_SIDE_M = 3.0, 4.0   # トンネルの天井の上の土かぶり、その幅（筒の外へ）
+BORE_MARGIN_M = 1.5   # 筒の中に入る地形の面を描かない範囲：トンネルの両端からこれだけ外まで
 CHANNEL_REACH_M = 6.0   # 川の溝が地形を動かす範囲（溝の外）
 ROAD_CAP_M = 3.0     # 土台があっても、道の縁からこの距離までは道の斜面より上に地形を出さない
 PAD_REACH_M = 40.0   # 土台（駐車場・家・分かれ道）が地形を動かす範囲  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
@@ -152,8 +153,28 @@ def _sample(sampler, unproject, X, Y):
     return fill_nan_nearest(sampler.sample(lat, lon).reshape(X.shape))
 
 
+def tunnel_holes(sec, xs, ys, Z, bore_rows):
+    """描かない地形の面（行 ys−1 × 列 xs−1）：トンネルの行（bore_rows）の筒の幅の中で、路面＋0.3m より上に出ていて、
+    天井より下に入る面。出入口で、残した山と削った地面をつなぐ斜めの面が車の高さを横切らない（筒と坑口の壁が覆う）。"""
+    from .tunnel import bore_height
+    H = np.zeros((len(ys) - 1, len(xs) - 1), bool)
+    rows = np.asarray(bore_rows, bool)
+    if not rows.any():
+        return H
+    c = np.stack([Z[:-1, :-1], Z[1:, :-1], Z[:-1, 1:], Z[1:, 1:]])
+    CX, CY = np.meshgrid((xs[:-1] + xs[1:]) / 2, (ys[:-1] + ys[1:]) / 2)
+    f = road_frame(sec, CX, CY); idx = f["idx"].reshape(CX.shape); lat = f["lat"].reshape(CX.shape)
+    t = rows[idx]
+    if not t.any():
+        return H
+    hw = np.where(lat >= 0, sec.hw_left[idx], sec.hw_right[idx]) + GUTTER_WIDTH + NEAR_CELL
+    road = sec.z[idx]
+    roof = road + np.array([bore_height(sec, i) for i in range(sec.n)])[idx]
+    return t & (np.abs(lat) <= hw) & (c.max(0) > road + 0.3) & (c.min(0) < roof - 0.2)
+
+
 def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=(), side_extra=(None, None),
-               town=None, channels=(), keep_rows=None, no_fill_rows=None, lake=None):
+               town=None, channels=(), keep_rows=None, no_fill_rows=None, lake=None, bore_rows=None):
     """town = (町の地面 TownGround, 町の範囲の円, 舗装された所の多角形) なら、円の中は町の地面（舗装の下は UNDER_DEPTH 下げる）、
     円の外 TOWN_BLEND_M の間で今までの地形へなめらかに移す。"""
     towns = [] if town is None else (list(town) if isinstance(town, list) else [town])
@@ -181,7 +202,8 @@ def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.
         # 円の外の帯と、円の中でも町の舗装が届いていない所：本線の下は削った高さより上にしない
         Z[m] = np.where(((d > 0) | ~inp) & under[m], np.minimum(Z[m], Zc[m]), Z[m])
         E[m] = np.where(d == 0, 0.0, E[m])
-    return {"xs": xs, "ys": ys, "Z": Z, "E": E, "D": D}
+    H = tunnel_holes(sec, xs, ys, Z, bore_rows) if bore_rows is not None else np.zeros((len(ys) - 1, len(xs) - 1), bool)
+    return {"xs": xs, "ys": ys, "Z": Z, "E": E, "D": D, "H": H}
 
 
 def build_far(sec, sampler, unproject=geo.from_local, extra=(), lake=None):
@@ -243,8 +265,16 @@ def road_clear_count(sec, near, stubs=(), margin=0.1, skip_rows=None):
     zr = surface_height(lat, sec.z[:, None], sec.slope[:, None], sec.crown[:, None])
     mg = np.full(k.shape, margin); mg[:, [0, -1]] = 0.0   # 端の点（側溝のきわ）は、路面より上に出たときだけ
     hit = zt > zr - mg
-    if skip_rows is not None:   # トンネルの行（道の上は山）
-        hit[np.asarray(skip_rows, bool)] = False
+    if skip_rows is not None:   # トンネルの行（道の上は山）：路面から天井までの間（車の高さ）に来る地形だけ。描かない面（H）の中は数えない
+        from .tunnel import bore_height
+        sk = np.asarray(skip_rows, bool)
+        roof = np.array([bore_height(sec, i) for i in np.flatnonzero(sk)])[:, None]
+        h2 = hit[sk] & (zt[sk] < sec.z[sk][:, None] + roof)
+        if "H" in near:
+            jx = np.clip(np.searchsorted(near["xs"], X[sk]) - 1, 0, near["H"].shape[1] - 1)
+            jy = np.clip(np.searchsorted(near["ys"], Y[sk]) - 1, 0, near["H"].shape[0] - 1)
+            h2 &= ~near["H"][jy, jx]
+        hit[sk] = h2
     bad = int(np.sum(hit))
     for st in stubs:
         for t in np.arange(0.0, st.axis.length, 1.0):

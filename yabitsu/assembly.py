@@ -140,6 +140,8 @@ def add_bay_lines(m, sec, bays, dash=(3.0, 3.0)):
 def add_terrain(m, near, far, mid=None):
     D = near["D"]
     keep = (D[:-1, :-1] <= NEAR_BAND) & (D[:-1, 1:] <= NEAR_BAND) & (D[1:, 1:] <= NEAR_BAND) & (D[1:, :-1] <= NEAR_BAND)
+    if "H" in near:   # トンネルの筒の中に入る面は描かない（terrain.tunnel_holes）
+        keep &= ~near["H"]
     for k, (v, f, uv) in enumerate(grid_mesh_chunks(near["xs"], near["ys"], near["Z"], keep)):
         m.add_mesh(GROUP, f"1GRASS_s1_terrain_{k:03d}", v, f, uv, "ground")
     if mid is not None:   # 道から 200m まで：4m 格子

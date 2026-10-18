@@ -28,12 +28,14 @@ def main():
     streams, _, _ = water.load(sec, sampler)
     chans = water.channels(sec, streams, start_lot.road_formation(sec, 0.0, float(sec.s[-1])))
     from yabitsu import tunnel   # トンネル：道の上の山を削らない
-    keep = tunnel.carve_mask(sec.s, tunnel.from_osm(side_roads.load_elements(), sec))
+    tuns = tunnel.from_osm(side_roads.load_elements(), sec)
+    keep = tunnel.carve_mask(sec.s, tuns)
+    bore = tunnel.row_mask(sec.s, tuns, margin_m=terrain.BORE_MARGIN_M)   # 筒の中に入る地形の面は描かない
     from yabitsu import bridge_parts   # S5 の橋の下は谷を盛らない（湖・深い谷の上の大きな橋）
     no_fill = bridge_parts.no_fill_mask(sec, s_from=float(track.load_bounds()["s5"][0]))
     lake_poly, lake_level = water.load_lake()   # 宮ヶ瀬湖：湖の中の地形は水位より下
     lake = (lake_poly, lake_level) if lake_poly is not None else None
-    near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra, channels=chans, keep_rows=keep, no_fill_rows=no_fill, lake=lake,
+    near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra, channels=chans, keep_rows=keep, no_fill_rows=no_fill, lake=lake, bore_rows=bore,
                               side_extra=features.sidewalk_offsets(sec, feats),  # 歩道の下に地形がかぶらない
                               town=[(tw.ground, nagoki.circle(), paved)] + [z.town_override() for z in nagoki.load_splits(sec)]
                               + [(k.ground, nagoki.circle(j), k.drivable().union(k.carriageway).union(k.sidewalk)) for j, k in others])

@@ -245,3 +245,35 @@ def test_far_terrain_inside_the_lake_is_below_the_water():
     import shapely
     inside = shapely.contains_xy(lake, X, Y)
     assert inside.any() and far["Z"][inside].max() <= 100.0 - tr.LAKE_DEPTH + 1e-6
+
+
+def test_terrain_faces_never_cross_the_tunnel_bore():
+    """トンネルの出入口で、残した山（天井＋土かぶり）と削った地面をつなぐ斜めの面が、筒の中（車の高さ）を横切らない（S5 2454m・10686m でクラッシュ）"""
+    from tests.test_meshgen import _straight
+    from yabitsu import tunnel as tn
+    sec = _straight(201)
+    tun = [tn.Tunnel(1, "", 80.0, 130.0)]
+    near = tr.build_near(sec, _FlatSampler(), [], keep_rows=tn.carve_mask(sec.s, tun),
+                         bore_rows=tn.row_mask(sec.s, tun, margin_m=tr.BORE_MARGIN_M))
+    xs, ys, Z, H = near["xs"], near["ys"], near["Z"], near["H"]
+    road, roof = 100.0, 100.0 + tn.bore_height(sec, 100)
+    c = np.stack([Z[:-1, :-1], Z[1:, :-1], Z[:-1, 1:], Z[1:, 1:]])
+    cx = (xs[:-1] + xs[1:]) / 2; cy = (ys[:-1] + ys[1:]) / 2
+    box = (np.abs(cy)[:, None] <= 3.0) & ((cx >= 76) & (cx <= 134))[None, :]
+    crossing = (c.max(0) > road + 0.3) & (c.min(0) < roof - 0.2)
+    assert not (box & crossing & ~H).any()
+    assert (box & H).any()                                               # 出入口の斜めの面は描かない
+    j, i = np.searchsorted(cy, 0.0), np.searchsorted(cx, 105.0)
+    assert not H[j, i] and c[:, j, i].min() >= roof                       # トンネルの中ほどの山は残る
+
+
+def test_road_clear_counts_ground_at_car_height_inside_a_tunnel():
+    """トンネルの中でも、地形が路面から天井までの間（車の高さ）に来たら数える。描かない面（H）の中は数えない"""
+    sec = _straight()
+    xs = np.arange(-10.0, 211.0); ys = np.arange(-30.0, 31.0); X, Y = np.meshgrid(xs, ys)
+    Z = np.where((X > 50) & (X < 60), float(sec.z[0]) + 1.0, float(sec.z[0]) - 1.0)    # 筒の中に土
+    skip = (sec.s > 49) & (sec.s < 61)
+    near = {"xs": xs, "ys": ys, "Z": Z}
+    assert tr.road_clear_count(sec, near, skip_rows=skip) > 0
+    near["H"] = np.zeros((len(ys) - 1, len(xs) - 1), bool); near["H"][:, (xs[:-1] >= 48) & (xs[:-1] < 62)] = True
+    assert tr.road_clear_count(sec, near, skip_rows=skip) == 0
