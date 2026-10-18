@@ -75,3 +75,15 @@ def test_offsets_only_move_the_line_near_where_they_are_given():
     assert np.allclose(moved.x[far], plain.x[far], atol=1e-6) and np.allclose(moved.y[far], plain.y[far], atol=1e-6)
     i = int(np.argmin(np.abs(moved.s - 2050)))
     assert np.hypot(moved.x[i] - plain.x[i], moved.y[i] - plain.y[i]) > 3.0
+
+
+def test_two_separate_offset_groups_leave_the_road_between_them_alone():
+    """離れた2か所の直し（S4 の 3600m と S5 の直し、など）の間の道は動かさない（受け入れ済みの区間を守る）。"""
+    t = np.linspace(0, 3 * np.pi, 400)
+    lat = 35.40 + 0.004 * np.sin(t); lon = 139.20 + np.linspace(0, 0.03, 400)
+    r = Route(list(lat), list(lon), [2] * 399, [False] * 399)
+    plain = cl.build_centerline(r)
+    off = np.array([[500.0, 0.0], [550.0, -4.0], [600.0, 0.0], [3000.0, 0.0], [3050.0, 3.0], [3100.0, 0.0]])
+    moved = cl.build_centerline(r, offsets=off)
+    mid = (plain.s > 700) & (plain.s < 2900)
+    assert np.allclose(moved.x[mid], plain.x[mid], atol=1e-6) and np.allclose(moved.y[mid], plain.y[mid], atol=1e-6)

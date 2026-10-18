@@ -132,6 +132,12 @@ def test_real_layouts_start_on_the_road_and_finish_ahead():
         s_start, s_fin, s_grid = at(l.timing_start), at(l.finish), at(l.grid)
         assert (s_fin - s_start) * l.direction > 1000, l.name
         assert 0 < (s_start - s_grid) * l.direction < 80, l.name  # s1_down はユーザーが選んだ地点で 60m
+        for k in range(4 if l.name in ("s4_up", "s4_down", "full_north", "full_south") else 0):
+            # 道の上のピット（S4 から）は計測の始まりより手前（練習走行でピットから出て、そのまま計測に入れる）。
+            # 今の8つは受け入れ済み（s2_up のピットは蓑毛の折り返し場＝道の外）なので見ない
+            p = objs[f"AC_PIT_{k}"]
+            s_pit = float(sec.s[int(np.argmin(np.hypot(sec.x - p.location[0], sec.y - p.location[1])))])
+            assert (s_start - s_pit) * l.direction > 0, (l.name, k)
 
 
 def _hairpin():

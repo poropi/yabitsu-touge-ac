@@ -93,8 +93,14 @@ def build_centerline(route, project=geo.to_local, step=1.0, sigma_m=4.0, offsets
         h, _ = heading_curvature(xy, st)
         moved = apply_offsets(s, xy, h, offsets)
         # 動かした所のまわり（OFFSET_BLEND_M）だけをなめらかにし、ほかの所は今の線のまま（受け入れ済みの区間を動かさない）
-        lo, hi = float(np.min(offsets[:, 0])) - OFFSET_BLEND_M, float(np.max(offsets[:, 0])) + OFFSET_BLEND_M
-        w = np.clip(np.minimum(s - lo, hi - s) / OFFSET_BLEND_M, 0.0, 1.0)[:, None]
+        o = np.argsort(offsets[:, 0]); lat = np.interp(s, offsets[o, 0], offsets[o, 1])
+        on = s[np.abs(lat) > 1e-9]   # 実際に動かす所。そこから OFFSET_BLEND_M までだけをなめらかにする（離れた直しの間は動かさない）
+        if len(on):
+            j = np.clip(np.searchsorted(on, s), 1, len(on) - 1) if len(on) > 1 else np.zeros(len(s), int)
+            d = np.minimum(np.abs(s - on[j]), np.abs(s - on[np.maximum(j - 1, 0)]))
+            w = np.clip(1.0 - d / OFFSET_BLEND_M, 0.0, 1.0)[:, None]
+        else:
+            w = np.zeros((len(s), 1))
         xy = moved * (1 - w) + smooth_xy(moved, 2.0, st) * w
         # s は測り直さない（直していない所の s と点を、直さないときとまったく同じにする）
     h, k = heading_curvature(xy, st)

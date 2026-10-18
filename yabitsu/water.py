@@ -104,7 +104,26 @@ def from_osm(elements, sec, sampler, band_m=200.0, s_from=0.0, unproject=geo.fro
             z = np.minimum.accumulate(z)
             width = float(tg["width"]) if str(tg.get("width", "")).replace(".", "", 1).isdigit() else WIDTH[tg["waterway"]]
             out.append(Stream(LineString(p), width, tg["waterway"], z, int(w.get("id", 0))))
+    _chain(out)
     return out
+
+
+def _chain(streams, join_m=1.0):
+    """way のつなぎ目で、下流の水面が上流の終わりより高くならないようにする：上流の way の終わりが別の way の上
+    （始まりでも途中でも）にあれば、そこから下流をその高さ以下にする。変わらなくなるまでくり返す。"""
+    for _ in range(len(streams) + 1):
+        changed = False
+        for up in streams:
+            end = Point(up.line.coords[-1]); z_end = float(up.z[-1])
+            for dn in streams:
+                if dn is up or dn.line.distance(end) > join_m:
+                    continue
+                t = dn.line.project(end)
+                m = dn.t >= t - 1e-6
+                if np.any(dn.z[m] > z_end + 1e-9):
+                    dn.z[m] = np.minimum(dn.z[m], z_end); dn.z = np.minimum.accumulate(dn.z); changed = True
+        if not changed:
+            break
 
 
 def _polys_lines(g):

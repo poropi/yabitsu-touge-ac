@@ -100,3 +100,13 @@ def test_short_humps_in_the_dem_are_ignored_too():
     z = z + 3.0 * np.exp(-((s - 1900.0) / 12.0) ** 2)
     zf, _, _ = el.fit_sections(s, z, np.ones_like(s, bool), 1.0, [(0, 1000), (1000, 3000)], fixed=1, robust=True)
     assert np.abs(zf - true)[1800:2000].max() < 0.8
+
+
+def test_adding_the_next_section_keeps_every_attached_section_identical():
+    """S5 を足しても S4（つないだ区間）の高さは1mmも変わらない（つなぐ区間は1つずつ、前から順につなぐ）。"""
+    s, true, z = _ravines()
+    s2 = np.arange(0.0, 4001.0); z2 = np.r_[z, z[-1] - 0.05 * np.arange(1.0, 1001.0)]
+    v = np.ones_like(s2, bool)
+    ab, _, _ = el.fit_sections(s2[:3001], z2[:3001], v[:3001], 1.0, [(0, 1000), (1000, 3000)], fixed=1, robust=True)
+    abc, _, _ = el.fit_sections(s2, z2, v, 1.0, [(0, 1000), (1000, 3000), (3000, 4000)], fixed=1, robust=True)
+    assert np.array_equal(abc[:3001], ab)

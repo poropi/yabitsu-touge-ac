@@ -63,3 +63,21 @@ def test_falls_stand_on_the_stream():
     ms = water.feature_meshes(falls, [])
     c = np.concatenate([m[1] for m in ms])[:, :2].mean(0)
     assert streams[0].line.distance(Point(*c)) <= 3.0
+
+
+class _Step(_Flat):
+    """北ほど高い地面。ただし y < 20 の所だけ 3m 高い（下流の way の始まりが、上流の way の終わりより高くなる）。"""
+    def sample(self, lat, lon):
+        from yabitsu import geo
+        x, y = geo.to_local(np.asarray(lat), np.asarray(lon))
+        return 90.0 + 0.05 * np.asarray(y) + np.where(np.asarray(y) <= 20.5, 3.0, 0.0)
+
+
+def test_water_keeps_going_down_where_one_way_joins_the_next():
+    """OSM では1本の川が何本もの way に分かれる。下流の way の水面が、上流の way の終わりより高く始まらない。"""
+    sec = _straight()
+    ws = [_way([[60, 90], [60, 20]], id=1, highway=None, waterway="stream"), _way([[60, 20], [60, -90]], id=2, highway=None, waterway="stream")]
+    for w in ws:
+        w["tags"].pop("highway")
+    a, b = sorted(water.from_osm(ws, sec, _Step(90.0)), key=lambda s: -s.line.coords[0][1])
+    assert b.z[0] <= a.z[-1] + 1e-9 and np.all(np.diff(b.z) <= 1e-9)

@@ -63,31 +63,34 @@ def fit_profile_robust(s, z_raw, valid, step, tol=1.5, sigmas=SIGMAS):
 
 
 def fit_sections(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None, fixed=0, robust=False):
-    """fixed=n：先頭の n 区間（受け入れ済み）は、bounds[:n] だけで呼んだときとまったく同じ高さにする。
-    n 番目より後の区間はそれだけで合わせ、始まりの blend_m を、前の区間の終わりの高さと勾配で延ばした直線へ寄せる
-    （S4 を峠の先に足しても S1 の高さを変えない）。fixed=0 は今まで通り（_fit_joined）。"""
+    """fixed=n：先頭の n 区間（S3・S2・S1。いっしょに合わせた区間）は、bounds[:n] だけで呼んだときとまったく同じ高さ。
+    それより後の区間（S4、S5 …）は、前から1つずつ「前の区間の終わり blend_m も入れて自分だけで合わせ、始まりの blend_m を
+    前の区間の終わりの高さと勾配で延ばした直線へ寄せる」。後ろに区間を足しても、前の区間の高さは1mmも変わらない。
+    robust：つなぐ区間を fit_profile_robust で合わせる（True／False か、区間ごとの並び）。fixed=0 は今まで通り（_fit_joined）。"""
     s = np.asarray(s, float); z_raw = np.asarray(z_raw, float); valid = np.asarray(valid, bool)
     if not fixed or fixed >= len(bounds):
         return _fit_joined(s, z_raw, valid, step, bounds, blend_m, sample)
-    b = bounds[fixed - 1][1]
-    ma = s <= b + 1e-6; mb = s >= bounds[fixed][0] - 1e-6
-    za, ra, sa = _fit_joined(s[ma], z_raw[ma], valid[ma], step, bounds[:fixed], blend_m, sample)
-    # 後ろの区間は、前の区間の終わり blend_m も入れて合わせる（つなぎ目で高さが近くなり、寄せても勾配が折れにくい）
-    a0 = bounds[fixed][0] - blend_m; mx = s >= a0 - 1e-6
-    bb = [(a0, bounds[fixed][1])] + list(bounds[fixed + 1:])
-    zx, rx, sb = _fit_joined(s[mx], z_raw[mx], valid[mx], step, bb, blend_m, sample,
-                             fit=fit_profile_robust if robust else fit_profile)   # 新しい区間だけ、短い谷を外して合わせる
-    keep = s[mx] >= bounds[fixed][0] - 1e-6
-    z = np.empty_like(s); z_ref = np.empty_like(s)
-    z[mb], z_ref[mb] = zx[keep], rx[keep]
-    sbv = s[mb]; i = int(np.argmin(np.abs(s[ma] - b)))
-    k = max(1, int(round(10.0 / step))); j = max(i - k, 0)
-    g = (za[i] - za[j]) / max(s[ma][i] - s[ma][j], 1e-9)
-    w_m = (sbv > b) & (sbv <= b + blend_m)
-    t = (sbv[w_m] - b) / blend_m; w = t * t * (3 - 2 * t)
-    zbv = z[mb]; zbv[w_m] = (1 - w) * (za[i] + g * (sbv[w_m] - b)) + w * zbv[w_m]; z[mb] = zbv
-    z[ma], z_ref[ma] = za, ra      # つなぎ目の行は受け入れ済みの区間の値
-    return z, z_ref, sa + sb
+    flags = list(robust) if isinstance(robust, (list, tuple)) else [bool(robust)] * len(bounds)
+    z = np.full_like(s, np.nan); z_ref = np.full_like(s, np.nan)
+    ma = s <= bounds[fixed - 1][1] + 1e-6
+    z[ma], z_ref[ma], sigmas = _fit_joined(s[ma], z_raw[ma], valid[ma], step, bounds[:fixed], blend_m, sample)
+    for k in range(fixed, len(bounds)):
+        a, b1 = bounds[k]; b = bounds[k - 1][1]
+        a0 = a - blend_m; mx = (s >= a0 - 1e-6) & (s <= b1 + 1e-6)
+        zx, rx, sb = _fit_joined(s[mx], z_raw[mx], valid[mx], step, [(a0, b1)], blend_m, sample,
+                                 fit=fit_profile_robust if flags[k] else fit_profile)
+        keep = s[mx] > b + 1e-6        # つなぎ目の行は前の区間の値のまま
+        mk = mx.copy(); mk[mx] = keep
+        sbv = s[mk]; zbv = zx[keep]
+        pm = s <= b + 1e-6; i = int(np.nonzero(pm)[0][-1])
+        kk = max(1, int(round(10.0 / step))); j = max(i - kk, 0)
+        g = (z[i] - z[j]) / max(s[i] - s[j], 1e-9)
+        w_m = sbv <= b + blend_m
+        tt = (sbv[w_m] - b) / blend_m; w = tt * tt * (3 - 2 * tt)
+        zbv[w_m] = (1 - w) * (z[i] + g * (sbv[w_m] - b)) + w * zbv[w_m]
+        z[mk], z_ref[mk] = zbv, rx[keep]
+        sigmas = sigmas + sb
+    return z, z_ref, sigmas
 
 
 def _fit_joined(s, z_raw, valid, step, bounds, blend_m=60.0, sample=None, fit=fit_profile):
