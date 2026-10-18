@@ -277,3 +277,56 @@ def test_road_clear_counts_ground_at_car_height_inside_a_tunnel():
     assert tr.road_clear_count(sec, near, skip_rows=skip) > 0
     near["H"] = np.zeros((len(ys) - 1, len(xs) - 1), bool); near["H"][:, (xs[:-1] >= 48) & (xs[:-1] < 62)] = True
     assert tr.road_clear_count(sec, near, skip_rows=skip) == 0
+
+
+def test_no_fill_under_a_bridge_keeps_nearby_branch_pads_filled():
+    """大きな橋の下で谷を盛らない処理が、橋の近くの分かれ道の土台の盛り土まで消さない（S5 9844m で分かれ道が 3m 浮いた）"""
+    sec = _straight()
+    pad = {"polygon": [[90, 10], [110, 10], [110, 20], [90, 20], [90, 10]], "z": 100.0}
+    X, Y = _pts(sec, [15.0])
+    nf = np.ones(sec.n, bool)                                            # 全部の行が橋
+    Z, _ = tr.carve(X, Y, np.full_like(X, 80.0), sec, pads=[pad], no_fill_rows=nf)   # 谷（80m）
+    assert Z[0, 0] == pytest.approx(100.0 - tr.UNDER_DEPTH)
+
+
+def test_tunnel_keep_rows_do_not_raise_ground_in_the_lake():
+    """トンネルの山を残す処理が、湖の中の地形を水位より上に戻さない（吹風トンネルの横で湖に陸の壁）"""
+    from shapely.geometry import box
+    sec = _straight()
+    X, Y = _pts(sec, [30.0])
+    keep = np.ones(sec.n, bool)
+    Z, _ = tr.carve(X, Y, np.full_like(X, 120.0), sec, keep_rows=keep, lake=(box(0, 20, 200, 60), 90.0))
+    assert Z[0, 0] <= 90.0 - tr.LAKE_DEPTH + 1e-9
+
+
+def test_town_ground_stays_below_the_lake():
+    """町の範囲の地面（宮ヶ瀬北原）も、湖の中は水位より下"""
+    from shapely.geometry import box
+    sec, g, circle, road = _town_case()
+    near = tr.build_near(sec, _FlatSampler(), [], town=(g, circle, road), lake=(box(110, 15, 130, 30), 90.0))
+    X, Y = np.meshgrid(near["xs"], near["ys"])
+    inl = (X > 111) & (X < 129) & (Y > 16) & (Y < 29)
+    assert near["Z"][inl].max() <= 90.0 - tr.LAKE_DEPTH + 1e-9
+
+
+def test_tunnel_holes_leave_cells_in_front_of_the_portal():
+    """坑口より外の地形の面（切り土の斜面）は穴にしない（後ろに何もなく、向こうが透けて見える）。筒の中にかかる面だけ"""
+    sec = _straight()
+    xs = np.arange(60.0, 151.0, 2.0); ys = np.arange(-10.0, 11.0, 2.0)
+    Z = np.full((len(ys), len(xs)), 100.0 - 1.0)
+    from yabitsu import tunnel as tn
+    j0, j1 = np.searchsorted(ys, 0.0), np.searchsorted(ys, 2.0)
+    for x in (78.0, 82.0):                                   # 坑口（80m）のすぐ手前（78〜80m）と、2m 奥に、車の高さを横切る面
+        i = np.searchsorted(xs, x); Z[j0:j1 + 1, i:i + 2] = 102.0; Z[j0, i] = 99.0
+    rows = tn.row_mask(sec.s, [tn.Tunnel(1, "", 80.0, 130.0)], margin_m=tr.BORE_MARGIN_M)   # track_06 と同じ
+    H = tr.tunnel_holes(sec, xs, ys, Z, rows)
+    assert not H[j0, np.searchsorted(xs, 78.0)] and H[j0, np.searchsorted(xs, 82.0)]
+
+
+def test_ground_just_outside_the_lake_reaches_the_water_edge():
+    """湖の岸のすぐ外（SHORE_M）の地面が水面より低いと、水面の縁が浮いて見える（宮ヶ瀬湖の岸の半分）。水面の高さまで上げる"""
+    from shapely.geometry import box
+    sec = _straight()
+    X, Y = _pts(sec, [31.0, 50.0])                       # 岸の 3m 外と、湖の中
+    Z, _ = tr.carve(X, Y, np.full_like(X, 80.0), sec, lake=(box(0, 34, 200, 60), 90.0))
+    assert Z[0, 0] >= 90.0 and Z[0, 1] <= 90.0 - tr.LAKE_DEPTH

@@ -15,8 +15,10 @@ MID_BAND, MID_CELL, MID_DROP, MID_OVERLAP = 210.0, 4.0, 0.15, 6.0  # 中くら�
 EXTRA_NEAR, EXTRA_HOLE = 20.0, 15.0
 TOWN_BLEND_M = 10.0  # 町の範囲の円の外で、町の地面から今までの地形へ移す幅
 LAKE_DEPTH = 2.0
+SHORE_M, SHORE_LIFT = 6.0, 0.15   # 湖の岸のすぐ外：地面を水面＋SHORE_LIFT まで上げる（水面の縁が浮いて見えない）
 TUNNEL_COVER_M, TUNNEL_SIDE_M = 3.0, 4.0   # トンネルの天井の上の土かぶり、その幅（筒の外へ）
-BORE_MARGIN_M = 1.5   # 筒の中に入る地形の面を描かない範囲：トンネルの両端からこれだけ外まで
+BORE_MARGIN_M = 0.0   # 筒の中に入る地形の面を描かない範囲：トンネルの両端から外へ。0：筒を横切る面は、坑口から PORTAL_INSET 奥の残した山の点を
+                      # 持つので、面の中心はトンネルの中。坑口より外の切り土の面は穴にしない（後ろに何もなく透けて見える）
 CHANNEL_REACH_M = 6.0   # 川の溝が地形を動かす範囲（溝の外）
 ROAD_CAP_M = 3.0     # 土台があっても、道の縁からこの距離までは道の斜面より上に地形を出さない
 PAD_REACH_M = 40.0   # 土台（駐車場・家・分かれ道）が地形を動かす範囲  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
@@ -73,6 +75,9 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
     e_in = np.maximum(form - np.abs(lat), 0)
     z_under = np.minimum(surface_height(np.clip(lat, -hw, hw), zc, sl, cr) - UNDER_DEPTH, z_edge - cut * e_in)
     z = np.where(e == 0, z_under, z)
+    if no_fill_rows is not None and np.any(no_fill_rows):   # 大きな橋（S5）の下：谷を盛らない（元の地形より上げない）。分かれ道などの土台（pads）はこのあとで盛る
+        nf = np.asarray(no_fill_rows, bool)[idx]
+        z[nf] = np.minimum(z[nf], np.ravel(Z_nat)[nf])
     road_cap = np.where(e == 0, z_under, z_edge + cut * e)   # 道の路面・切り土の斜面より上には地形を出さない（道から ROAD_CAP_M まで）
     e_road = e.copy()
     if pads:
@@ -106,13 +111,6 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
             near = d <= r
             sel, d = sel[near], d[near]
             z[sel] = np.minimum(z[sel], z_bed(xr[sel], yr[sel]) + BANK * d)
-    if lake is not None:   # 湖の中の地形は水位より LAKE_DEPTH 下（湖面と重ならない）
-        poly, level = lake
-        inl = shapely.contains_xy(poly, np.ravel(X), np.ravel(Y))
-        z[inl] = np.minimum(z[inl], level - LAKE_DEPTH)
-    if no_fill_rows is not None and np.any(no_fill_rows):   # 大きな橋（S5）の下：谷を盛らない（元の地形より上げない）
-        nf = np.asarray(no_fill_rows, bool)[idx]
-        z[nf] = np.minimum(z[nf], np.ravel(Z_nat)[nf])
     if keep_rows is not None and np.any(keep_rows):   # トンネル：一番近い行がトンネルの所は、山を削らず、筒の天井＋土かぶりより下げない
         from .tunnel import bore_height
         k = np.asarray(keep_rows, bool)[idx]
@@ -122,6 +120,8 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
             zk = np.ravel(Z_nat)[k]
             zk = np.where(band[k], np.maximum(zk, sec.z[idx][k] + roof[idx][k] + TUNNEL_COVER_M), zk)
             z[k] = zk; e[k] = np.maximum(e[k], 1.0)
+    if lake is not None:   # 湖：トンネルの山を残す処理のあと（湖の中に陸を戻さない）
+        z = lake_clamp(z, np.ravel(X), np.ravel(Y), lake)
     return z.reshape(shape), e.reshape(shape)
 
 
@@ -151,6 +151,17 @@ def fill_nan_nearest(Z):
 def _sample(sampler, unproject, X, Y):
     lat, lon = unproject(X.ravel(), Y.ravel())
     return fill_nan_nearest(sampler.sample(lat, lon).reshape(X.shape))
+
+
+def lake_clamp(z, x, y, lake):
+    """湖の中の地形は水位より LAKE_DEPTH 下（湖面と重ならない）。岸のすぐ外（SHORE_M）は水面＋SHORE_LIFT より下げない（水面の縁が浮かない）。"""
+    poly, level = lake
+    z = np.array(z, float)
+    inl = shapely.contains_xy(poly, x, y)
+    shore = shapely.contains_xy(poly.buffer(SHORE_M), x, y) & ~inl
+    z[inl] = np.minimum(z[inl], level - LAKE_DEPTH)
+    z[shore] = np.maximum(z[shore], level + SHORE_LIFT)
+    return z
 
 
 def tunnel_holes(sec, xs, ys, Z, bore_rows):
@@ -202,6 +213,8 @@ def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.
         # 円の外の帯と、円の中でも町の舗装が届いていない所：本線の下は削った高さより上にしない
         Z[m] = np.where(((d > 0) | ~inp) & under[m], np.minimum(Z[m], Zc[m]), Z[m])
         E[m] = np.where(d == 0, 0.0, E[m])
+    if lake is not None and towns:   # 町の地面（宮ヶ瀬北原）も、湖の中は水位より下
+        Z = lake_clamp(Z.ravel(), X.ravel(), Y.ravel(), lake).reshape(Z.shape)
     H = tunnel_holes(sec, xs, ys, Z, bore_rows) if bore_rows is not None else np.zeros((len(ys) - 1, len(xs) - 1), bool)
     return {"xs": xs, "ys": ys, "Z": Z, "E": E, "D": D, "H": H}
 
