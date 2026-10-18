@@ -56,3 +56,13 @@ def test_portal_faces_have_dark_openings():
     sec, ways, (m,) = _net()
     mats = {x[4] for x in m.meshes()}
     assert "tunnel_dark" in mats and "concrete" in mats
+
+
+def test_piers_stay_off_the_sidewalks_too():
+    """本線に歩道（2.5m）がある所では、柱は歩道の外 PIER_CLEAR から（s≈2700 の新東名の柱が歩道の上にあった。指摘 8）。"""
+    sec = _straight()
+    ways = _net()[1]
+    walk = np.full(sec.n, 2.5)
+    m, = mw.from_osm(ways, sec, _Flat(95.0), overrides={3: {"clearance_m": 7.0, "width_m": 12.0}}, walks=(walk, walk))
+    piers = next(x for x in m.meshes() if x[0].startswith("1WALL_mw_"))[1]
+    assert np.abs(piers[:, 1]).min() >= sec.hw_left[100] + GUTTER_WIDTH + 2.5 + 1.0 - 1e-6

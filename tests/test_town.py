@@ -219,3 +219,14 @@ def test_add_road_skips_several_ranges():
         xs = np.concatenate([np.load(f"{d}/{m.meshes[n]['file']}")["verts"][:, 0] for n in m.meshes if n.startswith("1ROAD_s1_") and "gutter" not in n])
         assert xs.min() >= 50.0 - 1e-6 and not ((xs > 100.5) & (xs < 139.5)).any()
         assert xs.max() == pytest.approx(200.0)
+
+
+def test_main_sidewalk_follows_the_road_width_inside_the_town_only():
+    """本線の歩道は、町の中のその場所の道幅の外に、決めた幅で付く（コースのどこか遠くの広い所＝バス停の切り込みに引っぱられない）。"""
+    sec = _straight(201)
+    sec.hw_left[150:] = 7.75; sec.hw_right[150:] = 7.75          # 町の外（遠く）に広い所
+    spec = {"roads": {"main": {"sidewalk_l": 2.0, "sidewalk_r": 2.0}}, "corner_radius_m": 6.0, "closures": [], "markings": []}
+    t = tw.Town(spec, [_way([[0, -60], [0, 60]], wid=7)], sec, _ground(), (0.0, 0.0), 50.0)
+    edge = float(sec.hw_left[30]) + GUTTER_WIDTH
+    assert t.sidewalk.contains(Point(30.0, edge + 1.0))
+    assert not t.sidewalk.contains(Point(30.0, edge + 2.0 + 0.5))

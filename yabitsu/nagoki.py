@@ -99,5 +99,6 @@ def track_stubs(sec, pads, feats, sampler=None):
     cws = side_crosswalk_points()
     for st in stubs:   # 分かれ道の上の横断歩道があれば、柵はその後ろ
         own = [st.crosswalk_area(p) for p in cws if st.surface.buffer(1.0).contains(Point(*p))]
-        side_roads.set_back_mouth(st, sec, walks + own)
-    return stubs, ft.cut_at(feats, side_roads.branch_gaps(stubs, sec))
+        side_roads.set_back_mouth(st, sec, walks + own + [z.area() for z in sps])   # 島の路面の上にも柵を立てない
+    paved = unary_union([z.area() for z in sps] + [tw.carriageway, tw.sidewalk])   # 別に作る舗装の上の壁・生け垣は作らない
+    return stubs, ft.cut_off(ft.cut_at(feats, side_roads.branch_gaps(stubs, sec)), sec, paved)

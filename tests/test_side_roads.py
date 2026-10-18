@@ -152,3 +152,26 @@ def test_barricade_goes_behind_a_crosswalk_set_further_into_the_branch():
     sr.set_back_mouth(st, sec, [st.crosswalk_area((100, 12.0))])
     (x0, y0), (x1, y1) = st.mouth.coords
     assert min(y0, y1) >= 12.0 + sr.CW_LEN / 2 + sr.CLEAR_M - 1e-6
+
+
+def test_branch_gap_uses_the_course_distance_not_the_map_length():
+    """本線の s は地図上の長さとずれる（S1 の 9900m で 38m）。壁を切る範囲は、入口に一番近い本線の行の s で測る。"""
+    sec = _straight()
+    sec.s = sec.s * 1.05                     # 坂のぶん s が地図上の長さより長い
+    st, = sr.stubs([_way([[100, 0], [100, 60]])], sec, _Flat(), keep_out=[])
+    (s0, s1), = sr.branch_gaps([st], sec)["L"]
+    assert (s0 + s1) / 2 == pytest.approx(105.0, abs=0.6)
+
+
+def test_hidden_wall_follows_the_branch_surface_where_the_mouth_was_set_back():
+    """入口を奥へ下げた所が下り坂でも、見えない壁の下に すき間をあけない（壁の高さは入口の所の路面から。指摘 6）。"""
+    sec = _straight()
+    st, = sr.stubs([_way([[100, 0], [100, 60]])], sec, _Flat(100.0, gy=-0.1), keep_out=[])
+    sr.set_back_mouth(st, sec, [st.crosswalk_area((100, 12.0))])
+    v, f, _ = st.wall()
+    for x, y in st.mouth.coords:
+        z = st.z_at(x, y)
+        near = v[np.hypot(v[:, 0] - x, v[:, 1] - y) < 1e-6]
+        assert near[:, 2].min() <= z - 0.4 and near[:, 2].max() >= z + 2.5
+    zs = st.ground_z(np.array([100.0, 100.0]), np.array([20.0, 30.0]))
+    assert zs[0] == pytest.approx(st.z_at(100.0, 20.0)) and zs[1] == pytest.approx(st.z_at(100.0, 30.0))

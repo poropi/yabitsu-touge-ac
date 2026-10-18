@@ -5,7 +5,7 @@ import math
 import numpy as np
 from shapely.geometry import LineString, Point
 
-from . import geo
+from . import geo, town_objects
 from .town_objects import _box, _merge, _prism, _quad
 
 NEAR_M = 50.0
@@ -35,6 +35,7 @@ def place(elements, sec, skip):
         x, y = [float(v) for v in geo.to_local(e["lat"], e["lon"])]
         if main.distance(Point(x, y)) > NEAR_M or any(math.hypot(x - a, y - b) < SKIP_M for a, b in skip):
             continue
+        x, y = (float(v) for v in town_objects.off_road_xy(sec, (x, y)))   # 道の上の点は、道の外へずらす
         q = main.interpolate(main.project(Point(x, y)))
         face = (math.degrees(math.atan2(q.x - x, q.y - y)) + 360.0) % 360.0
         out.append({"kind": kind, "xy": (x, y), "facing_deg": face, "name": e["tags"].get("name", ""), "osm_id": e.get("id")})

@@ -44,3 +44,14 @@ def test_short_reply_and_second_round_are_left_alone(tmp_path):
 def test_last_assistant_message_field_is_used_when_given():
     assert _run({"last_assistant_message": EN})["decision"] == "block"
     assert _run({"last_assistant_message": JA}) is None
+
+
+def test_odd_input_never_crashes_the_hook(tmp_path):
+    """壊れた入力・おかしな形・BOM つきの記録でも、エラーにならず何もしない（最終レビューの小さな指摘 13）。"""
+    for raw in (b"{not json", b"[1, 2]", json.dumps({"last_assistant_message": 123}).encode(), b"\xff\xfe\x00bad"):
+        r = subprocess.run([sys.executable, str(HOOK)], input=raw, capture_output=True)
+        assert r.returncode == 0 and not r.stdout.strip(), raw
+    p = tmp_path / "bom.jsonl"
+    p.write_bytes(b"\xef\xbb\xbf" + json.dumps({"type": "user", "message": {"content": "x"}}).encode() + b"\n"
+                  + json.dumps({"type": "assistant", "message": {"content": [{"type": "text", "text": EN}]}}).encode())
+    assert _run({"transcript_path": str(p)})["decision"] == "block"

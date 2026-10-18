@@ -202,3 +202,15 @@ def test_tiny_leftovers_after_a_cut_are_dropped():
     feats = [ft.Feature(10.3, 52.1, "L", "hedge", 1.2, "")]
     cut = ft.cut_at(feats, {"L": [(12.0, 50.0)], "R": []})
     assert cut == []          # 1.7m と 2.1m の切れ端は作らない（面が作れない・意味がない）
+
+
+def test_features_standing_on_another_paved_area_are_cut_there():
+    """島の路面（split）のような別の舗装の上に来る壁・生け垣は、その所だけ作らない（3340〜3370m 右の生け垣）。"""
+    from shapely.geometry import box
+    sec = _straight()
+    feats = [ft.Feature(0, 100, "L", "hedge", 1.8, ""), ft.Feature(0, 100, "R", "hedge", 1.8, "")]
+    paved = box(40, 0, 60, 12)                                   # 左側だけ、x=40〜60 に別の舗装
+    cut = ft.cut_off(feats, sec, paved)
+    left = sorted((round(f.s_from), round(f.s_to)) for f in cut if f.side == "L")
+    assert left == [(0, 40), (60, 100)]
+    assert [(f.s_from, f.s_to) for f in cut if f.side == "R"] == [(0, 100)]

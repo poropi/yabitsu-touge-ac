@@ -120,21 +120,25 @@ def wall_meshes(lines, z_fn, height=WALL_H, prefix="1WALL_town_block", step=2.0)
 OFF_ROAD_M = 0.5   # 路面の中にあったバス停を、道の縁＋側溝からこれだけ外へ
 
 
-def off_road(objects, sec):
-    """路面（本線の帯＋側溝）の中に点があるバス停を、同じ s のまま道の外（縁＋側溝＋OFF_ROAD_M）へずらす。ほかの物はそのまま。"""
+def off_road_xy(sec, p):
+    """点 p（ローカル座標）が本線の路面＋側溝の中なら、同じ s のまま道の外（縁＋側溝＋OFF_ROAD_M）へずらした点。外ならそのまま。"""
     from .crosssection import GUTTER_WIDTH
+    p = np.asarray(p, float); i = int(np.argmin(np.hypot(sec.x - p[0], sec.y - p[1])))
+    h = sec.heading[i]; n = np.array([-np.sin(h), np.cos(h)]); c = np.array([sec.x[i], sec.y[i]])
+    lat = float((p - c) @ n); hw = float(sec.hw_left[i] if lat >= 0 else sec.hw_right[i])
+    want = hw + GUTTER_WIDTH + OFF_ROAD_M
+    return p + n * (np.sign(lat or 1.0) * want - lat) if abs(lat) < want - 1e-6 else p
+
+
+def off_road(objects, sec):
+    """路面（本線の帯＋側溝）の中に点があるバス停を、同じ s のまま道の外へずらす（off_road_xy）。ほかの物はそのまま。"""
     out = []
     for o in objects:
-        if o.get("kind") != "bus_stop":
-            out.append(o); continue
-        p = _xy(o["points"][0]); i = int(np.argmin(np.hypot(sec.x - p[0], sec.y - p[1])))
-        h = sec.heading[i]; n = np.array([-np.sin(h), np.cos(h)]); c = np.array([sec.x[i], sec.y[i]])
-        lat = float((p - c) @ n); hw = float(sec.hw_left[i] if lat >= 0 else sec.hw_right[i])
-        want = hw + GUTTER_WIDTH + OFF_ROAD_M
-        if abs(lat) < want - 1e-6:
-            q = p + n * (np.sign(lat or 1.0) * want - lat)
-            la, lo = geo.from_local(q[0], q[1])
-            o = {**o, "points": [[float(la), float(lo)]] + list(o["points"][1:])}
+        if o.get("kind") == "bus_stop":
+            p = _xy(o["points"][0]); q = off_road_xy(sec, p)
+            if np.any(q != p):
+                la, lo = geo.from_local(q[0], q[1])
+                o = {**o, "points": [[float(la), float(lo)]] + list(o["points"][1:])}
         out.append(o)
     return out
 

@@ -186,9 +186,11 @@ def _cat(parts):
     return compact(v, f, np.concatenate([q[2] for q in parts]))
 
 
-def from_osm(elements, sec, sampler, overrides=None, unproject=geo.from_local):
-    """本線を渡る高速道路の橋から、トンネルの入口までの道。overrides = {橋の osm_id: {"clearance_m", "width_m"}}。"""
+def from_osm(elements, sec, sampler, overrides=None, unproject=geo.from_local, walks=None):
+    """本線を渡る高速道路の橋から、トンネルの入口までの道。overrides = {橋の osm_id: {"clearance_m", "width_m"}}。
+    walks = (左, 右) の行ごとの歩道の幅（features.sidewalk_offsets）があれば、柱は歩道の外 PIER_CLEAR から。"""
     overrides = overrides or {}
+    wl, wr = walks if walks is not None else (np.zeros(sec.n), np.zeros(sec.n))
     main = LineString(np.c_[sec.x, sec.y])
     ground = lambda x, y: float(np.nan_to_num(sampler.sample(*unproject(np.atleast_1d(x), np.atleast_1d(y)))[0], nan=0.0))
     out, used = [], set()
@@ -216,7 +218,7 @@ def from_osm(elements, sec, sampler, overrides=None, unproject=geo.from_local):
         zb = ground(*pts[-1]) if portals[1] else zc
         ang = abs(math.sin(math.atan2(*(np.array(axis.interpolate(min(tc + 1, L)).coords[0]) -
                                           np.array(axis.interpolate(max(tc - 1, 0)).coords[0]))[::-1]) - sec.heading[i]))
-        keep = (max(sec.hw_left[i], sec.hw_right[i]) + GUTTER_WIDTH + PIER_CLEAR) / max(ang, 0.2) + width / 2 * math.sqrt(max(0.0, 1 - ang ** 2)) / max(ang, 0.2)
+        keep = (max(sec.hw_left[i] + wl[i], sec.hw_right[i] + wr[i]) + GUTTER_WIDTH + PIER_CLEAR) / max(ang, 0.2) + width / 2 * math.sqrt(max(0.0, 1 - ang ** 2)) / max(ang, 0.2)
         out.append(Motorway(int(w["id"]), axis, ids, portals, width, tc, np.array([0.0, tc, L]), np.array([za, zc, zb]), ground, keep))
     return out
 

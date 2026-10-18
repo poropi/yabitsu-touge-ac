@@ -10,7 +10,7 @@ import math
 
 import numpy as np
 import shapely
-from shapely.geometry import LineString, Point, Polygon
+from shapely.geometry import LineString, MultiPoint, Point, Polygon
 from shapely.geometry.polygon import orient
 from shapely.ops import substring, unary_union
 
@@ -212,8 +212,9 @@ class Town:
         self._roads = []  # (way, 中心線, 車道の幅, 左の歩道, 右の歩道)
         mw = roads.get("main", {})
         for side, key in ((1, "sidewalk_l"), (-1, "sidewalk_r")):
-            if mw.get(key):
-                hw = float(max(sec.hw_left.max(), sec.hw_right.max())) + GUTTER_WIDTH
+            if mw.get(key):   # その場所の道幅（町の中の行）の外に付ける
+                m = (sec.s >= 0.0) & (sec.s <= s_exit)
+                hw = (sec.hw_left if side > 0 else sec.hw_right)[m] + GUTTER_WIDTH
                 walks.append(side_band(sec, 0.0, s_exit, side, hw - 0.01, hw + float(mw[key])))
         for w in osm_elements:
             t = w.get("tags", {})
@@ -340,6 +341,13 @@ class Town:
         中の小さな穴（中央の島など、HOLE_FILL_M2 まで）は埋める（見えない壁を交差点の真ん中に立てない）。"""
         extra = [Polygon(_xy(e["points"])) for e in self.spec.get("drivable_extra", [])]
         area = unary_union([self.carriageway, self.sidewalk, *extra])
+        # 走れるのは、県道70号（路面＋側溝＋歩道）と、交差点の中（腕の封鎖の線の端を結んだ多角形）と drivable_extra だけ。
+        # 封鎖の線で切るだけだと、線が道幅より短い所で柵の横を回って奥の道へ出られる（最終レビューの指摘 1）
+        keep = [main_formation(self.sec, 0.0, self.main_skip[1]).buffer(self.main_walk), *extra]
+        ends = [q for c in self.closures if not c["name"].startswith("side_") for q in _xy([c["a"], c["b"]])]
+        if len(ends) >= 3:
+            keep.append(MultiPoint([tuple(q) for q in ends]).convex_hull)
+        area = area.intersection(unary_union(keep))
         cuts = unary_union([LineString(_xy([c["a"], c["b"]])).buffer(0.05) for c in self.closures]) if self.closures else None
         pieces = _polys(area.difference(cuts) if cuts is not None else area)
         c = Point(*self.center)

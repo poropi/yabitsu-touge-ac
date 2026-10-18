@@ -112,6 +112,11 @@ class Stub:
         t = self.axis.project(shapely.Point(x, y))
         return float(np.interp(t, self.t_knots, self.z_knots))
 
+    def ground_z(self, x, y):
+        """z_at を配列で（柵などを入口の路面に置くため）。"""
+        x = np.atleast_1d(np.asarray(x, float)); y = np.atleast_1d(np.asarray(y, float))
+        return np.array([self.z_at(a, b) for a, b in zip(x.ravel(), y.ravel())]).reshape(x.shape)
+
     def crosswalk_area(self, p):
         """分かれ道の入口から横断歩道（点 p を中心に crosswalk_mesh で描く所）の奥の端までの範囲。柵はこの外へ下げる。"""
         t = self.axis.project(shapely.Point(*p))
@@ -141,8 +146,8 @@ class Stub:
     def wall(self, height=3.0):
         """入口をふさぐ見えない壁（両面）。"""
         (x0, y0), (x1, y1) = self.mouth.coords
-        z0 = float(self.z_knots[0]) - 0.5; z1 = float(self.z_knots[0]) + height
-        v = np.array([[x0, y0, z0], [x1, y1, z0], [x1, y1, z1], [x0, y0, z1]], float)
+        za, zb = self.z_at(x0, y0), self.z_at(x1, y1)   # 入口（奥へ下げた所）の路面の高さ
+        v = np.array([[x0, y0, za - 0.5], [x1, y1, zb - 0.5], [x1, y1, zb + height], [x0, y0, za + height]], float)
         f = np.array([[0, 1, 2, 3], [3, 2, 1, 0]], np.int32)
         return v, f, v[:, :2] / 2.0
 
@@ -283,12 +288,13 @@ def branch_gaps(stubs_, sec, margin=1.0):
     """分かれ道の入口で、本線の道ぞいの壁・ガードレールなどを切る s の範囲（左右ごと）：{"L": [(s0, s1)], "R": [...]}
     入口（柵の線、set_back_mouth で道ぞいの壁の線あたりに下げたもの）の中心の s から、
     分かれ道の幅を本線と交わる角度で割った長さ＋margin だけ前後。入口の先で本線ぞいに曲がる道でも、開いている所だけを切る。"""
-    main = LineString(np.c_[sec.x, sec.y])
     out = {"L": [], "R": []}
     for st in stubs_:
         c = st.mouth.interpolate(0.5, normalized=True)
-        s = main.project(c); i = int(np.argmin(np.abs(sec.s - s))); h = sec.heading[i]
+        # s は本線の行の s で測る（地図上の長さ main.project とは、坂のぶんずれる。S1 の奥で 38m）
+        i = int(np.argmin(np.hypot(sec.x - c.x, sec.y - c.y))); h = sec.heading[i]
         lat = -(c.x - sec.x[i]) * np.sin(h) + (c.y - sec.y[i]) * np.cos(h)
+        s = float(sec.s[i]) + (c.x - sec.x[i]) * np.cos(h) + (c.y - sec.y[i]) * np.sin(h)
         t = st.axis.project(c)
         a = np.array(st.axis.interpolate(max(t - 1.0, 0.0)).coords[0]); b = np.array(st.axis.interpolate(min(t + 1.0, st.axis.length)).coords[0])
         d = (b - a) / max(np.linalg.norm(b - a), 1e-9)

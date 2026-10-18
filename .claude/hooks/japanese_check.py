@@ -25,7 +25,7 @@ def is_english(text):
 def last_assistant_text(transcript_path):
     """会話の記録（jsonl）から、最後のユーザーの発言より後の、Claude の文章をつなげて返す。"""
     texts = []
-    with open(transcript_path, encoding="utf-8") as f:
+    with open(transcript_path, encoding="utf-8-sig", errors="replace") as f:
         for line in f:
             try:
                 e = json.loads(line)
@@ -42,15 +42,12 @@ def last_assistant_text(transcript_path):
 
 
 def main():
-    data = json.loads(sys.stdin.buffer.read().decode("utf-8") or "{}")
-    if data.get("stop_hook_active"):
+    data = json.loads(sys.stdin.buffer.read().decode("utf-8-sig") or "{}")
+    if not isinstance(data, dict) or data.get("stop_hook_active"):
         return
     text = data.get("last_assistant_message")
-    if not text and data.get("transcript_path"):
-        try:
-            text = last_assistant_text(data["transcript_path"])
-        except OSError:
-            return
+    if not isinstance(text, str) or not text:
+        text = last_assistant_text(data["transcript_path"]) if isinstance(data.get("transcript_path"), str) else ""
     if text and is_english(text):
         out = {"decision": "block",
                "reason": "最後の返事が英語になっています。同じ内容を、やさしい日本語で書き直してください（コード・ファイル名・コマンドはそのままで構いません）。"}
@@ -58,4 +55,7 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    try:
+        main()
+    except Exception:   # おかしな入力でも、会話を止めない（何もしない）
+        pass

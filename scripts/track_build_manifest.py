@@ -66,9 +66,10 @@ def main():
             continue
         (ax, ay), (bx, by) = st.mouth.coords
         p0, p1 = np.array(st.axis.coords[0]), np.array(st.axis.interpolate(min(2.0, st.axis.length)).coords[0])
-        assembly.add_meshes(m, town_objects.barricade_meshes((ax, ay), (bx, by), road_z, p0 - p1, k=100 + k))
+        assembly.add_meshes(m, town_objects.barricade_meshes((ax, ay), (bx, by), st.ground_z, p0 - p1, k=100 + k))   # 入口の路面の高さに
     ov = overpasses.load_overrides()
-    mws = motorway.from_osm(side_roads.load_elements(), sec, sampler, ov)   # 新東名など：両側のトンネルの入口まで
+    mws = motorway.from_osm(side_roads.load_elements(), sec, sampler, ov,
+                            walks=features.sidewalk_offsets(sec, feats))   # 新東名など：両側のトンネルの入口まで（柱は歩道の外）
     for z in sps:   # 路面（2車線・西の上り・東の下り・導流帯）と島（鳥居・灯籠など）
         assembly.add_meshes(m, z.meshes())
     # コースから 200m の景色：建物（1棟ずつ外周線の形）と、走れない道
@@ -77,6 +78,7 @@ def main():
     keep_out = unary_union([start_lot.road_formation(sec, 0.0, float(sec.s[-1])).buffer(1.0), tw.region.buffer(1.0)]
                            + [st.surface.buffer(0.5) for st in stubs] + [x.footprint() for x in mws]
                            + [z.area().buffer(0.5) for z in sps]
+                           + [unary_union(nagoki.sidewalk_polygons(sec, feats)).buffer(0.3)]   # 歩道の上に建物を立てない
                            + [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch")
                               and "house" not in p["name"]])
     from yabitsu import pois

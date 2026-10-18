@@ -77,6 +77,35 @@ def cut_at(feats, gaps):
     return out
 
 
+def cut_off(feats, sec, paved):
+    """壁・欄干・柵・生け垣・ガードレールのうち、立てる線（道の縁＋側溝＋歩道の外）が paved（島の路面など、別に作る舗装）の
+    中に来る所を除く。切れ端が MIN_PIECE_M より短ければ作らない。"""
+    import shapely
+    walk = dict(zip(("L", "R"), sidewalk_offsets(sec, feats)))
+    out = []
+    for f in feats:
+        if f.type not in CUT_TYPES or paved.is_empty:
+            out.append(f); continue
+        sl = rows_of(sec, f); idx = np.arange(sec.n)[sl]; side = SIDES[f.side]
+        hw = (sec.hw_left if side > 0 else sec.hw_right)[idx] + GUTTER_WIDTH + walk[f.side][idx] + 0.1
+        x = sec.x[idx] - side * hw * np.sin(sec.heading[idx]); y = sec.y[idx] + side * hw * np.cos(sec.heading[idx])
+        bad = shapely.contains_xy(paved, x, y)
+        if not bad.any():
+            out.append(f); continue
+        s = sec.s[idx]; k = 0
+        while k < len(idx):
+            if bad[k]:
+                k += 1; continue
+            j = k
+            while j + 1 < len(idx) and not bad[j + 1]:
+                j += 1
+            a = f.s_from if k == 0 else float(s[k]); b = f.s_to if j == len(idx) - 1 else float(s[j])
+            if b - a >= MIN_PIECE_M:
+                out.append(Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m))
+            k = j + 1
+    return out
+
+
 def rows_of(sec, f):
     if f.side not in SIDES or f.type not in TYPES:
         raise ValueError(f"side は L/R、type は {TYPES} のどれか: {f}")
