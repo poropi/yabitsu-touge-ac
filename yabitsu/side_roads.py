@@ -270,8 +270,11 @@ def _follow(pc, w0, ends, length_m):
 def _stop_before(axis, form, width):
     """入口から出たあと本線の路面（＋側溝）へまた近づく道は、近づく手前（道幅の半分＋CLEAR_M＋1m）で終える。"""
     near = width / 2 + CLEAR_M + 1.0
+    away = False   # 一度 本線から離れて（near の2倍より遠くへ）から、また近づいた所で終える。本線ぞいに走り出す道は切らない
     for t in np.arange(10.0, axis.length, 1.0):
-        if form.distance(Point(axis.interpolate(t))) < near:
+        d = form.distance(Point(axis.interpolate(t)))
+        away = away or d > 2 * near
+        if away and d < near:
             return substring(axis, 0.0, max(t - 1.0, 1.0))
     return axis
 

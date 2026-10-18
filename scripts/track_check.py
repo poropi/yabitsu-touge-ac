@@ -40,7 +40,9 @@ def check(processed_dir, manual_dir):
         sec = Section.load_json(P / "track_section.json")
         pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
         stubs, _ = nagoki.track_stubs(sec, pads, ft.load_features_rows(trk.load_section_rows("features", trk.load_bounds())))
-        road_clear = terrain.road_clear_count(sec, dict(np.load(P / "track_terrain_near.npz")), stubs)
+        from yabitsu import side_roads, tunnel
+        skip = tunnel.row_mask(sec.s, tunnel.from_osm(side_roads.load_elements(), sec), margin_m=0.0)
+        road_clear = terrain.road_clear_count(sec, dict(np.load(P / "track_terrain_near.npz")), stubs, skip_rows=skip)
     return {"elevation_ok": st["max_residual_m"] <= 1.5, "road_clear": road_clear, "road_clear_ok": road_clear in (0, None), "max_residual_m": st["max_residual_m"],
             "max_grade_pct": st["max_grade_pct"], "sections": sections, "position_ok": position_ok,
             "position_rows": len(rows), "folds": folds, "tris": tris}

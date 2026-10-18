@@ -246,3 +246,11 @@ def test_long_branch_has_no_pit_from_one_bad_elevation_sample():
     st, = sr.stubs([_way([[100, 0], [100, 300]])], sec, _Pit(), keep_out=[], length_m=200.0)
     i = int(np.argmin(np.abs(st.t_knots - 60)))
     assert abs(st.z_knots[i] - 100.0) < 1.0
+
+
+def test_branch_running_alongside_the_road_before_leaving_is_built_in_full():
+    """入口からしばらく本線ぞいを走ってから離れていく林道（S5 1012m の林道唐沢線）は、途中で切らずに作る。"""
+    sec = _straight()
+    st, = sr.stubs([_way([[60, 0], [63, 7.0], [100, 7.0], [130, 60], [150, 200]], id=3, highway="unclassified")],
+                   sec, _Flat(), keep_out=[], length_m=200.0)
+    assert st.axis.length > 150

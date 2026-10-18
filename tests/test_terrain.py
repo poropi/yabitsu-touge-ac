@@ -197,3 +197,26 @@ def test_road_clear_counts_places_where_ground_comes_up_to_the_road():
     assert tr.road_clear_count(sec, near) == 0
     Z[(X > 50) & (X < 60) & (np.abs(Y) < 2)] = float(sec.z[0]) + 0.3          # 道の上に土
     assert tr.road_clear_count(sec, near) > 0
+
+
+def test_road_clear_skips_tunnel_rows():
+    sec = _straight()
+    xs = np.arange(-10.0, 211.0); ys = np.arange(-30.0, 31.0); X, Y = np.meshgrid(xs, ys)
+    Z = np.where((X > 50) & (X < 60), float(sec.z[0]) + 30.0, float(sec.z[0]) - 1.0)    # 山（トンネル）
+    near = {"xs": xs, "ys": ys, "Z": Z}
+    skip = (sec.s > 49) & (sec.s < 61)
+    assert tr.road_clear_count(sec, near) > 0 and tr.road_clear_count(sec, near, skip_rows=skip) == 0
+
+
+def test_road_clear_edge_points_count_only_ground_above_the_surface():
+    """路面の端（側溝のきわ）は、2m の地形の格子が切り土の斜面とつながる所。路面より上に出たときだけ数える。"""
+    sec = _straight()
+    xs = np.arange(-10.0, 211.0, 0.5); ys = np.arange(-30.0, 31.0, 0.5); X, Y = np.meshgrid(xs, ys)
+    Z = np.full(X.shape, float(sec.z[0]) - 1.0)
+    edge = float(sec.hw_left[0]) - 0.2
+    zs = float(cs.surface_height(edge, float(sec.z[55]), sec.slope[55], sec.crown[55]))
+    band = (np.abs(Y - edge) < 0.3) & (X > 50) & (X < 60)
+    Z[band] = zs - 0.05                                                               # 端で 5cm 下
+    assert tr.road_clear_count(sec, {"xs": xs, "ys": ys, "Z": Z}) == 0
+    Z[band] = zs + 0.05                                                               # 端で 5cm 上
+    assert tr.road_clear_count(sec, {"xs": xs, "ys": ys, "Z": Z}) > 0

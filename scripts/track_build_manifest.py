@@ -54,6 +54,16 @@ def main():
     from shapely.ops import unary_union as _uu
     # stubs は上で作った（入口は本線と歩道から離してある）
     assembly.add_meshes(m, side_roads.stub_meshes(stubs))
+    from yabitsu import tunnel, textures as _tx   # トンネル（筒・照明・坑口・表札）
+    tns = tunnel.from_osm(side_roads.load_elements(), sec)
+    tspec = json.loads((config.DATA_MANUAL / "s5_tunnels.json").read_text(encoding="utf-8")) if (config.DATA_MANUAL / "s5_tunnels.json").exists() else {}
+    for tn in tns:
+        txt = tspec.get(str(tn.osm_id), {}).get("plate", tn.name)
+        if txt:
+            pth = config.TRACK_BUILD_DIR / "textures" / f"tunnel_plate_{tn.osm_id}.png"; pth.parent.mkdir(parents=True, exist_ok=True)
+            _tx.sign_texture(txt, "#E9E6DC", "#1C1C1C", 512, 112, border="#555555").save(pth)
+            m.add_material(f"tunnel_plate_{tn.osm_id}", texture=f"textures/{pth.name}")
+    assembly.add_meshes(m, tunnel.meshes(sec, tns, tspec, ground))
     from yabitsu import water   # S4 の川・沢（水面・川原）、堰・砂防ダム、湧き水の水くみ場
     streams, falls, springs = water.load(sec)
     form_all = start_lot.road_formation(sec, 0.0, float(sec.s[-1]))
