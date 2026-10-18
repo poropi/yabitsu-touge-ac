@@ -30,7 +30,8 @@ def main():
     def sample(q):  # 区間ごとの格子（区間の始点から 1m ごと）で標高を取る
         return sampler.sample(*geo.from_local(np.interp(q, cl.s, cl.x), np.interp(q, cl.s, cl.y)))
 
-    z, z_ref, sigmas = elevation.fit_sections(cl.s, z_raw, valid, cl.step, list(bounds.values()), sample=sample)
+    z, z_ref, sigmas = elevation.fit_sections(cl.s, z_raw, valid, cl.step, list(bounds.values()), sample=sample,
+                                              fixed=len(config.ACCEPTED_SECTIONS))   # 受け入れ済みの区間は今の高さのまま
     np.savez(P / "track_profile.npz", s=cl.s, z_raw=z_raw, z_ref=z_ref, z=z, valid=valid,
              bounds=np.array(bounds, dtype=object))
     st = elevation.profile_stats(cl.s, z, z_ref, valid, cl.step)

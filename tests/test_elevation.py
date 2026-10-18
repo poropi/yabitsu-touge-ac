@@ -45,3 +45,24 @@ def test_plots_are_written(tmp_path):
     zf, zref, _ = el.fit_profile(s, z, valid, 1.0)
     el.plot_profile(tmp_path / "p.png", s, zref, zf, valid, "t")
     assert (tmp_path / "p.png").stat().st_size > 1000
+
+
+def _fixed_case():
+    s = np.arange(0.0, 3001.0); z_raw = 100 + 0.08 * s + 3 * np.sin(s / 40.0); valid = np.ones_like(s, bool)
+    return s, z_raw, valid
+
+
+def test_fixed_sections_keep_their_heights_when_a_new_section_is_added():
+    """受け入れ済みの区間（先頭の fixed 個）は、上に区間を足しても高さがまったく変わらない（S4 を峠の先に足すとき）。"""
+    s, z_raw, valid = _fixed_case()
+    old, _, _ = el.fit_sections(s[:2001], z_raw[:2001], valid[:2001], 1.0, [(0, 1000), (1000, 2000)])
+    new, _, _ = el.fit_sections(s, z_raw, valid, 1.0, [(0, 1000), (1000, 2000), (2000, 3000)], fixed=2)
+    assert np.allclose(new[:2001], old, atol=1e-9)
+
+
+def test_new_section_meets_the_fixed_end_without_a_step_or_kink():
+    s, z_raw, valid = _fixed_case()
+    z, _, _ = el.fit_sections(s, z_raw, valid, 1.0, [(0, 1000), (1000, 2000), (2000, 3000)], fixed=2)
+    assert abs(z[2001] - z[2000]) < 0.12                       # 1m で 8% の上り＋α：段差がない
+    g0 = (z[2000] - z[1990]) / 10.0; g1 = (z[2010] - z[2000]) / 10.0
+    assert abs(g1 - g0) <= 0.02                                 # 勾配が折れない（今のつなぎ目と同じ基準：test_join_has_no_grade_jump）

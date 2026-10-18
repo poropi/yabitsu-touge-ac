@@ -30,9 +30,14 @@ class SectionDef:
     end: tuple
 
 
-SECTIONS = (SectionDef("s3", NAGOKI, S2_START), SectionDef("s2", S2_START, S1_START), SectionDef("s1", S1_START, S1_END))
+S4_END = (35.4651366, 139.2137214)  # S4 の終わり：札掛橋（OSM way 131561915）の北の端から、県道70号に沿って 250m
+
+SECTIONS = (SectionDef("s3", NAGOKI, S2_START), SectionDef("s2", S2_START, S1_START), SectionDef("s1", S1_START, S1_END),
+            SectionDef("s4", S1_END, S4_END))
+ACCEPTED_SECTIONS = ("s3", "s2", "s1")   # 受け入れ済みの区間：高さの合わせ直しで、今の値をそのまま使う（elevation.fit_sections の fixed）
 TRACK_GROUP = "yabitsu_main"
 TOWN_GROUP = "yabitsu_nagoki"  # 町の範囲の部品は別の kn5 にする
+S4_GROUP = "yabitsu_s4"  # S4（峠 → 札掛）の部品。全部のレイアウトが読む
 TRACK_BUILD_DIR = DATA_PROCESSED / "track"
 
 PROTECTED_DIRS = (AC_TRACKS / "nanohanadai",)
