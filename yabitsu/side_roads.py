@@ -293,7 +293,8 @@ def _stop_before(axis, form, width):
     return axis
 
 
-ROADSIDE_FILES = ("osm_nagoki.json", "osm_s3_roadside.json", "osm_track_roads.json", "osm_shintomei.json", "osm_s4_roads.json")
+ROADSIDE_FILES = ("osm_nagoki.json", "osm_s3_roadside.json", "osm_track_roads.json", "osm_shintomei.json", "osm_s4_roads.json",
+                  "osm_kitahara.json")
 
 
 def load_elements(raw_dir=None):

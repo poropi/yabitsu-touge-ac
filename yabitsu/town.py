@@ -5,6 +5,7 @@
 道幅・歩道の幅・路面の表示・封鎖の位置は data/manual/s3_nagoki.json に緯度経度で書く：
   roads: {"<OSM way id>" | "main": {"width_m", "sidewalk_l", "sidewalk_r"}}（書いていない道は ROAD_DEFAULTS）
   markings: [{"kind": stop_line | crosswalk | lane_line | centre_line | arrow | text, "points": [[lat, lon], ...], ...}]
+  crossings: [[lat, lon] か [lat, lon, "signal"], ...]（OSM にない横断歩道。auto のとき OSM の横断歩道と同じに扱う。signal は信号つき）
 """
 import math
 
@@ -263,6 +264,9 @@ class Town:
         s_in = self.main_skip[0]; inr = (sec.s >= s_in - 1.0) & (sec.s <= s_exit + 1.0)
         main_line = LineString(np.c_[sec.x, sec.y][inr])
         nodes = [e for e in elements if e.get("type") == "node"]
+        nodes += [{"type": "node", "lat": float(la), "lon": float(lo),
+                   "tags": {"highway": "crossing", "crossing:markings": "zebra", **({"_signal": True} if "signal" in rest else {})}}
+                  for la, lo, *rest in self.spec.get("crossings", [])]   # [lat, lon] か [lat, lon, "signal"]（信号つき）   # 地図にない横断歩道（ストリートビューで確かめて spec に書いたもの）
         sig = np.array([_xy([[e["lat"], e["lon"]]])[0] for e in nodes
                         if e.get("tags", {}).get("highway") == "traffic_signals"]).reshape(-1, 2)
         hw_main = float(np.median(sec.hw_left[inr])) + GUTTER_WIDTH
@@ -288,7 +292,7 @@ class Town:
             marks.append({"kind": "crosswalk", "points": [_ll(a), _ll(b)], "auto": True})
             away = d if np.dot(d, p - c) > 0 else -d
             crossings.append((way, p, away))
-            if len(sig) and np.hypot(*(sig - p).T).min() <= SIGNAL_NEAR_M:
+            if tg.get("_signal") or (len(sig) and np.hypot(*(sig - p).T).min() <= SIGNAL_NEAR_M):
                 self._signalised.append((p, away, a, b, wd))
                 q = p + away * (CROSSWALK_W / 2 + STOP_GAP_M)
                 left = np.array([away[1], -away[0]])   # 交差点へ向かう向き（-away）の左

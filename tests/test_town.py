@@ -230,3 +230,14 @@ def test_main_sidewalk_follows_the_road_width_inside_the_town_only():
     edge = float(sec.hw_left[30]) + GUTTER_WIDTH
     assert t.sidewalk.contains(Point(30.0, edge + 1.0))
     assert not t.sidewalk.contains(Point(30.0, edge + 2.0 + 0.5))
+
+
+def test_crosswalks_written_in_the_spec_work_like_osm_crossings():
+    """地図（OSM）にない横断歩道（宮ヶ瀬北原）を spec の crossings に書くと、横断歩道・停止線・信号機が付く。"""
+    ways = [_way([[0, -60], [0, 60]], wid=7), _node([0.5, 0.5], 9, highway="traffic_signals")]
+    spec = {"roads": {"7": {"width_m": 4.0, "sidewalk_l": 1.5, "sidewalk_r": 1.5}}, "corner_radius_m": 6.0,
+            "closures": [], "markings": [], "auto": True, "crossings": [[*geo.from_local(0.0, -14.0), "signal"]]}
+    sec, t = _town(spec, ways=ways)
+    kinds = [m["kind"] for m in t.markings]
+    assert "crosswalk" in kinds and "stop_line" in kinds
+    assert any(s["kind"] == "vehicle" for s in t.signals())

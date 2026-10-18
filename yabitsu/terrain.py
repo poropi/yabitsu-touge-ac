@@ -174,10 +174,12 @@ def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.
         m = (X >= x0) & (X <= x1) & (Y >= y0) & (Y <= y1)
         pts = shapely.points(np.c_[X[m], Y[m]])
         d = shapely.distance(pts, circle)
-        zt = ground.z(X[m], Y[m]) - np.where(shapely.contains(paved, pts), UNDER_DEPTH, 0.0)
+        inp = shapely.contains(paved, pts)
+        zt = ground.z(X[m], Y[m]) - np.where(inp, UNDER_DEPTH, 0.0)
         t = np.clip(d / TOWN_BLEND_M, 0.0, 1.0); w = t * t * (3 - 2 * t)
         Z[m] = (1 - w) * zt + w * Z[m]
-        Z[m] = np.where((d > 0) & under[m], np.minimum(Z[m], Zc[m]), Z[m])
+        # 円の外の帯と、円の中でも町の舗装が届いていない所：本線の下は削った高さより上にしない
+        Z[m] = np.where(((d > 0) | ~inp) & under[m], np.minimum(Z[m], Zc[m]), Z[m])
         E[m] = np.where(d == 0, 0.0, E[m])
     return {"xs": xs, "ys": ys, "Z": Z, "E": E, "D": D}
 

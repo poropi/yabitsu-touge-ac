@@ -23,6 +23,7 @@ def main():
     sampler = gsi.default_sampler()
     tw = nagoki.load_town(sec)   # 町の範囲：地形は町の地面に合わせる（舗装の下は少し下げる）
     paved = tw.drivable().union(tw.carriageway).union(tw.sidewalk)
+    others = nagoki.other_towns(sec)   # 宮ヶ瀬北原など
     from yabitsu import water   # S4 の川・沢：谷の底に溝を彫る（本線の路面の下は彫らない。橋の下は彫る）
     streams, _, _ = water.load(sec, sampler)
     chans = water.channels(sec, streams, start_lot.road_formation(sec, 0.0, float(sec.s[-1])))
@@ -34,11 +35,13 @@ def main():
     lake = (lake_poly, lake_level) if lake_poly is not None else None
     near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra, channels=chans, keep_rows=keep, no_fill_rows=no_fill, lake=lake,
                               side_extra=features.sidewalk_offsets(sec, feats),  # 歩道の下に地形がかぶらない
-                              town=[(tw.ground, nagoki.circle(), paved)] + [z.town_override() for z in nagoki.load_splits(sec)])
+                              town=[(tw.ground, nagoki.circle(), paved)] + [z.town_override() for z in nagoki.load_splits(sec)]
+                              + [(k.ground, nagoki.circle(j), k.drivable().union(k.carriageway).union(k.sidewalk)) for j, k in others])
     np.savez_compressed(P / "track_terrain_near.npz", **near)
     mid = terrain.build_mid(sec, sampler, pads, channels=chans, keep_rows=keep, no_fill_rows=no_fill, lake=lake)   # 道から 200m まで
     np.savez_compressed(P / "track_terrain_mid.npz", **mid)
-    far = terrain.build_far(sec, sampler, extra=extra + [np.asarray(nagoki.circle().exterior.coords).tolist()], lake=lake)
+    far = terrain.build_far(sec, sampler, extra=extra + [np.asarray(nagoki.circle(j).exterior.coords).tolist()
+                                                        for j in [nagoki.NAGOKI] + [j for j, _ in others]], lake=lake)
     np.savez_compressed(P / "track_terrain_far.npz", **far)
     print(f"near grid {near['Z'].shape}, mid grid {mid['Z'].shape}, far grid {far['Z'].shape}")
 

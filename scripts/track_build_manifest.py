@@ -17,15 +17,16 @@ def main():
     m = Manifest(config.TRACK_BUILD_DIR)
     textures.register_materials(m)
     tw = nagoki.load_town(sec)
+    others = nagoki.other_towns(sec)   # 宮ヶ瀬北原など（町の範囲は多角形で作る）
     sps = nagoki.load_splits(sec)   # 島をはさんで2本に分かれる所（地図の線どおり）
-    assembly.add_road(m, sec, skip=[tw.main_skip] + [z.main_skip for z in sps])   # 町の範囲と分かれる所は多角形で作る
+    assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps])   # 町の範囲と分かれる所は多角形で作る
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
     mid = dict(np.load(P / "track_terrain_mid.npz"))
     assembly.add_terrain(m, near, far, mid)
     ground = terrain.terrain_z(near, mid)   # 景色の建物・道は、できあがった地形の上に置く
     bounds = track.load_bounds()
     assembly.add_centrelines(m, sec, track.load_section_rows("centrelines", bounds), s_min=tw.main_skip[1],
-                             gaps=[z.main_skip for z in sps])
+                             gaps=[z.main_skip for z in sps] + [k.main_skip for _, k in others])
     from yabitsu import crosssection as cs
     assembly.add_bay_lines(m, sec, cs.parse_bay_rows(track.load_section_rows("busbays", bounds)))
     pads0 = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
@@ -39,6 +40,8 @@ def main():
     # 駐車場や広場には、木の板（幅 最大7m）がかぶらないよう少し広めに空ける
     blds = nagoki.load_buildings()
     track_blds = [buildings.Building.from_spec(d) for d in json.loads((config.DATA_MANUAL / "track_buildings.json").read_text(encoding="utf-8"))]
+    for j, _ in others:   # ほかの交差点の町の中の建物は、町の建物リスト（1棟ずつ確かめたもの）で作る
+        track_blds = [b for b in track_blds if not nagoki.circle(j).contains(b.footprint.centroid)]
     assembly.add_trees(m, trees.scatter(near, pads + start_lot.flats_for(lot_spec, pads), pad_clear_m=5.0,
                                         avoid=nagoki.tree_free_areas(sec, bounds, blds + track_blds)))
     assembly.add_pads(m, pads)
@@ -106,6 +109,7 @@ def main():
     from shapely.ops import unary_union
     from shapely.geometry import Polygon
     keep_out = unary_union([start_lot.road_formation(sec, 0.0, float(sec.s[-1])).buffer(1.0), tw.region.buffer(1.0)]
+                           + [k.region.buffer(1.0) for _, k in others]
                            + [st.surface.buffer(0.5) for st in stubs] + [x.footprint() for x in mws]
                            + [z.area().buffer(0.5) for z in sps]
                            + [unary_union(nagoki.sidewalk_polygons(sec, feats)).buffer(0.3)]   # 歩道の上に建物を立てない
@@ -155,6 +159,27 @@ def main():
         m.add_material(name, texture=rel)
     avoid = tw.paved_avoid()
     assembly.add_meshes(m, buildings.merge_by_material(buildings.building_meshes(blds, tw.ground.z, avoid)), group=config.TOWN_GROUP)
+    for j, k in others:   # ほかの交差点の町：別の kn5（j.group）。名前は town → 交差点の名前
+        def rn(items, j=j):   # 名古木と名前がぶつからないように：town → 交差点の名前、town のない名前には交差点の名前を足す
+            out = []
+            for n, *rest in items:
+                if "town" in n:
+                    n = n.replace("town", j.name, 1)
+                else:
+                    head = next((h for h in ("1WALL_", "1ROAD_", "LINES_") if n.startswith(h)), "")
+                    n = f"{head}{j.name}_{n[len(head):]}"
+                out.append((n, *rest))
+            return out
+        assembly.add_meshes(m, rn(k.meshes()), group=j.group)
+        assembly.add_meshes(m, rn(k.object_meshes()), group=j.group)
+        lp = config.DATA_MANUAL / j.lots
+        if lp.exists():
+            assembly.add_meshes(m, rn(k.lot_meshes(json.loads(lp.read_text(encoding="utf-8")))), group=j.group)
+        kb = nagoki.load_buildings(j)
+        for name, rel in buildings.write_textures(kb, config.TRACK_BUILD_DIR / "textures").items():
+            m.add_material(name, texture=rel)
+        assembly.add_meshes(m, [(f"{n}_{j.name}", *rest) for n, *rest in
+                                buildings.merge_by_material(buildings.building_meshes(kb, k.ground.z, k.paved_avoid()))], group=j.group)
     el = side_roads.load_elements()
     assembly.add_meshes(m, motorway.meshes(mws))
     skip = {i for x in mws for i in x.way_ids}

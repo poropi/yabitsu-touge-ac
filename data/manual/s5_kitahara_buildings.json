@@ -1,0 +1,2399 @@
+[
+ {
+  "id": "gsi1012_10250",
+  "name": "",
+  "source": "gsi",
+  "footprint": [
+   [
+    35.5202164,
+    139.2297363
+   ],
+   [
+    35.5202151,
+    139.2297246
+   ],
+   [
+    35.5203045,
+    139.2297103
+   ],
+   [
+    35.5203072,
+    139.2297363
+   ],
+   [
+    35.5203219,
+    139.2298742
+   ],
+   [
+    35.5202326,
+    139.2298885
+   ],
+   [
+    35.5202164,
+    139.2297363
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#E8E6E0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白い2階建て（前に赤い花の木）"
+ },
+ {
+  "id": "osm769694443",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5201565,
+    139.2298101
+   ],
+   [
+    35.5201641,
+    139.229912
+   ],
+   [
+    35.520142,
+    139.2299145
+   ],
+   [
+    35.5201445,
+    139.2299485
+   ],
+   [
+    35.520105,
+    139.229953
+   ],
+   [
+    35.5200948,
+    139.2298171
+   ],
+   [
+    35.5201565,
+    139.2298101
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#4A4A4A"
+  },
+  "wall": "#C87850",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "赤茶の2階建て"
+ },
+ {
+  "id": "osm769694435",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5203242,
+    139.230064
+   ],
+   [
+    35.5203366,
+    139.2301976
+   ],
+   [
+    35.520273,
+    139.2302065
+   ],
+   [
+    35.5202607,
+    139.2300729
+   ],
+   [
+    35.5203242,
+    139.230064
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#3A3A3A"
+  },
+  "wall": "#4A5060",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "紺色のサイディングの2階建て"
+ },
+ {
+  "id": "gsi1039_10237",
+  "name": "",
+  "source": "gsi",
+  "footprint": [
+   [
+    35.5201195,
+    139.2301807
+   ],
+   [
+    35.5200942,
+    139.2300184
+   ],
+   [
+    35.5201827,
+    139.2299977
+   ],
+   [
+    35.520208,
+    139.2301601
+   ],
+   [
+    35.5201195,
+    139.2301807
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#8C7258",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "茶色の2階建て"
+ },
+ {
+  "id": "osm769694437",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5204496,
+    139.2302124
+   ],
+   [
+    35.520462,
+    139.230346
+   ],
+   [
+    35.5203984,
+    139.2303549
+   ],
+   [
+    35.5203861,
+    139.2302213
+   ],
+   [
+    35.5204496,
+    139.2302124
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#D8DCE0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "明るい灰色の2階建て（白い柵）"
+ },
+ {
+  "id": "osm769694439",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5202328,
+    139.2302676
+   ],
+   [
+    35.5202452,
+    139.2304012
+   ],
+   [
+    35.5201817,
+    139.23041
+   ],
+   [
+    35.5201693,
+    139.2302764
+   ],
+   [
+    35.5202328,
+    139.2302676
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#D8D0C4",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "ベージュの2階建て"
+ },
+ {
+  "id": "gsi1093_10245",
+  "name": "",
+  "source": "gsi",
+  "footprint": [
+   [
+    35.5201844,
+    139.2307756
+   ],
+   [
+    35.5201706,
+    139.2306112
+   ],
+   [
+    35.5202602,
+    139.2305998
+   ],
+   [
+    35.5202741,
+    139.2307642
+   ],
+   [
+    35.5201844,
+    139.2307756
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#4A4A4A"
+  },
+  "wall": "#7A4434",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "赤茶の板張りの2階建て"
+ },
+ {
+  "id": "gsi1118_10251",
+  "name": "",
+  "source": "gsi",
+  "footprint": [
+   [
+    35.520326,
+    139.2309599
+   ],
+   [
+    35.5203146,
+    139.2310424
+   ],
+   [
+    35.5202471,
+    139.2310424
+   ],
+   [
+    35.5202357,
+    139.2309735
+   ],
+   [
+    35.5202413,
+    139.230891
+   ],
+   [
+    35.5203146,
+    139.230891
+   ],
+   [
+    35.5203202,
+    139.230953
+   ],
+   [
+    35.520326,
+    139.2309599
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#6A5040",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "茶色の板張りの平屋（石垣とブロック塀）"
+ },
+ {
+  "id": "osm769684049",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5204758,
+    139.2309867
+   ],
+   [
+    35.5204945,
+    139.2311828
+   ],
+   [
+    35.5204298,
+    139.2311921
+   ],
+   [
+    35.5204205,
+    139.2310945
+   ],
+   [
+    35.5204033,
+    139.231097
+   ],
+   [
+    35.5203939,
+    139.2309985
+   ],
+   [
+    35.5204758,
+    139.2309867
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#D8CCB4",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "ベージュの2階建て（カーポート）"
+ },
+ {
+  "id": "osm769682246",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5205071,
+    139.2313604
+   ],
+   [
+    35.520528,
+    139.2315206
+   ],
+   [
+    35.5204314,
+    139.2315396
+   ],
+   [
+    35.5204106,
+    139.2313794
+   ],
+   [
+    35.5205071,
+    139.2313604
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#F0EEE8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白いアパート（茶色の屋根）"
+ },
+ {
+  "id": "osm769682158",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5201556,
+    139.2315708
+   ],
+   [
+    35.520176,
+    139.2316972
+   ],
+   [
+    35.5200923,
+    139.2317176
+   ],
+   [
+    35.5200719,
+    139.2315912
+   ],
+   [
+    35.5201556,
+    139.2315708
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#8C7A68",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "レンガ調の2階建て"
+ },
+ {
+  "id": "gsi1179_10259",
+  "name": "",
+  "source": "gsi",
+  "footprint": [
+   [
+    35.5203199,
+    139.2317252
+   ],
+   [
+    35.5202994,
+    139.2315618
+   ],
+   [
+    35.5203884,
+    139.2315451
+   ],
+   [
+    35.5204089,
+    139.2317084
+   ],
+   [
+    35.5203199,
+    139.2317252
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "flat",
+   "rise_m": 0.0,
+   "color": "#9A9A9A"
+  },
+  "wall": "#F0F0EE",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白いアパート（外階段）"
+ },
+ {
+  "id": "gsi1177_10193",
+  "name": "",
+  "source": "gsi",
+  "footprint": [
+   [
+    35.519721,
+    139.2317087
+   ],
+   [
+    35.5197131,
+    139.2315437
+   ],
+   [
+    35.519803,
+    139.2315372
+   ],
+   [
+    35.5198109,
+    139.2317022
+   ],
+   [
+    35.519721,
+    139.2317087
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#E8DCA8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "クリーム色の洋風2階建て（茶色の柱）"
+ },
+ {
+  "id": "gsi1148_10058",
+  "name": "",
+  "source": "gsi",
+  "footprint": [
+   [
+    35.5185697,
+    139.2313961
+   ],
+   [
+    35.5184586,
+    139.231302
+   ],
+   [
+    35.5185099,
+    139.2312114
+   ],
+   [
+    35.518621,
+    139.2313055
+   ],
+   [
+    35.5185697,
+    139.2313961
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#8C8478",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "道から見えない（空き地の奥）"
+ },
+ {
+  "id": "osm769669292",
+  "name": "三沢木工",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5183368,
+    139.231372
+   ],
+   [
+    35.5185209,
+    139.2315164
+   ],
+   [
+    35.5185127,
+    139.2315321
+   ],
+   [
+    35.5185491,
+    139.2315607
+   ],
+   [
+    35.5185088,
+    139.2316383
+   ],
+   [
+    35.5183633,
+    139.2315243
+   ],
+   [
+    35.5183518,
+    139.2315463
+   ],
+   [
+    35.5183036,
+    139.2315086
+   ],
+   [
+    35.5183185,
+    139.23148
+   ],
+   [
+    35.5182916,
+    139.231459
+   ],
+   [
+    35.5183368,
+    139.231372
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 7.0,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#7A5A44"
+  },
+  "wall": "#B8B0A0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [
+   {
+    "text": "三沢木工",
+    "bg": "#FFFFFF",
+    "fg": "#1A1A1A",
+    "edge": 0,
+    "w_m": 1.6,
+    "h_m": 0.5,
+    "z_m": 3.0
+   }
+  ],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "材木屋のトタンの作業場と倉庫（看板 三沢木工）"
+ },
+ {
+  "id": "osm769669293",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5182698,
+    139.2312765
+   ],
+   [
+    35.5183218,
+    139.2313391
+   ],
+   [
+    35.5182498,
+    139.2314294
+   ],
+   [
+    35.5181978,
+    139.2313668
+   ],
+   [
+    35.5182698,
+    139.2312765
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#7A5A44"
+  },
+  "wall": "#C8C4B8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "材木置き場の小屋"
+ },
+ {
+  "id": "osm769669294",
+  "name": "三沢木工",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5183521,
+    139.2316289
+   ],
+   [
+    35.5184006,
+    139.2316736
+   ],
+   [
+    35.5183648,
+    139.2317321
+   ],
+   [
+    35.5183164,
+    139.2316874
+   ],
+   [
+    35.5183521,
+    139.2316289
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 7.0,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#7A5A44"
+  },
+  "wall": "#B8B0A0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [
+   {
+    "text": "三沢木工",
+    "bg": "#FFFFFF",
+    "fg": "#1A1A1A",
+    "edge": 0,
+    "w_m": 1.6,
+    "h_m": 0.5,
+    "z_m": 3.0
+   }
+  ],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "材木屋のトタンの作業場と倉庫（看板 三沢木工）"
+ },
+ {
+  "id": "osm769669295",
+  "name": "三沢木工",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5184022,
+    139.2316902
+   ],
+   [
+    35.5184298,
+    139.2317152
+   ],
+   [
+    35.518404,
+    139.2317581
+   ],
+   [
+    35.5183764,
+    139.231733
+   ],
+   [
+    35.5184022,
+    139.2316902
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 7.0,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#7A5A44"
+  },
+  "wall": "#B8B0A0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [
+   {
+    "text": "三沢木工",
+    "bg": "#FFFFFF",
+    "fg": "#1A1A1A",
+    "edge": 0,
+    "w_m": 1.6,
+    "h_m": 0.5,
+    "z_m": 3.0
+   }
+  ],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "材木屋のトタンの作業場と倉庫（看板 三沢木工）"
+ },
+ {
+  "id": "osm769669296",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5184241,
+    139.2312443
+   ],
+   [
+    35.5184734,
+    139.2312917
+   ],
+   [
+    35.5184464,
+    139.231334
+   ],
+   [
+    35.5183971,
+    139.2312866
+   ],
+   [
+    35.5184241,
+    139.2312443
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#7A5A44"
+  },
+  "wall": "#B8B0A0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "材木屋の倉庫（前に自動販売機）"
+ },
+ {
+  "id": "osm769669297",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5186338,
+    139.2321304
+   ],
+   [
+    35.5186427,
+    139.232238
+   ],
+   [
+    35.5185851,
+    139.2322452
+   ],
+   [
+    35.5185743,
+    139.2321153
+   ],
+   [
+    35.5185936,
+    139.2321129
+   ],
+   [
+    35.5185954,
+    139.2321352
+   ],
+   [
+    35.5186338,
+    139.2321304
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#9A9A9A"
+  },
+  "wall": "#D8CCB4",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": false,
+  "checked": false,
+  "sv": "",
+  "sv_date": "",
+  "note": ""
+ },
+ {
+  "id": "osm769682159",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5197365,
+    139.2314854
+   ],
+   [
+    35.5197554,
+    139.2316774
+   ],
+   [
+    35.5196896,
+    139.2316872
+   ],
+   [
+    35.5196864,
+    139.2316545
+   ],
+   [
+    35.5196624,
+    139.231658
+   ],
+   [
+    35.5196468,
+    139.2314987
+   ],
+   [
+    35.5197365,
+    139.2314854
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#E8DCA8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "クリーム色の洋風2階建て（茶色の柱）"
+ },
+ {
+  "id": "osm769682160",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5196224,
+    139.2315159
+   ],
+   [
+    35.5196351,
+    139.2316346
+   ],
+   [
+    35.5195578,
+    139.2316471
+   ],
+   [
+    35.5195451,
+    139.2315284
+   ],
+   [
+    35.5196224,
+    139.2315159
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#EDEBE6",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白い2階建ての事務所"
+ },
+ {
+  "id": "osm769682161",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5194114,
+    139.2314748
+   ],
+   [
+    35.5194151,
+    139.2315771
+   ],
+   [
+    35.5193467,
+    139.2315809
+   ],
+   [
+    35.5193415,
+    139.2314393
+   ],
+   [
+    35.5193829,
+    139.231437
+   ],
+   [
+    35.5193844,
+    139.2314763
+   ],
+   [
+    35.5194114,
+    139.2314748
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#7A6050",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "茶色の古い2階建て"
+ },
+ {
+  "id": "osm769682162",
+  "name": "でとまん食堂",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5200706,
+    139.2309271
+   ],
+   [
+    35.5200738,
+    139.230998
+   ],
+   [
+    35.5200025,
+    139.2310028
+   ],
+   [
+    35.520004,
+    139.2310356
+   ],
+   [
+    35.5199775,
+    139.2310374
+   ],
+   [
+    35.5199729,
+    139.2309337
+   ],
+   [
+    35.5200706,
+    139.2309271
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.2,
+  "roof": {
+   "type": "flat",
+   "rise_m": 0.0,
+   "color": "#3A3A3A"
+  },
+  "wall": "#2E3440",
+  "windows": true,
+  "shopfront": [],
+  "signs": [
+   {
+    "text": "でとまん食堂",
+    "bg": "#2E3440",
+    "fg": "#F0E6C8",
+    "edge": 0,
+    "w_m": 1.8,
+    "h_m": 0.4,
+    "z_m": 2.5
+   }
+  ],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "紺色の板張りの食堂（木のテラス）"
+ },
+ {
+  "id": "osm769682163",
+  "name": "でとまん食堂",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5198596,
+    139.2310148
+   ],
+   [
+    35.5198707,
+    139.2310391
+   ],
+   [
+    35.5198165,
+    139.2310763
+   ],
+   [
+    35.5198055,
+    139.231052
+   ],
+   [
+    35.5198596,
+    139.2310148
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.2,
+  "roof": {
+   "type": "flat",
+   "rise_m": 0.0,
+   "color": "#3A3A3A"
+  },
+  "wall": "#2E3440",
+  "windows": true,
+  "shopfront": [],
+  "signs": [
+   {
+    "text": "でとまん食堂",
+    "bg": "#2E3440",
+    "fg": "#F0E6C8",
+    "edge": 0,
+    "w_m": 1.8,
+    "h_m": 0.4,
+    "z_m": 2.5
+   }
+  ],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "紺色の板張りの食堂（木のテラス）"
+ },
+ {
+  "id": "osm769682164",
+  "name": "ミヤガセ食堂",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5200912,
+    139.2311887
+   ],
+   [
+    35.5200977,
+    139.2312642
+   ],
+   [
+    35.5199997,
+    139.231277
+   ],
+   [
+    35.5199914,
+    139.2311814
+   ],
+   [
+    35.5200376,
+    139.2311753
+   ],
+   [
+    35.5200394,
+    139.2311954
+   ],
+   [
+    35.5200912,
+    139.2311887
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "flat",
+   "rise_m": 0.0,
+   "color": "#9A9A9A"
+  },
+  "wall": "#D8D4CC",
+  "windows": true,
+  "shopfront": [],
+  "signs": [
+   {
+    "text": "ミヤガセ食堂",
+    "bg": "#1E5AA8",
+    "fg": "#FFFFFF",
+    "edge": 0,
+    "w_m": 2.6,
+    "h_m": 0.7,
+    "z_m": 3.6
+   }
+  ],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "トタンの2階建ての食堂（青い看板）"
+ },
+ {
+  "id": "osm769682165",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5199692,
+    139.2312053
+   ],
+   [
+    35.5199728,
+    139.2313061
+   ],
+   [
+    35.5199009,
+    139.2313099
+   ],
+   [
+    35.5198974,
+    139.2312091
+   ],
+   [
+    35.5199692,
+    139.2312053
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#A8423A"
+  },
+  "wall": "#E8E6E0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白と茶色の2階建て（ブロック塀）"
+ },
+ {
+  "id": "osm769682166",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5199532,
+    139.2311507
+   ],
+   [
+    35.5199544,
+    139.2311989
+   ],
+   [
+    35.519896,
+    139.231201
+   ],
+   [
+    35.5198949,
+    139.2311529
+   ],
+   [
+    35.5199532,
+    139.2311507
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#A8423A"
+  },
+  "wall": "#E8E6E0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白と茶色の2階建て（ブロック塀）"
+ },
+ {
+  "id": "osm769682167",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5198461,
+    139.2312286
+   ],
+   [
+    35.5198494,
+    139.2312951
+   ],
+   [
+    35.5198148,
+    139.2312976
+   ],
+   [
+    35.5198116,
+    139.2312311
+   ],
+   [
+    35.5198461,
+    139.2312286
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#A8423A"
+  },
+  "wall": "#F0F0EE",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白い2階建て（門とブロック塀）"
+ },
+ {
+  "id": "osm769682168",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5197611,
+    139.2312334
+   ],
+   [
+    35.5197613,
+    139.2312859
+   ],
+   [
+    35.5197275,
+    139.2312861
+   ],
+   [
+    35.5197273,
+    139.2312335
+   ],
+   [
+    35.5197611,
+    139.2312334
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#8C8478",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "草に隠れて見えない"
+ },
+ {
+  "id": "osm769682247",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5203947,
+    139.2314024
+   ],
+   [
+    35.5204155,
+    139.2315627
+   ],
+   [
+    35.520319,
+    139.2315817
+   ],
+   [
+    35.5202981,
+    139.2314214
+   ],
+   [
+    35.5203947,
+    139.2314024
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#F0EEE8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白いアパート（茶色の屋根）"
+ },
+ {
+  "id": "osm769682248",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5203129,
+    139.2315698
+   ],
+   [
+    35.5203338,
+    139.23173
+   ],
+   [
+    35.5202373,
+    139.231749
+   ],
+   [
+    35.5202164,
+    139.2315888
+   ],
+   [
+    35.5203129,
+    139.2315698
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.5,
+  "roof": {
+   "type": "hip",
+   "rise_m": 1.6,
+   "color": "#3A3A3A"
+  },
+  "wall": "#EDE6D8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "黒い瓦の平屋（和風）"
+ },
+ {
+  "id": "osm769684048",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.520562,
+    139.2307753
+   ],
+   [
+    35.5205775,
+    139.2309372
+   ],
+   [
+    35.5204798,
+    139.2309513
+   ],
+   [
+    35.5204673,
+    139.2308209
+   ],
+   [
+    35.5204919,
+    139.2308174
+   ],
+   [
+    35.5204889,
+    139.2307858
+   ],
+   [
+    35.520562,
+    139.2307753
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#E6E1D8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白い2階建て（ブロック塀）"
+ },
+ {
+  "id": "osm769684050",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5203611,
+    139.2308123
+   ],
+   [
+    35.5203735,
+    139.230978
+   ],
+   [
+    35.5202903,
+    139.2309874
+   ],
+   [
+    35.5202778,
+    139.2308217
+   ],
+   [
+    35.5203611,
+    139.2308123
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#EDEBE6",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白い平屋（石垣とブロック塀）"
+ },
+ {
+  "id": "osm769684051",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5202349,
+    139.2308401
+   ],
+   [
+    35.5202425,
+    139.2309156
+   ],
+   [
+    35.5201591,
+    139.2309284
+   ],
+   [
+    35.5201515,
+    139.2308529
+   ],
+   [
+    35.5202349,
+    139.2308401
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#6A5040",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "茶色の板張りの平屋（石垣とブロック塀）"
+ },
+ {
+  "id": "osm769684052",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5203442,
+    139.2310368
+   ],
+   [
+    35.5203574,
+    139.231179
+   ],
+   [
+    35.520282,
+    139.2311895
+   ],
+   [
+    35.5202798,
+    139.2311661
+   ],
+   [
+    35.5202603,
+    139.2311688
+   ],
+   [
+    35.5202632,
+    139.2312
+   ],
+   [
+    35.5201986,
+    139.231209
+   ],
+   [
+    35.5201847,
+    139.2310592
+   ],
+   [
+    35.5203442,
+    139.2310368
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#7A3A2E"
+  },
+  "wall": "#B8B0A6",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "灰色の2階建て（赤茶の瓦、茶色の柵）"
+ },
+ {
+  "id": "osm769684053",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5203562,
+    139.2311863
+   ],
+   [
+    35.5203626,
+    139.2312541
+   ],
+   [
+    35.5202811,
+    139.2312658
+   ],
+   [
+    35.5202746,
+    139.2311981
+   ],
+   [
+    35.5203562,
+    139.2311863
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#7A3A2E"
+  },
+  "wall": "#B8B0A6",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "灰色の2階建て（赤茶の瓦、茶色の柵）"
+ },
+ {
+  "id": "osm769687342",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.520479,
+    139.2305887
+   ],
+   [
+    35.5204904,
+    139.2307054
+   ],
+   [
+    35.5203927,
+    139.2307198
+   ],
+   [
+    35.5203814,
+    139.230603
+   ],
+   [
+    35.520479,
+    139.2305887
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#3A3A3A"
+  },
+  "wall": "#7A6A60",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "茶色のタイル調の2階建て"
+ },
+ {
+  "id": "osm769687343",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5204607,
+    139.2304828
+   ],
+   [
+    35.5204671,
+    139.230583
+   ],
+   [
+    35.5203895,
+    139.2305905
+   ],
+   [
+    35.5203831,
+    139.2304902
+   ],
+   [
+    35.5204607,
+    139.2304828
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#F0F0EE",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白い2階建て"
+ },
+ {
+  "id": "osm769687344",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5203378,
+    139.2304947
+   ],
+   [
+    35.520348,
+    139.2306023
+   ],
+   [
+    35.5202384,
+    139.230618
+   ],
+   [
+    35.5202281,
+    139.2305104
+   ],
+   [
+    35.5203378,
+    139.2304947
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#E0D8CC",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "ベージュの2階建て"
+ },
+ {
+  "id": "osm769687345",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5203501,
+    139.2306207
+   ],
+   [
+    35.5203571,
+    139.2307192
+   ],
+   [
+    35.5202903,
+    139.2307264
+   ],
+   [
+    35.5202832,
+    139.2306279
+   ],
+   [
+    35.5203501,
+    139.2306207
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#3A3A3A"
+  },
+  "wall": "#3E4048",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "黒っぽい2階建て"
+ },
+ {
+  "id": "osm769687346",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5202119,
+    139.2306467
+   ],
+   [
+    35.5202226,
+    139.2307374
+   ],
+   [
+    35.5201305,
+    139.2307538
+   ],
+   [
+    35.5201197,
+    139.230663
+   ],
+   [
+    35.5202119,
+    139.2306467
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#4A4A4A"
+  },
+  "wall": "#7A4434",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "赤茶の板張りの2階建て"
+ },
+ {
+  "id": "osm769687347",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5201865,
+    139.2305208
+   ],
+   [
+    35.5201944,
+    139.2306161
+   ],
+   [
+    35.5200942,
+    139.2306286
+   ],
+   [
+    35.5200863,
+    139.2305333
+   ],
+   [
+    35.5201865,
+    139.2305208
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#8C7258",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "板張りの2階建て（カーポート）"
+ },
+ {
+  "id": "osm769694434",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5204246,
+    139.2300631
+   ],
+   [
+    35.520437,
+    139.2301967
+   ],
+   [
+    35.5203735,
+    139.2302056
+   ],
+   [
+    35.5203611,
+    139.230072
+   ],
+   [
+    35.5204246,
+    139.2300631
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#3A3A3A"
+  },
+  "wall": "#3E4450",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "紺色の2階建て"
+ },
+ {
+  "id": "osm769694436",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5202142,
+    139.2301002
+   ],
+   [
+    35.5202266,
+    139.2302338
+   ],
+   [
+    35.5201631,
+    139.2302426
+   ],
+   [
+    35.5201507,
+    139.230109
+   ],
+   [
+    35.5202142,
+    139.2301002
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "flat",
+   "rise_m": 0.0,
+   "color": "#6E6E6E"
+  },
+  "wall": "#A88E74",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "茶色の箱型の2階建て"
+ },
+ {
+  "id": "osm769694438",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.520335,
+    139.230239
+   ],
+   [
+    35.5203474,
+    139.2303726
+   ],
+   [
+    35.5202839,
+    139.2303815
+   ],
+   [
+    35.5202715,
+    139.2302479
+   ],
+   [
+    35.520335,
+    139.230239
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#EDE6D8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "クリーム色の2階建て（レンガの門）"
+ },
+ {
+  "id": "osm769694440",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.520114,
+    139.2303126
+   ],
+   [
+    35.5201166,
+    139.2303402
+   ],
+   [
+    35.52013,
+    139.2303383
+   ],
+   [
+    35.5201391,
+    139.2304339
+   ],
+   [
+    35.5200736,
+    139.2304433
+   ],
+   [
+    35.520062,
+    139.23032
+   ],
+   [
+    35.520114,
+    139.2303126
+   ]
+  ],
+  "storeys": 1,
+  "height_m": 3.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#4A4A4A"
+  },
+  "wall": "#E8DCA8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "クリーム色の平屋"
+ },
+ {
+  "id": "osm769694441",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5202927,
+    139.2298385
+   ],
+   [
+    35.520305,
+    139.2299721
+   ],
+   [
+    35.5202415,
+    139.2299809
+   ],
+   [
+    35.5202291,
+    139.2298473
+   ],
+   [
+    35.5202927,
+    139.2298385
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#6E6E6E"
+  },
+  "wall": "#E8E6E0",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "白い2階建て（前に赤い花の木）"
+ },
+ {
+  "id": "osm769694442",
+  "name": "",
+  "source": "osm",
+  "footprint": [
+   [
+    35.5200344,
+    139.2298099
+   ],
+   [
+    35.5200524,
+    139.2299812
+   ],
+   [
+    35.5199876,
+    139.2299914
+   ],
+   [
+    35.5199698,
+    139.2298202
+   ],
+   [
+    35.5200344,
+    139.2298099
+   ]
+  ],
+  "storeys": 2,
+  "height_m": 6.5,
+  "roof": {
+   "type": "gable",
+   "rise_m": 1.6,
+   "color": "#5A4034"
+  },
+  "wall": "#E8DCA8",
+  "windows": true,
+  "shopfront": [],
+  "signs": [],
+  "canopy": null,
+  "lot": null,
+  "check": true,
+  "checked": true,
+  "sv": "",
+  "sv_date": "",
+  "note": "クリーム色に茶色の柱の2階建て"
+ }
+]

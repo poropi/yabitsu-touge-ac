@@ -188,6 +188,20 @@ def test_ground_stays_under_the_main_road_where_the_town_ground_blends_out():
         assert near["Z"][j, i] == pytest.approx(plain["Z"][j, i]), y   # 本線の下は削ったままの高さ（町の地面へ持ち上げない）
 
 
+def test_ground_stays_under_the_main_road_inside_the_town_where_the_town_paving_stops_short():
+    """町の円の中でも、町の舗装の多角形が届いていない本線の帯の下は、削ったままの高さ（S5 29700m、熊野橋の先の北原の入口）。"""
+    from yabitsu.town_ground import TownGround
+    sec, _, circle, road = _town_case()
+    xs = np.arange(-50.0, 251.0); ys = np.arange(-150.0, 151.0)
+    g = TownGround(xs, ys, np.full((len(ys), len(xs)), float(sec.z[0])))   # 町の地面＝路面の高さ
+    near = tr.build_near(sec, _FlatSampler(), [], town=(g, circle, road))   # 舗装は (100, 0) の半径 3.6m だけ
+    plain = tr.build_near(sec, _FlatSampler(), [])
+    i = np.searchsorted(near["xs"], 130.0)
+    for y in (0.0, 2.0, -2.0):                    # 円の中、舗装の外、本線の路面の中
+        j = np.searchsorted(near["ys"], y)
+        assert near["Z"][j, i] == pytest.approx(plain["Z"][j, i]), y
+
+
 def test_road_clear_counts_places_where_ground_comes_up_to_the_road():
     """track_check の road_clear：本線（と分かれ道）の路面から 10cm 以内に地形が来る所の数。0 で ok。"""
     sec = _straight()

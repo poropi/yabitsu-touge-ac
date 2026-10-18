@@ -70,9 +70,15 @@ def main():
     ground.save(P / "track_town_ground.npz")
     tw = nagoki.load_town(sec, ground)
     pads = pads + tw.pads()
+    others = []   # ほかの交差点の町（宮ヶ瀬北原）：地面を作って保存し、ピットを足す
+    for j in nagoki.available():
+        if j is nagoki.NAGOKI:
+            continue
+        g = town_ground.build(sec, gsi.default_sampler(), nagoki.center(j)); g.save(P / j.ground)
+        kt = nagoki.load_town(sec, g, j); others.append(kt); pads = pads + kt.pads()
     from shapely.ops import unary_union as _uu
     sps = nagoki.load_splits(sec)   # 島をはさんで2本に分かれる所（地図の線どおり。地形は track_06 で合わせる）
-    excl = _uu([tw.region] + [z.area() for z in sps])
+    excl = _uu([tw.region] + [k.region for k in others] + [z.area() for z in sps])
     pads = pads + [q for st in side_roads.for_track(sec, pads, exclude=excl) for q in st.pads()]  # 分かれ道の地形合わせ
     # 新東名など（トンネルの入口まで）：低い所は地形を路面に合わせる
     from yabitsu import motorway, overpasses

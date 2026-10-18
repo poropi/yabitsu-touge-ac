@@ -99,3 +99,29 @@ def test_nagoki_town_unchanged_after_generalising(town):
     assert [[c["name"], c["a"], c["b"]] for c in town.closures] == ref["closures"]
     assert abs(sum(g.length for g in town.boundary_walls()) - ref["walls_len"]) < 0.05
     assert len(town.markings) == ref["markings"] and [p["name"] for p in town.pads()] == ref["pads"]
+
+
+_KITA = config.DATA_MANUAL / "s5_kitahara.json"
+
+
+@pytest.mark.skipif(not _KITA.exists(), reason="宮ヶ瀬北原の spec がまだない")
+def test_toriibara_arm_is_built_past_the_barricade():
+    """宮ヶ瀬北原：県道64号の鳥居原方面（北西）は、封鎖の柵の先 50m も道（将来の延長）。柵の先へは走れない。"""
+    from yabitsu import geo, nagoki
+    from yabitsu.crosssection import Section
+    from yabitsu.town import _xy
+    j = nagoki.JUNCTIONS["kitahara"]
+    tw = nagoki.load_town(Section.load_json(_SEC), junction=j)
+    tx, ty = geo.to_local(35.538915, 139.222051)          # 鳥居原ふれあいの館
+    c0 = np.array(tw.center); goal = np.array([float(tx), float(ty)])
+    arms = [c for c in tw.closures if c["name"].startswith("arm_")]
+    def toward(c):
+        a, b = _xy([c["a"], c["b"]]); m = (a + b) / 2
+        return float(np.dot((m - c0) / np.linalg.norm(m - c0), (goal - c0) / np.linalg.norm(goal - c0)))
+    c = max(arms, key=toward)
+    a, b = _xy([c["a"], c["b"]]); m = (a + b) / 2
+    ln = next(l for (w, l, wd, sl, sr) in tw._roads if str(w.get("id")) == c["name"].split("_", 1)[1])   # 道に沿って 50m 先
+    t0 = ln.project(Point(*m))
+    q0, q1 = ln.interpolate(t0 - 50.0), ln.interpolate(t0 + 50.0)
+    p = max((q0, q1), key=lambda q: q.distance(Point(*c0)))
+    assert tw.carriageway.buffer(0.5).contains(p) and not tw.drivable().contains(p)

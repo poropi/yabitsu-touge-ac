@@ -60,6 +60,11 @@ def load_town(sec, ground=None, junction=NAGOKI):
     return town.Town(spec, side_roads.load_elements(), sec, ground or load_ground(junction), center(junction), config.TOWN_RADIUS_M)
 
 
+def other_towns(sec):
+    """名古木のほかの、spec のある交差点の町 [(Junction, Town)]（宮ヶ瀬北原など）。地面は track_04 で保存したもの。"""
+    return [(j, load_town(sec, junction=j)) for j in available() if j is not NAGOKI and (P / j.ground).exists()]
+
+
 def load_buildings(junction=NAGOKI):
     p = config.DATA_MANUAL / junction.buildings
     return [bd.Building.from_spec(d) for d in json.loads(p.read_text(encoding="utf-8"))] if p.exists() else []
@@ -124,13 +129,13 @@ def track_stubs(sec, pads, feats, sampler=None):
     """分かれ道（入口の柵・見えない壁は、本線の路面と歩道から離して置く）と、道ぞいの壁などを入口で切った features。"""
     from shapely.ops import unary_union
     from . import features as ft
-    tw = load_town(sec); sps = load_splits(sec)
+    tw = load_town(sec); sps = load_splits(sec); others = [k for _, k in other_towns(sec)]
     base = [p for p in pads if p.get("kind") != "stub"]
-    stubs = side_roads.for_track(sec, base, sampler, exclude=unary_union([tw.region] + [z.area() for z in sps]))
+    stubs = side_roads.for_track(sec, base, sampler, exclude=unary_union([tw.region] + [k.region for k in others] + [z.area() for z in sps]))
     walks = sidewalk_polygons(sec, feats)
     cws = side_crosswalk_points()
     for st in stubs:   # 分かれ道の上の横断歩道があれば、柵はその後ろ
         own = [st.crosswalk_area(p) for p in cws if st.surface.buffer(1.0).contains(Point(*p))]
         side_roads.set_back_mouth(st, sec, walks + own + [z.area() for z in sps])   # 島の路面の上にも柵を立てない
-    paved = unary_union([z.area() for z in sps] + [tw.carriageway, tw.sidewalk])   # 別に作る舗装の上の壁・生け垣は作らない
+    paved = unary_union([z.area() for z in sps] + [tw.carriageway, tw.sidewalk] + [g for k in others for g in (k.carriageway, k.sidewalk)])   # 別に作る舗装の上の壁・生け垣は作らない
     return stubs, ft.cut_off(ft.cut_at(feats, side_roads.branch_gaps(stubs, sec)), sec, paved)
