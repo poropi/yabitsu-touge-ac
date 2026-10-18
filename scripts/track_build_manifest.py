@@ -54,6 +54,11 @@ def main():
     from shapely.ops import unary_union as _uu
     # stubs は上で作った（入口は本線と歩道から離してある）
     assembly.add_meshes(m, side_roads.stub_meshes(stubs))
+    from yabitsu import water   # S4 の川・沢（水面・川原）、堰・砂防ダム、湧き水の水くみ場
+    streams, falls, springs = water.load(sec)
+    form_all = start_lot.road_formation(sec, 0.0, float(sec.s[-1]))
+    assembly.add_meshes(m, water.meshes(streams, water.road_area(sec, form_all, stubs)))
+    assembly.add_meshes(m, water.feature_meshes(falls, water.spring_items(springs, sec, ground, near_m=60.0)))
     from yabitsu import geo
     for k, (la, lo) in enumerate(json.loads((config.DATA_MANUAL / "s3_side_crosswalks.json").read_text(encoding="utf-8"))):
         p = np.array([float(v) for v in geo.to_local(la, lo)])

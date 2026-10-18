@@ -51,3 +51,10 @@ def test_sign_texture_renders_japanese_text():
     im = textures.sign_texture("名古木駐在所", "#FFFFFF", "#1B3A8C", 512, 128)
     a = np.array(im.convert("RGB")).reshape(-1, 3)
     assert ((np.abs(a.astype(int) - [255, 255, 255]).sum(1)) > 100).mean() > 0.05
+
+
+def test_water_textures(tmp_path):
+    from yabitsu import textures as tx
+    paths = tx.write_textures(tmp_path)
+    for name in ("water", "riverbed", "water_fall", "roof_dark"):
+        assert paths[name].exists() and name in tx.MATERIALS

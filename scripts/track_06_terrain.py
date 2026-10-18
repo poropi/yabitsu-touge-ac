@@ -23,11 +23,14 @@ def main():
     sampler = gsi.default_sampler()
     tw = nagoki.load_town(sec)   # 町の範囲：地形は町の地面に合わせる（舗装の下は少し下げる）
     paved = tw.drivable().union(tw.carriageway).union(tw.sidewalk)
-    near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra,
+    from yabitsu import water   # S4 の川・沢：谷の底に溝を彫る（本線の路面の下は彫らない。橋の下は彫る）
+    streams, _, _ = water.load(sec, sampler)
+    chans = water.channels(sec, streams, start_lot.road_formation(sec, 0.0, float(sec.s[-1])))
+    near = terrain.build_near(sec, sampler, pads, cut_left, cut_right, extra=extra, channels=chans,
                               side_extra=features.sidewalk_offsets(sec, feats),  # 歩道の下に地形がかぶらない
                               town=[(tw.ground, nagoki.circle(), paved)] + [z.town_override() for z in nagoki.load_splits(sec)])
     np.savez_compressed(P / "track_terrain_near.npz", **near)
-    mid = terrain.build_mid(sec, sampler, pads)   # 道から 200m まで
+    mid = terrain.build_mid(sec, sampler, pads, channels=chans)   # 道から 200m まで
     np.savez_compressed(P / "track_terrain_mid.npz", **mid)
     far = terrain.build_far(sec, sampler, extra=extra + [np.asarray(nagoki.circle().exterior.coords).tolist()])
     np.savez_compressed(P / "track_terrain_far.npz", **far)

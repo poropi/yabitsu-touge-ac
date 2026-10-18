@@ -46,6 +46,10 @@ MATERIALS = {
     "post_red": {"texture": "textures/post_red.png", "shader": "ksPerPixel"},
     "glass_grey": {"texture": "textures/glass_grey.png", "shader": "ksPerPixel", "two_sided": True},
     "info_board": {"texture": "textures/info_board.png", "shader": "ksPerPixel"},
+    "water": {"texture": "textures/water.png", "shader": "ksPerPixel"},
+    "riverbed": {"texture": "textures/riverbed.png", "shader": "ksPerPixel"},
+    "water_fall": {"texture": "textures/water_fall.png", "shader": "ksPerPixel", "two_sided": True},
+    "roof_dark": {"texture": "textures/roof_dark.png", "shader": "ksPerPixel", "two_sided": True},
 }
 
 FONT_FILES = (r"C:\Windows\Fonts\BIZ-UDGothicB.ttc", r"C:\Windows\Fonts\meiryob.ttc", r"C:\Windows\Fonts\YuGothB.ttc")
@@ -282,7 +286,11 @@ def write_textures(out_dir):
             "vending_front": _vending_front(),
             "post_red": _gray(128, 31, 0.62, 0.04, (1.45, 0.25, 0.22)),
             "glass_grey": _gray(128, 32, 0.45, 0.05, (0.9, 0.98, 1.05)),
-            "info_board": np.array(sign_texture("関東ふれあいのみち\nご案内", "#F4F1E6", "#2F4A2A", 384, 256, border="#5A3E22"))}
+            "info_board": np.array(sign_texture("関東ふれあいのみち\nご案内", "#F4F1E6", "#2F4A2A", 384, 256, border="#5A3E22")),
+            "water": _gray(512, 33, 0.36, 0.10, (0.72, 0.98, 1.10), coarse=20, fine=2),           # 山の沢の、緑がかった水
+            "riverbed": _gray(512, 34, 0.60, 0.34, (1.03, 1.0, 0.94), coarse=5, fine=1, specks=0.08),   # 白っぽい川原の石
+            "water_fall": _gray(256, 35, 0.90, 0.10, (0.96, 1.0, 1.04), coarse=4, fine=1),
+            "roof_dark": _gray(256, 36, 0.32, 0.05, (0.95, 1.0, 1.05), coarse=24)}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

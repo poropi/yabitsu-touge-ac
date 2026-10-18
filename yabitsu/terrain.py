@@ -14,6 +14,7 @@ FAR_EXTENT, FAR_CELL, FAR_HOLE, FAR_DROP = 2000.0, 20.0, 205.0, 1.0
 MID_BAND, MID_CELL, MID_DROP, MID_OVERLAP = 210.0, 4.0, 0.15, 6.0  # 中くらいの地形：道から 200m まで（細かい地形の下へ 6m もぐり込ませる）
 EXTRA_NEAR, EXTRA_HOLE = 20.0, 15.0
 TOWN_BLEND_M = 10.0  # 町の範囲の円の外で、町の地面から今までの地形へ移す幅
+CHANNEL_REACH_M = 6.0   # 川の溝が地形を動かす範囲（溝の外）
 ROAD_CAP_M = 3.0     # 土台があっても、道の縁からこの距離までは道の斜面より上に地形を出さない
 PAD_REACH_M = 40.0   # 土台（駐車場・家・分かれ道）が地形を動かす範囲  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
 
@@ -46,7 +47,7 @@ def road_frame(sec, X, Y):
     return {"idx": idx, "lat": -dx * np.sin(h) + dy * np.cos(h), "along": dx * np.cos(h) + dy * np.sin(h), "dist": dist}
 
 
-def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_left=None, side_extra_right=None):
+def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_left=None, side_extra_right=None, channels=()):
     """side_extra_*（行ごとの歩道の幅）があれば、そのぶん道の範囲を外へ広げる（歩道の下に地形がかぶらない）。"""
     shape = np.shape(X)
     f = road_frame(sec, X, Y)
@@ -89,6 +90,18 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
             z[sel] = np.where(d == 0, zp - UNDER_DEPTH, np.clip(z[sel], zp - FILL_SLOPE * d, zp + CUT_SLOPE * d))
             e[sel] = np.where(d == 0, 0.0, np.minimum(e[sel], d))
         z = np.where(e_road <= ROAD_CAP_M, np.minimum(z, road_cap), z)   # 道のすぐ横の高い土台（家など）が、道の上に地形を持ち上げないように
+    if channels:   # 川の溝（water.Stream.channel）：溝の中は川底、まわりは岸の勾配 BANK で元の地形へ
+        from .water import BANK
+        xr, yr = np.ravel(X), np.ravel(Y)
+        for poly, z_bed in channels:
+            x0, y0, x1, y1 = poly.bounds; r = CHANNEL_REACH_M
+            sel = np.nonzero((xr >= x0 - r) & (xr <= x1 + r) & (yr >= y0 - r) & (yr <= y1 + r))[0]
+            if not len(sel):
+                continue
+            d = shapely.distance(shapely.points(np.c_[xr[sel], yr[sel]]), poly)
+            near = d <= r
+            sel, d = sel[near], d[near]
+            z[sel] = np.minimum(z[sel], z_bed(xr[sel], yr[sel]) + BANK * d)
     return z.reshape(shape), e.reshape(shape)
 
 
@@ -121,7 +134,7 @@ def _sample(sampler, unproject, X, Y):
 
 
 def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=(), side_extra=(None, None),
-               town=None):
+               town=None, channels=()):
     """town = (町の地面 TownGround, 町の範囲の円, 舗装された所の多角形) なら、円の中は町の地面（舗装の下は UNDER_DEPTH 下げる）、
     円の外 TOWN_BLEND_M の間で今までの地形へなめらかに移す。"""
     towns = [] if town is None else (list(town) if isinstance(town, list) else [town])
@@ -130,7 +143,7 @@ def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.
     xs, ys = corridor_grid(sec, extra=extra)
     X, Y = np.meshgrid(xs, ys)
     D = _with_extra(road_frame(sec, X, Y)["dist"].reshape(X.shape), X, Y, extra, EXTRA_NEAR, NEAR_BAND)
-    Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right, *side_extra)
+    Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right, *side_extra, channels=channels)
     if towns:   # 本線の帯（路面＋側溝）の下。町の地面へ移す帯の中でも、ここは削った高さより上にしない
         f = road_frame(sec, X, Y); idx = f["idx"]
         hw = np.where(f["lat"] >= 0, sec.hw_left[idx], sec.hw_right[idx])
@@ -158,12 +171,12 @@ def build_far(sec, sampler, unproject=geo.from_local, extra=()):
     return {"xs": xs, "ys": ys, "Z": Z, "Dc": Dc}
 
 
-def build_mid(sec, sampler, pads=(), unproject=geo.from_local, extra=()):
+def build_mid(sec, sampler, pads=(), unproject=geo.from_local, extra=(), channels=()):
     """細かい地形（NEAR_BAND まで）の外、MID_BAND までの 4m 格子の地形。家などの土台（pads）にも合わせ、MID_DROP 下げる。"""
     xs, ys = corridor_grid(sec, MID_BAND, MID_CELL, extra=extra)
     X, Y = np.meshgrid(xs, ys)
     D = road_frame(sec, X, Y)["dist"].reshape(X.shape)
-    Z, _ = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads)
+    Z, _ = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, channels=channels)
     return {"xs": xs, "ys": ys, "Z": Z - MID_DROP, "D": D}
 
 
