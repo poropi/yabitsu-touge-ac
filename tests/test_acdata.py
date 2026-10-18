@@ -64,3 +64,20 @@ def test_ui_track_json(tmp_path):
                                geotags=(35.42, 139.21), tags=["touge"], credits="国土地理院 / OpenStreetMap")
     d = json.loads(p.read_text(encoding="utf-8"))
     assert d["pitboxes"] == "4" and d["length"] == "3281 m" and "国土地理院" in d["description"]
+
+
+def test_ui_images_show_only_the_layout_route_over_a_matching_photo(tmp_path):
+    """コース選択画面：outline.png はそのレイアウトの道だけを 16:9 いっぱいに、preview.png はその場所の空中写真（同じ枠）。"""
+    xy = np.c_[np.linspace(0, 3000, 300), 800 * np.sin(np.linspace(0, 3, 300))]
+    seen = {}
+    def photo(x0, y0, w_m, h_m, w_px, h_px):
+        seen["frame"] = (x0, y0, w_m, h_m)
+        return np.full((h_px, w_px, 3), 90, np.uint8)
+    acdata.write_ui_images(tmp_path, xy, photo)
+    out = Image.open(tmp_path / "outline.png"); pre = Image.open(tmp_path / "preview.png")
+    assert out.size == pre.size == (1920, 1080) and out.mode == "RGBA"
+    a = np.array(out)[:, :, 3]; ys, xs = np.nonzero(a)
+    assert (xs.max() - xs.min()) > 0.75 * 1920 or (ys.max() - ys.min()) > 0.75 * 1080
+    x0, y0, w_m, h_m = seen["frame"]
+    assert w_m / h_m == pytest.approx(16 / 9, rel=1e-3)
+    assert x0 <= xy[:, 0].min() and x0 + w_m >= xy[:, 0].max() and y0 <= xy[:, 1].min() and y0 + h_m >= xy[:, 1].max()

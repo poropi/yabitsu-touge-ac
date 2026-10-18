@@ -1,5 +1,3 @@
-import shutil
-
 import numpy as np
 
 from yabitsu import acdata, ailine, config, geo, layouts, track
@@ -8,6 +6,16 @@ from yabitsu.crosssection import Section
 T = config.TRACK_DIR
 CREDITS = "出典：国土地理院（標高タイル・シームレス空中写真・基盤地図情報）／© OpenStreetMap contributors (ODbL)"
 STALE = ["yabitsu_s1.kn5"]  # 区間をつなぐ前の kn5（もう読まない）
+
+
+def _photo(x0, y0, w_m, h_m, w_px, h_px):
+    """空中写真（地理院のシームレス写真）の、x0, y0 から w_m × h_m の範囲を w_px × h_px で。"""
+    import math
+    from yabitsu import gsi, photo
+    px = w_m / w_px
+    z = int(min(17, max(12, round(math.log2(156543.0 * math.cos(math.radians(35.43)) / px)))))
+    img = photo.render_local_image(gsi.TileCache(), geo.from_local, x0, y0, w_m, px, z=z)   # y0 から北へ w_m 四方（上が北）
+    return img[img.shape[0] - h_px:]   # 下（南）の h_m ぶん＝ y0 〜 y0 + h_m
 
 
 def main():
@@ -27,8 +35,10 @@ def main():
                                    length_m=layouts.timed_length(sec, layout, bounds), pitboxes=4,
                                    geotags=(float(lat), float(lon)), tags=["touge", "japan", "point to point"],
                                    credits=CREDITS)
-        out = config.assert_writable(T / "ui" / name / "outline.png")
-        shutil.copyfile(T / name / "map.png", out)
+        # コース選択画面：そのレイアウトで走る道だけの outline.png と、同じ枠の空中写真 preview.png
+        s0, s1 = sorted((layouts.point_s(sec, layout.grid, bounds, layout.section), layouts.point_s(sec, layout.finish, bounds, layout.section)))
+        m = (sec.s >= s0) & (sec.s <= s1)
+        acdata.write_ui_images(T / "ui" / name, np.c_[sec.x[m], sec.y[m]], _photo)
     for f in STALE:
         p = config.assert_writable(T / f)
         if p.exists():

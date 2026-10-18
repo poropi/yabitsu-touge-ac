@@ -127,3 +127,23 @@ def write_ui_track_json(path, *, name, description, length_m, pitboxes, geotags,
          "city": "Hadano, Kanagawa", "length": f"{round(length_m)} m", "width": "4-6 m",
          "pitboxes": str(pitboxes), "run": "A to B"}
     return write_text(path, json.dumps(d, ensure_ascii=False, indent=2))
+
+
+UI_W, UI_H = 1920, 1080
+
+
+def write_ui_images(ui_dir, xy, photo, margin=0.08, line_px=10):
+    """コース選択画面の絵：outline.png（そのレイアウトで走る道だけ、白い線、透明の背景）と preview.png（同じ枠の空中写真）。
+    xy＝走る道の点（ローカル座標、東・北）。photo(x0, y0, w_m, h_m, w_px, h_px) → (h_px, w_px, 3) の画像。"""
+    xy = np.asarray(xy, float)
+    lo, hi = xy.min(0), xy.max(0); c = (lo + hi) / 2; span = (hi - lo) * (1 + 2 * margin)
+    w_m = max(span[0], span[1] * UI_W / UI_H); h_m = w_m * UI_H / UI_W
+    x0, y0 = c[0] - w_m / 2, c[1] - h_m / 2
+    px = UI_W / w_m
+    pts = [((x - x0) * px, (y0 + h_m - y) * px) for x, y in xy]
+    out = Path(ui_dir); assert_writable(out / "outline.png"); out.mkdir(parents=True, exist_ok=True)
+    img = Image.new("RGBA", (UI_W, UI_H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    d.line(pts, fill=(0, 0, 0, 200), width=line_px + 6, joint="curve")      # 縁取り（写真の上でも見えるように）
+    d.line(pts, fill=(255, 255, 255, 255), width=line_px, joint="curve")
+    img.save(out / "outline.png")
+    Image.fromarray(np.asarray(photo(x0, y0, w_m, h_m, UI_W, UI_H), np.uint8)).convert("RGB").save(out / "preview.png")
