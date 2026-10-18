@@ -154,3 +154,22 @@ def test_bus_stops_standing_on_the_road_are_moved_just_outside_it():
     (x0, y0), (x1, y1), (x2, y2) = [geo.to_local(*o["points"][0]) for o in out]
     assert x0 == pytest.approx(50.0, abs=0.05) and y0 == pytest.approx(-(hw + GUTTER_WIDTH + to.OFF_ROAD_M), abs=0.05)
     assert (x1, y1) == pytest.approx((80.0, 7.0), abs=1e-6) and (x2, y2) == pytest.approx((60.0, 1.0), abs=1e-6)
+
+
+def test_curve_mirror_and_road_signs():
+    """カーブミラー（オレンジの柱＋丸い鏡）と道路標識（速度 30・警戒の黄色いひし形）を、柱の上に道の方へ向けて立てる。"""
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    objs = [{"kind": "mirror", "points": [_ll(10.0, 5.0)], "facing_deg": 180.0},
+            {"kind": "road_sign", "sign": "speed30", "points": [_ll(20.0, 5.0)], "facing_deg": 180.0},
+            {"kind": "road_sign", "sign": "warning", "points": [_ll(30.0, 5.0)], "facing_deg": 180.0}]
+    ms = {m[4]: m for m in to.object_meshes(objs, flat, prefix="s4_obj")}
+    assert {"pole_orange", "mirror", "sign_speed30", "sign_warning"} <= set(ms)
+    assert ms["mirror"][1][:, 2].max() > 102.0 and ms["sign_speed30"][1][:, 2].min() > 101.5
+
+
+def test_pole_signs_with_a_prefix_do_not_clash_with_the_town_signs(tmp_path):
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    s = [{"text": "札掛", "bg": "#3A2E26", "fg": "#FFFFFF", "at": _ll(5.0, 5.0), "facing_deg": 0.0}]
+    a = {m[0] for m in to.pole_sign_meshes(s, flat)}; b = {m[0] for m in to.pole_sign_meshes(s, flat, prefix="s4")}
+    assert not a & b
+    assert set(to.write_pole_sign_textures(s, tmp_path, prefix="s4")) == {m[4] for m in to.pole_sign_meshes(s, flat, prefix="s4") if "sign" in m[4] and m[4] != "pole_grey"}

@@ -13,7 +13,7 @@ from yabitsu.houses import footprint as house_fp
 from yabitsu.start_lot import Frame
 
 P = config.DATA_PROCESSED
-BBOX = (35.3740, 139.2030, 35.4330, 139.2440)
+BBOX = (35.3740, 139.2030, 35.4720, 139.2440)   # 名古木 〜 札掛（S4）
 
 
 def _ll(poly):
@@ -26,7 +26,8 @@ def main():
     sec = Section.load_json(P / "track_section.json")
     pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
     band = LineString(np.c_[sec.x, sec.y]).buffer(scenery.BAND_M)
-    el = side_roads.load_elements() + osm.fetch_overpass(osm.TRACK_BUILDINGS_QUERY, config.DATA_RAW / "osm_track_buildings.json")["elements"]
+    el = (side_roads.load_elements() + osm.fetch_overpass(osm.TRACK_BUILDINGS_QUERY, config.DATA_RAW / "osm_track_buildings.json")["elements"]
+          + json.loads((config.DATA_RAW / "osm_s4_buildings.json").read_text(encoding="utf-8"))["elements"])
     polys = footprints.merged(footprints.gsi_polygons(BBOX, area=band), footprints.osm_polygons(el))
     minoge = json.loads((config.DATA_MANUAL / "s2_minoge.json").read_text(encoding="utf-8"))
     taken = [house_fp(Frame(site.ll_to_xy([b["center"]])[0], b["axis_deg"]), b["size"]).buffer(1.0) for b in minoge.get("buildings", [])]

@@ -50,6 +50,10 @@ MATERIALS = {
     "riverbed": {"texture": "textures/riverbed.png", "shader": "ksPerPixel"},
     "water_fall": {"texture": "textures/water_fall.png", "shader": "ksPerPixel", "two_sided": True},
     "roof_dark": {"texture": "textures/roof_dark.png", "shader": "ksPerPixel", "two_sided": True},
+    "pole_orange": {"texture": "textures/pole_orange.png", "shader": "ksPerPixel"},
+    "mirror": {"texture": "textures/mirror.png", "shader": "ksPerPixel", "two_sided": True},
+    "sign_speed30": {"texture": "textures/sign_speed30.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
+    "sign_warning": {"texture": "textures/sign_warning.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
 }
 
 FONT_FILES = (r"C:\Windows\Fonts\BIZ-UDGothicB.ttc", r"C:\Windows\Fonts\meiryob.ttc", r"C:\Windows\Fonts\YuGothB.ttc")
@@ -164,6 +168,34 @@ def _font(px):
 def _rgb(hexs):
     h = hexs.lstrip("#")
     return tuple(int(h[i:i + 2], 16) for i in (0, 2, 4))
+
+
+def _mirror(px=128):
+    """カーブミラー：オレンジの縁の、空色の丸い鏡。"""
+    from PIL import ImageDraw
+    im = Image.new("RGB", (px, px), (230, 110, 40)); d = ImageDraw.Draw(im)
+    d.ellipse([10, 10, px - 10, px - 10], fill=(150, 175, 190))
+    return np.array(im)
+
+
+def _round_sign(text, px=256):
+    """速度制限の標識：白地・赤い輪・青い数字（まわりは透明）。"""
+    from PIL import ImageDraw
+    im = Image.new("RGBA", (px, px), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.ellipse([4, 4, px - 4, px - 4], fill=(205, 30, 35, 255)); d.ellipse([32, 32, px - 32, px - 32], fill=(250, 250, 250, 255))
+    font = _font(int(px * 0.42)); w = d.textlength(text, font=font)
+    d.text(((px - w) / 2, px * 0.27), text, fill=(25, 60, 150, 255), font=font)
+    return np.array(im)
+
+
+def _diamond_sign(px=256):
+    """警戒標識：黄色のひし形に黒い縁（まわりは透明）。"""
+    from PIL import ImageDraw
+    im = Image.new("RGBA", (px, px), (0, 0, 0, 0)); d = ImageDraw.Draw(im); h = px / 2
+    d.polygon([(h, 2), (px - 2, h), (h, px - 2), (2, h)], fill=(20, 20, 20, 255))
+    d.polygon([(h, 18), (px - 18, h), (h, px - 18), (18, h)], fill=(245, 200, 20, 255))
+    d.polygon([(h - 30, h + 40), (h, h - 45), (h + 30, h + 40)], fill=(20, 20, 20, 255))
+    return np.array(im)
 
 
 def sign_texture(text, bg, fg, w_px, h_px, border=None):
@@ -290,7 +322,11 @@ def write_textures(out_dir):
             "water": _gray(512, 33, 0.36, 0.10, (0.72, 0.98, 1.10), coarse=20, fine=2),           # 山の沢の、緑がかった水
             "riverbed": _gray(512, 34, 0.60, 0.34, (1.03, 1.0, 0.94), coarse=5, fine=1, specks=0.08),   # 白っぽい川原の石
             "water_fall": _gray(256, 35, 0.90, 0.10, (0.96, 1.0, 1.04), coarse=4, fine=1),
-            "roof_dark": _gray(256, 36, 0.32, 0.05, (0.95, 1.0, 1.05), coarse=24)}
+            "roof_dark": _gray(256, 36, 0.32, 0.05, (0.95, 1.0, 1.05), coarse=24),
+            "pole_orange": _gray(64, 37, 0.70, 0.04, (1.30, 0.62, 0.22)),
+            "mirror": _mirror(),
+            "sign_speed30": _round_sign("30"),
+            "sign_warning": _diamond_sign()}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

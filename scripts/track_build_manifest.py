@@ -116,6 +116,11 @@ def main():
     assembly.add_meshes(m, pois.meshes(pois.place(poi_nodes, sec, skip), ground))
     assembly.add_meshes(m, town_objects.signal_meshes(ro["signals"], road_z, prefix="s3_signal"))
     assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(ro["objects"], sec), road_z, prefix="s3_obj"))   # 路面の中のバス停は道の外へ
+    s4o = json.loads((config.DATA_MANUAL / "s4_objects.json").read_text(encoding="utf-8"))   # S4 のカーブミラー・標識・看板
+    assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(s4o["objects"], sec), road_z, prefix="s4_obj"))
+    assembly.add_meshes(m, town_objects.pole_sign_meshes(s4o.get("pole_signs", []), ground, prefix="s4"))
+    for name, rel in town_objects.write_pole_sign_textures(s4o.get("pole_signs", []), config.TRACK_BUILD_DIR / "textures", prefix="s4").items():
+        m.add_material(name, texture=rel)
     # 町の範囲（名古木交差点）：別の kn5（config.TOWN_GROUP）
     assembly.add_meshes(m, tw.meshes(), group=config.TOWN_GROUP)
     assembly.add_meshes(m, tw.object_meshes(), group=config.TOWN_GROUP)

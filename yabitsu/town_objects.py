@@ -236,12 +236,25 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
                 za, zb = zf(q[i]), zf(q[i + 1])
                 u0 = float(np.linalg.norm(q[i] - q[0])); u1 = u0 + float(np.linalg.norm(q[i + 1] - q[i]))
                 add("hoarding", _quad(q[i], q[i + 1], min(za, zb) - 0.2, min(za, zb) + h, u0 / 2.0, u1 / 2.0, both=True))
+        elif kind == "mirror":       # カーブミラー：オレンジの柱（2.9m）と丸い鏡（直径 0.8m、face の側を向く）
+            p = pts[0]; z = zf(p); face = _heading(float(ob.get("facing_deg", 0.0))); n = np.array([-face[1], face[0]])
+            add("pole_orange", _prism(p, 0.04, z - 0.2, z + 2.9))
+            c = p + face * 0.12; a = np.linspace(0, 2 * np.pi, 12, endpoint=False); zc = z + 2.6
+            ring = [[*(c + n * 0.4 * np.cos(q)), zc + 0.4 * np.sin(q)] for q in a]
+            v = np.array([[*c, zc]] + ring, float); f = [[0, 1 + i, 1 + (i + 1) % 12] for i in range(12)]
+            f += [[0, 1 + (i + 1) % 12, 1 + i] for i in range(12)]
+            add("mirror", (v, np.array(f, np.int32), (v[:, [0, 2]] - v[0, [0, 2]]) / 0.8 + 0.5))
+        elif kind == "road_sign":    # 道路標識：灰色の柱と、柱の上の板（speed30＝丸い速度 30、warning＝黄色のひし形）
+            p = pts[0]; z = zf(p); face = _heading(float(ob.get("facing_deg", 0.0))); n = np.array([-face[1], face[0]])
+            add("pole_grey", _prism(p, 0.035, z - 0.2, z + 2.4))
+            c = p + face * 0.06; s = 0.3
+            add(f"sign_{ob.get('sign', 'warning')}", _quad(c - n * s, c + n * s, z + 1.8, z + 2.4, both=True))
         else:
             raise ValueError(f"物の kind が分かりません: {ob}")
     return [(f"{prefix}_{mat}", *_merge(parts), mat, True) for mat, parts in groups.items()]
 
 
-def pole_sign_meshes(signs, z_fn):
+def pole_sign_meshes(signs, z_fn, prefix="town"):
     """立て看板：柱（高さ pole_h）と、柱の上の方の板（両面に文字）。signs = [{"text", "bg", "fg", "at", "facing_deg", "w_m", "h_m", "z_m", "pole_h"}]"""
     out, poles = [], []
     for k, s in enumerate(signs):
@@ -252,14 +265,15 @@ def pole_sign_meshes(signs, z_fn):
         front = _quad(p - n * w / 2, p + n * w / 2, z1, z1 + h)          # 表（face の側）
         back = _quad(p + n * w / 2 - face * 0.3, p - n * w / 2 - face * 0.3, z1, z1 + h)
         body = _box(p - face * 0.15, face, w, 0.3, z1, z1 + h)
-        out.append((f"town_polesign_{k}", *_merge([front, back]), f"polesign_{k}", True))
+        mat = "polesign_" + str(k) if prefix == "town" else f"{prefix}_polesign_{k}"
+        out.append((f"{prefix}_polesign_{k}", *_merge([front, back]), mat, True))
         poles.append(body)
     if poles:
-        out.append(("1WALL_town_polesign_poles", *_merge(poles), "pole_grey", True))
+        out.append((f"1WALL_{prefix}_polesign_poles", *_merge(poles), "pole_grey", True))
     return out
 
 
-def write_pole_sign_textures(signs, out_dir):
+def write_pole_sign_textures(signs, out_dir, prefix="town"):
     from pathlib import Path
     from .textures import sign_texture
     out = Path(out_dir); out.mkdir(parents=True, exist_ok=True)
@@ -267,6 +281,7 @@ def write_pole_sign_textures(signs, out_dir):
     for k, s in enumerate(signs):
         w, h = float(s.get("w_m", 1.2)), float(s.get("h_m", 2.0))
         px = 160
-        sign_texture(s["text"], s.get("bg", "#FFFFFF"), s.get("fg", "#000000"), int(w * px), int(h * px), border=s.get("border")).save(out / f"polesign_{k}.png")
-        paths[f"polesign_{k}"] = f"textures/polesign_{k}.png"
+        mat = "polesign_" + str(k) if prefix == "town" else f"{prefix}_polesign_{k}"
+        sign_texture(s["text"], s.get("bg", "#FFFFFF"), s.get("fg", "#000000"), int(w * px), int(h * px), border=s.get("border")).save(out / f"{mat}.png")
+        paths[mat] = f"textures/{mat}.png"
     return paths
