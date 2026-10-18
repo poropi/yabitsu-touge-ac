@@ -6,6 +6,8 @@
   roads: {"<OSM way id>" | "main": {"width_m", "sidewalk_l", "sidewalk_r"}}（書いていない道は ROAD_DEFAULTS）
   markings: [{"kind": stop_line | crosswalk | lane_line | centre_line | arrow | text, "points": [[lat, lon], ...], ...}]
   crossings: [[lat, lon] か [lat, lon, "signal"], ...]（OSM にない横断歩道。auto のとき OSM の横断歩道と同じに扱う。signal は信号つき）
+  signal_plate: {"text", "bg", "fg", "w_m"}（車用の信号の腕に付ける交差点名の板）
+  vehicle_arm_m: 自動の車用信号の腕の長さ（書かなければ道の上まで伸ばす。宮ヶ瀬北原は柱の横に灯器）
 """
 import math
 
@@ -200,6 +202,7 @@ def marking_polygons(spec):
 class Town:
     def __init__(self, spec, osm_elements, sec, ground, center_xy, radius):
         self.spec, self.sec, self.ground = spec, sec, ground
+        self.prefix = "town"   # 立て看板の絵の名前の頭（2 つ目からの交差点は交差点の名前）
         self.center = np.asarray(center_xy, float); self.radius = radius
         s_in, s_exit = town_range_s(sec, center_xy, radius)   # 本線が円の中にある範囲（名古木は道の始まり、宮ヶ瀬北原は終わり）
         self.main_skip = (s_in, s_exit)
@@ -406,11 +409,25 @@ class Town:
             left = np.array([-v[1], v[0]])
             far = c + v * float(np.dot(p - c, away))     # 交差点の向こう側（同じ距離）
             pole = far + left * (wd / 2 + 1.5)
-            out.append({"at": _ll(pole), "facing_deg": bearing(-v), "kind": "vehicle", "arm_m": wd / 2 + 0.5,
+            out.append({"at": _ll(pole), "facing_deg": bearing(-v), "kind": "vehicle", "arm_m": float(self.spec.get("vehicle_arm_m", wd / 2 + 0.5)),
                         "arm_deg": bearing(-left), "height_m": 5.5, "auto": True})
             for e, o in ((a, b), (b, a)):
                 u = (e - o) / max(np.linalg.norm(e - o), 1e-9)
                 out.append({"at": _ll(e + u * 0.8), "facing_deg": bearing(-u), "kind": "pedestrian", "height_m": 2.6, "auto": True})
+        return out
+
+    def pole_signs(self):
+        """立て看板：spec の pole_signs に、車用の信号の腕に付ける交差点名の板（spec の signal_plate、柱なし）を足す"""
+        out = list(self.spec.get("pole_signs", []))
+        plate = self.spec.get("signal_plate")
+        if plate:
+            for s in self.signals():
+                if s["kind"] != "vehicle":
+                    continue
+                L = float(s.get("arm_m", 3.0)); a = math.radians(float(s.get("arm_deg", s["facing_deg"] + 90.0))); arm = np.array([math.sin(a), math.cos(a)])
+                out.append({"text": plate["text"], "bg": plate.get("bg", "#F4F7FA"), "fg": plate.get("fg", "#1E3C78"),
+                            "at": _ll(_xy([s["at"]])[0] + arm * min(1.0, 0.4 * L)), "facing_deg": s["facing_deg"],
+                            "w_m": float(plate.get("w_m", 1.5)), "h_m": 0.45, "z_m": float(s.get("height_m", 5.5)) - 0.45, "no_pole": True})
         return out
 
     def pads(self):
@@ -444,8 +461,12 @@ class Town:
         lines = self.boundary_walls() + [LineString(_xy([c["a"], c["b"]])) for c in self.closures]
         out += to.wall_meshes(lines, self.ground.z)
         out += to.signal_meshes(self.signals(), self.ground.z)
-        out += to.pole_sign_meshes(self.spec.get("pole_signs", []), self.ground.z)
-        objects = list(self.spec.get("objects", []))
+        out += to.pole_sign_meshes(self.pole_signs(), self.ground.z, prefix=self.prefix)
+        paved = self.carriageway.union(self.sidewalk)
+        def walk_z(p):   # 擁壁の下：いちばん近い舗装（歩道）の上の高さ
+            q = paved.exterior.interpolate(paved.exterior.project(Point(*p))) if paved.geom_type == "Polygon" else Point(*p)
+            return float(self.ground.z(np.atleast_1d(q.x), np.atleast_1d(q.y))[0]) + CURB_H
+        objects = [dict(ob, _z_fn=walk_z) if ob.get("kind") == "retaining_wall" else ob for ob in self.spec.get("objects", [])]
         for e in self._bus_stops:   # OSM のバス停：道の方を向ける
             p = _xy([[e["lat"], e["lon"]]])[0]
             q = np.array(self.carriageway.exterior.interpolate(self.carriageway.exterior.project(Point(*p))).coords[0])                 if self.carriageway.geom_type == "Polygon" else p

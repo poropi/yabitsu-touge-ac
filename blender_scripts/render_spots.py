@@ -25,15 +25,17 @@ for ob in bpy.data.objects:   # ゲームで見えない部品（見えない壁
 
 
 def _ground(x, y):
-    """z を書かない地点：真上から下へ光線を当て、描く物の一番下（路面・地面。信号の腕などの上ではなく）の高さ"""
+    """z を書かない地点：真上から下へ光線を当て、路面（1ROAD_）の一番上の高さ。路面がなければ描く物の一番上（地面）"""
     from mathutils import Vector
-    dg = bpy.context.evaluated_depsgraph_get(); z = 3000.0; low = 0.0
+    dg = bpy.context.evaluated_depsgraph_get(); z = 3000.0; top = None
     while True:
         hit, loc, _, _, ob, _ = scene.ray_cast(dg, Vector((x, y, z)), Vector((0, 0, -1)))
         if not hit:
-            return low
-        if not ob.hide_render:
-            low = loc.z
+            return top if top is not None else 0.0
+        if ob.name.startswith("1ROAD"):
+            return loc.z
+        if top is None and not ob.hide_render and not ob.name.startswith(("1WALL", "LINES")):
+            top = loc.z
         z = loc.z - 0.01
 
 

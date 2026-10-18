@@ -57,7 +57,23 @@ def load_ground(junction=NAGOKI):
 
 def load_town(sec, ground=None, junction=NAGOKI):
     spec = json.loads((config.DATA_MANUAL / junction.spec).read_text(encoding="utf-8"))
-    return town.Town(spec, side_roads.load_elements(), sec, ground or load_ground(junction), center(junction), config.TOWN_RADIUS_M)
+    t = town.Town(spec, side_roads.load_elements(), sec, ground or load_ground(junction), center(junction), config.TOWN_RADIUS_M)
+    if junction is not NAGOKI:
+        t.prefix = junction.name
+    return t
+
+
+def rename_meshes(items, name):
+    """2 つ目からの交差点の部品の名前：town → 交差点の名前。town のない名前には交差点の名前を足す（もう入っていれば足さない）"""
+    out = []
+    for n, *rest in items:
+        if "town" in n:
+            n = n.replace("town", name, 1)
+        elif name not in n:
+            head = next((h for h in ("1WALL_", "1ROAD_", "LINES_") if n.startswith(h)), "")
+            n = f"{head}{name}_{n[len(head):]}"
+        out.append((n, *rest))
+    return out
 
 
 def other_towns(sec):

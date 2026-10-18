@@ -151,7 +151,7 @@ def main():
     # 町の範囲（名古木交差点）：別の kn5（config.TOWN_GROUP）
     assembly.add_meshes(m, tw.meshes(), group=config.TOWN_GROUP)
     assembly.add_meshes(m, tw.object_meshes(), group=config.TOWN_GROUP)
-    for name, rel in town_objects.write_pole_sign_textures(tw.spec.get("pole_signs", []), config.TRACK_BUILD_DIR / "textures").items():
+    for name, rel in town_objects.write_pole_sign_textures(tw.pole_signs(), config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel)
     lots = json.loads((config.DATA_MANUAL / "s3_lots.json").read_text(encoding="utf-8"))   # 店の駐車場・敷地の舗装と白線
     assembly.add_meshes(m, tw.lot_meshes(lots), group=config.TOWN_GROUP)
@@ -160,18 +160,11 @@ def main():
     avoid = tw.paved_avoid()
     assembly.add_meshes(m, buildings.merge_by_material(buildings.building_meshes(blds, tw.ground.z, avoid)), group=config.TOWN_GROUP)
     for j, k in others:   # ほかの交差点の町：別の kn5（j.group）。名前は town → 交差点の名前
-        def rn(items, j=j):   # 名古木と名前がぶつからないように：town → 交差点の名前、town のない名前には交差点の名前を足す
-            out = []
-            for n, *rest in items:
-                if "town" in n:
-                    n = n.replace("town", j.name, 1)
-                else:
-                    head = next((h for h in ("1WALL_", "1ROAD_", "LINES_") if n.startswith(h)), "")
-                    n = f"{head}{j.name}_{n[len(head):]}"
-                out.append((n, *rest))
-            return out
+        rn = lambda items, j=j: nagoki.rename_meshes(items, j.name)
         assembly.add_meshes(m, rn(k.meshes()), group=j.group)
         assembly.add_meshes(m, rn(k.object_meshes()), group=j.group)
+        for name, rel in town_objects.write_pole_sign_textures(k.pole_signs(), config.TRACK_BUILD_DIR / "textures", prefix=j.name).items():
+            m.add_material(name, texture=rel)
         lp = config.DATA_MANUAL / j.lots
         if lp.exists():
             assembly.add_meshes(m, rn(k.lot_meshes(json.loads(lp.read_text(encoding="utf-8")))), group=j.group)

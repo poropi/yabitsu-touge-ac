@@ -125,3 +125,11 @@ def test_toriibara_arm_is_built_past_the_barricade():
     q0, q1 = ln.interpolate(t0 - 50.0), ln.interpolate(t0 + 50.0)
     p = max((q0, q1), key=lambda q: q.distance(Point(*c0)))
     assert tw.carriageway.buffer(0.5).contains(p) and not tw.drivable().contains(p)
+
+
+def test_second_junction_mesh_names_get_the_junction_name_once():
+    from yabitsu import nagoki
+    items = [("town_obj_concrete", 1), ("1WALL_town_block_000", 2), ("barricade_000", 3), ("1WALL_kitahara_polesign_poles", 4),
+             ("kitahara_polesign_0", 5)]
+    assert [n for n, _ in nagoki.rename_meshes(items, "kitahara")] == [
+        "kitahara_obj_concrete", "1WALL_kitahara_block_000", "kitahara_barricade_000", "1WALL_kitahara_polesign_poles", "kitahara_polesign_0"]

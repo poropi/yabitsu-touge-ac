@@ -190,8 +190,8 @@ def signal_meshes(signals, z_fn, prefix="town_signal"):
 
 
 def object_meshes(objects, z_fn, prefix="town_obj"):
-    """objects = [{"kind": bus_stop | guard_pipe | stele | pole | torii | lantern, "points": [[lat, lon], ...], ...}]"""
-    groups = {}
+    """objects = [{"kind": bus_stop | guard_pipe | stele | pole | torii | lantern | hoarding | mirror | road_sign | retaining_wall, "points": [[lat, lon], ...], ...}]"""
+    groups, walls = {}, []
     add = lambda mat, part: groups.setdefault(mat, []).append(part)
     zf = lambda p: float(z_fn(np.atleast_1d(p[0]), np.atleast_1d(p[1]))[0])
     for ob in objects:
@@ -249,25 +249,40 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
             add("pole_grey", _prism(p, 0.035, z - 0.2, z + 2.4))
             c = p + face * 0.06; s = 0.3
             add(f"sign_{ob.get('sign', 'warning')}", _quad(c - n * s, c + n * s, z + 1.8, z + 2.4, both=True))
+        elif kind == "retaining_wall":   # 擁壁（厚さ 0.3m、当たり判定あり）と、上の金網のフェンス（fence_m）
+            q = np.asarray(LineString(pts).segmentize(2.0).coords); h = float(ob.get("height_m", 2.5)); fh = float(ob.get("fence_m", 0.0))
+            zw = ob.get("_z_fn") or zf   # 町では歩道の高さ（裏の山の高さではなく）
+            for i in range(len(q) - 1):
+                za, zb = zw(q[i]), zw(q[i + 1]); u = q[i + 1] - q[i]; L = float(np.linalg.norm(u))
+                if L < 1e-6:
+                    continue
+                n = np.array([-u[1], u[0]]) / L; top = max(za, zb) + h
+                walls.append(_box((q[i] + q[i + 1]) / 2, n, L + 0.02, 0.3, min(za, zb) - 0.3, top))
+                if fh > 0:
+                    add("railing_bars", _quad(q[i], q[i + 1], top, top + fh, 0.0, L / 2.0, both=True))
         else:
             raise ValueError(f"物の kind が分かりません: {ob}")
-    return [(f"{prefix}_{mat}", *_merge(parts), mat, True) for mat, parts in groups.items()]
+    out = [(f"{prefix}_{mat}", *_merge(parts), mat, True) for mat, parts in groups.items()]
+    if walls:
+        out.append((f"1WALL_{prefix}_retaining", *_merge(walls), "concrete", True))
+    return out
 
 
 def pole_sign_meshes(signs, z_fn, prefix="town"):
-    """立て看板：柱（高さ pole_h）と、柱の上の方の板（両面に文字）。signs = [{"text", "bg", "fg", "at", "facing_deg", "w_m", "h_m", "z_m", "pole_h"}]"""
+    """立て看板：柱（高さ pole_h）と、柱の上の方の板（両面に文字）。signs = [{"text", "bg", "fg", "at", "facing_deg", "w_m", "h_m", "z_m", "pole_h", "no_pole"}]"""
     out, poles = [], []
     for k, s in enumerate(signs):
         p = _xy(s["at"]); z = float(z_fn(np.atleast_1d(p[0]), np.atleast_1d(p[1]))[0])
         face = _heading(float(s.get("facing_deg", 0.0))); n = np.array([-face[1], face[0]])
         w, h, z1 = float(s.get("w_m", 1.2)), float(s.get("h_m", 2.0)), z + float(s.get("z_m", 3.0))
-        poles.append(_prism(p - face * 0.15, 0.12, z - 0.3, z + float(s.get("pole_h", z1 - z + h)), 8))
+        dep = 0.05 if s.get("no_pole") else 0.3   # no_pole：信号の腕などに付ける薄い板（柱なし）
         front = _quad(p - n * w / 2, p + n * w / 2, z1, z1 + h)          # 表（face の側）
-        back = _quad(p + n * w / 2 - face * 0.3, p - n * w / 2 - face * 0.3, z1, z1 + h)
-        body = _box(p - face * 0.15, face, w, 0.3, z1, z1 + h)
+        back = _quad(p + n * w / 2 - face * dep, p - n * w / 2 - face * dep, z1, z1 + h)
         mat = "polesign_" + str(k) if prefix == "town" else f"{prefix}_polesign_{k}"
         out.append((f"{prefix}_polesign_{k}", *_merge([front, back]), mat, True))
-        poles.append(body)
+        if not s.get("no_pole"):
+            poles.append(_prism(p - face * 0.15, 0.12, z - 0.3, z + float(s.get("pole_h", z1 - z + h)), 8))
+            poles.append(_box(p - face * 0.15, face, w, 0.3, z1, z1 + h))
     if poles:
         out.append((f"1WALL_{prefix}_polesign_poles", *_merge(poles), "pole_grey", True))
     return out

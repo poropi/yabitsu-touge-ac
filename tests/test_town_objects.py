@@ -173,3 +173,65 @@ def test_pole_signs_with_a_prefix_do_not_clash_with_the_town_signs(tmp_path):
     a = {m[0] for m in to.pole_sign_meshes(s, flat)}; b = {m[0] for m in to.pole_sign_meshes(s, flat, prefix="s4")}
     assert not a & b
     assert set(to.write_pole_sign_textures(s, tmp_path, prefix="s4")) == {m[4] for m in to.pole_sign_meshes(s, flat, prefix="s4") if "sign" in m[4] and m[4] != "pole_grey"}
+
+
+def test_retaining_wall_object_is_collidable_concrete_with_fence_on_top():
+    """交差点の角の擁壁（宮ヶ瀬北原）：当たり判定のあるコンクリートの壁と、上の金網のフェンス"""
+    g = _ground()
+    parts = to.object_meshes([{"kind": "retaining_wall", "points": [_ll(0, 0), _ll(20, 0)], "height_m": 2.5, "fence_m": 1.5}], g.z)
+    wall = next(p for p in parts if p[4] == "concrete")
+    assert wall[0].startswith("1WALL_") and wall[5] is True
+    assert wall[1][:, 2].max() == pytest.approx(102.5) and np.ptp(wall[1][:, 0]) == pytest.approx(20.0, abs=0.5)
+    fence = next(p for p in parts if p[4] == "railing_bars")
+    assert fence[1][:, 2].min() == pytest.approx(102.5) and fence[1][:, 2].max() == pytest.approx(104.0)
+
+
+def test_vehicle_signal_arm_length_can_be_set_in_the_spec():
+    """宮ヶ瀬北原の信号は柱の横に灯器（腕が短い）。spec の vehicle_arm_m で自動の信号の腕の長さを決める"""
+    sec, t = _auto_town([_node([0, -20], 1, highway="crossing", **{"crossing:markings": "zebra"}),
+                         _node([0, -24], 2, highway="traffic_signals")])
+    t.spec["vehicle_arm_m"] = 1.2
+    veh = next(s for s in t.signals() if s["kind"] == "vehicle")
+    assert veh["arm_m"] == pytest.approx(1.2)
+
+
+def test_pole_sign_materials_carry_the_junction_name():
+    """2 つ目の交差点の立て看板の絵が、名古木の polesign_0 とぶつからない"""
+    sec, t = _auto_town()
+    t.prefix = "kitahara"
+    t.spec["pole_signs"] = [{"text": "64", "at": _ll(5, 5)}]
+    mats = [m[4] for m in t.object_meshes()]
+    assert "kitahara_polesign_0" in mats and "polesign_0" not in mats
+
+
+def test_pole_sign_without_pole_is_just_the_board():
+    """信号の腕に付ける交差点名の板：柱も当たり判定もない"""
+    g = _ground()
+    parts = to.pole_sign_meshes([{"text": "宮ヶ瀬北原", "at": _ll(0, 0), "no_pole": True, "z_m": 5.0, "h_m": 0.45}], g.z)
+    assert [p[0] for p in parts] == ["town_polesign_0"]
+    assert parts[0][1][:, 2].min() == pytest.approx(105.0)
+
+
+def test_signal_name_plates_hang_on_the_vehicle_signal_arms():
+    sec, t = _auto_town([_node([0, -20], 1, highway="crossing", **{"crossing:markings": "zebra"}),
+                         _node([0, -24], 2, highway="traffic_signals")])
+    t.spec["signal_plate"] = {"text": "宮ヶ瀬北原\nMiyagase Kitahara"}
+    veh = [s for s in t.signals() if s["kind"] == "vehicle"]
+    plates = [s for s in t.pole_signs() if s.get("no_pole")]
+    assert len(plates) == len(veh) == 1
+    p, v = tw._xy([plates[0]["at"]])[0], tw._xy([veh[0]["at"]])[0]
+    assert np.linalg.norm(p - v) == pytest.approx(min(1.0, 0.4 * veh[0]["arm_m"]), abs=0.05)
+    assert plates[0]["z_m"] == pytest.approx(veh[0]["height_m"] - 0.45)
+    assert plates[0]["facing_deg"] == pytest.approx(veh[0]["facing_deg"])
+
+
+def test_town_retaining_wall_height_is_measured_from_the_sidewalk_not_the_hill_behind():
+    """擁壁は歩道の外に立つ。裏の地面（山）が高くても、壁の高さは歩道の上から（宮ヶ瀬北原の鳥居原側で壁が高すぎた）"""
+    from tests.test_town import _ground, _town
+    g = _ground(lambda X, Y: 100.0 + np.maximum(0.0, -X - 4.0) * 5.0)   # 西の歩道の外 0.5m から山
+    spec = {"roads": {"7": {"width_m": 4.0, "sidewalk_l": 1.5, "sidewalk_r": 1.5}}, "corner_radius_m": 6.0,
+            "closures": [], "markings": [], "auto": True,
+            "objects": [{"kind": "retaining_wall", "points": [_ll(-4.6, -14.0), _ll(-4.6, -8.0)], "height_m": 2.5}]}
+    sec, t = _town(spec, ways=[_way([[0, -60], [0, 60]], wid=7)], ground=g)
+    wall = next(m for m in t.object_meshes() if m[0] == "1WALL_town_obj_retaining")
+    assert wall[1][:, 2].max() == pytest.approx(100.0 + tw.CURB_H + 2.5, abs=0.05)
