@@ -137,8 +137,6 @@ def main():
     skip = {i for x in mws for i in x.way_ids}
     assembly.add_meshes(m, overpasses.meshes(overpasses.from_osm(el, sec, sampler, ov, skip_ids=skip)))
     assembly.add_layout_objects(m, sec, pads, layouts.load_layouts(), bounds)
-    # S4 の終わり（S5 はまだ）：道を横切る見えない壁と工事中の柵
-    assembly.add_meshes(m, assembly.road_end_closure(sec, float(bounds["s4"][1])))
     # S4（峠の先）の部品は yabitsu_s4.kn5 へ（全部のレイアウトが読む）。メッシュの頂点の平均に一番近い本線の行で決める
     s4_0 = float(bounds["s4"][0]); tree = __import__("scipy.spatial", fromlist=["cKDTree"]).cKDTree(np.c_[sec.x, sec.y])
     print("moved to", config.S4_GROUP, m.split_group(assembly.GROUP, config.S4_GROUP, lambda c: sec.s[tree.query(c)[1]] >= s4_0))

@@ -26,6 +26,8 @@ def main():
     sampler = gsi.default_sampler()
     z_raw = elevation.raw_profile(cl, sampler)
     valid = elevation.valid_mask(z_raw, cl.bridge, cl.step)
+    from yabitsu import side_roads, tunnel   # トンネルの中は標高データ（山の表面）を使わない
+    valid &= ~tunnel.row_mask(cl.s, tunnel.from_osm(side_roads.load_elements(), cl))
 
     def sample(q):  # 区間ごとの格子（区間の始点から 1m ごと）で標高を取る
         return sampler.sample(*geo.from_local(np.interp(q, cl.s, cl.x), np.interp(q, cl.s, cl.y)))
