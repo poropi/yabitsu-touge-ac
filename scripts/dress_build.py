@@ -320,7 +320,13 @@ def main():
     if hi > s_range[1]:
         line_rows += [{"s_from": s_range[1], "s_to": hi, "item": "centre", "side": "C", "value": "orange_solid"},
                       {"s_from": s_range[1], "s_to": hi, "item": "edge", "side": "B", "value": "solid"}]
+    # 島で分かれる所の路面（1ROAD_split）は、本線の路面の式より最大 3 cm ほど高い所がある。線がその下に埋まらないよう持ち上げる
+    split_surface = forest_ground.load_ground(MANIFEST, prefixes=("1ROAD_split",))
     for name, v, f, uv, mat in dress_lines.line_meshes(sec, line_rows):
+        zs = split_surface.z(v[:, :2])
+        lift = dress_lines.LIFT - (0.004 if mat == "dress_red" else 0.0)
+        v = v.copy(); ok = np.isfinite(zs)
+        v[ok, 2] = np.maximum(v[ok, 2], zs[ok] + lift)
         m.add_mesh(GROUP, name, v, f, uv, mat)
     # 島で道が分かれる所：今の白線（ガタガタ・切れて見える）を隠し、なめらかな線を引き直す
     from yabitsu import nagoki

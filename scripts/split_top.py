@@ -13,6 +13,16 @@ from scripts import dress_compare as dc
 from scripts import forest_build as fb
 
 
+def upscaled_aerial(c, size, px, layer="seamlessphoto"):
+    """地理院の空中写真は z=18（約 0.5 m/画素）が最大。元の細かさで取り、なめらかに拡大（Lanczos）してからくっきりさせる。"""
+    from PIL import ImageFilter
+    native = 0.5
+    a = Image.fromarray(photo.render_local_image(gsi.TileCache(), geo.from_local, c[0] - size / 2, c[1] - size / 2, size,
+                                                 native, layer=layer, z=18))
+    a = a.resize((px, px), Image.LANCZOS)
+    return a.filter(ImageFilter.UnsharpMask(radius=2.0, percent=120, threshold=2))
+
+
 def main():
     s = float(sys.argv[1]) if len(sys.argv) > 1 else 3430.0
     size = float(sys.argv[2]) if len(sys.argv) > 2 else 240.0
@@ -26,8 +36,7 @@ def main():
     subprocess.run([dc.BLENDER, "-b", "--factory-startup", "--python", str(config.PROJECT_ROOT / "blender_scripts" / "render_forest.py"),
                     "--", str(forest), "s3"], env={**os.environ, "DRESS_DIR": str(dc.DRESS)}, capture_output=True, timeout=1800, check=True)
     ren = Image.open(forest / "views" / "top_cmp.png").convert("RGB").resize((1000, 1000))
-    aer = Image.fromarray(photo.render_local_image(gsi.TileCache(), geo.from_local, c[0] - size / 2, c[1] - size / 2, size,
-                                                   size / 1000, z=18))
+    aer = upscaled_aerial(c, size, 1000)
     f = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", 30)
     out = Image.new("RGB", (2000, 1050), (255, 255, 255)); out.paste(aer, (0, 50)); out.paste(ren, (1000, 50))
     d = ImageDraw.Draw(out)
