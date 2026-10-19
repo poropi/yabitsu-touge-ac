@@ -12,7 +12,8 @@
   "open_rel_lum": 1.1,
   "settle_m": 40.0,
   "settle_rg_max": 0.93,
-  "settle_lum_max": 0.48
+  "settle_lum_max": 0.48,
+  "farm_m": 150.0
  },
  "map": {
   "px_size": 2.0,

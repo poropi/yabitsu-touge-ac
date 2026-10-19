@@ -1,0 +1,144 @@
+{
+  "schema_version": 1,
+  "purpose": "Three coarse mountain artistic candidate masks for pilot review, not GIS forest survey",
+  "coordinate_system": "existing project local XY metres",
+  "status": "pilot_only_pending_aerial_review",
+  "base": "export/landscape_s1_station_owner_pilot/20261019_151226_498974/landscape_trial.blend",
+  "masks": [
+    {
+      "id": "s1_mountain_art_pilot",
+      "section": "s1",
+      "local_station_m": 1800,
+      "center_xy": [
+        -266.06015583280623,
+        -675.6791973039
+      ],
+      "polygon_xy": [
+        [
+          -916.0601558328062,
+          -1325.6791973038999
+        ],
+        [
+          383.93984416719377,
+          -1325.6791973038999
+        ],
+        [
+          383.93984416719377,
+          -25.67919730389997
+        ],
+        [
+          -916.0601558328062,
+          -25.67919730389997
+        ]
+      ],
+      "confidence": "artistic_inferred_mountain_candidate_not_measured_forest_boundary",
+      "source": [
+        "data/processed/track_section.json",
+        "data/processed/track_terrain_far.npz",
+        "existing scene terrain and vegetation"
+      ],
+      "require_terrain_slope_or_mountain_filter": true,
+      "exclude_all_road_corridors_m": 120,
+      "protect_s1_existing_near_landscape": true,
+      "mandatory_exclusions": [
+        "actual water material surfaces and riverbed",
+        "all town ground and building footprints with margin",
+        "all pads lots plazas branches and parking",
+        "S3 corridor conservative settlement/farm envelope",
+        "Kitahara town envelope",
+        "terrain holes and non-ground surfaces"
+      ],
+      "note": "Bounding candidate only. Do not fill every polygon point: subtract exclusion masks first; retain road-view openings. Lake pilot includes water only for comparison, never planting."
+    },
+    {
+      "id": "s4_mountain_art_pilot",
+      "section": "s4",
+      "local_station_m": 3500,
+      "center_xy": [
+        -546.7516668486363,
+        1989.5680558069698
+      ],
+      "polygon_xy": [
+        [
+          -1196.7516668486364,
+          1339.5680558069698
+        ],
+        [
+          103.24833315136368,
+          1339.5680558069698
+        ],
+        [
+          103.24833315136368,
+          2639.56805580697
+        ],
+        [
+          -1196.7516668486364,
+          2639.56805580697
+        ]
+      ],
+      "confidence": "artistic_inferred_mountain_candidate_not_measured_forest_boundary",
+      "source": [
+        "data/processed/track_section.json",
+        "data/processed/track_terrain_far.npz",
+        "existing scene terrain and vegetation"
+      ],
+      "require_terrain_slope_or_mountain_filter": true,
+      "exclude_all_road_corridors_m": 120,
+      "protect_s1_existing_near_landscape": true,
+      "mandatory_exclusions": [
+        "actual water material surfaces and riverbed",
+        "all town ground and building footprints with margin",
+        "all pads lots plazas branches and parking",
+        "S3 corridor conservative settlement/farm envelope",
+        "Kitahara town envelope",
+        "terrain holes and non-ground surfaces"
+      ],
+      "note": "Bounding candidate only. Do not fill every polygon point: subtract exclusion masks first; retain road-view openings. Lake pilot includes water only for comparison, never planting."
+    },
+    {
+      "id": "s5_mountain_art_pilot",
+      "section": "s5",
+      "local_station_m": 10000,
+      "center_xy": [
+        957.9487839649111,
+        8553.63107107724
+      ],
+      "polygon_xy": [
+        [
+          207.94878396491106,
+          7803.6310710772395
+        ],
+        [
+          1707.948783964911,
+          7803.6310710772395
+        ],
+        [
+          1707.948783964911,
+          9303.63107107724
+        ],
+        [
+          207.94878396491106,
+          9303.63107107724
+        ]
+      ],
+      "confidence": "artistic_inferred_mountain_candidate_not_measured_forest_boundary",
+      "source": [
+        "data/processed/track_section.json",
+        "data/processed/track_terrain_far.npz",
+        "existing scene terrain and vegetation"
+      ],
+      "require_terrain_slope_or_mountain_filter": true,
+      "exclude_all_road_corridors_m": 120,
+      "protect_s1_existing_near_landscape": true,
+      "mandatory_exclusions": [
+        "actual water material surfaces and riverbed",
+        "all town ground and building footprints with margin",
+        "all pads lots plazas branches and parking",
+        "S3 corridor conservative settlement/farm envelope",
+        "Kitahara town envelope",
+        "terrain holes and non-ground surfaces"
+      ],
+      "note": "Bounding candidate only. Do not fill every polygon point: subtract exclusion masks first; retain road-view openings. Lake pilot includes water only for comparison, never planting."
+    }
+  ]
+}

@@ -106,3 +106,19 @@ def test_split_lines_stay_on_carriageway():
         pts = v[:, :2]
         assert not any(island.contains(Point(p)) for p in pts), name
         assert all(cw.buffer(0.05).contains(Point(p)) for p in pts), name
+
+
+def test_red_lane_on_right_half():
+    sec = _sec()
+    (name, v, f, uv, mat), = dress_lines.line_meshes(sec, [{"s_from": "100", "s_to": "150", "item": "red", "side": "R", "value": ""}])
+    assert mat == "dress_red" and (v[:, 1] < 0.01).all() and (v[:, 1] > -3.0).all()
+    assert v[:, 0].min() >= 99.5 and v[:, 0].max() <= 150.5
+    assert (v[:, 2] > 10.0).all() and (v[:, 2] < 10.0 + dress_lines.LIFT).all()      # 線より下
+
+
+def test_red_row_starts_after_gap():
+    sec = _sec()
+    rows = [{"s_from": "100", "s_to": "200", "item": "red", "side": "R", "value": ""},
+            {"s_from": "90", "s_to": "150", "item": "gap", "side": "B", "value": ""}]
+    (name, v, f, uv, mat), = [m for m in dress_lines.line_meshes(sec, rows) if m[4] == "dress_red"]
+    assert v[:, 0].min() >= 149.5

@@ -80,6 +80,17 @@ def line_meshes(sec: Section, rows) -> list:
                 for sgn, tag in ((1, "L"), (-1, "R")):
                     hw = sub.hw_left if sgn > 0 else sub.hw_right
                     add(f"dress_edge{tag}_{k:03d}_{j}", sub, sgn * (hw - EDGE_INSET - g), EDGE_DASH[r["value"]], "dress_line_white")
+        elif r["item"] == "red":            # 片側の車線の赤い舗装（滑り止め）。線より下に。分かれる所の中は split_red で
+            gaps = _gaps(rows)
+            a = max([a] + [g1 for g0, g1 in gaps if g0 <= a < g1])
+            sub = resample(sec, a, b)
+            if sub.n < 2:
+                continue
+            sgn = 1 if r["side"] == "L" else -1
+            hw = sub.hw_left if sgn > 0 else sub.hw_right
+            v, f, uv = mg.compact(*mg.line(sub, slice(None), sgn * hw / 2, width=float(np.mean(hw)) - 0.1, lift=LIFT - 0.004))
+            if len(f):
+                out.append((f"dress_red_{k:03d}", v, f, uv, "dress_red"))
         elif r["item"] == "green":
           for j, (x, y, _) in enumerate(_pieces(rows, a, b)):
             sub = resample(sec, x, y)
@@ -248,4 +259,26 @@ def split_lines(sp, z_fn) -> list:
         out.append((f"dress_split_white_{k:02d}", v, f, uv, "dress_line_white"))
     for k, (v, f, uv) in enumerate(grid_drape(G, z_fn, LIFT - 0.002)):
         out.append((f"dress_split_green_{k:02d}", v, f, uv, "dress_green"))
+    return out
+
+
+def split_red(sp, sec, rows, z_fn) -> list:
+    """分かれる所（split の窓）の中の、表の red 行の赤い舗装（路面の多角形に合わせ、split の赤とは重ねない）。"""
+    from shapely.geometry import LineString
+    from .town import grid_drape
+    out = []
+    for k, r in enumerate(x for x in rows if x["item"] == "red"):
+        a, b = max(float(r["s_from"]), sp.main_skip[0]), min(float(r["s_to"]), sp.main_skip[1])
+        if b - a < 1:
+            continue
+        sub = resample(sec, a, b)
+        sgn = 1 if r["side"] == "L" else -1
+        hw = sub.hw_left if sgn > 0 else sub.hw_right
+        nx, ny = -np.sin(sub.heading), np.cos(sub.heading)
+        edge = np.c_[sub.x + nx * sgn * hw, sub.y + ny * sgn * hw]
+        mid = np.c_[sub.x, sub.y]
+        from shapely.geometry import Polygon
+        poly = Polygon(np.r_[mid, edge[::-1]]).buffer(0).intersection(sp.carriageway).difference(sp.red)
+        for j, (v, f, uv) in enumerate(grid_drape(poly, z_fn, LIFT - 0.004)):
+            out.append((f"dress_split_red_{k}_{j}", v, f, uv, "dress_red"))
     return out

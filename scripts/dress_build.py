@@ -307,6 +307,8 @@ def main():
         img.save(tex / f"line_{k}.png")
         m.add_material(f"dress_line_{k}", texture=f"textures/line_{k}.png")
     m.add_material("dress_green", color=(0.17, 0.27, 0.20))   # 写真の緑の路側帯（くすんだ濃い緑）
+    shutil.copy2(MANIFEST / "textures" / "paint_red.png", tex / "paint_red.png")
+    m.add_material("dress_red", texture="textures/paint_red.png")   # 島の所の赤い路面（paint_red）と同じ画像
     marking_textures(tex)
     m.add_material("dress_diamond", texture="textures/diamond.png", alpha=True)
     for t in {r["value"] for r in csv.DictReader(open(config.DATA_MANUAL / "s3_lines.csv", encoding="utf-8")) if r["item"] == "text"}:
@@ -323,7 +325,7 @@ def main():
     # 島で道が分かれる所：今の白線（ガタガタ・切れて見える）を隠し、なめらかな線を引き直す
     from yabitsu import nagoki
     for spl in nagoki.load_splits(sec):
-        for name, v, f, uv, mat in dress_lines.split_lines(spl, spl.ground.z):     # 路面（1ROAD_split）と同じ高さ
+        for name, v, f, uv, mat in dress_lines.split_lines(spl, spl.ground.z) +                 dress_lines.split_red(spl, sec, line_rows, spl.ground.z):     # 路面（1ROAD_split）と同じ高さ
             m.add_mesh(GROUP, name, v, f, uv, mat)
     hide_lines += [n for k in range(20) for n in (f"LINES_split_white_{k:02d}", f"LINES_split_white_{k:02d}_back")]
     pave = list(csv.DictReader(open(config.DATA_MANUAL / "s3_pavements.csv", encoding="utf-8")))

@@ -30,6 +30,7 @@ DEFAULT_CLASSIFY = {
     "conifer_rel_lum": 1.0,     # 夏の写真：区画の森の明るさの中央値×これ より暗い緑の森は針葉樹
     "open_rel_lum": 1.1,        # なめらかな所は、区画の森の明るさの中央値×これ より明るい時だけ森以外
     "smooth_cells": 2,          # 多数決でならす範囲（マス）
+    "farm_m": 150.0,            # 家からこの距離までの茶色い所は畑・田（森にしない）
     "settle_m": 40.0,           # 家からこの距離までは集落（暗い緑だけを森にする）
     "settle_rg_max": 0.93,
     "settle_lum_max": 0.48,
@@ -110,6 +111,7 @@ def classify(rgb: np.ndarray, px_size: float, cfg: dict) -> np.ndarray:
     fmed = np.where(np.isnan(fmed), np.nanmedian(fmed) if not np.isnan(fmed).all() else 0.5, fmed)
     fmed_f = ndimage.zoom(fmed, zoom, order=1, mode="nearest", grid_mode=True)[:forest.shape[0], :forest.shape[1]]
     forest = rough | (lum_c < fmed_f * cfg["open_rel_lum"])
+    forest &= ~(brown & ~winter)        # 夏の写真の茶色い所（耕した畑・刈った田）は、ざらざらでも森にしない
     green = forest & ~brown
     conifer = green & (winter | (lum_c < med_f * cfg["conifer_rel_lum"]))
     cls = np.where(forest, np.where(conifer, 1, 2), 0).astype(np.uint8)
@@ -240,3 +242,15 @@ def osm_buildings(bounds, cache=None):
             x, y = geo.to_local([p["lat"] for p in g], [p["lon"] for p in g])
             polys.append(np.c_[x, y])
     return polys
+
+
+def farm_filter(fm: ForestMap, rgb, px_size, polygons, tri_meshes, cfg):
+    """家から farm_m 以内の茶色い所（R/G ≥ brown_rg）は畑・田として森にしない。
+    冬の写真の落葉樹も茶色に写るが、それは家から離れた山にある（2026-10-19：S3 の神社の西の畑が森になっていた）。"""
+    near = settlement_mask(fm, polygons, tri_meshes, cfg["farm_m"])
+    k = max(1, int(round(fm.cell / px_size)))
+    c = _cells(rgb.astype(np.float32) / 255.0, k).mean((1, 3))
+    h, w = min(c.shape[0], fm.cls.shape[0]), min(c.shape[1], fm.cls.shape[1])
+    brown = c[:h, :w, 0] / np.maximum(c[:h, :w, 1], 1e-3) >= cfg["brown_rg"]
+    sub = fm.cls[:h, :w]
+    sub[near[:h, :w] & brown] = 0

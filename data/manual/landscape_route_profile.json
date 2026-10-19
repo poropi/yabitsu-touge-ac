@@ -1,0 +1,380 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-10-19",
+  "distance_basis": "section_local_m_from_track_profile_bounds",
+  "section_lengths_m": {
+    "s3": 4300.9847519530895,
+    "s2": 4164.985234104771,
+    "s1": 3335.9881731028836,
+    "s4": 6423.977225423541,
+    "s5": 11686.958566862533
+  },
+  "quality_target": "了承済み100m試作の約7割の現地らしさ。測定済み再現率ではない。",
+  "policy": [
+    "通常の植生品質改善は森林区間全域で行う。近景の簡易木は重複追加だけで済ませず表示置換対象とする。",
+    "写真不足箇所は道路上を覆わせる意図的な樹冠生成なし。自然な通常樹冠の頭上張り出しは走行空間を妨げなければ許容。",
+    "市街地・畑・駐車場・広場・橋・トンネル・水面・分岐と既存構造物を優先。",
+    "構造物種類は各section_features.csvのnoteを参照。岩切土・法枠・吹付けを一律石積みへ変えない。",
+    "樹種は杉・檜・広葉樹の混合候補。比率は美術上の調整値で、現地調査値ではない。",
+    "参考写真は比較専用。ゲーム素材へ流用しない。"
+  ],
+  "segments": [
+    {
+      "section": "s3",
+      "start_m": 0,
+      "end_m": 200,
+      "character": "town_intersection",
+      "vegetation_scale": 0,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s3_nagoki.json",
+        "data/manual/s3_town_reference.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s3",
+      "start_m": 200,
+      "end_m": 2640,
+      "character": "settlement_fields",
+      "vegetation_scale": 0,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "docs/superpowers/specs/2026-10-17-yabitsu-s3-design.md",
+        "data/manual/s3_houses.json",
+        "data/manual/s3_lots.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s3",
+      "start_m": 2640,
+      "end_m": 2950,
+      "character": "overpass_rebuilt_open",
+      "vegetation_scale": 0,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s3_overpasses.csv",
+        "data/manual/s3_widths.csv"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s3",
+      "start_m": 2950,
+      "end_m": 4300.9847519530895,
+      "character": "settlement_fields",
+      "vegetation_scale": 0,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "docs/superpowers/specs/2026-10-17-yabitsu-s3-design.md",
+        "data/manual/s3_houses.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s2",
+      "start_m": 0,
+      "end_m": 300,
+      "character": "minoge_settlement",
+      "vegetation_scale": 0,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s2_minoge.json",
+        "docs/superpowers/specs/2026-10-17-yabitsu-s2-design.md"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s2",
+      "start_m": 300,
+      "end_m": 4064.985234104771,
+      "character": "forest",
+      "vegetation_scale": 0.6,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "docs/superpowers/specs/2026-10-17-yabitsu-s2-design.md",
+        "data/manual/s2_features.csv"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s2",
+      "start_m": 4064.985234104771,
+      "end_m": 4164.985234104771,
+      "character": "observation_lot_approach",
+      "vegetation_scale": 0.15,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s1_start_lot.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "距離境界100mは保守的な調整値。駐車場・展望地のポリゴンと既存の開放面を優先する。"
+    },
+    {
+      "section": "s1",
+      "start_m": 0,
+      "end_m": 60,
+      "character": "observation_lot",
+      "vegetation_scale": 0.1,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s1_start_lot.json",
+        "data/manual/s1_features.csv"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s1",
+      "start_m": 60,
+      "end_m": 300,
+      "character": "forest_rock_cut",
+      "vegetation_scale": 0.6,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s1_features.csv"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s1",
+      "start_m": 300,
+      "end_m": 400,
+      "character": "photo_reviewed_mixed_forest",
+      "vegetation_scale": 1,
+      "canopy_enabled": true,
+      "crown_width": [
+        0.9,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/landscape_trial_reference.json",
+        "export/landscape_trial/20261019_121050_717644/config.json"
+      ],
+      "confidence": "photo_reviewed_approximate",
+      "uncertainty": "旧325/375要求座標は現在約320/370m。空の開口を保つ。370m下り谷側のみ大きい張り出し。crown_widthは実装既定値で、100m試作の地点別profileを優先する。"
+    },
+    {
+      "section": "s1",
+      "start_m": 400,
+      "end_m": 3200,
+      "character": "forest",
+      "vegetation_scale": 0.6,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s1_features.csv"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s1",
+      "start_m": 3200,
+      "end_m": 3335.9881731028836,
+      "character": "pass_plaza_approach",
+      "vegetation_scale": 0.15,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s1_pass.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "3200mは保守的な景観調整境界。広場・休憩所・分岐・舗装面を優先し頭上を意図的に塞がない。"
+    },
+    {
+      "section": "s4",
+      "start_m": 0,
+      "end_m": 120,
+      "character": "pass_exit",
+      "vegetation_scale": 0.2,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s1_pass.json",
+        "data/manual/s4_fudakake.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s4",
+      "start_m": 120,
+      "end_m": 2090,
+      "character": "forest_valley_right",
+      "vegetation_scale": 0.6,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s4_features.csv"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "谷側はR。石積み・岩切土を維持。頭上開口は未確認。"
+    },
+    {
+      "section": "s4",
+      "start_m": 2090,
+      "end_m": 6140,
+      "character": "forest_valley_left",
+      "vegetation_scale": 0.6,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s4_features.csv",
+        "data/manual/s4_plazas.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "谷側はL。分岐・広場・橋は追加植生の除外形状を優先。頭上開口は未確認。"
+    },
+    {
+      "section": "s4",
+      "start_m": 6140,
+      "end_m": 6423.977225423541,
+      "character": "fudakake_bridge_settlement",
+      "vegetation_scale": 0.2,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s4_fudakake.json",
+        "data/manual/s4_widths.csv"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s5",
+      "start_m": 0,
+      "end_m": 150,
+      "character": "fudakake_departure",
+      "vegetation_scale": 0.2,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s5_fudakake_pits.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    },
+    {
+      "section": "s5",
+      "start_m": 150,
+      "end_m": 8960,
+      "character": "river_forest",
+      "vegetation_scale": 0.6,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s5_features.csv",
+        "data/manual/s5_bridges.json",
+        "data/manual/s5_tunnels.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "橋・トンネル・キャンプ場・分岐・水面を除外。川側R。法枠/ネット/岩切土を樹木で一様に隠さない。"
+    },
+    {
+      "section": "s5",
+      "start_m": 8960,
+      "end_m": 11480,
+      "character": "lake_road_openings",
+      "vegetation_scale": 0.3,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s5_features.csv",
+        "data/manual/s5_water.json",
+        "data/manual/s5_bridges.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "湖側の眺望・大門桟道・広い道路を保持。湖ぞい全区間が無樹木という断定ではない。既存森林外形に沿って植生を改善する。"
+    },
+    {
+      "section": "s5",
+      "start_m": 11480,
+      "end_m": 11686.958566862533,
+      "character": "kitahara_intersection",
+      "vegetation_scale": 0,
+      "canopy_enabled": false,
+      "crown_width": [
+        0.75,
+        0.75
+      ],
+      "evidence": [
+        "data/manual/s5_kitahara.json",
+        "data/manual/s5_kitahara_buildings.json"
+      ],
+      "confidence": "documented_context_canopy_unverified",
+      "uncertainty": "樹種比率・樹冠幅・個体位置は未測量。道路上を覆わせる意図的な追加樹冠は生成しない。"
+    }
+  ]
+}

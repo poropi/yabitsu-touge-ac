@@ -1,0 +1,2832 @@
+{
+  "schema_version": 1,
+  "scope": "s1_only",
+  "reviewed_on": "2026-10-19",
+  "section_length_m": 3335.9881731028836,
+  "photo_metadata": "data/manual/landscape_s1_photo_positions.json",
+  "policy": [
+    "写真66地点132方向を目視。区間端は写真間の補間であり連続写真測量ではない。",
+    "頭上被覆/開口は地点ごとの写真に従い人工アーチを作らない。開口域も林縁/中低層を改善する。",
+    "密度/幅倍率/間隔は実測値ではなく試作の調整値。実装後の連続運転席画像と写真比較で調整する。",
+    "S1以外へ適用しない。旧全線進捗/合格とは切り離す。"
+  ],
+  "segments": [
+    {
+      "section": "s1",
+      "start_m": 0,
+      "end_m": 15,
+      "character": "open_forest_edge",
+      "vegetation_scale": 0,
+      "litter_scale": 0,
+      "canopy_enabled": false,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0025_f.jpg",
+        "export/landscape_s1_reference/photos/s0025_b.jpg",
+        "export/landscape_s1_reference/supplemental/sheet_lot_ne.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [],
+      "notes": "駐車場入口/石碑の除外形状を優先"
+    },
+    {
+      "section": "s1",
+      "start_m": 15,
+      "end_m": 50,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0025_f.jpg",
+        "export/landscape_s1_reference/photos/s0025_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.5",
+          "note": "ブロック擁壁・上に柵（ストリートビュー）。s=0〜15 は駐車場の入口と石碑なので壁なし"
+        }
+      ],
+      "notes": "駐車場/石碑側へ大きい開口。左壁上は密な広葉樹、谷側に低木。"
+    },
+    {
+      "section": "s1",
+      "start_m": 50,
+      "end_m": 100,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0075_f.jpg",
+        "export/landscape_s1_reference/photos/s0075_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.5",
+          "note": "ブロック擁壁・上に柵（ストリートビュー）。s=0〜15 は駐車場の入口と石碑なので壁なし"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "6.0",
+          "note": "岩の切土（ストリートビュー）・見た目は仕上げで岩にする"
+        }
+      ],
+      "notes": "岩切土と苔、谷側混交木。前方は枝の張出し、後方は広い空。",
+      "canopy_scope_policy": "owned_station",
+      "canopy_scope_windows": [
+        [
+          75,
+          100
+        ]
+      ]
+    },
+    {
+      "section": "s1",
+      "start_m": 100,
+      "end_m": 150,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 5.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.9,
+        0.8
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0125_f.jpg",
+        "export/landscape_s1_reference/photos/s0125_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "covered",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "6.0",
+          "note": "岩の切土（ストリートビュー）・見た目は仕上げで岩にする"
+        }
+      ],
+      "notes": "苔岩壁と直幹針葉樹。後方は広葉樹が道路上へ重なり濃い被覆、透ける空は残る。",
+      "canopy_scope_policy": "owned_station"
+    },
+    {
+      "section": "s1",
+      "start_m": 150,
+      "end_m": 200,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0175_f.jpg",
+        "export/landscape_s1_reference/photos/s0175_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "6.0",
+          "note": "岩の切土（ストリートビュー）・見た目は仕上げで岩にする"
+        }
+      ],
+      "notes": "岩壁を苔/つる/低木が覆う。谷側針葉樹と中低層、カーブ先に明るい開口。"
+    },
+    {
+      "section": "s1",
+      "start_m": 200,
+      "end_m": 250,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0225_f.jpg",
+        "export/landscape_s1_reference/photos/s0225_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "6.0",
+          "note": "岩の切土（ストリートビュー）・見た目は仕上げで岩にする"
+        }
+      ],
+      "notes": "上りは針葉樹と広葉の頭上張出し、下りは谷側眺望と広い空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 250,
+      "end_m": 300,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0275_f.jpg",
+        "export/landscape_s1_reference/photos/s0275_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "山側壁/つる・草、谷側直幹の並び。上りは広い空と遠方山、下り林縁は濃い。 pilot275上で谷側広葉prototypeが写真の遠山/空を隠したため、追加林縁prototypeは山側だけ。谷側は通常の直幹混交木/下草で厚みを作り、眺望を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 300,
+      "end_m": 400,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 1,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 5.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 5,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0325_f.jpg",
+        "export/landscape_s1_reference/photos/s0325_b.jpg",
+        "export/landscape_s1_reference/photos/s0375_f.jpg",
+        "export/landscape_s1_reference/photos/s0375_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "approved",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "了承100mの配置/幅アンカー320/370を継承。写真要求点の現行距離325/375とは別。",
+      "crown_width_profile": [
+        [
+          320,
+          0.9,
+          0.75
+        ],
+        [
+          370,
+          1.1,
+          0.8
+        ]
+      ]
+    },
+    {
+      "section": "s1",
+      "start_m": 400,
+      "end_m": 450,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0425_f.jpg",
+        "export/landscape_s1_reference/photos/s0425_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "ブロック壁上の広葉層、谷側密な針葉幹と低木。中央縦の空開口。"
+    },
+    {
+      "section": "s1",
+      "start_m": 450,
+      "end_m": 500,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0475_f.jpg",
+        "export/landscape_s1_reference/photos/s0475_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "山側低い苔壁/広葉、谷側針葉林、枝が上へ重なるが中央に細い空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 500,
+      "end_m": 550,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 5.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.9,
+        0.8
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0525_f.jpg",
+        "export/landscape_s1_reference/photos/s0525_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "covered",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "山側広葉が谷側針葉林へ張出し、特に下りは道路上の濃い葉/枝。"
+    },
+    {
+      "section": "s1",
+      "start_m": 550,
+      "end_m": 600,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0575_f.jpg",
+        "export/landscape_s1_reference/photos/s0575_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高いブロック壁と谷側針葉列。両方向とも中央上方に空開口。"
+    },
+    {
+      "section": "s1",
+      "start_m": 600,
+      "end_m": 650,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0625_f.jpg",
+        "export/landscape_s1_reference/photos/s0625_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 650,
+      "end_m": 700,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0675_f.jpg",
+        "export/landscape_s1_reference/photos/s0675_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 700,
+      "end_m": 750,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0725_f.jpg",
+        "export/landscape_s1_reference/photos/s0725_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 750,
+      "end_m": 800,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0775_f.jpg",
+        "export/landscape_s1_reference/photos/s0775_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 800,
+      "end_m": 850,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0825_f.jpg",
+        "export/landscape_s1_reference/photos/s0825_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 850,
+      "end_m": 900,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0875_f.jpg",
+        "export/landscape_s1_reference/photos/s0875_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 900,
+      "end_m": 950,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0925_f.jpg",
+        "export/landscape_s1_reference/photos/s0925_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側土手/落葉/低木、谷側直幹。広葉が上へ張出し、明るい隙間。"
+    },
+    {
+      "section": "s1",
+      "start_m": 950,
+      "end_m": 1000,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 5.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.9,
+        0.8
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s0975_f.jpg",
+        "export/landscape_s1_reference/photos/s0975_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "covered",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側広葉と谷側針葉の枝葉が上方を重ねる。下り中央の細い光の通り道。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1000,
+      "end_m": 1050,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1025_f.jpg",
+        "export/landscape_s1_reference/photos/s1025_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "谷側針葉列/低木、中層枝が上方へ。中央前方に明るい開口。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1050,
+      "end_m": 1100,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1075_f.jpg",
+        "export/landscape_s1_reference/photos/s1075_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "曲がりの両側が濃い混交層。道路上へ重なる枝と小さい空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1100,
+      "end_m": 1150,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1125_f.jpg",
+        "export/landscape_s1_reference/photos/s1125_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1150,
+      "end_m": 1200,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1175_f.jpg",
+        "export/landscape_s1_reference/photos/s1175_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1200,
+      "end_m": 1250,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1225_f.jpg",
+        "export/landscape_s1_reference/photos/s1225_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1250,
+      "end_m": 1300,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1275_f.jpg",
+        "export/landscape_s1_reference/photos/s1275_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い壁上から谷側へ広葉の張出し。林内は針葉幹、中央空は保持。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1300,
+      "end_m": 1350,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1325_f.jpg",
+        "export/landscape_s1_reference/photos/s1325_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1350,
+      "end_m": 1400,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1375_f.jpg",
+        "export/landscape_s1_reference/photos/s1375_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁、谷側密針葉。前方空スリットと部分的張出し。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1400,
+      "end_m": 1450,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1425_f.jpg",
+        "export/landscape_s1_reference/photos/s1425_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "山側小分岐/小屋、谷側柵/設備。前方に広い空、分岐は植生除外。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1450,
+      "end_m": 1500,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1475_f.jpg",
+        "export/landscape_s1_reference/photos/s1475_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔ブロック壁と谷側針葉列/中低木。両方向の中央上方に空開口を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1500,
+      "end_m": 1550,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1525_f.jpg",
+        "export/landscape_s1_reference/photos/s1525_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "ブロック擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "山側高壁、谷側細い針葉幹/低木。部分頭上被覆と細い中央空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1550,
+      "end_m": 1600,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1575_f.jpg",
+        "export/landscape_s1_reference/photos/s1575_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "山側苔岩/ネット、谷側針葉層。上方は細枝葉が重なるが小開口あり。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1600,
+      "end_m": 1650,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1625_f.jpg",
+        "export/landscape_s1_reference/photos/s1625_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "山側ネット急斜面、谷側濃い針葉。枝が道路上へ重なり、前方曲がりは明るい。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1650,
+      "end_m": 1700,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 5.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.9,
+        0.8
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1675_f.jpg",
+        "export/landscape_s1_reference/photos/s1675_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "covered",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "山側ネット岩壁/つると谷側低木。上方の濃い枝葉で被覆、見通しの先は残す。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1700,
+      "end_m": 1750,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 5.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.9,
+        0.8
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1725_f.jpg",
+        "export/landscape_s1_reference/photos/s1725_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "covered",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "谷側針葉+広葉中層と山側ネットつる。頭上に連続する緑と小空隙。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1750,
+      "end_m": 1800,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1775_f.jpg",
+        "export/landscape_s1_reference/photos/s1775_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.0",
+          "note": "低い石積み（ストリートビュー）"
+        }
+      ],
+      "notes": "低い石積みと直幹針葉列。道路上の薄い被覆、谷側に透過した空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1800,
+      "end_m": 1850,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1825_f.jpg",
+        "export/landscape_s1_reference/photos/s1825_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "2.0",
+          "note": "低い石積み（ストリートビュー）"
+        }
+      ],
+      "notes": "低い丸石壁と谷側針葉列。直線の中央上方に明瞭な空スリット。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1850,
+      "end_m": 1900,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1875_f.jpg",
+        "export/landscape_s1_reference/photos/s1875_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁・上に柵（ストリートビュー）"
+        }
+      ],
+      "notes": "高い壁/上柵、山側低木、谷側広葉。大きい空/山の眺望。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1900,
+      "end_m": 1950,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1925_f.jpg",
+        "export/landscape_s1_reference/photos/s1925_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁・上に柵（ストリートビュー）"
+        }
+      ],
+      "notes": "高い苔壁と谷側針葉/低木。下りは広い上空、上りカーブ先は緑。"
+    },
+    {
+      "section": "s1",
+      "start_m": 1950,
+      "end_m": 2000,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s1975_f.jpg",
+        "export/landscape_s1_reference/photos/s1975_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁・上に柵（ストリートビュー）"
+        }
+      ],
+      "notes": "高壁/柵、谷側針葉と広葉。ヘアピンで広い上空を残す。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2000,
+      "end_m": 2050,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2025_f.jpg",
+        "export/landscape_s1_reference/photos/s2025_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.5",
+          "note": "ブロック擁壁・上に柵（ストリートビュー）"
+        }
+      ],
+      "notes": "高壁上柵と谷側針葉。中央縦長の空、下りは明るい山斜面。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2050,
+      "end_m": 2100,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2075_f.jpg",
+        "export/landscape_s1_reference/photos/s2075_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側緑の斜面/落葉、谷側広葉低木。部分的道路上張出し、空の細片。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2100,
+      "end_m": 2150,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2125_f.jpg",
+        "export/landscape_s1_reference/photos/s2125_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "厚い広葉中低層と針葉混交。頭上が重なるが中央前方に空が残る。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2150,
+      "end_m": 2200,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2175_f.jpg",
+        "export/landscape_s1_reference/photos/s2175_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "谷側は背の低い広葉と眺望。上空/谷側を広く開ける。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2200,
+      "end_m": 2250,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2225_f.jpg",
+        "export/landscape_s1_reference/photos/s2225_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側ネットつる/広葉、谷側低木で眺望。道路上に広い空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2250,
+      "end_m": 2300,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2275_f.jpg",
+        "export/landscape_s1_reference/photos/s2275_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側緑の法面/局所砂利。谷側低木/広葉で空が大きい。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2300,
+      "end_m": 2350,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2325_f.jpg",
+        "export/landscape_s1_reference/photos/s2325_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "山側ネット岩壁、谷側広葉低木。上方の空と遠い山を守る。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2350,
+      "end_m": 2400,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2375_f.jpg",
+        "export/landscape_s1_reference/photos/s2375_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "5.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "上り曲がり先は濃い林/ネット壁、下り上方は開口。片側張出し扱い。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2400,
+      "end_m": 2450,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2425_f.jpg",
+        "export/landscape_s1_reference/photos/s2425_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側急斜面/植生、谷側針葉列と広葉の張出し。下りは濃い影と狭い空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2450,
+      "end_m": 2500,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2475_f.jpg",
+        "export/landscape_s1_reference/photos/s2475_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側緑の法面、谷側針葉直幹。部分張出しと中央空スリット。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2500,
+      "end_m": 2550,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 5.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.9,
+        0.8
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2525_f.jpg",
+        "export/landscape_s1_reference/photos/s2525_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "covered",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側広葉と谷側針葉の高い層が道路上へ重なる。特に下りは連続した緑の天井。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2550,
+      "end_m": 2600,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2575_f.jpg",
+        "export/landscape_s1_reference/photos/s2575_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "谷側針葉列に広葉中層、下り枝が曲がりの上へ張出す。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2600,
+      "end_m": 2650,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2625_f.jpg",
+        "export/landscape_s1_reference/photos/s2625_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側ネット/つる、谷側針葉と低木。部分被覆と中央小空隙。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2650,
+      "end_m": 2700,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2675_f.jpg",
+        "export/landscape_s1_reference/photos/s2675_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "混交林縁が厚いが中央上方の空は大きい。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2700,
+      "end_m": 2750,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2725_f.jpg",
+        "export/landscape_s1_reference/photos/s2725_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "山側緑の斜面、谷側針葉+広葉。片側枝が上方へ重なり、空スリット。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2750,
+      "end_m": 2800,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2775_f.jpg",
+        "export/landscape_s1_reference/photos/s2775_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "山側ネット岩、谷側針葉/広葉。ヘアピンの大きい上空を保持。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2800,
+      "end_m": 2850,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2825_f.jpg",
+        "export/landscape_s1_reference/photos/s2825_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "山側土/広葉、谷側針葉。中央上空の帯、下りは広い空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2850,
+      "end_m": 2900,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2875_f.jpg",
+        "export/landscape_s1_reference/photos/s2875_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "谷側広葉低木が路肩まで濃い。中央開口とカーブ先の空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2900,
+      "end_m": 2950,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2925_f.jpg",
+        "export/landscape_s1_reference/photos/s2925_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "低い谷側植生と広い山/空の眺望。幹を道路近くへ増やし眺望を埋めない。"
+    },
+    {
+      "section": "s1",
+      "start_m": 2950,
+      "end_m": 3000,
+      "character": "photo_mixed_forest",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": true,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s2975_f.jpg",
+        "export/landscape_s1_reference/photos/s2975_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "partial",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "谷側広葉が曲がりの道路上へ張出す、後方は広い空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 3000,
+      "end_m": 3050,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s3025_f.jpg",
+        "export/landscape_s1_reference/photos/s3025_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "4.0",
+          "note": "落石防護網の急斜面（ストリートビュー）・見た目は仕上げで直す"
+        }
+      ],
+      "notes": "ネット岩切土、谷側針葉/広葉。上空と遠方山を開け、標識/反射板の視認を保つ。"
+    },
+    {
+      "section": "s1",
+      "start_m": 3050,
+      "end_m": 3100,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s3075_f.jpg",
+        "export/landscape_s1_reference/photos/s3075_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "広葉の低い谷側と開けた空。山側法面は緑、視界を埋めない。"
+    },
+    {
+      "section": "s1",
+      "start_m": 3100,
+      "end_m": 3150,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s3125_f.jpg",
+        "export/landscape_s1_reference/photos/s3125_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        }
+      ],
+      "notes": "谷側背低い広葉/草、山側緑。大きい空と遠方山。"
+    },
+    {
+      "section": "s1",
+      "start_m": 3150,
+      "end_m": 3200,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s3175_f.jpg",
+        "export/landscape_s1_reference/photos/s3175_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "3.0",
+          "note": "石積み擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "谷側低木と広い空、山側広葉。局所路肩/砂利開口あり。"
+    },
+    {
+      "section": "s1",
+      "start_m": 3200,
+      "end_m": 3250,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s3225_f.jpg",
+        "export/landscape_s1_reference/photos/s3225_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "R",
+          "type": "guardrail",
+          "height_m": "",
+          "note": "ストリートビューで確認（ほぼ連続）"
+        },
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "3.0",
+          "note": "石積み擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "苔石積み上の広葉と谷側低木。峠接近の空を保持。"
+    },
+    {
+      "section": "s1",
+      "start_m": 3250,
+      "end_m": 3300,
+      "character": "open_forest_edge",
+      "vegetation_scale": 1.0,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": true,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/photos/s3275_f.jpg",
+        "export/landscape_s1_reference/photos/s3275_b.jpg"
+      ],
+      "confidence": "photo_reviewed_boundary_interpolated",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [
+        {
+          "side": "L",
+          "type": "retaining_wall",
+          "height_m": "3.0",
+          "note": "石積み擁壁（ストリートビュー）"
+        }
+      ],
+      "notes": "峠入口の建物/看板/植栽、山側石壁。道路上は広い空。"
+    },
+    {
+      "section": "s1",
+      "start_m": 3300,
+      "end_m": 3335.9881731028836,
+      "character": "pass_plaza",
+      "vegetation_scale": 0.25,
+      "litter_scale": 0.65,
+      "canopy_enabled": false,
+      "forest_edge_enabled": false,
+      "canopy_spacing_m": 7.0,
+      "canopy_understory_clusters": 140,
+      "canopy_sides": [
+        -1,
+        1
+      ],
+      "canopy_edge_padding_m": 0,
+      "crown_width": [
+        0.7,
+        0.65
+      ],
+      "evidence": [
+        "export/landscape_s1_reference/supplemental/s1_end_look_back.png"
+      ],
+      "confidence": "terminal_photo_landmark_matched",
+      "overhead_observation": "open",
+      "uncertainty": "写真は要求座標、実pano位置/撮影月/画角未確定。区間端は隣接写真中間の調整値で樹冠測量境界ではない。",
+      "work_status": "planned_not_implemented",
+      "structures": [],
+      "notes": "終端付近から峠側の後方写真で施設/広場/道路上の空を確認。追加prototypeは配置せず通常植生控えめと施設除外を維持。Maps URL位置を照合、厳密なpano座標/date未確定。"
+    }
+  ]
+}

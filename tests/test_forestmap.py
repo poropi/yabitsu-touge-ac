@@ -84,3 +84,15 @@ def test_settlement_drops_speckles():
     rgb = np.full((80, 80, 3), (80, 98, 104), np.uint8)           # 全部「暗い緑」
     forestmap.settlement_filter(fm, rgb, 1.0, np.ones((20, 20), bool), CFG)
     assert fm.cls[3, 3] == 0 and fm.cls[12, 12] == 1
+
+
+def test_brown_near_houses_is_farmland():
+    """家から farm_m 以内の茶色い所（耕した畑・刈った田）は、ざらざらでも森にしない（S3 3400 の神社の西の畑が森になっていた）。
+    遠い山の茶色（冬の写真の落葉樹）は森のまま。"""
+    rng = np.random.default_rng(4)
+    brown = _patch(rng, (150, 128, 108), 30, n=40)
+    rgb = np.concatenate([brown] * 10, 1).astype(np.uint8)            # 40×400 px（1 m/px）
+    fm = forestmap.ForestMap(x0=0.0, y1=40.0, cell=4.0, cls=np.full((10, 100), 2, np.uint8))
+    house = [np.array([[0.0, 18.0], [4.0, 18.0], [4.0, 22.0], [0.0, 22.0]])]
+    forestmap.farm_filter(fm, rgb, 1.0, house, [], {**CFG, "farm_m": 150.0})
+    assert fm.at(np.array([[60.0, 20.0], [380.0, 20.0]])).tolist() == [0, 2]

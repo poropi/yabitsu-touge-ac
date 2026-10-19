@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "purpose": "Full-background artistic mountain candidate domain, not surveyed forest cover",
+  "status": "direction_accepted_after_two_view_shape_pilot_pending_full_generation",
+  "coordinate_system": "existing project local XY metres",
+  "terrain_source": "data/processed/track_terrain_far.npz",
+  "candidate_polygon_xy": [
+    [
+      -3460,
+      -7480
+    ],
+    [
+      3760,
+      -7480
+    ],
+    [
+      3760,
+      12200
+    ],
+    [
+      -3460,
+      12200
+    ]
+  ],
+  "terrain_bbox_km2": 142.0896,
+  "criteria_union": [
+    {
+      "id": "upland_mountain",
+      "min_elevation_m": 330,
+      "min_slope": 0.12,
+      "grid_candidate_before_exclusions_km2": 93.74
+    },
+    {
+      "id": "lower_steep_lake_valley",
+      "min_elevation_m": 285,
+      "max_elevation_m_exclusive": 330,
+      "min_slope": 0.25,
+      "grid_candidate_before_exclusions_km2": 6.75
+    }
+  ],
+  "area_method": "20m terrain cell corner mean elevation and corner mean finite-difference gradient; 400m2 per cell; excludes no roads/towns/water/terrain holes yet",
+  "mandatory_exclusions": [
+    "outside actual rendered ground terrain and terrain holes",
+    "all roads 120m plus canopy radius",
+    "finished S1 landscape",
+    "S3 and Kitahara conservative settlement/farm corridor 400m",
+    "building facility plaza lot parking branch and pad surfaces with margin",
+    "actual water surfaces and riverbed with margin"
+  ],
+  "uncovered_intentionally": [
+    "low elevation below285m",
+    "gentle terrain below330m",
+    "upland slope below0.12",
+    "settlements agriculture facilities water and protected road corridors",
+    "unavailable terrain outside existing domain"
+  ],
+  "uncertainty": "Elevation/slope thresholds are artistic conservative selection parameters, not ecological forest classification. Existing real forests in excluded flatter areas may remain unaugmented. Existing trees are retained except independently identified submerged roots. Final candidate area must be computed after exclusions against actual mesh footprint."
+}
