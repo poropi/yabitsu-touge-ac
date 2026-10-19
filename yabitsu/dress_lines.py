@@ -39,11 +39,17 @@ def _green(rows, a, b):
     return 0.0
 
 
+def _gaps(rows):
+    return [(float(r["s_from"]), float(r["s_to"])) for r in rows if r["item"] == "gap"]
+
+
 def _pieces(rows, a, b):
-    """a〜b を、緑の路側帯の境で分ける。[(a', b', 緑の幅)]"""
-    cuts = sorted({a, b} | {float(r[k]) for r in rows if r["item"] == "green" for k in ("s_from", "s_to")
+    """a〜b を、緑の路側帯の境と gap（線を引かない所）で分ける。[(a', b', 緑の幅)]"""
+    cuts = sorted({a, b} | {float(r[k]) for r in rows if r["item"] in ("green", "gap") for k in ("s_from", "s_to")
                             if a < float(r[k]) < b})
-    return [(x, y, _green(rows, x, y)) for x, y in zip(cuts[:-1], cuts[1:])]
+    gaps = _gaps(rows)
+    return [(x, y, _green(rows, x, y)) for x, y in zip(cuts[:-1], cuts[1:])
+            if not any(g0 <= (x + y) / 2 <= g1 for g0, g1 in gaps)]
 
 
 def line_meshes(sec: Section, rows) -> list:
@@ -75,12 +81,15 @@ def line_meshes(sec: Section, rows) -> list:
                     hw = sub.hw_left if sgn > 0 else sub.hw_right
                     add(f"dress_edge{tag}_{k:03d}_{j}", sub, sgn * (hw - EDGE_INSET - g), EDGE_DASH[r["value"]], "dress_line_white")
         elif r["item"] == "green":
-            sub = resample(sec, a, b)
+          for j, (x, y, _) in enumerate(_pieces(rows, a, b)):
+            sub = resample(sec, x, y)
+            if sub.n < 2:
+                continue
             g = float(r["value"])
             for sgn, tag in ((1, "L"), (-1, "R")):
                 hw = sub.hw_left if sgn > 0 else sub.hw_right
                 inner = hw - EDGE_INSET - g + WIDTH / 2          # 外側線の外から道の端まで
-                add(f"dress_green{tag}_{k:03d}", sub, sgn * (inner + hw) / 2, None, "dress_green", width=float(np.mean(hw - inner)))
+                add(f"dress_green{tag}_{k:03d}_{j}", sub, sgn * (inner + hw) / 2, None, "dress_green", width=float(np.mean(hw - inner)))
     return out
 
 
@@ -100,3 +109,70 @@ def hidden_line_meshes(manifest_dir, cl, s_range, near_m=40.0):
             names += [name, f"{name}_back"]
             lo, hi = min(lo, s.min()), max(hi, s.max())
     return names, (lo, hi)
+
+
+# ---------- 路面の標示（ひし形・数字） ----------
+
+DIAMOND_BEFORE = (30.0, 50.0)       # 横断歩道の手前 m（信号のない横断歩道。2026-10-19 ストリートビューで全部この位置）
+DIAMOND_SIZE = (1.5, 5.0)           # 幅・長さ m
+TEXT_SIZE = (1.4, 2.6)
+
+
+def diamond_spots(sec, pavements):
+    """[(s, 車線 "L"=上り|"R"=下り)]。信号（停止線）のある横断歩道には描かない。"""
+    stops = [float(r["s_from"]) for r in pavements if r["kind"].startswith("stop_line")]
+    out = []
+    for r in pavements:
+        if r["kind"] != "crosswalk":
+            continue
+        a, b = float(r["s_from"]), float(r["s_to"])
+        if any(a - 6 <= x <= b + 6 for x in stops):
+            continue
+        for d in DIAMOND_BEFORE:
+            if a - d >= sec.s[0]:
+                out.append((a - d, "L"))
+            if b + d <= sec.s[-1]:
+                out.append((b + d, "R"))
+    return out
+
+
+def _lane_quad(sec, s, side, size, flip):
+    """車線の中央に、進む向きにそろえた四角（uv の v が進む向き）。"""
+    from .crosssection import surface_height
+    i = int(np.clip(np.searchsorted(sec.s, s), 0, sec.n - 1))
+    sgn = 1 if side == "L" else -1
+    hw = sec.hw_left[i] if sgn > 0 else sec.hw_right[i]
+    lat = sgn * hw / 2
+    h = sec.heading[i]
+    t = np.array([np.cos(h), np.sin(h)]) * (1 if side == "L" else -1)   # 下りは向きが逆
+    n = np.array([-t[1], t[0]])
+    c = np.array([sec.x[i], sec.y[i]]) + np.array([-np.sin(h), np.cos(h)]) * lat
+    w, l = size
+    pts = [c - t * l / 2 - n * w / 2, c - t * l / 2 + n * w / 2, c + t * l / 2 + n * w / 2, c + t * l / 2 - n * w / 2]
+    # 四隅それぞれの路面の高さ（坂・横断勾配に沿わせる）
+    tree = cKDTree(np.c_[sec.x, sec.y])
+    nr = np.array([-np.sin(sec.heading), np.cos(sec.heading)]).T
+    v = []
+    for p in pts:
+        j = tree.query(p)[1]
+        lj = float(np.dot(p - np.array([sec.x[j], sec.y[j]]), nr[j]))
+        sj = sec.s[j] + float(np.dot(p - np.array([sec.x[j], sec.y[j]]), [np.cos(sec.heading[j]), np.sin(sec.heading[j])]))
+        zj = np.interp(sj, sec.s, sec.z)
+        v.append((p[0], p[1], float(surface_height(lj, zj, sec.slope[j], sec.crown[j])) + LIFT))
+    v = np.array(v)
+    return v, np.array([(0, 1, 2, 3)]), np.array([(0, 0), (1, 0), (1, 1), (0, 1)], float)
+
+
+def marking_meshes(sec, diamonds, rows):
+    """ひし形と、表の text 行（数字）→ [(名前, verts, faces, uvs, 材質)]。"""
+    out = []
+    parts = [_lane_quad(sec, s, side, DIAMOND_SIZE, False) for s, side in diamonds]
+    if parts:
+        off = np.cumsum([0] + [len(p[0]) for p in parts[:-1]])
+        out.append(("dress_diamonds", np.concatenate([p[0] for p in parts]),
+                    np.concatenate([p[1] + o for p, o in zip(parts, off)]), np.concatenate([p[2] for p in parts]),
+                    "dress_diamond"))
+    for k, r in enumerate(x for x in rows if x["item"] == "text"):
+        v, f, uv = _lane_quad(sec, float(r["s_from"]), r["side"], TEXT_SIZE, False)
+        out.append((f"dress_text_{k:02d}", v, f, uv, f"dress_text_{r['value']}"))
+    return out

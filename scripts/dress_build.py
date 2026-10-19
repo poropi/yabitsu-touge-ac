@@ -81,6 +81,9 @@ def write_retex_textures(keys, ext_dir: Path):
         u_m, v_m, rot = dress_retex.UV_LAYOUT[layout]
         img, _ = dress_tex.load(base)
         comp = dress_retex.compose(img.convert("RGB"), base_m, u_m, v_m, rot)
+        if key in ("road_town", "plane_town"):   # 町の区間の路面は写真より明るく見えた（2026-10-19 全地点の見直し）
+            from PIL import ImageEnhance
+            comp = ImageEnhance.Brightness(comp).enhance(0.82)
         if key == "line_orange":       # Codex の色は実物（ストリートビュー）より鮮やか
             from PIL import ImageEnhance
             comp = ImageEnhance.Color(comp).enhance(0.75)
@@ -128,12 +131,32 @@ def fence_textures(tex_dir: Path):
     patch.save(tex_dir / "patch.png")
 
 
+def marking_textures(tex_dir: Path):
+    """路面の標示の画像（白・オレンジの塗料、アルファ付き）。v＝進む向き。"""
+    from PIL import ImageFont
+    W, H = 128, 427                                         # 1.5 m × 5 m
+    img = Image.new("RGBA", (W, H), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+    white = (236, 236, 232, 255)
+    pts = [(W / 2, 4), (W - 4, H / 2), (W / 2, H - 4), (4, H / 2)]
+    d.polygon(pts, outline=white, width=14)
+    img.save(tex_dir / "diamond.png")
+    for t in ("40",):
+        img = Image.new("RGBA", (180, 334), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
+        font = ImageFont.truetype("C:/Windows/Fonts/arialbd.ttf", 170)
+        tmp = Image.new("RGBA", (180, 180), (0, 0, 0, 0))
+        ImageDraw.Draw(tmp).text((90, 90), t, fill=(222, 170, 70, 255), font=font, anchor="mm")
+        img = tmp.resize((180, 334)).transpose(Image.FLIP_TOP_BOTTOM)       # 縦に引きのばす（路面の文字）・v が上向き
+        img.save(tex_dir / f"text_{t}.png")
+
+
 FENCE_MAT = {"wbeam": "dress_white", "wbeam_redwhite": "dress_redwhite", "white_bar": "dress_bars",
              "white_pipe": "dress_white", "green_mesh": "dress_mesh"}
 
 
 def fence_runs(feats_csv, rows):
-    """柵の範囲：s3_features（ガードパイプ・ガードレール・柵）＋ s3_dress の fence。重なりは features を優先。"""
+    """柵の範囲：s3_features（ガードパイプ・ガードレール・柵）＋ s3_dress の fence。
+    s3_dress（ストリートビュー 166 枚で確かめた表）が重なる所は s3_dress を優先し、features の行はその外だけ残す。"""
+    dress = [(float(r["s_from"]), float(r["s_to"]), r["side"], r["value"]) for r in rows if r["item"] == "fence"]
     runs = []
     for r in csv.DictReader(open(feats_csv, encoding="utf-8")):
         if r["type"] == "guardrail":
@@ -142,15 +165,22 @@ def fence_runs(feats_csv, rows):
             kind = "green_mesh" if "金網" in r["note"] else "white_bar"
         else:
             continue
-        runs.append((float(r["s_from"]), float(r["s_to"]), r["side"], kind))
-    for r in rows:
-        if r["item"] != "fence":
-            continue
-        a, b, side = float(r["s_from"]), float(r["s_to"]), r["side"]
-        if any(side == s and not (b < x0 or a > x1) and k != "green_mesh" for x0, x1, s, k in runs) and r["value"] != "green_mesh":
-            continue
-        runs.append((a, b, side, r["value"]))
-    return runs
+        pieces = [(float(r["s_from"]), float(r["s_to"]))]
+        for d0, d1, side, k in dress:
+            if side != r["side"] or k == "green_mesh":      # 金網はガードレールの後ろに足すもの（重ねてよい）
+                continue
+            nxt = []
+            for x0, x1 in pieces:
+                if x1 <= d0 or x0 >= d1:
+                    nxt.append((x0, x1))
+                else:
+                    if x0 < d0:
+                        nxt.append((x0, d0))
+                    if x1 > d1:
+                        nxt.append((d1, x1))
+            pieces = nxt
+        runs += [(x0, x1, r["side"], kind) for x0, x1 in pieces if x1 - x0 >= 3.0]
+    return runs + dress
 
 
 def build_parts(sec, rows, m: Manifest, s_range):
@@ -190,10 +220,8 @@ def build_parts(sec, rows, m: Manifest, s_range):
             rules.append((float(r["s_from"]), float(r["s_to"]), "manhole", float(r["value"])))
         elif r["item"] == "gutter" and r["value"] == "grating" and r["side"] == "L":
             rules.append((float(r["s_from"]), float(r["s_to"]), "grating", 25.0))
-        elif r["item"] == "surface" and r["value"] == "patched":
-            rules.append((float(r["s_from"]), float(r["s_to"]), "patch", 45.0))
     decals = dress_parts.road_decals(sec, rules, seed=7)
-    for kind in ("manhole", "grating", "patch"):
+    for kind in ("manhole", "grating"):      # 補修跡は写真に目立つものが無いので置かない（2026-10-19 全地点の見直し）
         parts = [(v, f, uv) for v, f, uv, kk in decals if kk == kind]
         if not parts:
             continue
@@ -250,7 +278,11 @@ def main():
             img = ImageEnhance.Color(img).enhance(0.75)
         img.save(tex / f"line_{k}.png")
         m.add_material(f"dress_line_{k}", texture=f"textures/line_{k}.png")
-    m.add_material("dress_green", color=(0.20, 0.34, 0.27))   # 写真の緑の路側帯（くすんだ緑）
+    m.add_material("dress_green", color=(0.17, 0.27, 0.20))   # 写真の緑の路側帯（くすんだ濃い緑）
+    marking_textures(tex)
+    m.add_material("dress_diamond", texture="textures/diamond.png", alpha=True)
+    for t in {r["value"] for r in csv.DictReader(open(config.DATA_MANUAL / "s3_lines.csv", encoding="utf-8")) if r["item"] == "text"}:
+        m.add_material(f"dress_text_{t}", texture=f"textures/text_{t}.png", alpha=True)
     npoles = build_parts(sec, rows, m, s_range)
     # 路面の線：今の線を隠し、表（s3_lines.csv）どおりに引き直す。隠す線が S3 の外（S2 の頭）にはみ出す分は、もとと同じ線を引く
     hide_lines, (lo, hi) = dress_lines.hidden_line_meshes(MANIFEST, cl, s_range)
@@ -259,6 +291,10 @@ def main():
         line_rows += [{"s_from": s_range[1], "s_to": hi, "item": "centre", "side": "C", "value": "orange_solid"},
                       {"s_from": s_range[1], "s_to": hi, "item": "edge", "side": "B", "value": "solid"}]
     for name, v, f, uv, mat in dress_lines.line_meshes(sec, line_rows):
+        m.add_mesh(GROUP, name, v, f, uv, mat)
+    pave = list(csv.DictReader(open(config.DATA_MANUAL / "s3_pavements.csv", encoding="utf-8")))
+    diamonds = [d for d in dress_lines.diamond_spots(sec, pave) if s_range[0] + 200 <= d[0] <= s_range[1]]
+    for name, v, f, uv, mat in dress_lines.marking_meshes(sec, diamonds, line_rows):
         m.add_mesh(GROUP, name, v, f, uv, mat)
     m.save()
     kn5_path = OUT / f"{GROUP}.kn5"

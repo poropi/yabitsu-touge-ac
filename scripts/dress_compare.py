@@ -21,6 +21,9 @@ EYE = 2.5                     # ストリートビューのカメラの高さ
 
 def main():
     picks = sys.argv[1:] or DEFAULT
+    if picks == ["all"]:      # 写真のある全地点（上り・下り）
+        picks = [f"{p['s']}{d}" for p in json.loads((SV / "sv_s3_points.json").read_text(encoding="utf-8")) for d in "fb"
+                 if (SV / "sv" / f"s3_{p['s']:04d}_{d}.png").exists()]
     pts = {p["s"]: p for p in json.loads((SV / "sv_s3_points.json").read_text(encoding="utf-8"))}
     road = forest_ground.load_ground(config.DATA_PROCESSED / "track", prefixes=("1ROAD_",))
     views = []
@@ -51,13 +54,21 @@ def main():
         for x0, t in ((0, "ストリートビュー"), (900, "今回の仕上げ")):
             dr.rectangle((x0, 0, x0 + 360, 40), fill=(0, 0, 0)); dr.text((x0 + 8, 4), f"{label}  {t}", fill=(255, 255, 0), font=font)
         rows.append(row)
-    out = config.PROJECT_ROOT / "export" / "dress" / "s3" / "compare.jpg"
-    sheet = Image.new("RGB", (1800, 600 * len(rows)))
-    for k, row in enumerate(rows):
-        sheet.paste(row, (0, 600 * k))
-    sheet.save(out, quality=88)
-    print(out)
-    os.startfile(out)
+    out_dir = config.PROJECT_ROOT / "export" / "dress" / "s3" / "compare"
+    out_dir.mkdir(parents=True, exist_ok=True)
+    per = 6
+    outs = []
+    for k in range(0, len(rows), per):
+        chunk = [r.resize((1200, 400)) for r in rows[k:k + per]]
+        sheet = Image.new("RGB", (1200, 400 * len(chunk)))
+        for j, row in enumerate(chunk):
+            sheet.paste(row, (0, 400 * j))
+        out = out_dir / f"compare_{k // per:02d}.jpg"
+        sheet.save(out, quality=88)
+        outs.append(out)
+    print("\n".join(map(str, outs)))
+    if len(outs) == 1:
+        os.startfile(outs[0])
 
 
 if __name__ == "__main__":
