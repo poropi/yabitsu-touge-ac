@@ -1,6 +1,7 @@
 s_from,s_to,side,type,height_m,note
 35,3240,R,guardrail,,ストリートビューで確認（ほぼ連続）
-15,60,L,retaining_wall,2.5,ブロック擁壁・上に柵（ストリートビュー）。s=0〜15 は駐車場の入口と石碑なので壁なし
+15,31,L,retaining_wall,2.5,ブロック擁壁・上に柵（ストリートビュー）。s=0〜15 は駐車場の入口と石碑なので壁なし
+39,60,L,retaining_wall,2.5,ブロック擁壁・上に柵。31〜39 は階段（s1_start_lot.json の hill_stairs）
 60,250,L,retaining_wall,6.0,岩の切土（ストリートビュー）・見た目は仕上げで岩にする
 250,600,L,retaining_wall,2.5,ブロック擁壁（ストリートビュー）
 600,900,L,retaining_wall,4.5,ブロック擁壁（ストリートビュー）

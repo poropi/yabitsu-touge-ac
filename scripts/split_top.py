@@ -25,11 +25,14 @@ def upscaled_aerial(c, size, px, layer="seamlessphoto"):
 
 def main():
     s = float(sys.argv[1]) if len(sys.argv) > 1 else 3430.0
+    section = sys.argv[3] if len(sys.argv) > 3 else "s3"
     size = float(sys.argv[2]) if len(sys.argv) > 2 else 240.0
     forest = sorted((config.PROJECT_ROOT / "export" / "forest").glob("2026*"))[-1]
     cl = np.load(config.DATA_PROCESSED / "track_centerline.npz"); b = track.load_bounds()
-    c, _ = fb._at("s3", s, cl, b)
+    c, _ = fb._at(section, s, cl, b)
     z = float(forest_ground.load_ground(fb.MANIFEST, prefixes=("1ROAD_",)).z(c[None])[0])
+    if not np.isfinite(z):
+        z = float(forest_ground.load_ground(fb.MANIFEST).z(c[None])[0])
     v = [{"name": "top_cmp", "type": "top", "center": c.tolist(), "size": size, "z": z,
           "window": [c[0] - size * 0.7, c[1] - size * 0.7, c[0] + size * 0.7, c[1] + size * 0.7], "lod": 2}]
     (forest / "views.json").write_text(json.dumps(v), encoding="utf-8")
@@ -44,7 +47,7 @@ def main():
     d.text((1010, 8), "今のコース（上から）", fill=(0, 0, 0), font=f)
     p = config.PROJECT_ROOT / "export" / "dress" / "s3" / "split_top_compare.jpg"
     out.save(p, quality=90)
-    os.startfile(p)
+    # 開くのは呼び出した側（ユーザーに見せる時だけ、説明と一緒に）
     print(p)
 
 

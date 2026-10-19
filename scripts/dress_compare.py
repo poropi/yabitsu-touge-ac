@@ -68,7 +68,7 @@ def main():
         outs.append(out)
     print("\n".join(map(str, outs)))
     if len(outs) == 1:
-        os.startfile(outs[0])
+        pass   # 開くのは呼び出した側（ユーザーに見せる時だけ、説明と一緒に）
 
 
 if __name__ == "__main__":

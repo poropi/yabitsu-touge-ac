@@ -52,6 +52,18 @@ def main():
     minoge = minoge_area.load(config.DATA_MANUAL / "s2_minoge.json")
     if minoge:
         assembly.add_pass_area(m, minoge_area.build(minoge, sec, minoge_area.dem_ground()))
+    from yabitsu import asama_area   # 浅間神社の入口：広場・石積み・石段・社号標・石碑（参考：nanohanadai・ストリートビュー）
+    asama = asama_area.load(config.DATA_MANUAL / "s2_asama.json")
+    if asama:
+        import shutil as _sh
+        tdir = config.TRACK_BUILD_DIR / "textures"; tdir.mkdir(parents=True, exist_ok=True)
+        _sh.copy2(config.PROJECT_ROOT / "assets" / "dress" / "kenchi.png", tdir / "kenchi.png")
+        asama_area.pillar_texture(asama["pillar"]["text"], tdir / "asama_pillar.png")
+        asama_area.board_texture(tdir / "asama_board.png")
+        m.add_material("kenchi", texture="textures/kenchi.png")
+        m.add_material("asama_pillar", texture="textures/asama_pillar.png")
+        m.add_material("asama_board", texture="textures/asama_board.png")
+        assembly.add_pass_area(m, asama_area.build(asama, sec))
     sampler = gsi.default_sampler()
     base_pads = [p for p in pads if p.get("kind") != "stub"]
     from shapely.ops import unary_union as _uu

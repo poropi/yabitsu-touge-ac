@@ -293,7 +293,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": false,
+"gone": true,
+"note": "菜の花台のトイレ：s1_start_lot.json の building で作る（重なっていた）"
 },
 {
 "id": "osm369697472",
@@ -337,7 +339,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": false,
+"gone": true,
+"note": "ヘアピンの内側の東屋（屋根だけ）：s1_start_lot.json の shelter で作る"
 },
 {
 "id": "gm647_3689",

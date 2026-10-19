@@ -27,7 +27,8 @@ s_from,s_to,side,type,height_m,note
 2410,2440,R,retaining_wall,0.8,低いコンクリート壁（ストリートビュー）
 2560,2800,R,retaining_wall,3.5,ブロック擁壁・石積み（ストリートビュー）
 2800,2850,R,retaining_wall,5.0,岩の崖（ストリートビュー）
-2860,3090,R,retaining_wall,3.0,石積み（ストリートビュー）
+2860,2932,R,retaining_wall,3.0,石積み（ストリートビュー）
+2966,3090,R,retaining_wall,3.0,石積み（ストリートビュー）。2932〜2966 は浅間神社の入口の広場（data/manual/s2_asama.json の奥の壁）
 3110,3460,R,guardrail,,ガードレール（この区間は谷側が右）
 3160,3300,L,retaining_wall,3.5,ブロック擁壁（ストリートビュー）
 3300,3340,L,retaining_wall,1.5,低いブロック擁壁（ストリートビュー）

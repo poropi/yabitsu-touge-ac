@@ -104,7 +104,7 @@ def tree_card(w=512, h=1024, seed=5):
 
 
 def pavers(size=1024, tile_m=4.0, brick=(0.25, 0.125), seed=9):
-    """菜の花台の駐車場のブロック舗装。灰色に赤茶のブロックが混じる。1枚＝tile_m 四方。"""
+    """菜の花台の駐車場のブロック舗装。灰色に、ときどき赤茶のブロックが混じる（ストリートビュー 2025）。1枚＝tile_m 四方。"""
     rng = np.random.default_rng(seed)
     px = size / tile_m; bw, bh = int(round(brick[0] * px)), int(round(brick[1] * px))
     yy, xx = np.mgrid[0:size, 0:size]
@@ -112,7 +112,7 @@ def pavers(size=1024, tile_m=4.0, brick=(0.25, 0.125), seed=9):
     ncol, nrow = size // bw + 1, size // bh + 1
     pick = rng.random((nrow, ncol)); shade = 0.9 + 0.2 * rng.random((nrow, ncol))
     grey, red = np.array([0.56, 0.55, 0.52]), np.array([0.55, 0.40, 0.33])
-    base = np.where((pick[row, col] < 0.3)[..., None], red, grey) * shade[row, col][..., None]
+    base = np.where((pick[row, col] < 0.08)[..., None], red, grey) * shade[row, col][..., None]   # 写真は灰色が主（2026-10-20）
     joint = ((yy % bh) < 2) | ((xs % bw) < 2)
     base = np.where(joint[..., None], base * 0.55, base)
     return _u8(base * (0.9 + 0.2 * periodic_noise(size, 3, rng))[..., None])

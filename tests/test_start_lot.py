@@ -169,3 +169,21 @@ def test_lot_in_middle_of_road_is_trimmed_by_both_branches():
     poly = sl.lot_polygon(spec, sec)
     road = sl.road_formation(sec, s_min=0.0, s_max=float(sec.s[-1]))
     assert poly.intersection(road).area < 0.5 and poly.area > 50
+
+
+def test_lot_details_from_street_view():
+    """ヘアピンの内側の東屋（屋根と柱）、北の階段、自然石の石碑と銘板、トイレの妻の筋かい。"""
+    import json
+    from yabitsu import config, start_lot
+    spec = start_lot.load_spec(config.DATA_MANUAL / "s1_start_lot.json")
+    pad = {"z": 563.0, "polygon": [[0, 0], [1, 0], [1, 1], [0, 1]]}
+    names = {n: (v, mat) for n, v, f, uv, mat, r in start_lot.meshes(spec, pad)}
+    for need in ("s1_shelter_roof", "1WALL_s1_shelter_posts", "1ROAD_s1_hill_stairs", "s1_hill_handrails",
+                 "s1_monument_plaque", "s1_building_truss"):
+        assert need in names, need
+    roof = names["s1_shelter_roof"][0]
+    assert roof[:, 2].min() > 563.0 + spec["shelter"]["mound"] + 2.0
+    st = names["1ROAD_s1_hill_stairs"][0]
+    assert st[:, 2].max() >= spec["hill_stairs"]["z1"] - 0.05
+    fl = [p for p in start_lot.flat_pads(spec, pad) if p["name"] in ("shelter_mound", "hill_stairs")]
+    assert len(fl) == 2 and "plane" in [p for p in fl if p["name"] == "hill_stairs"][0]

@@ -5,7 +5,7 @@ import numpy as np
 from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
-from yabitsu import config, crosssection as cs, gsi, minoge_area, nagoki, pass_area, side_roads, start_lot, town_ground, track
+from yabitsu import asama_area, config, crosssection as cs, gsi, minoge_area, nagoki, pass_area, side_roads, start_lot, town_ground, track
 from yabitsu.centerline import Centerline
 
 P = config.DATA_PROCESSED
@@ -65,6 +65,9 @@ def main():
     minoge = minoge_area.load(config.DATA_MANUAL / "s2_minoge.json")
     if minoge:
         pads = pads + minoge_area.build(minoge, sec, minoge_area.dem_ground()).pads()
+    asama = asama_area.load(config.DATA_MANUAL / "s2_asama.json")   # 浅間神社の入口の広場と石段
+    if asama:
+        pads = pads + asama_area.build(asama, sec).pads()
     # 町の範囲（名古木交差点）：地面の高さを作って保存し、町のピットを足す
     ground = town_ground.build(sec, gsi.default_sampler(), nagoki.center())
     ground.save(P / "track_town_ground.npz")

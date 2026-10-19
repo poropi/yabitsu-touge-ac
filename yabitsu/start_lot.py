@@ -93,8 +93,20 @@ def flat_pads(spec, pad):
     if "path" in spec:
         pa = spec["path"]
         polys.append(LineString(f.xy(*np.asarray(pa["points"], float).T)).buffer(pa["width"] / 2 + 1.0))
-    return [{"name": "flat", "role": "flat", "polygon": np.asarray(p.exterior.coords).tolist(), "z": pad["z"] + 0.25}
-            for p in polys]
+    out = [{"name": "flat", "role": "flat", "polygon": np.asarray(p.exterior.coords).tolist(), "z": pad["z"] + 0.25}
+           for p in polys]
+    from . import site
+    if "shelter" in spec:               # 東屋の小高い所
+        sh = spec["shelter"]; c = site.ll_to_xy([sh["center_ll"]])[0]
+        out.append({"name": "shelter_mound", "role": "flat", "polygon": np.asarray(Polygon(_ring(c, max(sh["size"]) * 0.75, 16)).exterior.coords).tolist(),
+                    "z": pad["z"] + sh["mound"]})
+    if "hill_stairs" in spec:           # 階段の下の地形を段に沿った斜面にする
+        hs = spec["hill_stairs"]; p0, p1 = site.ll_to_xy([hs["start_ll"], hs["end_ll"]]); q0, q1 = site.ll_to_xy(hs["side_ll"])
+        d = p1 - p0; L = float(np.hypot(*d)); g = (hs["z1"] - hs["z0"]) / L * d / L
+        poly = Polygon([p0, p1, q1 + (q1 - p1) * 0.2, q0 + (q0 - p0) * 0.2]).buffer(0.3)
+        out.append({"name": "hill_stairs", "role": "flat", "polygon": np.asarray(poly.exterior.coords).tolist(), "z": hs["z0"],
+                    "plane": [float(p0[0]), float(p0[1]), float(hs["z0"] - 0.02), float(g[0]), float(g[1])]})
+    return out
 
 
 def flats_for(spec_path, pads):
@@ -236,6 +248,57 @@ def path_mesh(spec, z):
     return v, faces, np.c_[a, b] / 2.0
 
 
+def _wood_beam(g, u0, w0, u1, w1, t=0.12):
+    """Frame g の a 軸（妻の幅の向き）と高さの面に、(u0, w0)→(u1, w1) の角材（厚み t）。"""
+    p0, p1 = g.xy(u0, 0.0), g.xy(u1, 0.0)
+    d = np.array([u1 - u0, w1 - w0]); L = float(np.hypot(*d)); d = d / max(L, 1e-9); nrm = np.array([-d[1], d[0]]) * t / 2
+    pts = [(u0 + nrm[0], w0 + nrm[1]), (u1 + nrm[0], w1 + nrm[1]), (u1 - nrm[0], w1 - nrm[1]), (u0 - nrm[0], w0 - nrm[1])]
+    v = []
+    for off in (-t / 2, t / 2):
+        for u, w in pts:
+            xy = g.xy(u, off); v.append((xy[0], xy[1], w))
+    faces = [(0, 1, 2, 3), (7, 6, 5, 4), (0, 4, 5, 1), (1, 5, 6, 2), (2, 6, 7, 3), (3, 7, 4, 0)]
+    return np.array(v), np.array(faces), np.c_[np.arange(8) % 2, np.arange(8) // 4 * L]
+
+
+def shelter_meshes(spec, z_lot):
+    """ヘアピンの内側の、小高い所のコンクリートの東屋：薄い平らな屋根と 4 本の柱。"""
+    sh = spec["shelter"]
+    from . import site
+    c = site.ll_to_xy([sh["center_ll"]])[0]; g = Frame(c, sh["axis_deg"])
+    L, W = sh["size"]; zb = z_lot + sh["mound"]; zt = zb + sh["height"]; t = sh["post"]
+    posts = [box(g, (a_ - t / 2, a_ + t / 2), (b_ - t / 2, b_ + t / 2), zb - 0.5, zt, 1.0)
+             for a_ in (-L / 2 + 0.5, L / 2 - 0.5) for b_ in (-W / 2 + 0.5, W / 2 - 0.5)]
+    roof = box(g, (-L / 2, L / 2), (-W / 2, W / 2), zt, zt + sh["slab"], 2.0)
+    under = _quad(g, [-L / 2, -L / 2, L / 2, L / 2], [-W / 2, W / 2, W / 2, -W / 2], [zt] * 4, 2.0)   # 下から見た天井
+    return [("1WALL_s1_shelter_posts", *_merge(posts), "concrete", True),
+            ("s1_shelter_roof", *_merge([roof, under]), "concrete", True)]
+
+
+def hill_stairs_meshes(spec):
+    """ヘアピンの外側の石積みの切れ目を上る階段（段ごとの箱）と、両側の手すり。"""
+    hs = spec["hill_stairs"]
+    from . import site
+    p0, p1 = site.ll_to_xy([hs["start_ll"], hs["end_ll"]])
+    q0, _ = site.ll_to_xy(hs["side_ll"])
+    run_dir = p1 - p0; length = float(np.hypot(*run_dir))
+    g = Frame(p0, float(np.degrees(np.arctan2(run_dir[1], run_dir[0]))))
+    side = 1.0 if g.ab(q0)[1] > 0 else -1.0        # 壁の奥（道から離れる向き）
+    w = hs["width"]; b = (0.0, side * w) if side > 0 else (side * w, 0.0)
+    n = max(1, int(round((hs["z1"] - hs["z0"]) / hs["rise"]))); run = length / n; rise = (hs["z1"] - hs["z0"]) / n
+    steps = [box(g, (k * run, length + 0.5), b, hs["z0"] - 0.3, hs["z0"] + (k + 1) * rise, 1.0) for k in range(n)]
+    rails = []
+    for b_ in (b[0] + 0.08, b[1] - 0.08):
+        for a_ in np.arange(0.2, length + 0.01, 1.4):
+            zb = hs["z0"] + a_ / run * rise
+            rails.append(box(g, (a_ - 0.025, a_ + 0.025), (b_ - 0.025, b_ + 0.025), zb, zb + 0.9, 0.5))
+        for a0, a1 in zip(np.arange(0.2, length, 1.4)[:-1], np.arange(0.2, length, 1.4)[1:]):
+            zb = hs["z0"] + a0 / run * rise
+            rails.append(box(g, (a0, a1), (b_ - 0.025, b_ + 0.025), zb + 0.85, zb + 0.9, 0.5))
+    return [("1ROAD_s1_hill_stairs", *_merge(steps), "concrete", True),
+            ("s1_hill_handrails", *_merge(rails), "railing", True)]
+
+
 def meshes(spec, pad):
     """(名前, 頂点, 面, UV, 材質, 描画するか) の並び。"""
     f = frame(spec); z = pad["z"]
@@ -270,8 +333,16 @@ def meshes(spec, pad):
     out.append(("1WALL_s1_lot_blocks", *_merge(blocks), "concrete", True))
 
     mo = spec["monument"]; L, W, H = mo["size"]
-    out.append(("1WALL_s1_monument", *box(f, (mo["a"] - L / 2, mo["a"] + L / 2), (mo["b"] - W / 2, mo["b"] + W / 2),
-                                          z - 0.3, z + H, 1.0), "stone", True))
+    if mo.get("shape") == "rough":     # 自然石の石碑（上へすぼまる）と、正面の黒い銘板
+        from .asama_area import _slab
+        out.append(("1WALL_s1_monument", *_slab(f, mo["a"], mo["b"], L, W, z - 0.3, H + 0.3), "stone", True))
+        pw, ph = mo["plaque"]
+        out.append(("s1_monument_plaque", *_quad(f, [mo["a"] - pw / 2, mo["a"] + pw / 2, mo["a"] + pw / 2, mo["a"] - pw / 2],
+                                                 [mo["b"] - W / 2 - 0.03] * 4, [z + 0.5] * 2 + [z + 0.5 + ph] * 2, 1.0),
+                    "tunnel_dark", True))
+    else:
+        out.append(("1WALL_s1_monument", *box(f, (mo["a"] - L / 2, mo["a"] + L / 2), (mo["b"] - W / 2, mo["b"] + W / 2),
+                                              z - 0.3, z + H, 1.0), "stone", True))
 
     bu = spec["building"]
     walls = box(f, bu["a"], bu["b"], z - 0.3, z + bu["wall_h"], 2.0)
@@ -280,6 +351,22 @@ def meshes(spec, pad):
     out.append(("s1_building_roof", *_gable_roof(f, bu["a"], bu["b"], z + bu["wall_h"], bu["roof_h"], bu["eaves"]),
                 "roof", True))
 
+    if bu.get("truss"):                 # 妻の木の筋かい（X 字）と軒の下の横木
+        a0, a1 = bu["a"]; b0, b1 = bu["b"]; zt = z + bu["wall_h"]
+        beams = []
+        for a_ in (a0 - 0.05, a1 + 0.05):
+            g = Frame(f.xy(a_, b0), spec["axis_deg"] + 90.0)
+            span = b1 - b0
+            for (u0, w0), (u1, w1) in (((0.0, zt), (span, zt)), ((0.0, zt), (span / 2, zt + bu["roof_h"])),
+                                        ((span, zt), (span / 2, zt + bu["roof_h"])), ((span * 0.25, zt), (span * 0.5, zt + bu["roof_h"] * 0.5)),
+                                        ((span * 0.75, zt), (span * 0.5, zt + bu["roof_h"] * 0.5)), ((span / 2, zt), (span / 2, zt + bu["roof_h"]))):
+                beams.append(_wood_beam(g, u0, w0, u1, w1))
+        out.append(("s1_building_truss", *_merge(beams), "wood", True))
+
+    if "shelter" in spec:
+        out += shelter_meshes(spec, z)
+    if "hill_stairs" in spec:
+        out += hill_stairs_meshes(spec)
     if "tower" in spec:
         out += tower_meshes(spec, z)
     if "path" in spec:
