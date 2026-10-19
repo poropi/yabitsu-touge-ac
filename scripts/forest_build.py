@@ -115,7 +115,8 @@ def compare_top(out, views):
 
 def old_tree_meshes():
     m = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))
-    return sorted(n for n, e in m["meshes"].items() if e["material"] == "tree")
+    names = sorted(n for n, e in m["meshes"].items() if e["material"] == "tree")
+    return [x for n in names for x in (n, f"{n}_back")]   # kn5 では両面の材質は「_back」の付いた裏側の部品が別にある
 
 
 def install(ext_src: Path, track_dir: Path):

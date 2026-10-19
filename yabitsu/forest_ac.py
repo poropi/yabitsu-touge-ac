@@ -36,7 +36,7 @@ def write_ext_config(track_dir: Path, lists, hidden_meshes):
     p.parent.mkdir(parents=True, exist_ok=True)
     s = [MARK, "", "[TREES]", "ACTIVE=1"] + [f"LIST_{k}={l}" for k, l in enumerate(lists)]
     if hidden_meshes:   # 古い板の木（kn5 の中）を隠す
-        s += ["", "[MESH_ADJUSTMENT_...]", "MESHES=" + ",".join(hidden_meshes), "IS_ACTIVE=0"]
+        s += ["", "[MESH_ADJUSTMENT_...]", "MESHES=" + ",".join(hidden_meshes), "IS_ACTIVE=0", "IS_RENDERABLE=0"]
     p.write_text("\n".join(s) + "\n", encoding="utf-8", newline="\n")
 
 

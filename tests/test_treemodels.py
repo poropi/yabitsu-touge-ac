@@ -62,5 +62,5 @@ def test_packages_written(tmp_path):
         names = z.namelist()
         assert "tree.ini" in names and all(f"LOD{i}.mesh" in names for i in range(3))
         tex, subs = csptree.read_mesh(z.read("LOD0.mesh"))
-        assert all(t[1] in names for t in tex)
+        assert all(t[1] in names and t[1].endswith(".dds") for t in tex)
         assert out[n].height > 0

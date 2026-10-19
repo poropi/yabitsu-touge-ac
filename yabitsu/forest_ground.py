@@ -108,7 +108,8 @@ class KeepOut:
     def __init__(self, fine: Grid, blocked, road_d, coarse: Grid, coarse_road, coarse_blocked, cfg):
         self.fine, self._blocked, self._road_d = fine, blocked, road_d
         self.coarse, self._croad, self._cblocked, self.cfg = coarse, coarse_road, coarse_blocked, cfg
-        self._coarse_d = None
+        self._course_road = coarse_road.copy()     # ゲームの中に作った道だけ（OSM の道は入れない）
+        self._coarse_d = self._course_d = None
 
     def add_lines(self, lines, widths):
         """OSM の道など（中心線と幅）。植えない範囲は 幅/2＋osm_road、道からの距離にも使う。"""
@@ -131,6 +132,17 @@ class KeepOut:
         out[ok] = self._blocked[r[ok], c[ok]]
         r2, c2, ok2 = self.coarse.rc(xy)
         out[ok2] |= self._cblocked[r2[ok2], c2[ok2]]
+        return out
+
+    def course_distance(self, xy) -> np.ndarray:
+        """ゲームの中に作った道（manifest の道路）からの距離。木の密度の帯や下草に使う。"""
+        if self._course_d is None:
+            self._course_d = (ndimage.distance_transform_edt(~self._course_road) * self.coarse.cell).astype(np.float32)
+        r, c, ok = self.fine.rc(xy)
+        out = np.full(len(r), np.inf)
+        out[ok] = self._road_d[r[ok], c[ok]]
+        r2, c2, ok2 = self.coarse.rc(xy)
+        out[ok2] = np.minimum(out[ok2], self._course_d[r2[ok2], c2[ok2]])
         return out
 
     def road_distance(self, xy) -> np.ndarray:

@@ -1,4 +1,5 @@
-"""森の木を配置する。空中写真の地図（森／針葉樹／広葉樹）・地面の高さ・植えない範囲に従い、道路からの距離の帯ごとに密度と大きさを変える。"""
+"""森の木を配置する。空中写真の地図（森／針葉樹／広葉樹）・地面の高さ・植えない範囲に従い、ゲームの中の道（コース）からの
+距離の帯ごとに密度と大きさを変える（OSM の道は植えない範囲と張り出しの判定にだけ使う）。"""
 import numpy as np
 import shapely
 from shapely.geometry.base import BaseGeometry
@@ -75,7 +76,7 @@ def place(area, fm, ground, keep, models, cfg, seed=1, species=None):
             P = P[fm.at(P) == cls_id]
             if not len(P):
                 continue
-            d = keep.road_distance(P)
+            d = keep.course_distance(P)
             w = _ramp(d, lo, hi, cfg["blend_m"])
             sel = rng.random(len(P)) < w
             P, d = P[sel], d[sel]
@@ -101,7 +102,7 @@ def place(area, fm, ground, keep, models, cfg, seed=1, species=None):
         if isinstance(area, BaseGeometry):
             P = P[shapely.contains_xy(area, P[:, 0], P[:, 1])]
         P = P[(fm.at(P) > 0) & (fm.at(P) < 3)]
-        d = keep.road_distance(P)
+        d = keep.course_distance(P)
         sel = (d <= u["max_d"]) & (rng.random(len(P)) < p)
         P, d = P[sel], d[sel]
         bad = keep.blocked(P)
@@ -117,6 +118,7 @@ def place(area, fm, ground, keep, models, cfg, seed=1, species=None):
     size = np.concatenate([o[3] for o in out]) if out else np.zeros(0, np.float32)
     d = np.concatenate([o[4] for o in out]) if out else np.zeros(0)
 
+    d = keep.road_distance(P) if len(P) else d      # 張り出しは OSM の道も含めた道路からの距離で見る
     # 道路の上に張り出す木：枝の最低の高さが路面＋overhang_clear_m 未満なら植えない
     cb = np.array([models[p].crown_base * models[p].height for p in pats]) if len(pats) else np.zeros(0)
     cr = np.array([models[p].crown_radius for p in pats]) if len(pats) else np.zeros(0)

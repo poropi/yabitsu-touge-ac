@@ -44,3 +44,11 @@ def test_forestmap_at_lookup():
     fm = forestmap.ForestMap(x0=0.0, y1=8.0, cell=4.0, cls=cls)
     got = fm.at(np.array([[2.0, 6.0], [6.0, 6.0], [2.0, 2.0], [6.0, 2.0], [-1.0, 2.0], [2.0, 9.0]]))
     assert got.tolist() == [1, 2, 0, 1, 0, 0]
+
+
+def test_dense_smooth_canopy_is_forest():
+    rng = np.random.default_rng(2)
+    rough = _patch(rng, (74, 92, 100), 30)         # ふつうの森（ざらざら）
+    dense = _patch(rng, (70, 90, 92), 5)           # 葉が詰まってなめらかに写る広葉樹（周りより暗い）
+    field = _patch(rng, (139, 156, 129), 4)        # 伐採地（なめらかで明るい）
+    assert [c > 0 for c in _classes([rough, dense, field])] == [True, True, False]

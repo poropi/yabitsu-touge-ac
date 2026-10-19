@@ -8,7 +8,8 @@
   "brown_rg": 1.0,
   "winter_brown_share": 0.08,
   "conifer_rel_lum": 1.0,
-  "smooth_cells": 2
+  "smooth_cells": 2,
+  "open_rel_lum": 1.1
  },
  "map": {
   "px_size": 2.0,
@@ -53,8 +54,8 @@
    {
     "max_d": 800,
     "spacing": {
-     "conifer": 9.0,
-     "broadleaf": 11.0
+     "conifer": 9.5,
+     "broadleaf": 11.5
     },
     "size": [
      1.0,
@@ -64,12 +65,12 @@
    {
     "max_d": 1000000000.0,
     "spacing": {
-     "conifer": 13.0,
-     "broadleaf": 15.0
+     "conifer": 16.0,
+     "broadleaf": 18.0
     },
     "size": [
-     1.1,
-     1.4
+     1.15,
+     1.45
     ]
    }
   ],

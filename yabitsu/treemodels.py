@@ -14,7 +14,7 @@ from pathlib import Path
 
 import numpy as np
 
-from . import csptree
+from . import csptree, kn5
 from . import foliage_textures as ft
 from .config import PROJECT_ROOT
 
@@ -336,8 +336,19 @@ def _species_of(name):
     return next(k for k, v in SPECIES.items() if name in v)
 
 
+def _dds(png: bytes) -> bytes:
+    """CSP は PNG だとミップマップが無いと警告し、木の準備（遠景画像の作成）が進まなかった（2026-10-19 のログ）。
+    他のコースと同じく、ミップマップ付きの DDS にする。"""
+    from PIL import Image
+    return kn5.dds_bytes(Image.open(io.BytesIO(png)))
+
+
 @lru_cache(maxsize=None)
 def species_textures(species):
+    return {k.replace(".png", ".dds"): _dds(v) for k, v in _species_png(species).items()}
+
+
+def _species_png(species):
     if species == "fern":
         c, n, _ = ft.fern_fronds()
         return {"fern_leaf.png": ft.png_rgba(c), "fern_leaf_nm.png": ft.png_normal(n)}

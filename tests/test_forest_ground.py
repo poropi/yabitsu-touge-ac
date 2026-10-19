@@ -82,3 +82,10 @@ def test_surface_by_prefix(tmp_path):
     m = _manifest(tmp_path, {"1GRASS_s1_terrain_000": (*_square(-10, -10, 10, 10, 0.0), "ground"),
                              "1ROAD_s1_000": (*_square(-2, -10, 2, 10, 3.0), "asphalt")})
     assert fg.load_ground(m, prefixes=("1ROAD_",)).z(np.array([[0.0, 0.0]]))[0] == 3.0
+
+
+def test_course_distance_ignores_osm(tmp_path):
+    k = _keep(tmp_path, {"1ROAD_s1_000": (*_square(-20, -3, 20, 3, 0.0), "asphalt")})
+    k.add_lines([np.array([[-30.0, 20.0], [30.0, 20.0]])], [4.0])
+    assert k.course_distance(np.array([[0.0, 25.0]]))[0] == pytest.approx(22.0, abs=1.5)
+    assert k.road_distance(np.array([[0.0, 25.0]]))[0] < 5.0

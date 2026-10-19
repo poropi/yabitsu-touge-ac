@@ -28,6 +28,7 @@ DEFAULT_CLASSIFY = {
     "brown_rg": 1.0,            # R/G がこれ以上の森は茶色（冬の写真の落葉広葉樹）
     "winter_brown_share": 0.08, # 区画の森のうち茶色がこれ以上なら冬の写真：青緑の森はすべて針葉樹
     "conifer_rel_lum": 1.0,     # 夏の写真：区画の森の明るさの中央値×これ より暗い緑の森は針葉樹
+    "open_rel_lum": 1.1,        # なめらかな所は、区画の森の明るさの中央値×これ より明るい時だけ森以外
     "smooth_cells": 2,          # 多数決でならす範囲（マス）
 }
 
@@ -72,7 +73,8 @@ def classify(rgb: np.ndarray, px_size: float, cfg: dict) -> np.ndarray:
     cv = _cells(sd / np.maximum(m, 1e-3), k).mean((1, 3))
     c = _cells(f, k).mean((1, 3))
     lum_c = c.mean(-1)
-    forest = (cv >= cfg["cv_min"]) | (lum_c < cfg["shadow_lum"])
+    rough = (cv >= cfg["cv_min"]) | (lum_c < cfg["shadow_lum"])
+    forest = rough   # なめらかでも、周りの森より暗ければ（葉の詰まった森）森にする（下で区画ごとに足す）
     rg = c[..., 0] / np.maximum(c[..., 1], 1e-3)
     brown = rg >= cfg["brown_rg"]
     # 区画ごとに「冬の写真か」と「森の明るさの中央値」を求め、区画の中心の間をなめらかにつないで使う（境目が四角くならない）
@@ -95,6 +97,17 @@ def classify(rgb: np.ndarray, px_size: float, cfg: dict) -> np.ndarray:
     share_f = ndimage.zoom(share, zoom, order=1, mode="nearest", grid_mode=True)[:forest.shape[0], :forest.shape[1]]
     med_f = ndimage.zoom(med, zoom, order=1, mode="nearest", grid_mode=True)[:forest.shape[0], :forest.shape[1]]
     winter = share_f >= cfg["winter_brown_share"]
+    # なめらかな所は、区画の森の明るさの中央値×open_rel_lum より明るければ森以外（伐採地・畑）、暗ければ森
+    fmed = np.full((R, C), np.nan, np.float32)
+    for i in range(R):
+        for j in range(C):
+            sl = (slice(i * nb, (i + 1) * nb), slice(j * nb, (j + 1) * nb))
+            if rough[sl].any():
+                fmed[i, j] = np.median(lum_c[sl][rough[sl]])
+    fmed = np.where(np.isnan(fmed), np.nanmedian(fmed) if not np.isnan(fmed).all() else 0.5, fmed)
+    fmed_f = ndimage.zoom(fmed, zoom, order=1, mode="nearest", grid_mode=True)[:forest.shape[0], :forest.shape[1]]
+    forest = rough | (lum_c < fmed_f * cfg["open_rel_lum"])
+    green = forest & ~brown
     conifer = green & (winter | (lum_c < med_f * cfg["conifer_rel_lum"]))
     cls = np.where(forest, np.where(conifer, 1, 2), 0).astype(np.uint8)
     n = int(cfg["smooth_cells"])

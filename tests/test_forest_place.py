@@ -94,3 +94,13 @@ def test_area_limits(world):
     from shapely.geometry import box
     t = _place(world, area=box(-50, 0, 50, 100))
     assert len(t) and (t.x >= -50).all() and (t.x <= 50).all() and (t.y >= 0).all()
+
+
+def test_tiers_follow_course_not_osm(world):
+    fm, ground, keep = world
+    keep.add_lines([np.array([[-200.0, 150.0], [200.0, 150.0]])], [4.0])    # 北の森の中の OSM の道
+    t = fp.place(None, fm, ground, keep, MODELS, CFG, seed=1, species=SPECIES)
+    con = np.array([p.startswith(("sugi", "hinoki")) for p in t.pattern])
+    near_osm = con & (t.y > 155) & (t.y < 180)
+    near_course = con & (t.y > 10) & (t.y < 35)
+    assert near_course.sum() > 3 * near_osm.sum()
