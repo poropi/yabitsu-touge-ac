@@ -79,19 +79,46 @@ def mesh_object(name, v, f, uv, mat, coll):
     return ob
 
 
+DRESS = Path(__import__("os").environ.get("DRESS_DIR", "")) if __import__("os").environ.get("DRESS_DIR") else None
+RETEX = json.loads((DRESS / "retex.json").read_text(encoding="utf-8")) if DRESS else {}
+HIDDEN = set(json.loads((DRESS / "hidden.json").read_text(encoding="utf-8"))) if DRESS else set()
+
+
+def load_dress(sc, win):
+    """S3 の仕上げの部品（dress_build の manifest）。"""
+    if not DRESS:
+        return
+    dm = json.loads((DRESS / "manifest.json").read_text(encoding="utf-8"))
+    x0, y0, x1, y1 = win
+    for name, e in dm["meshes"].items():
+        z = np.load(DRESS / e["file"])
+        v = z["verts"]
+        if v[:, 0].max() < x0 or v[:, 0].min() > x1 or v[:, 1].max() < y0 or v[:, 1].min() > y1:
+            continue
+        mspec = dm["materials"][e["material"]]
+        tex = DRESS / mspec["texture"] if mspec.get("texture") else None
+        col = mspec.get("color")
+        hexcol = "#%02X%02X%02X" % tuple(int(c * 255) for c in col) if col else None
+        mesh_object(name, v, z["faces"], z["uvs"], image_material("d_" + e["material"], tex, mspec.get("alpha"), hexcol),
+                    sc.collection)
+
+
 def load_course(sc, win):
     x0, y0, x1, y1 = win
     for name, (a, b, c, d) in bboxes.items():
         if c < x0 or a > x1 or d < y0 or b > y1:
             continue
         e = manifest["meshes"][name]
-        if not e.get("renderable", True):
+        if not e.get("renderable", True) or name in HIDDEN:
             continue
         z = np.load(MAN / e["file"])
         m = manifest["materials"].get(e["material"], {})
         tex = MAN / m["texture"] if m.get("texture") else None
-        mesh_object(name, z["verts"], z["faces"], z["uvs"], image_material(e["material"], tex, m.get("alpha"), m.get("color")),
-                    sc.collection)
+        mat = image_material(e["material"], tex, m.get("alpha"), m.get("color"))
+        if name in RETEX:          # S3 の貼り替え（CSP の SHADER_REPLACEMENT と同じ画像）
+            key = RETEX[name]
+            mat = image_material("retex_" + key, DRESS / "extension" / f"dress_{key}.dds")
+        mesh_object(name, z["verts"], z["faces"], z["uvs"], mat, sc.collection)
 
 
 def tree_objects(lod):
@@ -163,6 +190,7 @@ def instance_trees(sc, objs, win):
 for v in views:
     sc = reset()
     load_course(sc, v["window"])
+    load_dress(sc, v["window"])
     objs = tree_objects(v.get("lod", 1))
     n = instance_trees(sc, objs, v["window"])
     cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam")); sc.collection.objects.link(cam)
@@ -178,7 +206,7 @@ for v in views:
         d = tgt - eye
         cam.rotation_euler = (np.arctan2(np.hypot(d[0], d[1]), -d[2]), 0, np.arctan2(d[1], d[0]) - np.pi / 2)
         cam.data.lens = v.get("lens", 24)
-        sc.render.resolution_x, sc.render.resolution_y = 1600, 900
+        sc.render.resolution_x, sc.render.resolution_y = v.get("res", (1600, 900))
     sc.camera = cam
     sc.render.filepath = str(out / "views" / f"{v['name']}.png")
     bpy.ops.render.render(write_still=True)

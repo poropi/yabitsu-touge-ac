@@ -79,6 +79,9 @@ def write_retex_textures(keys, ext_dir: Path):
         u_m, v_m, rot = dress_retex.UV_LAYOUT[layout]
         img, _ = dress_tex.load(base)
         comp = dress_retex.compose(img.convert("RGB"), base_m, u_m, v_m, rot)
+        if key == "line_orange":       # Codex の色は実物（ストリートビュー）より鮮やか
+            from PIL import ImageEnhance
+            comp = ImageEnhance.Color(comp).enhance(0.75)
         lum = np.asarray(comp.convert("L"), float) / 255.0
         n = dress_tex.height_to_normal(lum, dress_tex.TEXTURES[base].normal)
         nm = Image.fromarray(((n * 0.5 + 0.5) * 255).astype(np.uint8))
@@ -248,7 +251,9 @@ def main():
     ext = OUT / "extension"
     ext.mkdir(parents=True, exist_ok=True)
     write_retex_textures(sorted(set(assign.values())), ext)
+    (OUT / "retex.json").write_text(json.dumps(assign, ensure_ascii=False), encoding="utf-8")   # 確認描画用
     hide = old_fence_meshes(cl, s_range)
+    (OUT / "hidden.json").write_text(json.dumps(hide), encoding="utf-8")
     part = dress_retex.section_text(assign) + "\n[MESH_ADJUSTMENT_...]\nACTIVE=1\nMESHES=" + ",".join(hide) + \
         "\nIS_RENDERABLE=0\n"
     (ext / "dress_s3.ini").write_text(part, encoding="utf-8", newline="\n")
