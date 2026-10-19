@@ -1,0 +1,15 @@
+{
+ "classify": {
+  "cell_m": 4.0,
+  "bright_max": 0.46,
+  "rg_max": 0.95,
+  "conifer_score_max": 0.005,
+  "conifer_bright_weight": 0.5,
+  "bright_ref": 0.38,
+  "smooth_cells": 2
+ },
+ "map": {
+  "px_size": 2.0,
+  "z": 17
+ }
+}
