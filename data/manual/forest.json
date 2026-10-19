@@ -11,5 +11,17 @@
  "map": {
   "px_size": 2.0,
   "z": 17
+ },
+ "clearance": {
+  "road": 2.0,
+  "wall": 0.5,
+  "building": 2.0,
+  "bridge": 3.0,
+  "water": 1.0,
+  "tunnel": 5.0,
+  "other": 1.0,
+  "osm_road": 1.5,
+  "cell": 1.0,
+  "coarse_cell": 4.0
  }
 }
