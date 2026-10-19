@@ -36,6 +36,8 @@ def kind_of(name: str, material: str):
         return "sidewalk"
     if n.startswith("track_sidewalk") and n.endswith("_curb"):
         return "curb"
+    if n.startswith("1ROAD_split_red"):      # 赤い舗装は写真に無い（s=3400 下り）：ふつうの路面にする
+        return "road_plane"
     if n.startswith(("1ROAD_town_carriageway", "1ROAD_side_stub", "1ROAD_split")) and material == "asphalt":
         return "road_plane"
     if n.startswith("1ROAD_s1_") and material == "asphalt":

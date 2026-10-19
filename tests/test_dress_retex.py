@@ -63,3 +63,7 @@ def test_assemble_migrates_old_single_file(tmp_path):
     ext_config.assemble(tmp_path)
     s = (tmp_path / "extension" / "ext_config.ini").read_text(encoding="utf-8")
     assert "LIST_0=trees\a.txt" in s and "MESHES=a" in s
+
+
+def test_split_red_becomes_plain_road():
+    assert dress_retex.kind_of("1ROAD_split_red_00", "paint_red") == "road_plane"

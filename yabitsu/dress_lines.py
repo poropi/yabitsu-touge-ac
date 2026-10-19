@@ -176,3 +176,76 @@ def marking_meshes(sec, diamonds, rows):
         v, f, uv = _lane_quad(sec, float(r["s_from"]), r["side"], TEXT_SIZE, False)
         out.append((f"dress_text_{k:02d}", v, f, uv, f"dress_text_{r['value']}"))
     return out
+
+
+# ---------- 島で道が分かれる所（split）の線を引き直す ----------
+
+SPLIT_OUTER = 0.55      # 外側線の中心：路面の外周から内側へ（その外に緑の路側帯）
+SPLIT_GREEN = (0.05, 0.47)
+SPLIT_ISLAND = 0.6      # 島のまわりの破線：島から
+ZEBRA_EVERY, ZEBRA_W = 1.5, 0.45
+
+
+def _dash(line, on, off):
+    """線を (on, off) m の破線に切る。"""
+    from shapely.ops import substring
+    out, t, L = [], 0.0, line.length
+    while t < L:
+        out.append(substring(line, t, min(L, t + on)))
+        t += on + off
+    return out
+
+
+def split_lines(sp, z_fn) -> list:
+    """split.Split（島・路面・導流帯）から、なめらかな外側線（実線）＋緑の路側帯、島のまわりの破線、導流帯のしまを作る。
+    今の線（LINES_split_white）は、路面の多角形の縁をそのままたどるのでガタガタで、ところどころ切れて見えた。"""
+    import math
+
+    from shapely.geometry import LineString, Polygon
+    from shapely.ops import unary_union
+
+    from .town import _polys, grid_drape
+
+    cw = sp.carriageway
+    ends = sp._ends()
+    smooth = cw.buffer(1.5, join_style="round").buffer(-1.5, join_style="round").intersection(cw.buffer(0.01))
+    white, green = [], []
+
+    def lines_of(g):
+        return [g] if g.geom_type == "LineString" else [x for x in getattr(g, "geoms", []) if x.geom_type == "LineString"]
+
+    # 外側線と緑：外周（島の穴は除く）
+    for g in _polys(smooth):
+        ring = Polygon(g.exterior)
+        edge = LineString(ring.buffer(-SPLIT_OUTER).exterior.coords) if not ring.buffer(-SPLIT_OUTER).is_empty else None
+        if edge is not None:
+            for piece in lines_of(edge.difference(ends.buffer(0.5)).difference(sp.zebra.buffer(0.3))):
+                white.append(piece.buffer(0.075, cap_style="flat"))
+        green.append(ring.buffer(-SPLIT_GREEN[0]).difference(ring.buffer(-SPLIT_GREEN[1])).difference(ends.buffer(0.5)))
+    # 島のまわり：白の実線だけ（ストリートビュー s=3400 上り・下り。緑は外側だけ）
+    isl = sp.island
+    ring = LineString(isl.buffer(SPLIT_ISLAND).exterior.coords)
+    for piece in lines_of(ring.difference(sp.zebra.buffer(0.3))):
+        white.append(piece.buffer(0.075, cap_style="flat"))
+    # 導流帯：外枠と斜めのしま
+    for g in _polys(sp.zebra):
+        if g.area < 2.0:
+            continue
+        white.append(LineString(g.exterior.coords).buffer(0.075))
+        c = g.centroid
+        R = math.hypot(g.bounds[2] - g.bounds[0], g.bounds[3] - g.bounds[1])
+        best = min(sp.lines.values(), key=lambda ln: ln.distance(c))
+        a = best.project(c); p0, p1 = best.interpolate(max(0, a - 1)), best.interpolate(a + 1)
+        h = math.atan2(p1.y - p0.y, p1.x - p0.x) + math.radians(45)
+        d = np.array([math.cos(h), math.sin(h)]); n = np.array([-d[1], d[0]])
+        for t in np.arange(-R, R, ZEBRA_EVERY):
+            q = np.array([c.x, c.y]) + n * t
+            white.append(LineString([q - d * R, q + d * R]).buffer(ZEBRA_W / 2, cap_style="flat").intersection(g))
+    out = []
+    W = unary_union(white).intersection(cw).difference(isl)
+    G = unary_union(green).intersection(cw).difference(isl.buffer(SPLIT_ISLAND + 0.3)).difference(W)
+    for k, (v, f, uv) in enumerate(grid_drape(W, z_fn, LIFT)):
+        out.append((f"dress_split_white_{k:02d}", v, f, uv, "dress_line_white"))
+    for k, (v, f, uv) in enumerate(grid_drape(G, z_fn, LIFT - 0.002)):
+        out.append((f"dress_split_green_{k:02d}", v, f, uv, "dress_green"))
+    return out

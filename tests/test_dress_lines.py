@@ -81,3 +81,28 @@ def test_marking_follows_slope():
     sec.z[:] = sec.s * 0.1                                     # 10 % の坂
     (name, v, f, uv, mat), = dress_lines.marking_meshes(sec, [(150.0, "L")], [])
     assert np.allclose(v[:, 2], v[:, 0] * 0.1 + dress_lines.LIFT, atol=0.02)
+
+
+def test_split_lines_stay_on_carriageway():
+    """島で分かれる所の線：島に乗らない・路面の外に出ない・外側は実線、島側は破線、緑は外側線の外。"""
+    from types import SimpleNamespace
+    from shapely.geometry import LineString, Point, box
+    island = box(40, -1.5, 60, 1.5)
+    up = LineString([(0, 0), (35, 0), (45, -3.6), (55, -3.6), (65, 0), (100, 0)])
+    down = LineString([(0, 0), (35, 0), (45, 3.6), (55, 3.6), (65, 0), (100, 0)])
+    lanes = {"u": up.buffer(1.8, cap_style="flat"), "d": down.buffer(1.8, cap_style="flat")}
+    from shapely.ops import unary_union
+    cw = unary_union(list(lanes.values())).difference(island)
+    sp = SimpleNamespace(island=island, carriageway=cw, zebra=box(30, -2, 40, 2).difference(island).intersection(cw),
+                         lines={"u": up, "d": down}, singles={"u", "d"}, window=box(0, -10, 100, 10),
+                         _ends=lambda: box(-5, -10, 2, 10).union(box(98, -10, 105, 10)))
+    out = dress_lines.split_lines(sp, lambda x, y: np.zeros_like(np.asarray(x, float)))
+    mats = {m[4] for m in out}
+    assert {"dress_line_white", "dress_green"} <= mats
+    # 島のまわりは白の実線だけ（緑は外側だけ）：ストリートビュー s=3400 上り・下り
+    green = [m for m in out if m[4] == "dress_green"]
+    assert all(island.distance(Point(p)) > 0.6 for _, v, *_ in green for p in v[:, :2])
+    for name, v, f, uv, mat in out:
+        pts = v[:, :2]
+        assert not any(island.contains(Point(p)) for p in pts), name
+        assert all(cw.buffer(0.05).contains(Point(p)) for p in pts), name

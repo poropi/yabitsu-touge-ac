@@ -32,7 +32,7 @@ s_from,s_to,side,item,value,note
 2830,2880,R,fence,white_bar,白い柵（s=2850上り）
 3180,3260,L,fence,white_bar,擁壁の上の白い柵（s=3200）
 3230,3270,R,fence,white_bar,白い柵（s=3250上り）
-3430,3520,R,fence,wbeam,白いガードレール（s=3450上り・3500下り）
+3484,3520,R,fence,wbeam,白いガードレール：島で分かれる所（〜3462）の先から（s=3450上り・3500下り）
 3680,3730,L,fence,wbeam,白いガードレール（s=3700下り）
 3880,3920,R,fence,wbeam,白いガードレール（s=3900下り）
 4230,4270,L,fence,white_bar,白い柵（s=4250上り）

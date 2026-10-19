@@ -153,6 +153,32 @@ FENCE_MAT = {"wbeam": "dress_white", "wbeam_redwhite": "dress_redwhite", "white_
              "white_pipe": "dress_white", "green_mesh": "dress_mesh"}
 
 
+def cut_gaps(runs, gaps):
+    """(s_from, s_to, ...) の並びから gaps の範囲を切り取る。"""
+    out = []
+    for a, b, *rest in runs:
+        pieces = [(a, b)]
+        for g0, g1 in gaps:
+            nxt = []
+            for x0, x1 in pieces:
+                if x1 <= g0 or x0 >= g1:
+                    nxt.append((x0, x1))
+                else:
+                    if x0 < g0:
+                        nxt.append((x0, g0))
+                    if x1 > g1:
+                        nxt.append((g1, x1))
+            pieces = nxt
+        out += [(x0, x1, *rest) for x0, x1 in pieces if x1 - x0 >= 3.0]
+    return out
+
+
+def split_gaps():
+    """島で道が分かれる所（s3_lines.csv の gap）。ここは本線の左右を基準にした部品を置かない。"""
+    return [(float(r["s_from"]), float(r["s_to"])) for r in csv.DictReader(open(config.DATA_MANUAL / "s3_lines.csv", encoding="utf-8"))
+            if r["item"] == "gap"]
+
+
 def fence_runs(feats_csv, rows):
     """柵の範囲：s3_features（ガードパイプ・ガードレール・柵）＋ s3_dress の fence。
     s3_dress（ストリートビュー 166 枚で確かめた表）が重なる所は s3_dress を優先し、features の行はその外だけ残す。"""
@@ -188,7 +214,8 @@ def build_parts(sec, rows, m: Manifest, s_range):
     swL, swR = features.sidewalk_offsets(sec, feats)
     sidewalk = {"L": swL, "R": swR}
     # 柵
-    for k, (a, b, side, kind) in enumerate(fence_runs(config.DATA_MANUAL / "s3_features.csv", rows)):
+    gaps = split_gaps()
+    for k, (a, b, side, kind) in enumerate(cut_gaps(fence_runs(config.DATA_MANUAL / "s3_features.csv", rows), gaps)):
         if kind == "white_pipe":
             v, f, uv = dress_parts.fence_mesh(sec, a, b, side, "wbeam", sidewalk[side])     # 形は波形の代わりに細い3段
         else:
@@ -202,8 +229,8 @@ def build_parts(sec, rows, m: Manifest, s_range):
                                                  "water": 0.5, "tunnel": 2.0, "other": 0.3})
     allp = []
     for k, r in enumerate(x for x in rows if x["item"] == "poles"):
-        poles = dress_parts.utility_poles(sec, float(r["s_from"]), float(r["s_to"]), r["side"], float(r["value"]),
-                                          keep, sidewalk[r["side"]])
+        poles = [p for a, b in [(x0, x1) for x0, x1, *_ in cut_gaps([(float(r["s_from"]), float(r["s_to"]))], gaps)]
+                 for p in dress_parts.utility_poles(sec, a, b, r["side"], float(r["value"]), keep, sidewalk[r["side"]])]
         if len(poles) < 1:
             continue
         allp += poles
@@ -220,6 +247,7 @@ def build_parts(sec, rows, m: Manifest, s_range):
             rules.append((float(r["s_from"]), float(r["s_to"]), "manhole", float(r["value"])))
         elif r["item"] == "gutter" and r["value"] == "grating" and r["side"] == "L":
             rules.append((float(r["s_from"]), float(r["s_to"]), "grating", 25.0))
+    rules = [(a, b, k, sp) for a, b, k, sp in cut_gaps([(a, b, k, sp) for a, b, k, sp in rules], gaps)]
     decals = dress_parts.road_decals(sec, rules, seed=7)
     for kind in ("manhole", "grating"):      # 補修跡は写真に目立つものが無いので置かない（2026-10-19 全地点の見直し）
         parts = [(v, f, uv) for v, f, uv, kk in decals if kk == kind]
@@ -292,8 +320,15 @@ def main():
                       {"s_from": s_range[1], "s_to": hi, "item": "edge", "side": "B", "value": "solid"}]
     for name, v, f, uv, mat in dress_lines.line_meshes(sec, line_rows):
         m.add_mesh(GROUP, name, v, f, uv, mat)
+    # 島で道が分かれる所：今の白線（ガタガタ・切れて見える）を隠し、なめらかな線を引き直す
+    from yabitsu import nagoki
+    for spl in nagoki.load_splits(sec):
+        for name, v, f, uv, mat in dress_lines.split_lines(spl, spl.ground.z):     # 路面（1ROAD_split）と同じ高さ
+            m.add_mesh(GROUP, name, v, f, uv, mat)
+    hide_lines += [n for k in range(20) for n in (f"LINES_split_white_{k:02d}", f"LINES_split_white_{k:02d}_back")]
     pave = list(csv.DictReader(open(config.DATA_MANUAL / "s3_pavements.csv", encoding="utf-8")))
-    diamonds = [d for d in dress_lines.diamond_spots(sec, pave) if s_range[0] + 200 <= d[0] <= s_range[1]]
+    diamonds = [d for d in dress_lines.diamond_spots(sec, pave) if s_range[0] + 200 <= d[0] <= s_range[1]
+                and not any(g0 - 3 <= d[0] <= g1 + 3 for g0, g1 in split_gaps())]
     for name, v, f, uv, mat in dress_lines.marking_meshes(sec, diamonds, line_rows):
         m.add_mesh(GROUP, name, v, f, uv, mat)
     m.save()
