@@ -51,6 +51,7 @@ def forest_map(cfg, refresh, out_dir, t0):
     houses = [(v, t) for n, mat, v, t in forest_ground._load(MANIFEST) if forest_ground.mesh_class(n, mat) == "building"]
     mask = forestmap.settlement_mask(fm, forestmap.osm_buildings(bounds), houses, c["settle_m"])
     forestmap.settlement_filter(fm, rgb, cfg["map"]["px_size"], mask, c)
+    forestmap.farm_filter(fm, rgb, cfg["map"]["px_size"], forestmap.osm_buildings(bounds), houses, c)
     fm.save(MAP)
     forestmap.preview(rgb, fm, out_dir / "forest_map.png", max_px=6000)
     log(t0, f"空中写真の地図を作りました（森 {np.mean(fm.cls > 0) * 100:.0f}%、針葉樹 {np.mean(fm.cls == 1) * 100:.0f}%）")

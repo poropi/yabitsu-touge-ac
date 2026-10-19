@@ -275,10 +275,15 @@ def split_red(sp, sec, rows, z_fn) -> list:
         sgn = 1 if r["side"] == "L" else -1
         hw = sub.hw_left if sgn > 0 else sub.hw_right
         nx, ny = -np.sin(sub.heading), np.cos(sub.heading)
-        edge = np.c_[sub.x + nx * sgn * hw, sub.y + ny * sgn * hw]
         mid = np.c_[sub.x, sub.y]
         from shapely.geometry import Polygon
-        poly = Polygon(np.r_[mid, edge[::-1]]).buffer(0).intersection(sp.carriageway).difference(sp.red)
+        if sp.red is not None and not sp.red.is_empty:
+            # 分かれた片側の道（split の red＝下り側の道）のうち、この s の範囲：中心線から片側 15 m の帯で切る
+            band = Polygon(np.r_[mid, np.c_[sub.x + nx * sgn * 15, sub.y + ny * sgn * 15][::-1]]).buffer(0)
+            poly = band.intersection(sp.red).intersection(sp.carriageway)
+        else:
+            edge = np.c_[sub.x + nx * sgn * hw, sub.y + ny * sgn * hw]
+            poly = Polygon(np.r_[mid, edge[::-1]]).buffer(0).intersection(sp.carriageway)
         for j, (v, f, uv) in enumerate(grid_drape(poly, z_fn, LIFT - 0.004)):
             out.append((f"dress_split_red_{k}_{j}", v, f, uv, "dress_red"))
     return out

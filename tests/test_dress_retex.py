@@ -65,6 +65,6 @@ def test_assemble_migrates_old_single_file(tmp_path):
     assert "LIST_0=trees\a.txt" in s and "MESHES=a" in s
 
 
-def test_split_red_stays_red():
-    """空中写真（地理院）で下り側の道は赤い舗装。貼り替えない。"""
-    assert dress_retex.kind_of("1ROAD_split_red_00", "paint_red") is None
+def test_split_red_becomes_plain_road():
+    """ストリートビュー 2025 では下り側の道は灰色（空中写真の赤は古い）。"""
+    assert dress_retex.kind_of("1ROAD_split_red_00", "paint_red") == "road_plane"
