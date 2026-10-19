@@ -325,7 +325,9 @@ def main():
     # 島で道が分かれる所：今の白線（ガタガタ・切れて見える）を隠し、なめらかな線を引き直す
     from yabitsu import nagoki
     for spl in nagoki.load_splits(sec):
-        for name, v, f, uv, mat in dress_lines.split_lines(spl, spl.ground.z) +                 dress_lines.split_red(spl, sec, line_rows, spl.ground.z):     # 路面（1ROAD_split）と同じ高さ
+        # 島の南の、下り側の道の中の小さな導流帯（中心線から 5 m 以上右）は無い（ユーザーの指示 2026-10-19）
+        keep_out = dress_lines.zebra_parts(spl, sec, s_max=3391.0, lat_max=-5.0).buffer(0.4)
+        for name, v, f, uv, mat in dress_lines.split_lines(spl, spl.ground.z, keep_out) +                 dress_lines.split_red(spl, sec, line_rows, spl.ground.z):     # 路面（1ROAD_split）と同じ高さ
             m.add_mesh(GROUP, name, v, f, uv, mat)
     hide_lines += [n for k in range(20) for n in (f"LINES_split_white_{k:02d}", f"LINES_split_white_{k:02d}_back")]
     pave = list(csv.DictReader(open(config.DATA_MANUAL / "s3_pavements.csv", encoding="utf-8")))

@@ -207,7 +207,17 @@ def _dash(line, on, off):
     return out
 
 
-def split_lines(sp, z_fn) -> list:
+def band_polygon(sec, s_from, s_to, lat_a, lat_b):
+    """中心線の s_from〜s_to、横 lat_a〜lat_b（左が正）の帯の多角形。"""
+    from shapely.geometry import Polygon
+    sub = resample(sec, s_from, s_to, 0.5)
+    nx, ny = -np.sin(sub.heading), np.cos(sub.heading)
+    a = np.c_[sub.x + nx * lat_a, sub.y + ny * lat_a]
+    b = np.c_[sub.x + nx * lat_b, sub.y + ny * lat_b]
+    return Polygon(np.r_[a, b[::-1]]).buffer(0)
+
+
+def split_lines(sp, z_fn, keep_out=None) -> list:
     """split.Split（島・路面・導流帯）から、なめらかな外側線（実線）＋緑の路側帯、島のまわりの破線、導流帯のしまを作る。
     今の線（LINES_split_white）は、路面の多角形の縁をそのままたどるのでガタガタで、ところどころ切れて見えた。"""
     import math
@@ -254,6 +264,8 @@ def split_lines(sp, z_fn) -> list:
             white.append(LineString([q - d * R, q + d * R]).buffer(ZEBRA_W / 2, cap_style="flat").intersection(g))
     out = []
     W = unary_union(white).intersection(cw).difference(isl)
+    if keep_out is not None:            # 線を引かない所（ユーザーの指示で消した所）
+        W = W.difference(keep_out)
     G = unary_union(green).intersection(cw).difference(isl.buffer(SPLIT_ISLAND + 0.3)).difference(W)
     for k, (v, f, uv) in enumerate(grid_drape(W, z_fn, LIFT)):
         out.append((f"dress_split_white_{k:02d}", v, f, uv, "dress_line_white"))
@@ -287,3 +299,21 @@ def split_red(sp, sec, rows, z_fn) -> list:
         for j, (v, f, uv) in enumerate(grid_drape(poly, z_fn, LIFT - 0.004)):
             out.append((f"dress_split_red_{k}_{j}", v, f, uv, "dress_red"))
     return out
+
+
+def zebra_parts(sp, sec, s_max, lat_max):
+    """split の導流帯のうち、重心が s_max より手前で、中心線から lat_max より右（負）にあるもの。"""
+    from shapely.geometry import Polygon
+    from shapely.ops import unary_union
+
+    from .town import _polys
+    tree = cKDTree(np.c_[sec.x, sec.y])
+    out = []
+    for g in _polys(sp.zebra):
+        c = g.centroid
+        i = tree.query([c.x, c.y])[1]
+        h = sec.heading[i]
+        lat = -(c.x - sec.x[i]) * np.sin(h) + (c.y - sec.y[i]) * np.cos(h)
+        if sec.s[i] < s_max and lat < lat_max:
+            out.append(g)
+    return unary_union(out) if out else Polygon()
