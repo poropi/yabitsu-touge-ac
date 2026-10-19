@@ -162,11 +162,21 @@ def main():
     log(t0, "地面と植えない範囲")
     area = pilot_area() if a.area == "pilot" else None
     surface = forest_ground.load_ground(MANIFEST, prefixes=("1ROAD_",))     # 路面
-    trees = forest_place.place(area, fm, ground, keep, models, cfg.get("place", {}), road_surface=surface)
+    from yabitsu import geo
+    zones = [{**z, "center": [float(v) for v in geo.to_local(*z["center_ll"])]} for z in cfg.get("species_zones", [])]
+    trees = forest_place.place(area, fm, ground, keep, models, cfg.get("place", {}), road_surface=surface, zones=zones)
     cl = np.load(config.DATA_PROCESSED / "track_centerline.npz")
     cxy = np.c_[cl["x"], cl["y"]]
     cz = surface.z(cxy)
     cz = np.where(np.isfinite(cz), cz, np.nan_to_num(ground.z(cxy)))
+    zones = []                      # 眺めの開けた場所（data/manual/forest.json の view_clear：緯度経度・半径）
+    for zn in cfg.get("view_clear", []):
+        from yabitsu import geo
+        x, y = geo.to_local(*zn["center_ll"])
+        zones.append({"center": [float(x), float(y)], "radius": zn["radius"], "z": zn["z"], "margin": zn.get("margin", 0.0)})
+    vk = forest_place.view_clear_keep(trees, models, zones)
+    trees = trees[vk]
+    log(t0, f"眺めの開けた場所の木を {int((~vk).sum()):,} 本取り除きました")
     keep_sight = forest_place.sightline_keep(trees, models, cxy, cz, cfg.get("sight", {}))
     np.save(out / "removed_sight.npy", np.asarray(trees[~keep_sight]))
     trees = trees[keep_sight]

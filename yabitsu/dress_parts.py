@@ -160,3 +160,34 @@ def road_decals(sec, rules, seed=1):
                 lat = rng.choice([-1, 1]) * rng.uniform(0.8, 1.8)
                 out.append((*_quad(sec, i, lat, DECAL_SIZE[kind], rot=rng.uniform(-0.2, 0.2) if kind == "patch" else 0.0), kind))
     return out
+
+
+# ---------- 小物：紅白のドラム缶（クッションドラム）、カーブミラー ----------
+
+def barrel_mesh(p, r=0.3, h=0.9, sides=12):
+    """立てた円柱（側面と天面）。uv の v は高さ（紅白の市松のテクスチャを 2 段）。"""
+    x, y, z = p
+    ang = np.linspace(0, 2 * np.pi, sides + 1)
+    V, U = [], []
+    for k, zz in enumerate((z, z + h)):
+        for j, a in enumerate(ang):
+            V.append((x + r * np.cos(a), y + r * np.sin(a), zz)); U.append((j / sides * 3, k))
+    F = [(j, j + 1, sides + 2 + j, sides + 1 + j) for j in range(sides)]
+    c = len(V); V.append((x, y, z + h)); U.append((0.5, 1))
+    F += [(sides + 1 + j, sides + 2 + j, c, c) for j in range(sides)]
+    return np.array(V, float), np.array(F, np.int64), np.array(U, float)
+
+
+def mirror_meshes(p, facing_deg, height=3.0, r=0.4):
+    """カーブミラー：オレンジの柱（細い円柱）と、向き facing_deg（北から時計回り）の丸い鏡（両面の円盤）。"""
+    x, y, z = p
+    pole = barrel_mesh((x, y, z), r=0.04, h=height + r, sides=8)
+    t = np.radians(facing_deg)
+    n = np.array([np.sin(t), np.cos(t)]); side = np.array([n[1], -n[0]])
+    c = np.array([x, y]) + n * 0.12
+    ang = np.linspace(0, 2 * np.pi, 17)[:-1]
+    V = [(c[0] + side[0] * r * np.cos(a), c[1] + side[1] * r * np.cos(a), z + height + r * np.sin(a)) for a in ang]
+    V.append((c[0], c[1], z + height))
+    F = [(j, (j + 1) % 16, 16, 16) for j in range(16)]
+    U = [(0.5 + 0.5 * np.cos(a), 0.5 + 0.5 * np.sin(a)) for a in ang] + [(0.5, 0.5)]
+    return pole, (np.array(V, float), np.array(F, np.int64), np.array(U, float))

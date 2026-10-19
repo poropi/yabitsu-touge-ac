@@ -47,3 +47,11 @@ def test_wires_sag_between_poles():
     mid = v[np.abs(v[:, 0] - 20) < 1.5]
     end = v[np.abs(v[:, 0]) < 0.5]
     assert mid[:, 2].mean() < end[:, 2].mean() - 0.5
+
+
+def test_barrel_and_mirror_stand_on_ground():
+    v, f, uv = dress_parts.barrel_mesh((10.0, 5.0, 100.0))
+    assert abs(v[:, 2].min() - 100.0) < 1e-6 and 0.8 < v[:, 2].max() - 100.0 < 1.0
+    assert np.hypot(v[:, 0] - 10, v[:, 1] - 5).max() <= 0.31
+    pole, disc = dress_parts.mirror_meshes((0.0, 0.0, 50.0), facing_deg=90.0)
+    assert pole[0][:, 2].max() > 52.5 and disc[0][:, 2].mean() > 52.0

@@ -74,7 +74,7 @@ def _finish(note: str) -> str:
     return "kenchi"        # 間知石・石積み・石垣（S3 の壁はほとんどこれ）
 
 
-def wall_finish(manifest_dir, cl, features_csv, names) -> dict:
+def wall_finish(manifest_dir, cl, features_csv, names, s_offset=0.0) -> dict:
     """壁の部品の中心の s と左右から、表（*_features.csv）の行を引いて仕上げを決める。"""
     rows = [r for r in csv.DictReader(open(features_csv, encoding="utf-8"))
             if r["type"] in ("retaining_wall", "parapet")]
@@ -90,7 +90,7 @@ def wall_finish(manifest_dir, cl, features_csv, names) -> dict:
         j = min(i + 1, len(P) - 1); i0 = max(j - 1, 0)
         h = P[j] - P[i0]
         side = "L" if h[0] * (c[1] - P[i][1]) - h[1] * (c[0] - P[i][0]) > 0 else "R"
-        s = cl["s"][i]
+        s = cl["s"][i] - s_offset            # 表の s は区間の起点から
         hit = [r for r in rows if r["side"] == side and float(r["s_from"]) - 10 <= s <= float(r["s_to"]) + 10]
         out[name] = _finish(hit[0]["note"]) if hit else "kenchi"
     return out

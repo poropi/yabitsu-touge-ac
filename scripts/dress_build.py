@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
 
-from yabitsu import (acdata, config, dress_lines, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5,
+from yabitsu import (acdata, config, dress_lines, geo, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5,
                      layouts, track)
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
@@ -131,6 +131,16 @@ def fence_textures(tex_dir: Path):
     patch.save(tex_dir / "patch.png")
 
 
+def _checker(path):
+    """紅白の市松（クッションドラム）：横 6 ます × 縦 2 段を 1 枚に。"""
+    img = Image.new("RGB", (240, 80), (238, 238, 236)); d = ImageDraw.Draw(img)
+    for i in range(6):
+        for j in range(2):
+            if (i + j) % 2 == 0:
+                d.rectangle((i * 40, j * 40, i * 40 + 39, j * 40 + 39), fill=(205, 40, 40))
+    img.save(path)
+
+
 def marking_textures(tex_dir: Path):
     """路面の標示の画像（白・オレンジの塗料、アルファ付き）。v＝進む向き。"""
     from PIL import ImageFont
@@ -207,6 +217,74 @@ def fence_runs(feats_csv, rows):
             pieces = nxt
         runs += [(x0, x1, r["side"], kind) for x0, x1 in pieces if x1 - x0 >= 3.0]
     return runs + dress
+
+
+LOT_RAIL = (3.0, 31.0)      # 菜の花台の出口のヘアピン：外側（谷側＝左）の白いガードレール。階段の手前まで（ストリートビュー lot_a_0・lot_c_0）
+
+
+def lot_props(sec, m: Manifest, tex: Path):
+    """菜の花台の駐車場の出口（S1 の 0〜31 m）：谷側の白いガードレール、紅白のクッションドラム 2 本、カーブミラー。
+    作り直しをせずに足すもの。もとの 16〜31 m の擁壁（写真には無い）は表示だけ消す（当たり判定は残る＝ガードレールと
+    ほぼ同じ線）。消す擁壁の名前を返す。"""
+    from scipy.spatial import cKDTree
+    b = track.load_bounds()["s1"][0]
+    z = np.zeros(sec.n)
+    v, f, uv = dress_parts.fence_mesh(sec, b + LOT_RAIL[0], b + LOT_RAIL[1], "L", "wbeam", z)
+    m.add_mesh(GROUP, "dress_lot_rail", v, f, uv, "dress_white")
+    i = int(np.searchsorted(sec.s, b + LOT_RAIL[0]))
+    n = np.array([-np.sin(sec.heading[i]), np.cos(sec.heading[i])]); t = np.array([np.cos(sec.heading[i]), np.sin(sec.heading[i])])
+    edge = np.array([sec.x[i], sec.y[i]]) + n * (sec.hw_left[i] + 0.9)
+    ze = float(sec.edge_z(1)[i])
+    parts = [dress_parts.barrel_mesh((*(edge - t * (1.0 + 0.7 * k)), ze)) for k in range(2)]
+    from yabitsu.start_lot import _merge
+    m.add_mesh(GROUP, "dress_lot_barrels", *_merge(parts), "dress_barrel")
+    m.add_mesh(GROUP, "1WALL_dress_lot_barrels", *_merge(parts), "dress_barrel", renderable=False)
+    pano = np.array([float(v) for v in geo.to_local(35.4105931, 139.2097993)])
+    mp = edge + n * 0.4 + t * 1.5
+    face = float(np.degrees(np.arctan2(*(pano - mp))) % 360)
+    pole, disc = dress_parts.mirror_meshes((*mp, ze), face)
+    m.add_mesh(GROUP, "dress_lot_mirror_pole", *pole, "dress_orange")
+    m.add_mesh(GROUP, "dress_lot_mirror", *disc, "dress_mirror")
+    # 駐車場の谷側の青緑の柵を、出口のヘアピンまで延ばす（ストリートビュー lot_a_90）。オレンジの標識の柱と白い小さな柱
+    from yabitsu import start_lot
+    from yabitsu.start_lot import box as _box, Frame
+    spec = start_lot.load_spec(config.DATA_MANUAL / "s1_start_lot.json"); fr = start_lot.frame(spec)
+    pads = json.loads((config.DATA_PROCESSED / "track_pads.json").read_text(encoding="utf-8"))
+    zl = [p_ for p_ in pads if p_.get("kind") == "lot"][0]["z"]
+    fe = spec["fence"]; fb, fh = fe["b"], fe["height"]; a0, a1 = fe["a"][1], fe["a"][1] + 5.5
+    posts = [_box(fr, (a_ - 0.04, a_ + 0.04), (fb - 0.04, fb + 0.04), zl - 0.3, zl + fh) for a_ in np.arange(a0 + 2.0, a1 + 1e-9, 2.0)]
+    rails = [_box(fr, (a0, a1), (fb - 0.03, fb + 0.03), zl + zz, zl + zz + 0.06) for zz in (0.08, fh - 0.06)]
+    bars = [_box(fr, (a_ - 0.012, a_ + 0.012), (fb - 0.012, fb + 0.012), zl + 0.1, zl + fh - 0.05) for a_ in np.arange(a0 + 0.12, a1, 0.12)]
+    m.add_mesh(GROUP, "dress_lot_fence_ext", *_merge(posts + rails + bars), "dress_teal")
+    m.add_mesh(GROUP, "1WALL_dress_lot_fence_ext", *_box(fr, (a0, a1), (fb - 0.05, fb + 0.05), zl - 0.3, zl + 1.2), "dress_teal", renderable=False)
+    pole_xy = fr.xy(a1 - 0.5, fb + 0.6); post_xy = fr.xy(a1 - 1.6, fb + 0.9)
+    g = Frame(pole_xy, spec["axis_deg"])
+    pole = dress_parts.barrel_mesh((*pole_xy, zl), r=0.05, h=3.2, sides=8)
+    signs = [_box(g, (-0.35, 0.35), (-0.02, 0.02), zl + zz, zl + zz + 0.45, 1.0) for zz in (1.4, 2.0)]
+    m.add_mesh(GROUP, "dress_lot_signpole", *pole, "dress_orange")
+    m.add_mesh(GROUP, "dress_lot_signs", *_merge(signs), "dress_sign_white")
+    m.add_mesh(GROUP, "dress_lot_whitepost", *dress_parts.barrel_mesh((*post_xy, zl), r=0.09, h=0.9, sides=10), "dress_white")
+    # トイレへの道の、駐車場の側の白い低い壁（ストリートビュー lot_b_270）
+    wall_parts = [_box(fr, (-57.0, -44.0), (9.45, 9.75), zl - 0.6, zl + 0.55, 1.0),
+                  _box(fr, (-44.0, -43.7), (9.45, 10.8), zl - 0.6, zl + 0.55, 1.0)]
+    m.add_mesh(GROUP, "1WALL_dress_lot_toilet_wall", *_merge(wall_parts), "dress_white")
+    # S2 の終わりの右の石積み（4060〜4165）は、ヘアピンの島の縁まで回り込んでいた。写真（lot_a_90）の島は低い縁石と茂み。
+    # 4140 までを描き直し、もとの壁は表示だけ消す
+    from yabitsu.features import Feature, retaining_wall_mesh
+    s2 = track.load_bounds()["s2"][0]
+    v, f, uv = retaining_wall_mesh(sec, Feature(s2 + 4060.0, s2 + 4140.0, "R", "retaining_wall", 4.0, ""))
+    m.add_mesh(GROUP, "dress_s2_end_wall", v, f, uv, "dress_kenchi_wall")
+    # 消す擁壁：S1 の 16〜31 m の左の壁、S2 の終わりの右の壁（名前は作り直しのたびに変わるので、形で探す）
+    man = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))
+    tree = cKDTree(np.c_[sec.x, sec.y]); hide = []
+    for name, e in man["meshes"].items():
+        if not name.startswith("1WALL_s1_retaining"):
+            continue
+        vv = np.load(MANIFEST / e["file"])["verts"]
+        d, j = tree.query(vv[:, :2]); ss = sec.s[j] - b
+        if d.min() < 15 and ((10 < ss.min() < 20 and 25 < ss.max() < 35) or (-115 < ss.min() < -95 and -5 < ss.max() < 5)):
+            hide += [name, f"{name}_back"]
+    return hide
 
 
 def build_parts(sec, rows, m: Manifest, s_range):
@@ -307,6 +385,15 @@ def main():
         img.save(tex / f"line_{k}.png")
         m.add_material(f"dress_line_{k}", texture=f"textures/line_{k}.png")
     m.add_material("dress_green", color=(0.17, 0.27, 0.20))   # 写真の緑の路側帯（くすんだ濃い緑）
+    _checker(tex / "barrel.png"); m.add_material("dress_barrel", texture="textures/barrel.png")
+    m.add_material("dress_orange", color=(0.90, 0.42, 0.12))
+    m.add_material("dress_teal", color=(0.30, 0.62, 0.55), two_sided=True)       # 駐車場の青緑の柵
+    m.add_material("dress_sign_white", color=(0.93, 0.93, 0.92))
+    m.add_material("dress_mirror", color=(0.75, 0.78, 0.80), two_sided=True)
+    bimg, _ = dress_tex.load("block_wall"); bimg.convert("RGB").save(tex / "block_wall.png")
+    kimg, _ = dress_tex.load("kenchi"); kimg.convert("RGB").save(tex / "kenchi.png")
+    m.add_material("dress_kenchi_wall", texture="textures/kenchi.png")
+    m.add_material("dress_block", texture="textures/block_wall.png")
     shutil.copy2(MANIFEST / "textures" / "paint_red.png", tex / "paint_red.png")
     m.add_material("dress_red", texture="textures/paint_red.png")   # 島の所の赤い路面（paint_red）と同じ画像
     marking_textures(tex)
@@ -314,6 +401,7 @@ def main():
     for t in {r["value"] for r in csv.DictReader(open(config.DATA_MANUAL / "s3_lines.csv", encoding="utf-8")) if r["item"] == "text"}:
         m.add_material(f"dress_text_{t}", texture=f"textures/text_{t}.png", alpha=True)
     npoles = build_parts(sec, rows, m, s_range)
+    hide_lot = lot_props(sec, m, tex)       # 菜の花台の出口（S1）の小物
     # 路面の線：今の線を隠し、表（s3_lines.csv）どおりに引き直す。隠す線が S3 の外（S2 の頭）にはみ出す分は、もとと同じ線を引く
     hide_lines, (lo, hi) = dress_lines.hidden_line_meshes(MANIFEST, cl, s_range)
     line_rows = list(csv.DictReader(open(config.DATA_MANUAL / "s3_lines.csv", encoding="utf-8")))
@@ -348,11 +436,17 @@ def main():
 
     # 貼り替え
     assign = retex_assign(cl, rows, s_range)
+    # 浅間神社のまわり（S2 2800〜3100）の石積みも、表（s2_features）どおりの模様にする
+    s2 = track.load_bounds()["s2"][0]
+    kinds2 = dress_retex.s3_meshes(MANIFEST, cl, (s2 + 2800.0, s2 + 3100.0))
+    walls2 = [n_ for n_, k_ in kinds2.items() if k_ == "wall"]
+    fin2 = dress_retex.wall_finish(MANIFEST, cl, config.DATA_MANUAL / "s2_features.csv", walls2, s_offset=s2)
+    assign.update({n_: f"wall_{fin2.get(n_, 'kenchi')}" for n_ in walls2})
     ext = OUT / "extension"
     ext.mkdir(parents=True, exist_ok=True)
     write_retex_textures(sorted(set(assign.values())), ext)
     (OUT / "retex.json").write_text(json.dumps(assign, ensure_ascii=False), encoding="utf-8")   # 確認描画用
-    hide = old_fence_meshes(cl, s_range) + hide_lines
+    hide = old_fence_meshes(cl, s_range) + hide_lines + hide_lot
     (OUT / "hidden.json").write_text(json.dumps(hide), encoding="utf-8")
     part = dress_retex.section_text(assign) + "\n[MESH_ADJUSTMENT_...]\nACTIVE=1\nMESHES=" + ",".join(hide) + \
         "\nIS_RENDERABLE=0\n"

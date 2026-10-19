@@ -150,3 +150,25 @@ def test_overhang_uses_road_surface_not_ground_under_it(tmp_path):
     d = keep.road_distance(np.c_[t.x, t.y])
     near = d < 4.0
     assert not (near & (t.z + 10.0 < 6.0 + 5.0)).any()
+
+
+def test_view_clear_drops_tall_trees_below_viewpoint():
+    """展望の場所（駐車場）より下の斜面の木で、梢が展望の高さを超えるものは植えない（谷の眺めが開けている）。"""
+    t = np.zeros(4, fp.DTYPE)
+    t[0] = (0.0, 30.0, 90.0, "sugi_a", 0, 1.0)      # 下の斜面・梢 110 > 100 → 取る
+    t[1] = (0.0, 30.0, 70.0, "sugi_a", 0, 1.0)      # 下の斜面・梢 90 < 100 → 残す
+    t[2] = (0.0, 30.0, 105.0, "sugi_a", 0, 1.0)     # 上の斜面 → 残す
+    t[3] = (0.0, 300.0, 90.0, "sugi_a", 0, 1.0)     # 遠い → 残す
+    keep = fp.view_clear_keep(t.view(np.recarray), MODELS, [{"center": [0.0, 0.0], "radius": 100.0, "z": 100.0, "margin": 0.0}])
+    assert keep.tolist() == [False, True, True, True]
+
+
+def test_species_zone_forces_broadleaf(world):
+    """樹種を決める場所（species_zones）：中では森の判定に関わらず広葉樹と低木を植える（菜の花台のまわりの雑木）。"""
+    fm, ground, keep = world
+    zones = [{"center": [-120.0, -100.0], "radius": 40.0, "species": "broadleaf", "spacing": 5.0}]
+    t = fp.place(None, fm, ground, keep, MODELS, CFG, seed=1, species=SPECIES, zones=zones)
+    d = np.hypot(t.x + 120, t.y + 100)
+    inz = d < 35
+    assert inz.sum() > 20
+    assert all(p.startswith(("broadleaf", "shrub", "fern")) for p in np.asarray(t.pattern)[inz])

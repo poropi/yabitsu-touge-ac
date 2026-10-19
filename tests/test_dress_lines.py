@@ -122,3 +122,18 @@ def test_red_row_starts_after_gap():
             {"s_from": "90", "s_to": "150", "item": "gap", "side": "B", "value": ""}]
     (name, v, f, uv, mat), = [m for m in dress_lines.line_meshes(sec, rows) if m[4] == "dress_red"]
     assert v[:, 0].min() >= 149.5
+
+
+def test_split_lines_keep_out():
+    from shapely.geometry import box
+    from types import SimpleNamespace
+    from shapely.geometry import LineString
+    cw = box(0, -4, 100, 4)
+    sp = SimpleNamespace(island=box(45, -0.5, 55, 0.5), carriageway=cw.difference(box(45, -0.5, 55, 0.5)),
+                         zebra=box(20, -1, 40, 1), lines={"a": LineString([(0, 0), (100, 0)])}, singles=set(),
+                         _ends=lambda: box(-5, -5, 1, 5).union(box(99, -5, 105, 5)))
+    out = dress_lines.split_lines(sp, lambda x, y: np.zeros_like(np.asarray(x, float)), keep_out=box(15, -4, 42, 0))
+    for name, v, f, uv, mat in out:
+        if mat == "dress_line_white":
+            cen = v[f].mean(1)
+            assert not ((cen[:, 0] > 16) & (cen[:, 0] < 41) & (cen[:, 1] < -0.1)).any()

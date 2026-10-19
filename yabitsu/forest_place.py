@@ -64,7 +64,7 @@ def _road_z(xy, d, ground, keep, h=1.0, surface=None):
     return np.where(np.isfinite(z), z, ground.z(xy))
 
 
-def place(area, fm, ground, keep, models, cfg, seed=1, species=None, road_surface=None):
+def place(area, fm, ground, keep, models, cfg, seed=1, species=None, road_surface=None, zones=()):
     if species is None:
         from .treemodels import SPECIES as species
     cfg = {**DEFAULT_PLACE, **cfg}
@@ -121,18 +121,40 @@ def place(area, fm, ground, keep, models, cfg, seed=1, species=None, road_surfac
         pats = np.array([species[name][rng.integers(len(species[name]))] for _ in range(ok.sum())], dtype="U16")
         out.append((P[ok], z[ok], pats, rng.uniform(0.8, 1.25, ok.sum()).astype(np.float32), d[ok]))
 
+    # 樹種を決める場所（zones）：中にあった木を除き、森の判定に関わらず指定の樹種と低木を植え直す
+    for zn in zones:
+        cx, cy = zn["center"]; R = zn["radius"]
+        out = [(o[0][m_], o[1][m_], o[2][m_], o[3][m_], o[4][m_]) for o in out
+               for m_ in [np.hypot(o[0][:, 0] - cx, o[0][:, 1] - cy) >= R]]
+        for name, spacing in ((zn["species"], zn["spacing"]), ("shrub", zn["spacing"] * 0.8)):
+            Q = _grid((cx - R, cy - R, cx + R, cy + R), spacing, cfg["jitter"], rng)
+            Q = Q[np.hypot(Q[:, 0] - cx, Q[:, 1] - cy) < R]
+            Q = Q[~keep.blocked(Q)]
+            zq = ground.z(Q); okq = np.isfinite(zq); Q, zq = Q[okq], zq[okq]
+            pats_q = np.array([species[name][rng.integers(len(species[name]))] for _ in range(len(Q))], dtype="U16")
+            sz = rng.uniform(*(zn.get("size", [0.6, 1.0]) if name != "shrub" else [0.8, 1.3]), len(Q)).astype(np.float32)
+            if name == "shrub" and len(Q):   # 低木は駐車場の縁から 3.5 m 離す（車止めの外の草地）
+                ok2 = keep.road_distance(Q) >= 3.5
+                Q, zq, pats_q, sz = Q[ok2], zq[ok2], pats_q[ok2], sz[ok2]
+            if name != "shrub" and len(Q):   # 枝は駐車場の上に少し出てよいが、樹冠の半分より近くには植えない
+                crr = np.array([models[pp].crown_radius for pp in pats_q]) * sz
+                ok2 = keep.road_distance(Q) >= crr * zn.get("overhang", 0.5)
+                Q, zq, pats_q, sz = Q[ok2], zq[ok2], pats_q[ok2], sz[ok2]
+            out.append((Q, zq, pats_q, sz, np.full(len(Q), 1e9)))   # 場所で決めた木は、張り出しの判定をしない（駐車場の上に枝が出てよい）
+
     P = np.concatenate([o[0] for o in out]) if out else np.zeros((0, 2))
     z = np.concatenate([o[1] for o in out]) if out else np.zeros(0)
     pats = np.concatenate([o[2] for o in out]) if out else np.zeros(0, "U16")
     size = np.concatenate([o[3] for o in out]) if out else np.zeros(0, np.float32)
     d = np.concatenate([o[4] for o in out]) if out else np.zeros(0)
 
+    zone_tree = d >= 1e8 if len(P) else np.zeros(0, bool)
     d = keep.road_distance(P) if len(P) else d      # 張り出しは OSM の道も含めた道路からの距離で見る
     # 道路の上に張り出す木：枝の最低の高さが路面＋overhang_clear_m 未満なら植えない
     cb = np.array([models[p].crown_base * models[p].height for p in pats]) if len(pats) else np.zeros(0)
     cr = np.array([models[p].crown_radius for p in pats]) if len(pats) else np.zeros(0)
     under = np.char.startswith(pats, "shrub") | np.char.startswith(pats, "fern") if len(pats) else np.zeros(0, bool)
-    over = (~under) & (d < cr * size)
+    over = (~under) & (d < cr * size) & ~zone_tree
     if over.any():
         rz = _road_z(P[over], d[over], ground, keep, surface=road_surface)
         low = z[over] + cb[over] * size[over] < rz + cfg["overhang_clear_m"]
@@ -215,4 +237,17 @@ def sightline_keep(trees, models, cl, cl_z, cfg) -> np.ndarray:
                         idx = np.flatnonzero(ok)[inside]
                         hit[idx] = True
     keep[cand[hit]] = False
+    return keep
+
+
+def view_clear_keep(trees, models, zones) -> np.ndarray:
+    """眺めの開けた場所（zones：中心・半径・展望の高さ z・余裕 margin）：その場所より低い地面に立ち、梢が z＋margin を
+    超える木を取り除く。True＝残す。2026-10-20：菜の花台の駐車場は谷側の眺めが開けている（ストリートビュー）。"""
+    keep = np.ones(len(trees), bool)
+    pats = np.asarray(trees.pattern)
+    H = np.array([models[p].height for p in pats]) * np.asarray(trees.scale, float) if len(pats) else np.zeros(0)
+    for zn in zones:
+        d = np.hypot(trees.x - zn["center"][0], trees.y - zn["center"][1])
+        top = trees.z + H
+        keep &= ~((d < zn["radius"]) & (trees.z < zn["z"]) & (top > zn["z"] + zn.get("margin", 0.0)))
     return keep
