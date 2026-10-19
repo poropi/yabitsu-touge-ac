@@ -317,3 +317,33 @@ def zebra_parts(sp, sec, s_max, lat_max):
         if sec.s[i] < s_max and lat < lat_max:
             out.append(g)
     return unary_union(out) if out else Polygon()
+
+
+def split_centre(sp, sec, z_fn) -> list:
+    """分かれる所の前後のオレンジの中央線：地図（OSM）の2車線の道の線に沿って、窓の端から分かれる点まで引き、
+    そこから導流帯の先端まで伸ばす（空中写真：線は道のカーブに沿って導流帯の先につながる）。"""
+    from shapely.geometry import LineString
+    from .town import _polys, grid_drape
+    tree = cKDTree(np.c_[sec.x, sec.y])
+    big = max(_polys(sp.zebra), key=lambda g: g.area)
+    zv = np.asarray(big.exterior.coords)
+    zs = sec.s[tree.query(zv)[1]]
+    tips = {"south": zv[np.argmin(zs)], "north": zv[np.argmax(zs)]}
+    out = []
+    for k, ln in sp.lines.items():
+        if k in sp.singles:
+            continue
+        seg = ln.intersection(sp.window)
+        if seg.is_empty or seg.geom_type != "LineString":
+            continue
+        c = np.asarray(seg.coords)[:, :2]
+        cs = sec.s[tree.query(c)[1]]
+        if cs[0] > cs[-1]:
+            c, cs = c[::-1], cs[::-1]
+        south = cs.mean() < np.mean([zs.min(), zs.max()])
+        tip = tips["south" if south else "north"]
+        pts = np.r_[c, [tip]] if south else np.r_[[tip], c]
+        poly = LineString(pts).buffer(0.075, cap_style="flat").intersection(sp.carriageway)
+        for j, (v, f, uv) in enumerate(grid_drape(poly, z_fn, LIFT)):
+            out.append((f"dress_split_orange_{k}_{j}", v, f, uv, "dress_line_orange"))
+    return out
