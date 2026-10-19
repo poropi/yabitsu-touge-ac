@@ -15,7 +15,7 @@ from pathlib import Path
 import numpy as np
 from PIL import Image, ImageDraw
 
-from yabitsu import (acdata, config, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5,
+from yabitsu import (acdata, config, dress_lines, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5,
                      layouts, track)
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
@@ -66,6 +66,8 @@ def retex_assign(cl, rows, s_range):
             assign[name] = "plane_town"
         elif k == "wall":
             assign[name] = f"wall_{finish.get(name, 'kenchi')}"
+        elif k in ("line_white", "line_orange"):
+            continue                      # 線は引き直す（dress_lines）ので貼り替えない
         elif k == "parapet":
             assign[name] = "wall_concrete"
         else:
@@ -240,7 +242,24 @@ def main():
     m.add_material("dress_wire", color=(0.12, 0.12, 0.12), two_sided=True)
     for k in ("manhole", "grating", "patch"):
         m.add_material(f"dress_{k}", texture=f"textures/{k}.png", alpha=k != "grating")
+    for k in ("white", "orange"):
+        img, _ = dress_tex.load(f"paint_{k}")
+        img = img.convert("RGB").resize((256, 256))
+        if k == "orange":       # Codex の色は実物（ストリートビュー）より鮮やか
+            from PIL import ImageEnhance
+            img = ImageEnhance.Color(img).enhance(0.75)
+        img.save(tex / f"line_{k}.png")
+        m.add_material(f"dress_line_{k}", texture=f"textures/line_{k}.png")
+    m.add_material("dress_green", color=(0.20, 0.34, 0.27))   # 写真の緑の路側帯（くすんだ緑）
     npoles = build_parts(sec, rows, m, s_range)
+    # 路面の線：今の線を隠し、表（s3_lines.csv）どおりに引き直す。隠す線が S3 の外（S2 の頭）にはみ出す分は、もとと同じ線を引く
+    hide_lines, (lo, hi) = dress_lines.hidden_line_meshes(MANIFEST, cl, s_range)
+    line_rows = list(csv.DictReader(open(config.DATA_MANUAL / "s3_lines.csv", encoding="utf-8")))
+    if hi > s_range[1]:
+        line_rows += [{"s_from": s_range[1], "s_to": hi, "item": "centre", "side": "C", "value": "orange_solid"},
+                      {"s_from": s_range[1], "s_to": hi, "item": "edge", "side": "B", "value": "solid"}]
+    for name, v, f, uv, mat in dress_lines.line_meshes(sec, line_rows):
+        m.add_mesh(GROUP, name, v, f, uv, mat)
     m.save()
     kn5_path = OUT / f"{GROUP}.kn5"
     kn5.write_from_manifest(OUT / "manifest.json", GROUP, kn5_path)
@@ -252,12 +271,12 @@ def main():
     ext.mkdir(parents=True, exist_ok=True)
     write_retex_textures(sorted(set(assign.values())), ext)
     (OUT / "retex.json").write_text(json.dumps(assign, ensure_ascii=False), encoding="utf-8")   # 確認描画用
-    hide = old_fence_meshes(cl, s_range)
+    hide = old_fence_meshes(cl, s_range) + hide_lines
     (OUT / "hidden.json").write_text(json.dumps(hide), encoding="utf-8")
     part = dress_retex.section_text(assign) + "\n[MESH_ADJUSTMENT_...]\nACTIVE=1\nMESHES=" + ",".join(hide) + \
         "\nIS_RENDERABLE=0\n"
     (ext / "dress_s3.ini").write_text(part, encoding="utf-8", newline="\n")
-    print(f"貼り替え：{len(assign)} 部品・{len(set(assign.values()))} 種類、隠す古い柵 {len(hide) // 2}")
+    print(f"貼り替え：{len(assign)} 部品・{len(set(assign.values()))} 種類、隠す古い柵と線 {len(hide) // 2}")
 
     if a.no_install:
         return
