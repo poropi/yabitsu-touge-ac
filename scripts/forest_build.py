@@ -16,7 +16,7 @@ from pathlib import Path
 import numpy as np
 from shapely.geometry import LineString
 
-from yabitsu import config, forest_ac, forest_ground, forest_place, forestmap, polyhaven, track, treemodels
+from yabitsu import config, ext_config, forest_ac, forest_ground, forest_place, forestmap, polyhaven, track, treemodels
 
 CFG = config.PROJECT_ROOT / "data" / "manual" / "forest.json"
 MANIFEST = config.DATA_PROCESSED / "track"
@@ -131,7 +131,10 @@ def install(ext_src: Path, track_dir: Path):
         raise RuntimeError(f"{cfg} はこのスクリプトが書いたものではありません")
     if (dst / "trees").exists():
         shutil.rmtree(dst / "trees")
-    shutil.copytree(ext_src / "extension", dst, dirs_exist_ok=True)
+    shutil.copytree(ext_src / "extension" / "trees", dst / "trees")
+    (dst / "parts").mkdir(parents=True, exist_ok=True)
+    shutil.copy2(ext_src / "extension" / "parts" / "forest.ini", dst / "parts" / "forest.ini")
+    ext_config.assemble(track_dir)        # 森の部品だけを入れ替え、ほかの部品（S3 の仕上げ）は残す
     forest_ac.write_layout_off(track_dir, [l for l in NO_FOREST_LAYOUTS if (track_dir / l).exists()])
 
 

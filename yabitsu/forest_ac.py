@@ -3,9 +3,8 @@ from pathlib import Path
 
 import numpy as np
 
-from . import csptree
-
-MARK = "; yabitsu forest（scripts.forest_build が書いたファイル。手で直さない）"
+from . import csptree, ext_config
+from .ext_config import MARK  # noqa: F401（ほかのモジュールが forest_ac.MARK を使う）
 
 
 def write_lists(trees, ext_dir: Path, tile_m=1000.0) -> list:
@@ -33,13 +32,13 @@ def _check_ours(p: Path):
 
 
 def write_ext_config(track_dir: Path, lists, hidden_meshes):
-    p = Path(track_dir) / "extension" / "ext_config.ini"
-    _check_ours(p)
-    p.parent.mkdir(parents=True, exist_ok=True)
-    s = [MARK, "", "[TREES]", "ACTIVE=1"] + [f"LIST_{k}={l}" for k, l in enumerate(lists)]
+    """森の部品（extension/parts/forest.ini）を書き、ext_config.ini を組み立て直す（S3 の仕上げなど他の部品は残る）。"""
+    _check_ours(Path(track_dir) / "extension" / "ext_config.ini")
+    s = ["[TREES]", "ACTIVE=1"] + [f"LIST_{k}={l}" for k, l in enumerate(lists)]
     if hidden_meshes:   # 古い板の木（kn5 の中）を隠す
         s += ["", "[MESH_ADJUSTMENT_...]", "MESHES=" + ",".join(hidden_meshes), "IS_ACTIVE=0", "IS_RENDERABLE=0"]
-    p.write_text("\n".join(s) + "\n", encoding="utf-8", newline="\n")
+    ext_config.write_part(track_dir, "forest", "\n".join(s))
+    ext_config.assemble(track_dir)
 
 
 def write_layout_off(track_dir: Path, layouts):
