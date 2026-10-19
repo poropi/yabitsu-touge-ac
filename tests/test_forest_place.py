@@ -104,3 +104,49 @@ def test_tiers_follow_course_not_osm(world):
     near_osm = con & (t.y > 155) & (t.y < 180)
     near_course = con & (t.y > 10) & (t.y < 35)
     assert near_course.sum() > 3 * near_osm.sum()
+
+
+def _one(x, y, z, pattern, scale=1.0):
+    t = np.zeros(1, fp.DTYPE)
+    t[0] = (x, y, z, pattern, 0.0, scale)
+    return t
+
+
+def test_sightline_clears_overhang_but_keeps_inner_forest():
+    # 半径 40 m の左カーブ（中心 (0, 40)）を走る。樹冠が目の高さにある杉を、道からの距離を変えて置く
+    a = np.linspace(-np.pi / 2, 0.2, 120)
+    cl = np.c_[40 * np.cos(a), 40 + 40 * np.sin(a)]
+    z = np.zeros(len(cl))
+    at = lambda r, zz: _one(r * np.cos(-0.7), 40 + r * np.sin(-0.7), zz, "sugi_a")
+    t = np.concatenate([at(36.0, -12.0),    # 内側の路肩のすぐ外：樹冠が道の上にはみ出す → 取る
+                        at(43.0, -12.0),    # 外側（谷側）から樹冠が道にはみ出す → 取る
+                        at(26.0, -12.0),    # 内側の森の奥 → 残す
+                        at(36.0, 30.0)]     # 樹冠が視線より上 → 残す
+                       ).view(np.recarray)
+    keep = fp.sightline_keep(t, MODELS, cl, z, fp.DEFAULT_SIGHT)
+    assert keep.tolist() == [False, False, True, True]
+
+
+def test_sightline_keeps_understory():
+    cl = np.c_[np.linspace(0, 100, 50), np.zeros(50)]
+    t = _one(50.0, 4.0, 0.0, "fern_a").view(np.recarray)
+    assert fp.sightline_keep(t, MODELS, cl, np.zeros(50), fp.DEFAULT_SIGHT).tolist() == [True]
+
+
+def test_overhang_uses_road_surface_not_ground_under_it(tmp_path):
+    """道路の真下の地形は削ってある。張り出しは路面（1ROAD）の高さで判定すること。"""
+    from tests.test_forest_ground import _manifest, _square
+    road = _square(-100, -3, 100, 3, 6.0)                    # 盛り土の上の道路（路面 6 m）
+    m = _manifest(tmp_path, {"1GRASS_s1_terrain_000": (*_square(-100, -100, 100, 100, 0.0), "ground"),
+                             "1ROAD_s1_000": (*road, "asphalt")})
+    ground, keep = fg.load_ground(m), fg.load_keepout(m, {"cell": 0.5, "coarse_cell": 2.0})
+    surface = fg.load_ground(m, prefixes=("1ROAD_",))
+    fm = ForestMap(x0=-100.0, y1=100.0, cell=4.0, cls=np.ones((50, 50), np.uint8))
+    cfg = {**CFG, "tiers": [{"max_d": 1e9, "spacing": {"conifer": 3.0, "broadleaf": 3.0}, "size": [1.0, 1.0]}],
+           "understory": {**CFG["understory"], "max_d": 0.0}}
+    models = {**MODELS, "sugi_a": SimpleNamespace(height=20.0, crown_base=0.5, crown_radius=4.0)}
+    t = fp.place(None, fm, ground, keep, models, cfg, seed=1, species={**SPECIES, "hinoki": ["sugi_a"]},
+                 road_surface=surface)
+    d = keep.road_distance(np.c_[t.x, t.y])
+    near = d < 4.0
+    assert not (near & (t.z + 10.0 < 6.0 + 5.0)).any()

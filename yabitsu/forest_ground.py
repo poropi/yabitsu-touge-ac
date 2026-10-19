@@ -46,6 +46,36 @@ def _load(manifest_dir: Path):
         yield name, e["material"], d["verts"], tris
 
 
+class TriSoup:
+    """三角形の集まり（頂点が重なっていてもよい）の高さ。三角形の中心の KD 木で近い候補を調べる。"""
+
+    def __init__(self, v, tris, k=32):
+        from scipy.spatial import cKDTree
+        self.a, self.b, self.c = v[tris[:, 0]], v[tris[:, 1]], v[tris[:, 2]]
+        cen = (self.a + self.b + self.c)[:, :2] / 3
+        self.tree, self.k = cKDTree(cen), min(k, len(tris))
+
+    def __call__(self, x, y):
+        q = np.c_[x, y]
+        _, idx = self.tree.query(q, self.k)
+        idx = idx.reshape(len(q), -1)
+        out = np.full(len(q), np.nan)
+        todo = np.ones(len(q), bool)
+        for col in range(idx.shape[1]):
+            t = idx[:, col]
+            a, b, c = self.a[t], self.b[t], self.c[t]
+            v0, v1, v2 = (b - a)[:, :2], (c - a)[:, :2], q - a[:, :2]
+            den = v0[:, 0] * v1[:, 1] - v1[:, 0] * v0[:, 1]
+            ok = np.abs(den) > 1e-12
+            den = np.where(ok, den, 1.0)
+            u = (v2[:, 0] * v1[:, 1] - v1[:, 0] * v2[:, 1]) / den
+            w = (v0[:, 0] * v2[:, 1] - v2[:, 0] * v0[:, 1]) / den
+            inside = todo & ok & (u >= -1e-6) & (w >= -1e-6) & (u + w <= 1 + 1e-6)
+            out[inside] = (a[:, 2] + u * (b - a)[:, 2] + w * (c - a)[:, 2])[inside]
+            todo &= ~inside
+        return np.ma.masked_invalid(out)
+
+
 class Ground:
     def __init__(self, parts):
         self.parts = parts      # [(bbox, interpolator)]、優先度の低い順
@@ -71,9 +101,8 @@ def load_ground(manifest_dir: Path, prefixes=None) -> Ground:
             continue
         try:
             interp = LinearTriInterpolator(Triangulation(v[:, 0], v[:, 1], tris), v[:, 2])
-        except (ValueError, RuntimeError) as e:
-            print(f"地面 {name} を読めません: {e}")
-            continue
+        except (ValueError, RuntimeError):
+            interp = TriSoup(v, tris)       # 頂点が重なっているメッシュ（道路・峠の島など）
         bbox = (v[:, 0].min(), v[:, 1].min(), v[:, 0].max(), v[:, 1].max())
         (far if name.startswith("TERRAIN_FAR") else near).append((bbox, interp))
     return Ground(far + near)

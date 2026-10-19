@@ -64,3 +64,15 @@ def test_packages_written(tmp_path):
         tex, subs = csptree.read_mesh(z.read("LOD0.mesh"))
         assert all(t[1] in names and t[1].endswith(".dds") for t in tex)
         assert out[n].height > 0
+
+
+def test_crown_covers_all_lods(models):
+    """視界・張り出しの判定に使う樹冠は、遠くで使う形（板が大きい）も含めていちばん広く低いもの。"""
+    for name, m in models.items():
+        if name.startswith("fern"):
+            continue
+        H, hw = m.height, m.width / 2
+        for lod in m.lods:
+            p = lod[0].verts["p"]
+            assert np.hypot(p[:, 0], p[:, 2]).max() * hw <= m.crown_radius + 1e-3, name
+            assert p[:, 1].min() * H >= m.crown_base * H - 1e-3, name

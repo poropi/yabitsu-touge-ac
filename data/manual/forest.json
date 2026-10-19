@@ -86,5 +86,28 @@
    "shrub_p": 0.35
   },
   "overhang_clear_m": 5.0
+ },
+ "sight": {
+  "step_m": 2.0,
+  "ahead_m": [
+   6,
+   12,
+   20,
+   28,
+   35
+  ],
+  "lateral_m": [
+   -1.6,
+   0.0,
+   1.6
+  ],
+  "eye_h": 1.2,
+  "target_h": [
+   1.0,
+   3.0
+  ],
+  "crown_shrink": 0.85,
+  "margin_m": 0.3,
+  "near_m": 60.0
  }
 }

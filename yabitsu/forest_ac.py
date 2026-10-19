@@ -17,7 +17,9 @@ def write_lists(trees, ext_dir: Path, tile_m=1000.0) -> list:
     out = []
     for key in sorted(set(zip(i.tolist(), j.tolist()))):
         sel = np.flatnonzero((i == key[0]) & (j == key[1]))
-        lines = ["configure: angle variance = 0, 0", "configure: size variance = 1, 1"]
+        # ばらつきは各行の angle/size で指定済み。CSP が横幅や色を勝手に変えないよう、全部 1 倍・0 に固定する
+        lines = ["configure: angle variance = 0, 0", "configure: size variance = 1, 1", "configure: width variance = 1, 1",
+                 "configure: color variance = 0, 0, 0"]
         lines += [csptree.tree_line(f"{trees.pattern[k]}.zip", *ac[k], trees.angle_deg[k], trees.scale[k]) for k in sel]
         name = f"forest_{key[0]}_{key[1]}.txt"
         (ext_dir / "trees" / name).write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")

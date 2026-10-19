@@ -398,14 +398,16 @@ def build_pattern(name: str, seed: int = 1) -> TreeModel:
     textures = species_textures(species)
     names = list(textures)
     lods = [_pack([leaf, wood], H, half_w, names) for leaf, wood, _ in raw]
-    leaf0 = raw[0][0].arrays()[0]
-    crown_r = float(np.linalg.norm(leaf0[:, [0, 2]], axis=1).max())
+    # 視界・張り出しの判定用：遠くで使う形（板が大きい）も含めて、いちばん広く・いちばん低い樹冠
+    leaves = np.concatenate([leaf.arrays()[0] for leaf, _, _ in raw])
+    crown_r = float(np.linalg.norm(leaves[:, [0, 2]], axis=1).max())
+    crown_base = max(0.0, float(leaves[:, 1].min()) / H)
     ini = {"BASIC": {"HEIGHT": round(H, 3), "WIDTH": round(2 * half_w, 3), "DISTANCE": DRAW_DISTANCE[species]},
            "SHADING": {"SPECULAR": 0.03, "SUBSCATTERING": 0.3, "REFLECTIVITY": 0.02, "BRIGHTNESS": 1.0},
            "NORMALS": {"BOOST": 1, "SPHERE": 0.3}}
     for i, d in enumerate(LOD_DISTANCE):
         ini[f"LOD_{i}"] = {"MODEL": f"LOD{i}.mesh", "DISTANCE": d}
-    return TreeModel(lods, H, 2 * half_w, raw[0][2], crown_r, textures, ini)
+    return TreeModel(lods, H, 2 * half_w, crown_base, crown_r, textures, ini)
 
 
 def write_all(out_dir: Path, names=None) -> dict:

@@ -89,3 +89,12 @@ def test_course_distance_ignores_osm(tmp_path):
     k.add_lines([np.array([[-30.0, 20.0], [30.0, 20.0]])], [4.0])
     assert k.course_distance(np.array([[0.0, 25.0]]))[0] == pytest.approx(22.0, abs=1.5)
     assert k.road_distance(np.array([[0.0, 25.0]]))[0] < 5.0
+
+
+def test_surface_with_duplicate_vertices(tmp_path):
+    """道路のメッシュは継ぎ目で頂点が重なっている（matplotlib の三角分割では読めない）。それでも高さが取れること。"""
+    v = [(0, 0, 3), (10, 0, 3), (10, 10, 3), (0, 10, 3), (10, 0, 3), (20, 0, 5), (20, 10, 5), (10, 10, 3)]
+    f = [(0, 1, 2), (0, 2, 3), (4, 5, 6), (4, 6, 7)]
+    m = _manifest(tmp_path, {"1ROAD_s1_000": (v, f, "asphalt")})
+    z = fg.load_ground(m, prefixes=("1ROAD_",)).z(np.array([[5.0, 5.0], [15.0, 5.0], [30.0, 5.0]]))
+    assert z[0] == pytest.approx(3.0) and z[1] == pytest.approx(4.0) and np.isnan(z[2])

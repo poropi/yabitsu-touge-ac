@@ -44,18 +44,27 @@ def _patch_rand(xy, size, seed):
     return (h % 10007) / 10007.0
 
 
-def _road_z(xy, d, ground, keep, h=1.0):
-    """一番近い道路の路面の高さ（距離の勾配の逆向きへ d だけ進んだ所の地面）。"""
+def _road_z(xy, d, ground, keep, h=1.0, surface=None):
+    """一番近い道路の路面の高さ（距離の勾配の逆向きへ d だけ進んだ所）。surface（1ROAD の面）があればその高さ。
+    道路の真下の地形は削ってあり、路面より平均 6 m 低い（2026-10-19 の全線の比較）ので、地面では代わりにならない。"""
     gx = keep.road_distance(xy + [h, 0]) - keep.road_distance(xy - [h, 0])
     gy = keep.road_distance(xy + [0, h]) - keep.road_distance(xy - [0, h])
     g = np.c_[gx, gy]
     n = np.linalg.norm(g, axis=1, keepdims=True)
     g = np.where(n > 1e-6, g / np.maximum(n, 1e-6), 0)
-    z = ground.z(xy - g * d[:, None])
+    z = np.full(len(xy), np.nan)
+    if surface is not None:     # 距離の格子は 1 m ほどずれるので、道路の内側へ少しずつ深く探す
+        for extra in (0.5, 1.5, 3.0, 5.0):
+            todo = ~np.isfinite(z)
+            if not todo.any():
+                break
+            z[todo] = surface.z(xy[todo] - g[todo] * (d[todo, None] + extra))
+    todo = ~np.isfinite(z)
+    z[todo] = ground.z(xy[todo] - g[todo] * (d[todo, None] + 0.5))
     return np.where(np.isfinite(z), z, ground.z(xy))
 
 
-def place(area, fm, ground, keep, models, cfg, seed=1, species=None):
+def place(area, fm, ground, keep, models, cfg, seed=1, species=None, road_surface=None):
     if species is None:
         from .treemodels import SPECIES as species
     cfg = {**DEFAULT_PLACE, **cfg}
@@ -125,7 +134,7 @@ def place(area, fm, ground, keep, models, cfg, seed=1, species=None):
     under = np.char.startswith(pats, "shrub") | np.char.startswith(pats, "fern") if len(pats) else np.zeros(0, bool)
     over = (~under) & (d < cr * size)
     if over.any():
-        rz = _road_z(P[over], d[over], ground, keep)
+        rz = _road_z(P[over], d[over], ground, keep, surface=road_surface)
         low = z[over] + cb[over] * size[over] < rz + cfg["overhang_clear_m"]
         drop = np.flatnonzero(over)[low]
         mask = np.ones(len(P), bool); mask[drop] = False
@@ -135,3 +144,75 @@ def place(area, fm, ground, keep, models, cfg, seed=1, species=None):
     t["x"], t["y"], t["z"], t["pattern"], t["scale"] = P[:, 0], P[:, 1], z, pats, size
     t["angle_deg"] = rng.uniform(0, 360, len(P))
     return t.view(np.recarray)
+
+
+# 視界：コースの上を走る目の高さから先の路面への見通しの線に、樹冠がかかる木を取り除く（data/manual/forest.json の "sight"）。
+# 見通す距離は短め（道にはみ出した枝を取る。カーブの内側の森そのものは残す）。
+DEFAULT_SIGHT = {
+    "step_m": 2.0,                       # 中心線の点の間隔
+    "ahead_m": [6, 12, 20, 28, 35],      # 先の路面までの距離
+    "lateral_m": [-1.6, 0.0, 1.6],       # 目の位置（左右の車線・中央）
+    "eye_h": 1.2, "target_h": [1.0, 3.0],
+    "crown_shrink": 0.85,                # 樹冠の半径（葉の先端）を少し内側に
+    "margin_m": 0.3,
+    "near_m": 60.0,                      # これより道から遠い木は調べない
+}
+
+
+def _resample(cl, z, step):
+    s = np.r_[0, np.cumsum(np.linalg.norm(np.diff(cl, axis=0), axis=1))]
+    ss = np.arange(0, s[-1], step)
+    return np.c_[np.interp(ss, s, cl[:, 0]), np.interp(ss, s, cl[:, 1])], np.interp(ss, s, z)
+
+
+def sightline_keep(trees, models, cl, cl_z, cfg) -> np.ndarray:
+    """True＝残す。下草（シダ・低木）は調べない。"""
+    from scipy.spatial import cKDTree
+    cfg = {**DEFAULT_SIGHT, **cfg}
+    P, Z = _resample(np.asarray(cl, float), np.asarray(cl_z, float), cfg["step_m"])
+    d = np.gradient(P, axis=0); d /= np.maximum(np.linalg.norm(d, axis=1, keepdims=True), 1e-9)
+    nrm = np.c_[-d[:, 1], d[:, 0]]
+    keep = np.ones(len(trees), bool)
+    pats = np.asarray(trees.pattern)
+    big = ~(np.char.startswith(pats, "shrub") | np.char.startswith(pats, "fern"))
+    xy = np.c_[trees.x, trees.y]
+    dist, i0 = cKDTree(P).query(xy)
+    cand = np.flatnonzero(big & (dist < cfg["near_m"]))
+    if not len(cand):
+        return keep
+    c = xy[cand]; i0 = i0[cand]
+    sc = np.asarray(trees.scale, float)[cand]
+    m = [models[p] for p in pats[cand]]
+    H = np.array([x.height for x in m]) * sc
+    zb = np.asarray(trees.z, float)[cand] + np.array([x.crown_base for x in m]) * H
+    zt = np.asarray(trees.z, float)[cand] + H
+    R = np.array([x.crown_radius for x in m]) * sc * cfg["crown_shrink"]
+    cone = np.char.startswith(pats[cand], "sugi") | np.char.startswith(pats[cand], "hinoki")
+    hit = np.zeros(len(cand), bool)
+    n = len(P)
+    reach = int(np.ceil((R.max() + cfg["margin_m"] + max(map(abs, cfg["lateral_m"]))) / cfg["step_m"])) + 1
+    for ahead in cfg["ahead_m"]:
+        k = max(1, int(round(ahead / cfg["step_m"])))
+        for sgn in (1, -1):              # 上り・下り
+            for off in range(-k - reach, reach + 1):
+                i = i0 + off * sgn
+                j = i + k * sgn
+                ok = (i >= 0) & (i < n) & (j >= 0) & (j < n) & ~hit
+                if not ok.any():
+                    continue
+                ii, jj = i[ok], j[ok]
+                for lat in cfg["lateral_m"]:
+                    a2 = P[ii] + nrm[ii] * lat * sgn
+                    b2 = P[jj] + nrm[jj] * lat * sgn
+                    ab = b2 - a2
+                    t = np.clip(np.einsum("ij,ij->i", c[ok] - a2, ab) / np.maximum(np.einsum("ij,ij->i", ab, ab), 1e-9), 0, 1)
+                    dd = np.linalg.norm(a2 + ab * t[:, None] - c[ok], axis=1)
+                    for th in cfg["target_h"]:
+                        h = Z[ii] + cfg["eye_h"] + t * (Z[jj] + th - Z[ii] - cfg["eye_h"])
+                        f = np.clip((zt[ok] - h) / np.maximum(zt[ok] - zb[ok], 1e-6), 0, 1) ** 0.9
+                        r = np.where(cone[ok], R[ok] * f, R[ok])
+                        inside = (h >= zb[ok]) & (h <= zt[ok]) & (dd < r + cfg["margin_m"])
+                        idx = np.flatnonzero(ok)[inside]
+                        hit[idx] = True
+    keep[cand[hit]] = False
+    return keep

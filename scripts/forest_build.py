@@ -153,7 +153,16 @@ def main():
     keep.add_lines(*forest_ground.osm_road_lines(terrain_bounds()))
     log(t0, "地面と植えない範囲")
     area = pilot_area() if a.area == "pilot" else None
-    trees = forest_place.place(area, fm, ground, keep, models, cfg.get("place", {}))
+    surface = forest_ground.load_ground(MANIFEST, prefixes=("1ROAD_",))     # 路面
+    trees = forest_place.place(area, fm, ground, keep, models, cfg.get("place", {}), road_surface=surface)
+    cl = np.load(config.DATA_PROCESSED / "track_centerline.npz")
+    cxy = np.c_[cl["x"], cl["y"]]
+    cz = surface.z(cxy)
+    cz = np.where(np.isfinite(cz), cz, np.nan_to_num(ground.z(cxy)))
+    keep_sight = forest_place.sightline_keep(trees, models, cxy, cz, cfg.get("sight", {}))
+    np.save(out / "removed_sight.npy", np.asarray(trees[~keep_sight]))
+    trees = trees[keep_sight]
+    log(t0, f"コースの視界をさえぎる木を {int((~keep_sight).sum()):,} 本取り除きました")
     counts = Counter(p.split("_")[0] for p in trees.pattern)
     log(t0, f"配置 {len(trees):,} 本 {dict(counts)}")
     np.save(out / "trees.npy", np.asarray(trees))

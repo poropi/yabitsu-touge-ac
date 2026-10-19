@@ -17,6 +17,7 @@ def test_write_lists_tiles(tmp_path):
     assert sorted(lists) == ["trees\\forest_0_0.txt", "trees\\forest_1_0.txt"]
     a = (tmp_path / "trees" / "forest_0_0.txt").read_text(encoding="utf-8").splitlines()
     assert a[0] == "configure: angle variance = 0, 0" and a[1] == "configure: size variance = 1, 1"
+    assert "configure: width variance = 1, 1" in a
     assert "tree: sugi_a.zip; pos=10.00, 500.00, -20.00; angle = 30; size = 1.10" in a
     assert len([l for l in a if l.startswith("tree:")]) == 2
 
