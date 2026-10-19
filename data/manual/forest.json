@@ -1,11 +1,13 @@
 {
  "classify": {
   "cell_m": 4.0,
-  "bright_max": 0.46,
-  "rg_max": 0.95,
-  "conifer_score_max": 0.005,
-  "conifer_bright_weight": 0.5,
-  "bright_ref": 0.38,
+  "tex_window_m": 10.0,
+  "cv_min": 0.105,
+  "shadow_lum": 0.13,
+  "block_m": 500.0,
+  "brown_rg": 1.0,
+  "winter_brown_share": 0.08,
+  "conifer_rel_lum": 1.0,
   "smooth_cells": 2
  },
  "map": {

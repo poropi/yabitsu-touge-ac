@@ -177,7 +177,7 @@ def bark(kind, seed=3, w=512, h=1024):
         strips = strips / (np.abs(strips).max() + 1e-6)
         fine = ndimage.gaussian_filter(rng.normal(0, 1, (h, w)), (6, 0.6))
         fine = fine / (np.abs(fine).max() + 1e-6)
-        col = np.array((0.52, 0.38, 0.30) if kind == "sugi" else (0.50, 0.40, 0.33), np.float32)
+        col = np.array((0.44, 0.35, 0.29) if kind == "sugi" else (0.46, 0.38, 0.32), np.float32)
         lum = img.mean(-1, keepdims=True); lum = lum / lum.mean()
         img = col * (0.55 + 0.45 * lum) * (1 + 0.35 * strips[..., None] + 0.2 * fine[..., None])
         nrm[..., 0] += 6.0 * np.gradient(strips + 0.5 * fine, axis=1)

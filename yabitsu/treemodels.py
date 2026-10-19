@@ -165,11 +165,11 @@ def _conifer(name, lod, species):
     rng = np.random.default_rng(c["seed"] * 10 + lod)
     H, cb, R = c["height"], c["crown_base"] * c["height"], c["radius"]
     spacing, per, cross, segs, wmul, nfill = [(0.30, 6, True, 3, 1.0, 170), (0.62, 5, False, 2, 1.3, 40),
-                                              (1.0, 4, False, 1, 1.7, 0)][lod]
+                                              (0.8, 5, False, 1, 2.0, 30)][lod]
     leaf, wood = Part(), Part()
     sink = 0.015 * H
     ys = np.linspace(-sink, H * 0.97, [26, 10, 4][lod])
-    r0 = H * 0.013
+    r0 = H * 0.009
     tube(wood, [(0, y, 0) for y in ys], [r0 * (1 - max(y, 0) / H) ** 0.8 + 0.02 for y in ys], [10, 6, 4][lod],
          uv_v=0.35, ao=0.75)
     rects = [(0, 0, 1, 0.5), (0, 0.5, 1, 1)]
@@ -193,7 +193,7 @@ def _conifer(name, lod, species):
                 card(leaf, root, u, _rot(v, u, np.pi / 2), L * 0.9, L * 0.4, rect, bend=np.radians(12), segs=segs,
                      center=center, ao=aos)
             if lod == 0:
-                tube(wood, [root, root + u * L * 0.8], [0.035, 0.008], 3, uv_v=1.0, ao=0.55)
+                tube(wood, [root, root + u * L * 0.55], [0.025, 0.006], 3, uv_v=1.0, ao=0.35)
             k += 1
         y += spacing * rng.uniform(0.8, 1.2)
     for _ in range(nfill):   # 枝の間を埋める小枝（内側ほど暗い）

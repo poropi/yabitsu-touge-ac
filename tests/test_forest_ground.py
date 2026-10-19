@@ -76,3 +76,9 @@ def test_osm_roads_extend_keepout(tmp_path):
     k.add_lines([np.array([[-30.0, 20.0], [30.0, 20.0]])], [4.0])
     assert k.blocked(np.array([[0.0, 20.0], [0.0, 30.0]])).tolist() == [True, False]
     assert k.road_distance(np.array([[0.0, 30.0]]))[0] == pytest.approx(10.0 - 2.0, abs=1.5)
+
+
+def test_surface_by_prefix(tmp_path):
+    m = _manifest(tmp_path, {"1GRASS_s1_terrain_000": (*_square(-10, -10, 10, 10, 0.0), "ground"),
+                             "1ROAD_s1_000": (*_square(-2, -10, 2, 10, 3.0), "asphalt")})
+    assert fg.load_ground(m, prefixes=("1ROAD_",)).z(np.array([[0.0, 0.0]]))[0] == 3.0

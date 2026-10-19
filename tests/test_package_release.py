@@ -23,3 +23,18 @@ def test_release_zip_has_the_ac_folder_layout_and_versioned_ui(tmp_path):
     assert any(n.startswith("README") and "/" not in n for n in names)
     assert z.name == "yabitsu-touge-ac-v0.0.1.zip"
     assert json.loads((track / "ui" / "s1_up" / "ui_track.json").read_text(encoding="utf-8")).get("version") is None   # 入っているコースは変えない
+
+
+def test_release_excludes_codex_test(tmp_path):
+    from scripts import package_release
+    track = tmp_path / "yabitsu"
+    for rel in ("yabitsu_main.kn5", "yabitsu_s1_landscape_test.kn5", "models_s1_landscape_up.ini",
+                "s1_landscape_up/data/map.ini", "ui/s1_landscape_up/ui_track.json", "models_s1_up.ini"):
+        p = track / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text("{}", encoding="utf-8")
+    import zipfile
+    z = zipfile.ZipFile(package_release.package(track, tmp_path / "out", "9.9.9"))
+    names = z.namelist()
+    assert not [n for n in names if "s1_landscape" in n]
+    assert "content/tracks/yabitsu/yabitsu_main.kn5" in names and "content/tracks/yabitsu/models_s1_up.ini" in names

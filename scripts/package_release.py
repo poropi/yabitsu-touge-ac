@@ -12,6 +12,7 @@ from yabitsu import config
 
 AUTHOR = "poropi"
 TRACK_NAME = "yabitsu"
+EXCLUDE = ("s1_landscape",)   # Codex の S1 景観確認（試作。1.6 GB）は配布しない
 README = """ヤビツ峠（Yabitsu Touge）for Assetto Corsa  v{version}
 
 神奈川県の県道70号（秦野清川線）、名古木からヤビツ峠を越えて宮ヶ瀬北原までの約 29.9km を、
@@ -60,7 +61,7 @@ def package(track_dir, out_dir, version, author=AUTHOR):
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as z:
         z.writestr("README.txt", README.format(version=version, author=author).replace("\n", "\r\n").encode("utf-8-sig"))
         for p in sorted(track_dir.rglob("*")):
-            if not p.is_file():
+            if not p.is_file() or any(k in p.relative_to(track_dir).as_posix() for k in EXCLUDE):
                 continue
             arc = f"{base}/{p.relative_to(track_dir).as_posix()}"
             if p.name == "ui_track.json":   # 入っているコースは変えず、zip の中だけ version と author を書く

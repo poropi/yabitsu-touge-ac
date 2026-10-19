@@ -63,10 +63,11 @@ class Ground:
         return out
 
 
-def load_ground(manifest_dir: Path) -> Ground:
+def load_ground(manifest_dir: Path, prefixes=None) -> Ground:
+    """prefixes を渡すと、地面ではなくその名前で始まるメッシュの面（例：道路 "1ROAD_"）の高さ。"""
     far, near = [], []
     for name, mat, v, tris in _load(manifest_dir):
-        if mat != "ground":
+        if (mat != "ground") if prefixes is None else not name.startswith(tuple(prefixes)):
             continue
         try:
             interp = LinearTriInterpolator(Triangulation(v[:, 0], v[:, 1], tris), v[:, 2])
