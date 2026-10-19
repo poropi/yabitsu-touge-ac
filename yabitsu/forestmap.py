@@ -30,6 +30,9 @@ DEFAULT_CLASSIFY = {
     "conifer_rel_lum": 1.0,     # 夏の写真：区画の森の明るさの中央値×これ より暗い緑の森は針葉樹
     "open_rel_lum": 1.1,        # なめらかな所は、区画の森の明るさの中央値×これ より明るい時だけ森以外
     "smooth_cells": 2,          # 多数決でならす範囲（マス）
+    "settle_m": 40.0,           # 家からこの距離までは集落（暗い緑だけを森にする）
+    "settle_rg_max": 0.93,
+    "settle_lum_max": 0.48,
 }
 
 
@@ -187,3 +190,53 @@ def preview(rgb: np.ndarray, fm: ForestMap, path: Path, max_px=4000):
     out.paste(a.resize(size), (0, 0)); out.paste(b.resize(size, Image.NEAREST), (size[0], 0))
     path.parent.mkdir(parents=True, exist_ok=True)
     out.save(path)
+
+
+def settlement_mask(fm: ForestMap, polygons, tri_meshes, radius_m=40.0) -> np.ndarray:
+    """家（多角形、または (頂点, 三角形) のメッシュ）から radius_m 以内のマス＝集落。"""
+    img = Image.fromarray(np.zeros(fm.cls.shape, np.uint8))
+    d = ImageDraw.Draw(img)
+    px = lambda p: list(zip((p[:, 0] - fm.x0) / fm.cell, (fm.y1 - p[:, 1]) / fm.cell))
+    for poly in polygons:
+        d.polygon(px(np.asarray(poly, float)), fill=1, outline=1)
+    for v, tris in tri_meshes:
+        for t in tris:
+            d.polygon(px(np.asarray(v, float)[list(t), :2]), fill=1, outline=1)
+    houses = np.asarray(img) > 0
+    if not houses.any():
+        return houses
+    return ndimage.distance_transform_edt(~houses) * fm.cell <= radius_m
+
+
+def settlement_filter(fm: ForestMap, rgb, px_size, mask, cfg):
+    """集落では、暗い緑（R/G が settle_rg_max 未満、明るさ settle_lum_max 未満）だけを森に残す
+    （田んぼ・畑・屋根の並びは、ざらざらに写っても森にしない。2026-10-19 名古木〜蓑毛の写真で実測：
+    森 明るさ 0.39・R/G 0.85、畑・田んぼ・家 0.55〜0.73・0.99〜1.0）。"""
+    k = max(1, int(round(fm.cell / px_size)))
+    c = _cells(rgb.astype(np.float32) / 255.0, k).mean((1, 3))
+    h, w = min(c.shape[0], fm.cls.shape[0]), min(c.shape[1], fm.cls.shape[1])
+    c, m = c[:h, :w], mask[:h, :w]
+    lum = c.mean(-1)
+    rg = c[..., 0] / np.maximum(c[..., 1], 1e-3)
+    green = (rg < cfg["settle_rg_max"]) & (lum < cfg["settle_lum_max"])
+    sub = fm.cls[:h, :w]
+    sub[m & ~green] = 0
+    # 家の影は暗い緑の点に見える：集落の中では 3×3 マス（12 m）より小さい森の点を消す
+    forest = sub > 0
+    opened = ndimage.binary_opening(forest, np.ones((3, 3), bool))
+    sub[m & forest & ~opened] = 0
+
+
+def osm_buildings(bounds, cache=None):
+    """OSM の建物の多角形（osm_open_areas と同じキャッシュから）。"""
+    from . import config
+    cache = cache or config.DATA_RAW / "osm_forest_open.json"
+    osm_open_areas(bounds, cache)       # まだ取っていなければ取る
+    import json
+    polys = []
+    for e in json.loads(Path(cache).read_text(encoding="utf-8"))["elements"]:
+        if "building" in e.get("tags", {}) and e.get("geometry"):
+            g = e["geometry"]
+            x, y = geo.to_local([p["lat"] for p in g], [p["lon"] for p in g])
+            polys.append(np.c_[x, y])
+    return polys

@@ -9,7 +9,10 @@
   "winter_brown_share": 0.08,
   "conifer_rel_lum": 1.0,
   "smooth_cells": 2,
-  "open_rel_lum": 1.1
+  "open_rel_lum": 1.1,
+  "settle_m": 40.0,
+  "settle_rg_max": 0.93,
+  "settle_lum_max": 0.48
  },
  "map": {
   "px_size": 2.0,

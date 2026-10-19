@@ -47,6 +47,10 @@ def forest_map(cfg, refresh, out_dir, t0):
     c = {**forestmap.DEFAULT_CLASSIFY, **cfg.get("classify", {})}
     fm = forestmap.ForestMap(bounds[0], bounds[3], c["cell_m"], forestmap.classify(rgb, cfg["map"]["px_size"], c))
     forestmap.clear_polygons(fm, forestmap.osm_open_areas(bounds))
+    # 集落（家から settle_m 以内）は暗い緑だけを森に：田んぼ・畑・屋根の並びを森にしない
+    houses = [(v, t) for n, mat, v, t in forest_ground._load(MANIFEST) if forest_ground.mesh_class(n, mat) == "building"]
+    mask = forestmap.settlement_mask(fm, forestmap.osm_buildings(bounds), houses, c["settle_m"])
+    forestmap.settlement_filter(fm, rgb, cfg["map"]["px_size"], mask, c)
     fm.save(MAP)
     forestmap.preview(rgb, fm, out_dir / "forest_map.png", max_px=6000)
     log(t0, f"空中写真の地図を作りました（森 {np.mean(fm.cls > 0) * 100:.0f}%、針葉樹 {np.mean(fm.cls == 1) * 100:.0f}%）")
