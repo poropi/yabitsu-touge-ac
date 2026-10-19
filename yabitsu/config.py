@@ -62,3 +62,4 @@ def assert_writable(path) -> Path:
         if p == dn or p.startswith(dn + os.sep):
             raise ProtectedPathError(f"{path} は変更禁止のフォルダ（{d}）の中です")
     return Path(path)
+DRESS_KN5 = ("yabitsu_s3_dress.kn5",)   # 道路まわりの仕上げ（scripts.dress_build が書く。全部のレイアウトが読む）

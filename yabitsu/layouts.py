@@ -127,4 +127,5 @@ def shared_groups():
 
 def kn5_files(layout_name):
     """models_<レイアウト>.ini に書く kn5 の並び。"""
-    return [f"{g}.kn5" for g in shared_groups()] + [f"{layout_name}_objects.kn5"]
+    from . import config
+    return [f"{g}.kn5" for g in shared_groups()] + list(config.DRESS_KN5) + [f"{layout_name}_objects.kn5"]

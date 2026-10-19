@@ -210,3 +210,10 @@ def test_every_layout_loads_the_s4_kn5():
         assert files[:5] == [f"{g}.kn5" for g in shared]
         assert files[-1] == f"{name}_objects.kn5"
     assert lay.kn5_groups(["s1_up"]) == shared + ["s1_up_objects"]
+
+
+def test_every_layout_loads_the_s3_dress_kn5():
+    """S3 の道路まわりの仕上げ（yabitsu_s3_dress.kn5）は全部のレイアウトが読む（置き物の kn5 より前）。"""
+    for name in ("s3_up", "full_down", "s1_up"):
+        files = lay.kn5_files(name)
+        assert "yabitsu_s3_dress.kn5" in files and files[-1] == f"{name}_objects.kn5"

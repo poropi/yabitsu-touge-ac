@@ -18,7 +18,8 @@ def request(name: str):
               "保存したらファイル名と画像の大きさだけ答えてください。")
     dress_tex.SRC.mkdir(parents=True, exist_ok=True)
     r = subprocess.run([CODEX, "exec", "--skip-git-repo-check", "--sandbox", "workspace-write", "-C", str(dress_tex.SRC),
-                        "--enable", "image_generation", prompt], capture_output=True, timeout=900)
+                        "--enable", "image_generation", prompt], capture_output=True, timeout=900,
+                       stdin=subprocess.DEVNULL)   # 入力をつなぐと codex はそれを読み終わるまで待つ
     ok = (dress_tex.SRC / f"{name}.png").exists()
     print(f"{name}: {'ok' if ok else 'FAILED'}", flush=True)
     if not ok:
