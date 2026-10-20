@@ -79,28 +79,28 @@ def mesh_object(name, v, f, uv, mat, coll):
     return ob
 
 
-DRESS = Path(__import__("os").environ.get("DRESS_DIR", "")) if __import__("os").environ.get("DRESS_DIR") else None
-RETEX = json.loads((DRESS / "retex.json").read_text(encoding="utf-8")) if DRESS else {}
-HIDDEN = set(json.loads((DRESS / "hidden.json").read_text(encoding="utf-8"))) if DRESS else set()
+# 道路まわりの仕上げ（dress_build・dress_mountain の出力フォルダ）。DRESS_DIR に os.pathsep 区切りで複数書ける
+DRESSES = [Path(p) for p in __import__("os").environ.get("DRESS_DIR", "").split(__import__("os").pathsep) if p]
+RETEX = {n: (d, k) for d in DRESSES for n, k in json.loads((d / "retex.json").read_text(encoding="utf-8")).items()}
+HIDDEN = {n for d in DRESSES for n in json.loads((d / "hidden.json").read_text(encoding="utf-8"))}
 
 
 def load_dress(sc, win):
-    """S3 の仕上げの部品（dress_build の manifest）。"""
-    if not DRESS:
-        return
-    dm = json.loads((DRESS / "manifest.json").read_text(encoding="utf-8"))
+    """仕上げの部品（各フォルダの manifest）。"""
     x0, y0, x1, y1 = win
-    for name, e in dm["meshes"].items():
-        z = np.load(DRESS / e["file"])
-        v = z["verts"]
-        if v[:, 0].max() < x0 or v[:, 0].min() > x1 or v[:, 1].max() < y0 or v[:, 1].min() > y1:
-            continue
-        mspec = dm["materials"][e["material"]]
-        tex = DRESS / mspec["texture"] if mspec.get("texture") else None
-        col = mspec.get("color")
-        hexcol = "#%02X%02X%02X" % tuple(int(c * 255) for c in col) if col else None
-        mesh_object(name, v, z["faces"], z["uvs"], image_material("d_" + e["material"], tex, mspec.get("alpha"), hexcol),
-                    sc.collection)
+    for DRESS in DRESSES:
+        dm = json.loads((DRESS / "manifest.json").read_text(encoding="utf-8"))
+        for name, e in dm["meshes"].items():
+            z = np.load(DRESS / e["file"])
+            v = z["verts"]
+            if v[:, 0].max() < x0 or v[:, 0].min() > x1 or v[:, 1].max() < y0 or v[:, 1].min() > y1:
+                continue
+            mspec = dm["materials"][e["material"]]
+            tex = DRESS / mspec["texture"] if mspec.get("texture") else None
+            col = mspec.get("color")
+            hexcol = "#%02X%02X%02X" % tuple(int(c * 255) for c in col) if col else None
+            mesh_object(name, v, z["faces"], z["uvs"], image_material(f"d_{DRESS.name}_" + e["material"], tex, mspec.get("alpha"), hexcol),
+                        sc.collection)
 
 
 def load_course(sc, win):
@@ -115,9 +115,9 @@ def load_course(sc, win):
         m = manifest["materials"].get(e["material"], {})
         tex = MAN / m["texture"] if m.get("texture") else None
         mat = image_material(e["material"], tex, m.get("alpha"), m.get("color"))
-        if name in RETEX:          # S3 の貼り替え（CSP の SHADER_REPLACEMENT と同じ画像）
-            key = RETEX[name]
-            mat = image_material("retex_" + key, DRESS / "extension" / f"dress_{key}.dds")
+        if name in RETEX:          # 仕上げの貼り替え（CSP の SHADER_REPLACEMENT と同じ画像）
+            d, key = RETEX[name]
+            mat = image_material("retex_" + key, d / "extension" / f"dress_{key}.dds")
         mesh_object(name, z["verts"], z["faces"], z["uvs"], mat, sc.collection)
 
 

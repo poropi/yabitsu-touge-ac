@@ -10,12 +10,13 @@ from scipy.spatial import cKDTree
 
 # 種類 → (UV の横 1 が何 m, 縦 1 が何 m, 元の画像を 90 度回すか)。2026-10-19 に manifest の UV を測った値
 UV_LAYOUT = {
-    "road": (4.0, 2.0, False),        # 1ROAD_s1_*：横＝道の幅方向、縦＝長さ
+    "road": (4.0, 4.0, False),        # 1ROAD_s1_*：横＝道の幅方向、縦＝長さ（2026-10-20 に測り直した。縦は 4 m）
     "plane": (4.0, 4.0, False),       # 町の車道・分かれ道：真上から x/4, y/4
-    "gutter": (4.0, 2.0, False),
+    "gutter": (1.0, 4.0, False),      # 側溝：横＝断面に沿って 1 m（垂らした縁を含む）、縦＝長さ 4 m（2026-10-20 に測り直した）
     "line": (1.0, 4.0, False),        # 白線・中央線：横 m、縦 1 = 4 m
     "sidewalk": (1.0, 4.0, False),
     "wall": (2.0, 4.0, True),         # 壁・橋の手すり壁：横＝高さ（1 = 2 m）、縦＝長さ（1 = 4 m）
+    "terrain": (8.0, 8.0, False),     # 地形（1GRASS_*）：真上から x/8, y/8
 }
 
 
