@@ -24,13 +24,14 @@ README = """ヤビツ峠（Yabitsu Touge）for Assetto Corsa  v{version}
     （例：C:\\Program Files (x86)\\Steam\\steamapps\\common\\assettocorsa）に上書きでコピーします。
   ・コース選択で「ヤビツ峠」を選び、レイアウトを選んでください。
 
-■ レイアウト（16）
-  S3 名古木→蓑毛 / S2 蓑毛→菜の花台 / S1 菜の花台→ヤビツ峠 / S4 ヤビツ峠→札掛 / S5 札掛→宮ヶ瀬北原 の上り・下り、
-  全線（名古木→ヤビツ峠、名古木→札掛、名古木→宮ヶ瀬北原）の上り・下り。
+■ レイアウト（12）
+  S1 名古木→蓑毛 / S2 蓑毛→菜の花台 / S3 菜の花台→ヤビツ峠 / S4 ヤビツ峠→札掛 / S5 札掛→宮ヶ瀬北原 の上り・下り、
+  全線（名古木→宮ヶ瀬北原）の上り・下り。
   どれも A 地点から B 地点まで走るコース（point to point）です。
 
 ■ わかっていること（v{version}）
-  ・木・擁壁の模様など、見た目はまだ簡単です。
+  ・見た目（路面・ガードレール・擁壁・土手・落ち葉・森）はストリートビューに合わせて作り込み中です。
+    Custom Shaders Patch（CSP）があると、森と路面・擁壁の模様が表示されます。
   ・S5 の宮ヶ瀬湖のまわりで、湖の縁が少し浮いて見える所、吹風トンネルの横の湖の一部が陸になっている所があります。
   ・分かれ道は工事中の柵でふさいであります（柵の向こうは走れません）。
 
@@ -46,7 +47,7 @@ README = """ヤビツ峠（Yabitsu Touge）for Assetto Corsa  v{version}
 ----------------------------------------------------------------
 Yabitsu Touge for Assetto Corsa  v{version}
 Route 70 (Hadano-Kiyokawa line), Kanagawa, Japan: Nagoki - Yabitsu Pass - Miyagase-Kitahara, about 29.9 km,
-built from public map and elevation data. 16 point-to-point layouts.
+built from public map and elevation data. 12 point-to-point layouts. Custom Shaders Patch recommended.
 Install: drop the zip into Content Manager, or copy the "content" folder into your assettocorsa folder.
 Credits: GSI Japan (elevation tiles, seamless aerial photos, basic map vector tiles), (c) OpenStreetMap contributors (ODbL).
 Not affiliated with Google, GSI, OpenStreetMap or Kunos Simulazioni.
