@@ -2,6 +2,10 @@
 
 神奈川県の県道70号（秦野清川線）、名古木からヤビツ峠を越えて宮ヶ瀬北原までの約 29.9km を、地図・標高データ・ストリートビューをもとに Assetto Corsa のコースとして作るプロジェクトです。
 
+## ダウンロード（Assetto Corsa の MOD）
+
+**[最新版のダウンロード（Releases）](https://github.com/poropi/yabitsu-touge-ac/releases/latest)** から `yabitsu-touge-ac-v<版>.zip` を落とし、Content Manager の画面に zip を落とすか、zip の中の `content` フォルダを Assetto Corsa のフォルダに上書きでコピーします。Custom Shaders Patch（CSP）を入れると、森と路面・擁壁などの模様が表示されます。
+
 このリポジトリにあるのは、コースを作るためのプログラム（Python）と、手で確かめて書いたデータです。できあがったコースのファイル（.kn5 など）と、ダウンロードした地図・標高・空中写真は入っていません。
 
 ## コース
