@@ -86,6 +86,8 @@ def main():
     print(f"BUILT group={a.group} meshes={len(g['meshes'])} empties={len(g['empties'])}")
     if a.blend:
         Path(a.blend).parent.mkdir(parents=True, exist_ok=True)
+        # サンドボックス等でホームを取得できないとBlenderが文字化けしたサムネイル用フォルダを作るため、保存時のサムネイルを作らない。
+        bpy.context.preferences.filepaths.file_preview_type = "NONE"
         bpy.ops.wm.save_as_mainfile(filepath=str(Path(a.blend).resolve()))
     if a.fbx:
         Path(a.fbx).parent.mkdir(parents=True, exist_ok=True)

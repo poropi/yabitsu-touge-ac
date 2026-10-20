@@ -19,4 +19,6 @@ for item in json.loads((folder / "underlay.json").read_text(encoding="utf-8")):
     nt.links.new(tex.outputs[0], bsdf.inputs["Base Color"]); me.materials.append(mat)
     ob = bpy.data.objects.new("UNDERLAY_" + item["file"], me); coll.objects.link(ob)
 if save_as:
+    # サンドボックス等でホームを取得できないとBlenderが文字化けしたサムネイル用フォルダを作るため、保存時のサムネイルを作らない。
+    bpy.context.preferences.filepaths.file_preview_type = "NONE"
     bpy.ops.wm.save_as_mainfile(filepath=str(Path(save_as).resolve()))
