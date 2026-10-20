@@ -120,9 +120,8 @@ def test_real_layouts_start_on_the_road_and_finish_ahead():
     sec = Section.load_json(_REAL); pads = json.loads((config.DATA_PROCESSED / "track_pads.json").read_text(encoding="utf-8"))
     bounds = track.load_bounds()
     ls = lay.load_layouts()
-    assert {l.name for l in ls} == {"s1_up", "s1_down", "s2_up", "s2_down", "s3_up", "s3_down", "full_up", "full_down",
-                                    "s4_up", "s4_down", "full_north", "full_south",
-                                    "s5_up", "s5_down", "full_kitahara_up", "full_kitahara_down"}
+    assert {l.name for l in ls} == {"s1_up", "s1_down", "s2_up", "s2_down", "s3_up", "s3_down",
+                                    "s4_up", "s4_down", "s5_up", "s5_down", "full_kitahara_up", "full_kitahara_down"}
     for l in ls:
         objs = _by(lay.layout_objects(sec, pads, l, bounds))
         for i in range(4):
@@ -132,9 +131,9 @@ def test_real_layouts_start_on_the_road_and_finish_ahead():
         at = lambda pt: lay.point_s(sec, pt, bounds, l.section)
         s_start, s_fin, s_grid = at(l.timing_start), at(l.finish), at(l.grid)
         assert (s_fin - s_start) * l.direction > 1000, l.name
-        assert 0 < (s_start - s_grid) * l.direction < 80, l.name  # s1_down はユーザーが選んだ地点で 60m
-        for k in range(4 if l.name in ("s4_up", "s4_down", "full_north", "full_south",
-                                       "s5_up", "s5_down", "full_kitahara_up", "full_kitahara_down") else 0):
+        assert 0 < (s_start - s_grid) * l.direction < 80, l.name  # s3_down（菜の花台行き）はユーザーが選んだ地点で 60m
+        for k in range(4 if l.name in ("s4_up", "s4_down", "s5_up", "s5_down",
+                                       "full_kitahara_up", "full_kitahara_down") else 0):
             # 道の上のピット（S4 から）は計測の始まりより手前（練習走行でピットから出て、そのまま計測に入れる）。
             # 今の8つは受け入れ済み（s2_up のピットは蓑毛の折り返し場＝道の外）なので見ない
             p = objs[f"AC_PIT_{k}"]
@@ -205,7 +204,7 @@ def test_every_layout_loads_the_s4_kn5():
     """峠の北の地形は S4 の kn5 で埋めるので、今のレイアウトも含めて全部が yabitsu_s4.kn5 を読む。"""
     from yabitsu import config
     shared = [config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP, config.S5_GROUP, config.KITAHARA_GROUP]
-    for name in ("s1_up", "full_down", "s4_up", "s5_up"):   # S5・宮ヶ瀬北原の kn5 も全部のレイアウトが読む
+    for name in ("s1_up", "full_kitahara_down", "s4_up", "s5_up"):   # S5・宮ヶ瀬北原の kn5 も全部のレイアウトが読む
         files = lay.kn5_files(name)
         assert files[:5] == [f"{g}.kn5" for g in shared]
         assert files[-1] == f"{name}_objects.kn5"
@@ -214,6 +213,6 @@ def test_every_layout_loads_the_s4_kn5():
 
 def test_every_layout_loads_the_s3_dress_kn5():
     """S3 の道路まわりの仕上げ（yabitsu_s3_dress.kn5）は全部のレイアウトが読む（置き物の kn5 より前）。"""
-    for name in ("s3_up", "full_down", "s1_up"):
+    for name in ("s3_up", "full_kitahara_down", "s1_up"):
         files = lay.kn5_files(name)
         assert "yabitsu_s3_dress.kn5" in files and files[-1] == f"{name}_objects.kn5"

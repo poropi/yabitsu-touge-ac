@@ -59,7 +59,7 @@ def test_s1_layout_objects_unchanged():
     sec, pads, bounds = _track()
     s0 = bounds["s1"][0]
     current = {l.name: {d.name: d for d in layouts.layout_objects(sec, pads, l, bounds)}
-               for l in layouts.load_layouts() if l.name in ("s1_up", "s1_down")}
+               for l in layouts.load_layouts() if l.name in _ref()["layouts"]}
     for name, objs in _ref()["layouts"].items():
         for dname, (lat, lon, z, h) in objs.items():
             d = current[name][dname]
