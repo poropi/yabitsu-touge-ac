@@ -3,3 +3,6 @@ s_from,s_to,kind,note
 9050,9150,red_stripes,カーブの赤い滑り止め（s=9100）
 9330,9370,red_stripes,赤い滑り止め（s=9350）
 9450,9550,red_stripes,赤い滑り止め（s=9500）
+9980,10090,green_stripes,緑の滑り止め（2026-10-22 ストリートビュー s5_10000_b/f・s5_10050_b/f）
+10205,10270,green_stripes,緑の滑り止め（s5_10200_f・s5_10250_b/f）
+11525,11580,green_stripes,緑の滑り止め（s5_11550_b/f）

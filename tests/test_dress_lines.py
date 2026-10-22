@@ -1,4 +1,5 @@
 import csv
+import pytest
 
 import numpy as np
 
@@ -137,3 +138,45 @@ def test_split_lines_keep_out():
         if mat == "dress_line_white":
             cen = v[f].mean(1)
             assert not ((cen[:, 0] > 16) & (cen[:, 0] < 41) & (cen[:, 1] < -0.1)).any()
+
+
+def test_road_marks_number_faces_its_traffic():
+    """数字：dir=b（s が減る向きに走る車）の標示は右の車線（y < 0）。uv の v は走る向き（-x）に増える。"""
+    sec = _sec(400)
+    (name, v, f, uv, mat), = dress_lines.road_mark_meshes(sec, [{"s": "200", "side": "R", "dir": "b", "kind": "number", "value": "30", "color": "orange"}])
+    assert mat == "mt_mark_n30_orange" and (v[:, 1] < 0).all()
+    assert v[uv[:, 1].argmax(), 0] < v[uv[:, 1].argmin(), 0]
+    assert np.ptp(v[:, 0]) == pytest.approx(dress_lines.MARK_NUMBER_SIZE[1], abs=0.01)
+
+
+def test_road_marks_text_reads_far_to_near():
+    """文字：1 字ずつの四角。走る車から見て最初の字がいちばん奥（2026-10-22 ストリートビュー s2_1150_b「左急カーブ」）。C は道の真ん中。"""
+    sec = _sec(400)
+    ms = dress_lines.road_mark_meshes(sec, [{"s": "200", "side": "C", "dir": "f", "kind": "text", "value": "左急カーブ", "color": "white"}])
+    centre = {}
+    for name, v, f, uv, mat in ms:
+        for q in f:
+            centre.setdefault(mat, []).append(v[q].mean(0))
+    x = {mat: np.mean([c[0] for c in cs]) for mat, cs in centre.items()}
+    order = [dress_lines.char_material(c, "white") for c in "左急カーブ"]
+    assert [x[m] for m in order] == sorted([x[m] for m in order], reverse=True)    # 左 が +x（奥）
+    assert all(abs(c[1]) < 0.01 for cs in centre.values() for c in cs)
+
+
+def test_mark_textures_are_long_with_alpha():
+    img = dress_lines.mark_texture("text", "急", "white")
+    a = np.asarray(img)[..., 3]
+    assert img.height > img.width * 1.5 and (a > 0).mean() > 0.05 and (a == 0).mean() > 0.2
+
+
+def test_mark_quad_uv_reads_upright_for_its_driver():
+    """標示の四角の uv：走る車から見て u は左→右、v は手前→奥。画像は正立のまま貼れば、走る車に正しく読める
+    （kn5 と確認描画はどちらも v を 1-v にして画像の下を v=0 に置く）。2026-10-22 に 180 度回って見えた不具合の確かめ。"""
+    sec = _sec(400)
+    for side, fwd in (("L", 1), ("R", -1)):
+        v, f, uv = dress_lines._lane_quad(sec, 200.0, side, (1.0, 2.0), False)
+        drv_left = np.array([0.0, 1.0]) * fwd          # 進む向き (+x)*fwd の左
+        u_dir = v[uv[:, 0].argmax(), :2] - v[uv[:, 0].argmin(), :2]
+        v_dir = v[uv[:, 1].argmax(), :2] - v[uv[:, 1].argmin(), :2]
+        assert np.dot(u_dir, -drv_left) > 0             # u が増えると右へ
+        assert np.dot(v_dir, [fwd, 0.0]) > 0            # v が増えると奥へ

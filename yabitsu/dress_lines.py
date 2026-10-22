@@ -149,13 +149,18 @@ def diamond_spots(sec, pavements):
 
 def _lane_quad(sec, s, side, size, flip):
     """車線の中央に、進む向きにそろえた四角（uv の v が進む向き）。"""
-    from .crosssection import surface_height
     i = int(np.clip(np.searchsorted(sec.s, s), 0, sec.n - 1))
     sgn = 1 if side == "L" else -1
     hw = sec.hw_left[i] if sgn > 0 else sec.hw_right[i]
-    lat = sgn * hw / 2
+    return _mark_quad(sec, s, sgn * hw / 2, sgn, size)       # 下り（右の車線）は向きが逆
+
+
+def _mark_quad(sec, s, lat, fwd, size):
+    """s の位置で中心線から横へ lat（左が正）の所に、fwd（+1＝s が増える向き、-1＝減る向き）へそろえた四角。"""
+    from .crosssection import surface_height
+    i = int(np.clip(np.searchsorted(sec.s, s), 0, sec.n - 1))
     h = sec.heading[i]
-    t = np.array([np.cos(h), np.sin(h)]) * (1 if side == "L" else -1)   # 下りは向きが逆
+    t = np.array([np.cos(h), np.sin(h)]) * fwd
     n = np.array([-t[1], t[0]])
     c = np.array([sec.x[i], sec.y[i]]) + np.array([-np.sin(h), np.cos(h)]) * lat
     w, l = size
@@ -171,7 +176,8 @@ def _lane_quad(sec, s, side, size, flip):
         zj = np.interp(sj, sec.s, sec.z)
         v.append((p[0], p[1], float(surface_height(lj, zj, sec.slope[j], sec.crown[j])) + LIFT))
     v = np.array(v)
-    return v, np.array([(0, 1, 2, 3)]), np.array([(0, 0), (1, 0), (1, 1), (0, 1)], float)
+    # 四隅は 奥から見て 手前右・手前左・奥左・奥右。uv は走る車から見て u が左→右、v が手前→奥（画像は正立のまま貼る）
+    return v, np.array([(0, 1, 2, 3)]), np.array([(1, 0), (0, 0), (0, 1), (1, 1)], float)
 
 
 def marking_meshes(sec, diamonds, rows):
@@ -186,6 +192,71 @@ def marking_meshes(sec, diamonds, rows):
     for k, r in enumerate(x for x in rows if x["item"] == "text"):
         v, f, uv = _lane_quad(sec, float(r["s_from"]), r["side"], TEXT_SIZE, False)
         out.append((f"dress_text_{k:02d}", v, f, uv, f"dress_text_{r['value']}"))
+    return out
+
+
+# ---------- 山道の路面の文字・数字・ひし形（data/manual/road_markings.csv） ----------
+# 大きさは 2026-10-22 にストリートビューの写真から目で見積もった値（測った値ではない）。描画と写真を並べて合わせる
+MARK_NUMBER_SIZE = (1.6, 3.0)         # 「30」など：幅・長さ m
+MARK_CHAR_SIZE, MARK_CHAR_GAP = (1.1, 2.0), 0.6    # 文字 1 字：幅・長さ m、字と字のすき間 m
+PAINT = {"white": (236, 236, 232, 255), "orange": (222, 170, 70, 255)}
+
+
+def char_material(ch, color):
+    return f"mt_mark_c{ord(ch):x}_{color}"
+
+
+def mark_material(r):
+    if r["kind"] == "number":
+        return f"mt_mark_n{r['value']}_{r['color']}"
+    if r["kind"] == "diamond":
+        return "mt_mark_diamond"
+    raise ValueError(r["kind"])
+
+
+def mark_texture(kind, value, color):
+    """標示の画像（アルファ付き、縦長＝走る向き）。正立のまま（画像の下が手前）。"""
+    from PIL import Image, ImageDraw, ImageFont
+    from . import config
+    fill = PAINT[color]
+    if kind == "diamond":
+        W, H = 128, 427
+        img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
+        ImageDraw.Draw(img).polygon([(W / 2, 4), (W - 4, H / 2), (W / 2, H - 4), (4, H / 2)], outline=fill, width=14)
+        return img
+    if kind == "number":
+        font, size = ImageFont.truetype(config.font_file("arial_bold"), 170), MARK_NUMBER_SIZE
+    else:
+        font, size = ImageFont.truetype(config.font_file("gothic_bold"), 200), MARK_CHAR_SIZE
+    sq = Image.new("RGBA", (220, 220), (0, 0, 0, 0))
+    ImageDraw.Draw(sq).text((110, 110), value, fill=fill, font=font, anchor="mm")
+    sq = sq.crop(sq.getbbox() or (0, 0, 220, 220))
+    w = 200
+    return sq.resize((w, int(w * size[1] / size[0])))
+
+
+def road_mark_meshes(sec, rows):
+    """表の行（s は道の全体の距離）→ 材質ごとにまとめた [(名前, verts, faces, uvs, 材質)]。
+    side：L＝左の車線（s が増える向きに走る車）、R＝右の車線、C＝道の真ん中。dir：読ませる車の向き（f＝s が増える、b＝減る）。
+    文字は 1 字ずつの四角で、走る車から見て最初の字がいちばん奥。"""
+    parts = {}
+    for r in rows:
+        s, fwd = float(r["s"]), (1 if r["dir"] == "f" else -1)
+        i = int(np.clip(np.searchsorted(sec.s, s), 0, sec.n - 1))
+        lat = {"L": sec.hw_left[i] / 2, "R": -sec.hw_right[i] / 2, "C": 0.0}[r["side"]]
+        if r["kind"] == "text":
+            n, step = len(r["value"]), MARK_CHAR_SIZE[1] + MARK_CHAR_GAP
+            for k, ch in enumerate(r["value"]):
+                sk = s + fwd * ((n - 1) / 2 - k) * step
+                parts.setdefault(char_material(ch, r["color"]), []).append(_mark_quad(sec, sk, lat, fwd, MARK_CHAR_SIZE))
+        else:
+            size = MARK_NUMBER_SIZE if r["kind"] == "number" else DIAMOND_SIZE
+            parts.setdefault(mark_material(r), []).append(_mark_quad(sec, s, lat, fwd, size))
+    out = []
+    for mat, ps in sorted(parts.items()):
+        off = np.cumsum([0] + [len(p[0]) for p in ps[:-1]])
+        out.append((mat.replace("mt_mark_", "mt_marks_"), np.concatenate([p[0] for p in ps]),
+                    np.concatenate([p[1] + o for p, o in zip(ps, off)]), np.concatenate([p[2] for p in ps]), mat))
     return out
 
 

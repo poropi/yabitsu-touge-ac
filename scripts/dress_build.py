@@ -157,7 +157,7 @@ def marking_textures(tex_dir: Path):
         font = ImageFont.truetype(config.font_file("arial_bold"), 170)
         tmp = Image.new("RGBA", (180, 180), (0, 0, 0, 0))
         ImageDraw.Draw(tmp).text((90, 90), t, fill=(222, 170, 70, 255), font=font, anchor="mm")
-        img = tmp.resize((180, 334)).transpose(Image.FLIP_TOP_BOTTOM)       # 縦に引きのばす（路面の文字）・v が上向き
+        img = tmp.resize((180, 334))       # 縦に引きのばす（路面の文字）。正立のまま（画像の下が手前。dress_lines._mark_quad の uv）
         img.save(tex_dir / f"text_{t}.png")
 
 

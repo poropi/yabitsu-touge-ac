@@ -1,0 +1,42 @@
+section,s,side,dir,kind,value,color,note
+s2,40,L,f,diamond,,white,蓑毛の横断歩道（s=90）の手前 50m（s2_0050_b）
+s2,60,L,f,diamond,,white,同 30m（s2_0050_f）
+s2,124,R,b,diamond,,white,横断歩道の先 30m（s2_0150_b の遠く）
+s2,144,R,b,diamond,,white,同 50m（s2_0150_b の手前の大きなひし形）
+s2,15,R,b,number,40,orange,s2_0000_f の右の車線に逆さの「40」
+s2,285,L,f,number,30,orange,s2_0300_b の右（上りの車線）に逆さの「30」
+s2,647,R,b,number,30,orange,s2_0650_b のすぐ前（赤い帯の先）
+s2,1092,L,f,number,30,orange,s2_1100_b の右に大きな逆さの「30」
+s2,1143,C,f,text,左急カーブ,white,s2_1150_b に逆さの白い文字（道の真ん中）。s2_1150_f の看板も左急カーブ
+s2,1270,R,b,number,30,orange,s2_1250_f の奥に逆さの「30」（赤い帯の先）
+s2,1510,L,f,number,30,orange,s2_1500_f の大きな「30」
+s2,1690,L,f,number,30,orange,s2_1700_b の右に逆さの「30」
+s2,3960,R,b,number,30,orange,s2_3950_f に逆さの「30」
+s1,210,L,f,number,30,orange,s1_0200_f の「30」
+s1,435,R,b,number,30,orange,s1_0400_f の奥に逆さの「30」（s1_0450_b の奥と同じ）
+s1,465,L,f,number,30,orange,s1_0450_f の「30」
+s1,630,R,b,number,30,orange,s1_0650_b の「30」
+s1,955,R,b,number,30,orange,s1_0950_f のすぐ前に逆さの「30」（かすれ）
+s1,1185,L,f,number,30,orange,s1_1150_f の奥の「30」
+s1,1305,R,b,number,30,orange,s1_1300_f のすぐ前に逆さの「30」
+s1,1695,L,f,number,30,orange,s1_1700_b のすぐ前に逆さの「30」
+s1,1862,R,b,number,30,orange,s1_1850_f に逆さの「30」
+s1,2015,R,b,number,30,orange,s1_2000_f に逆さの「30」
+s1,2510,R,b,number,30,orange,s1_2500_f に逆さの「30」
+s1,2765,R,b,number,30,orange,s1_2750_f に逆さの「30」
+s1,3012,R,b,number,30,orange,s1_3000_f に逆さの「30」
+s1,3060,L,f,number,30,white,s1_3050_f の白い「30」
+s1,3260,R,b,number,30,orange,s1_3250_f のすぐ前に逆さの「30」
+s4,208,R,b,number,30,orange,s4_0200_f に逆さの「30」
+s4,705,R,b,number,30,orange,s4_0700_f のすぐ前に逆さの「30」
+s4,770,L,f,number,30,orange,s4_0750_f の「30」
+s4,1106,R,b,number,30,orange,s4_1100_f のすぐ前に逆さの「30」
+s4,2220,R,b,number,30,orange,s4_2200_f のすぐ前の逆さの「30」と s4_2250_b の「30」（同じ標示と見た）
+s4,2485,R,b,number,30,orange,s4_2500_b の「30」
+s4,3112,R,b,number,30,orange,s4_3100_f に逆さの「30」（拡大して確認）
+s4,3165,L,f,number,30,orange,s4_3150_f の「30」
+s4,3990,L,f,number,30,orange,s4_4000_b の奥に逆さの「30」
+s4,4100,L,f,number,30,orange,s4_4100_f の「30」
+s4,4444,L,f,number,30,orange,s4_4450_b に逆さの「30」（拡大して確認）
+s4,4558,L,f,number,30,orange,s4_4550_f の「30」
+s5,10140,R,b,number,40,orange,s5_10150_b の橋の上の「40」

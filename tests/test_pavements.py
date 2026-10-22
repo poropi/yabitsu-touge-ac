@@ -71,3 +71,12 @@ def test_stop_line_down_covers_right_half():
 def test_red_half_down_paints_the_right_half():
     sec, name, v, f, mat = _mesh("red_half_down", 50.0, 70.0)
     assert mat == "paint_red" and v[:, 1].max() == pytest.approx(0.0) and v[:, 1].min() == pytest.approx(-sec.hw_right[0])
+
+
+def test_green_stripes_like_red_but_green():
+    """緑のすべり止め（S5 の宮ヶ瀬寄り、2026-10-22 ストリートビュー）：赤と同じ並びで、塗料が緑。"""
+    _, _, vr, fr, _ = _mesh("red_stripes")
+    _, _, vg, fg, mat = _mesh("green_stripes")
+    assert mat == "paint_green" and np.allclose(vr, vg) and (fr == fg).all()
+    from yabitsu import textures
+    assert "paint_green" in textures.MATERIALS

@@ -89,3 +89,12 @@ def test_town_retaining_walls_get_kenchi_block():
     """町の物の擁壁（1WALL_<prefix>_obj_retaining。宮ヶ瀬北原など）は間知ブロック。S3 の仕上げが持っているものは触らない。"""
     names = ["1WALL_kitahara_obj_retaining", "1WALL_s3_obj_retaining", "1WALL_s1_retaining_006", "1WALL_track_parapet_049"]
     assert dm.town_walls(names, taken={"1WALL_s3_obj_retaining"}) == {"1WALL_kitahara_obj_retaining": "mt_wall_block"}
+
+
+def test_mountain_poles_table_is_valid():
+    """山道の電柱の表：区間・左右・範囲・間隔が使える値（2026-10-22 ストリートビューの読み取りから作った）。"""
+    import csv
+    from yabitsu import config
+    rows = list(csv.DictReader(open(config.DATA_MANUAL / "mountain_poles.csv", encoding="utf-8")))
+    assert rows and all(r["section"] in dm.SECTIONS and r["side"] in ("L", "R") for r in rows)
+    assert all(0 <= float(r["s_from"]) < float(r["s_to"]) and float(r["spacing"]) > 0 for r in rows)

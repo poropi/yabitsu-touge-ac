@@ -14,7 +14,7 @@ import shutil
 import numpy as np
 from PIL import Image, ImageEnhance
 
-from yabitsu import (acdata, config, dress_mountain as dm, dress_parts, dress_retex, dress_tex, ext_config, features, kn5, layouts,
+from yabitsu import (acdata, config, dress_lines, dress_mountain as dm, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5, layouts,
                      nagoki, side_roads, track, tunnel)
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
@@ -219,6 +219,47 @@ def build_parts(sec, bounds, feats, rows, m: Manifest):
     return hide
 
 
+def add_poles(sec, bounds, m: Manifest):
+    """電柱と電線（data/manual/mountain_poles.csv。s は区間の起点から）。並べ方は S3 の町と同じ（dress_parts.utility_poles）。"""
+    keep = forest_ground.load_keepout(MANIFEST, {"road": 0.3, "wall": 0.2, "building": 1.0, "bridge": 1.0,
+                                                 "water": 0.5, "tunnel": 2.0, "other": 0.3})
+    no_sidewalk = np.zeros(sec.n)
+    allp = []
+    for k, r in enumerate(csv.DictReader(open(config.DATA_MANUAL / "mountain_poles.csv", encoding="utf-8"))):
+        s0 = bounds[r["section"]][0]
+        poles = dress_parts.utility_poles(sec, s0 + float(r["s_from"]), s0 + float(r["s_to"]), r["side"], float(r["spacing"]),
+                                          keep, no_sidewalk)
+        if not poles:
+            continue
+        allp += poles
+        v, f, uv = dress_parts.pole_mesh(poles)
+        m.add_mesh(GROUP, f"mt_poles_{k:03d}", v, f, uv, "mt_pole")
+        v, f, uv = dress_parts.wire_mesh(poles, n_wires=3)
+        if len(v):
+            m.add_mesh(GROUP, f"mt_wires_{k:03d}", v, f, uv, "mt_wire")
+    return len(allp)
+
+
+def add_road_marks(sec, bounds, m: Manifest, tex):
+    """路面の文字・数字・ひし形（data/manual/road_markings.csv。s は区間の起点から）。"""
+    marks = [{**r, "s": float(r["s"]) + bounds[r["section"]][0]}
+             for r in csv.DictReader(open(config.DATA_MANUAL / "road_markings.csv", encoding="utf-8"))]
+    for name, v, f, uv, mat in dress_lines.road_mark_meshes(sec, marks):
+        key = mat.removeprefix("mt_mark_")
+        if key.startswith("c"):           # 文字 1 字：c<文字コード>_<色>
+            code, color = key[1:].split("_")
+            img = dress_lines.mark_texture("text", chr(int(code, 16)), color)
+        elif key.startswith("n"):         # 数字：n<数字>_<色>
+            value, color = key[1:].split("_")
+            img = dress_lines.mark_texture("number", value, color)
+        else:
+            img = dress_lines.mark_texture("diamond", "", "white")
+        img.save(tex / f"{mat}.png")
+        m.add_material(mat, texture=f"textures/{mat}.png", alpha=True)
+        m.add_mesh(GROUP, name, v, f, uv, mat)
+    return len(marks)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-install", action="store_true")
@@ -251,10 +292,15 @@ def main():
     m.add_material("mt_leaves_edge", texture="textures/leaves_edge.png", alpha=True)
     m.add_material("mt_leaves_lane", texture="textures/leaves_lane.png", alpha=True)
     hide = build_parts(sec, bounds, feats, rows, m)
+    nmarks = add_road_marks(sec, bounds, m, tex)
+    pole_img, _ = dress_tex.load("pole"); pole_img.convert("RGB").save(tex / "pole.png")
+    m.add_material("mt_pole", texture="textures/pole.png")
+    m.add_material("mt_wire", color=(0.12, 0.12, 0.12), two_sided=True)
+    npoles = add_poles(sec, bounds, m)
     m.save()
     kn5_path = OUT / f"{GROUP}.kn5"
     kn5.write_from_manifest(OUT / "manifest.json", GROUP, kn5_path)
-    print(f"部品：{len(m.meshes)} メッシュ → {kn5_path} {kn5_path.stat().st_size / 1e6:.1f} MB")
+    print(f"部品：{len(m.meshes)} メッシュ（路面の標示 {nmarks}、電柱 {npoles} 本）→ {kn5_path} {kn5_path.stat().st_size / 1e6:.1f} MB")
 
     assign = retex_assign(sec, cl, bounds, feats, rows)
     ext = OUT / "extension"; ext.mkdir(parents=True, exist_ok=True)
