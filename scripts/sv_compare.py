@@ -1,6 +1,7 @@
 """ストリートビューの写真と、同じ位置・向きの今のコースの描画を並べる（どの区間でも）。
 使い方: uv run python -m scripts.sv_compare <jobs.json> <名前.jpg>   （config.COMPARE_DIR に書く。絶対パスならそこへ）
-jobs.json: [{"name", "lat", "lon", "yaw"(度・北から時計回り), "photo"(写真のパス), "pitch"(任意・下向きが正), "fov"(任意)}]"""
+jobs.json: [{"name", "lat", "lon", "yaw"(度・北から時計回り), "photo"(写真のパス), "pitch"(任意・下向きが正), "fov"(任意),
+            "window_m"(任意・コースと仕上げを読む範囲の半分 m。遠くを見る絵で広げる), "clip_end"(任意・見える距離 m)}]"""
 import json
 import os
 import subprocess
@@ -33,11 +34,12 @@ def main():
         tgt = [*(c + d * 50 * np.cos(pitch)), float(z) + EYE - 50 * np.sin(pitch)]
         views.append({"name": j["name"], "type": "persp", "eye": [*c, float(z) + EYE], "target": tgt,
                       "lens": 18 * 100 / j.get("fov", 100), "lod": 0, "res": [900, 600],
-                      "window": [c[0] - 250, c[1] - 250, c[0] + 250, c[1] + 250]})
+                      "window": [c[0] - j.get("window_m", 250), c[1] - j.get("window_m", 250), c[0] + j.get("window_m", 250), c[1] + j.get("window_m", 250)],
+                      "tree_window": [c[0] - 250, c[1] - 250, c[0] + 250, c[1] + 250], "clip_end": j.get("clip_end", 20000)})
     (dc.FOREST / "views.json").write_text(json.dumps(views), encoding="utf-8")
     r = subprocess.run([dc.BLENDER, "-b", "--factory-startup", "--python",
                         str(config.PROJECT_ROOT / "blender_scripts" / "render_forest.py"), "--", str(dc.FOREST), "x"],
-                       env={**os.environ, "DRESS_DIR": os.pathsep.join(str(d) for d in (dc.DRESS, config.DATA_PROCESSED / "dress_mountain") if d.exists())},
+                       env={**os.environ, "DRESS_DIR": os.pathsep.join(str(d) for d in (dc.DRESS, config.DATA_PROCESSED / "dress_mountain", config.DATA_PROCESSED / "horizon") if d.exists())},
                        capture_output=True, timeout=3000)   # S3 と山道（S2〜S5・宮ヶ瀬北原）の仕上げ
     if r.returncode:
         print(r.stderr.decode("utf-8", "replace")[-1500:]); return
