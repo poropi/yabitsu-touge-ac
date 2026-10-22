@@ -243,3 +243,21 @@ def test_second_junction_pits_are_named_after_the_junction():
     t.spec["pits"] = [_ll(20.0 + 6 * i, 1.5) + [90.0] for i in range(4)]
     t.prefix = "kitahara"
     assert t.pads()[0]["name"] == "kitahara_pits"
+
+
+def test_retaining_wall_uv_follows_wall_length_and_height():
+    """擁壁の壁面の UV は、横（u）＝高さ（1 = 2 m）、縦（v）＝壁に沿った長さ（1 = 4 m）。間知ブロックを CSP で貼るため
+    （dress_retex.UV_LAYOUT["wall"] と同じ）。折れた壁でも v は角でつながる。"""
+    g = _ground()
+    (name, v, f, uv, mat, rend), = to.object_meshes(
+        [{"kind": "retaining_wall", "points": [_ll(0, 0), _ll(10, 0), _ll(10, 10)], "height_m": 2.5}], g.z)
+    assert name == "1WALL_town_obj_retaining"
+    n = face_normals(v, f)
+    side = np.abs(n[:, 2]) < 0.1
+    fv = f[side].ravel()
+    # 壁面の頂点：高さ 1 m ごとに u が 0.5、壁に沿って 4 m ごとに v が 1
+    assert np.ptp(uv[fv, 0]) == pytest.approx(np.ptp(v[fv, 2]) / 2.0, abs=0.05)
+    assert uv[fv, 1].max() == pytest.approx(20.0 / 4.0, abs=0.1)
+    # どの壁面も、u は高さ / 2 に比例（頂点の z と u の差が一定）
+    d = v[fv, 2] / 2.0 - uv[fv, 0]
+    assert np.ptp(d) == pytest.approx(0.0, abs=1e-6)

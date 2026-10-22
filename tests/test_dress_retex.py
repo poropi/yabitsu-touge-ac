@@ -68,3 +68,23 @@ def test_assemble_migrates_old_single_file(tmp_path):
 def test_split_red_becomes_plain_road():
     """ストリートビュー 2025 では下り側の道は灰色（空中写真の赤は古い）。"""
     assert dress_retex.kind_of("1ROAD_split_red_00", "paint_red") == "road_plane"
+
+
+def test_enlarge_keeps_size_tiles_and_scales_the_pattern():
+    """enlarge(img, k)：同じ大きさの画像のまま、模様を k 倍に（目地の数が 1/k）。端は反対側とつながる（並べても継ぎ目がない）。"""
+    import numpy as np
+    from PIL import Image
+    n = 256
+    y, x = np.mgrid[0:n, 0:n]
+    a = 128 + 60 * np.sign(np.sin(2 * np.pi * 4 * (x + y) / n)) + 40 * np.cos(2 * np.pi * x / n)   # 斜めの目地 4 本＋横に 1 周するむら
+    img = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)).convert("RGB")
+    out = dress_retex.enlarge(img, 2)
+    assert out.size == img.size
+    g = np.asarray(out.convert("L"), float); g -= g.mean()
+    P = np.abs(np.fft.fft2(g)) ** 2; P[0, 0] = 0
+    i, j = np.unravel_index(P.argmax(), P.shape)
+    assert {int(i), int(j)} <= {2, n - 2}                       # 目地の周期が 4 → 2
+    edge = np.abs(g[:, 0] - g[:, -1]).mean(); inner = np.abs(g[:, 100] - g[:, 101]).mean()
+    assert edge < inner * 1.5                                  # 右端と左端の差は、となりの列どうしの差と同じくらい
+    plain = np.asarray(img.resize((2 * n, 2 * n)).convert("L"), float)[:n, :n]
+    assert np.abs(plain[:, 0] - plain[:, -1]).mean() > inner * 3   # 切り出しただけなら、むらの段差が端に出る（この確かめ方が効いている）

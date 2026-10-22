@@ -83,3 +83,9 @@ def test_leaf_textures_are_dense_at_the_edge_and_sparse_on_the_lane():
     assert a[:, um > 0.4].mean() < 0.3
     b = np.asarray(lane)[..., 3] > 0
     assert 0.002 < b.mean() < 0.08
+
+
+def test_town_retaining_walls_get_kenchi_block():
+    """町の物の擁壁（1WALL_<prefix>_obj_retaining。宮ヶ瀬北原など）は間知ブロック。S3 の仕上げが持っているものは触らない。"""
+    names = ["1WALL_kitahara_obj_retaining", "1WALL_s3_obj_retaining", "1WALL_s1_retaining_006", "1WALL_track_parapet_049"]
+    assert dm.town_walls(names, taken={"1WALL_s3_obj_retaining"}) == {"1WALL_kitahara_obj_retaining": "mt_wall_block"}

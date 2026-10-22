@@ -46,6 +46,20 @@ def _box(c, d, w, depth, z0, z1):
     return v, f, v[:, :2] / 2.0
 
 
+def _wall_uv(box, a, t, n, s0):
+    """_box の箱を面ごとの頂点に分け、壁の UV にする：横 u＝高さ（1 = 2 m）、縦 v＝壁に沿った長さ（1 = 4 m、s0 は壁の始まりからの距離）。
+    dress_retex.UV_LAYOUT["wall"] と同じ寸法なので、間知ブロックなどを CSP でそのまま貼れる。上面は u＝奥行き。"""
+    v, f, _ = box
+    vs, fs, us = [], [], []
+    for k, face in enumerate(f):
+        p = v[face]
+        along = s0 + (p[:, :2] - a) @ t
+        top = np.ptp(p[:, 2]) < 1e-9
+        us.append(np.c_[((p[:, :2] - a) @ n) / 2.0 if top else p[:, 2] / 2.0, along / 4.0])
+        vs.append(p); fs.append(np.arange(4) + 4 * k)
+    return np.vstack(vs), np.array(fs), np.vstack(us)
+
+
 def _prism(c, r, z0, z1, n=8):
     a = np.linspace(0, 2 * np.pi, n, endpoint=False)
     ring = np.c_[c[0] + r * np.cos(a), c[1] + r * np.sin(a)]
@@ -252,12 +266,14 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
         elif kind == "retaining_wall":   # 擁壁（厚さ 0.3m、当たり判定あり）と、上の金網のフェンス（fence_m）
             q = np.asarray(LineString(pts).segmentize(2.0).coords); h = float(ob.get("height_m", 2.5)); fh = float(ob.get("fence_m", 0.0))
             zw = ob.get("_z_fn") or zf   # 町では歩道の高さ（裏の山の高さではなく）
+            s0 = 0.0
             for i in range(len(q) - 1):
                 za, zb = zw(q[i]), zw(q[i + 1]); u = q[i + 1] - q[i]; L = float(np.linalg.norm(u))
                 if L < 1e-6:
                     continue
                 n = np.array([-u[1], u[0]]) / L; top = max(za, zb) + h
-                walls.append(_box((q[i] + q[i + 1]) / 2, n, L + 0.02, 0.3, min(za, zb) - 0.3, top))
+                walls.append(_wall_uv(_box((q[i] + q[i + 1]) / 2, n, L + 0.02, 0.3, min(za, zb) - 0.3, top), q[i], u / L, n, s0))
+                s0 += L
                 if fh > 0:
                     add("railing_bars", _quad(q[i], q[i + 1], top, top + fh, 0.0, L / 2.0, both=True))
         else:

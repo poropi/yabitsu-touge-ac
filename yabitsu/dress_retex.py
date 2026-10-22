@@ -97,6 +97,30 @@ def wall_finish(manifest_dir, cl, features_csv, names, s_offset=0.0) -> dict:
     return out
 
 
+def enlarge(img: Image.Image, k: float, band=0.125) -> Image.Image:
+    """継ぎ目のない画像の模様を k 倍に（大きさは同じ。目地の数が 1/k）。k 倍に広げて左上の元の大きさを切り出し、
+    端の帯（幅 band）を、広げた画像で切り出しの手前にある部分と混ぜて、反対の端とつながるようにする。
+    目地がそろうのは、元の目地の数 c について c/k と (k-1)·c/k が整数のとき（間知ブロック 4→2 は k=2、間知石 5→2 は k=2.5）。"""
+    n_w, n_h = img.size
+    W, H = int(round(n_w * k)), int(round(n_h * k))
+    p = 8   # 拡大の前に周りへ折り返して貼る（端どうしもなめらかにつながる拡大にする）
+    pad = np.pad(np.asarray(img), ((p, p), (p, p)) + ((0, 0),) * (np.asarray(img).ndim - 2), mode="wrap")
+    q = int(round(p * k))
+    big = np.asarray(Image.fromarray(pad).resize((W + 2 * q, H + 2 * q), Image.LANCZOS), float)[q:q + H, q:q + W]
+    bw, bh = int(n_w * band), int(n_h * band)
+    tx = np.linspace(0, 1, bw)[None, :, None]
+    ty = np.linspace(0, 1, bh)[:, None, None]
+
+    def right(rows):     # 右端の帯を、広げた画像の右端（＝左端のすぐ手前）へ寄せる
+        a = big[rows, :n_w].copy()
+        a[:, n_w - bw:] = a[:, n_w - bw:] * (1 - tx) + big[rows, W - bw:] * tx
+        return a
+
+    out = right(slice(0, n_h))
+    out[n_h - bh:] = out[n_h - bh:] * (1 - ty) + right(slice(H - bh, H)) * ty     # 下端の帯も同じく（上端のすぐ手前へ）
+    return Image.fromarray(np.clip(out, 0, 255).astype(np.uint8), img.mode)
+
+
 def compose(base: Image.Image, base_m, u_m, v_m, rotate=False, max_px=2048) -> Image.Image:
     """元の画像（実寸 base_m＝横×縦 m）を、UV の 1 が u_m×v_m m の範囲になる画像にする（並べる・回す）。"""
     img, bw, bh = base, base_m[0], base_m[1]

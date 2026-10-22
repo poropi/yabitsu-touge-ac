@@ -15,6 +15,12 @@ from .meshgen import ribbon
 SECTIONS = ("s2", "s1", "s4", "s5")      # 内部の区間名（表示の S2・S3・S4・S5）
 
 
+def town_walls(names, taken=()) -> dict:
+    """町の物の擁壁（town_objects の 1WALL_<prefix>_obj_retaining）→ 間知ブロック。宮ヶ瀬北原の擁壁はストリートビューで間知ブロック
+    （s5_kitahara.json の note）。taken（S3 の仕上げが貼り替える・隠すもの）は除く。"""
+    return {n: "mt_wall_block" for n in names if n.startswith("1WALL_") and n.endswith("_obj_retaining") and n not in taken}
+
+
 def wall_finish(note: str) -> str:
     """壁の note → 貼り替えのテクスチャのキー（wall_*）。"""
     n = note
