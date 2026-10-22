@@ -97,6 +97,11 @@ def wall_finish(manifest_dir, cl, features_csv, names, s_offset=0.0) -> dict:
     return out
 
 
+# 元の画像 → 模様を何倍にするか。間知ブロック・間知石の画像は目地の周期が 2 m に 4〜5 つで、本物（ブロック・石の面 約 35 cm、
+# 斜めの段の間隔 約 0.5 m）の半分ほど。2026-10-22 にストリートビュー（S3 500m、S2 1700m、宮ヶ瀬北原）と描画を並べて確かめ、2 m に 2 つにした
+ENLARGE = {"kenchi_block": 2.0, "kenchi": 2.5, "kenchi_moss": 2.5}
+
+
 def enlarge(img: Image.Image, k: float, band=0.125) -> Image.Image:
     """継ぎ目のない画像の模様を k 倍に（大きさは同じ。目地の数が 1/k）。k 倍に広げて左上の元の大きさを切り出し、
     端の帯（幅 band）を、広げた画像で切り出しの手前にある部分と混ぜて、反対の端とつながるようにする。

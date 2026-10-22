@@ -80,6 +80,8 @@ def write_retex_textures(keys, ext_dir: Path):
         base, base_m, layout = RETEX[key]
         u_m, v_m, rot = dress_retex.UV_LAYOUT[layout]
         img, _ = dress_tex.load(base)
+        if base in dress_retex.ENLARGE:
+            img = dress_retex.enlarge(img.convert("RGB"), dress_retex.ENLARGE[base])
         comp = dress_retex.compose(img.convert("RGB"), base_m, u_m, v_m, rot)
         if key in ("road_town", "plane_town"):   # 町の区間の路面は写真より明るく見えた（2026-10-19 全地点の見直し）
             from PIL import ImageEnhance

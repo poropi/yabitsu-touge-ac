@@ -40,9 +40,6 @@ RETEX = {
 # ストリートビューと見比べて決めた 明るさ・鮮やかさ・コントラスト
 TONE = {"mt_road": 0.68, "mt_plane": 0.68, "mt_road_dark": 0.9, "mt_gutter": 0.72, "mt_wall_kenchi_moss": 0.72,
         "mt_wall_block": 0.82, "mt_wall_rock_net": 0.8, "mt_terrain": 0.85}
-# 間知ブロック・間知石の模様を k 倍に：画像は目地の周期が 2 m に 4〜5 つで、本物（ブロックの面 約 35 cm、斜めの段の間隔 約 0.5 m）の半分ほど。
-# 2026-10-22 にストリートビュー（S2 1700m・宮ヶ瀬北原）と描画を並べて確かめた。2 m に 2 つにする
-ENLARGE = {"mt_wall_block": 2.0, "mt_wall_kenchi": 2.5, "mt_wall_kenchi_moss": 2.5}
 SATURATION = {"mt_wall_kenchi_moss": 0.85, "mt_terrain": 0.8, "mt_gutter": 0.8, "mt_wall_rock_net": 0.6}
 CONTRAST = {"mt_road": 0.7, "mt_plane": 0.7}
 
@@ -153,8 +150,8 @@ def write_retex_textures(keys, ext_dir):
         base, base_m, layout = RETEX[key]
         u_m, v_m, rot = dress_retex.UV_LAYOUT[layout]
         img, _ = dress_tex.load(base)
-        if key in ENLARGE:
-            img = dress_retex.enlarge(img.convert("RGB"), ENLARGE[key])
+        if base in dress_retex.ENLARGE:
+            img = dress_retex.enlarge(img.convert("RGB"), dress_retex.ENLARGE[base])
         comp = dress_retex.compose(img.convert("RGB"), base_m, u_m, v_m, rot)
         if TONE.get(key, 1.0) != 1.0:
             comp = ImageEnhance.Brightness(comp).enhance(TONE[key])
