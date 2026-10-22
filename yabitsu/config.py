@@ -66,6 +66,7 @@ S4_GROUP = "yabitsu_s4"  # S4（峠 → 札掛）の部品。全部のレイア�
 S5_GROUP = "yabitsu_s5"  # S5（札掛 → 宮ヶ瀬北原）の部品
 KITAHARA_GROUP = "yabitsu_kitahara"  # 宮ヶ瀬北原交差点の町の範囲
 TRACK_BUILD_DIR = DATA_PROCESSED / "track"
+COMPARE_DIR = PROJECT_ROOT / "export" / "compare"   # ストリートビューと描画を並べた比較画像（どのスクリプトもここ。名前の頭で区別）
 
 PROTECTED_DIRS = (AC_TRACKS / "nanohanadai",)
 

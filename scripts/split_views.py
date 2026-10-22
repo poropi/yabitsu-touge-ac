@@ -5,7 +5,7 @@ from scipy.spatial import cKDTree
 from yabitsu import config, nagoki, forest_ground, track
 from yabitsu.crosssection import Section
 from scripts import dress_compare as dc, forest_build as fb
-out=sys.argv[1]
+out=config.COMPARE_DIR/sys.argv[1]; out.parent.mkdir(parents=True,exist_ok=True)
 sec=Section.load_json(config.DATA_PROCESSED/'track_section.json'); sp=nagoki.load_splits(sec)[0]
 road=forest_ground.load_ground(config.DATA_PROCESSED/'track',prefixes=('1ROAD_',))
 T=cKDTree(np.c_[sec.x,sec.y]); views=[]

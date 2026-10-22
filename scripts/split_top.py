@@ -45,7 +45,7 @@ def main():
     d = ImageDraw.Draw(out)
     d.text((10, 8), f"空中写真（地理院） s={s:.0f} 付近 {size:.0f} m 四方・上が北", fill=(0, 0, 0), font=f)
     d.text((1010, 8), "今のコース（上から）", fill=(0, 0, 0), font=f)
-    p = config.PROJECT_ROOT / "export" / "dress" / "s3" / "split_top_compare.jpg"
+    p = config.COMPARE_DIR / "s3_split_top.jpg"; p.parent.mkdir(parents=True, exist_ok=True)
     out.save(p, quality=90)
     # 開くのは呼び出した側（ユーザーに見せる時だけ、説明と一緒に）
     print(p)

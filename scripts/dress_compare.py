@@ -54,7 +54,7 @@ def main():
         for x0, t in ((0, "ストリートビュー"), (900, "今回の仕上げ")):
             dr.rectangle((x0, 0, x0 + 360, 40), fill=(0, 0, 0)); dr.text((x0 + 8, 4), f"{label}  {t}", fill=(255, 255, 0), font=font)
         rows.append(row)
-    out_dir = config.PROJECT_ROOT / "export" / "dress" / "s3" / "compare"
+    out_dir = config.COMPARE_DIR
     out_dir.mkdir(parents=True, exist_ok=True)
     per = 6
     outs = []
@@ -63,7 +63,7 @@ def main():
         sheet = Image.new("RGB", (1200, 400 * len(chunk)))
         for j, row in enumerate(chunk):
             sheet.paste(row, (0, 400 * j))
-        out = out_dir / f"compare_{k // per:02d}.jpg"
+        out = out_dir / f"s3_{k // per:02d}.jpg"
         sheet.save(out, quality=88)
         outs.append(out)
     print("\n".join(map(str, outs)))

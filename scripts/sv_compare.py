@@ -1,5 +1,5 @@
 """ストリートビューの写真と、同じ位置・向きの今のコースの描画を並べる（どの区間でも）。
-使い方: uv run python -m scripts.sv_compare <jobs.json> <out.jpg>
+使い方: uv run python -m scripts.sv_compare <jobs.json> <名前.jpg>   （config.COMPARE_DIR に書く。絶対パスならそこへ）
 jobs.json: [{"name", "lat", "lon", "yaw"(度・北から時計回り), "photo"(写真のパス), "pitch"(任意・下向きが正), "fov"(任意)}]"""
 import json
 import os
@@ -18,7 +18,7 @@ EYE = 2.5
 
 def main():
     jobs = json.loads(Path(sys.argv[1]).read_text(encoding="utf-8"))
-    out = Path(sys.argv[2])
+    out = config.COMPARE_DIR / sys.argv[2]; out.parent.mkdir(parents=True, exist_ok=True)
     surf = forest_ground.load_ground(config.DATA_PROCESSED / "track", prefixes=("1ROAD_",))
     ground = forest_ground.load_ground(config.DATA_PROCESSED / "track")
     views = []

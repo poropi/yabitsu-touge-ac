@@ -21,7 +21,7 @@ OLD = {"s4": SDD / "2026-10-18-yabitsu-s4", "s5": SDD / "2026-10-18-yabitsu-s5"}
 FOREST = sorted((config.PROJECT_ROOT / "export" / "forest").glob("2026*"))[-1]
 DRESS = [config.DATA_PROCESSED / "dress_s3", config.DATA_PROCESSED / "dress_mountain"]
 BLENDER = str(config.BLENDER_EXE)
-OUT = config.PROJECT_ROOT / "export" / "dress" / "mountain" / "compare"
+OUT = config.COMPARE_DIR
 EYE = 2.5
 LABEL = {"s2": "S2", "s1": "S3", "s4": "S4", "s5": "S5"}       # 表示の区間名
 
@@ -105,7 +105,7 @@ def main():
         sheet = Image.new("RGB", (W, 300 * len(chunk)))
         for j, r in enumerate(chunk):
             sheet.paste(r.resize((W, 300)), (0, 300 * j))
-        out = OUT / f"compare_{k // per:02d}.jpg"
+        out = OUT / f"mountain_{k // per:02d}.jpg"
         sheet.save(out, quality=88)
         outs.append(out)
     print("\n".join(map(str, outs)))
