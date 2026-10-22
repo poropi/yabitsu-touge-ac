@@ -15,7 +15,7 @@ W, H, COLS, ROWS = 400, 267, 3, 4
 def main():
     OUT.mkdir(parents=True, exist_ok=True)
     files = sorted(SV.glob("s3_*_*.png"), key=lambda p: (int(re.findall(r"s3_(\d+)_", p.name)[0]), p.name))
-    font = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", 22)
+    font = ImageFont.truetype(config.font_file("gothic"), 22)
     per = COLS * ROWS
     for k in range(0, len(files), per):
         sheet = Image.new("RGB", (W * COLS, H * ROWS), (255, 255, 255))

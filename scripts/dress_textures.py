@@ -27,7 +27,7 @@ def request(name: str):
 
 
 def check_sheet(names):
-    font = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", 22)
+    font = ImageFont.truetype(config.font_file("gothic"), 22)
     cell = 320
     cols = 4
     rows = (len(names) + cols - 1) // cols

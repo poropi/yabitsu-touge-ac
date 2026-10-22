@@ -59,7 +59,6 @@ MATERIALS = {
     "tunnel_lamp": {"texture": "textures/tunnel_lamp.png", "shader": "ksPerPixel", "two_sided": True},
 }
 
-FONT_FILES = (r"C:\Windows\Fonts\BIZ-UDGothicB.ttc", r"C:\Windows\Fonts\meiryob.ttc", r"C:\Windows\Fonts\YuGothB.ttc")
 
 
 def periodic_noise(size, feature_px, rng):
@@ -162,10 +161,8 @@ def roof(size=512, seed=10):
 
 def _font(px):
     from PIL import ImageFont
-    for f in FONT_FILES:
-        if Path(f).exists():
-            return ImageFont.truetype(f, px)
-    return ImageFont.load_default()
+    from . import config
+    return ImageFont.truetype(config.font_file("gothic_bold"), px)
 
 
 def _rgb(hexs):

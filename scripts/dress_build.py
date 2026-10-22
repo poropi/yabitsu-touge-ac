@@ -152,7 +152,7 @@ def marking_textures(tex_dir: Path):
     img.save(tex_dir / "diamond.png")
     for t in ("40",):
         img = Image.new("RGBA", (180, 334), (0, 0, 0, 0)); d = ImageDraw.Draw(img)
-        font = ImageFont.truetype("C:/Windows/Fonts/arialbd.ttf", 170)
+        font = ImageFont.truetype(config.font_file("arial_bold"), 170)
         tmp = Image.new("RGBA", (180, 180), (0, 0, 0, 0))
         ImageDraw.Draw(tmp).text((90, 90), t, fill=(222, 170, 70, 255), font=font, anchor="mm")
         img = tmp.resize((180, 334)).transpose(Image.FLIP_TOP_BOTTOM)       # 縦に引きのばす（路面の文字）・v が上向き

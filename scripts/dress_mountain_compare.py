@@ -20,7 +20,7 @@ NEW = SDD / "2026-10-20-mountain-dress"
 OLD = {"s4": SDD / "2026-10-18-yabitsu-s4", "s5": SDD / "2026-10-18-yabitsu-s5"}
 FOREST = sorted((config.PROJECT_ROOT / "export" / "forest").glob("2026*"))[-1]
 DRESS = [config.DATA_PROCESSED / "dress_s3", config.DATA_PROCESSED / "dress_mountain"]
-BLENDER = r"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe"
+BLENDER = str(config.BLENDER_EXE)
 OUT = config.PROJECT_ROOT / "export" / "dress" / "mountain" / "compare"
 EYE = 2.5
 LABEL = {"s2": "S2", "s1": "S3", "s4": "S4", "s5": "S5"}       # 表示の区間名
@@ -81,7 +81,7 @@ def main():
     if not after_only:
         render([dict(v) for v in views], [DRESS[0]], "before")
     render([dict(v) for v in views], DRESS, "after")
-    font = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", 24)
+    font = ImageFont.truetype(config.font_file("gothic"), 24)
     OUT.mkdir(parents=True, exist_ok=True)
     rows = []
     for v, (sec, s, fb, img) in zip(views, picks):

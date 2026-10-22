@@ -23,7 +23,7 @@ c,_=fb._at('s3',3410,cl,b); z=float(road.z(c[None])[0])
 views.append({"name":"top_split","type":"top","center":c.tolist(),"size":110.0,"z":z,"window":[c[0]-80,c[1]-80,c[0]+80,c[1]+80],"lod":2})
 (dc.FOREST/'views.json').write_text(json.dumps(views),encoding='utf-8')
 r=subprocess.run([dc.BLENDER,"-b","--factory-startup","--python","blender_scripts/render_forest.py","--",str(dc.FOREST),"s3"],env={**os.environ,"DRESS_DIR":str(dc.DRESS)},capture_output=True,timeout=2400); print(r.returncode)
-font=ImageFont.truetype('C:/Windows/Fonts/meiryo.ttc',22)
+font=ImageFont.truetype(config.font_file('gothic'),22)
 SV=dc.SV/'sv'
 sh=Image.new('RGB',(2700,500*4),(255,255,255))
 for k,v in enumerate(views[:6]):

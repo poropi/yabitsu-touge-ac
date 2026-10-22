@@ -1,4 +1,5 @@
 import os
+import sys
 from dataclasses import dataclass
 from pathlib import Path
 
@@ -11,7 +12,29 @@ AC_ROOT = Path(r"C:\Program Files (x86)\Steam\steamapps\common\assettocorsa")
 AC_TRACKS = AC_ROOT / "content" / "tracks"
 TRACK_DIR = AC_TRACKS / "yabitsu"
 TEST_TRACK_DIR = AC_TRACKS / "yabitsu_test"
-BLENDER_EXE = Path(r"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe")
+if sys.platform == "win32":
+    BLENDER_EXE = Path(r"C:\Program Files\Blender Foundation\Blender 5.2\blender.exe")
+else:   # Mac で描画だけ確かめるとき（AC はない）
+    BLENDER_EXE = Path("/opt/homebrew/bin/blender")
+
+# 絵に文字を描くフォント。Windows は今までのファイル、Mac は近い書体で代える（同じ絵にはならない）
+_WIN_FONTS = "C:/Windows/Fonts/"
+_MAC_FONTS = "/System/Library/Fonts/"
+FONTS = {
+    "gothic": (_WIN_FONTS + "meiryo.ttc", _MAC_FONTS + "ヒラギノ角ゴシック W3.ttc"),
+    "gothic_bold": (_WIN_FONTS + "BIZ-UDGothicB.ttc", _WIN_FONTS + "meiryob.ttc", _WIN_FONTS + "YuGothB.ttc",
+                    _MAC_FONTS + "ヒラギノ角ゴシック W6.ttc"),
+    "mincho": (_WIN_FONTS + "msmincho.ttc", _MAC_FONTS + "ヒラギノ明朝 ProN.ttc"),
+    "arial_bold": (_WIN_FONTS + "arialbd.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf"),
+}
+
+
+def font_file(kind) -> str:
+    """kind のフォントのうち、このマシンにある最初のファイル。"""
+    for f in FONTS[kind]:
+        if Path(f).exists():
+            return f
+    raise FileNotFoundError(f"フォント {kind} が見つかりません: {FONTS[kind]}")
 
 NAGOKI = (35.3796436, 139.2358251)  # 名古木交差点の中心（OSM node 293317044）。S3 の道の始まり
 TOWN_RADIUS_M = 200.0               # 交差点から、この半径の中を地図どおりの道と建物で作る（町の範囲）
@@ -52,7 +75,7 @@ class ProtectedPathError(RuntimeError):
 
 
 def _norm(p) -> str:
-    return os.path.normcase(os.path.abspath(p))
+    return os.path.abspath(p).casefold()   # AC のフォルダ名は大文字小文字を区別しない（Windows・Mac とも）
 
 
 def assert_writable(path) -> Path:

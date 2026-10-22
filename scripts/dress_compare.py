@@ -14,7 +14,7 @@ from yabitsu import config, forest_ground, geo
 SV = config.PROJECT_ROOT / ".superpowers" / "sdd" / "2026-10-17-yabitsu-s3"
 FOREST = sorted((config.PROJECT_ROOT / "export" / "forest").glob("2026*"))[-1]     # いちばん新しい森（木の配置）
 DRESS = config.DATA_PROCESSED / "dress_s3"
-BLENDER = r"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe"
+BLENDER = str(config.BLENDER_EXE)
 DEFAULT = ["500f", "1050b", "1450f", "2150f", "2350b", "3950f"]
 EYE = 2.5                     # ストリートビューのカメラの高さ
 
@@ -43,7 +43,7 @@ def main():
                         "--", str(FOREST), "s3"], env=env, capture_output=True, timeout=3000)
     if r.returncode:
         print(r.stderr.decode("utf-8", "replace")[-2000:]); return
-    font = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", 26)
+    font = ImageFont.truetype(config.font_file("gothic"), 26)
     rows = []
     for v in views:
         sv = Image.open(SV / "sv" / f"s3_{v['name'][3:]}.png").convert("RGB").resize((900, 600))

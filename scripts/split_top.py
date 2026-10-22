@@ -40,7 +40,7 @@ def main():
                     "--", str(forest), "s3"], env={**os.environ, "DRESS_DIR": str(dc.DRESS)}, capture_output=True, timeout=1800, check=True)
     ren = Image.open(forest / "views" / "top_cmp.png").convert("RGB").resize((1000, 1000))
     aer = upscaled_aerial(c, size, 1000)
-    f = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", 30)
+    f = ImageFont.truetype(config.font_file("gothic"), 30)
     out = Image.new("RGB", (2000, 1050), (255, 255, 255)); out.paste(aer, (0, 50)); out.paste(ren, (1000, 50))
     d = ImageDraw.Draw(out)
     d.text((10, 8), f"空中写真（地理院） s={s:.0f} 付近 {size:.0f} m 四方・上が北", fill=(0, 0, 0), font=f)

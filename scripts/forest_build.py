@@ -22,7 +22,7 @@ CFG = config.PROJECT_ROOT / "data" / "manual" / "forest.json"
 MANIFEST = config.DATA_PROCESSED / "track"
 MAP = config.DATA_PROCESSED / "forest_map.npz"
 PHOTO = config.DATA_PROCESSED / "forest_photo.npy"   # 全域の空中写真（2 m/画素）
-BLENDER = Path(r"C:/Program Files/Blender Foundation/Blender 5.2/blender.exe")
+BLENDER = config.BLENDER_EXE
 NO_FOREST_LAYOUTS = ("s1_landscape_up", "s1_landscape_down")   # Codex の S1 景観確認
 
 

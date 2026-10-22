@@ -11,7 +11,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFont
 from shapely.geometry import Polygon
 
-from . import site
+from . import config, site
 from .start_lot import Frame, _merge, _quad, box, road_formation
 
 STEP_TOP = 0.02      # 石段の地形の平面は、段の先端よりこれだけ下
@@ -139,7 +139,7 @@ def pillar_texture(text, path, w=64, h=640):
     """社号標：白っぽい石に縦書きの黒い字。"""
     img = Image.new("RGB", (w, h), (214, 210, 200))
     d = ImageDraw.Draw(img)
-    font = ImageFont.truetype("C:/Windows/Fonts/msmincho.ttc", int(w * 0.8))
+    font = ImageFont.truetype(config.font_file("mincho"), int(w * 0.8))
     for k, ch in enumerate(text):
         d.text((w / 2, h * 0.08 + k * w * 0.95), ch, fill=(40, 38, 36), font=font, anchor="mt")
     img.save(path)

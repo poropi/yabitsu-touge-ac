@@ -37,10 +37,11 @@ def main():
     (dc.FOREST / "views.json").write_text(json.dumps(views), encoding="utf-8")
     r = subprocess.run([dc.BLENDER, "-b", "--factory-startup", "--python",
                         str(config.PROJECT_ROOT / "blender_scripts" / "render_forest.py"), "--", str(dc.FOREST), "x"],
-                       env={**os.environ, "DRESS_DIR": str(dc.DRESS)}, capture_output=True, timeout=3000)
+                       env={**os.environ, "DRESS_DIR": os.pathsep.join(str(d) for d in (dc.DRESS, config.DATA_PROCESSED / "dress_mountain") if d.exists())},
+                       capture_output=True, timeout=3000)   # S3 と山道（S2〜S5・宮ヶ瀬北原）の仕上げ
     if r.returncode:
         print(r.stderr.decode("utf-8", "replace")[-1500:]); return
-    font = ImageFont.truetype("C:/Windows/Fonts/meiryo.ttc", 22)
+    font = ImageFont.truetype(config.font_file("gothic"), 22)
     sheet = Image.new("RGB", (1200, 400 * len(jobs)))
     for k, (j, v) in enumerate(zip(jobs, views)):
         a = Image.open(j["photo"]).convert("RGB").resize((600, 400))
