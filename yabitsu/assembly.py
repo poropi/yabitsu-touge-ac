@@ -137,7 +137,13 @@ def add_bay_lines(m, sec, bays, dash=(3.0, 3.0)):
             m.add_mesh(GROUP, f"LINES_track_bay_{k:02d}", v, f, uv, "line_white")
 
 
-def add_terrain(m, near, far, mid=None):
+def far_photo_uv(v, far):
+    """遠い地形の長方形（far の xs・ys の端）を 0〜1 にする uv（空中写真を 1 枚貼る。v=0 が南＝画像の下）。"""
+    x0, x1, y0, y1 = far["xs"][0], far["xs"][-1], far["ys"][0], far["ys"][-1]
+    return np.c_[(v[:, 0] - x0) / (x1 - x0), (v[:, 1] - y0) / (y1 - y0)]
+
+
+def add_terrain(m, near, far, mid=None, far_photo=False):
     D = near["D"]
     keep = (D[:-1, :-1] <= NEAR_BAND) & (D[:-1, 1:] <= NEAR_BAND) & (D[1:, 1:] <= NEAR_BAND) & (D[1:, :-1] <= NEAR_BAND)
     if "H" in near:   # トンネルの筒の中に入る面は描かない（terrain.tunnel_holes）
@@ -149,7 +155,10 @@ def add_terrain(m, near, far, mid=None):
         for k, (v, f, uv) in enumerate(grid_mesh_chunks(mid["xs"], mid["ys"], mid["Z"], mid_keep(mid["D"]), block=80, uv_scale=8.0)):
             m.add_mesh(GROUP, f"1GRASS_track_mid_{k:03d}", v, f, uv, "ground")
     for k, (v, f, uv) in enumerate(grid_mesh_chunks(far["xs"], far["ys"], far["Z"], far["Dc"] >= FAR_HOLE, block=50, uv_scale=40.0)):
-        m.add_mesh(GROUP, f"TERRAIN_FAR_s1_{k:02d}", v, f, uv, "ground")
+        if far_photo:     # 遠い地形は空中写真（菜の花台などから見下ろす街・畑が、くり返しの地面の絵にならない）
+            m.add_mesh(GROUP, f"TERRAIN_FAR_s1_{k:02d}", v, f, far_photo_uv(v, far), "ground_far")
+        else:
+            m.add_mesh(GROUP, f"TERRAIN_FAR_s1_{k:02d}", v, f, uv, "ground")
 
 
 def add_features(m, sec, feats):

@@ -6,16 +6,18 @@ from PIL import Image, ImageDraw
 from .gsi import tile_coords
 
 
-def render_local_image(cache, unproject, x0, y0, size_m, px_size=0.5, layer="seamlessphoto", z=18, ext="jpg"):
-    n = int(round(size_m / px_size))
+def render_local_image(cache, unproject, x0, y0, size_m, px_size=0.5, layer="seamlessphoto", z=18, ext="jpg", height_m=None):
+    """左下 (x0, y0)、横 size_m・縦 height_m（省くと正方形）の空中写真。1 行目が北。"""
+    height_m = size_m if height_m is None else height_m
+    n = int(round(size_m / px_size)); nh = int(round(height_m / px_size))
     xs = x0 + (np.arange(n) + 0.5) * px_size
-    ys = y0 + size_m - (np.arange(n) + 0.5) * px_size
+    ys = y0 + height_m - (np.arange(nh) + 0.5) * px_size
     X, Y = np.meshgrid(xs, ys)
     lat, lon = unproject(X.ravel(), Y.ravel())
     fx, fy = tile_coords(lat, lon, z)
     tx, ty = np.floor(fx).astype(np.int64), np.floor(fy).astype(np.int64)
     px = np.clip(((fx - tx) * 256).astype(np.int64), 0, 255); py = np.clip(((fy - ty) * 256).astype(np.int64), 0, 255)
-    out = np.full((n * n, 3), 128, np.uint8)
+    out = np.full((n * nh, 3), 128, np.uint8)
     for a, b in np.unique(np.stack([tx, ty], 1), axis=0):
         data = cache.get_bytes(layer, z, int(a), int(b), ext)
         if data is None:
@@ -23,7 +25,7 @@ def render_local_image(cache, unproject, x0, y0, size_m, px_size=0.5, layer="sea
         t = np.array(Image.open(io.BytesIO(data)).convert("RGB"))
         m = (tx == a) & (ty == b)
         out[m] = t[py[m], px[m]]
-    return out.reshape(n, n, 3)
+    return out.reshape(nh, n, 3)
 
 
 def hillshade(zgrid, cell, azimuth=315.0, altitude=45.0):

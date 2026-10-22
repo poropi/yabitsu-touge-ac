@@ -98,3 +98,11 @@ def test_surface_with_duplicate_vertices(tmp_path):
     m = _manifest(tmp_path, {"1ROAD_s1_000": (v, f, "asphalt")})
     z = fg.load_ground(m, prefixes=("1ROAD_",)).z(np.array([[5.0, 5.0], [15.0, 5.0], [30.0, 5.0]]))
     assert z[0] == pytest.approx(3.0) and z[1] == pytest.approx(4.0) and np.isnan(z[2])
+
+
+def test_far_photo_ground_is_still_ground(tmp_path):
+    """遠い地形に空中写真を貼った材質（ground_far）も地面として扱う（高さ・植える範囲・壁ではない）。"""
+    far = _square(-50, -50, 50, 50, 90.0)
+    m = _manifest(tmp_path, {"TERRAIN_FAR_s1_000": (*far, "ground_far")})
+    assert fg.load_ground(m).z(np.array([[0.0, 0.0]]))[0] == 90.0
+    assert fg.mesh_class("TERRAIN_FAR_s1_000", "ground_far") is None

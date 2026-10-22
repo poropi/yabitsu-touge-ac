@@ -228,7 +228,7 @@ def add_poles(sec, bounds, m: Manifest):
     for k, r in enumerate(csv.DictReader(open(config.DATA_MANUAL / "mountain_poles.csv", encoding="utf-8"))):
         s0 = bounds[r["section"]][0]
         poles = dress_parts.utility_poles(sec, s0 + float(r["s_from"]), s0 + float(r["s_to"]), r["side"], float(r["spacing"]),
-                                          keep, no_sidewalk)
+                                          keep, no_sidewalk, lat_tries=(0.0, 1.5, 3.0))   # 山道は擁壁・ガードレールの外へも探す
         if not poles:
             continue
         allp += poles

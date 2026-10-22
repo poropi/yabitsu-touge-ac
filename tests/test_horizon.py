@@ -37,3 +37,12 @@ def test_meshes_face_up_with_photo_uv():
         assert uv.min() >= 0 and uv.max() <= 1
         south = v[:, 1].argmin()
         assert uv[south, 1] == uv[:, 1].min()          # v=0 が南（画像の下）
+
+
+def test_far_terrain_photo_uv_spans_the_far_rectangle():
+    """遠い地形に空中写真を貼る uv：長方形の左下が (0,0)、右上が (1,1)（v=0 が南＝画像の下）。"""
+    from yabitsu import assembly
+    far = {"xs": np.arange(0.0, 401.0, 20.0), "ys": np.arange(0.0, 801.0, 20.0)}
+    v = np.array([[0.0, 0.0, 5.0], [400.0, 800.0, 5.0], [200.0, 400.0, 5.0]])
+    uv = assembly.far_photo_uv(v, far)
+    assert np.allclose(uv, [[0, 0], [1, 1], [0.5, 0.5]])

@@ -68,17 +68,17 @@ def fence_mesh(sec, s_from, s_to, side, kind, sidewalk):
 
 # ---------- 電柱と電線 ----------
 
-def utility_poles(sec, s_from, s_to, side, spacing, keep, sidewalk, rng=None, tries=(0, 4, -4, 8, -8, 12)):
-    """電柱の位置 [(x, y, z)]。道路・建物など植えない所に当たれば、前後へずらして探す。"""
+def utility_poles(sec, s_from, s_to, side, spacing, keep, sidewalk, rng=None, tries=(0, 4, -4, 8, -8, 12), lat_tries=(0.0,)):
+    """電柱の位置 [(x, y, z)]。道路・建物など植えない所に当たれば、前後へ（lat_tries を渡すと外側へも）ずらして探す。"""
     rng = rng or np.random.default_rng(int(s_from))
     sd = SIDES[side]
     out = []
     for s in np.arange(s_from + rng.uniform(0, spacing * 0.5), s_to, spacing):
-        for d in tries:
+        for d, extra in ((d, e) for e in lat_tries for d in tries):
             i = int(np.clip(np.searchsorted(sec.s, s + d), 0, sec.n - 1))
             h = sec.heading[i]
             n = np.array([-np.sin(h), np.cos(h)]) * sd
-            c = np.array([sec.x[i], sec.y[i]]) + n * _lat(sec, np.array([i]), sd, POLE_GAP, sidewalk)[0]
+            c = np.array([sec.x[i], sec.y[i]]) + n * (_lat(sec, np.array([i]), sd, POLE_GAP, sidewalk)[0] + extra)
             if not keep.blocked(c[None])[0]:
                 out.append((float(c[0]), float(c[1]), float(sec.edge_z(sd)[i])))
                 break

@@ -12,6 +12,17 @@ from yabitsu.manifest import Manifest
 P = config.DATA_PROCESSED
 
 
+def add_far_photo(m, far):
+    """遠い地形に貼る空中写真（地理院 seamlessphoto z=15、長方形全体を 1 枚、1024×4096）。"""
+    from PIL import Image
+    from yabitsu import geo, gsi, photo
+    x0, x1, y0, y1 = float(far["xs"][0]), float(far["xs"][-1]), float(far["ys"][0]), float(far["ys"][-1])
+    img = photo.render_local_image(gsi.TileCache(), geo.from_local, x0, y0, x1 - x0, px_size=5.0, z=15, height_m=y1 - y0)
+    (config.TRACK_BUILD_DIR / "textures").mkdir(parents=True, exist_ok=True)
+    Image.fromarray(img).resize((1024, 4096), Image.LANCZOS).save(config.TRACK_BUILD_DIR / "textures" / "far_photo.jpg", quality=90)
+    m.add_material("ground_far", texture="textures/far_photo.jpg")
+
+
 def main():
     sec = Section.load_json(P / "track_section.json")
     m = Manifest(config.TRACK_BUILD_DIR)
@@ -22,7 +33,8 @@ def main():
     assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps])   # 町の範囲と分かれる所は多角形で作る
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
     mid = dict(np.load(P / "track_terrain_mid.npz"))
-    assembly.add_terrain(m, near, far, mid)
+    add_far_photo(m, far)
+    assembly.add_terrain(m, near, far, mid, far_photo=True)
     ground = terrain.terrain_z(near, mid)   # 景色の建物・道は、できあがった地形の上に置く
     bounds = track.load_bounds()
     assembly.add_centrelines(m, sec, track.load_section_rows("centrelines", bounds), s_min=tw.main_skip[1],

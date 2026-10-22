@@ -197,8 +197,8 @@ def marking_meshes(sec, diamonds, rows):
 
 # ---------- 山道の路面の文字・数字・ひし形（data/manual/road_markings.csv） ----------
 # 大きさは 2026-10-22 にストリートビューの写真から目で見積もった値（測った値ではない）。描画と写真を並べて合わせる
-MARK_NUMBER_SIZE = (1.6, 3.0)         # 「30」など：幅・長さ m
-MARK_CHAR_SIZE, MARK_CHAR_GAP = (1.1, 2.0), 0.6    # 文字 1 字：幅・長さ m、字と字のすき間 m
+MARK_NUMBER_SIZE = (1.5, 4.5)         # 「30」など：幅・長さ m（縦に大きく引きのばした字。s2_1100_b・s2_1500_f の写真）
+MARK_CHAR_SIZE, MARK_CHAR_GAP = (1.1, 3.0), 0.6    # 文字 1 字：幅・長さ m、字と字のすき間 m
 PAINT = {"white": (236, 236, 232, 255), "orange": (222, 170, 70, 255)}
 
 

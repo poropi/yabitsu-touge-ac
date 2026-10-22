@@ -17,6 +17,7 @@ from yabitsu import csptree  # noqa: E402
 
 out = Path(sys.argv[sys.argv.index("--") + 1])
 views = json.loads((out / "views.json").read_text(encoding="utf-8"))
+SAMPLES = int(__import__("os").environ.get("RENDER_SAMPLES", "16"))
 trees = np.load(out / "trees.npy")
 MAN = ROOT / "data" / "processed" / "track"
 manifest = json.loads((MAN / "manifest.json").read_text(encoding="utf-8"))
@@ -39,6 +40,7 @@ def reset():
         sc.render.engine = "BLENDER_EEVEE_NEXT"
     except TypeError:
         sc.render.engine = "BLENDER_EEVEE"
+    sc.eevee.taa_render_samples = SAMPLES   # 既定の 64 は 1 枚 2〜3 分かかる。比べる絵には 16 で足りる
     w = bpy.data.worlds.new("w"); sc.world = w; w.use_nodes = True
     bg = next(n for n in w.node_tree.nodes if n.type == "BACKGROUND")
     bg.inputs[0].default_value = (0.55, 0.68, 0.85, 1); bg.inputs[1].default_value = 1.0

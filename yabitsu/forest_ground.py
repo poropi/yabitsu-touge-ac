@@ -15,11 +15,12 @@ from scipy import ndimage
 DEFAULT_CLEARANCE = {"road": 2.0, "wall": 0.5, "building": 2.0, "bridge": 3.0, "water": 1.0, "tunnel": 5.0,
                      "other": 1.0, "osm_road": 1.5, "cell": 1.0, "coarse_cell": 4.0}
 CLASSES = ("road", "wall", "building", "bridge", "water", "tunnel", "other")
+GROUND_MATERIALS = ("ground", "ground_far")   # ground_far：遠い地形（空中写真を貼る）
 
 
 def mesh_class(name: str, material: str):
     n = name.lower()
-    if material in ("ground", "tree"):
+    if material in (*GROUND_MATERIALS, "tree"):
         return None
     if "bridge" in n:
         return "bridge"
@@ -97,7 +98,7 @@ def load_ground(manifest_dir: Path, prefixes=None) -> Ground:
     """prefixes を渡すと、地面ではなくその名前で始まるメッシュの面（例：道路 "1ROAD_"）の高さ。"""
     far, near = [], []
     for name, mat, v, tris in _load(manifest_dir):
-        if (mat != "ground") if prefixes is None else not name.startswith(tuple(prefixes)):
+        if (mat not in GROUND_MATERIALS) if prefixes is None else not name.startswith(tuple(prefixes)):
             continue
         try:
             interp = LinearTriInterpolator(Triangulation(v[:, 0], v[:, 1], tris), v[:, 2])
@@ -189,7 +190,7 @@ def load_keepout(manifest_dir: Path, cfg: dict) -> KeepOut:
     cfg = {**DEFAULT_CLEARANCE, **cfg}
     items, ground_bb = [], [np.inf, np.inf, -np.inf, -np.inf]
     for name, mat, v, tris in _load(manifest_dir):
-        if mat == "ground":
+        if mat in GROUND_MATERIALS:
             ground_bb = [min(ground_bb[0], v[:, 0].min()), min(ground_bb[1], v[:, 1].min()),
                          max(ground_bb[2], v[:, 0].max()), max(ground_bb[3], v[:, 1].max())]
         k = mesh_class(name, mat)

@@ -29,7 +29,7 @@ def _meshes(manifest_dir):
 
 def kind_of(name: str, material: str):
     n = name
-    if material in ("ground", "tree"):
+    if material in ("ground", "ground_far", "tree"):
         return None
     if n.startswith("1ROAD_s1_gutter"):
         return "gutter"
