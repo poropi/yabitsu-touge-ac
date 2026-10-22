@@ -73,7 +73,7 @@ def mesh_object(name, v, f, uv, mat, coll):
     if uv is not None:
         layer = me.uv_layers.new()
         u = uv[np.asarray(f).ravel()]
-        layer.data.foreach_set("uv", np.c_[u[:, 0], 1 - u[:, 1]].ravel())
+        layer.data.foreach_set("uv", u.ravel())   # 部品データの uv はそのまま（kn5 は 1-v で書く＝AC と同じ見え方。2026-10-22 に 1-v をやめた）
     me.materials.append(mat)
     ob = bpy.data.objects.new(name, me); coll.objects.link(ob)
     return ob
@@ -148,7 +148,7 @@ def tree_objects(lod):
         me.from_pydata(V.tolist(), [], F.tolist())
         layer = me.uv_layers.new()
         u = UV[F.ravel()]
-        layer.data.foreach_set("uv", np.c_[u[:, 0], 1 - u[:, 1]].ravel())
+        layer.data.foreach_set("uv", u.ravel())   # 部品データの uv はそのまま（kn5 は 1-v で書く＝AC と同じ見え方。2026-10-22 に 1-v をやめた）
         me.polygons.foreach_set("material_index", mat_idx)
         ob = bpy.data.objects.new(zp.stem, me); coll.objects.link(ob)
         objs[zp.stem] = ob
@@ -192,9 +192,9 @@ for v in views:
     load_course(sc, v["window"])
     load_dress(sc, v["window"])
     objs = tree_objects(v.get("lod", 1))
-    n = instance_trees(sc, objs, v["window"])
+    n = instance_trees(sc, objs, v.get("tree_window", v["window"]))   # 遠くを見る絵では、木だけ狭い範囲にできる
     cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam")); sc.collection.objects.link(cam)
-    cam.data.clip_end = 20000
+    cam.data.clip_end = v.get("clip_end", 20000)
     if v["type"] == "top":
         cx, cy, size = v["center"][0], v["center"][1], v["size"]
         cam.data.type = "ORTHO"; cam.data.ortho_scale = size
