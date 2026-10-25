@@ -69,7 +69,8 @@ def road_surface(sec, sl, n_lat=5):
     return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl])
 
 
-def gutter(sec, sl, side):
+def gutter(sec, sl, side, skip=None):
+    """skip（区間ごと）が真の所は作らない（わき道の入口：mouth_strip で路面を続ける）。"""
     hw = _cols(sec, sl, sec.hw_left if side > 0 else sec.hw_right)
     z_edge = surface_height(side * hw, _cols(sec, sl, sec.z), _cols(sec, sl, sec.slope), _cols(sec, sl, sec.crown))
     offs = np.array([0.0, GUTTER_WIDTH / 2, GUTTER_WIDTH, GUTTER_WIDTH])[None, :]
@@ -77,7 +78,18 @@ def gutter(sec, sl, side):
     lat = side * (hw + offs); z = z_edge + dz
     if side < 0:
         lat, z = lat[:, ::-1], z[:, ::-1]
-    return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], u_scale=1.0)
+    mask = None if skip is None else np.repeat(~np.asarray(skip, bool)[:, None], 3, 1)
+    return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], u_scale=1.0, face_mask=mask)
+
+
+def mouth_strip(sec, sl, side, rows):
+    """わき道の入口で、側溝の代わりに路面を道の縁の高さのまま側溝の幅だけ延ばす（rows：区間ごと）。"""
+    hw = _cols(sec, sl, sec.hw_left if side > 0 else sec.hw_right)
+    z_edge = surface_height(side * hw, _cols(sec, sl, sec.z), _cols(sec, sl, sec.slope), _cols(sec, sl, sec.crown))
+    lat = side * (hw + np.array([0.0, GUTTER_WIDTH])[None, :]); z = np.repeat(z_edge, 2, 1)
+    if side < 0:
+        lat, z = lat[:, ::-1], z[:, ::-1]
+    return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], face_mask=np.asarray(rows, bool)[:, None])
 
 
 def line(sec, sl, center_lat, width=0.15, lift=0.005, dash=None, row_mask=None):

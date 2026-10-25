@@ -261,3 +261,141 @@ def test_retaining_wall_uv_follows_wall_length_and_height():
     # どの壁面も、u は高さ / 2 に比例（頂点の z と u の差が一定）
     d = v[fv, 2] / 2.0 - uv[fv, 0]
     assert np.ptp(d) == pytest.approx(0.0, abs=1e-6)
+
+
+def test_stop_sign_bench_and_bollards():
+    """止まれ（大きさ size_m の板）、木のベンチ（座面 0.42 m）、赤い車止め（0.8 m）。"""
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    objs = [{"kind": "road_sign", "sign": "stop", "size_m": 0.8, "points": [_ll(0.0, 0.0)], "facing_deg": 180.0},
+            {"kind": "bench", "points": [_ll(10.0, 0.0), _ll(12.0, 0.0)], "facing_deg": 270.0},
+            {"kind": "bollard", "points": [_ll(20.0, 0.0), _ll(21.0, 0.0)]}]
+    ms = {m[4]: m for m in to.object_meshes(objs, flat, prefix="s1_obj")}
+    assert {"sign_stop", "wood", "post_red"} <= set(ms)
+    sign = ms["sign_stop"][1]
+    assert np.ptp(sign[:, 2]) == pytest.approx(0.8) and sign[:, 2].min() == pytest.approx(101.8)
+    assert ms["wood"][1][:, 2].max() == pytest.approx(100.42)
+    assert ms["post_red"][1][:, 2].max() == pytest.approx(100.8)
+
+
+def test_wooden_pole_sign_stands_on_two_wood_posts(tmp_path):
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    s = [{"text": "丹沢大山国定公園\nTANZAWA-OYAMA QUASI-NATIONAL PARK", "bg": "#4A3524", "fg": "#EDE6D6", "at": _ll(0.0, 0.0),
+          "facing_deg": 180.0, "w_m": 2.0, "h_m": 0.6, "z_m": 0.45, "posts": "wood"}]
+    ms = {m[4]: m for m in to.pole_sign_meshes(s, flat, prefix="s1")}
+    assert "wood" in ms and "pole_grey" not in ms
+    posts = ms["wood"][1]
+    assert posts[:, 2].max() == pytest.approx(100.45 + 0.6 + 0.12)
+    assert np.ptp(posts[:, 0]) > 2.0                     # 板の両端の外に柱
+    assert (tmp_path / "s1_polesign_0.png").exists() is False
+    to.write_pole_sign_textures(s, tmp_path, prefix="s1")
+    assert (tmp_path / "s1_polesign_0.png").exists()
+
+
+def test_island_fire_cistern_sign_and_bamboo_tree_stakes():
+    """峠の島：防火水そうの標識（白い柱）と、若木の竹の支柱（杭3本＋横木3本、高さ 1.5m まで）。"""
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    objs = [{"kind": "road_sign", "sign": "fire_cistern", "pole": "pole_white", "size_m": 0.6, "points": [_ll(0.0, 0.0)]},
+            {"kind": "tree_stake", "points": [_ll(5.0, 0.0), _ll(9.0, 0.0)]}]
+    ms = {m[4]: m for m in to.object_meshes(objs, flat, prefix="s1_obj")}
+    assert {"pole_white", "sign_fire_cistern", "bamboo"} <= set(ms) and "pole_grey" not in ms
+    v = ms["bamboo"][1]
+    assert len(ms["bamboo"][2]) == 2 * 6 * 6          # 支柱2組 × 棒6本 × 側面6枚
+    assert v[:, 2].max() == pytest.approx(101.5, abs=0.03) and v[:, 2].min() < 100.0
+
+
+def test_wood_carved_sign_with_log_posts_and_white_caps(tmp_path):
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    s = [{"text": "ヤビツ峠", "style": "wood_carved", "posts": "log", "at": _ll(0.0, 0.0), "facing_deg": 0.0,
+          "w_m": 1.9, "h_m": 1.0, "z_m": 0.55,
+          "lines": [{"text": "丹沢大山国定公園", "size": 0.15}, {"text": "TANZAWA", "size": 0.08, "band": "#4F4033"},
+                    {"text": "ヤビツ峠", "size": 0.17}]}]
+    mats = {m[4] for m in to.pole_sign_meshes(s, flat, prefix="s1")}
+    assert {"wood", "pole_white", "s1_polesign_0"} <= mats
+    to.write_pole_sign_textures(s, tmp_path, prefix="s1")
+    from PIL import Image
+    im = np.asarray(Image.open(tmp_path / "s1_polesign_0.png"))
+    assert im.shape[:2] == (320, 608) and (im.mean(2) > 225).mean() > 0.01   # 白い彫り文字がある
+
+
+def test_vending_machine_box_and_front_window():
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    ms = {m[4]: m for m in to.object_meshes([{"kind": "vending", "points": [_ll(0.0, 0.0)], "facing_deg": 90.0}], flat, prefix="s1_obj")}
+    assert {"vending", "vending_front"} <= set(ms)
+    assert ms["vending"][1][:, 2].max() == pytest.approx(101.83)
+    assert ms["vending_front"][1][:, 0].min() > 0.3                    # 正面（東）の窓
+
+
+def test_pole_material_and_red_vending_machine():
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    objs = [{"kind": "pole", "material": "pole_redwhite", "height_m": 11.0, "points": [_ll(0.0, 0.0)]},
+            {"kind": "vending", "color": "red", "points": [_ll(5.0, 0.0)]}]
+    ms = {m[4]: m for m in to.object_meshes(objs, flat, prefix="s1_obj")}
+    assert {"pole_redwhite", "vending_red", "vending_front"} <= set(ms) and "concrete" not in ms
+    assert ms["pole_redwhite"][1][:, 2].max() == pytest.approx(111.0)
+
+
+def test_delineators_along_a_line_sawhorse_and_cushion_drum():
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    objs = [{"kind": "delineator", "dz": 0.15, "spacing_m": 2.0, "points": [_ll(0.0, 0.0), _ll(10.0, 0.0)]},
+            {"kind": "sawhorse", "points": [_ll(0.0, 5.0), _ll(2.5, 5.0)]},
+            {"kind": "cushion_drum", "points": [_ll(0.0, -5.0)]}]
+    ms = {m[4]: m for m in to.object_meshes(objs, flat, prefix="s1_obj")}
+    pole = ms["delineator"][1]
+    assert len(pole) == 6 * 16                                     # 2 m おきに 6 本（八角柱）
+    assert pole[:, 2].min() == pytest.approx(100.15) and pole[:, 2].max() == pytest.approx(100.95)
+    assert "rubber_black" in ms
+    assert ms["wood"][1][:, 2].max() == pytest.approx(100.85 + 0.05, abs=0.06)   # 横木の高さ 0.85 m
+    assert ms["drum_checker"][1][:, 2].max() == pytest.approx(100.86)
+
+
+def test_retaining_wall_with_a_material_keeps_its_own_mesh():
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    objs = [{"kind": "retaining_wall", "material": "wall_grey", "height_m": 3.0, "points": [_ll(0.0, 0.0), _ll(6.0, 0.0)]},
+            {"kind": "retaining_wall", "height_m": 1.0, "points": [_ll(0.0, 9.0), _ll(6.0, 9.0)]}]
+    ms = {m[0]: m for m in to.object_meshes(objs, flat, prefix="s1_obj")}
+    assert ms["1WALL_s1_obj_retaining_wall_grey"][4] == "wall_grey" and ms["1WALL_s1_obj_retaining"][4] == "concrete"
+    assert ms["1WALL_s1_obj_retaining_wall_grey"][1][:, 2].max() == pytest.approx(103.0)
+
+
+def test_single_post_sign_is_a_thin_board_on_one_thin_post():
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    sign = {"text": "監視\nカメラ", "at": _ll(0.0, 0.0), "facing_deg": 90, "w_m": 0.45, "h_m": 0.95, "z_m": 0.45, "posts": "single"}
+    ms = {m[0]: m for m in to.pole_sign_meshes([sign], flat, prefix="s1")}
+    post = ms["1WALL_s1_polesign_poles"][1]
+    assert len(post) == 16 and np.ptp(post[:, 0]) < 0.1                     # 細い柱 1 本だけ（裏の箱なし）
+    board = ms["s1_polesign_0"][1]
+    assert np.ptp(board[:, 0]) == pytest.approx(0.05, abs=1e-6)             # 板の厚み 5 cm（東を向く）
+
+
+def test_sawhorse_row_with_rope_plates_and_orange_beam():
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    objs = [{"kind": "sawhorse", "rope": True, "beam": "pole_orange", "plates": [1], "height_m": 0.8,
+             "points": [_ll(0.0, 0.0), _ll(3.0, 0.0), _ll(6.0, 0.0)]}]
+    ms = {m[4]: m for m in to.object_meshes(objs, flat, prefix="s1_obj")}
+    assert ms["pole_orange"][1][:, 2].max() == pytest.approx(100.85, abs=0.01)   # 横木 2 本の高さ 0.8 m
+    plate = ms["pole_grey"][1]
+    assert len(plate) == 4 and plate[:, 0].min() > 3.5 and plate[:, 0].max() < 5.5   # 2 本目の横木だけに板
+    rope = ms["pole_white"][1]
+    assert rope[:, 2].min() == pytest.approx(100.8 - 0.12, abs=0.01) and rope[:, 0].max() == pytest.approx(6.0, abs=0.02)
+
+
+def test_cabinet_and_mesh_fence():
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    objs = [{"kind": "cabinet", "w_m": 0.9, "d_m": 0.5, "height_m": 1.9, "z_m": 0.2, "points": [_ll(0.0, 0.0)]},
+            {"kind": "mesh_fence", "height_m": 1.6, "points": [_ll(0.0, 3.0), _ll(5.0, 3.0)]}]
+    ms = {m[4]: m for m in to.object_meshes(objs, flat, prefix="s1_obj")}
+    box = ms["pole_white"][1]
+    assert box[:, 2].min() == pytest.approx(100.2) and box[:, 2].max() == pytest.approx(102.1)
+    assert ms["railing_bars"][1][:, 2].max() == pytest.approx(101.6)
+    assert len(ms["pole_grey"][1]) == 4 * 12                                   # 2 m おきに区切った 4 点に支柱
+
+
+def test_retaining_wall_top_follows_the_ground_without_steps():
+    slope = lambda x, y: 100.0 + 0.1 * np.asarray(x, float)
+    line = [_ll(0.0, 0.0), _ll(8.0, 0.0)]
+    stepped = to.object_meshes([{"kind": "retaining_wall", "height_m": 1.3, "points": line}], slope, prefix="o")[0][1]
+    follow = to.object_meshes([{"kind": "retaining_wall", "height_m": 1.3, "top": "follow", "points": line}], slope, prefix="o")[0][1]
+    top = lambda v, x: v[np.isclose(v[:, 0], x, atol=0.002)][:, 2].max()   # 8 m は 1.6 m ずつに切られ、継ぎ目の両側に頂点（1.59・1.61）
+    assert top(stepped, 1.59) - top(stepped, 1.61) == pytest.approx(0.16, abs=0.01)   # 今までの壁：区間ごとに高い方に揃えるので継ぎ目に段
+    assert top(follow, 1.59) - top(follow, 1.61) == pytest.approx(-0.002, abs=0.002)   # 地面に沿う：段なし
+    assert top(follow, 3.21) == pytest.approx(100.0 + 0.1 * 3.2 + 1.3, abs=0.01)     # 地面 + 1.3 m

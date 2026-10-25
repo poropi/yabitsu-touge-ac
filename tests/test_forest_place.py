@@ -90,6 +90,24 @@ def test_understory_only_near_road(world):
     assert world[2].road_distance(np.c_[t.x, t.y])[under].max() <= CFG["understory"]["max_d"] + 1
 
 
+def test_young_broadleaves_fill_conifer_understory_without_low_road_overhang(world):
+    fm, ground, keep = world
+    young = {"max_d": 25.0, "spacing": 6.0, "p": 0.55, "size": [0.35, 0.55]}
+    cfg = {**CFG, "young_broadleaf": young}
+    t = fp.place(None, fm, ground, keep, MODELS, cfg, species=SPECIES)
+    small = np.char.startswith(t.pattern, "broadleaf") & (t.scale < 0.6)
+    assert small.sum() > 25
+    xy = np.c_[t.x, t.y][small]
+    assert (fm.at(xy) == 1).all()  # 既存の広葉樹林や空き地には重ねない
+    assert keep.course_distance(xy).max() <= young["max_d"]
+    assert not keep.blocked(xy).any()
+    assert (keep.road_distance(xy) >= MODELS["broadleaf_a"].crown_radius * t.scale[small]).all()
+    # 上層の植林を置き換えず、同じ木を残す。
+    baseline = fp.place(None, fm, ground, keep, MODELS, CFG, species=SPECIES)
+    for pattern in ("sugi_a", "hinoki_a"):
+        assert np.array_equal(t.x[t.pattern == pattern], baseline.x[baseline.pattern == pattern])
+
+
 def test_area_limits(world):
     from shapely.geometry import box
     t = _place(world, area=box(-50, 0, 50, 100))
@@ -172,3 +190,67 @@ def test_species_zone_forces_broadleaf(world):
     inz = d < 35
     assert inz.sum() > 20
     assert all(p.startswith(("broadleaf", "shrub", "fern")) for p in np.asarray(t.pattern)[inz])
+
+
+def test_species_zone_with_fixed_trees_and_understory_inside_a_polygon(world):
+    """島：木は決めた位置（支柱の位置）に、下草（シダ）は多角形の中だけに植える。"""
+    from shapely.geometry import box
+    fm, ground, keep = world
+    island = box(-130.0, -110.0, -110.0, -90.0)
+    pts = [[-125.0, -105.0], [-115.0, -95.0]]
+    zones = [{"center": [-120.0, -100.0], "radius": 30.0, "species": "broadleaf", "spacing": 5.0, "points": pts,
+              "shrub_species": "fern", "shrub_spacing": 1.0, "inside": island}]
+    t = fp.place(None, fm, ground, keep, MODELS, CFG, seed=1, species=SPECIES, zones=zones)
+    pat = np.asarray(t.pattern); inz = np.hypot(t.x + 120, t.y + 100) < 30
+    trees = inz & np.char.startswith(pat, "broadleaf")
+    assert sorted(zip(np.round(t.x[trees], 3), np.round(t.y[trees], 3))) == sorted(map(tuple, pts))
+    ferns = inz & np.char.startswith(pat, "fern")
+    assert ferns.sum() > 100
+    assert ((t.x[ferns] >= -130) & (t.x[ferns] <= -110) & (t.y[ferns] >= -110) & (t.y[ferns] <= -90)).all()
+
+
+def test_later_zones_keep_the_island_trees_and_stay_out_of_it(world):
+    """島の若木は、あとに処理する重なった場所に消されない。その場所の木も島の中には植えない。"""
+    from shapely.geometry import box
+    fm, ground, keep = world
+    island = box(-130.0, -110.0, -110.0, -90.0)
+    pts = [[-125.0, -105.0], [-115.0, -95.0]]
+    zones = [{"center": [-120.0, -100.0], "radius": 15.0, "species": "broadleaf", "spacing": 5.0, "points": pts,
+              "shrub_species": "fern", "shrub_spacing": 1.0, "inside": island},
+             {"center": [-115.0, -100.0], "radius": 30.0, "species": "broadleaf", "spacing": 3.0}]
+    t = fp.place(None, fm, ground, keep, MODELS, CFG, seed=1, species=SPECIES, zones=zones)
+    pat = np.asarray(t.pattern)
+    inside = (t.x > -130) & (t.x < -110) & (t.y > -110) & (t.y < -90)
+    trees = inside & np.char.startswith(pat, "broadleaf")
+    assert sorted(zip(np.round(t.x[trees], 3), np.round(t.y[trees], 3))) == sorted(map(tuple, pts))
+    assert not (inside & np.char.startswith(pat, "shrub")).any()
+
+
+def test_zone_cleared_by_game_objects_only_ignores_map_paths(tmp_path):
+    """clear: "game"：地図の小道の線（OSM）が通っていても、ゲームの道から離れていれば木を植える（峠の斜面）。"""
+    road = _square(-200, -3, 200, 3, 10.0)
+    m = _manifest(tmp_path, {"1GRASS_s1_terrain_000": (*_square(-200, -200, 200, 200, 10.0), "ground"),
+                             "1ROAD_s1_000": (*road, "asphalt")})
+    ground = fg.load_ground(m)
+    fm = ForestMap(x0=-200.0, y1=200.0, cell=4.0, cls=np.zeros((100, 100), np.uint8))
+    zone = {"center": [0.0, 60.0], "radius": 20.0, "species": "broadleaf", "spacing": 3.0, "shrub_spacing": 50.0}
+    counts = []
+    for extra in ({}, {"clear": "game", "road_clear": 1.5}):
+        keep = fg.load_keepout(m, {"cell": 0.5, "coarse_cell": 2.0})
+        keep.add_lines([np.array([[x, 60.0 + 7 * np.sin(x / 3)] for x in np.arange(-25, 25, 1.0)])], [2.0])   # 斜面をうねる小道
+        t = fp.place(None, fm, ground, keep, MODELS, CFG, seed=1, species=SPECIES, zones=[{**zone, **extra}])
+        counts.append(int((np.char.startswith(np.asarray(t.pattern), "broadleaf") & (np.hypot(t.x, t.y - 60) < 20)).sum()))
+    assert counts[1] >= counts[0] + 25   # 小道の線で消えていた木（約 4 割）が残る
+
+
+def test_fill_bare_plants_only_where_nothing_grows(world):
+    """むき出しの地面を埋める：木の無い所にだけ植え、道・open の円には植えない。"""
+    fm, ground, keep = world
+    t0 = fp.place(None, fm, ground, keep, MODELS, CFG, seed=1, species=SPECIES)
+    zone = {"center": [100.0, -100.0], "radius": 30.0, "spacing": 3.0, "road_clear": 2.5, "open": [[100.0, -100.0, 8.0]]}
+    add = fp.fill_bare(t0, ground, keep, SPECIES, zone)
+    assert len(add) > 50
+    assert (np.hypot(add.x - 100, add.y + 100) >= 8.0 - 1.0).all()            # open の中は草地のまま（茂みのずらし分だけ許す）
+    assert (np.abs(add.y) > 3.0).all()                                        # 道の上には植えない
+    again = fp.fill_bare(np.concatenate([np.asarray(t0), np.asarray(add)]).view(np.recarray), ground, keep, SPECIES, zone)
+    assert len(again) < len(add) * 0.1                                        # 埋めた後はほとんど足さない

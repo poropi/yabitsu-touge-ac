@@ -26,6 +26,7 @@ FONTS = {
                     _MAC_FONTS + "ヒラギノ角ゴシック W6.ttc"),
     "mincho": (_WIN_FONTS + "msmincho.ttc", _MAC_FONTS + "ヒラギノ明朝 ProN.ttc"),
     "arial_bold": (_WIN_FONTS + "arialbd.ttf", "/System/Library/Fonts/Supplemental/Arial Bold.ttf"),
+    "arial": (_WIN_FONTS + "arial.ttf", "/System/Library/Fonts/Supplemental/Arial.ttf"),
 }
 
 
@@ -86,4 +87,5 @@ def assert_writable(path) -> Path:
         if p == dn or p.startswith(dn + os.sep):
             raise ProtectedPathError(f"{path} は変更禁止のフォルダ（{d}）の中です")
     return Path(path)
-DRESS_KN5 = ("yabitsu_s3_dress.kn5", "yabitsu_mountain_dress.kn5", "yabitsu_horizon.kn5")   # 道路まわりの仕上げ（scripts.dress_build・scripts.dress_mountain が書く）と遠景（scripts.horizon_build）。全部のレイアウトが読む
+DRESS_KN5 = ("yabitsu_s3_dress.kn5", "yabitsu_mountain_dress.kn5", "yabitsu_horizon.kn5", "yabitsu_parking_props.kn5",
+             "yabitsu_visual_updates.kn5", "yabitsu_environment.kn5", "yabitsu_environment_audio.kn5")   # 全レイアウト共通

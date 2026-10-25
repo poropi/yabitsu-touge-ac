@@ -98,3 +98,21 @@ def test_mountain_poles_table_is_valid():
     rows = list(csv.DictReader(open(config.DATA_MANUAL / "mountain_poles.csv", encoding="utf-8")))
     assert rows and all(r["section"] in dm.SECTIONS and r["side"] in ("L", "R") for r in rows)
     assert all(0 <= float(r["s_from"]) < float(r["s_to"]) and float(r["spacing"]) > 0 for r in rows)
+
+
+def test_chainlink_keeps_wall_top_footprint_and_has_open_mesh():
+    from yabitsu.town_objects import _quad
+    v, f, uv = _quad(np.array([0., 0.]), np.array([2., 0.]), 12.5, 14., both=True)
+    panel, posts = dm.chainlink_parts(v, f, uv)
+    assert np.array_equal(panel[0], v)
+    assert np.array_equal(panel[2], uv)
+    assert posts[0][:, 2].min() == 12.5
+    assert posts[0][:, 2].max() == 14.
+    alpha = np.asarray(dm.chainlink_texture())[..., 3]
+    assert 0.04 < (alpha > 0).mean() < 0.3  # 空が透ける金網で、ベタ板にはならない
+
+
+def test_pass_walls_standing_on_the_ground_keep_their_finish():
+    """峠の擁壁を地面の高さに立てると名前が objg になる。わき道の石積みは野面石積み、駐車場の向かいの擁壁は間知ブロックのまま。"""
+    names = ["1WALL_s1_objg_retaining", "1WALL_s1_objg_retaining_wall_grey"]
+    assert dm.town_walls(names) == {"1WALL_s1_objg_retaining": "mt_wall_nozura", "1WALL_s1_objg_retaining_wall_grey": "mt_wall_block"}

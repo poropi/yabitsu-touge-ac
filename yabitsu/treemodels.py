@@ -25,6 +25,7 @@ SPECIES = {
     "sugi": ["sugi_a", "sugi_b", "sugi_c"],
     "hinoki": ["hinoki_a", "hinoki_b"],
     "broadleaf": ["broadleaf_a", "broadleaf_b", "broadleaf_c", "broadleaf_d"],
+    "sapling": ["sapling_a", "sapling_b"],
     "shrub": ["shrub_a", "shrub_b"],
     "fern": ["fern_a", "fern_b"],
 }
@@ -38,14 +39,17 @@ CONIFERS = {
     "hinoki_a": dict(height=16.0, crown_base=0.38, radius=2.6, rise=(-22, 25), seed=21),
     "hinoki_b": dict(height=20.0, crown_base=0.42, radius=2.9, rise=(-18, 28), seed=22),
 }
-BROADLEAVES = {"broadleaf_a": (0, 14.0, 31), "broadleaf_b": (1, 12.0, 32), "broadleaf_c": (0, 15.5, 33), "broadleaf_d": (3, 11.0, 34)}
+BROADLEAVES = {"broadleaf_a": (0, 14.0, 31), "broadleaf_b": (1, 12.0, 32), "broadleaf_c": (0, 15.5, 33), "broadleaf_d": (3, 11.0, 34),
+               "sapling_a": (0, 5.5, 61), "sapling_b": (3, 4.8, 62)}   # sapling：植えたばかりの若木（細く、葉がまばら）
+SAPLING = dict(spread=0.45, leaves=0.13, card=0.45, reach=0.12, low=0.42)   # 広葉樹に比べた横の広がり・葉の数・葉の板の大きさ・樹冠の厚み、葉の付き始め（全高の割合）
 SHRUBS = {"shrub_a": (1.4, 41), "shrub_b": (2.3, 42)}
 FERNS = {"fern_a": (0.75, 51), "fern_b": (1.0, 52)}
 
 TINTS = {"sugi": [(0.50, 0.62, 0.47), (0.56, 0.66, 0.50)], "hinoki": [(0.70, 0.84, 0.58), (0.64, 0.80, 0.55)],
-         "broadleaf": [(0.88, 1.0, 0.80), (0.78, 0.94, 0.70)], "shrub": [(0.86, 0.98, 0.76), (0.80, 0.92, 0.70)]}
+         "broadleaf": [(0.88, 1.0, 0.80), (0.78, 0.94, 0.70)], "shrub": [(0.86, 0.98, 0.76), (0.80, 0.92, 0.70)],
+         "sapling": [(1.02, 1.10, 0.66), (0.95, 1.06, 0.62)]}   # 日の当たる若葉の明るい黄緑
 LOD_DISTANCE = (40, 110, 230)
-DRAW_DISTANCE = {"sugi": 4000, "hinoki": 4000, "broadleaf": 4000, "shrub": 300, "fern": 120}
+DRAW_DISTANCE = {"sugi": 4000, "hinoki": 4000, "broadleaf": 4000, "sapling": 1500, "shrub": 300, "fern": 120}
 
 
 def sources_available() -> bool:
@@ -238,6 +242,8 @@ def _branch_points(br, steps):
 
 def _broadleaf(name, lod):
     idx, H, seed = BROADLEAVES[name]
+    young = name.startswith("sapling")
+    k = SAPLING if young else dict(spread=1.0, leaves=1.0, card=1.0, reach=0.16, low=0.3)
     proto = _prototypes()[idx]
     rng = np.random.default_rng(seed * 10 + lod)
     s = H / proto["height_m"]
@@ -246,7 +252,8 @@ def _broadleaf(name, lod):
     skel = []
     for bi, br in enumerate(proto["branches"]):
         P, r = _branch_points(br, steps)
-        P, r = P * s * np.array([0.72 * (-1 if name == "broadleaf_c" else 1), 1.0, 0.72]), r * s   # c は a の骨格を左右反転
+        sp = 0.72 * k["spread"]
+        P, r = P * s * np.array([sp * (-1 if name == "broadleaf_c" else 1), 1.0, sp]), r * s * (0.6 if young else 1.0)   # c は a の骨格を左右反転
         if bi == 0:
             P = np.r_[[P[0] - np.array([0, 0.015 * H, 0])], P]; r = np.r_[r[0] * 1.1, r]
         keep = r >= min_r
@@ -256,16 +263,17 @@ def _broadleaf(name, lod):
     skel = np.concatenate(skel)
     skel = skel[skel[:, 1] > 0.35 * H]
     # 樹冠：枝の点のまわり（半径 reach）に葉の茂みを置く。外側ほど多く、内側は暗く
-    reach = 0.16 * H
+    reach = k["reach"] * H
     center = skel.mean(0)
     count, size, crossed = [(420, (1.5, 2.2), True), (170, (2.2, 3.1), False), (60, (3.3, 4.5), False)][lod]
+    count = int(count * k["leaves"]); size = tuple(x * k["card"] for x in size)
     base = skel[rng.integers(len(skel), size=count * 3)]
     off = _unit(rng.normal(0, 1, (count * 3, 3)) + _unit(base - center) * 1.2) * reach * rng.uniform(0.3, 1.0, (count * 3, 1))
     cand = base + off
     dist = np.linalg.norm(cand - center, axis=1)
     w = (dist / dist.max()) ** 2 + 0.1
     pick = cand[rng.choice(len(cand), count, replace=False, p=w / w.sum())]
-    pick = pick[pick[:, 1] > 0.3 * H]
+    pick = pick[pick[:, 1] > k["low"] * H]
     rects = [(0, 0, 0.5, 1), (0.5, 0, 1, 1)]
     rmax = np.linalg.norm((pick - center), axis=1).max() + 1e-6
     for p in pick:
@@ -358,7 +366,7 @@ def _species_png(species):
         parts = [ft.conifer_branch(100 + i, tints[i], density=dens) for i in range(2)]
         canvas = np.concatenate([p[0] for p in parts]); nrm = np.concatenate([p[1] for p in parts])
     else:
-        n = 40 if species == "broadleaf" else 30
+        n = {"broadleaf": 40, "sapling": 26}.get(species, 30)
         parts = [ft.leaf_cluster(200 + i, tints[i], n=n) for i in range(2)]
         canvas = np.concatenate([p[0] for p in parts], 1); nrm = np.concatenate([p[1] for p in parts], 1)
     bark, bnrm = ft.bark(species if species in ("sugi", "hinoki") else "broadleaf")
@@ -388,7 +396,7 @@ def _pack(parts, H, half_w, tex_names):
 def build_pattern(name: str, seed: int = 1) -> TreeModel:
     species = _species_of(name)
     builders = {"sugi": lambda l: _conifer(name, l, species), "hinoki": lambda l: _conifer(name, l, species),
-                "broadleaf": lambda l: _broadleaf(name, l), "shrub": lambda l: _shrub(name, l),
+                "broadleaf": lambda l: _broadleaf(name, l), "sapling": lambda l: _broadleaf(name, l), "shrub": lambda l: _shrub(name, l),
                 "fern": lambda l: _fern(name, l)}
     raw = [builders[species](lod) for lod in range(3)]
     allp = np.concatenate([part.arrays()[0] for leaf, wood, _ in raw for part in (leaf, wood)

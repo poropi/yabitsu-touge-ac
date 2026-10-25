@@ -18,7 +18,48 @@ SECTIONS = ("s2", "s1", "s4", "s5")      # 内部の区間名（表示の S2・S
 def town_walls(names, taken=()) -> dict:
     """町の物の擁壁（town_objects の 1WALL_<prefix>_obj_retaining）→ 間知ブロック。宮ヶ瀬北原の擁壁はストリートビューで間知ブロック
     （s5_kitahara.json の note）。taken（S3 の仕上げが貼り替える・隠すもの）は除く。"""
-    return {n: "mt_wall_block" for n in names if n.startswith("1WALL_") and n.endswith("_obj_retaining") and n not in taken}
+    # ヤビツ峠のわき道の野面石積み（地面の高さに立てる物は objg）
+    stone = {"1WALL_s1_obj_retaining": "mt_wall_nozura", "1WALL_s1_objg_retaining": "mt_wall_nozura"}
+    # 材質 wall_grey の擁壁（town_objects の material、例：峠の駐車場の向かいの道から離れた所）も間知ブロック
+    return {n: stone.get(n, "mt_wall_block") for n in names
+            if n.startswith("1WALL_") and n.endswith(("_obj_retaining", "_obj_retaining_wall_grey", "_objg_retaining", "_objg_retaining_wall_grey"))
+            and n not in taken}
+
+
+def chainlink_texture():
+    """2 m×1.5 mの銀色の金網。約6cmの網目と上下の横桟。"""
+    w, h = 512, 384
+    img = Image.new("RGBA", (w, h), (0, 0, 0, 0))
+    d = ImageDraw.Draw(img)
+    for k in range(-w, h + w, 16):
+        d.line([(0, k), (w, k + w)], fill=(155, 161, 151, 255), width=1)
+        d.line([(0, k), (w, k - w)], fill=(155, 161, 151, 255), width=1)
+    d.rectangle((0, 0, w, 5), fill=(178, 182, 171, 255))
+    d.rectangle((0, h - 6, w, h), fill=(178, 182, 171, 255))
+    return img
+
+
+def chainlink_parts(v, f, uv):
+    """既存の擁壁上フェンスの面を利用し、銀色の支柱を加える。元の壁の形と高さは保つ。"""
+    from .town_objects import _merge
+    posts, last = [], None
+    for q in np.asarray(v).reshape(-1, 4, 3):
+        p = q[0]
+        if last is None or np.linalg.norm(p[:2] - last[:2]) >= 1.7:
+            posts.append(cylinder(p, 0.032, q[3, 2] - p[2], sides=8))
+            last = p
+    q = np.asarray(v).reshape(-1, 4, 3)[-1]
+    if np.linalg.norm(q[1, :2] - last[:2]) > 0.1:
+        posts.append(cylinder(q[1], 0.032, q[2, 2] - q[1, 2], sides=8))
+    return (v, f[::2], uv), _merge(posts)
+
+
+def pole_cover_texture():
+    """黄黒の斜め縞。円周1m×高さ1.6m、縞の間隔約20cm。"""
+    y, x = np.mgrid[:512, :320]
+    stripe = ((x + y) // 64) % 2
+    colors = np.array([(40, 40, 34), (210, 178, 42)], np.uint8)
+    return Image.fromarray(colors[stripe])
 
 
 def wall_finish(note: str) -> str:

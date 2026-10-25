@@ -14,7 +14,8 @@ from datetime import datetime
 from pathlib import Path
 
 import numpy as np
-from shapely.geometry import LineString
+import shapely
+from shapely.geometry import LineString, Polygon
 
 from yabitsu import config, ext_config, forest_ac, forest_ground, forest_place, forestmap, polyhaven, track, treemodels
 
@@ -139,6 +140,14 @@ def install(ext_src: Path, track_dir: Path):
     forest_ac.write_layout_off(track_dir, [l for l in NO_FOREST_LAYOUTS if (track_dir / l).exists()])
 
 
+def pass_island():
+    """ヤビツ峠の分かれ道の島の形（data/manual/s1_pass.json から、コースと同じ作り方で）。"""
+    from yabitsu import pass_area
+    from yabitsu.crosssection import Section
+    sec = Section.load_json(config.DATA_PROCESSED / "track_section.json")
+    return pass_area.build(pass_area.load(config.DATA_MANUAL / "s1_pass.json"), sec).polys["island"]
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--area", choices=("pilot", "all"), default="pilot")
@@ -163,8 +172,20 @@ def main():
     area = pilot_area() if a.area == "pilot" else None
     surface = forest_ground.load_ground(MANIFEST, prefixes=("1ROAD_",))     # 路面
     from yabitsu import geo
-    zones = [{**z, "center": [float(v) for v in geo.to_local(*z["center_ll"])]} for z in cfg.get("species_zones", [])]
+    zones = [{**z, "center": [float(v) for v in geo.to_local(*z["center_ll"])],
+              **({"points": [[float(v) for v in geo.to_local(*p)] for p in z["points_ll"]]} if "points_ll" in z else {}),
+              **({"inside": pass_island()} if z.get("inside_pass_island") else {}),
+              **({"inside": Polygon(np.c_[geo.to_local(*np.asarray(z["inside_ll"], float).T)]).buffer(0)} if "inside_ll" in z else {})}
+             for z in cfg.get("species_zones", [])]
     trees = forest_place.place(area, fm, ground, keep, models, cfg.get("place", {}), road_surface=surface, zones=zones)
+    # keep_sight：写真に合わせて植えた所（峠のトイレ前の紅葉など）。コースの視界の判定では消さない
+    keep_areas = [z["inside"] for z in zones if z.get("keep_sight") and "inside" in z]
+    for fb in cfg.get("fill_bare", []):   # むき出しの地面を埋める（峠のまわりなど）
+        fz = {**fb, "center": [float(v) for v in geo.to_local(*fb["center_ll"])],
+              "open": [[*map(float, geo.to_local(*o["center_ll"])), o["radius"]] for o in fb.get("open", [])]}
+        add = forest_place.fill_bare(trees, ground, keep, treemodels.SPECIES, fz)
+        trees = np.concatenate([np.asarray(trees), np.asarray(add)]).view(np.recarray)
+        log(t0, f"むき出しの地面を埋めた：{fb['note'][:20]} に {len(add):,} 本")
     cl = np.load(config.DATA_PROCESSED / "track_centerline.npz")
     cxy = np.c_[cl["x"], cl["y"]]
     cz = surface.z(cxy)
@@ -178,6 +199,8 @@ def main():
     trees = trees[vk]
     log(t0, f"眺めの開けた場所の木を {int((~vk).sum()):,} 本取り除きました")
     keep_sight = forest_place.sightline_keep(trees, models, cxy, cz, cfg.get("sight", {}))
+    for g in keep_areas:
+        keep_sight |= shapely.contains_xy(g, np.asarray(trees.x, float), np.asarray(trees.y, float))
     np.save(out / "removed_sight.npy", np.asarray(trees[~keep_sight]))
     trees = trees[keep_sight]
     log(t0, f"コースの視界をさえぎる木を {int((~keep_sight).sum()):,} 本取り除きました")
@@ -195,7 +218,7 @@ def main():
     if a.render:
         (out / "views.json").write_text(json.dumps(view_specs(a.area, ground), ensure_ascii=False, indent=1),
                                          encoding="utf-8", newline="\n")
-        subprocess.run([str(BLENDER), "-b", "--factory-startup", "--python",
+        subprocess.run([str(BLENDER), "-b", "--factory-startup", "--python-exit-code", "1", "--python",
                         str(config.PROJECT_ROOT / "blender_scripts" / "render_forest.py"), "--", str(out), a.area],
                        check=True, timeout=1800)
         compare_top(out, json.loads((out / "views.json").read_text(encoding="utf-8")))

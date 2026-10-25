@@ -33,8 +33,12 @@ def _keep_spans(sec, skip):
     return spans
 
 
-def add_road(m, sec, rows_per_chunk=200, skip=None):
-    """skip の範囲（町の範囲・島で分かれる所：道は多角形で作る）は帯を作らない。skip は (s0, s1) かその並び。"""
+MOUTH_DASH = (1.0, 1.0)   # わき道の入口を横切る路肩の線（破線）の長さと間隔 m（本線の形は 1 m 刻みなので、これより短くできない）
+
+
+def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=()):
+    """skip の範囲（町の範囲・島で分かれる所：道は多角形で作る）は帯を作らない。skip は (s0, s1) かその並び。
+    mouths（(side, s0, s1) の並び）：わき道が接している所。その側は側溝を作らずに路面を続け、路肩の線を破線にする。"""
     chunks = [(a + i0, a + i1) for a, b in _keep_spans(sec, skip) for i0, i1 in mg.split_rows(b - a + 1, rows_per_chunk)]
     for k, (i0, i1) in enumerate(chunks):
         sl = slice(i0, i1 + 1)
@@ -45,9 +49,19 @@ def add_road(m, sec, rows_per_chunk=200, skip=None):
             raise ValueError(f"路面が折り返しています: s={s_bad:.0f}m 付近（{len(bad)} 面）。中心線の補正か道幅を見直してください")
         m.add_mesh(GROUP, f"1ROAD_s1_{k:02d}", v, f, uv, "asphalt")
         for side, tag in ((1, "L"), (-1, "R")):
-            m.add_mesh(GROUP, f"1ROAD_s1_gutter{tag}_{k:02d}", *mg.gutter(sec, sl, side), "concrete")
+            s = sec.s[sl]
+            rows = np.zeros(len(s), bool)
+            for sd, s0, s1 in mouths:
+                rows |= (sd == side) & (s >= s0) & (s <= s1)
+            seg = rows[:-1] & rows[1:]
+            m.add_mesh(GROUP, f"1ROAD_s1_gutter{tag}_{k:02d}", *mg.gutter(sec, sl, side, skip=seg), "concrete")
+            if seg.any():   # 側溝の代わりに路面をそのまま続ける
+                m.add_mesh(GROUP, f"1ROAD_s1_mouth{tag}_{k:02d}", *mg.mouth_strip(sec, sl, side, seg), "asphalt")
             hw = (sec.hw_left if side > 0 else sec.hw_right)[sl]
-            m.add_mesh(GROUP, f"LINES_s1_edge{tag}_{k:02d}", *mg.line(sec, sl, side * (hw - 0.25)), "line_white")
+            m.add_mesh(GROUP, f"LINES_s1_edge{tag}_{k:02d}", *mg.line(sec, sl, side * (hw - 0.25), row_mask=~seg), "line_white")
+            if seg.any():
+                m.add_mesh(GROUP, f"LINES_s1_edge{tag}_mouth_{k:02d}",
+                           *mg.line(sec, sl, side * (hw - 0.25), dash=MOUTH_DASH, row_mask=seg), "line_white")
 
 
 CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("line_white", None),
@@ -163,6 +177,7 @@ def add_terrain(m, near, far, mid=None, far_photo=False):
 
 def add_features(m, sec, feats):
     off = dict(zip(("L", "R"), ft.sidewalk_offsets(sec, feats)))  # 壁・生け垣・欄干は歩道の外側に立てる
+    shelf = ft.shelf_widths(sec, feats)
     for k, f in enumerate(feats):
         if f.type == "guardrail":
             vis, col = ft.guardrail_meshes(sec, f)
@@ -185,6 +200,8 @@ def add_features(m, sec, feats):
             m.add_mesh(GROUP, f"1WALL_track_overpass_{k:03d}_piers", *piers, "concrete")
         else:
             m.add_mesh(GROUP, f"1WALL_s1_retaining_{k:03d}", *ft.retaining_wall_mesh(sec, f, off[f.side]), "concrete")
+            if shelf[ft.SIDES[f.side]][ft.rows_of(sec, f)].max() > 0.01:   # 壁を道から離して立てた所：手前の草地
+                m.add_mesh(GROUP, f"1GRASS_track_shelf_{k:03d}", *ft.shelf_mesh(sec, f, off[f.side]), "ground")
 
 
 def add_trees(m, trees):

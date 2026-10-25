@@ -38,3 +38,17 @@ def test_release_excludes_codex_test(tmp_path):
     names = z.namelist()
     assert not [n for n in names if "s1_landscape" in n]
     assert "content/tracks/yabitsu/yabitsu_main.kn5" in names and "content/tracks/yabitsu/models_s1_up.ini" in names
+
+
+def test_release_excludes_copied_parked_cars(tmp_path):
+    """菜の花台の駐車車両は、組み込んだ PC の AC の車のコピー（extension/parked_cars）なので配布しない。Lua は配布する。"""
+    from scripts import package_release
+    import zipfile
+    track = tmp_path / "yabitsu"
+    for rel in ("yabitsu_main.kn5", "extension/parked_cars.lua", "extension/parked_cars/ks_toyota_gt86/toyota_gt86.kn5"):
+        p = track / rel
+        p.parent.mkdir(parents=True, exist_ok=True)
+        p.write_text("{}", encoding="utf-8")
+    names = zipfile.ZipFile(package_release.package(track, tmp_path / "out", "9.9.9")).namelist()
+    assert "content/tracks/yabitsu/extension/parked_cars.lua" in names
+    assert not [n for n in names if "parked_cars/" in n]

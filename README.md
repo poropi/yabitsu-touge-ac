@@ -45,11 +45,14 @@ uv run python -m scripts.track_08_acfiles          # レイアウト・コース
 
 `.kn5` は Assetto Corsa の `content/tracks/yabitsu/` に書き出されます。
 
+夜間照明・雨・環境音・紅葉と、既存KN5を保持した仕上げの生成手順は [docs/environment.md](docs/environment.md) にあります。
+
 ## データの出典
 
 - **OpenStreetMap**：道・建物・橋・トンネル・川・湖・信号などの位置と形。© OpenStreetMap contributors。データは [ODbL](https://opendatacommons.org/licenses/odbl/) のもとで使えます。このリポジトリの `data/manual/` のうち OSM から作ったもの（建物の外形など）も ODbL に従います。
 - **国土地理院**：標高タイル（dem5a・dem5b・dem）、空中写真（全国最新写真 seamlessphoto）、基盤地図情報の建物の外形（ベクトルタイル）。出典：国土地理院（[地理院タイル](https://maps.gsi.go.jp/development/ichiran.html)）を加工して作成。
 - **Poly Haven**（[polyhaven.com](https://polyhaven.com)、CC0）：森の木の葉・針葉・シダ・樹皮の写真素材（fir_tree_01・tree_small_02・fern_02）を切り出して組み直しました。森の植える場所と樹種は、上の空中写真から判定しています（`docs/forest.md`）。
+- **Freesound**（CC0）：cartoonrob の日本の蝉、tomasloos の日本の鳥・小川の録音を加工して使用。出典と処理は [docs/environment.md](docs/environment.md) に記載。
 - **Google ストリートビュー**：建物・標識・壁などの見た目を確かめるために見ただけです。画像はこのリポジトリに入っていません。
 
 このプロジェクトは Google、国土地理院、OpenStreetMap、Kunos Simulazioni（Assetto Corsa）とは関係ありません。

@@ -56,6 +56,10 @@ def main():
     if site_spec:
         site_pads = pass_area.build(site_spec, sec).pads()
         taken = unary_union([Polygon(p["polygon"]) for p in site_pads]).buffer(0.5)
+        park = [Polygon(p["polygon"]) for p in site_pads if p["name"] == "pass_parking"]
+        if park:   # 峠の駐車場を航空写真の形で作ったので、重なる OSM の駐車場は丸ごと外す（削り残しを残さない）
+            pads = [p for p in pads if p.get("kind") == "lot" or Polygon(p["polygon"]).buffer(0).intersection(park[0]).area
+                    < 0.2 * Polygon(p["polygon"]).buffer(0).area]
         for p in pads:  # 峠の駐車場（OSM）は、わき道・島・広場と重ならないように削る
             if p.get("kind") != "lot":
                 g = Polygon(p["polygon"]).difference(taken)

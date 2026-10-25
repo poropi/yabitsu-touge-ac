@@ -225,7 +225,7 @@ def mark_texture(kind, value, color):
         ImageDraw.Draw(img).polygon([(W / 2, 4), (W - 4, H / 2), (W / 2, H - 4), (4, H / 2)], outline=fill, width=14)
         return img
     if kind == "number":
-        font, size = ImageFont.truetype(config.font_file("arial_bold"), 170), MARK_NUMBER_SIZE
+        font, size = ImageFont.truetype(config.font_file("arial"), 170), MARK_NUMBER_SIZE
     else:
         font, size = ImageFont.truetype(config.font_file("gothic_bold"), 200), MARK_CHAR_SIZE
     sq = Image.new("RGBA", (220, 220), (0, 0, 0, 0))

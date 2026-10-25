@@ -60,6 +60,17 @@ def _wall_uv(box, a, t, n, s0):
     return np.vstack(vs), np.array(fs), np.vstack(us)
 
 
+def _slanted(p0, z0, p1, z1, r, n=6):
+    """p0（高さ z0）から p1（高さ z1）への細い棒（斜めの杭・横木）。"""
+    a0 = np.array([*p0, z0], float); a1 = np.array([*p1, z1], float); ax = a1 - a0; ax /= np.linalg.norm(ax)
+    e1 = np.cross(ax, [0.0, 0.0, 1.0] if abs(ax[2]) < 0.9 else [1.0, 0.0, 0.0]); e1 /= np.linalg.norm(e1); e2 = np.cross(ax, e1)
+    t = np.linspace(0, 2 * np.pi, n, endpoint=False)
+    ring = r * (np.cos(t)[:, None] * e1 + np.sin(t)[:, None] * e2)
+    v = np.r_[a0 + ring, a1 + ring]
+    f = np.array([[k, (k + 1) % n, n + (k + 1) % n, n + k] for k in range(n)])
+    return v, f, np.c_[np.arange(2 * n) % n / n, np.repeat([0.0, 1.0], n)]
+
+
 def _prism(c, r, z0, z1, n=8):
     a = np.linspace(0, 2 * np.pi, n, endpoint=False)
     ring = np.c_[c[0] + r * np.cos(a), c[1] + r * np.sin(a)]
@@ -204,8 +215,8 @@ def signal_meshes(signals, z_fn, prefix="town_signal"):
 
 
 def object_meshes(objects, z_fn, prefix="town_obj"):
-    """objects = [{"kind": bus_stop | guard_pipe | stele | pole | torii | lantern | hoarding | mirror | road_sign | retaining_wall, "points": [[lat, lon], ...], ...}]"""
-    groups, walls = {}, []
+    """objects = [{"kind": bus_stop | guard_pipe | stele | pole | torii | lantern | hoarding | mirror | road_sign | bench | tree_stake | vending | bollard | retaining_wall | delineator | sawhorse | cushion_drum, "points": [[lat, lon], ...], ...}]"""
+    groups, walls, mat_walls = {}, [], {}
     add = lambda mat, part: groups.setdefault(mat, []).append(part)
     zf = lambda p: float(z_fn(np.atleast_1d(p[0]), np.atleast_1d(p[1]))[0])
     for ob in objects:
@@ -228,9 +239,9 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
         elif kind == "stele":
             p = pts[0]; z = zf(p); w, dpt, h = ob.get("size", [0.6, 0.3, 1.5])
             add("stone", _box(p, _heading(float(ob.get("facing_deg", 0.0))), w, dpt, z - 0.2, z + h))
-        elif kind == "pole":         # 電柱（電線は張らない）
+        elif kind == "pole":         # 電柱（電線は張らない）。material で色（pole_white・pole_redwhite など）
             for p in pts:
-                z = zf(p); add("concrete", _prism(p, 0.17, z - 0.5, z + float(ob.get("height_m", 10.0))))
+                z = zf(p); add(ob.get("material", "concrete"), _prism(p, float(ob.get("radius_m", 0.17)), z - 0.5, z + float(ob.get("height_m", 10.0))))
         elif kind == "torii":        # 石の鳥居：柱2本と笠木・貫
             p = pts[0]; z = zf(p); face = _heading(float(ob.get("facing_deg", 0.0))); n = np.array([-face[1], face[0]])
             span, h = float(ob.get("span_m", 2.6)), float(ob.get("height_m", 3.6))
@@ -258,11 +269,79 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
             v = np.array([[*c, zc]] + ring, float); f = [[0, 1 + i, 1 + (i + 1) % 12] for i in range(12)]
             f += [[0, 1 + (i + 1) % 12, 1 + i] for i in range(12)]
             add("mirror", (v, np.array(f, np.int32), (v[:, [0, 2]] - v[0, [0, 2]]) / 0.8 + 0.5))
-        elif kind == "road_sign":    # 道路標識：灰色の柱と、柱の上の板（speed30＝丸い速度 30、warning＝黄色のひし形）
+        elif kind == "road_sign":    # 道路標識：灰色の柱と、柱の上の板（speed30＝丸い速度 30、warning＝黄色のひし形、stop＝止まれ、fire_cistern＝防火水そう。pole＝柱の色の材質）
             p = pts[0]; z = zf(p); face = _heading(float(ob.get("facing_deg", 0.0))); n = np.array([-face[1], face[0]])
-            add("pole_grey", _prism(p, 0.035, z - 0.2, z + 2.4))
-            c = p + face * 0.06; s = 0.3
-            add(f"sign_{ob.get('sign', 'warning')}", _quad(c - n * s, c + n * s, z + 1.8, z + 2.4, both=True))
+            s = float(ob.get("size_m", 0.6)) / 2
+            add(ob.get("pole", "pole_grey"), _prism(p, 0.035, z - 0.2, z + 1.8 + 2 * s))
+            c = p + face * 0.06
+            add(f"sign_{ob.get('sign', 'warning')}", _quad(c - n * s, c + n * s, z + 1.8, z + 1.8 + 2 * s, both=True))
+        elif kind == "bench":        # 木のベンチ：座面（幅 1.8m・奥行き 0.4m・高さ 0.42m）と脚2本。points ごとに1脚、facing の側に座る
+            face = _heading(float(ob.get("facing_deg", 0.0))); n = np.array([-face[1], face[0]]); w = float(ob.get("width_m", 1.8))
+            for p in pts:
+                z = zf(p)
+                add("wood", _box(p, face, w, 0.4, z + 0.36, z + 0.42))
+                for s in (1, -1):
+                    add("wood", _box(p + n * s * (w / 2 - 0.15), face, 0.08, 0.36, z - 0.1, z + 0.36))
+        elif kind == "tree_stake":   # 若木の竹の支柱：幹のまわりに斜めの杭3本（地面で幹から 0.55m、高さ 1.5m で幹に寄せる）と、高さ 1.1m の横木
+            for p in pts:
+                z = zf(p); mid = []
+                for k in range(3):
+                    a = 2 * math.pi * k / 3 + 0.4; u = np.array([math.cos(a), math.sin(a)])
+                    base, top = p + u * 0.55, p + u * 0.07
+                    add("bamboo", _slanted(base, z - 0.2, top, z + 1.5, 0.022))
+                    mid.append(base + (top - base) * (1.3 / 1.7))   # 杭の高さ 1.1m の所
+                for k in range(3):
+                    add("bamboo", _slanted(mid[k], z + 1.1, mid[(k + 1) % 3], z + 1.1, 0.018))
+        elif kind == "vending":      # 自動販売機：白い箱（幅 1.0m・奥行き 0.75m・高さ 1.83m）と正面の見本の窓。facing の側が正面
+            d = _heading(float(ob.get("facing_deg", 0.0))); n = np.array([-d[1], d[0]])
+            for p in pts:
+                z = zf(p); add("vending_red" if ob.get("color") == "red" else "vending", _box(p, d, 1.0, 0.75, z, z + 1.83))
+                fc = p + d * 0.38; add("vending_front", _quad(fc - n * 0.45, fc + n * 0.45, z + 0.9, z + 1.75))
+        elif kind == "bollard":      # 赤い車止め（高さ 0.8m）
+            for p in pts:
+                z = zf(p); add("post_red", _prism(p, 0.05, z - 0.2, z + float(ob.get("height_m", 0.8)), 8))
+        elif kind == "delineator":   # オレンジの車線分離標（直径 8 cm・高さ 0.8 m、白い反射帯2本、黒い台座）。当たり判定なし（倒れて戻る物）
+            line = ob.get("spacing_m")   # spacing_m があれば points を線として、その間隔で並べる
+            if line:
+                ln = LineString(pts); n = max(int(round(ln.length / float(line))), 1)
+                pts = [np.array(ln.interpolate(k / n, normalized=True).coords[0]) for k in range(n + 1)]
+            for p in pts:
+                z = zf(p) + float(ob.get("dz", 0.0))
+                add("delineator", _prism(p, 0.04, z, z + 0.8, 8)); add("rubber_black", _prism(p, 0.11, z - 0.02, z + 0.05, 8))
+        elif kind == "sawhorse":     # 木の A 型の柵：points の各点に A 形の脚、隣り合う点の間に横木（高さ height_m、既定 0.85 m）
+            q = pts; hh = float(ob.get("height_m", 0.85)); beam = ob.get("beam", "wood")   # beam：横木の材質（pole_orange など）
+            tops = []
+            for i in range(len(q) - 1):
+                a, b = q[i], q[i + 1]; u = (b - a) / np.linalg.norm(b - a); n = np.array([-u[1], u[0]])
+                za, zb = zf(a), zf(b); top = max(za, zb) + hh
+                add(beam, _slanted(a, top, b, top, 0.05, 4))
+                for p, z in ((a, za), (b, zb)):
+                    for s in (1, -1):
+                        add("wood", _slanted(p + n * s * 0.32 * hh / 0.85, z - 0.05, p, top, 0.035, 4))
+                tops += [(a, top), (b, top)]
+                if i in ob.get("plates", []):   # 横木の真ん中に下げた灰色の三角の板（反射板。一辺 0.45 m）
+                    m = (a + b) / 2 + n * 0.06
+                    add("pole_grey", (np.array([[*m, top - 0.47], [*m, top - 0.47], [*(m + u * 0.22), top - 0.08], [*(m - u * 0.22), top - 0.08]]),
+                                      np.array([[0, 1, 2, 3], [3, 2, 1, 0]]), np.array([[0.5, 1], [0.5, 1], [1, 0], [0, 0]])))
+            if ob.get("rope"):   # 柵の頭をつなぐ白いロープ（間で 0.12 m たるむ）
+                for (a, za), (b, zb) in zip(tops[0::2], tops[1::2]):
+                    m = (a + b) / 2; zm = (za + zb) / 2 - 0.12
+                    add("pole_white", _slanted(a, za, m, zm, 0.008, 4)); add("pole_white", _slanted(m, zm, b, zb, 0.008, 4))
+        elif kind == "cabinet":      # 電柱の脇の灰白の機器の箱（w_m×d_m×height_m、足元から z_m 浮かせる）。facing の側が正面
+            d = _heading(float(ob.get("facing_deg", 0.0)))
+            for p in pts:
+                z = zf(p) + float(ob.get("z_m", 0.0))
+                add(ob.get("material", "pole_white"), _box(p, d, float(ob.get("w_m", 0.8)), float(ob.get("d_m", 0.4)), z, z + float(ob.get("height_m", 1.4))))
+        elif kind == "mesh_fence":   # 金網のフェンス（高さ height_m、2.0 m おきに灰色の支柱）
+            q = np.asarray(LineString(pts).segmentize(2.0).coords); h = float(ob.get("height_m", 1.5))
+            for i in range(len(q) - 1):
+                za, zb = zf(q[i]), zf(q[i + 1]); L = float(np.linalg.norm(q[i + 1] - q[i]))
+                add("railing_bars", _quad(q[i], q[i + 1], min(za, zb), min(za, zb) + h, 0.0, L / 2.0, both=True))
+            for p in q:
+                z = zf(p); add("pole_grey", _prism(p, 0.03, z - 0.2, z + h, 6))
+        elif kind == "cushion_drum":   # 紅白の市松の緩衝ドラム（直径 0.6 m・高さ 0.85 m）
+            for p in pts:
+                z = zf(p); add("drum_checker", _prism(p, 0.3, z, z + 0.85, 12)); add("drum_checker", _box(p, (1, 0), 0.5, 0.5, z + 0.84, z + 0.86))
         elif kind == "retaining_wall":   # 擁壁（厚さ 0.3m、当たり判定あり）と、上の金網のフェンス（fence_m）
             q = np.asarray(LineString(pts).segmentize(2.0).coords); h = float(ob.get("height_m", 2.5)); fh = float(ob.get("fence_m", 0.0))
             zw = ob.get("_z_fn") or zf   # 町では歩道の高さ（裏の山の高さではなく）
@@ -272,7 +351,13 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
                 if L < 1e-6:
                     continue
                 n = np.array([-u[1], u[0]]) / L; top = max(za, zb) + h
-                walls.append(_wall_uv(_box((q[i] + q[i + 1]) / 2, n, L + 0.02, 0.3, min(za, zb) - 0.3, top), q[i], u / L, n, s0))
+                box = _box((q[i] + q[i + 1]) / 2, n, L + 0.02, 0.3, min(za, zb) - 0.3, top)
+                if ob.get("top") == "follow":   # 上端を地面の傾きに沿わせる（2 m ごとの段にしない）
+                    v = box[0].copy(); up = v[:, 2] > top - 1e-9
+                    t = np.clip((v[up, :2] - q[i]) @ (u / L) / L, 0.0, 1.0); v[up, 2] = za + h + (zb - za) * t
+                    box = (v, box[1], box[2])
+                part = _wall_uv(box, q[i], u / L, n, s0)
+                (mat_walls.setdefault(ob["material"], []) if ob.get("material") else walls).append(part)
                 s0 += L
                 if fh > 0:
                     add("railing_bars", _quad(q[i], q[i + 1], top, top + fh, 0.0, L / 2.0, both=True))
@@ -281,26 +366,44 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
     out = [(f"{prefix}_{mat}", *_merge(parts), mat, True) for mat, parts in groups.items()]
     if walls:
         out.append((f"1WALL_{prefix}_retaining", *_merge(walls), "concrete", True))
+    for k, (mat, parts) in enumerate(mat_walls.items()):   # 材質を指定した擁壁（material）
+        out.append((f"1WALL_{prefix}_retaining_{mat}", *_merge(parts), mat, True))
     return out
 
 
 def pole_sign_meshes(signs, z_fn, prefix="town"):
     """立て看板：柱（高さ pole_h）と、柱の上の方の板（両面に文字）。signs = [{"text", "bg", "fg", "at", "facing_deg", "w_m", "h_m", "z_m", "pole_h", "no_pole"}]"""
-    out, poles = [], []
+    out, poles, wood_posts, caps = [], [], [], []
     for k, s in enumerate(signs):
         p = _xy(s["at"]); z = float(z_fn(np.atleast_1d(p[0]), np.atleast_1d(p[1]))[0])
         face = _heading(float(s.get("facing_deg", 0.0))); n = np.array([-face[1], face[0]])
         w, h, z1 = float(s.get("w_m", 1.2)), float(s.get("h_m", 2.0)), z + float(s.get("z_m", 3.0))
-        dep = 0.05 if s.get("no_pole") else 0.3   # no_pole：信号の腕などに付ける薄い板（柱なし）
+        dep = 0.05 if s.get("no_pole") or s.get("posts") == "single" else 0.3   # no_pole：信号の腕などに付ける薄い板（柱なし）
         front = _quad(p - n * w / 2, p + n * w / 2, z1, z1 + h)          # 表（face の側）
         back = _quad(p + n * w / 2 - face * dep, p - n * w / 2 - face * dep, z1, z1 + h)
         mat = "polesign_" + str(k) if prefix == "town" else f"{prefix}_polesign_{k}"
         out.append((f"{prefix}_polesign_{k}", *_merge([front, back]), mat, True))
-        if not s.get("no_pole"):
+        if s.get("posts") == "log":    # 丸太の柱2本（板より少し上まで、頭は白く塗る）、板の裏は木
+            for side in (1, -1):
+                q = p - face * dep / 2 + n * side * (w / 2 + 0.09)
+                wood_posts.append(_prism(q, 0.09, z - 0.3, z1 + h + 0.12, 10))
+                caps.append(_prism(q, 0.092, z1 + h + 0.08, z1 + h + 0.125, 10))
+            wood_posts.append(_box(p - face * dep / 2, face, w, dep - 0.02, z1, z1 + h))
+        elif s.get("posts") == "wood":   # 木の看板：板の両端に角柱2本（板より少し上まで）、板の裏は木
+            for side in (1, -1):
+                wood_posts.append(_box(p - face * dep / 2 + n * side * (w / 2 + 0.06), face, 0.12, 0.12, z - 0.3, z1 + h + 0.12))
+            wood_posts.append(_box(p - face * dep / 2, face, w, dep - 0.02, z1, z1 + h))
+        elif s.get("posts") == "single":   # 細い柱 1 本に薄い板（監視カメラの札など）
+            poles.append(_prism(p - face * 0.06, 0.035, z - 0.3, z1 + h, 8))
+        elif not s.get("no_pole"):
             poles.append(_prism(p - face * 0.15, 0.12, z - 0.3, z + float(s.get("pole_h", z1 - z + h)), 8))
             poles.append(_box(p - face * 0.15, face, w, 0.3, z1, z1 + h))
     if poles:
         out.append((f"1WALL_{prefix}_polesign_poles", *_merge(poles), "pole_grey", True))
+    if wood_posts:
+        out.append((f"1WALL_{prefix}_polesign_posts", *_merge(wood_posts), "wood", True))
+    if caps:
+        out.append((f"{prefix}_polesign_caps", *_merge(caps), "pole_white", True))
     return out
 
 
@@ -313,6 +416,14 @@ def write_pole_sign_textures(signs, out_dir, prefix="town"):
         w, h = float(s.get("w_m", 1.2)), float(s.get("h_m", 2.0))
         px = 160
         mat = "polesign_" + str(k) if prefix == "town" else f"{prefix}_polesign_{k}"
-        sign_texture(s["text"], s.get("bg", "#FFFFFF"), s.get("fg", "#000000"), int(w * px), int(h * px), border=s.get("border")).save(out / f"{mat}.png")
+        if s.get("style") in ("shop_front", "annex_front", "toilet_front", "trail_map"):   # 建物の正面に貼る絵（峠の売店・トイレ）と案内地図
+            from . import textures as tx
+            {"shop_front": tx.shop_front_texture, "annex_front": tx.annex_front_texture, "toilet_front": tx.toilet_front_texture,
+             "trail_map": tx.trail_map_texture}[s["style"]](int(w * px * 2), int(h * px * 2)).save(out / f"{mat}.png")
+        elif s.get("style") == "wood_carved":   # 木を彫って白く塗った看板（lines に行ごとの大きさ・帯）
+            from .textures import wood_sign_texture
+            wood_sign_texture(s["lines"], int(w * px * 2), int(h * px * 2)).save(out / f"{mat}.png")
+        else:
+            sign_texture(s["text"], s.get("bg", "#FFFFFF"), s.get("fg", "#000000"), int(w * px), int(h * px), border=s.get("border")).save(out / f"{mat}.png")
         paths[mat] = f"textures/{mat}.png"
     return paths

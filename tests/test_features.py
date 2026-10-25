@@ -214,3 +214,21 @@ def test_features_standing_on_another_paved_area_are_cut_there():
     left = sorted((round(f.s_from), round(f.s_to)) for f in cut if f.side == "L")
     assert left == [(0, 40), (60, 100)]
     assert [(f.s_from, f.s_to) for f in cut if f.side == "R"] == [(0, 100)]
+
+
+def test_retaining_wall_set_back_tapers_between_rows_and_gets_a_grass_shelf():
+    sec = _straight()
+    from yabitsu.crosssection import GUTTER_WIDTH
+    feats = [ft.Feature(10, 30, "L", "retaining_wall", 4.5, "", width_m=1.5), ft.Feature(30, 50, "L", "retaining_wall", 4.0, "", width_m=0.5),
+             ft.Feature(50, 90, "L", "retaining_wall", 3.5, ""), ft.Feature(120, 140, "L", "retaining_wall", 2.0, "")]
+    shelf = ft.shelf_widths(sec, feats)
+    assert shelf[1][15] == pytest.approx(1.5) and shelf[1][30] == pytest.approx(1.0)   # 行の真ん中（20・40）の間は直線
+    assert shelf[1][70] == pytest.approx(0.0) and shelf[1][60] == pytest.approx(0.5 / 3)  # 次の行の真ん中（70）で 0 へ
+    assert shelf[1][130] == 0.0 and shelf[-1].max() == 0.0                              # つながっていない壁・反対側は離さない
+    off_l, _ = ft.sidewalk_offsets(sec, feats)
+    v, f, uv = ft.retaining_wall_mesh(sec, feats[0], offset=off_l)
+    at = lambda a, x: a[np.isclose(a[:, 0], x)][:, 1]
+    assert at(v, 10).min() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH + 1.5) and at(v, 30).min() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH + 1.0)
+    gv, gf, _ = ft.shelf_mesh(sec, feats[0], off_l)
+    assert at(gv, 10).min() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH) and at(gv, 10).max() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH + 1.5)
+    assert (face_normals(gv, gf)[:, 2] > 0).all()

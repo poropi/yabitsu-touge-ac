@@ -20,6 +20,8 @@ GROUND_MATERIALS = ("ground", "ground_far")   # ground_far：遠い地形（空�
 
 def mesh_class(name: str, material: str):
     n = name.lower()
+    if "_pass_island" in n:   # 峠の分かれ道の島（草地だが、電柱などを立てない）
+        return "other"
     if material in (*GROUND_MATERIALS, "tree"):
         return None
     if "bridge" in n:
@@ -164,6 +166,13 @@ class KeepOut:
         out[ok2] |= self._cblocked[r2[ok2], c2[ok2]]
         return out
 
+    def blocked_game(self, xy) -> np.ndarray:
+        """ゲームの中に作った物（manifest の道・壁・建物など）だけで見た、植えない所。OSM の道の線を含めない。"""
+        r, c, ok = self.fine.rc(xy)
+        out = np.zeros(len(r), bool)
+        out[ok] = self._blocked[r[ok], c[ok]]
+        return out
+
     def course_distance(self, xy) -> np.ndarray:
         """ゲームの中に作った道（manifest の道路）からの距離。木の密度の帯や下草に使う。"""
         if self._course_d is None:
@@ -173,6 +182,13 @@ class KeepOut:
         out[ok] = self._road_d[r[ok], c[ok]]
         r2, c2, ok2 = self.coarse.rc(xy)
         out[ok2] = np.minimum(out[ok2], self._course_d[r2[ok2], c2[ok2]])
+        return out
+
+    def fine_road_distance(self, xy) -> np.ndarray:
+        """ゲームの中に作った道路（manifest の 1ROAD_）だけからの距離（1 m の格子）。OSM の道の太い線を含めない。"""
+        r, c, ok = self.fine.rc(xy)
+        out = np.full(len(r), np.inf)
+        out[ok] = self._road_d[r[ok], c[ok]]
         return out
 
     def road_distance(self, xy) -> np.ndarray:

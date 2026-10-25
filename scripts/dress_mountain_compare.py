@@ -53,7 +53,7 @@ def render(views, dress_dirs, tag):
         v["name"] = f"{tag}_{v['key']}"
     (FOREST / "views.json").write_text(json.dumps(views), encoding="utf-8")
     env = {**os.environ, "DRESS_DIR": os.pathsep.join(str(d) for d in dress_dirs if d.exists())}
-    r = subprocess.run([BLENDER, "-b", "--factory-startup", "--python", str(config.PROJECT_ROOT / "blender_scripts" / "render_forest.py"),
+    r = subprocess.run([BLENDER, "-b", "--factory-startup", "--python-exit-code", "1", "--python", str(config.PROJECT_ROOT / "blender_scripts" / "render_forest.py"),
                         "--", str(FOREST), "mountain"], env=env, capture_output=True, timeout=3600)
     if r.returncode:
         raise SystemExit(r.stderr.decode("utf-8", "replace")[-2000:])

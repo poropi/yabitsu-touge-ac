@@ -12,7 +12,8 @@ from yabitsu import config
 
 AUTHOR = "poropi"
 TRACK_NAME = "yabitsu"
-EXCLUDE = ("s1_landscape",)   # Codex の S1 景観確認（試作。1.6 GB）は配布しない
+EXCLUDE = ("s1_landscape",    # Codex の S1 景観確認（試作。1.6 GB）は配布しない
+           "extension/parked_cars/")   # 菜の花台の駐車車両：組み込んだ PC の AC の車のコピー（他人の車のデータなので配布しない）
 README = """ヤビツ峠（Yabitsu Touge）for Assetto Corsa  v{version}
 
 神奈川県の県道70号（秦野清川線）、名古木からヤビツ峠を越えて宮ヶ瀬北原までの約 29.9km を、

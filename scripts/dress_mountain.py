@@ -15,7 +15,7 @@ import numpy as np
 from PIL import Image, ImageEnhance
 
 from yabitsu import (acdata, config, dress_lines, dress_mountain as dm, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5, layouts,
-                     nagoki, side_roads, track, tunnel)
+                     geo, nagoki, side_roads, track, tunnel)
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
 
@@ -33,13 +33,16 @@ RETEX = {
     "mt_line_white": ("paint_white", (1, 1), "line"), "mt_line_orange": ("paint_orange", (1, 1), "line"),
     "mt_wall_kenchi": ("kenchi", (2, 2), "wall"), "mt_wall_kenchi_moss": ("kenchi_moss", (2, 2), "wall"),
     "mt_wall_block": ("kenchi_block", (2, 2), "wall"), "mt_wall_concrete": ("concrete_wall", (2, 2), "wall"),
+    "mt_wall_kitahara": ("kenchi_block", (2, 2), "wall"),
+    "mt_wall_block_aged": ("kenchi_block", (2, 2), "wall"),   # 古びて茶色がかった間知ブロック（峠の駐車場の向かい）
     "mt_wall_rock": ("rock_cut", (2, 2), "wall"), "mt_wall_rock_net": ("rock_net", (2, 2), "wall"),
     "mt_wall_norikae": ("norikae", (8, 8), "wall"), "mt_wall_shotcrete": ("shotcrete", (2, 2), "wall"),
+    "mt_wall_nozura": ("nozura", (1.9, 1.9), "wall"),     # 無料素材の野面石積み（ヤビツ峠のわき道）
     "mt_terrain": ("forest_floor", (2, 2), "terrain"),
 }
 # ストリートビューと見比べて決めた 明るさ・鮮やかさ・コントラスト
-TONE = {"mt_road": 0.68, "mt_plane": 0.68, "mt_road_dark": 0.9, "mt_gutter": 0.72, "mt_wall_kenchi_moss": 0.72,
-        "mt_wall_block": 0.82, "mt_wall_rock_net": 0.8, "mt_terrain": 0.85}
+TONE = {"mt_road": 0.68, "mt_plane": 0.68, "mt_road_dark": 0.9, "mt_gutter": 0.72, "mt_wall_kenchi_moss": 0.72, "mt_wall_nozura": 0.62,
+        "mt_wall_block": 0.82, "mt_wall_block_aged": 0.56, "mt_wall_rock_net": 0.8, "mt_terrain": 0.85}
 SATURATION = {"mt_wall_kenchi_moss": 0.85, "mt_terrain": 0.8, "mt_gutter": 0.8, "mt_wall_rock_net": 0.6}
 CONTRAST = {"mt_road": 0.7, "mt_plane": 0.7}
 
@@ -133,6 +136,10 @@ def retex_assign(sec, cl, bounds, feats, rows):
                 fin = override((f.s_from + f.s_to) / 2, walls, f.side) or dm.wall_finish(f.note)
                 assign[name] = f"mt_wall_{fin}"
     assign.update(dm.town_walls(man["meshes"], taken))
+    if "1WALL_s1_objg_retaining_wall_grey" in assign:   # 峠の駐車場の向かいの擁壁の南の端（s4 の擁壁と同じ古びた間知ブロック）
+        assign["1WALL_s1_objg_retaining_wall_grey"] = "mt_wall_block_aged"
+    if "1WALL_kitahara_obj_retaining" in assign:
+        assign["1WALL_kitahara_obj_retaining"] = "mt_wall_kitahara"
     # 地形（土手・林の地面）：中心がいちばん近い道の s が山道の範囲（表の bare_ground を除く）にあるもの
     green = ranges(bounds, rows, "green_ground")
     for name, e in man["meshes"].items():
@@ -161,6 +168,12 @@ def write_retex_textures(keys, ext_dir):
             comp = ImageEnhance.Color(comp).enhance(SATURATION[key])
         if key in CONTRAST:
             comp = ImageEnhance.Contrast(comp).enhance(CONTRAST[key])
+        if key == "mt_wall_nozura":      # ヤビツ峠の石積みは苔で緑がかる（ストリートビュー 2026-10-23）
+            comp = Image.fromarray(np.clip(np.asarray(comp, float) * [0.92, 1.0, 0.86], 0, 255).astype(np.uint8))
+        if key == "mt_wall_block_aged":   # Street View 駐車場 250°・320° の壁 (141〜153, 127〜136, 106〜117)。ゲームの日なたで約 1.8 倍に明るく見える
+            comp = Image.fromarray(np.clip(np.asarray(comp, float) * [1.0, 0.93, 0.84], 0, 255).astype(np.uint8))
+        if key == "mt_wall_kitahara":
+            comp = Image.fromarray(np.clip(np.asarray(comp, float) * [0.92, 0.86, 0.73], 0, 255).astype(np.uint8))
         if key == "mt_terrain":
             comp = dm.mossy_ground(comp)
         lum = np.asarray(comp.convert("L"), float) / 255.0
@@ -260,6 +273,34 @@ def add_road_marks(sec, bounds, m: Manifest, tex):
     return len(marks)
 
 
+def add_kitahara_details(m, tex):
+    """受け入れ済みの北原KN5を保ち、既存の柵を金網に差し替え、電柱と保護カバーを足す。"""
+    base = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))
+    old = "kitahara_obj_railing_bars"
+    z = np.load(MANIFEST / base["meshes"][old]["file"])
+    panel, posts = dm.chainlink_parts(z["verts"], z["faces"], z["uvs"])
+    dm.chainlink_texture().save(tex / "chainlink.png")
+    dm.pole_cover_texture().save(tex / "pole_cover.png")
+    m.add_material("mt_chainlink", texture="textures/chainlink.png", alpha=True, two_sided=True)
+    m.add_material("mt_chainlink_post", color=(0.67, 0.69, 0.64))
+    m.add_material("mt_pole_cover", texture="textures/pole_cover.png")
+    m.add_mesh(GROUP, "mt_kitahara_chainlink", *panel, "mt_chainlink")
+    m.add_mesh(GROUP, "mt_kitahara_fence_posts", *posts, "mt_chainlink_post")
+    surf = forest_ground.load_ground(MANIFEST, prefixes=("1ROAD_kitahara_sidewalk_",))
+    poles = []
+    for row in json.loads((config.DATA_MANUAL / "kitahara_poles.json").read_text())["poles"]:
+        x, y = map(float, geo.to_local(*row["at"]))
+        z0 = surf.z(np.array([[x, y]]))[0]
+        if not np.isfinite(z0):
+            raise ValueError(f"北原の電柱が歩道の外にあります: {row['at']}")
+        poles.append((x, y, float(z0)))
+    m.add_mesh(GROUP, "mt_kitahara_poles", *dress_parts.pole_mesh(poles), "mt_pole")
+    m.add_mesh(GROUP, "mt_kitahara_wires", *dress_parts.wire_mesh(poles, n_wires=4), "mt_wire")
+    for k, (x, y, z0) in enumerate(poles):
+        m.add_mesh(GROUP, f"mt_kitahara_cover_{k}", *dm.cylinder((x, y, z0 + 0.5), 0.19, 1.6), "mt_pole_cover")
+    return [old, old + "_back"], len(poles)
+
+
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-install", action="store_true")
@@ -297,6 +338,9 @@ def main():
     m.add_material("mt_pole", texture="textures/pole.png")
     m.add_material("mt_wire", color=(0.12, 0.12, 0.12), two_sided=True)
     npoles = add_poles(sec, bounds, m)
+    kita_hidden, kita_poles = add_kitahara_details(m, tex)
+    hide += kita_hidden
+    npoles += kita_poles
     m.save()
     kn5_path = OUT / f"{GROUP}.kn5"
     kn5.write_from_manifest(OUT / "manifest.json", GROUP, kn5_path)

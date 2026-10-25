@@ -1,6 +1,6 @@
 section,s,side,dir,kind,value,color,note
 s2,44,L,f,diamond,,white,蓑毛の横断歩道（s=90）の手前（s2_0050_b のすぐ後ろ。2026-10-22 描画と並べて直した）
-s2,78,L,f,diamond,,white,同（s2_0050_f の 25m ほど先。描画と並べて直した）
+s2,70,L,f,diamond,,white,s2_0050_f のひし形。撮影点 s=51m から前方19m（2026-10-22 写真内の位置と投影を照合）
 s2,124,R,b,diamond,,white,横断歩道の先 30m（s2_0150_b の遠く）
 s2,144,R,b,diamond,,white,同 50m（s2_0150_b の手前の大きなひし形）
 s2,15,R,b,number,40,orange,s2_0000_f の右の車線に逆さの「40」
@@ -9,7 +9,7 @@ s2,647,R,b,number,30,orange,s2_0650_b のすぐ前（赤い帯の先）
 s2,1092,L,f,number,30,orange,s2_1100_b の右に大きな逆さの「30」
 s2,1143,C,f,text,左急カーブ,white,s2_1150_b に逆さの白い文字（道の真ん中）。s2_1150_f の看板も左急カーブ
 s2,1270,R,b,number,30,orange,s2_1250_f の奥に逆さの「30」（赤い帯の先）
-s2,1495,L,f,number,30,orange,s2_1500_f の大きな「30」（描画と並べて手前へ直した）
+s2,1508,L,f,number,30,orange,s2_1500_f の大きな「30」。撮影点 s=1501m の前方7m（2026-10-22 旧1495mはカメラ後方だったため修正）
 s2,1690,L,f,number,30,orange,s2_1700_b の右に逆さの「30」
 s2,3960,R,b,number,30,orange,s2_3950_f に逆さの「30」
 s1,210,L,f,number,30,orange,s1_0200_f の「30」

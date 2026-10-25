@@ -54,6 +54,25 @@ def test_pad_is_flattened():
     assert Z[0, 0] == pytest.approx(105.0 - tr.UNDER_DEPTH) and E[0, 0] == 0
 
 
+def test_pass_pad_cells_stay_under_the_paving():
+    # 峠の面（kind=pass）の角が、角が全部 面の外の斜面の上にある 2m の四角に入り込む：四角の角を面より下げ、舗装の上に地形が出ない
+    sec = _straight()
+    xs = np.arange(90.0, 112.1, 2.0); ys = np.arange(20.0, 44.1, 2.0)
+    X, Y = np.meshgrid(xs, ys)
+    pad = {"polygon": [[91, 21], [101.5, 21], [101.5, 37.5], [91, 37.5], [91, 21]], "z": 105.0, "kind": "pass"}
+    Z, _ = tr.carve(X, Y, np.full_like(X, 500.0), sec, pads=[pad])
+    for x, y in [(101.4, 37.4), (101.4, 30.0), (95.0, 37.4)]:   # 面の角と縁の近く
+        i, j = int((x - 90) // 2), int((y - 20) // 2)
+        fx, fy = (x - xs[i]) / 2, (y - ys[j]) / 2
+        z00, z01, z10, z11 = Z[j, i], Z[j, i + 1], Z[j + 1, i], Z[j + 1, i + 1]
+        zt = z00 + fx * (z01 - z00) + fy * (z11 - z01) if fx >= fy else z00 + fy * (z10 - z00) + fx * (z11 - z10)
+        assert zt < 105.0
+    assert Z[-1, -1] > 106.0   # 面にかからない四角の外の山はそのまま
+    plain = dict(pad, kind="lot")   # ほかの土台（家など）は今までどおり
+    Zp, _ = tr.carve(X, Y, np.full_like(X, 500.0), sec, pads=[plain])
+    assert Zp[9, 6] > 105.0
+
+
 def test_grid_mesh_chunks_respect_keep_and_vertex_limit():
     xs = np.arange(0.0, 301.0, 1.0); ys = np.arange(0.0, 201.0, 1.0)
     Z = np.zeros((len(ys), len(xs)))
@@ -330,3 +349,14 @@ def test_ground_just_outside_the_lake_reaches_the_water_edge():
     X, Y = _pts(sec, [31.0, 50.0])                       # 岸の 3m 外と、湖の中
     Z, _ = tr.carve(X, Y, np.full_like(X, 80.0), sec, lake=(box(0, 34, 200, 60), 90.0))
     assert Z[0, 0] >= 90.0 and Z[0, 1] <= 90.0 - tr.LAKE_DEPTH
+
+
+def test_terrain_mesh_z_follows_the_mesh_triangles():
+    # 格子の四角は (r,c)→(r+1,c+1) の対角線で割る（kn5._triangles）。双一次の補間ではなく、その三角形の上の高さを返す
+    xs = np.array([0.0, 2.0]); ys = np.array([0.0, 2.0])
+    Z = np.array([[0.0, 0.0], [0.0, 4.0]])   # (r=1,c=1) の角だけ高い
+    near = {"xs": xs, "ys": ys, "Z": Z, "D": np.zeros_like(Z)}
+    mid = {"xs": xs, "ys": ys, "Z": Z - tr.MID_DROP}
+    f = tr.terrain_mesh_z(near, mid)
+    assert f(np.array([1.5]), np.array([0.5]))[0] == pytest.approx(0.0 + 0.75 * 0 + 0.25 * 4.0)   # fx>=fy：z00+fx(z01-z00)+fy(z11-z01)
+    assert tr.terrain_z(near, mid)(np.array([1.5]), np.array([0.5]))[0] == pytest.approx(0.75 * 0.25 * 4.0)   # 双一次とは違う

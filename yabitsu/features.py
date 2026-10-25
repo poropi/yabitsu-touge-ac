@@ -133,13 +133,48 @@ def _side_arrays(sec, f, offset=None):
 
 
 def sidewalk_offsets(sec, feats):
-    """左右それぞれ、行ごとの歩道の幅（歩道のない所は 0）。壁・生け垣・欄干はこの外側に立てる。"""
+    """左右それぞれ、行ごとの歩道の幅（歩道のない所は 0）。壁・生け垣・欄干はこの外側に立てる。
+    擁壁の行の width_m は、道の縁から壁までの草地の幅（壁を道から離して立てる。shelf_widths）も含める。"""
     off = {1: np.zeros(sec.n), -1: np.zeros(sec.n)}
     for f in feats:
         if f.type == "sidewalk":
             sl = rows_of(sec, f)
             off[SIDES[f.side]][sl] = np.maximum(off[SIDES[f.side]][sl], f.width_m)
-    return off[1], off[-1]
+    shelf = shelf_widths(sec, feats)
+    return np.maximum(off[1], shelf[1]), np.maximum(off[-1], shelf[-1])
+
+
+def shelf_widths(sec, feats):
+    """擁壁の手前の草地の幅（行ごと、左右）。つながった擁壁の行の並びに width_m のある行があれば、
+    各行の真ん中で width_m になるように並び全体で直線で補う（行の境で壁が段にならない。並びの両端はその行の値のまま）。"""
+    out = {1: np.zeros(sec.n), -1: np.zeros(sec.n)}
+    for side in ("L", "R"):
+        rows = sorted((f for f in feats if f.type == "retaining_wall" and f.side == side), key=lambda f: f.s_from)
+        runs = []
+        for f in rows:
+            if runs and f.s_from - runs[-1][-1].s_to < 0.01:
+                runs[-1].append(f)
+            else:
+                runs.append([f])
+        for run in runs:
+            if not any(f.width_m > 0 for f in run):
+                continue
+            mid = [(f.s_from + f.s_to) / 2 for f in run]
+            sl = slice(rows_of(sec, run[0]).start, rows_of(sec, run[-1]).stop)
+            out[SIDES[side]][sl] = np.interp(sec.s[sl], mid, [f.width_m for f in run])
+    return out
+
+
+def shelf_mesh(sec, f, offset):
+    """擁壁を道から離して立てた所の、側溝の外から壁の足元までの草地（道の縁の高さ、外へ 0.05 m 上る）。"""
+    sl, side, hw, ze = _side_arrays(sec, f)
+    w = np.asarray(offset, float)[sl]
+    hw2 = (sec.hw_left if side > 0 else sec.hw_right)[sl] + GUTTER_WIDTH
+    lat = side * np.c_[hw2, hw2 + w]
+    z = np.c_[ze, ze + 0.05]
+    if side < 0:
+        lat, z = lat[:, ::-1], z[:, ::-1]
+    return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], u_scale=1.0)
 
 
 def guardrail_meshes(sec, f):

@@ -21,6 +21,7 @@ MATERIALS = {
     "roof": {"texture": "textures/roof.png", "shader": "ksPerPixel", "two_sided": True},
     "stone": {"texture": "textures/stone.png", "shader": "ksPerPixel"},
     "wood": {"texture": "textures/wood.png", "shader": "ksPerPixel", "two_sided": True},
+    "wood_cedar": {"texture": "textures/wood_cedar.png", "shader": "ksPerPixel"},   # 杉板の写真（assets/free、CC0）
     "wood_bars": {"texture": "textures/wood_bars.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
     "roof_metal": {"texture": "textures/roof_metal.png", "shader": "ksPerPixel", "two_sided": True},
     "roof_blue": {"texture": "textures/roof_blue.png", "shader": "ksPerPixel", "two_sided": True},
@@ -55,9 +56,21 @@ MATERIALS = {
     "mirror": {"texture": "textures/mirror.png", "shader": "ksPerPixel", "two_sided": True},
     "sign_speed30": {"texture": "textures/sign_speed30.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
     "sign_warning": {"texture": "textures/sign_warning.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
+    "sign_stop": {"texture": "textures/sign_stop.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
+    "sign_fire_cistern": {"texture": "textures/sign_fire_cistern.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
+    "pole_white": {"texture": "textures/pole_white.png", "shader": "ksPerPixel"},
+    "bamboo": {"texture": "textures/bamboo.png", "shader": "ksPerPixel"},
+    "pole_redwhite": {"texture": "textures/pole_redwhite.png", "shader": "ksPerPixel"},
+    "vending_red": {"texture": "textures/vending_red.png", "shader": "ksPerPixel"},
+    "stone_nozura": {"texture": "textures/stone_nozura.png", "shader": "ksPerPixel"},
     "sign_speed40": {"texture": "textures/sign_speed40.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},
     "tunnel_wall": {"texture": "textures/tunnel_wall.png", "shader": "ksPerPixel"},
     "tunnel_lamp": {"texture": "textures/tunnel_lamp.png", "shader": "ksPerPixel", "two_sided": True},
+    "pavers_brick": {"texture": "textures/pavers_brick.png", "shader": "ksPerPixel"},   # 峠のトイレ前の角地の灰茶のれんが（杉綾）
+    "delineator": {"texture": "textures/delineator.png", "shader": "ksPerPixel"},       # オレンジの車線分離標（白い反射帯2本）
+    "drum_checker": {"texture": "textures/drum_checker.png", "shader": "ksPerPixel"},   # 紅白の市松の緩衝ドラム
+    "siding_white": {"texture": "textures/siding_white.png", "shader": "ksPerPixel"},   # 白い縦の羽目板（峠のトイレの棟）
+    "rubber_black": {"texture": "textures/rubber_black.png", "shader": "ksPerPixel"},   # 車線分離標の黒い台座
 }
 
 
@@ -152,6 +165,13 @@ def wood(size=256, seed=15):
     return _u8(np.array([0.30, 0.19, 0.12]) * grain[..., None] * 1.1)
 
 
+def cedar_planks():
+    """杉板の写真（Poly Haven「Japanese Cedar Planks」CC0、実寸 約 1.13 m 四方）。少し暗くして焦げ茶の板張りに寄せる。"""
+    from . import config
+    a = np.asarray(Image.open(config.PROJECT_ROOT / "assets" / "free" / "japanese_cedar_planks_1k.jpg").convert("RGB"), float)
+    return np.clip(a * [0.55, 0.45, 0.40], 0, 255).astype(np.uint8)
+
+
 def roof(size=512, seed=10):
     rng = np.random.default_rng(seed)
     yy = np.arange(size)[:, None].repeat(size, 1)
@@ -199,6 +219,216 @@ def _diamond_sign(px=256):
     return np.array(im)
 
 
+def _stop_sign(px=256):
+    """一時停止：赤い逆三角に白い縁、白い「止まれ」（まわりは透明）。"""
+    from PIL import ImageDraw
+    im = Image.new("RGBA", (px, px), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.polygon([(4, 20), (px - 4, 20), (px / 2, px - 10)], fill=(245, 245, 245, 255))
+    d.polygon([(22, 30), (px - 22, 30), (px / 2, px - 30)], fill=(200, 30, 36, 255))
+    d.text((px / 2, 80), "止まれ", fill=(250, 250, 250, 255), font=_font(42), anchor="mm")
+    return np.array(im)
+
+
+def _bands(colors, n, w=32, h=512):
+    """縦に n 段の色のしま（赤白の柱など。上から colors を交互に）。"""
+    y = np.arange(h)[:, None].repeat(w, 1)
+    c = np.array(colors, np.uint8)
+    return c[(y * n // h) % len(colors)]
+
+
+def _delineator(w=64, h=512):
+    """オレンジの車線分離標（高さ 0.8 m を縦 1 枚）：上から 8〜20 %・28〜40 % に白い反射帯（ストリートビューの峠）。"""
+    y = np.arange(h)[:, None].repeat(w, 1) / h
+    white = ((y > 0.08) & (y < 0.20)) | ((y > 0.28) & (y < 0.40))
+    return np.where(white[..., None], np.array([236, 236, 228], np.uint8), np.array([238, 92, 30], np.uint8))
+
+
+def _checker(colors, nu, nv, w=256, h=256):
+    """市松模様（円柱の周りに nu、縦に nv）。"""
+    yy, xx = np.mgrid[0:h, 0:w]
+    c = np.array(colors, np.uint8)
+    return c[((xx * nu // w) + (yy * nv // h)) % 2]
+
+
+def _siding(size=512, seed=43):
+    """白い縦の羽目板（2 m 四方を 1 枚。15 cm ごとに細い溝、少し汚れ）。"""
+    rng = np.random.default_rng(seed)
+    xx = np.arange(size)[None, :].repeat(size, 0)
+    groove = (xx % (size * 0.15 / 2.0)) < 2.5
+    base = np.array([0.88, 0.87, 0.84]) * (0.94 + 0.06 * periodic_noise(size, 40, rng))[..., None]
+    return _u8(np.where(groove[..., None], base * 0.72, base))
+
+
+def herringbone_bricks(size=1024, tile_m=2.0, brick_w=0.1, seed=44):
+    """灰茶のれんがの杉綾（ヘリンボーン）敷き（2:1 のれんが、45° 回し）。1 枚＝tile_m 四方で継ぎ目なくくり返す。"""
+    rng = np.random.default_rng(seed)
+    n = int(round(tile_m / brick_w / np.sqrt(2)))      # 45° 回した格子の 1 枚あたりのマス数（4 の倍数にそろえる）
+    n -= n % 4
+    yy, xx = np.mgrid[0:size, 0:size].astype(float) * (n / size)
+    gx = np.floor(xx + yy).astype(int) % (2 * n); gy = np.floor(yy - xx).astype(int) % (2 * n)
+    d = (gx - gy) % 4
+    horiz = d < 2
+    bx = np.where(horiz, gx - d, gx); by = np.where(horiz, gy, gy - (3 - d))
+    bid = (bx % (2 * n)) * 4096 + (by % (2 * n)) * 2 + horiz
+    h = (np.sin(bid * 12.9898) * 43758.5453) % 1.0
+    shade = 0.80 + 0.32 * h
+    # 灰茶のれんがの混ぜ敷き（ストリートビュー 012° の中央値 RGB (65, 64, 56)、R/G 1.02。赤茶一色ではない）
+    tones = np.array([[0.46, 0.44, 0.38], [0.50, 0.45, 0.38], [0.43, 0.42, 0.37], [0.52, 0.44, 0.37]])
+    base = tones[(np.floor(((np.sin(bid * 78.233) * 12345.678) % 1.0) * 4)).astype(int)] * shade[..., None]
+    joint = (bid != np.roll(bid, 1, 0)) | (bid != np.roll(bid, 1, 1)) | (bid != np.roll(bid, -1, 1))
+    base = np.where(joint[..., None], np.array([0.40, 0.38, 0.35]), base)
+    return _u8(base * (0.9 + 0.2 * periodic_noise(size, 3, rng))[..., None])
+
+
+def trail_map_texture(w_px, h_px):
+    """峠の横長の案内地図（左右に写真の枠、真ん中に黄緑の地図・山・道。ストリートビューの峠のトイレ前）。"""
+    from PIL import ImageDraw
+    rng = np.random.default_rng(7)
+    im = Image.new("RGB", (w_px, h_px), (238, 234, 220)); d = ImageDraw.Draw(im)
+    W, H = w_px, h_px
+    d.rectangle([0, 0, W - 1, H - 1], outline=(96, 70, 44), width=max(3, H // 40))
+    d.rectangle([int(W * 0.03), int(H * 0.04), int(W * 0.97), int(H * 0.12)], fill=(60, 96, 60))
+    d.text((W / 2, H * 0.08), "丹沢大山国定公園 ヤビツ峠 周辺案内図", fill=(245, 245, 235), font=_font(int(H * 0.06)), anchor="mm")
+    mx0, mx1, my0, my1 = int(W * 0.22), int(W * 0.78), int(H * 0.16), int(H * 0.94)
+    d.rectangle([mx0, my0, mx1, my1], fill=(214, 226, 150))
+    for _ in range(9):   # 山
+        cx, cy, r = rng.uniform(mx0 + 40, mx1 - 40), rng.uniform(my0 + 40, my1 - 30), rng.uniform(H * 0.05, H * 0.10)
+        d.polygon([(cx - r, cy + r * 0.6), (cx, cy - r * 0.7), (cx + r, cy + r * 0.6)], fill=(110, 160, 90))
+    for _ in range(3):   # 登山道（赤い線）：峠から山へ曲がりながら延びる
+        x, y = (mx0 + mx1) / 2, (my0 + my1) / 2; a = rng.uniform(0, 2 * np.pi); pts = [(x, y)]
+        for _ in range(40):
+            a += rng.normal(0, 0.25); x = float(np.clip(x + 9 * np.cos(a), mx0 + 5, mx1 - 5)); y = float(np.clip(y + 9 * np.sin(a), my0 + 5, my1 - 5)); pts.append((x, y))
+        d.line(pts, fill=(200, 60, 50), width=max(2, H // 110), joint="curve")
+    d.line([(mx0, my1 - 30), (W * 0.45, H * 0.6), (mx1, my0 + 40)], fill=(150, 150, 150), width=max(4, H // 45))
+    for side in (0, 1):  # 左右の写真と説明の枠
+        x0 = int(W * (0.03 if side == 0 else 0.80))
+        for j in range(5):
+            y0 = int(H * (0.16 + j * 0.16))
+            d.rectangle([x0, y0, x0 + int(W * 0.07), y0 + int(H * 0.13)], fill=tuple(int(c) for c in rng.integers(70, 190, 3)))
+            for q in range(4):
+                d.line([(x0 + int(W * 0.08), y0 + 8 + q * int(H * 0.03)), (x0 + int(W * 0.17), y0 + 8 + q * int(H * 0.03))],
+                       fill=(120, 110, 100), width=2)
+    return im
+
+
+def toilet_front_texture(w_px, h_px):
+    """峠のトイレの正面（南）：白い壁と柱、焦げ茶の縦板の面、掲示板 2 枚、男女の入口（暗い）、白い腰（ストリートビュー 012°・072°）。"""
+    from PIL import ImageDraw
+    im = Image.new("RGB", (w_px, h_px), (232, 230, 222)); d = ImageDraw.Draw(im)
+    W, H = w_px, h_px; X = lambda f: int(W * f); Y = lambda f: int(H * f)
+    brown = _boards(X(0.62), Y(0.62), (70, 46, 32), board_px=max(8, W // 60))
+    im.paste(brown, (X(0.06), Y(0.12)))
+    d.rectangle([0, Y(0.74), W, H], fill=(226, 224, 216))                       # 白い腰
+    d.line([(0, Y(0.74)), (W, Y(0.74))], fill=(150, 146, 138), width=max(2, H // 120))
+    for x0, x1 in ((0.10, 0.30), (0.36, 0.60)):                                 # 掲示板（黒っぽい枠に貼り紙）
+        d.rectangle([X(x0), Y(0.22), X(x1), Y(0.52)], fill=(56, 44, 34), outline=(30, 24, 18), width=3)
+        for k in range(6):
+            px0 = X(x0) + 6 + (k % 3) * (X(x1 - x0) // 3); py0 = Y(0.25) + (k // 3) * Y(0.13)
+            d.rectangle([px0, py0, px0 + X(x1 - x0) // 3 - 10, py0 + Y(0.11)], fill=(236, 232, 214))
+    for x0, col in ((0.70, (40, 60, 120)), (0.84, (150, 40, 50))):              # 男・女の入口
+        d.rectangle([X(x0), Y(0.30), X(x0 + 0.11), Y(1.0)], fill=(34, 32, 30))
+        d.rectangle([X(x0 + 0.025), Y(0.20), X(x0 + 0.085), Y(0.27)], fill=col)
+    return im
+
+
+def _fire_cistern_sign(px=256):
+    """防火水そうの標識：赤い丸に白い細い縁、上に小さく FIRE CISTERN、真ん中に「防火水そう」、下に容量（まわりは透明）。"""
+    from PIL import ImageDraw
+    im = Image.new("RGBA", (px, px), (0, 0, 0, 0)); d = ImageDraw.Draw(im)
+    d.ellipse([3, 3, px - 3, px - 3], fill=(245, 245, 245, 255)); d.ellipse([9, 9, px - 9, px - 9], fill=(200, 32, 40, 255))
+    white = (250, 250, 250, 255)
+    d.text((px / 2, px * 0.26), "FIRE CISTERN", fill=white, font=_font(int(px * 0.075)), anchor="mm")
+    f = _font(int(px * 0.20)); t = "防火水そう"
+    w = d.textlength(t, font=f); f = _font(int(px * 0.20 * min(1.0, px * 0.80 / w)))
+    d.text((px / 2, px * 0.50), t, fill=white, font=f, anchor="mm")
+    d.text((px / 2, px * 0.74), "40m³", fill=white, font=_font(int(px * 0.08)), anchor="mm")
+    return np.array(im)
+
+
+def wood_sign_texture(lines, w_px, h_px):
+    """木を彫って白く塗った看板（灰色がかった古い板、横に板目）。lines = [{"text", "size"(高さの割合), "band"(帯の色・任意),
+    "font"(gothic_bold | mincho・任意)}]。帯のある行は、帯の中に明るい字。"""
+    from PIL import ImageDraw, ImageFont
+    from . import config
+    a = np.asarray(Image.open(config.PROJECT_ROOT / "assets" / "free" / "japanese_cedar_planks_1k.jpg").convert("RGB"), float)
+    g = a.mean(2, keepdims=True)
+    a = np.clip((0.30 * a + 0.70 * g) * [0.92, 0.88, 0.80] + 40, 0, 255).astype(np.uint8)   # 日に焼けて灰色がかった板
+    im = Image.fromarray(np.rot90(a)).resize((w_px, h_px)).convert("RGB"); d = ImageDraw.Draw(im)   # 板目は横
+    for k in range(1, 4):   # 横に4枚の板の継ぎ目
+        y = h_px * k // 4; d.line([(0, y), (w_px, y)], fill=(70, 62, 54), width=max(1, h_px // 120))
+    gap = 1.45   # 行の送り（字の高さの倍）
+    total = sum(float(l["size"]) for l in lines) * gap
+    y = (h_px - total * h_px) / 2
+    for l in lines:
+        sz = float(l["size"]) * h_px; font_kind = l.get("font", "gothic_bold")
+        f = ImageFont.truetype(config.font_file(font_kind), int(sz))
+        w = d.textlength(l["text"], font=f)
+        if w > w_px * 0.88:
+            f = ImageFont.truetype(config.font_file(font_kind), int(sz * w_px * 0.88 / w)); w = d.textlength(l["text"], font=f)
+        cy = y + sz * 0.56
+        if l.get("band"):
+            pad = sz * 0.25
+            d.rectangle([(w_px - w) / 2 - pad, cy - sz * 0.62, (w_px + w) / 2 + pad, cy + sz * 0.62], fill=_rgb(l["band"]))
+        d.text((w_px / 2 + 2, cy + 2), l["text"], fill=(60, 52, 44), font=f, anchor="mm")    # 彫りの影
+        d.text((w_px / 2, cy), l["text"], fill=(238, 234, 224), font=f, anchor="mm")
+        y += sz * gap
+    return im
+
+
+def nozura_stones():
+    """野面石積みの写真（Poly Haven「Japanese Stone Wall」CC0、assets/dress/nozura.png。峠の石積みと同じ素材）。"""
+    from . import config
+    return np.asarray(Image.open(config.PROJECT_ROOT / "assets" / "dress" / "nozura.png").convert("RGB").resize((512, 512)))
+
+
+def _boards(w_px, h_px, rgb, board_px=22, seed=5):
+    """縦の板張り（古い焦げ茶の板）。"""
+    rng = np.random.default_rng(seed)
+    x = np.arange(w_px)
+    shade = 0.82 + 0.18 * rng.random(w_px // board_px + 2)[x // board_px]
+    shade = shade * np.where(x % board_px < 2, 0.55, 1.0)
+    g = shade[None, :] * (0.92 + 0.08 * rng.random((h_px, w_px)))
+    return Image.fromarray(np.clip(np.array(rgb, float)[None, None, :] * g[..., None], 0, 255).astype(np.uint8))
+
+
+def shop_front_texture(w_px, h_px):
+    """峠の売店の正面（看板建築）：上に大きな看板、下は奥まった軒下に梁・柱・入口・窓・写真のパネル・OPEN の札（ユーザーの写真から）。"""
+    from PIL import ImageDraw
+    im = _boards(w_px, h_px, (74, 59, 46)); d = ImageDraw.Draw(im)
+    W, H = w_px, h_px; Y = lambda f: int(H * f); X = lambda f: int(W * f)
+    d.rectangle([X(0.01), Y(0.02), X(0.99), Y(0.24)], fill=(62, 50, 40), outline=(40, 32, 26), width=max(2, H // 150))
+    white = (236, 230, 218)
+    d.text((X(0.17), Y(0.085)), "国民宿舎", fill=white, font=_font(Y(0.055)), anchor="mm")
+    d.text((X(0.17), Y(0.170)), "丹沢ホーム", fill=white, font=_font(Y(0.055)), anchor="mm")
+    d.text((X(0.63), Y(0.13)), "ヤビツ峠売店", fill=white, font=_font(Y(0.115)), anchor="mm")
+    d.rectangle([X(0.04), Y(0.26), X(0.96), Y(1.0)], fill=(40, 32, 26))                 # 奥まった軒下（暗い）
+    d.rectangle([X(0.04), Y(0.26), X(0.96), Y(0.30)], fill=(26, 20, 16))                 # 軒の影
+    d.rectangle([X(0.04), Y(0.36), X(0.96), Y(0.40)], fill=(110, 58, 42))                # 赤茶の梁
+    d.rectangle([X(0.47), Y(0.36), X(0.50), Y(1.0)], fill=(70, 54, 40))                  # 真ん中の柱
+    d.rectangle([X(0.0), Y(0.24), X(0.04), Y(1.0)], fill=(70, 56, 44)); d.rectangle([X(0.96), Y(0.24), X(1.0), Y(1.0)], fill=(70, 56, 44))
+    for i in range(6):                                                                    # 写真を貼ったパネル
+        for j in range(4):
+            x0, y0 = X(0.06 + i * 0.04), Y(0.62 + j * 0.06)
+            d.rectangle([x0, y0, x0 + X(0.034), y0 + Y(0.05)], fill=(150 + 15 * ((i + j) % 3), 150, 145))
+    d.rectangle([X(0.31), Y(0.50), X(0.45), Y(0.56)], fill=(232, 224, 200))              # 入口の上の白い箱
+    d.rectangle([X(0.315), Y(0.56), X(0.445), Y(1.0)], fill=(225, 222, 212))             # 入口の白い枠
+    d.rectangle([X(0.33), Y(0.58), X(0.43), Y(1.0)], fill=(48, 52, 54))                  # 入口のガラス
+    d.rectangle([X(0.52), Y(0.50), X(0.70), Y(0.56)], fill=(232, 224, 200))
+    d.rectangle([X(0.52), Y(0.58), X(0.70), Y(0.86)], fill=(225, 222, 212))              # 窓の白い枠
+    d.rectangle([X(0.535), Y(0.60), X(0.685), Y(0.84)], fill=(60, 66, 62))
+    d.rectangle([X(0.452), Y(0.63), X(0.468), Y(0.68)], fill=(205, 30, 36))              # OPEN の札
+    return im
+
+
+def annex_front_texture(w_px, h_px):
+    """売店の右の小屋の正面：上にクリーム色の幕板、下は暗い中（前に自動販売機が立つ）。"""
+    from PIL import ImageDraw
+    im = _boards(w_px, h_px, (74, 59, 46), seed=6); d = ImageDraw.Draw(im)
+    d.rectangle([0, 0, w_px, int(h_px * 0.2)], fill=(230, 220, 194))
+    d.rectangle([int(w_px * 0.06), int(h_px * 0.2), int(w_px * 0.94), h_px], fill=(42, 34, 28))
+    return im
+
+
 def sign_texture(text, bg, fg, w_px, h_px, border=None):
     """看板の絵：背景色 bg に、文字 fg を枠いっぱいの大きさで中央に書く（日本語のフォント）。"""
     from PIL import ImageDraw
@@ -206,12 +436,14 @@ def sign_texture(text, bg, fg, w_px, h_px, border=None):
     if border:
         b = max(2, h_px // 16); d.rectangle([b // 2, b // 2, w_px - b // 2, h_px - b // 2], outline=_rgb(border), width=b)
     lines = text.split("\n")
-    size = int(min(h_px * 0.8 / len(lines), w_px * 0.9 / max(len(s) for s in lines)))
-    f = _font(max(8, size))
-    y = (h_px - size * len(lines) * 1.05) / 2
-    for s in lines:
+    scale = [0.4 if s.isascii() and any(not t.isascii() for t in lines) else 1.0 for s in lines]   # 和文の下の英文は 0.4 倍の大きさ
+    ref = _font(100)
+    size = int(min(h_px * 0.8 / sum(scale), *(w_px * 0.9 / max(d.textlength(s, font=ref) / 100 * k, 1e-6) for s, k in zip(lines, scale))))
+    y = (h_px - size * sum(scale) * 1.05) / 2
+    for s, k in zip(lines, scale):
+        f = _font(max(8, int(size * k)))
         tw = d.textlength(s, font=f)
-        d.text(((w_px - tw) / 2, y), s, font=f, fill=_rgb(fg)); y += size * 1.05
+        d.text(((w_px - tw) / 2, y), s, font=f, fill=_rgb(fg)); y += size * k * 1.05
     return im
 
 
@@ -295,13 +527,14 @@ def write_textures(out_dir):
             "roof": roof(),
             "stone": _gray(512, 13, 0.50, 0.22, (1.05, 0.98, 0.88), coarse=16, fine=2),
             "wood": wood(),
+            "wood_cedar": cedar_planks(),
             "wood_bars": railing_bars(rgb=(0.30, 0.19, 0.12), bars=4, bar_px=14),
             "roof_metal": _gray(256, 16, 0.50, 0.06, (0.84, 1.0, 0.94), coarse=24),
             "roof_blue": _gray(256, 22, 0.42, 0.05, (0.55, 0.80, 1.25), coarse=24),
             "roof_red": _gray(256, 23, 0.45, 0.05, (1.35, 0.62, 0.50), coarse=24),
             "tiles": tiles(),
             "paint_red": _gray(256, 18, 0.62, 0.08, (1.0, 0.42, 0.36)),
-            "paint_green": _gray(256, 24, 0.55, 0.08, (0.42, 0.85, 0.48)),
+            "paint_green": _gray(256, 24, 0.55, 0.08, (0.64, 0.78, 0.62)),
             "line_orange": _gray(256, 19, 0.80, 0.05, (1.0, 0.62, 0.16)),
             "concrete_circles": concrete_circles(),
             "hedge": _gray(512, 20, 0.42, 0.30, (0.55, 1.0, 0.45), coarse=6, fine=2),
@@ -330,8 +563,20 @@ def write_textures(out_dir):
             "sign_speed30": _round_sign("30"),
             "sign_speed40": _round_sign("40"),
             "sign_warning": _diamond_sign(),
+            "sign_stop": _stop_sign(),
+            "sign_fire_cistern": _fire_cistern_sign(),
+            "pole_white": _gray(128, 40, 0.90, 0.03),
+            "bamboo": _gray(128, 41, 0.62, 0.07, (1.18, 1.02, 0.66), coarse=24),
+            "pole_redwhite": _bands(((200, 40, 36), (236, 236, 230)), 8),
+            "vending_red": _gray(128, 42, 0.62, 0.04, (1.40, 0.22, 0.20)),
+            "stone_nozura": nozura_stones(),
             "tunnel_wall": _gray(512, 38, 0.46, 0.10, (1.0, 0.99, 0.96), coarse=10, fine=2),
-            "tunnel_lamp": _gray(64, 39, 0.97, 0.02, (1.04, 0.88, 0.55))}
+            "tunnel_lamp": _gray(64, 39, 0.97, 0.02, (1.04, 0.88, 0.55)),
+            "pavers_brick": herringbone_bricks(),
+            "delineator": _delineator(),
+            "drum_checker": _checker(((205, 70, 80), (238, 236, 230)), 4, 2),
+            "siding_white": _siding(),
+            "rubber_black": _gray(64, 45, 0.12, 0.03)}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

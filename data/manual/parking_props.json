@@ -1,0 +1,355 @@
+{
+ "note": "菜の花台の駐車車両と見物客。実在の人物・特定日時の配置を再現したものではない。a/bはs1_start_lot.jsonの駐車場座標。車は谷側向き、人物は谷を眺める。ピットと通路は空ける。車は ac_car の AC の車（各自の AC から Lua で読み込む。2 台は Kunos 標準、スイフトは MOD）。人は Microsoft Rocketbox（MIT）",
+ "cars": [
+  {
+   "a": -51.75,
+   "b": 0.0,
+   "yaw_deg": 180,
+   "material": "body_silver",
+   "ac_car": {
+    "id": "ks_toyota_gt86",
+    "lod": "toyota_gt86_LOD_B.kn5",
+    "main": "toyota_gt86.kn5"
+   }
+  },
+  {
+   "a": -44.25,
+   "b": 0.0,
+   "yaw_deg": 180,
+   "material": "body_blue",
+   "ac_car": {
+    "id": "ks_mazda_mx5_nd",
+    "lod": "mazda_mx5_lod_b.kn5",
+    "main": "mazda_mx5_lod_a.kn5"
+   }
+  },
+  {
+   "a": -36.75,
+   "b": 0.0,
+   "yaw_deg": 180,
+   "material": "body_white",
+   "ac_car": {
+    "id": "2017_suzuki_swift",
+    "lod": "2017_suzuki_swift_lod_b.kn5",
+    "main": "2017_suzuki_swift.kn5"
+   }
+  }
+ ],
+ "people": [
+  {
+   "a": -59.2,
+   "b": -1.8,
+   "yaw_deg": 180,
+   "model": "Male_Adult_05"
+  },
+  {
+   "a": -30.0,
+   "b": -1.8,
+   "yaw_deg": 175,
+   "model": "Female_Adult_04"
+  },
+  {
+   "a": -28.4,
+   "b": -1.8,
+   "yaw_deg": 190,
+   "model": "Male_Adult_10"
+  }
+ ],
+ "pass_cars": [
+  {
+   "stall": "north",
+   "index": 0,
+   "ac_car": {
+    "id": "traffic_toyota_rav4",
+    "lod": "traffic_toyota_rav4_lod_c.kn5",
+    "main": "traffic_toyota_rav4.kn5",
+    "wheels": {
+     "front": [
+      0.773,
+      -0.24,
+      1.47
+     ],
+     "rear": [
+      0.768,
+      -0.27,
+      -1.035
+     ]
+    }
+   }
+  },
+  {
+   "stall": "north",
+   "index": 2,
+   "ac_car": {
+    "id": "traffic_aegis_suzuki_alto_works",
+    "lod": "traffic_aegis_suzuki_alto_works_lod_c.kn5",
+    "main": "traffic_aegis_suzuki_alto_works.kn5",
+    "wheels": {
+     "front": [
+      0.6,
+      -0.001,
+      1.23
+     ],
+     "rear": [
+      0.6,
+      -0.001,
+      -1.23
+     ]
+    }
+   }
+  },
+  {
+   "stall": "north",
+   "index": 3,
+   "ac_car": {
+    "id": "traffic_aegis_toyota_vellfire",
+    "lod": "traffic_rize_toyota_vellfire_lod_c.kn5",
+    "main": "traffic_rize_toyota_vellfire.kn5",
+    "wheels": {
+     "front": [
+      0.794,
+      -0.0,
+      1.5
+     ],
+     "rear": [
+      0.794,
+      -0.0,
+      -1.5
+     ]
+    }
+   }
+  },
+  {
+   "stall": "north",
+   "index": 5,
+   "ac_car": {
+    "id": "traffic_nissan_leaf",
+    "lod": "traffic_nissan_leaf_lod_c.kn5",
+    "main": "traffic_nissan_leaf.kn5",
+    "wheels": {
+     "front": [
+      0.752,
+      -0.144,
+      1.253
+     ],
+     "rear": [
+      0.754,
+      -0.157,
+      -1.423
+     ]
+    }
+   }
+  },
+  {
+   "stall": "mid_n",
+   "index": 0,
+   "ac_car": {
+    "id": "traffic_aegis_toyota_prius",
+    "lod": "traffic_aegis_toyota_prius_lod_c.kn5",
+    "main": "traffic_aegis_toyota_prius.kn5",
+    "wheels": {
+     "front": [
+      0.769,
+      0.001,
+      1.35
+     ],
+     "rear": [
+      0.767,
+      0.001,
+      -1.35
+     ]
+    }
+   }
+  },
+  {
+   "stall": "mid_n",
+   "index": 1,
+   "ac_car": {
+    "id": "traffic_aegis_mazda_cx3",
+    "lod": "traffic_aegis_mazda_cx3_lod_c.kn5",
+    "main": "traffic_aegis_mazda_cx3.kn5",
+    "wheels": {
+     "front": [
+      0.764,
+      -0.003,
+      1.285
+     ],
+     "rear": [
+      0.764,
+      -0.003,
+      -1.285
+     ]
+    }
+   }
+  },
+  {
+   "stall": "mid_n",
+   "index": 3,
+   "ac_car": {
+    "id": "traffic_aegis_suzuki_alto_works",
+    "lod": "traffic_aegis_suzuki_alto_works_lod_c.kn5",
+    "main": "traffic_aegis_suzuki_alto_works.kn5",
+    "wheels": {
+     "front": [
+      0.6,
+      -0.001,
+      1.23
+     ],
+     "rear": [
+      0.6,
+      -0.001,
+      -1.23
+     ]
+    }
+   }
+  },
+  {
+   "stall": "mid_s",
+   "index": 0,
+   "ac_car": {
+    "id": "traffic_aegis_subaru_levorg",
+    "lod": "traffic_aegis_subaru_levorg_lod_c.kn5",
+    "main": "traffic_aegis_subaru_levorg.kn5",
+    "wheels": {
+     "front": [
+      0.767,
+      -0.002,
+      1.325
+     ],
+     "rear": [
+      0.772,
+      -0.002,
+      -1.325
+     ]
+    }
+   }
+  },
+  {
+   "stall": "mid_s",
+   "index": 2,
+   "ac_car": {
+    "id": "traffic_aegis_toyota_vellfire",
+    "lod": "traffic_rize_toyota_vellfire_lod_c.kn5",
+    "main": "traffic_rize_toyota_vellfire.kn5",
+    "wheels": {
+     "front": [
+      0.794,
+      -0.0,
+      1.5
+     ],
+     "rear": [
+      0.794,
+      -0.0,
+      -1.5
+     ]
+    }
+   }
+  },
+  {
+   "stall": "east",
+   "index": 0,
+   "ac_car": {
+    "id": "honda_acty_ha3",
+    "lod": "honda_acty_ha3_lod_c.kn5",
+    "main": "honda_acty_ha3.kn5",
+    "wheels": {
+     "front": [
+      0.631,
+      -0.001,
+      0.804
+     ],
+     "rear": [
+      0.631,
+      -0.001,
+      -1.103
+     ]
+    }
+   }
+  },
+  {
+   "stall": "east",
+   "index": 1,
+   "ac_car": {
+    "id": "traffic_aegis_toyota_vellfire",
+    "lod": "traffic_rize_toyota_vellfire_lod_c.kn5",
+    "main": "traffic_rize_toyota_vellfire.kn5",
+    "wheels": {
+     "front": [
+      0.794,
+      -0.0,
+      1.5
+     ],
+     "rear": [
+      0.794,
+      -0.0,
+      -1.5
+     ]
+    }
+   }
+  },
+  {
+   "stall": "east",
+   "index": 2,
+   "ac_car": {
+    "id": "traffic_aegis_suzuki_alto_works",
+    "lod": "traffic_aegis_suzuki_alto_works_lod_c.kn5",
+    "main": "traffic_aegis_suzuki_alto_works.kn5",
+    "wheels": {
+     "front": [
+      0.6,
+      -0.001,
+      1.23
+     ],
+     "rear": [
+      0.6,
+      -0.001,
+      -1.23
+     ]
+    }
+   }
+  },
+  {
+   "stall": "south",
+   "index": 0,
+   "ac_car": {
+    "id": "traffic_aegis_mazda_cx3",
+    "lod": "traffic_aegis_mazda_cx3_lod_c.kn5",
+    "main": "traffic_aegis_mazda_cx3.kn5",
+    "wheels": {
+     "front": [
+      0.764,
+      -0.003,
+      1.285
+     ],
+     "rear": [
+      0.764,
+      -0.003,
+      -1.285
+     ]
+    }
+   }
+  },
+  {
+   "stall": "south",
+   "index": 2,
+   "ac_car": {
+    "id": "traffic_aegis_toyota_prius",
+    "lod": "traffic_aegis_toyota_prius_lod_c.kn5",
+    "main": "traffic_aegis_toyota_prius.kn5",
+    "wheels": {
+     "front": [
+      0.769,
+      0.001,
+      1.35
+     ],
+     "rear": [
+      0.767,
+      0.001,
+      -1.35
+     ]
+    }
+   }
+  }
+ ],
+ "note_pass_cars": "ヤビツ峠の駐車場の車（航空写真・Street View で車が止まっている枠に、軽・ミニバン・SUV など。各自の AC の traffic 系の車）"
+}

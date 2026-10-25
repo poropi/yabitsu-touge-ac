@@ -21,7 +21,8 @@ BORE_MARGIN_M = 0.0   # 筒の中に入る地形の面を描かない範囲：�
                       # 持つので、面の中心はトンネルの中。坑口より外の切り土の面は穴にしない（後ろに何もなく透けて見える）
 CHANNEL_REACH_M = 6.0   # 川の溝が地形を動かす範囲（溝の外）
 ROAD_CAP_M = 3.0     # 土台があっても、道の縁からこの距離までは道の斜面より上に地形を出さない
-PAD_REACH_M = 40.0   # 土台（駐車場・家・分かれ道）が地形を動かす範囲  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
+PASS_EDGE_DROP = 0.05   # 峠の面にかかる格子の四角の、面の外の角を面より下げる高さ
+PAD_REACH_M = 40.0  # 土台（駐車場・家・分かれ道）が地形を動かす範囲  # 道から離れた場所（展望台の広場など）のまわりに、細かい地形を張る幅と粗い地形の穴の幅
 
 
 def corridor_grid(sec, band=NEAR_BAND, cell=NEAR_CELL, extra=()):
@@ -98,6 +99,8 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
                 zp = z0 + gx * (xr[sel] - cx) + gy * (yr[sel] - cy)
             z[sel] = np.where(d == 0, zp - UNDER_DEPTH, np.clip(z[sel], zp - FILL_SLOPE * d, zp + CUT_SLOPE * d))
             e[sel] = np.where(d == 0, 0.0, np.minimum(e[sel], d))
+        if len(shape) == 2 and min(shape) > 1:
+            z = _sink_pass_cells(z, np.asarray(X)[0], np.asarray(Y)[:, 0], pads)
         z = np.where(e_road <= ROAD_CAP_M, np.minimum(z, road_cap), z)   # 道のすぐ横の高い土台（家など）が、道の上に地形を持ち上げないように
     if channels:   # 川の溝（water.Stream.channel）：溝の中は川底、まわりは岸の勾配 BANK で元の地形へ
         from .water import BANK
@@ -123,6 +126,33 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
     if lake is not None:   # 湖：トンネルの山を残す処理のあと（湖の中に陸を戻さない）
         z = lake_clamp(z, np.ravel(X), np.ravel(Y), lake)
     return z.reshape(shape), e.reshape(shape)
+
+
+def _sink_pass_cells(z, xs, ys, pads):
+    """舗装を描く土台（峠の面 kind=pass）にかかる格子の四角は、4 つの角を面より下げる（中は UNDER_DEPTH、外は PASS_EDGE_DROP）。
+    角が全部 面の外の斜面の上にある四角に面の角が入り込んでも、三角形が舗装の上に出ない。ほかの土台に戻されないよう、全部の土台のあとで下げるだけ。"""
+    nx = len(xs); z = z.copy()
+    for p in pads:
+        if p.get("kind") != "pass":
+            continue
+        poly = Polygon(p["polygon"])
+        x0, y0, x1, y1 = poly.bounds
+        i0, i1 = max(np.searchsorted(xs, x0) - 1, 0), min(np.searchsorted(xs, x1), nx - 1)
+        j0, j1 = max(np.searchsorted(ys, y0) - 1, 0), min(np.searchsorted(ys, y1), len(ys) - 1)
+        if i1 <= i0 or j1 <= j0:
+            continue
+        I, J = np.meshgrid(np.arange(i0, i1), np.arange(j0, j1)); I, J = I.ravel(), J.ravel()
+        hit = shapely.intersects(shapely.box(xs[I], ys[J], xs[I + 1], ys[J + 1]), poly)
+        I, J = I[hit], J[hit]
+        corners = np.unique(np.r_[J * nx + I, J * nx + I + 1, (J + 1) * nx + I, (J + 1) * nx + I + 1])
+        cx_, cy_ = xs[corners % nx], ys[corners // nx]
+        zp = np.full(len(corners), float(p["z"]))
+        if "plane" in p:
+            cx, cy, z0, gx, gy = p["plane"]
+            zp = z0 + gx * (cx_ - cx) + gy * (cy_ - cy)
+        inside = shapely.contains_xy(poly, cx_, cy_)
+        z[corners] = np.minimum(z[corners], zp - np.where(inside, UNDER_DEPTH, PASS_EDGE_DROP))
+    return z
 
 
 def grid_mesh_chunks(xs, ys, Z, face_keep, block=100, uv_scale=8.0):
@@ -263,7 +293,27 @@ def terrain_z(near, mid):
     return z
 
 
-BRANCH_MARGIN = -0.02   # 分かれ道は、路面より 2cm 以上上に出たときだけ（土台の継ぎ目の丸め）
+def terrain_mesh_z(near, mid):
+    """terrain_z と同じだが、細かい地形の中はメッシュと同じ三角形で補間する（格子の四角は (r,c)→(r+1,c+1) の対角線で割る。
+    grid_mesh_chunks と kn5._triangles）。急な斜面では双一次の補間とメッシュが 0.3〜0.4 m ずれ、地面に立てた物が浮く。"""
+    from scipy.interpolate import RegularGridInterpolator
+    xs, ys, Z = near["xs"], near["ys"], near["Z"]
+    fd = RegularGridInterpolator((ys, xs), near["D"], bounds_error=False, fill_value=np.inf)
+    rough = terrain_z(near, mid)
+
+    def z(x, y):
+        xf, yf = np.ravel(np.asarray(x, float)), np.ravel(np.asarray(y, float))
+        c = np.clip(np.searchsorted(xs, xf, side="right") - 1, 0, len(xs) - 2)
+        r = np.clip(np.searchsorted(ys, yf, side="right") - 1, 0, len(ys) - 2)
+        fx = (xf - xs[c]) / (xs[c + 1] - xs[c]); fy = (yf - ys[r]) / (ys[r + 1] - ys[r])
+        z00, z01, z10, z11 = Z[r, c], Z[r, c + 1], Z[r + 1, c], Z[r + 1, c + 1]
+        zt = np.where(fx >= fy, z00 + fx * (z01 - z00) + fy * (z11 - z01), z00 + fy * (z10 - z00) + fx * (z11 - z10))
+        ok = (fx >= 0) & (fx <= 1) & (fy >= 0) & (fy <= 1) & (fd(np.c_[yf, xf]) <= NEAR_BAND - 2.0) & np.isfinite(zt)
+        return np.where(ok, zt, np.ravel(rough(xf, yf))).reshape(np.shape(x))
+    return z
+
+
+BRANCH_MARGIN = -0.02  # 分かれ道は、路面より 2cm 以上上に出たときだけ（土台の継ぎ目の丸め）
 
 
 def road_clear_count(sec, near, stubs=(), margin=0.1, skip_rows=None):

@@ -30,12 +30,16 @@ def main():
     tw = nagoki.load_town(sec)
     others = nagoki.other_towns(sec)   # 宮ヶ瀬北原など（町の範囲は多角形で作る）
     sps = nagoki.load_splits(sec)   # 島をはさんで2本に分かれる所（地図の線どおり）
-    assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps])   # 町の範囲と分かれる所は多角形で作る
+    site_spec = pass_area.load(config.DATA_MANUAL / "s1_pass.json")
+    pass_site = pass_area.build(site_spec, sec) if site_spec else None
+    assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps],   # 町の範囲と分かれる所は多角形で作る
+                      mouths=pass_site.mouths() if pass_site else ())   # 峠のわき道の入口は側溝をくぼませない
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
     mid = dict(np.load(P / "track_terrain_mid.npz"))
     add_far_photo(m, far)
     assembly.add_terrain(m, near, far, mid, far_photo=True)
     ground = terrain.terrain_z(near, mid)   # 景色の建物・道は、できあがった地形の上に置く
+    ground_mesh = terrain.terrain_mesh_z(near, mid)   # 地面に立てる小物は、メッシュの三角形どおりの高さ（急な斜面で浮かない）
     bounds = track.load_bounds()
     assembly.add_centrelines(m, sec, track.load_section_rows("centrelines", bounds), s_min=tw.main_skip[1],
                              gaps=[z.main_skip for z in sps] + [k.main_skip for _, k in others])
@@ -58,9 +62,8 @@ def main():
                                         avoid=nagoki.tree_free_areas(sec, bounds, blds + track_blds)))
     assembly.add_pads(m, pads)
     assembly.add_start_lot(m, start_lot.load_spec(lot_spec), pads)
-    site_spec = pass_area.load(config.DATA_MANUAL / "s1_pass.json")
-    if site_spec:
-        assembly.add_pass_area(m, pass_area.build(site_spec, sec))
+    if pass_site:
+        assembly.add_pass_area(m, pass_site)
     minoge = minoge_area.load(config.DATA_MANUAL / "s2_minoge.json")
     if minoge:
         assembly.add_pass_area(m, minoge_area.build(minoge, sec, minoge_area.dem_ground()))
@@ -138,7 +141,7 @@ def main():
                            + [z.area().buffer(0.5) for z in sps]
                            + [unary_union(nagoki.sidewalk_polygons(sec, feats)).buffer(0.3)]   # 歩道の上に建物を立てない
                            + [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch")
-                              and "house" not in p["name"]])
+                              and "house" not in p["name"] and not p.get("buildings_ok")])
     from yabitsu import pois
     poi_el = json.loads((config.DATA_RAW / "osm_track_pois.json").read_text(encoding="utf-8"))["elements"]
     pois.add_shop_signs(poi_el, track_blds, sec)   # 店の名前の看板
@@ -163,14 +166,37 @@ def main():
     skip = [tuple(float(v) for v in geo.to_local(*o["points"][0])) for o in ro["objects"]]
     skip += [tuple(float(v) for v in geo.to_local(*mo["center"])) for mo in (minoge or {}).get("monuments", [])]
     skip += [tuple(float(v) for v in geo.to_local(*ob["at"])) for z in sps for ob in z.spec.get("objects", [])]
+    for sn in ("s1", "s4", "s5"):   # 手で置いた 1 点の物（峠の売店の自動販売機など）と看板
+        so = json.loads((config.DATA_MANUAL / f"{sn}_objects.json").read_text(encoding="utf-8"))
+        skip += [tuple(float(v) for v in geo.to_local(*ob["points"][0])) for ob in so.get("objects", []) if len(ob.get("points", [])) == 1]
+        skip += [tuple(float(v) for v in geo.to_local(*ob["at"])) for ob in so.get("pole_signs", [])]
     poi_nodes = [e for e in poi_el if e.get("type") == "node" and "lat" in e]
     assembly.add_meshes(m, pois.meshes(pois.place(poi_nodes, sec, skip), ground))
     assembly.add_meshes(m, town_objects.signal_meshes(ro["signals"], road_z, prefix="s3_signal"))
     assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(ro["objects"], sec), road_z, prefix="s3_obj"))   # 路面の中のバス停は道の外へ
-    for sn in ("s4", "s5"):   # S4・S5 のカーブミラー・標識・看板（data/manual/s4_objects.json・s5_objects.json）
+    def flats_or_ground(x, y):   # 峠の面（台・歩道・植え込み・駐車場など）の上はその面の高さ、それ以外は地形の高さ
+        z = np.asarray(ground_mesh(x, y), float).copy()
+        if pass_site:
+            pz = pass_site.top_z(x, y).reshape(np.shape(z))
+            z = np.where(np.isfinite(pz), pz, z)
+        return z
+
+    def pass_or_road_z(x, y):    # 峠の面の上はその面の高さ（本線の中心の高さでは歩道の物が 0.8 m 浮く）、それ以外は今までどおり
+        z = np.asarray(road_z(x, y), float).copy()
+        if pass_site:
+            pz = pass_site.top_z(x, y).reshape(np.shape(z))
+            z = np.where(np.isfinite(pz), pz, z)
+        return z
+
+    for sn in ("s1", "s4", "s5"):   # S1（峠）・S4・S5 の標識・看板・ベンチなど（data/manual/sN_objects.json）
         so = json.loads((config.DATA_MANUAL / f"{sn}_objects.json").read_text(encoding="utf-8"))
-        assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(so["objects"], sec), road_z, prefix=f"{sn}_obj"))
-        assembly.add_meshes(m, town_objects.pole_sign_meshes(so.get("pole_signs", []), ground, prefix=sn))
+        on_road = [o for o in so["objects"] if o.get("z_from") != "ground"]
+        on_ground = [o for o in so["objects"] if o.get("z_from") == "ground"]   # 台の上など、地形の高さに立てる物（売店の自動販売機）
+        assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(on_road, sec), pass_or_road_z if sn == "s1" else road_z,
+                                                          prefix=f"{sn}_obj"))
+        if on_ground:
+            assembly.add_meshes(m, town_objects.object_meshes(on_ground, flats_or_ground, prefix=f"{sn}_objg"))
+        assembly.add_meshes(m, town_objects.pole_sign_meshes(so.get("pole_signs", []), flats_or_ground, prefix=sn))
         for name, rel in town_objects.write_pole_sign_textures(so.get("pole_signs", []), config.TRACK_BUILD_DIR / "textures", prefix=sn).items():
             m.add_material(name, texture=rel)
     # 町の範囲（名古木交差点）：別の kn5（config.TOWN_GROUP）

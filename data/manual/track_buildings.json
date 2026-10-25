@@ -1811,20 +1811,22 @@
 139.2190392
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 3.8,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#4A4A4A"
+"rise_m": 1.0,
+"color": "#6B3A2A"
 },
-"wall": "#EDEBE6",
-"windows": true,
+"wall": "#3E2C22",
+"windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "ヤビツ峠売店：形は manual_pass_shop_shed と manual_pass_shop_tower の2棟で作る（ストリートビュー panoid 9SHzLOjCjafOBtORjjK8Fw の 345° を寄せた写真 export/compare/pass/sv_zoom_shop.png、2026-10-23）",
+"gone": true
 },
 {
 "id": "osm1103246795",
@@ -1867,20 +1869,21 @@
 139.2197439
 ]
 ],
-"storeys": 2,
-"height_m": 6.3,
+"storeys": 1,
+"height_m": 4.6,
 "roof": {
 "type": "gable",
-"rise_m": 1.8,
-"color": "#C8C8C8"
+"rise_m": 1.6,
+"color": "#3A3A3C"
 },
-"wall": "#A88E74",
-"windows": true,
+"wall": "#2A2523",
+"windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": true,
+"note": "峠の東の丘の上の建物：黒っぽい板壁と暗い灰色の屋根、木に隠れる（同じパノラマの 45°）"
 },
 {
 "id": "g221_6540",
@@ -100940,5 +100943,89 @@
 "lot": null,
 "checked": true,
 "note": "ストリートビュー・空中写真（2026-10-18）：霊園の管理棟（クリーム色の壁・こげ茶の屋根、赤れんがの門柱）"
+},
+{
+"id": "manual_pass_shop_main",
+"name": "ヤビツ峠売店（本体）",
+"footprint": [
+[
+35.4280005,
+139.2190392
+],
+[
+35.4280472,
+139.2190059
+],
+[
+35.4280172,
+139.2189424
+],
+[
+35.4279705,
+139.2189757
+],
+[
+35.4280005,
+139.2190392
+]
+],
+"storeys": 1,
+"height_m": 3.2,
+"roof": {
+"type": "mono",
+"rise_m": 2.3,
+"ridge_deg": 150.1,
+"color": "#4E4034"
+},
+"wall": "#33271D",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": true,
+"note": "正面の高い看板建築（正面は s1_objects.json の絵 shop_front）（ユーザーの売店の写真 2026-10-23：焦げ茶の板の看板建築、正面上に「国民宿舎 丹沢ホーム ヤビツ峠売店」、右に赤茶のトタンの片流れの小屋とコカ・コーラの自動販売機、野面石の台と段） 屋根は正面の看板の裏から裏手（西）へ下がる片流れ（Street View 駐車場 190°、2026-10-25） 壁の色は日なたで明るく見えすぎた（ゲームの撮影 v13 で南の面が (225,198,179)）ので暗くした（2026-10-25）"
+},
+{
+"id": "manual_pass_shop_annex",
+"name": "ヤビツ峠売店（右の小屋）",
+"footprint": [
+[
+35.4280472,
+139.2190059
+],
+[
+35.4280768,
+139.2189849
+],
+[
+35.4280468,
+139.2189214
+],
+[
+35.4280172,
+139.2189424
+],
+[
+35.4280472,
+139.2190059
+]
+],
+"storeys": 1,
+"height_m": 2.7,
+"roof": {
+"type": "mono",
+"rise_m": 0.8,
+"ridge_deg": 150.1,
+"color": "#8A4028"
+},
+"wall": "#33271D",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": true,
+"note": "右（北西）の平屋、赤茶のトタンの片流れ屋根（ユーザーの売店の写真 2026-10-23：焦げ茶の板の看板建築、正面上に「国民宿舎 丹沢ホーム ヤビツ峠売店」、右に赤茶のトタンの片流れの小屋とコカ・コーラの自動販売機、野面石の台と段）（正面は絵 annex_front） 壁の色は日なたで明るく見えすぎた（ゲームの撮影 v13 で南の面が (225,198,179)）ので暗くした（2026-10-25）"
 }
 ]
