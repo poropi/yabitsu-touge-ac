@@ -671,47 +671,54 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": false,
+"gone": true,
+"note": "道の北に建物は無い（杉の林。門戸口橋・きまぐれ喫茶・青山荘（ストリートビュー panoid cpxT78m56nuX93tia93TUg・eO03ew8Q7h5b--3CDo-LQQ 2025-07、利用者の写真、OSM、2026-10-26））"
 },
 {
 "id": "osm369868038",
 "name": "グレース・マーヤ ホール",
 "footprint": [
 [
-35.4346989,
-139.2117768
+35.4346789,
+139.2117341
 ],
 [
-35.4346194,
-139.2118357
+35.4346019,
+139.2117978
 ],
 [
-35.4345084,
-139.21161
+35.4344817,
+139.2115793
 ],
 [
-35.4345879,
-139.2115511
+35.4345587,
+139.2115155
 ],
 [
-35.4346989,
-139.2117768
+35.4346789,
+139.2117341
 ]
 ],
 "storeys": 1,
-"height_m": 3.4,
+"height_m": 4.7,
 "roof": {
-"type": "flat",
-"rise_m": 0.0,
-"color": "#3E3A36"
+"type": "gable",
+"rise_m": 2.0,
+"color": "#3E3A36",
+"gable_end": {
+"bearing": 59.4,
+"wall": "#ECE8E0"
+}
 },
-"wall": "#8C7766",
+"wall": "#5E5444",
 "windows": true,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": true
+"checked": true,
+"note": "グレース・マーヤ ホール（青山荘）：焦げ茶のれんが張りのゆるい切妻（床は斜面の上の南の角の地面から軒 4.7 m、北の角の地面からは 6.8 m）（棟は長い辺の向き）。北東の妻壁は白いタイル（絵 hall_front、妻の三角も白）。位置と向きは写真 B135・B180・B225 の角の方位に合わせた（OSM から西へ 3.5 m・南へ 2.5 m、2.9° 回した）（門戸口橋・きまぐれ喫茶・青山荘（ストリートビュー panoid cpxT78m56nuX93tia93TUg・eO03ew8Q7h5b--3CDo-LQQ 2025-07、利用者の写真、OSM、2026-10-26））"
 },
 {
 "id": "osm369868054",
@@ -1232,7 +1239,7 @@
 },
 {
 "id": "osm369868058",
-"name": "",
+"name": "きまぐれ喫茶",
 "footprint": [
 [
 35.4347296,
@@ -1255,30 +1262,21 @@
 139.2121445
 ]
 ],
-"storeys": 2,
-"height_m": 6.5,
+"storeys": 1,
+"height_m": 4.2,
 "roof": {
 "type": "gable",
-"rise_m": 2.6,
-"color": "#4E4A46"
+"rise_m": 3.8,
+"color": "#4A4542"
 },
-"wall": "#E8E3D6",
+"wall": "#808C7E",
 "windows": true,
 "shopfront": [],
-"signs": [
-{
-"text": "P",
-"bg": "#FFFFFF",
-"fg": "#D23C3C",
-"edge": 0,
-"w_m": 0.8,
-"h_m": 0.8,
-"z_m": 1.2
-}
-],
+"signs": [],
 "canopy": null,
 "lot": null,
-"checked": true
+"checked": true,
+"note": "名水きまぐれ喫茶：道（北）に妻を向けた急な切妻（軒 4.2 m・棟まで 3.8 m）、薄緑の板張り。正面と屋根裏の窓は絵 cafe_front・cafe_attic（門戸口橋・きまぐれ喫茶・青山荘（ストリートビュー panoid cpxT78m56nuX93tia93TUg・eO03ew8Q7h5b--3CDo-LQQ 2025-07、利用者の写真、OSM、2026-10-26））"
 },
 {
 "id": "osm369868052",

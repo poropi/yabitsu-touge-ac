@@ -146,6 +146,8 @@ def retex_assign(sec, cl, bounds, feats, rows):
     for name in man["meshes"]:
         if name.startswith("1GRASS_terayama_") and name not in taken:
             assign[name] = "mt_grass"
+        if name.startswith("1GRASS_goma_") and name not in taken:   # 護摩屋敷の水の島：落ち葉の地面（ストリートビュー 045°・090°）
+            assign[name] = "mt_terrain"
     green = ranges(bounds, rows, "green_ground")
     for name, e in man["meshes"].items():
         if not name.startswith(("1GRASS_s1_terrain", "1GRASS_track_mid")) or name in taken:
@@ -157,6 +159,36 @@ def retex_assign(sec, cl, bounds, feats, rows):
         if inside(s, grass):
             assign[name] = "mt_grass"
     return assign
+
+
+def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex):
+    """草地（mt_grass）に貼った地形の塊のうち、表の grass・green_ground のどちらの範囲にも入らない面（面の真ん中の s で判定）を
+    別の形にして mt_terrain にする。残りの面は mt_grass のまま（今までと同じ見た目）。どちらも仕上げの kn5 に足し、元の塊は隠す（当たり判定は元のまま）。
+    地形の塊は 300 m ほどあり、寺山富士見橋の草地の範囲に中心が入った塊は、護摩屋敷の水の斜面まで草地になっていた（2026-10-25）。
+    戻り値は隠す元の塊の名前。"""
+    from scipy.spatial import cKDTree
+    man = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))
+    tree = cKDTree(np.c_[cl["x"], cl["y"]])
+    near = ranges(bounds, rows, "grass") + ranges(bounds, rows, "green_ground")
+    hide = []
+    for name, e in man["meshes"].items():
+        if assign.get(name) != "mt_grass" or not name.startswith(("1GRASS_s1_terrain", "1GRASS_track_mid")):
+            continue
+        z = np.load(MANIFEST / e["file"]); v, f, uv = z["verts"], z["faces"], z["uvs"]
+        s = cl["s"][tree.query(v[f].mean(1)[:, :2])[1]]
+        g = np.array([inside(x, near) for x in s])
+        if g.all():
+            continue
+        for tag, keep, key in (("grass", g, "mt_grass"), ("terrain", ~g, "mt_terrain")):
+            if keep.any():
+                used = np.unique(f[keep]); remap = np.full(len(v), -1); remap[used] = np.arange(len(used))
+                nm = f"mtsplit_{name[len('1GRASS_'):]}_{tag}"
+                m.add_mesh(GROUP, nm, v[used], remap[f[keep]], uv[used], "mt_split_ground")
+                assign[nm] = key
+        del assign[name]; hide.append(name)
+    if hide:   # 絵は貼り替えで決まる（この材質の絵は使われない）
+        m.add_material("mt_split_ground", color=(0.30, 0.28, 0.20))
+    return hide
 
 
 def write_retex_textures(keys, ext_dir):
@@ -347,19 +379,28 @@ def main():
     m.add_material("mt_leaves_lane", texture="textures/leaves_lane.png", alpha=True)
     hide = build_parts(sec, bounds, feats, rows, m)
     nmarks = add_road_marks(sec, bounds, m, tex)
-    pole_img, _ = dress_tex.load("pole"); pole_img.convert("RGB").save(tex / "pole.png")
-    m.add_material("mt_pole", texture="textures/pole.png")
+    pole_img, _ = dress_tex.load("pole")
+    # 山道の電柱は雨のしみのある古いコンクリートでくすんだ灰茶色（ストリートビュー 青山荘 B090 の日なたの柱 (78,70,55)）。
+    # 元の画像 (176,174,171) はゲームの日なたでほぼ白に見えた（縦の面はゲームで約 1.8 倍に明るく見える）ので、暗く・少し黄土色に（2026-10-26）
+    # ゲームの撮影（門戸口橋 v1、2026-10-26）で柱と路面の明るさの比が 0.55（写真 0.42）、赤／青が 0.87（写真 1.42。空の青い光で青く寄る）
+    # だったので、さらに 0.76 倍に暗くし、黄土色の側へ寄せた
+    Image.fromarray(np.clip(np.asarray(pole_img.convert("RGB"), float) * [0.36, 0.32, 0.236], 0, 255).astype(np.uint8)).save(tex / "pole_mt.png")
+    # 名前を S3 の町の仕上げ（yabitsu_s3_dress.kn5 の pole.dds、明るい元の画像）と分ける。同じ名前だとゲームは S3 の画像を山道の電柱にも使い、
+    # 暗くした画像が効かなかった（2026-10-26 の撮影 v1・v2 で柱の色が同じ (146,152,164)）
+    m.add_material("mt_pole", texture="textures/pole_mt.png")
     m.add_material("mt_wire", color=(0.12, 0.12, 0.12), two_sided=True)
     npoles = add_poles(sec, bounds, m)
     kita_hidden, kita_poles = add_kitahara_details(m, tex)
     hide += kita_hidden
     npoles += kita_poles
+    assign = retex_assign(sec, cl, bounds, feats, rows)
+    split_hidden = split_grass_terrain(sec, cl, bounds, rows, assign, m, tex)   # 草地の範囲の境をまたぐ地形の塊を分ける
+    hide += split_hidden
     m.save()
     kn5_path = OUT / f"{GROUP}.kn5"
     kn5.write_from_manifest(OUT / "manifest.json", GROUP, kn5_path)
     print(f"部品：{len(m.meshes)} メッシュ（路面の標示 {nmarks}、電柱 {npoles} 本）→ {kn5_path} {kn5_path.stat().st_size / 1e6:.1f} MB")
 
-    assign = retex_assign(sec, cl, bounds, feats, rows)
     ext = OUT / "extension"; ext.mkdir(parents=True, exist_ok=True)
     write_retex_textures(sorted(set(assign.values())), ext)
     (OUT / "retex.json").write_text(json.dumps(assign, ensure_ascii=False), encoding="utf-8")   # 確認描画用
@@ -369,7 +410,7 @@ def main():
     kinds = {}
     for v in assign.values():
         kinds[v] = kinds.get(v, 0) + 1
-    print("貼り替え：", kinds, f"、隠す古いガードレール {len(hide) // 2}")
+    print("貼り替え：", kinds, f"、隠す古いガードレール {(len(hide) - len(split_hidden)) // 2}、分けた地形の塊 {split_hidden}")
 
     if a.no_install:
         return

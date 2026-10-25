@@ -35,9 +35,13 @@ def main():
     from yabitsu import terayama_area
     tera_spec = terayama_area.load(config.DATA_MANUAL / "s4_terayama.json")
     tera_site = terayama_area.build(tera_spec, sec) if tera_spec else None
+    from yabitsu import gomayashiki_area
+    goma_spec = gomayashiki_area.load(config.DATA_MANUAL / "s4_gomayashiki.json")
+    goma_site = gomayashiki_area.build(goma_spec, sec) if goma_spec else None
+    sites = [x for x in (pass_site, tera_site, goma_site) if x]
     assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps],   # 町の範囲と分かれる所は多角形で作る
-                      mouths=(pass_site.mouths() if pass_site else []) + (tera_site.mouths() if tera_site else []),   # 峠・寺山のわき道の入口は側溝をくぼませない
-                      no_lines=tera_site.no_lines() if tera_site else ())   # 寺山富士見橋のまわりは路肩の白線が無い
+                      mouths=[mo for x in sites for mo in x.mouths()],   # 峠・寺山・護摩屋敷のわき道の入口は側溝をくぼませない
+                      no_lines=[r for x in (tera_site, goma_site) if x for r in x.no_lines()])   # 寺山富士見橋のまわりは路肩の白線が無い
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
     mid = dict(np.load(P / "track_terrain_mid.npz"))
     add_far_photo(m, far)
@@ -89,6 +93,8 @@ def main():
         _tx.terayama_toilet_front_texture(int(_L * 160), int(_H * 160)).save(config.TRACK_BUILD_DIR / "textures" / "terayama_toilet_front.png")
         m.add_material("terayama_toilet_front", texture="textures/terayama_toilet_front.png")
         assembly.add_pass_area(m, tera_site)
+    if goma_site:   # 護摩屋敷の水：分かれ目の広場・湧き水・わき道の輪
+        assembly.add_pass_area(m, goma_site)
     sampler = gsi.default_sampler()
     base_pads = [p for p in pads if p.get("kind") != "stub"]
     from shapely.ops import unary_union as _uu
@@ -121,6 +127,9 @@ def main():
     lake_poly, lake_level = water.load_lake()   # 宮ヶ瀬湖の湖面（見える湖の全体）
     if lake_poly is not None:
         assembly.add_meshes(m, water.lake_meshes(lake_poly, lake_level, water.road_area(sec, form_all, stubs)))
+    if goma_site:   # 護摩屋敷の水は gomayashiki_area で作るので、OSM の湧き水の点（node 1950963807）に屋根つきの水場を置かない
+        from yabitsu import geo as _geo
+        springs = [e for e in springs if np.hypot(*(np.asarray(_geo.to_local(e["lat"], e["lon"]), float) - goma_site.spout)) > 15.0]
     assembly.add_meshes(m, water.feature_meshes(falls, water.spring_items(springs, sec, ground, near_m=60.0)))
     from yabitsu import geo
     for k, (la, lo) in enumerate(json.loads((config.DATA_MANUAL / "s3_side_crosswalks.json").read_text(encoding="utf-8"))):
@@ -149,7 +158,8 @@ def main():
                            + [k.region.buffer(1.0) for _, k in others]
                            + [st.surface.buffer(0.5) for st in stubs] + [x.footprint() for x in mws]
                            + [z.area().buffer(0.5) for z in sps]
-                           + ([tera_site.area().buffer(6.0)] if tera_site else [])   # 寺山富士見橋の広場・わき道・草地（OSM の小道を重ねない。OSM のわき道はストリートビューより 4 m 北にずれている）
+                           + ([tera_site.area().buffer(6.0)] if tera_site else [])
+                           + ([goma_site.area().buffer(3.0)] if goma_site else [])   # 護摩屋敷の水の広場・わき道の輪（OSM のわき道を重ねない）   # 寺山富士見橋の広場・わき道・草地（OSM の小道を重ねない。OSM のわき道はストリートビューより 4 m 北にずれている）
                            + [unary_union(nagoki.sidewalk_polygons(sec, feats)).buffer(0.3)]   # 歩道の上に建物を立てない
                            + [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch")
                               and "house" not in p["name"] and not p.get("buildings_ok")])

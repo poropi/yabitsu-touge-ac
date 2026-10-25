@@ -44,7 +44,7 @@ def main():
         poly = _Poly(site.ll_to_xy(pl["points"])).buffer(0)
         c = poly.centroid; i = int(np.argmin(np.hypot(sec.x - c.x, sec.y - c.y)))
         pads.append({"name": pl["name"], "role": "flat", "kind": "plaza", "polygon": np.asarray(poly.exterior.coords).tolist(),
-                     "z": float(min(sec.edge_z(1)[i], sec.edge_z(-1)[i]))})
+                     "z": float(min(sec.edge_z(1)[i], sec.edge_z(-1)[i])), **({"material": pl["material"]} if pl.get("material") else {})})   # material：砂利の広場など（既定はアスファルト）
     # OSM の駐車場が道にかぶるところは削る（峠の先へ道を延ばしたので、峠の駐車場が道に接する）
     road = start_lot.road_formation(sec, s_min=0.0, s_max=float(sec.s[-1]))
     for p in pads:
@@ -76,6 +76,10 @@ def main():
     tera = terayama_area.load(config.DATA_MANUAL / "s4_terayama.json")   # 寺山富士見橋：広場・わき道・トイレの台
     if tera:
         pads = pads + terayama_area.build(tera, sec).pads()
+    from yabitsu import gomayashiki_area
+    goma = gomayashiki_area.load(config.DATA_MANUAL / "s4_gomayashiki.json")   # 護摩屋敷の水：分かれ目の広場・湧き水・わき道の輪
+    if goma:
+        pads = pads + gomayashiki_area.build(goma, sec).pads()
     # 町の範囲（名古木交差点）：地面の高さを作って保存し、町のピットを足す
     ground = town_ground.build(sec, gsi.default_sampler(), nagoki.center())
     ground.save(P / "track_town_ground.npz")

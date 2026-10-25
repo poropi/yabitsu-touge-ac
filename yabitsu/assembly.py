@@ -220,7 +220,7 @@ def add_pads(m, pads):
     for k, p in enumerate(pads):
         if p.get("kind") in ("lot", "pass", "site", "stub", "branch", "motorway"):  # それぞれの部品で作る（地形合わせだけの土台）
             continue
-        m.add_mesh(GROUP, f"1ROAD_s1_pad_{k:02d}", *mg.pad_mesh(p["polygon"], p["z"]), "asphalt")
+        m.add_mesh(GROUP, f"1ROAD_s1_pad_{k:02d}", *mg.pad_mesh(p["polygon"], p["z"]), p.get("material", "asphalt"))   # 砂利の広場は gravel_grey（仕上げで貼り替えない）
 
 
 def add_start_lot(m, spec, pads):

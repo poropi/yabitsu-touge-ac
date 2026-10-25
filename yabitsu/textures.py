@@ -74,6 +74,13 @@ MATERIALS = {
     "concrete_board": {"texture": "textures/concrete_board.png", "shader": "ksPerPixel"},   # 板の型枠の跡がある打ち放しのコンクリート（寺山のトイレ）
     "roof_shingle": {"texture": "textures/roof_shingle.png", "shader": "ksPerPixel", "two_sided": True},   # 苔の付いた茶色い屋根板（寺山のトイレ）
     "pole_green": {"texture": "textures/pole_green.png", "shader": "ksPerPixel"},   # 緑に塗った柱（山のトイレチップ塔）
+    "pole_brown": {"texture": "textures/pole_brown.png", "shader": "ksPerPixel"},   # 焦げ茶に塗った柵のパイプ（護摩屋敷の水）
+    "pole_blue": {"texture": "textures/pole_blue.png", "shader": "ksPerPixel"},     # 青い円筒・標識の板（護摩屋敷の水）
+    "lava_moss": {"texture": "textures/lava_moss.png", "shader": "ksPerPixel"},     # 苔むした黒い溶岩石（護摩屋敷の水の柱）
+    "flagstone": {"texture": "textures/flagstone.png", "shader": "ksPerPixel"},     # 赤茶の不定形の石畳（護摩屋敷の水の水受け）
+    "gravel_dark": {"texture": "textures/gravel_dark.png", "shader": "ksPerPixel"}, # 暗い灰色の砂利と小石（護摩屋敷の水の場所）
+    "gravel_grey": {"texture": "textures/gravel_grey.png", "shader": "ksPerPixel"}, # 道より少し明るい灰色の砂利の広場（青山荘の入口）
+    "mesh_green": {"texture": "textures/mesh_green.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},   # 緑のひし形の金網（すき間は透明。護摩屋敷の水の裏）
 }
 
 
@@ -132,6 +139,13 @@ def pavers(size=1024, tile_m=4.0, brick=(0.25, 0.125), seed=9):
     joint = ((yy % bh) < 2) | ((xs % bw) < 2)
     base = np.where(joint[..., None], base * 0.55, base)
     return _u8(base * (0.9 + 0.2 * periodic_noise(size, 3, rng))[..., None])
+
+
+def mesh_green(size=512, cell_px=16, wire_px=2, rgb=(0.20, 0.42, 0.24)):
+    """緑のひし形の金網（すき間は透明）。横 1 枚＝2 m（mesh_fence の UV）なので 1 目は 6.25 cm（利用者の写真の金網）。512 を割り切る目にして継ぎ目を出さない。"""
+    yy, xx = np.mgrid[0:size, 0:size]
+    on = ((xx + yy) % cell_px < wire_px) | ((xx - yy) % cell_px < wire_px)
+    return np.dstack([_u8(np.broadcast_to(np.array(rgb), (size, size, 3))), np.where(on, 255, 0).astype(np.uint8)])
 
 
 def railing_bars(size=256, bars=4, bar_px=10, rgb=(0.22, 0.52, 0.42)):
@@ -333,6 +347,36 @@ def _shingles(w=512, h=512, seed=48):
     return _u8(np.stack([g * (1.05 - moss * 0.4), g * (0.92 + moss * 0.3), g * (0.82 - moss * 0.2)], -1))
 
 
+def _lava_moss(w=512, h=512, seed=49):
+    """苔むした黒い溶岩石：穴の多い暗い灰色の塊に、明るい黄緑の苔のまだら（利用者の写真 2020〜2025）。"""
+    rng = np.random.default_rng(seed)
+    blob = periodic_noise(w, 40, rng); pore = periodic_noise(w, 3, rng); m = periodic_noise(w, 64, rng)
+    g = 0.30 + 0.14 * (blob - 0.5) - 0.12 * (pore < 0.32)          # 灰色の石と小さな黒い穴（2020 年の写真は苔が少ない）
+    moss = np.clip((m - 0.58) * 3.0, 0, 1) * (0.7 + 0.3 * pore)       # 苔は大きなまだら（石の 3 割ほど）
+    stone = np.stack([g, g * 0.98, g * 0.95], -1)
+    green = np.stack([0.30 + 0.10 * pore, 0.42 + 0.12 * pore, 0.12 + 0.04 * pore], -1)
+    return _u8(stone * (1 - moss[..., None]) + green * moss[..., None])
+
+
+def _flagstone(w=512, h=512, seed=50, cells=26):
+    """赤茶・灰色の不定形の石を並べた石畳（目地は暗い）。最近いの点で石を分ける（繰り返す）。"""
+    rng = np.random.default_rng(seed)
+    pts = rng.random((cells, 2)) * w
+    pts = np.concatenate([pts + np.array([dx, dy]) * w for dx in (-1, 0, 1) for dy in (-1, 0, 1)])
+    yy, xx = np.mgrid[0:h, 0:w].astype(np.float32)
+    d = np.stack([np.hypot(xx - p[0], yy - p[1]) for p in pts], -1)
+    k = np.argsort(d, -1)[..., :2]; i0, i1 = k[..., 0], k[..., 1]; idx = i0 % cells
+    o0, o1 = np.take_along_axis(d, k[..., :1], -1)[..., 0], np.take_along_axis(d, k[..., 1:], -1)[..., 0]
+    gap = np.hypot(*(pts[i1] - pts[i0]).transpose(2, 0, 1))
+    joint = (o1 ** 2 - o0 ** 2) / (2 * np.maximum(gap, 1e-3)) < 2.0   # 境界の線（二等分線）までの距離
+    tone = rng.uniform(0.85, 1.15, cells)[idx]; red = rng.uniform(0.0, 1.0, cells)[idx]
+    n = periodic_noise(w, 6, rng)
+    base = 0.42 * tone * (0.9 + 0.2 * n)
+    col = np.stack([base * (1.0 + 0.25 * red), base * (0.92 + 0.05 * red), base * (0.86 - 0.08 * red)], -1)
+    col = np.where(joint[..., None], col * 0.45, col)
+    return _u8(col)
+
+
 def terayama_toilet_front_texture(w_px, h_px):
     """寺山富士見橋のトイレの正面（南）：打ち放しのコンクリートの壁、真ん中に V 字に切れ込んだ入口（奥に木の扉）、
     左に掲示板と黒い銘板（ユーザーの写真 2025-06〜09）。"""
@@ -460,6 +504,84 @@ def shop_front_texture(w_px, h_px):
     return im
 
 
+def cafe_front_texture(w_px, h_px):
+    """きまぐれ喫茶の正面（北、道に向いた妻側の壁）：薄緑の縦の板張り、焦げ茶の帯と白地に青い字の看板「名水きまぐれ喫茶」、
+    帯の下に茶と白のしまの日よけ、1 階は白い枠の窓と真ん中の入口（ストリートビュー A180・A225、利用者の写真 2026-06）。"""
+    from PIL import ImageDraw
+    im = _boards(w_px, h_px, (128, 140, 126), board_px=max(8, w_px // 48), seed=7); d = ImageDraw.Draw(im)
+    W, H = w_px, h_px; X = lambda f: int(W * f); Y = lambda f: int(H * f)   # 上＝軒（高さ 4.2 m）、下＝地面
+    brown = (60, 46, 36)
+    d.rectangle([0, 0, W, Y(0.03)], fill=brown)                                      # 軒の下の焦げ茶の縁
+    d.rectangle([0, 0, X(0.02), H], fill=brown); d.rectangle([X(0.98), 0, W, H], fill=brown)   # 角の焦げ茶の縁
+    d.rectangle([0, Y(0.30), W, Y(0.40)], fill=brown)                                # 焦げ茶の帯
+    d.rectangle([X(0.30), Y(0.30), X(0.70), Y(0.38)], fill=(238, 240, 236))          # 白い看板
+    sub = sign_texture("名水きまぐれ喫茶", "#EEF0EC", "#2A5CB0", X(0.38), Y(0.07))
+    im.paste(sub, (X(0.31), Y(0.305)))
+    for k in range(12):                                                              # 茶と白のしまの日よけ
+        d.rectangle([X(0.04 + k * 0.077), Y(0.40), X(0.04 + (k + 1) * 0.077), Y(0.48)], fill=(110, 70, 48) if k % 2 == 0 else (226, 220, 206))
+    for x0, x1 in ((0.06, 0.36), (0.64, 0.94)):                                      # 1 階の窓（白い枠、暗いガラス、縦の桟）
+        d.rectangle([X(x0), Y(0.52), X(x1), Y(0.86)], fill=(232, 232, 226))
+        d.rectangle([X(x0 + 0.015), Y(0.54), X(x1 - 0.015), Y(0.84)], fill=(48, 54, 58))
+        for t in (0.33, 0.66):
+            xm = X(x0 + (x1 - x0) * t); d.line([(xm, Y(0.54)), (xm, Y(0.84))], fill=(232, 232, 226), width=max(2, W // 200))
+    d.rectangle([X(0.42), Y(0.50), X(0.58), H], fill=(70, 56, 44))                   # 入口（木の扉）
+    d.rectangle([X(0.44), Y(0.53), X(0.56), Y(0.75)], fill=(46, 50, 54))
+    d.rectangle([0, Y(0.94), W, H], fill=(96, 92, 84))                               # 地面ぎわの土台
+    return im
+
+
+def hall_front_texture(w_px, h_px):
+    """青山荘のホール（グレース・マーヤ ホール）の北の壁の東の端の白い面：白いタイル、上に丸窓 3 つ、その下に楕円の看板「青山荘」、
+    ガラスの両開きの扉と、右に桃色の丸い札と小さな窓（ストリートビュー B135・B180、利用者の写真 2017-11・2024-01）。"""
+    from PIL import ImageDraw
+    rng = np.random.default_rng(8)
+    g = 0.86 + 0.05 * rng.random((h_px // 6 + 1, w_px // 12 + 1))   # 白いタイル（少しずつ色が違う）
+    g = np.kron(g, np.ones((6, 12)))[:h_px, :w_px]
+    g = np.where((np.arange(h_px)[:, None] % 6 == 0) | (np.arange(w_px)[None, :] % 12 == 0), g * 0.9, g)
+    im = Image.fromarray(np.clip(np.stack([g * 236, g * 232, g * 224], -1), 0, 255).astype(np.uint8)); d = ImageDraw.Draw(im)
+    W, H = w_px, h_px; X = lambda f: int(W * f); Y = lambda f: int(H * f)
+    r = Y(0.06)                                                                  # 丸窓の直径 約 0.8 m（絵の高さ 6.9 m）
+    for cx in (0.38, 0.5, 0.62):                                                   # 丸窓 3 つ（黒い窓、白い枠）
+        d.ellipse([X(cx) - r, Y(0.16) - r, X(cx) + r, Y(0.16) + r], fill=(70, 66, 60))
+        d.ellipse([X(cx) - r + 4, Y(0.16) - r + 4, X(cx) + r - 4, Y(0.16) + r - 4], fill=(28, 30, 34))
+    d.ellipse([X(0.40), Y(0.29), X(0.60), Y(0.42)], fill=(200, 60, 50))           # 楕円の看板（赤い縁）
+    d.ellipse([X(0.41), Y(0.30), X(0.59), Y(0.41)], fill=(240, 236, 226))
+    im.paste(sign_texture("青山荘", "#F0ECE2", "#2A4E9A", X(0.14), Y(0.08)), (X(0.43), Y(0.315)))
+    d.rectangle([X(0.40), Y(0.56), X(0.60), H], fill=(150, 150, 146))             # ガラスの両開きの扉（高さ約 3 m。絵は地面から軒の 6.9 m）
+    for x0 in (0.415, 0.505):
+        d.rectangle([X(x0), Y(0.585), X(x0 + 0.08), H], fill=(66, 78, 84))
+    d.ellipse([X(0.70), Y(0.40), X(0.76), Y(0.40) + X(0.06)], fill=(230, 90, 150))   # 桃色の丸い札
+    d.rectangle([X(0.80), Y(0.50), X(0.94), Y(0.78)], fill=(230, 228, 222)); d.rectangle([X(0.815), Y(0.52), X(0.925), Y(0.76)], fill=(52, 58, 62))
+    return im
+
+
+def hall_sign_texture(w_px, h_px):
+    """ホールのれんがの壁の額縁の看板（白地に茶の飾りの縁と文字）。"""
+    from PIL import ImageDraw
+    im = sign_texture("青山荘\nホール", "#F2EEE4", "#5A3E22", w_px, h_px, border="#8A6A44")
+    return im
+
+
+def rail_band_texture(w_px, h_px):
+    """ガードレールの板に巻いた紅白の反射帯：赤・白・赤の縦じまに、真ん中の白の上にオレンジの反射板（ストリートビュー A180・A225）。"""
+    from PIL import ImageDraw
+    im = Image.new("RGB", (w_px, h_px), (232, 232, 226)); d = ImageDraw.Draw(im)
+    for x0, x1 in ((0.0, 0.3), (0.7, 1.0)):
+        d.rectangle([int(w_px * x0), 0, int(w_px * x1), h_px], fill=(196, 40, 36))
+    d.rectangle([int(w_px * 0.36), int(h_px * 0.36), int(w_px * 0.64), int(h_px * 0.64)], fill=(240, 150, 30))
+    return im
+
+
+def cafe_attic_texture(w_px, h_px):
+    """きまぐれ喫茶の妻壁の屋根裏の大きな窓（白い枠に縦の桟 2 本、暗いガラス）。"""
+    from PIL import ImageDraw
+    im = Image.new("RGB", (w_px, h_px), (232, 232, 226)); d = ImageDraw.Draw(im); b = max(3, h_px // 12)
+    d.rectangle([b, b, w_px - b, h_px - b], fill=(44, 50, 56))
+    for t in (1 / 3, 2 / 3):
+        d.rectangle([int(w_px * t) - b // 2, b, int(w_px * t) + b // 2, h_px - b], fill=(232, 232, 226))
+    return im
+
+
 def annex_front_texture(w_px, h_px):
     """売店の右の小屋の正面：上にクリーム色の幕板、下は暗い中（前に自動販売機が立つ）。"""
     from PIL import ImageDraw
@@ -559,6 +681,7 @@ def write_textures(out_dir):
             "pavers": pavers(),
             "railing": _gray(256, 11, 0.50, 0.06, (0.44, 1.04, 0.84), coarse=24),
             "railing_bars": railing_bars(),
+            "mesh_green": mesh_green(),
             "wall_white": _gray(512, 12, 0.86, 0.06, (1.0, 1.0, 0.98)),
             "wall_cream": _gray(512, 24, 0.86, 0.06, (1.02, 0.98, 0.86)),
             "wall_beige": _gray(512, 25, 0.76, 0.06, (1.04, 0.96, 0.84)),
@@ -619,7 +742,13 @@ def write_textures(out_dir):
             "rubber_black": _gray(64, 45, 0.12, 0.03),
             "concrete_board": _board_concrete(),
             "roof_shingle": _shingles(),
-            "pole_green": _gray(64, 46, 0.42, 0.04, (0.45, 1.05, 0.62))}
+            "pole_green": _gray(64, 46, 0.42, 0.04, (0.45, 1.05, 0.62)),
+            "pole_brown": _gray(64, 51, 0.30, 0.03, (1.10, 0.80, 0.62)),
+            "pole_blue": _gray(64, 52, 0.50, 0.04, (0.35, 0.65, 1.45)),
+            "lava_moss": _lava_moss(),
+            "flagstone": _flagstone(),
+            "gravel_grey": _gray(512, 54, 0.33, 0.26, (0.97, 1.0, 1.04), coarse=3, fine=1, specks=0.10),   # 写真の砂利は道の約 1.25 倍の明るさ（A090）。asphalt (67) の 1.25 倍
+            "gravel_dark": _gray(512, 53, 0.19, 0.16, (1.0, 0.98, 0.94), coarse=3, fine=1, specks=0.08)}   # ゲームでは約 2.2 倍に明るく見える（2026-10-25 の撮影で画像 95 → 210、写真は 85〜140）ので平均 50
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

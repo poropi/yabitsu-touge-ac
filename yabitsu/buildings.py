@@ -68,6 +68,11 @@ def facade_mat(b):
     return f"facade_{b.wall.lstrip('#').upper()}{'_w' if b.windows else ''}"
 
 
+def gable_end_mat(b):
+    """roof.gable_end の妻の三角の材質（窓の無い壁の色）。"""
+    return f"facade_{b.roof['gable_end']['wall'].lstrip('#').upper()}"
+
+
 def roof_mat(b):
     return f"roofc_{b.roof.get('color', '#707070').lstrip('#').upper()}"
 
@@ -181,7 +186,7 @@ def _pitched_roof(b, fp, z_eave):
     bm = (b0 + b1) / 2; W = b1 - b0; L = a1 - a0
     drop = rise * EAVES / max(W / 2, 1e-6)
     s = z_eave - drop; zr = z_eave + rise
-    parts, gables = [], []
+    parts, gables, odd = [], [], None
     if kind == "mono":   # 片流れ：b0 側が低く、b1 側が高い
         drop = rise * EAVES / max(W, 1e-6)
         parts.append((_q(f, [A0, A1, A1, A0], [B0, B0, B1, B1], [z_eave - drop, z_eave - drop, zr + drop, zr + drop]),
@@ -203,9 +208,17 @@ def _pitched_roof(b, fp, z_eave):
         parts.append((_q(f, [A0, A1, A1, A0], [B0, B0, bm, bm], [s, s, zr, zr]), [[0, 1, 2, 3]], [[0, 0], [L / 2, 0], [L / 2, 1], [0, 1]]))
         parts.append((_q(f, [A1, A0, A0, A1], [B1, B1, bm, bm], [s, s, zr, zr]), [[0, 1, 2, 3]], [[0, 0], [L / 2, 0], [L / 2, 1], [0, 1]]))
         v, fc, uv = _gable_ends(f, (a0, a1), (b0, b1), z_eave, rise)
+        ge = b.roof.get("gable_end")   # 外向きの方位が bearing に近い方の妻の三角だけ別の色（正面の妻壁がタイル張りなど）
+        if ge:
+            out_a1 = f.xy([a1], [bm])[0] - f.xy([a0], [bm])[0]   # a1 の端の外向き
+            want = np.array([math.sin(math.radians(ge["bearing"])), math.cos(math.radians(ge["bearing"]))])
+            k = 0 if float(out_a1 @ want) > 0 else 1          # _gable_ends は a1 の端、a0 の端の順
+            odd = (v[3 * k:3 * k + 3], np.array([[0, 1, 2]]), uv[3 * k:3 * k + 3])
+            keep = [i for i in range(2) if i != k][0]
+            v, fc, uv = v[3 * keep:3 * keep + 3], np.array([[0, 1, 2]]), uv[3 * keep:3 * keep + 3]
         gables.append((v, fc, uv))
     roof = _merge([(v, np.asarray(fc), np.asarray(uv, float)) for v, fc, uv in parts])
-    return roof, (_merge(gables) if gables else None)
+    return roof, (_merge(gables) if gables else None), odd
 
 
 def edge_facing(b, bearing):
@@ -268,10 +281,12 @@ def building_meshes(buildings, ground_z, avoid=None):
                     parts.append(_tri_poly(g, top + PARAPET_H))
             out.append((f"bld_{b.id}_roof", *_merge(parts), roof_mat(b), True))
         else:
-            roof, gables = _pitched_roof(b, fp, top)
+            roof, gables, odd = _pitched_roof(b, fp, top)
             out.append((f"bld_{b.id}_roof", *roof, roof_mat(b), True))
             if gables is not None:
                 out.append((f"bld_{b.id}_gables", *gables, facade_mat(b), True))
+            if odd is not None:
+                out.append((f"bld_{b.id}_gable_end", *odd, gable_end_mat(b), True))
         out += _signs(b, fp, ground_z)
         if b.canopy:
             out += _canopy(b, orient(Polygon(_xy(b.canopy["points"])).buffer(0), 1.0), ground_z, fp)
@@ -357,6 +372,8 @@ def write_textures(buildings, out_dir):
     for k, b in enumerate(buildings):
         if facade_mat(b) not in mats:
             save(facade_mat(b), facade_image(b.wall, b.windows, seed=k))
+        if b.roof.get("gable_end") and gable_end_mat(b) not in mats:
+            save(gable_end_mat(b), facade_image(b.roof["gable_end"]["wall"], False, seed=k))
         if roof_mat(b) not in mats:
             r = _hex(b.roof.get("color", "#707070"))
             g = _gray(128, 100 + k, 1.0, 0.08)
