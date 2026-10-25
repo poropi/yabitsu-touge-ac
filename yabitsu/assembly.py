@@ -36,9 +36,10 @@ def _keep_spans(sec, skip):
 MOUTH_DASH = (1.0, 1.0)   # わき道の入口を横切る路肩の線（破線）の長さと間隔 m（本線の形は 1 m 刻みなので、これより短くできない）
 
 
-def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=()):
+def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=(), no_lines=()):
     """skip の範囲（町の範囲・島で分かれる所：道は多角形で作る）は帯を作らない。skip は (s0, s1) かその並び。
-    mouths（(side, s0, s1) の並び）：わき道が接している所。その側は側溝を作らずに路面を続け、路肩の線を破線にする。"""
+    mouths（(side, s0, s1) の並び）：わき道が接している所。その側は側溝を作らずに路面を続け、路肩の線を破線にする。
+    no_lines（(side, s0, s1) の並び）：路肩の白線を引かない所。"""
     chunks = [(a + i0, a + i1) for a, b in _keep_spans(sec, skip) for i0, i1 in mg.split_rows(b - a + 1, rows_per_chunk)]
     for k, (i0, i1) in enumerate(chunks):
         sl = slice(i0, i1 + 1)
@@ -58,10 +59,15 @@ def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=()):
             if seg.any():   # 側溝の代わりに路面をそのまま続ける
                 m.add_mesh(GROUP, f"1ROAD_s1_mouth{tag}_{k:02d}", *mg.mouth_strip(sec, sl, side, seg), "asphalt")
             hw = (sec.hw_left if side > 0 else sec.hw_right)[sl]
-            m.add_mesh(GROUP, f"LINES_s1_edge{tag}_{k:02d}", *mg.line(sec, sl, side * (hw - 0.25), row_mask=~seg), "line_white")
-            if seg.any():
+            bare = np.zeros(len(s), bool)
+            for sd, s0, s1 in no_lines:
+                bare |= (sd == side) & (s >= s0) & (s <= s1)
+            bare = bare[:-1] | bare[1:]
+            if (~seg & ~bare).any():
+                m.add_mesh(GROUP, f"LINES_s1_edge{tag}_{k:02d}", *mg.line(sec, sl, side * (hw - 0.25), row_mask=~seg & ~bare), "line_white")
+            if (seg & ~bare).any():
                 m.add_mesh(GROUP, f"LINES_s1_edge{tag}_mouth_{k:02d}",
-                           *mg.line(sec, sl, side * (hw - 0.25), dash=MOUTH_DASH, row_mask=seg), "line_white")
+                           *mg.line(sec, sl, side * (hw - 0.25), dash=MOUTH_DASH, row_mask=seg & ~bare), "line_white")
 
 
 CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("line_white", None),

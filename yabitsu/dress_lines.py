@@ -206,7 +206,12 @@ def char_material(ch, color):
     return f"mt_mark_c{ord(ch):x}_{color}"
 
 
+MARK_LABEL_H, MARK_LABEL_PITCH = 0.9, 1.0   # 横書きの文字列（「県道70号」）：字の高さ m（道を横切る向き）・1 字の送り m（道に沿う向き）
+
+
 def mark_material(r):
+    if r["kind"] == "label":
+        return "mt_mark_l" + "-".join(f"{ord(c):x}" for c in r["value"]) + f"_{r['color']}"
     if r["kind"] == "number":
         return f"mt_mark_n{r['value']}_{r['color']}"
     if r["kind"] == "diamond":
@@ -224,6 +229,12 @@ def mark_texture(kind, value, color):
         img = Image.new("RGBA", (W, H), (0, 0, 0, 0))
         ImageDraw.Draw(img).polygon([(W / 2, 4), (W - 4, H / 2), (W / 2, H - 4), (4, H / 2)], outline=fill, width=14)
         return img
+    if kind == "label":   # 横書きの文字列を、道に沿って寝かせる：画像の下＝文字列の始め、字の上＝走る車の左
+        font = ImageFont.truetype(config.font_file("gothic_bold"), 160)
+        wpx = int(len(value) * MARK_LABEL_PITCH / MARK_LABEL_H * 200)
+        img = Image.new("RGBA", (wpx, 200), (0, 0, 0, 0))
+        ImageDraw.Draw(img).text((wpx / 2, 100), value, fill=fill, font=font, anchor="mm")
+        return img.rotate(90, expand=True)
     if kind == "number":
         font, size = ImageFont.truetype(config.font_file("arial"), 170), MARK_NUMBER_SIZE
     else:
@@ -244,6 +255,9 @@ def road_mark_meshes(sec, rows):
         s, fwd = float(r["s"]), (1 if r["dir"] == "f" else -1)
         i = int(np.clip(np.searchsorted(sec.s, s), 0, sec.n - 1))
         lat = {"L": sec.hw_left[i] / 2, "R": -sec.hw_right[i] / 2, "C": 0.0}[r["side"]]
+        if r["kind"] == "label":
+            parts.setdefault(mark_material(r), []).append(_mark_quad(sec, s, lat, fwd, (MARK_LABEL_H, MARK_LABEL_PITCH * len(r["value"]))))
+            continue
         if r["kind"] == "text":
             n, step = len(r["value"]), MARK_CHAR_SIZE[1] + MARK_CHAR_GAP
             for k, ch in enumerate(r["value"]):

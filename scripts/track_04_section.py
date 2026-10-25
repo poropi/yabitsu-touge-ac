@@ -72,6 +72,10 @@ def main():
     asama = asama_area.load(config.DATA_MANUAL / "s2_asama.json")   # 浅間神社の入口の広場と石段
     if asama:
         pads = pads + asama_area.build(asama, sec).pads()
+    from yabitsu import terayama_area
+    tera = terayama_area.load(config.DATA_MANUAL / "s4_terayama.json")   # 寺山富士見橋：広場・わき道・トイレの台
+    if tera:
+        pads = pads + terayama_area.build(tera, sec).pads()
     # 町の範囲（名古木交差点）：地面の高さを作って保存し、町のピットを足す
     ground = town_ground.build(sec, gsi.default_sampler(), nagoki.center())
     ground.save(P / "track_town_ground.npz")

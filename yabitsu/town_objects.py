@@ -216,7 +216,7 @@ def signal_meshes(signals, z_fn, prefix="town_signal"):
 
 def object_meshes(objects, z_fn, prefix="town_obj"):
     """objects = [{"kind": bus_stop | guard_pipe | stele | pole | torii | lantern | hoarding | mirror | road_sign | bench | tree_stake | vending | bollard | retaining_wall | delineator | sawhorse | cushion_drum, "points": [[lat, lon], ...], ...}]"""
-    groups, walls, mat_walls = {}, [], {}
+    groups, walls, mat_walls, fence_walls = {}, [], {}, []
     add = lambda mat, part: groups.setdefault(mat, []).append(part)
     zf = lambda p: float(z_fn(np.atleast_1d(p[0]), np.atleast_1d(p[1]))[0])
     for ob in objects:
@@ -332,6 +332,23 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
             for p in pts:
                 z = zf(p) + float(ob.get("z_m", 0.0))
                 add(ob.get("material", "pole_white"), _box(p, d, float(ob.get("w_m", 0.8)), float(ob.get("d_m", 0.4)), z, z + float(ob.get("height_m", 1.4))))
+        elif kind == "wood_fence":   # 木の柵：2 m おきの角柱（高さ height_m）と横木 2 本、両端の柱は白。見えない当たり判定の壁つき
+            q = np.asarray(LineString(pts).segmentize(2.0).coords); h = float(ob.get("height_m", 1.0))
+            for k, p in enumerate(q):
+                z = zf(p); end = k in (0, len(q) - 1)
+                add("pole_white" if end else "wood", _box(p, (1, 0), 0.12, 0.12, z - 0.2, z + h + (0.1 if end else 0.0)))
+            for i in range(len(q) - 1):
+                za, zb = zf(q[i]), zf(q[i + 1])
+                for r in (0.45, 0.9):
+                    add("wood", _slanted(q[i], za + r * h, q[i + 1], zb + r * h, 0.05, 4))
+                fence_walls.append(_quad(q[i], q[i + 1], min(za, zb) - 0.3, max(za, zb) + h + 0.2, both=True))
+        elif kind == "pipe_u":       # 車止めの U 字のステンレスのパイプ（幅 width_m・高さ height_m）。facing の向きに並ぶ面
+            d = _heading(float(ob.get("facing_deg", 0.0))); n = np.array([-d[1], d[0]])
+            w, h = float(ob.get("width_m", 0.6)), float(ob.get("height_m", 0.6))
+            for p in pts:
+                z = zf(p); a, b = p - n * w / 2, p + n * w / 2
+                add("pole_grey", _slanted(a, z - 0.1, a, z + h, 0.03, 6)); add("pole_grey", _slanted(b, z - 0.1, b, z + h, 0.03, 6))
+                add("pole_grey", _slanted(a, z + h, b, z + h, 0.03, 6))
         elif kind == "mesh_fence":   # 金網のフェンス（高さ height_m、2.0 m おきに灰色の支柱）
             q = np.asarray(LineString(pts).segmentize(2.0).coords); h = float(ob.get("height_m", 1.5))
             for i in range(len(q) - 1):
@@ -366,6 +383,8 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
     out = [(f"{prefix}_{mat}", *_merge(parts), mat, True) for mat, parts in groups.items()]
     if walls:
         out.append((f"1WALL_{prefix}_retaining", *_merge(walls), "concrete", True))
+    if fence_walls:   # 木の柵の当たり判定（見えない）
+        out.append((f"1WALL_{prefix}_woodfence", *_merge(fence_walls), "wood", False))
     for k, (mat, parts) in enumerate(mat_walls.items()):   # 材質を指定した擁壁（material）
         out.append((f"1WALL_{prefix}_retaining_{mat}", *_merge(parts), mat, True))
     return out
@@ -416,10 +435,10 @@ def write_pole_sign_textures(signs, out_dir, prefix="town"):
         w, h = float(s.get("w_m", 1.2)), float(s.get("h_m", 2.0))
         px = 160
         mat = "polesign_" + str(k) if prefix == "town" else f"{prefix}_polesign_{k}"
-        if s.get("style") in ("shop_front", "annex_front", "toilet_front", "trail_map"):   # 建物の正面に貼る絵（峠の売店・トイレ）と案内地図
+        if s.get("style") in ("shop_front", "annex_front", "toilet_front", "trail_map", "terayama_toilet_front"):   # 建物の正面に貼る絵（峠の売店・トイレ）と案内地図
             from . import textures as tx
             {"shop_front": tx.shop_front_texture, "annex_front": tx.annex_front_texture, "toilet_front": tx.toilet_front_texture,
-             "trail_map": tx.trail_map_texture}[s["style"]](int(w * px * 2), int(h * px * 2)).save(out / f"{mat}.png")
+             "trail_map": tx.trail_map_texture, "terayama_toilet_front": tx.terayama_toilet_front_texture}[s["style"]](int(w * px * 2), int(h * px * 2)).save(out / f"{mat}.png")
         elif s.get("style") == "wood_carved":   # 木を彫って白く塗った看板（lines に行ごとの大きさ・帯）
             from .textures import wood_sign_texture
             wood_sign_texture(s["lines"], int(w * px * 2), int(h * px * 2)).save(out / f"{mat}.png")

@@ -71,6 +71,9 @@ MATERIALS = {
     "drum_checker": {"texture": "textures/drum_checker.png", "shader": "ksPerPixel"},   # 紅白の市松の緩衝ドラム
     "siding_white": {"texture": "textures/siding_white.png", "shader": "ksPerPixel"},   # 白い縦の羽目板（峠のトイレの棟）
     "rubber_black": {"texture": "textures/rubber_black.png", "shader": "ksPerPixel"},   # 車線分離標の黒い台座
+    "concrete_board": {"texture": "textures/concrete_board.png", "shader": "ksPerPixel"},   # 板の型枠の跡がある打ち放しのコンクリート（寺山のトイレ）
+    "roof_shingle": {"texture": "textures/roof_shingle.png", "shader": "ksPerPixel", "two_sided": True},   # 苔の付いた茶色い屋根板（寺山のトイレ）
+    "pole_green": {"texture": "textures/pole_green.png", "shader": "ksPerPixel"},   # 緑に塗った柱（山のトイレチップ塔）
 }
 
 
@@ -309,6 +312,43 @@ def trail_map_texture(w_px, h_px):
                 d.line([(x0 + int(W * 0.08), y0 + 8 + q * int(H * 0.03)), (x0 + int(W * 0.17), y0 + 8 + q * int(H * 0.03))],
                        fill=(120, 110, 100), width=2)
     return im
+
+
+def _board_concrete(w=512, h=512, seed=47):
+    """板の型枠の跡がある打ち放しのコンクリート（1 枚＝横 2 m・縦 2 m、板の幅 0.15 m ごとに横の継ぎ目と木目）。"""
+    rng = np.random.default_rng(seed)
+    g = 0.70 + 0.08 * (periodic_noise(w, 40, rng) - 0.5) + 0.05 * (periodic_noise(w, 3, rng) - 0.5)   # 写真では日の当たる壁はほぼ白
+    yy = np.arange(h)[:, None]; board = h * 0.15 / 2.0
+    g = g - 0.07 * (yy % board < 2) + 0.03 * np.sin(np.arange(w)[None, :] / w * 2 * np.pi * 9 + (yy // board) * 1.7)
+    return _u8(np.stack([g * 1.0, g * 0.99, g * 0.95], -1)[:h, :w])
+
+
+def _shingles(w=512, h=512, seed=48):
+    """苔の付いた茶色い屋根板（段の継ぎ目）。"""
+    rng = np.random.default_rng(seed)
+    n = periodic_noise(w, 24, rng); f = periodic_noise(w, 2, rng)
+    g = 0.28 + 0.08 * (n - 0.5) + 0.05 * (f - 0.5)   # 写真では暗い焦げ茶
+    g = g * np.where(np.arange(h)[:, None] % 32 < 3, 0.7, 1.0)
+    moss = np.clip(n - 0.55, 0, 1) * 0.6
+    return _u8(np.stack([g * (1.05 - moss * 0.4), g * (0.92 + moss * 0.3), g * (0.82 - moss * 0.2)], -1))
+
+
+def terayama_toilet_front_texture(w_px, h_px):
+    """寺山富士見橋のトイレの正面（南）：打ち放しのコンクリートの壁、真ん中に V 字に切れ込んだ入口（奥に木の扉）、
+    左に掲示板と黒い銘板（ユーザーの写真 2025-06〜09）。"""
+    from PIL import ImageDraw
+    base = Image.fromarray(_board_concrete(w_px, h_px)) if w_px == h_px else Image.fromarray(_board_concrete(max(w_px, h_px), max(w_px, h_px))).crop((0, 0, w_px, h_px))
+    d = ImageDraw.Draw(base); W, H = w_px, h_px; X = lambda f: int(W * f); Y = lambda f: int(H * f)
+    d.polygon([(X(0.40), 0), (X(0.60), 0), (X(0.57), H), (X(0.43), H)], fill=(52, 46, 40))          # 入口の暗い奥
+    d.rectangle([X(0.455), Y(0.25), X(0.545), H], fill=(196, 140, 78))                                # 奥の木の扉
+    d.line([(X(0.5), Y(0.25)), (X(0.5), H)], fill=(120, 84, 50), width=max(2, W // 300))
+    d.rectangle([X(0.14), Y(0.22), X(0.30), Y(0.55)], fill=(70, 66, 60))                               # 掲示板の枠
+    d.rectangle([X(0.15), Y(0.24), X(0.29), Y(0.53)], fill=(232, 230, 214))
+    for k in range(4):
+        d.rectangle([X(0.16), Y(0.27 + k * 0.06), X(0.28 - 0.02 * (k % 2)), Y(0.30 + k * 0.06)], fill=(60, 90, 160) if k == 1 else (90, 90, 90))
+    d.rectangle([X(0.17), Y(0.63), X(0.27), Y(0.80)], fill=(48, 48, 46))                                # 黒い銘板
+    d.rectangle([X(0.66), Y(0.30), X(0.71), Y(0.42)], fill=(232, 190, 40))                              # 入口の右の黄色い貼り紙
+    return base
 
 
 def toilet_front_texture(w_px, h_px):
@@ -576,7 +616,10 @@ def write_textures(out_dir):
             "delineator": _delineator(),
             "drum_checker": _checker(((205, 70, 80), (238, 236, 230)), 4, 2),
             "siding_white": _siding(),
-            "rubber_black": _gray(64, 45, 0.12, 0.03)}
+            "rubber_black": _gray(64, 45, 0.12, 0.03),
+            "concrete_board": _board_concrete(),
+            "roof_shingle": _shingles(),
+            "pole_green": _gray(64, 46, 0.42, 0.04, (0.45, 1.05, 0.62))}
     paths = {}
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name

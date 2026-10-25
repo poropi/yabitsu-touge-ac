@@ -28,6 +28,7 @@ SPECIES = {
     "sapling": ["sapling_a", "sapling_b"],
     "shrub": ["shrub_a", "shrub_b"],
     "fern": ["fern_a", "fern_b"],
+    "grass": ["grass_a", "grass_b"],   # ススキの草むら（細い葉をほぼ立てて束ねる）
 }
 
 # height：高さ m、crown_base：葉が始まる高さ（全高に対する割合）、radius：樹冠の根元の半径 m、
@@ -44,12 +45,13 @@ BROADLEAVES = {"broadleaf_a": (0, 14.0, 31), "broadleaf_b": (1, 12.0, 32), "broa
 SAPLING = dict(spread=0.45, leaves=0.13, card=0.45, reach=0.12, low=0.42)   # 広葉樹に比べた横の広がり・葉の数・葉の板の大きさ・樹冠の厚み、葉の付き始め（全高の割合）
 SHRUBS = {"shrub_a": (1.4, 41), "shrub_b": (2.3, 42)}
 FERNS = {"fern_a": (0.75, 51), "fern_b": (1.0, 52)}
+GRASSES = {"grass_a": (1.0, 71), "grass_b": (1.2, 72)}   # 高さ m（size で 1.6〜2.2 倍にして使う）、乱数の種
 
 TINTS = {"sugi": [(0.50, 0.62, 0.47), (0.56, 0.66, 0.50)], "hinoki": [(0.70, 0.84, 0.58), (0.64, 0.80, 0.55)],
          "broadleaf": [(0.88, 1.0, 0.80), (0.78, 0.94, 0.70)], "shrub": [(0.86, 0.98, 0.76), (0.80, 0.92, 0.70)],
          "sapling": [(1.02, 1.10, 0.66), (0.95, 1.06, 0.62)]}   # 日の当たる若葉の明るい黄緑
 LOD_DISTANCE = (40, 110, 230)
-DRAW_DISTANCE = {"sugi": 4000, "hinoki": 4000, "broadleaf": 4000, "sapling": 1500, "shrub": 300, "fern": 120}
+DRAW_DISTANCE = {"sugi": 4000, "hinoki": 4000, "broadleaf": 4000, "sapling": 1500, "shrub": 300, "fern": 120, "grass": 150}
 
 
 def sources_available() -> bool:
@@ -338,6 +340,25 @@ def _fern(name, lod):
     return leaf, None, 0.0
 
 
+def _grass(name, lod):
+    """ススキの株：根元のまわり半径 0.3 m から、ほぼ立った細い葉の板を束ねる（先が少し垂れる）。"""
+    H, seed = GRASSES[name]
+    rng = np.random.default_rng(seed)
+    leaf = Part()
+    n, segs = [(30, 3), (18, 2), (9, 1)][lod]
+    for i in range(n):
+        az = rng.uniform(0, 2 * np.pi)
+        el = np.radians(rng.uniform(62, 86))
+        u = np.array([np.cos(el) * np.cos(az), np.sin(el), np.cos(el) * np.sin(az)])
+        v = _unit(np.cross(UP, u))
+        root = np.array([np.cos(az), 0.0, np.sin(az)]) * rng.uniform(0.0, 0.3)
+        L = H * rng.uniform(0.75, 1.1)
+        k = 3 if i % 6 == 0 else i % 3
+        card(leaf, root, u, v, L, L * 0.09, (k / 4, 0, (k + 1) / 4, 1), bend=np.radians(rng.uniform(10, 35)), segs=segs,
+             along="y", center=np.array([0, -0.3, 0]), ao=(0.85, 1.0))   # 根元を暗くしすぎると株が黒い壁に見えた（2026-10-25 の描画）
+    return leaf, None, 0.0
+
+
 # ---------- テクスチャ ----------
 
 def _species_of(name):
@@ -360,6 +381,9 @@ def _species_png(species):
     if species == "fern":
         c, n, _ = ft.fern_fronds()
         return {"fern_leaf.png": ft.png_rgba(c), "fern_leaf_nm.png": ft.png_normal(n)}
+    if species == "grass":
+        c, n = ft.grass_blades()
+        return {"grass_leaf.png": ft.png_rgba(c), "grass_leaf_nm.png": ft.png_normal(n)}
     tints = TINTS[species]
     if species in ("sugi", "hinoki"):
         dens = 1.25 if species == "sugi" else 1.0
@@ -397,7 +421,7 @@ def build_pattern(name: str, seed: int = 1) -> TreeModel:
     species = _species_of(name)
     builders = {"sugi": lambda l: _conifer(name, l, species), "hinoki": lambda l: _conifer(name, l, species),
                 "broadleaf": lambda l: _broadleaf(name, l), "sapling": lambda l: _broadleaf(name, l), "shrub": lambda l: _shrub(name, l),
-                "fern": lambda l: _fern(name, l)}
+                "fern": lambda l: _fern(name, l), "grass": lambda l: _grass(name, l)}
     raw = [builders[species](lod) for lod in range(3)]
     allp = np.concatenate([part.arrays()[0] for leaf, wood, _ in raw for part in (leaf, wood)
                            if part is not None and part.arrays() is not None])

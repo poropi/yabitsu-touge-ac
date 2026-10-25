@@ -23,6 +23,11 @@ DEFAULT_PLACE = {
 DTYPE = [("x", "f8"), ("y", "f8"), ("z", "f8"), ("pattern", "U16"), ("angle_deg", "f4"), ("scale", "f4")]
 
 
+
+def _under(pats):
+    """下草（茂み・シダ・ススキ）：道の上への張り出しや視界の判定で木として数えない。"""
+    return np.char.startswith(pats, "shrub") | np.char.startswith(pats, "fern") | np.char.startswith(pats, "grass")
+
 def _grid(bounds, spacing, jitter, rng):
     x0, y0, x1, y1 = bounds
     xs = np.arange(x0 + spacing / 2, x1, spacing); ys = np.arange(y0 + spacing / 2, y1, spacing)
@@ -190,7 +195,7 @@ def place(area, fm, ground, keep, models, cfg, seed=1, species=None, road_surfac
     # 道路の上に張り出す木：枝の最低の高さが路面＋overhang_clear_m 未満なら植えない
     cb = np.array([models[p].crown_base * models[p].height for p in pats]) if len(pats) else np.zeros(0)
     cr = np.array([models[p].crown_radius for p in pats]) if len(pats) else np.zeros(0)
-    under = np.char.startswith(pats, "shrub") | np.char.startswith(pats, "fern") if len(pats) else np.zeros(0, bool)
+    under = _under(pats) if len(pats) else np.zeros(0, bool)
     over = (~under) & (d < cr * size) & ~zone_tree
     if over.any():
         rz = _road_z(P[over], d[over], ground, keep, surface=road_surface)
@@ -217,7 +222,7 @@ def fill_bare(trees, ground, keep, species, zone, seed=7):
         Q = Q[np.hypot(Q[:, 0] - ox, Q[:, 1] - oy) >= orad]
     Q = Q[(keep.fine_road_distance(Q) >= zone.get("road_clear", 2.5)) & ~keep.blocked_game(Q)]
     pats = np.asarray(trees.pattern)
-    cover = ~np.char.startswith(pats, "fern")
+    cover = ~(np.char.startswith(pats, "fern") | np.char.startswith(pats, "grass"))
     if cover.any() and len(Q):
         d, _ = cKDTree(np.c_[trees.x, trees.y][cover]).query(Q)
         Q = Q[d >= zone.get("bare_m", 3.5)]
@@ -264,7 +269,7 @@ def sightline_keep(trees, models, cl, cl_z, cfg) -> np.ndarray:
     nrm = np.c_[-d[:, 1], d[:, 0]]
     keep = np.ones(len(trees), bool)
     pats = np.asarray(trees.pattern)
-    big = ~(np.char.startswith(pats, "shrub") | np.char.startswith(pats, "fern") | np.char.startswith(pats, "sapling"))
+    big = ~(_under(pats) | np.char.startswith(pats, "sapling"))
     xy = np.c_[trees.x, trees.y]
     dist, i0 = cKDTree(P).query(xy)
     cand = np.flatnonzero(big & (dist < cfg["near_m"]))

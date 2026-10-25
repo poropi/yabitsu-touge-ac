@@ -32,8 +32,12 @@ def main():
     sps = nagoki.load_splits(sec)   # 島をはさんで2本に分かれる所（地図の線どおり）
     site_spec = pass_area.load(config.DATA_MANUAL / "s1_pass.json")
     pass_site = pass_area.build(site_spec, sec) if site_spec else None
+    from yabitsu import terayama_area
+    tera_spec = terayama_area.load(config.DATA_MANUAL / "s4_terayama.json")
+    tera_site = terayama_area.build(tera_spec, sec) if tera_spec else None
     assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps],   # 町の範囲と分かれる所は多角形で作る
-                      mouths=pass_site.mouths() if pass_site else ())   # 峠のわき道の入口は側溝をくぼませない
+                      mouths=(pass_site.mouths() if pass_site else []) + (tera_site.mouths() if tera_site else []),   # 峠・寺山のわき道の入口は側溝をくぼませない
+                      no_lines=tera_site.no_lines() if tera_site else ())   # 寺山富士見橋のまわりは路肩の白線が無い
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
     mid = dict(np.load(P / "track_terrain_mid.npz"))
     add_far_photo(m, far)
@@ -79,6 +83,12 @@ def main():
         m.add_material("asama_pillar", texture="textures/asama_pillar.png")
         m.add_material("asama_board", texture="textures/asama_board.png")
         assembly.add_pass_area(m, asama_area.build(asama, sec))
+    if tera_site:   # 寺山富士見橋：広場・わき道・トイレ（正面の絵はトイレの横の長さ・壁の高さの割合で書く）
+        from yabitsu import textures as _tx
+        _L, _ = tera_spec["toilet"]["size"]; _H = tera_spec["toilet"]["wall_h"]
+        _tx.terayama_toilet_front_texture(int(_L * 160), int(_H * 160)).save(config.TRACK_BUILD_DIR / "textures" / "terayama_toilet_front.png")
+        m.add_material("terayama_toilet_front", texture="textures/terayama_toilet_front.png")
+        assembly.add_pass_area(m, tera_site)
     sampler = gsi.default_sampler()
     base_pads = [p for p in pads if p.get("kind") != "stub"]
     from shapely.ops import unary_union as _uu
@@ -139,6 +149,7 @@ def main():
                            + [k.region.buffer(1.0) for _, k in others]
                            + [st.surface.buffer(0.5) for st in stubs] + [x.footprint() for x in mws]
                            + [z.area().buffer(0.5) for z in sps]
+                           + ([tera_site.area().buffer(6.0)] if tera_site else [])   # 寺山富士見橋の広場・わき道・草地（OSM の小道を重ねない。OSM のわき道はストリートビューより 4 m 北にずれている）
                            + [unary_union(nagoki.sidewalk_polygons(sec, feats)).buffer(0.3)]   # 歩道の上に建物を立てない
                            + [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch")
                               and "house" not in p["name"] and not p.get("buildings_ok")])

@@ -20,7 +20,7 @@ def _tris(subs):
 
 
 def test_species_cover_plan():
-    assert set(treemodels.SPECIES) == {"sugi", "hinoki", "broadleaf", "sapling", "shrub", "fern"}   # sapling：植えたばかりの若木（峠の島）
+    assert set(treemodels.SPECIES) == {"sugi", "hinoki", "broadleaf", "sapling", "shrub", "fern", "grass"}   # sapling：植えたばかりの若木（峠の島）、grass：ススキ（寺山富士見橋）
     assert all(len(v) >= 2 for k, v in treemodels.SPECIES.items() if k in ("sugi", "hinoki", "broadleaf"))
 
 

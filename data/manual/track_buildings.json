@@ -37,7 +37,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": false,
+"gone": true,
+"note": "道の東に建物は無い（草地。寺山富士見橋（ストリートビュー panoid fUHhEWDk_c6ht5fUxur0jA 2025-07、利用者の写真 2025-06〜12、Google 航空写真、2026-10-25））"
 },
 {
 "id": "gm925_340",
@@ -93,7 +95,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": false,
+"gone": true,
+"note": "道の東に建物は無い（草地。寺山富士見橋（ストリートビュー panoid fUHhEWDk_c6ht5fUxur0jA 2025-07、利用者の写真 2025-06〜12、Google 航空写真、2026-10-25））"
 },
 {
 "id": "gm933_336",
@@ -149,7 +153,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false
+"checked": false,
+"gone": true,
+"note": "道の東に建物は無い（草地。寺山富士見橋（ストリートビュー panoid fUHhEWDk_c6ht5fUxur0jA 2025-07、利用者の写真 2025-06〜12、Google 航空写真、2026-10-25））"
 },
 {
 "id": "osm952587264",
@@ -100568,7 +100574,9 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": true
+"checked": true,
+"gone": true,
+"note": "寺山富士見橋公衆トイレ：形は data/manual/s4_terayama.json で作る（寺山富士見橋（ストリートビュー panoid fUHhEWDk_c6ht5fUxur0jA 2025-07、利用者の写真 2025-06〜12、Google 航空写真、2026-10-25））"
 },
 {
 "id": "osm371207602",

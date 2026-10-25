@@ -13,5 +13,5 @@ LUT=(|0=0.5|0.15=0.15|0.2=0|0.73=0|0.79=0.1|0.84=0.8|0.88=1|0.95=0.75|1=0.5|)
 
 [TREES]
 SEASON_AUTUMN_0=YABITSU_AUTUMN
-SEASON_AUTUMN_1=sugi?,hinoki?,shrub?,fern?,0
+SEASON_AUTUMN_1=sugi?,hinoki?,shrub?,fern?,grass?,0
 ''')

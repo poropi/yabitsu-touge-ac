@@ -163,6 +163,29 @@ def fern_fronds():
     return canvas, nrm, len(sp)
 
 
+def grass_blades(seed=9, w=512, h=1024):
+    """ススキの葉：細く先のとがった葉（4 列、画像の下＝根元）。4 列目は先に黄土色の穂がつく。"""
+    rng = np.random.default_rng(seed)
+    canvas, nrm = _canvas(w, h)
+    cw = w // 4
+    yy, xx = np.mgrid[0:h, 0:cw].astype(np.float32)
+    s = 1.0 - yy / h                                   # 0＝根元、1＝先
+    for k in range(4):
+        bend = rng.uniform(-0.25, 0.25) * cw
+        mid = cw / 2 + bend * s ** 2
+        half = cw * 0.34 * (1.0 - s) ** 0.7 + 0.6
+        a = np.clip(half - np.abs(xx - mid), 0, 1)
+        g = 0.75 + 0.25 * np.exp(-((xx - mid) / np.maximum(half * 0.35, 0.5)) ** 2)   # 真ん中の白っぽい筋
+        col = np.stack([0.40 + 0.10 * s, 0.60 + 0.08 * s, 0.20 + 0.05 * s], -1) * g[..., None]   # 日の当たる夏のススキの明るい黄緑（写真）
+        if k == 3:   # 穂
+            ear = (s > 0.72) & (np.abs(xx - mid) < cw * 0.30 * np.sin(np.clip((s - 0.72) / 0.28, 0, 1) * np.pi) + 1)
+            a = np.maximum(a, ear * (0.55 + 0.45 * rng.random(a.shape)))
+            col = np.where(ear[..., None], np.array([0.72, 0.62, 0.45], np.float32), col)
+        canvas[:, k * cw:(k + 1) * cw, :3] = col; canvas[:, k * cw:(k + 1) * cw, 3] = a
+        nrm[:, k * cw:(k + 1) * cw, 0] = np.clip((xx - mid) / np.maximum(half, 1), -1, 1) * 0.4
+    return canvas, nrm
+
+
 def bark(kind, seed=3, w=512, h=1024):
     """幹の樹皮（縦に繰り返す）。杉・檜は赤茶の縦すじ、広葉樹は灰褐色。"""
     base = _load(BARK[0], BARK[1], "RGB")

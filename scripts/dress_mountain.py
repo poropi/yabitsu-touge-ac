@@ -39,6 +39,7 @@ RETEX = {
     "mt_wall_norikae": ("norikae", (8, 8), "wall"), "mt_wall_shotcrete": ("shotcrete", (2, 2), "wall"),
     "mt_wall_nozura": ("nozura", (1.9, 1.9), "wall"),     # 無料素材の野面石積み（ヤビツ峠のわき道）
     "mt_terrain": ("forest_floor", (2, 2), "terrain"),
+    "mt_grass": ("forest_floor", (2, 2), "terrain"),   # 草地（林の地面の写真を緑に染める。表の grass の範囲と寺山の広場）
 }
 # ストリートビューと見比べて決めた 明るさ・鮮やかさ・コントラスト
 TONE = {"mt_road": 0.68, "mt_plane": 0.68, "mt_road_dark": 0.9, "mt_gutter": 0.72, "mt_wall_kenchi_moss": 0.72, "mt_wall_nozura": 0.62,
@@ -141,6 +142,10 @@ def retex_assign(sec, cl, bounds, feats, rows):
     if "1WALL_kitahara_obj_retaining" in assign:
         assign["1WALL_kitahara_obj_retaining"] = "mt_wall_kitahara"
     # 地形（土手・林の地面）：中心がいちばん近い道の s が山道の範囲（表の bare_ground を除く）にあるもの
+    grass = ranges(bounds, rows, "grass")   # 草地の仕上げ（mt_grass）にする地形の範囲
+    for name in man["meshes"]:
+        if name.startswith("1GRASS_terayama_") and name not in taken:
+            assign[name] = "mt_grass"
     green = ranges(bounds, rows, "green_ground")
     for name, e in man["meshes"].items():
         if not name.startswith(("1GRASS_s1_terrain", "1GRASS_track_mid")) or name in taken:
@@ -149,6 +154,8 @@ def retex_assign(sec, cl, bounds, feats, rows):
         s = float(cl["s"][tree.query(v[:, :2].mean(0))[1]])
         if any(bounds[x][0] <= s <= bounds[x][1] for x in dm.SECTIONS) and not inside(s, green):
             assign[name] = "mt_terrain"
+        if inside(s, grass):
+            assign[name] = "mt_grass"
     return assign
 
 
@@ -176,6 +183,9 @@ def write_retex_textures(keys, ext_dir):
             comp = Image.fromarray(np.clip(np.asarray(comp, float) * [0.92, 0.86, 0.73], 0, 255).astype(np.uint8))
         if key == "mt_terrain":
             comp = dm.mossy_ground(comp)
+        if key == "mt_grass":   # 夏の草地の濃い緑（寺山富士見橋のストリートビュー 270° の広場の草 (155,157,110) にゲームの撮影で合わせた、2026-10-25）
+            g = np.asarray(comp.convert("L"), float)[..., None] / 255.0
+            comp = Image.fromarray(np.clip((0.55 + 0.9 * g) * np.array([74, 92, 44], float), 0, 255).astype(np.uint8))
         lum = np.asarray(comp.convert("L"), float) / 255.0
         n = dress_tex.height_to_normal(lum, dress_tex.TEXTURES[base].normal)
         nm = Image.fromarray(((n * 0.5 + 0.5) * 255).astype(np.uint8))
@@ -262,6 +272,9 @@ def add_road_marks(sec, bounds, m: Manifest, tex):
         if key.startswith("c"):           # 文字 1 字：c<文字コード>_<色>
             code, color = key[1:].split("_")
             img = dress_lines.mark_texture("text", chr(int(code, 16)), color)
+        elif key.startswith("l"):         # 横書きの文字列：l<文字コード-文字コード-…>_<色>
+            codes, color = key[1:].split("_")
+            img = dress_lines.mark_texture("label", "".join(chr(int(c, 16)) for c in codes.split("-")), color)
         elif key.startswith("n"):         # 数字：n<数字>_<色>
             value, color = key[1:].split("_")
             img = dress_lines.mark_texture("number", value, color)

@@ -399,3 +399,14 @@ def test_retaining_wall_top_follows_the_ground_without_steps():
     assert top(stepped, 1.59) - top(stepped, 1.61) == pytest.approx(0.16, abs=0.01)   # 今までの壁：区間ごとに高い方に揃えるので継ぎ目に段
     assert top(follow, 1.59) - top(follow, 1.61) == pytest.approx(-0.002, abs=0.002)   # 地面に沿う：段なし
     assert top(follow, 3.21) == pytest.approx(100.0 + 0.1 * 3.2 + 1.3, abs=0.01)     # 地面 + 1.3 m
+
+
+def test_wood_fence_has_posts_rails_white_ends_and_hidden_collision():
+    flat = lambda x, y: np.full(np.shape(x), 100.0)
+    ms = to.object_meshes([{"kind": "wood_fence", "height_m": 1.0, "points": [_ll(0.0, 0.0), _ll(6.0, 0.0)]},
+                           {"kind": "pipe_u", "facing_deg": 0, "points": [_ll(0.0, 5.0)]}], flat, prefix="o")
+    by = {m[0]: m for m in ms}
+    assert by["1WALL_o_woodfence"][5] is False and by["1WALL_o_woodfence"][1][:, 2].max() == pytest.approx(101.2)
+    assert len(by["o_pole_white"][1]) == 2 * 8                       # 両端の白い柱 2 本
+    assert by["o_wood"][1][:, 2].max() == pytest.approx(101.0, abs=0.06)
+    assert by["o_pole_grey"][1][:, 2].max() == pytest.approx(100.63, abs=0.01)
