@@ -1,7 +1,7 @@
 import numpy as np
 import pytest
 
-from yabitsu import assembly, geo, textures as tx, town_objects as to
+from yabitsu import assembly, buildings as bd, geo, textures as tx, town_objects as to
 
 
 def _ll(x, y):
@@ -53,6 +53,6 @@ def test_gable_end_colours_only_the_end_facing_the_bearing(tmp_path):
     assert end[4] == "facade_ECE8E0" and len(end[2]) == 1 and len(rest[2]) == 1        # 三角は 1 枚ずつ
     c = np.asarray(geo.to_local(*fp[0]))
     assert end[1][:, 0].mean() - c[0] == pytest.approx(20.0, abs=0.01)                 # 東の端（方位 90°）だけ白
-    assert end[1][:, 2].max() == pytest.approx(7.0, abs=0.01)                          # 軒 5 m ＋ 棟まで 2 m
+    assert end[1][:, 2].max() == pytest.approx(7.0 + bd.BASE_H, abs=0.01)              # 基礎＋軒 5 m ＋ 棟まで 2 m
     mats = buildings.write_textures(b, tmp_path / "tex")
     assert "facade_ECE8E0" in mats

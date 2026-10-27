@@ -7141,7 +7141,9 @@
   "checked": true,
   "sv": "",
   "sv_date": "2025",
-  "note": "ストリートビューで確認（Claude）"
+  "note": "ストリートビューで確認（Claude）",
+  "kit": "conv_store",
+  "kit_note": "部品の家のコンビニ（house_kit.store_parts）。ガラスの店構え・3 本線の帯・茶色の柱（ストリートビュー st_n、2026-10-28）"
  },
  {
   "id": "gsi1513_m5357",

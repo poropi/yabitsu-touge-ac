@@ -180,3 +180,16 @@ def test_mark_quad_uv_reads_upright_for_its_driver():
         v_dir = v[uv[:, 1].argmax(), :2] - v[uv[:, 1].argmin(), :2]
         assert np.dot(u_dir, -drv_left) > 0             # u が増えると右へ
         assert np.dot(v_dir, [fwd, 0.0]) > 0            # v が増えると奥へ
+
+
+def test_road_marks_face_up_for_every_kind_and_direction():
+    """山道の標示の面は上向き（材質は片面。下向きだとゲームでは裏になって見えない。Blender の描画は裏も描くので気づかなかった。2026-10-27 札掛橋）。"""
+    from yabitsu.meshgen import face_normals
+    sec = _sec(400)
+    rows = [{"s": "100", "side": "L", "dir": "f", "kind": "label", "value": "県道70号", "color": "white"},
+            {"s": "150", "side": "R", "dir": "b", "kind": "label", "value": "県道70号", "color": "white"},
+            {"s": "200", "side": "R", "dir": "b", "kind": "number", "value": "30", "color": "orange"},
+            {"s": "250", "side": "C", "dir": "f", "kind": "text", "value": "止まれ", "color": "white"},
+            {"s": "300", "side": "L", "dir": "f", "kind": "diamond", "value": "", "color": "white"}]
+    for name, v, f, uv, mat in dress_lines.road_mark_meshes(sec, rows):
+        assert (face_normals(v, f)[:, 2] > 0.99).all(), name

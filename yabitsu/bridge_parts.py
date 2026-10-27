@@ -1,7 +1,7 @@
 """名前のある橋（S5）の作り込み：両端の親柱と銘板（橋の名前・ひらがな）、路面の下の桁、谷の地面まで立つ橋脚。
 欄干・手すりは features の fence（橋の範囲）で作る。橋の下の谷は地形を盛らない（no_fill_mask → terrain.carve）。
 
-data/manual/s5_bridges.json：[{"osm_id", "name", "kana", "rail", "rail_color", "deck_depth_m", "pier_every_m"}]"""
+data/manual/s5_bridges.json：[{"osm_id", "name", "kana", "rail", "rail_color", "deck_depth_m", "pier_every_m", "post_material"}]"""
 import json
 import math
 
@@ -67,17 +67,18 @@ def meshes(sec, bridges, rng, ground_z):
             for sd in (1, -1):
                 hw = (sec.hw_left[i] if sd > 0 else sec.hw_right[i]) + GUTTER_WIDTH + POST_W / 2
                 p = c + n * sd * hw; z = float(sec.edge_z(sd)[i])
-                out.append((f"bridge_{bid}_post_{end}{'L' if sd > 0 else 'R'}", *_box(p, d, n, POST_W, POST_W, z - 0.2, z + POST_H), "stone", True))
+                out.append((f"bridge_{bid}_post_{end}{'L' if sd > 0 else 'R'}", *_box(p, d, n, POST_W, POST_W, z - 0.2, z + POST_H),
+                            b.get("post_material", "stone"), True))   # post_material：親柱の材質（塩水橋は明るいコンクリート）
                 q = p - n * sd * (POST_W / 2 + 0.01)   # 道の側の面に銘板
                 pv = np.array([[*(q - d * 0.2), z + 0.5], [*(q + d * 0.2), z + 0.5], [*(q + d * 0.2), z + 1.1], [*(q - d * 0.2), z + 1.1]])
                 pf = np.array([[0, 1, 2, 3]] if sd < 0 else [[3, 2, 1, 0]], np.int32)
                 out.append((f"bridge_{bid}_plate_{end}{'L' if sd > 0 else 'R'}", pv, np.r_[pf, pf[:, ::-1]],
                             np.array([[0, 0], [1, 0], [1, 1], [0, 1]], float), f"bridge_plate_{bid}_{'name' if end == 'a' else 'kana'}", True))
-        # 欄干：concrete＝コンクリートの壁、steel・wood＝色つきの格子の柵＋見えない壁
+        # 欄干：concrete＝コンクリートの壁、steel・wood＝色つきの格子の柵＋見えない壁、none＝作らない（sN_objects の steel_rail などで作る）
         rail = b.get("rail", "steel")
         mat = "concrete" if rail == "concrete" else f"bridge_rail_{str(b.get('rail_color', '#8A8A86')).lstrip('#').upper()}"
         rows_r = [int(np.argmin(np.abs(sec.s - s))) for s in np.r_[np.arange(s0, s1, 2.0), s1]]
-        for sd, tag in ((1, "L"), (-1, "R")):
+        for sd, tag in (((1, "L"), (-1, "R")) if rail != "none" else ()):
             V, F = [], []
             for k, i in enumerate(rows_r):
                 n = np.array([-math.sin(sec.heading[i]), math.cos(sec.heading[i])]); c = np.array([sec.x[i], sec.y[i]])
@@ -153,7 +154,7 @@ def rail_textures(bridges, out_dir):
     out_dir.mkdir(parents=True, exist_ok=True)
     paths = {}
     for b in bridges:
-        if b.get("rail", "steel") == "concrete" and not b.get("arch"):
+        if b.get("rail", "steel") in ("concrete", "none") and not b.get("arch"):
             continue
         cols = [(str(b.get("rail_color", "#8A8A86")), False)] + ([(str(b.get("arch_color", "#C0302A")), True)] if b.get("arch") else [])
         for col, solid in cols:

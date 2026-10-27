@@ -105,5 +105,14 @@ def process(name: str) -> tuple:
     return img, nm
 
 
+KIT_DIR = PROJECT_ROOT / "assets" / "house_kit"     # 町並みの部品の絵（.claude/skills/japanese-house-kit/scripts/gen_textures.py）
+KIT_NORMAL = {"ishigaki": 4.5}
+
+
 def load(name: str) -> tuple:
-    return Image.open(DIR / f"{name}.png"), Image.open(DIR / f"{name}_nm.png")
+    d = DIR if (DIR / f"{name}.png").exists() else KIT_DIR
+    return Image.open(d / f"{name}.png"), Image.open(d / f"{name}_nm.png")
+
+
+def normal_strength(name: str) -> float:
+    return TEXTURES[name].normal if name in TEXTURES else KIT_NORMAL[name]

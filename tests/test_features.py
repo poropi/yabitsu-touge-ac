@@ -232,3 +232,18 @@ def test_retaining_wall_set_back_tapers_between_rows_and_gets_a_grass_shelf():
     gv, gf, _ = ft.shelf_mesh(sec, feats[0], off_l)
     assert at(gv, 10).min() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH) and at(gv, 10).max() == pytest.approx(sec.hw_left[0] + GUTTER_WIDTH + 1.5)
     assert (face_normals(gv, gf)[:, 2] > 0).all()
+
+
+def test_set_back_shelf_takes_the_row_material_and_keeps_it_through_cuts(tmp_path):
+    """砂利の路肩の奥の石垣（諸戸山林事務所の前）：手前の面は行の material（空なら草地）。分かれ道で切っても残る。"""
+    from yabitsu.manifest import Manifest
+    from yabitsu import assembly
+    p = tmp_path / "f.csv"
+    p.write_text("s_from,s_to,side,type,height_m,width_m,note,material\n10,60,L,retaining_wall,1.6,3.7,石垣,gravel_grey\n"
+                 "70,90,L,retaining_wall,2.0,1.0,土手,\n", encoding="utf-8")
+    feats = ft.cut_at(ft.load_features_csv(p), {"L": [(30.0, 34.0)], "R": []})
+    assert [f.material for f in feats] == ["gravel_grey", "gravel_grey", ""]
+    m = Manifest(tmp_path / "m")
+    assembly.add_features(m, _straight(), feats)
+    mats = {n: e["material"] for n, e in m.meshes.items() if n.startswith("1GRASS_track_shelf_")}
+    assert sorted(mats.values()) == ["gravel_grey", "gravel_grey", "ground"]

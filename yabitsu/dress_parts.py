@@ -85,7 +85,9 @@ def utility_poles(sec, s_from, s_to, side, spacing, keep, sidewalk, rng=None, tr
     return out
 
 
-def pole_mesh(poles, height=12.0, r0=0.19, r1=0.12, sides=8):
+def pole_mesh(poles, height=10.0, r0=0.165, r1=0.095, sides=8):
+    """コンクリート電柱 12-19（全長 12 m・末口 19 cm・元口 35 cm・細り 1/75、根入れ約 2 m）の地上 10 m。
+    出典は .claude/skills/japanese-house-kit/references.md。"""
     V, F, U = [], [], []
     for x, y, z in poles:
         b = len(V)
@@ -104,7 +106,7 @@ def pole_mesh(poles, height=12.0, r0=0.19, r1=0.12, sides=8):
     return np.array(V, float), np.array(F, np.int64), np.array(U, float)
 
 
-def wire_mesh(poles, n_wires=5, top=11.0, sag=0.6, width=0.025, steps=12):
+def wire_mesh(poles, n_wires=5, top=9.0, sag=0.6, width=0.025, steps=12):
     """隣どうしの電柱の間に、たるんだ電線（細い帯）を張る。"""
     V, F, U = [], [], []
     for (x0, y0, z0), (x1, y1, z1) in zip(poles[:-1], poles[1:]):

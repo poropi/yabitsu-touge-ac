@@ -12,8 +12,8 @@ from scipy.ndimage import uniform_filter
 
 from . import geo, gsi, photo
 
-CLASSES = {0: "open", 1: "conifer", 2: "broadleaf", 3: "water"}
-COLORS = np.array([(215, 200, 160), (20, 70, 40), (120, 170, 60), (60, 110, 200)], np.uint8)
+CLASSES = {0: "open", 1: "conifer", 2: "broadleaf", 3: "water", 4: "garden"}
+COLORS = np.array([(215, 200, 160), (20, 70, 40), (120, 170, 60), (60, 110, 200), (230, 120, 200)], np.uint8)
 
 # 値は data/manual/forest.json の "classify" で上書きする。
 # 全域の写真は撮影時期の違う写真のつぎはぎ（夏の緑・夏の青み・冬）。明るさや色の絶対値では森を決めず、
@@ -34,6 +34,7 @@ DEFAULT_CLASSIFY = {
     "settle_m": 40.0,           # 家からこの距離までは集落（暗い緑だけを森にする）
     "settle_rg_max": 0.93,
     "settle_lum_max": 0.48,
+    "garden_rg_max": 0.98,      # 集落で森にしなかった、きめの粗い緑（R/G がこれ未満で G>B）は庭木（4）
 }
 
 
@@ -132,6 +133,76 @@ def clear_polygons(fm: ForestMap, polygons):
     fm.cls[np.asarray(img) > 0] = 0
 
 
+def restore_above_water(fm: ForestMap, raw: np.ndarray, polygons, ground_z, level_m: float, margin_m: float = 3.0) -> int:
+    """湖の多角形（OSM の natural=water）の中でも、地形が水面＋margin_m より高く、空中写真では森（raw > 0）のマスを森に戻す。
+    OSM の宮ヶ瀬湖の輪郭は陸の斜面まで含んでいて（北原の南東の丘、湖面より 15〜65 m 上）、clear_polygons で森が消えていた（2026-10-27）。
+    戻したマスの数を返す。"""
+    img = Image.fromarray(np.zeros(fm.cls.shape, np.uint8))
+    d = ImageDraw.Draw(img)
+    for poly in polygons:
+        poly = np.asarray(poly, float)
+        d.polygon(list(zip((poly[:, 0] - fm.x0) / fm.cell, (fm.y1 - poly[:, 1]) / fm.cell)), fill=1, outline=1)
+    rr, cc = np.nonzero((np.asarray(img) > 0) & (fm.cls == 0) & (raw > 0))
+    if not len(rr):
+        return 0
+    xy = np.c_[fm.x0 + (cc + 0.5) * fm.cell, fm.y1 - (rr + 0.5) * fm.cell]
+    z = np.asarray(ground_z(xy), float)
+    ok = np.isfinite(z) & (z > level_m + margin_m)
+    fm.cls[rr[ok], cc[ok]] = raw[rr[ok], cc[ok]]
+    return int(ok.sum())
+
+
+def mountain_forest(fm: ForestMap, raw: np.ndarray, rgb: np.ndarray, px_size: float, keep_open: np.ndarray, slope_deg: np.ndarray,
+                    min_slope_deg: float = 15.0, green_gr: float = 1.06, bare_lum: float = 0.55) -> int:
+    """山の斜面は森にする（2026-10-27、ユーザー「基本的に山は木々で覆われているはず」）。開けた土地のマスのうち、keep_open（OSM の土地利用・
+    家のまわり）の外で、傾きが min_slope_deg 以上で、写真では森（raw > 0。冬の茶色い広葉樹を集落・畑として外していた所）か、写真が緑っぽい
+    （G/R ≥ green_gr かつ明るさ < bare_lum。夏の写真の森をまだらに開けた土地としていた所）マスを森にする。ベージュ・白のむき出しの土や
+    岩（崩れた斜面・採石場）は残す。森にしたマスの数を返す。"""
+    k = max(1, int(round(fm.cell / px_size)))
+    c = _cells(rgb.astype(np.float32) / 255.0, k).mean(axis=(1, 3))
+    h, w = min(c.shape[0], fm.cls.shape[0]), min(c.shape[1], fm.cls.shape[1])
+    c = c[:h, :w]; r, g = c[..., 0], c[..., 1]; lum = c.mean(-1)
+    green = (g / np.maximum(r, 1e-3) >= green_gr) & (lum < bare_lum)
+    sub = fm.cls[:h, :w]
+    pick = (sub == 0) & ~keep_open[:h, :w] & (slope_deg[:h, :w] >= min_slope_deg) & ((raw[:h, :w] > 0) | green)
+    sub[pick] = np.where(raw[:h, :w][pick] > 0, raw[:h, :w][pick], 2)   # 写真が開けた土地なら広葉樹（夏の写真の森）
+    return int(pick.sum())
+
+
+def slope_map(fm: ForestMap, ground_z, mask=None) -> np.ndarray:
+    """マスごとの地形の傾き（度）。mask のマスだけ測る（ほかは 0）。ground_z(xy) は地形の高さ（無ければ nan → 0 度）。"""
+    out = np.zeros(fm.cls.shape, np.float32)
+    rr, cc = np.nonzero(np.ones(fm.cls.shape, bool) if mask is None else mask)
+    if not len(rr):
+        return out
+    x = fm.x0 + (cc + 0.5) * fm.cell; y = fm.y1 - (rr + 0.5) * fm.cell; e = fm.cell
+    z = lambda dx, dy: np.asarray(ground_z(np.c_[x + dx, y + dy]), float)
+    gx = (z(e, 0) - z(-e, 0)) / (2 * e); gy = (z(0, e) - z(0, -e)) / (2 * e)
+    s = np.degrees(np.arctan(np.hypot(gx, gy)))
+    out[rr, cc] = np.nan_to_num(s, nan=0.0)
+    return out
+
+
+def osm_lake_polygons(bounds, cache=None):
+    """湖（OSM の natural=water・water=lake|reservoir）の多角形（ローカル座標）。osm_open_areas と同じキャッシュから。"""
+    from . import config
+    cache = cache or config.DATA_RAW / "osm_forest_open.json"
+    import json
+    data = json.loads(Path(cache).read_text(encoding="utf-8"))
+    polys = []
+    for e in data["elements"]:
+        tg = e.get("tags", {})
+        if tg.get("natural") != "water" or tg.get("water") not in ("lake", "reservoir"):
+            continue
+        rings = [e["geometry"]] if e.get("geometry") else [m["geometry"] for m in e.get("members", [])
+                                                          if m.get("role") == "outer" and m.get("geometry")]
+        for g in rings:
+            if len(g) >= 3:
+                x, y = geo.to_local([p["lat"] for p in g], [p["lon"] for p in g])
+                polys.append(np.c_[x, y])
+    return polys
+
+
 OPEN_TAGS = {"landuse": ("residential", "farmland", "meadow", "grass", "industrial", "commercial", "retail",
                          "orchard", "allotments", "recreation_ground", "cemetery", "construction", "quarry",
                          "farmyard", "greenhouse_horticulture", "railway", "brownfield"),
@@ -222,9 +293,12 @@ def settlement_filter(fm: ForestMap, rgb, px_size, mask, cfg):
     rg = c[..., 0] / np.maximum(c[..., 1], 1e-3)
     green = (rg < cfg["settle_rg_max"]) & (lum < cfg["settle_lum_max"])
     sub = fm.cls[:h, :w]
+    # 森にしない所のうち、きめが粗く緑っぽい所は庭木・生け垣（名古木で、道ぞいの庭木まで消えて芝生ばかりに見えた。2026-10-28）
+    garden = m & ~green & (sub > 0) & (sub < 3) & (rg < cfg.get("garden_rg_max", 0.98)) & (c[..., 1] > c[..., 2])
     sub[m & ~green] = 0
+    sub[garden] = 4
     # 家の影は暗い緑の点に見える：集落の中では 3×3 マス（12 m）より小さい森の点を消す
-    forest = sub > 0
+    forest = (sub > 0) & (sub < 3)
     opened = ndimage.binary_opening(forest, np.ones((3, 3), bool))
     sub[m & forest & ~opened] = 0
 

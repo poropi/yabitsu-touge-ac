@@ -166,6 +166,34 @@ def main():
     log(t0, f"木のモデル {len(models)} 種類")
     fm = forest_map(cfg, a.refresh_map, out, t0)
     ground = forest_ground.load_ground(MANIFEST)
+    # 湖（宮ヶ瀬湖）の OSM の輪郭が陸の斜面まで含み、森が消えていた所を戻す（保存済みの地図を作り直さずに、読んだあとで毎回）
+    c = {**forestmap.DEFAULT_CLASSIFY, **cfg.get("classify", {})}
+    raw = forestmap.classify(np.load(PHOTO), cfg["map"]["px_size"], c)
+    level = json.loads((config.DATA_MANUAL / "s5_water.json").read_text(encoding="utf-8"))["lake_level_m"]
+    n = forestmap.restore_above_water(fm, raw, forestmap.osm_lake_polygons(terrain_bounds()), ground.z, level)
+    log(t0, f"湖の輪郭の中の陸（湖面 {level} m＋3 m より上）を森に戻した：{n:,} マス（{n * fm.cell ** 2 / 1e4:.1f} ha）")
+    # 山の斜面は森に：OSM の土地利用（湖を除く）と家から 25 m の外の、傾き 15° 以上の開けた土地で、写真が森か緑っぽい所
+    bounds = terrain_bounds()
+    lakes = forestmap.osm_lake_polygons(bounds)
+    keep_open = np.zeros(fm.cls.shape, bool)
+    probe = forestmap.ForestMap(fm.x0, fm.y1, fm.cell, np.ones(fm.cls.shape, np.uint8))
+    forestmap.clear_polygons(probe, forestmap.osm_open_areas(bounds)); keep_open |= probe.cls == 0
+    probe.cls[:] = 1; forestmap.clear_polygons(probe, lakes); keep_open &= ~(probe.cls == 0)   # 湖の輪郭は高さで決めた（restore_above_water）
+    houses = [(v, t_) for nm, mat, v, t_ in forest_ground._load(MANIFEST) if forest_ground.mesh_class(nm, mat) == "building"]
+    keep_open |= forestmap.settlement_mask(fm, forestmap.osm_buildings(bounds), houses, 25.0)
+    # 写真に合わせて木を決めた範囲（species_zones・fill_bare の円、keep_map の作り込んだ場所のまわり）は今までの判定のまま
+    from yabitsu import geo as _geo
+    yy, xx = np.mgrid[0:fm.cls.shape[0], 0:fm.cls.shape[1]]
+    for zz in cfg.get("species_zones", []) + cfg.get("fill_bare", []) + cfg.get("keep_map", []):   # keep_map：作り込んだ場所のまわり
+        zx, zy = _geo.to_local(*zz["center_ll"]); rad = float(zz.get("radius", 0.0))
+        r0, r1 = int((fm.y1 - zy - rad) / fm.cell), int((fm.y1 - zy + rad) / fm.cell) + 1
+        c0, c1 = int((zx - rad - fm.x0) / fm.cell), int((zx + rad - fm.x0) / fm.cell) + 1
+        r0, c0 = max(r0, 0), max(c0, 0)
+        sub = (fm.x0 + (xx[r0:r1, c0:c1] + 0.5) * fm.cell - zx) ** 2 + (fm.y1 - (yy[r0:r1, c0:c1] + 0.5) * fm.cell - zy) ** 2 <= rad ** 2
+        keep_open[r0:r1, c0:c1] |= sub
+    slope = forestmap.slope_map(fm, ground.z, (fm.cls == 0) & ~keep_open)
+    n = forestmap.mountain_forest(fm, raw, np.load(PHOTO), cfg["map"]["px_size"], keep_open, slope)
+    log(t0, f"山の斜面（15° 以上・家と土地利用の外）を森にした：{n:,} マス（{n * fm.cell ** 2 / 1e4:.1f} ha）")
     keep = forest_ground.load_keepout(MANIFEST, cfg.get("clearance", {}))
     keep.add_lines(*forest_ground.osm_road_lines(terrain_bounds()))
     log(t0, "地面と植えない範囲")

@@ -115,29 +115,80 @@ def meshes(sec, tunnels, spec, ground_z):
     return out
 
 
-def _portal(sec, t, tag, s, sgn, ground_z, plate, mat="concrete"):
-    """坑口：s の所で道を横切る縦の面。筒の断面の所は穴、その外は下（路面−1m か外の地形の下）から上（内外の地形の高い方＋0.5m）まで。"""
+RIM_W, RIM_D = 0.5, 0.25    # 坑口のアーチの縁：幅・手前への出っ張り
+HEAD_T = 0.6                # 坑口の壁の厚さ（天端のふた）
+PORTAL_STYLES = {           # s5_tunnels.json の portal → (壁の材質, アーチの縁の材質)
+    "stone": ("kenchi_moss", "concrete_moss"),        # 苔むした間知石の壁とコンクリートの縁（大洞トンネル）
+    "concrete_old": ("concrete_moss", "concrete_moss"),   # 苔と黒い汚れの古いコンクリート（S5 4056 の小さなトンネル）
+    "concrete": ("concrete_grey", "concrete_grey"),   # 灰色のコンクリート（吹風トンネル）
+}
+
+
+def _orient(v, f, out_dir):
+    """面 f の表を out_dir（水平 2D）へ向ける。"""
+    from .meshgen import face_normals
+    nr = face_normals(v, f)[:, :2] @ np.asarray(out_dir, float)
+    return f if np.mean(nr > 0) >= 0.5 else f[:, ::-1]
+
+
+def _portal(sec, t, tag, s, sgn, ground_z, plate, style="concrete"):
+    """坑口：s の所で道を横切る縦の壁（筒の断面の所は穴、その外は下（路面−1m か外の地形の下）から上（内外の地形の高い方＋0.5m）まで）。
+    表は外向きの 1 枚（表と裏を同じ所に重ねると縞に見えた。2026-10-28）で、天端に厚さ HEAD_T のふた。アーチの輪郭に沿って、幅 RIM_W・
+    手前へ RIM_D 出た縁（外の面・内側・外周）。材質は PORTAL_STYLES（壁・縁）。表札は縁の上。"""
+    wall_mat, rim_mat = PORTAL_STYLES.get(style, (style, style))
     i = int(np.argmin(np.abs(sec.s - s))); c, n, l, r = _frame(sec, i); zc = sec.z[i]
-    d = np.array([-n[1], n[0]])
+    d = np.array([-n[1], n[0]]); o = -d * sgn         # o：坑口から外（道の手前）の向き（d は道の進む向きの逆）
     prof = _profile(sec, i)
     arch = lambda lat: max([dz for (la, dz) in prof if abs(la - lat) < 1e-6] or [np.interp(lat, [p[0] for p in prof[1:-1]], [p[1] for p in prof[1:-1]])])
     lats = np.r_[np.arange(-r - PORTAL_WING, -r, 1.0), [p[0] for p in prof[1:-1]], np.arange(l + 1.0, l + PORTAL_WING + 1e-6, 1.0)]
     lats = np.unique(np.round(lats, 6))
-    V, F = [], []
+    V, F, tops = [], [], []
     for k, lat in enumerate(lats):
         p = c + n * lat
         k_in = PORTAL_INSET + 1.5   # 山を残す所（坑口より PORTAL_INSET 奥から）の高さまで面を立てる
-        g_in = float(np.atleast_1d(ground_z(np.array([p[0] - sgn * d[0] * k_in]), np.array([p[1] - sgn * d[1] * k_in])))[0])
+        g_in = float(np.atleast_1d(ground_z(np.array([p[0] - sgn * d[0] * k_in]), np.array([p[1] - sgn * d[1] * k_in])))[0])   # 今までと同じ所の高さ
         g_out = float(np.atleast_1d(ground_z(np.array([p[0] + sgn * d[0] * 1.0]), np.array([p[1] + sgn * d[1] * 1.0])))[0])
         top = max(g_in, g_out, zc + bore_height(sec, i)) + 0.5
         bot = zc + arch(lat) if -r - 1e-6 <= lat <= l + 1e-6 else min(zc - 1.0, g_out - 0.5, g_in - 0.5)
-        V += [[*p, bot], [*p, top]]
+        V += [[*p, bot], [*p, top]]; tops.append([*p, top])
         if k:
             a = 2 * (k - 1); F.append([a, a + 2, a + 3, a + 1])
-    v = np.array(V, float); f = np.array(F, np.int32)
-    out = [(f"tunnel_{t.osm_id}_portal_{tag}", v, np.r_[f, f[:, ::-1]], np.c_[np.repeat(lats, 2) / 3.0, v[:, 2] / 3.0], mat, True)]
+    v = np.array(V, float); f = _orient(v, np.array(F, np.int32), o)
+    uv = np.c_[np.repeat(lats, 2) / 2.0, v[:, 2] / 2.0]
+    tp = np.array(tops); tb = tp - np.r_[o * HEAD_T, 0.0]          # 天端のふた（上向き）
+    cv = np.r_[tp, tb]; m_ = len(tp)
+    cf = np.array([[k, k + 1, m_ + k + 1, m_ + k] for k in range(m_ - 1)], np.int32)
+    from .meshgen import face_normals
+    if np.mean(face_normals(cv, cf)[:, 2] > 0) < 0.5:
+        cf = cf[:, ::-1]
+    from .start_lot import _merge
+    out = [(f"tunnel_{t.osm_id}_portal_{tag}", *_merge([(v, f, uv), (cv, cf, cv[:, :2] / 2.0)]), wall_mat, True)]
+    # アーチの縁：輪郭（右の下 → アーチ → 左の下）の内側の線と、外へ RIM_W 広げた線
+    rad = (l + r) / 2.0; cl = (l - r) / 2.0
+    inner = [(-r, 0.0)] + [(la, dz) for la, dz in prof[1:-1]] + [(l, 0.0)]
+    outer = []
+    for la, dz in inner:
+        if dz > WALL_H + 1e-6:
+            k_ = 1.0 + RIM_W / rad; outer.append((cl + (la - cl) * k_, WALL_H + (dz - WALL_H) * k_))
+        else:
+            outer.append((la + (RIM_W if la > cl else -RIM_W), dz))
+    P = lambda la, dz, f_: [*(c + n * la + o * f_), zc + dz]
+    rv, rf = [], []
+    for k in range(len(inner) - 1):
+        quads = [(inner[k], inner[k + 1], outer[k + 1], outer[k], RIM_D, RIM_D),      # 手前の面
+                 (inner[k], inner[k + 1], inner[k + 1], inner[k], 0.0, RIM_D),        # 内側（穴の縁）
+                 (outer[k], outer[k + 1], outer[k + 1], outer[k], 0.0, RIM_D)]        # 外周
+        for qa, qb, qc, qd, fa, fb in quads:
+            b0 = len(rv)
+            if fa == fb:
+                rv += [P(*qa, fa), P(*qb, fa), P(*qc, fa), P(*qd, fa)]
+            else:
+                rv += [P(*qa, fa), P(*qb, fa), P(*qc, fb), P(*qd, fb)]
+            rf.append([b0, b0 + 1, b0 + 2, b0 + 3]); rf.append([b0 + 3, b0 + 2, b0 + 1, b0])   # 細い帯なので両面（向きの判定を省く）
+    rv = np.array(rv, float)
+    out.append((f"tunnel_{t.osm_id}_rim_{tag}", rv, np.array(rf, np.int32), np.c_[np.arange(len(rv)) % 4 / 2.0, rv[:, 2] / 2.0], rim_mat, True))
     if plate:
-        zt = zc + bore_height(sec, i) + 0.3; q = c + d * sgn * 0.05
+        zt = zc + bore_height(sec, i) + RIM_W + 0.3; q = c + o * (0.08)
         pv = np.array([[*(q - n * 1.6), zt], [*(q + n * 1.6), zt], [*(q + n * 1.6), zt + 0.7], [*(q - n * 1.6), zt + 0.7]])
         pf = np.array([[0, 1, 2, 3]] if sgn < 0 else [[3, 2, 1, 0]], np.int32)
         out.append((f"tunnel_{t.osm_id}_plate_{tag}", pv, np.r_[pf, pf[:, ::-1]], np.array([[0, 0], [1, 0], [1, 1], [0, 1]], float), f"tunnel_plate_{t.osm_id}", True))

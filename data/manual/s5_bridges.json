@@ -13,11 +13,12 @@
   "osm_id": 131561910,
   "name": "塩水橋",
   "kana": "塩水橋",
-  "rail": "steel",
+  "rail": "none",
   "rail_color": "#8E8E88",
   "deck_depth_m": 1.0,
   "pier_every_m": 0,
-  "note": "灰色の鉄の手すり（s=4570）"
+  "note": "灰色の鉄の手すり（s=4570）。欄干は s5_objects の steel_rail（管 3 本と縦格子）、親柱は明るいコンクリート（塩水橋のまわり（ストリートビュー panoid IGHUjEKhX1_iokvdpU1u5Q 2025-07、OSM、2026-10-27））",
+  "post_material": "concrete"
  },
  {
   "osm_id": 785523109,
@@ -105,11 +106,11 @@
   "osm_id": 131561909,
   "name": "吹風橋",
   "kana": "吹風橋",
-  "rail": "concrete",
-  "rail_color": "#B9B4A8",
+  "rail": "steel",
+  "rail_color": "#5E4434",
   "deck_depth_m": 1.5,
   "pier_every_m": 20,
-  "note": "トンネルを出てすぐ：コンクリートの欄干と茶色の手すり（s=10950）"
+  "note": "トンネルを出てすぐ：コンクリートの欄干と茶色の手すり（s=10950）。欄干は焦げ茶の格子（トンネルの出入口（ストリートビュー 2025-07、2026-10-28）、吹風 北口）"
  },
  {
   "osm_id": 131561913,

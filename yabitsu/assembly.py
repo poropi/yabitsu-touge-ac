@@ -5,6 +5,7 @@ from . import meshgen as mg
 from . import config, layouts as layouts_mod
 from . import pass_area
 from . import start_lot as lot_mod
+from .start_lot import _merge
 from . import trees as tree_mod
 from .terrain import FAR_HOLE, NEAR_BAND, grid_mesh_chunks
 
@@ -36,26 +37,52 @@ def _keep_spans(sec, skip):
 MOUTH_DASH = (1.0, 1.0)   # わき道の入口を横切る路肩の線（破線）の長さと間隔 m（本線の形は 1 m 刻みなので、これより短くできない）
 
 
-def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=(), no_lines=()):
+def _dry_runs(sec, i0, i1, dry):
+    """行 i0〜i1 の帯を、dry（(s0, s1) の並び：トンネルの中）にかかる所とかからない所の、続いた行の範囲 [(行の始め, 行の終わり, 中か)] に分ける。
+    行の組（j, j+1）の真ん中の s で決める。"""
+    s = sec.s[i0:i1 + 1]; mid = (s[:-1] + s[1:]) / 2
+    inside = np.zeros(len(mid), bool)
+    for s0, s1 in dry:
+        inside |= (mid >= s0) & (mid <= s1)
+    out, j = [], 0
+    while j < len(mid):
+        e = j
+        while e + 1 < len(mid) and inside[e + 1] == inside[j]:
+            e += 1
+        out.append((i0 + j, i0 + e + 1, bool(inside[j])))
+        j = e + 1
+    return out
+
+
+def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=(), no_lines=(), dry=()):
     """skip の範囲（町の範囲・島で分かれる所：道は多角形で作る）は帯を作らない。skip は (s0, s1) かその並び。
     mouths（(side, s0, s1) の並び）：わき道が接している所。その側は側溝を作らずに路面を続け、路肩の線を破線にする。
-    no_lines（(side, s0, s1) の並び）：路肩の白線を引かない所。"""
+    no_lines（(side, s0, s1) の並び）：路肩の白線を引かない所。
+    dry（(s0, s1) の並び：トンネルの中）：その所の路面・側溝は名前に _tun を付けた別の部品にし、路面の材質を asphalt_tunnel にする
+    （RainFX の水たまり・濡れの材質に入れない。雨のときトンネルの中の路面が出口を鏡のように映していた。2026-10-28）。ほかの部品の名前は変えない。"""
     chunks = [(a + i0, a + i1) for a, b in _keep_spans(sec, skip) for i0, i1 in mg.split_rows(b - a + 1, rows_per_chunk)]
     for k, (i0, i1) in enumerate(chunks):
         sl = slice(i0, i1 + 1)
-        v, f, uv = mg.road_surface(sec, sl)
-        bad = mg.folded_faces(v, f)
-        if len(bad):
-            s_bad = sec.s[i0 + bad[0] // 4]
-            raise ValueError(f"路面が折り返しています: s={s_bad:.0f}m 付近（{len(bad)} 面）。中心線の補正か道幅を見直してください")
-        m.add_mesh(GROUP, f"1ROAD_s1_{k:02d}", v, f, uv, "asphalt")
+        runs = _dry_runs(sec, i0, i1, dry)
+        for wet in (False, True):
+            parts = [mg.road_surface(sec, slice(a, b + 1)) for a, b, inside in runs if inside == wet]
+            if not parts:
+                continue
+            v, f, uv = _merge(parts)
+            bad = mg.folded_faces(v, f)
+            if len(bad):
+                raise ValueError(f"路面が折り返しています: s={sec.s[i0]:.0f}〜{sec.s[i1]:.0f}m の部品（{len(bad)} 面）。中心線の補正か道幅を見直してください")
+            m.add_mesh(GROUP, f"1ROAD_s1_{k:02d}" + ("_tun" if wet else ""), v, f, uv, "asphalt_tunnel" if wet else "asphalt")
         for side, tag in ((1, "L"), (-1, "R")):
             s = sec.s[sl]
             rows = np.zeros(len(s), bool)
             for sd, s0, s1 in mouths:
                 rows |= (sd == side) & (s >= s0) & (s <= s1)
             seg = rows[:-1] & rows[1:]
-            m.add_mesh(GROUP, f"1ROAD_s1_gutter{tag}_{k:02d}", *mg.gutter(sec, sl, side, skip=seg), "concrete")
+            for wet in (False, True):
+                parts = [mg.gutter(sec, slice(a, b + 1), side, skip=seg[a - i0:b - i0]) for a, b, inside in runs if inside == wet]
+                if parts:
+                    m.add_mesh(GROUP, f"1ROAD_s1_gutter{tag}_{k:02d}" + ("_tun" if wet else ""), *_merge(parts), "concrete")
             if seg.any():   # 側溝の代わりに路面をそのまま続ける
                 m.add_mesh(GROUP, f"1ROAD_s1_mouth{tag}_{k:02d}", *mg.mouth_strip(sec, sl, side, seg), "asphalt")
             hw = (sec.hw_left if side > 0 else sec.hw_right)[sl]
@@ -206,8 +233,8 @@ def add_features(m, sec, feats):
             m.add_mesh(GROUP, f"1WALL_track_overpass_{k:03d}_piers", *piers, "concrete")
         else:
             m.add_mesh(GROUP, f"1WALL_s1_retaining_{k:03d}", *ft.retaining_wall_mesh(sec, f, off[f.side]), "concrete")
-            if shelf[ft.SIDES[f.side]][ft.rows_of(sec, f)].max() > 0.01:   # 壁を道から離して立てた所：手前の草地
-                m.add_mesh(GROUP, f"1GRASS_track_shelf_{k:03d}", *ft.shelf_mesh(sec, f, off[f.side]), "ground")
+            if shelf[ft.SIDES[f.side]][ft.rows_of(sec, f)].max() > 0.01:   # 壁を道から離して立てた所：手前の草地（行の material があればその材質、砂利の路肩など）
+                m.add_mesh(GROUP, f"1GRASS_track_shelf_{k:03d}", *ft.shelf_mesh(sec, f, off[f.side]), f.material or "ground")
 
 
 def add_trees(m, trees):

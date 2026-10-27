@@ -1,5 +1,7 @@
 """コース全体（S1〜S5）から半径 200m の建物を data/manual/track_buildings.json に書く（buildings.py の形）。
-地理院の外周線と OSM の建物を合わせ、町の範囲（名古木交差点。1棟ずつ確かめた s3_buildings.json がある）、蓑毛の家
+注意：checked=true でない建物は作り直すので、手で直した値・手で足した建物は消える（2026-10-28 に流して 9 棟消え 68 棟変わった）。
+既にあるファイルに足すだけなら、流し直さず新しい建物だけを足す（export/compare/nagoki の作業で Overture の 216 棟を足したときはそうした）。
+地理院の外周線と OSM の建物を合わせ（どちらにも無い家は Overture の輪郭で補う）、町の範囲（名古木交差点。1棟ずつ確かめた s3_buildings.json がある）、蓑毛の家
 （s2_minoge.json）、駐車場・峠・蓑毛の広場とは重ねない。屋根の色は空中写真。Street View で確かめた建物（checked=true）は残す。"""
 import json
 
@@ -30,6 +32,9 @@ def main():
           + json.loads((config.DATA_RAW / "osm_s4_buildings.json").read_text(encoding="utf-8"))["elements"]
           + osm.fetch_overpass(osm.S5_BUILDINGS_QUERY, config.DATA_RAW / "osm_s5_buildings.json")["elements"])
     polys = footprints.merged(footprints.gsi_polygons(BBOX, area=band), footprints.osm_polygons(el))
+    ov = config.DATA_RAW / "overture_buildings.json"
+    if ov.exists():   # 地理院・OSM に無い家を Overture（Microsoft の輪郭）で補う
+        polys = footprints.fill_gaps(polys, footprints.overture_polygons(ov))
     minoge = json.loads((config.DATA_MANUAL / "s2_minoge.json").read_text(encoding="utf-8"))
     taken = [house_fp(Frame(site.ll_to_xy([b["center"]])[0], b["axis_deg"]), b["size"]).buffer(1.0) for b in minoge.get("buildings", [])]
     taken += [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch") and "house" not in p["name"]]
@@ -42,7 +47,8 @@ def main():
         if poly.area < 8.0 or not band.contains(poly.centroid) or poly.intersects(taken):
             continue
         c = poly.centroid
-        bid = f"osm{tags['_id']}" if src == "osm" else f"g{int(round(c.x))}_{int(round(c.y))}".replace("-", "m")
+        bid = (f"osm{tags['_id']}" if src == "osm" else
+               f"{'v' if src == 'ov' else 'g'}{int(round(c.x))}_{int(round(c.y))}".replace("-", "m"))
         if bid in seen:
             continue
         seen.add(bid)

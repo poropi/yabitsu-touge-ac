@@ -41,7 +41,7 @@ def kind_of(name: str, material: str):
         return "road_plane"                  # 赤いのは南の端だけ（s3_lines.csv の red 行で描く）。空中写真は古い
     if n.startswith(("1ROAD_town_carriageway", "1ROAD_side_stub", "1ROAD_split")) and material == "asphalt":
         return "road_plane"
-    if n.startswith("1ROAD_s1_") and material == "asphalt":
+    if n.startswith("1ROAD_s1_") and material in ("asphalt", "asphalt_tunnel"):   # asphalt_tunnel：トンネルの中の路面
         return "road"
     if n.startswith("LINES_") and material in ("line_white", "line_orange"):
         return material

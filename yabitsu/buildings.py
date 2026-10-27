@@ -3,7 +3,7 @@
 
   {"id", "name", "footprint": [[lat, lon], ...], "storeys", "height_m",
    "roof": {"type": flat | gable | hip | mono, "rise_m", "ridge_deg"（棟の方位）, "color": "#RRGGBB"},
-   "wall": "#RRGGBB", "windows": bool, "shopfront": [辺の番号], "signs": [{"text", "bg", "fg", "edge", "w_m", "h_m", "z_m"}],
+   "wall": "#RRGGBB", "cladding": siding | plaster | tin（無ければ facades.cladding_of が壁の色から）, "windows": bool, "shopfront": [辺の番号], "signs": [{"text", "bg", "fg", "edge", "w_m", "h_m", "z_m"}],
    "canopy": {"points": [[lat, lon], ...], "z_m"} | null, "lot": {"points": [[lat, lon], ...]} | null}
 
 辺の番号は、外周線を反時計回りにしたときの i 番目の点 → i+1 番目の点。"""
@@ -22,7 +22,10 @@ from .start_lot import Frame, _gable_ends
 
 PARAPET_H = 0.3
 SHOP_H = 3.0          # 1階の店のガラスの高さ
-BAY_W = 4.0           # 壁の絵 1 枚の横幅（窓1つぶん）
+BAY_W = 4.0           # 窓 1 区画の横幅（壁の絵 1 枚は facades.FACADE_BAYS 区画）
+BASE_H = 0.45         # 家の基礎の高さ（一番高い地面から床まで）。店は BASE_SHOP_H
+BASE_SHOP_H = 0.1
+BASE_MAT = "concrete"
 CANOPY_T = 0.6
 EAVES = 0.4
 
@@ -47,13 +50,15 @@ class Building:
     canopy: dict = None
     lot: dict = None
     name: str = ""
+    cladding: str = None
+    kit: str = None          # 部品の家の種類（house_kit）。"conv_store"＝コンビニの店
 
     @classmethod
     def from_spec(cls, d):
         fp = orient(Polygon(_xy(d["footprint"])).buffer(0), 1.0)
         return cls(str(d["id"]), fp, int(d.get("storeys", 2)), float(d.get("height_m", 6.0)), dict(d.get("roof", {})),
                    d.get("wall", "#E8E4DC"), bool(d.get("windows", True)), list(d.get("shopfront", [])),
-                   list(d.get("signs", [])), d.get("canopy"), d.get("lot"), d.get("name", ""))
+                   list(d.get("signs", [])), d.get("canopy"), d.get("lot"), d.get("name", ""), d.get("cladding"), d.get("kit"))
 
 
 def load(path):
@@ -64,8 +69,9 @@ def load(path):
 
 
 def facade_mat(b):
-    """壁の材質：色と窓の有無が同じ建物は同じ絵を使う。"""
-    return f"facade_{b.wall.lstrip('#').upper()}{'_w' if b.windows else ''}"
+    """壁の材質：仕上げ・色・窓の有無が同じ建物は同じ絵を使う。"""
+    from .facades import cladding_of
+    return f"facade_{cladding_of(b)}_{b.wall.lstrip('#').upper()}{'_w' if b.windows else ''}"
 
 
 def gable_end_mat(b):
@@ -137,7 +143,9 @@ def _tri_poly(poly, z):
 
 
 def _wall_quads(ring, z0, z1, floor, storey_h, inward=False, u0=0.0):
-    """外周（反時計回り）の各辺に立つ壁。表は外（inward なら内）。UV は u＝辺に沿った長さ/BAY_W、v＝(高さ−床)/1階の高さ。"""
+    """外周（反時計回り）の各辺に立つ壁。表は外（inward なら内）。UV は u＝辺に沿った長さ/(BAY_W×FACADE_BAYS)、v＝(高さ−床)/1階の高さ。"""
+    from .facades import FACADE_BAYS
+    span = BAY_W * FACADE_BAYS
     p = np.asarray(ring.coords)
     vs, fs, us, u = [], [], [], u0
     for i in range(len(p) - 1):
@@ -149,9 +157,9 @@ def _wall_quads(ring, z0, z1, floor, storey_h, inward=False, u0=0.0):
             a, b = b, a
         k = len(vs)
         vs += [[*a, z0], [*b, z0], [*b, z1], [*a, z1]]
-        us += [[u, (z0 - floor) / storey_h], [u + L / BAY_W, (z0 - floor) / storey_h],
-               [u + L / BAY_W, (z1 - floor) / storey_h], [u, (z1 - floor) / storey_h]]
-        fs.append([k, k + 1, k + 2, k + 3]); u += L / BAY_W
+        us += [[u, (z0 - floor) / storey_h], [u + L / span, (z0 - floor) / storey_h],
+               [u + L / span, (z1 - floor) / storey_h], [u, (z1 - floor) / storey_h]]
+        fs.append([k, k + 1, k + 2, k + 3]); u += L / span
     return np.array(vs, float), np.array(fs), np.array(us, float)
 
 
@@ -253,8 +261,9 @@ def building_meshes(buildings, ground_z, avoid=None):
         zg = np.asarray(ground_z(p[:, 0], p[:, 1]), float)
         c = fp.centroid
         zc = float(np.asarray(ground_z(np.atleast_1d(c.x), np.atleast_1d(c.y)), float)[0])
-        z_low, floor = min(float(zg.min()), zc), max(float(zg.max()), zc)
+        z_low, ground_top = min(float(zg.min()), zc), max(float(zg.max()), zc)
         z0 = z_low - 0.3
+        floor = ground_top + (BASE_SHOP_H if b.shopfront else BASE_H)   # 床より下は基礎（窓の絵が地面の下まで繰り返して、2 階建てが 3 階建てに見えた）
         top = floor + b.height_m
         sh = b.height_m / max(b.storeys, 1)
         flat = b.roof.get("type", "flat") == "flat"
@@ -264,11 +273,11 @@ def building_meshes(buildings, ground_z, avoid=None):
         for i in range(len(p) - 1):
             if i in shop:
                 shops.append(_edge_quad(p[i], p[i + 1], floor, floor + min(SHOP_H, b.height_m), floor, SHOP_H))
-                walls.append(_edge_quad(p[i], p[i + 1], z0, floor, floor, sh))
                 walls.append(_edge_quad(p[i], p[i + 1], floor + min(SHOP_H, b.height_m), wall_top, floor, sh))
             else:
-                walls.append(_edge_quad(p[i], p[i + 1], z0, wall_top, floor, sh))
+                walls.append(_edge_quad(p[i], p[i + 1], floor, wall_top, floor, sh))
         out.append((f"1WALL_bld_{b.id}", *_merge(walls), facade_mat(b), True))
+        out.append((f"1WALL_bld_{b.id}_base", *_wall_quads(ring, z0, floor, z0, 2.0), BASE_MAT, True))
         if shops:
             out.append((f"bld_{b.id}_shop", *_merge(shops), "shopfront", True))
         if flat:
@@ -293,18 +302,18 @@ def building_meshes(buildings, ground_z, avoid=None):
     return out
 
 
-def _floor(fp, ground_z):
+def _floor(fp, ground_z, base=0.0):
     p = np.asarray(fp.exterior.coords)
     zg = np.asarray(ground_z(p[:, 0], p[:, 1]), float)
     c = fp.centroid
     zc = float(np.asarray(ground_z(np.atleast_1d(c.x), np.atleast_1d(c.y)), float)[0])
-    return min(float(zg.min()), zc), max(float(zg.max()), zc)
+    return min(float(zg.min()), zc), max(float(zg.max()), zc) + base
 
 
 def _signs(b, fp, ground_z, base=0.0):
     out = []
     p = np.asarray(fp.exterior.coords)
-    floor = _floor(fp, ground_z)[1] + base
+    floor = _floor(fp, ground_z, BASE_SHOP_H if b.shopfront else BASE_H)[1] + base
     for n, s in enumerate(b.signs):
         e = int(s.get("edge", 0)) % (len(p) - 1)
         a, bb = p[e], p[e + 1]
@@ -339,19 +348,6 @@ def _hex(c):
     return np.array([int(h[i:i + 2], 16) for i in (0, 2, 4)], float) / 255.0
 
 
-def facade_image(wall, windows=True, w=256, h=192, seed=0):
-    """壁の絵 1 枚＝横 BAY_W(4m)・縦 1 階ぶん。窓（濃い色のガラスと白い枠）が真ん中に1つ。"""
-    rng = np.random.default_rng(seed)
-    base = _hex(wall)[None, None, :] * (0.94 + 0.06 * rng.random((h, w, 1)))
-    img = base.copy()
-    if windows:
-        x0, x1 = int(w * 0.30), int(w * 0.70); y0, y1 = int(h * 0.22), int(h * 0.62)   # 上が y=0（窓の下端は床から 0.9m）
-        img[y0 - 4:y1 + 4, x0 - 4:x1 + 4] = [0.92, 0.92, 0.90]
-        img[y0:y1, x0:x1] = [0.20, 0.25, 0.30]
-        img[y0:y1, (x0 + x1) // 2 - 2:(x0 + x1) // 2 + 2] = [0.92, 0.92, 0.90]
-    return Image.fromarray(np.clip(img * 255, 0, 255).astype(np.uint8))
-
-
 def shopfront_image(w=256, h=192):
     img = np.full((h, w, 3), 0.85)
     img[int(h * 0.1):int(h * 0.95), int(w * 0.05):int(w * 0.95)] = [0.22, 0.28, 0.32]
@@ -361,8 +357,9 @@ def shopfront_image(w=256, h=192):
 
 
 def write_textures(buildings, out_dir):
-    """建物ごとの壁・屋根・看板の絵を書き、{材質の名前: "textures/xxx.png"} を返す。"""
-    from .textures import _gray, sign_texture
+    """建物ごとの壁・屋根・看板の絵を書き、{材質の名前: "textures/xxx.png"} を返す。壁と屋根は写真の素材から（facades）。"""
+    from . import facades
+    from .textures import sign_texture
     out = Path(out_dir); out.mkdir(parents=True, exist_ok=True)
     mats = {}
 
@@ -371,13 +368,11 @@ def write_textures(buildings, out_dir):
     save("shopfront", shopfront_image())
     for k, b in enumerate(buildings):
         if facade_mat(b) not in mats:
-            save(facade_mat(b), facade_image(b.wall, b.windows, seed=k))
+            save(facade_mat(b), facades.facade_image(b.wall, b.windows, facades.cladding_of(b), seed=k))
         if b.roof.get("gable_end") and gable_end_mat(b) not in mats:
-            save(gable_end_mat(b), facade_image(b.roof["gable_end"]["wall"], False, seed=k))
+            save(gable_end_mat(b), facades.facade_image(b.roof["gable_end"]["wall"], False, "plaster", seed=k))
         if roof_mat(b) not in mats:
-            r = _hex(b.roof.get("color", "#707070"))
-            g = _gray(128, 100 + k, 1.0, 0.08)
-            save(roof_mat(b), Image.fromarray(np.clip(g.astype(float) * r[None, None, :], 0, 255).astype(np.uint8)))
+            save(roof_mat(b), facades.roof_image(b.roof.get("color", "#707070"), seed=k))
         for n, s in enumerate(b.signs):
             w_px = int(np.clip(float(s.get("w_m", 3.0)) * 96, 96, 1024)); h_px = int(np.clip(float(s.get("h_m", 1.0)) * 96, 48, 512))
             save(f"sign_{b.id}_{n}", sign_texture(s["text"], s.get("bg", "#FFFFFF"), s.get("fg", "#000000"), w_px, h_px))

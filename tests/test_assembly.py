@@ -129,3 +129,21 @@ def test_raised_median_strip_with_double_orange_lines(tmp_path):
     lines = [n for n in names if m.meshes[n]["material"] == "line_orange"]
     lv = np.concatenate([np.load(tmp_path / m.meshes[n]["file"])["verts"] for n in lines])
     assert lv[:, 1].min() < -assembly.MEDIAN_W / 2 and lv[:, 1].max() > assembly.MEDIAN_W / 2
+
+
+def test_road_inside_a_tunnel_is_a_separate_dry_piece_and_other_names_stay():
+    """トンネルの中（dry）の路面・側溝は名前に _tun を付けた部品で、路面の材質は asphalt_tunnel（RainFX の水たまりに入れない）。
+    トンネルの外の部品は今までどおりの名前（仕上げの貼り替え・雨の設定が名前で引く）。路面の面の数は分けても変わらない。"""
+    import tempfile
+    from pathlib import Path
+    import numpy as np
+    sec = _straight()
+    with tempfile.TemporaryDirectory() as d0, tempfile.TemporaryDirectory() as d1:
+        m0, m1 = Manifest(d0), Manifest(d1)
+        assembly.add_road(m0, sec)
+        assembly.add_road(m1, sec, dry=[(30.0, 60.0)])
+        assert {n: e["material"] for n, e in m1.meshes.items() if n.endswith("_tun")} == {
+            "1ROAD_s1_00_tun": "asphalt_tunnel", "1ROAD_s1_gutterL_00_tun": "concrete", "1ROAD_s1_gutterR_00_tun": "concrete"}
+        assert set(m0.meshes) <= set(m1.meshes)
+        faces = lambda m, names: sum(len(np.load(Path(m.root) / m.meshes[n]["file"])["faces"]) for n in names)
+        assert faces(m0, ["1ROAD_s1_00"]) == faces(m1, ["1ROAD_s1_00", "1ROAD_s1_00_tun"])

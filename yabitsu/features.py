@@ -30,13 +30,14 @@ class Feature:
     height_m: float
     note: str
     width_m: float = 0.0  # 歩道の幅、道の上を渡る橋が道の外へ張り出す長さ
+    material: str = ""    # 擁壁を道から離して立てた所の手前の面の材質（空なら草地 ground。砂利の路肩は gravel_grey）
 
 
 def load_features_rows(rows):
     """表の行（区間の表を通しの距離へずらしたもの、または CSV をそのまま読んだもの）を Feature に。"""
     num = lambda v: float(v) if v not in (None, "") else 0.0
     return [Feature(float(r["s_from"]), float(r["s_to"]), str(r["side"]).strip(), str(r["type"]).strip(),
-                    num(r.get("height_m")), r.get("note") or "", num(r.get("width_m")))
+                    num(r.get("height_m")), r.get("note") or "", num(r.get("width_m")), (r.get("material") or "").strip())
             for r in rows if r.get("s_from") not in (None, "")]
 
 
@@ -72,7 +73,7 @@ def cut_at(feats, gaps):
                             nxt.append((g1, b))
                 pieces = nxt
         cut = pieces != [(f.s_from, f.s_to)]
-        out += [Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m) for a, b in pieces
+        out += [Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m, f.material) for a, b in pieces
                 if b - a >= (MIN_PIECE_M if cut else 0.0)]
     return out
 
@@ -101,7 +102,7 @@ def cut_off(feats, sec, paved):
                 j += 1
             a = f.s_from if k == 0 else float(s[k]); b = f.s_to if j == len(idx) - 1 else float(s[j])
             if b - a >= MIN_PIECE_M:
-                out.append(Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m))
+                out.append(Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m, f.material))
             k = j + 1
     return out
 

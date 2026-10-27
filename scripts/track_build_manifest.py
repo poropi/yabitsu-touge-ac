@@ -41,7 +41,8 @@ def main():
     sites = [x for x in (pass_site, tera_site, goma_site) if x]
     assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps],   # 町の範囲と分かれる所は多角形で作る
                       mouths=[mo for x in sites for mo in x.mouths()],   # 峠・寺山・護摩屋敷のわき道の入口は側溝をくぼませない
-                      no_lines=[r for x in (tera_site, goma_site) if x for r in x.no_lines()])   # 寺山富士見橋のまわりは路肩の白線が無い
+                      no_lines=[r for x in (tera_site, goma_site) if x for r in x.no_lines()],   # 寺山富士見橋のまわりは路肩の白線が無い
+                      dry=[(t_.s0, t_.s1) for t_ in __import__("yabitsu.tunnel", fromlist=["x"]).from_osm(side_roads.load_elements(), sec)])   # トンネルの中は水たまりを作らない材質
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
     mid = dict(np.load(P / "track_terrain_mid.npz"))
     add_far_photo(m, far)
@@ -173,10 +174,15 @@ def main():
             b = min(track_blds, key=lambda q: q.footprint.distance(c))
             if b.footprint.distance(c) < 10:
                 b.roof = {"type": "hip", "rise_m": 4.5, "color": "#6B5B45"}; b.wall = "#8A7356"; b.windows = False
+    # S3 の名古木〜1.7 km の道ぞいの家は部品の家（house_kit）。箱に窓の絵の家はストリートビューと全く違って見えた（2026-10-28）
+    from yabitsu import house_kit
+    s3_0 = float(bounds["s3"][0])
+    hk_blds, track_blds, hk_line, hk_road = house_kit.split(track_blds, sec, s3_0)
     for name, rel in buildings.write_textures(track_blds, config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel)
     assembly.add_meshes(m, [(f"{n[:-3]}_trk{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in
                             buildings.merge_by_material(buildings.building_meshes(track_blds, ground, keep_out))])
+    hk_items, hk_pals = house_kit.house_meshes(hk_blds, ground, hk_road, near_line=hk_line, avoid=keep_out)
     band = LineString(np.c_[sec.x, sec.y]).buffer(scenery.BAND_M); shapely.prepare(band)   # コースから 200m だけ
     roads = scenery.road_polygons(side_roads.load_elements(), keep_out, near=band)
     from yabitsu import town as town_mod
@@ -227,10 +233,18 @@ def main():
         m.add_material(name, texture=rel)
     lots = json.loads((config.DATA_MANUAL / "s3_lots.json").read_text(encoding="utf-8"))   # 店の駐車場・敷地の舗装と白線
     assembly.add_meshes(m, tw.lot_meshes(lots), group=config.TOWN_GROUP)
+    hk_town, blds, _, _ = house_kit.split(blds, sec, s3_0)
     for name, rel in buildings.write_textures(blds, config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel)
     avoid = tw.paved_avoid()
     assembly.add_meshes(m, buildings.merge_by_material(buildings.building_meshes(blds, tw.ground.z, avoid)), group=config.TOWN_GROUP)
+    t_items, t_pals = house_kit.house_meshes(hk_town, tw.ground.z, hk_road, near_line=hk_line, avoid=avoid)
+    for name, rel in house_kit.write_textures(hk_pals + t_pals, config.TRACK_BUILD_DIR / "textures").items():
+        m.add_material(name, texture=rel)
+    assembly.add_meshes(m, [(f"{n[:-3]}_hk{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in buildings.merge_by_material(hk_items)])
+    assembly.add_meshes(m, [(f"{n[:-3]}_hkt{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in buildings.merge_by_material(t_items)],
+                        group=config.TOWN_GROUP)
+    print(f"部品の家：道ぞい {len(hk_blds)} 軒・町 {len(hk_town)} 軒、三角形 {sum(len(x[2]) for x in hk_items + t_items) * 2}", flush=True)
     for j, k in others:   # ほかの交差点の町：別の kn5（j.group）。名前は town → 交差点の名前
         rn = lambda items, j=j: nagoki.rename_meshes(items, j.name)
         assembly.add_meshes(m, rn(k.meshes()), group=j.group)

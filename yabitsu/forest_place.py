@@ -19,6 +19,8 @@ DEFAULT_PLACE = {
     "jitter": 0.42,           # 格子からのずれ（間隔に対する割合）
     "understory": {"max_d": 30.0, "fern_spacing": 3.5, "fern_p": 0.45, "shrub_spacing": 6.0, "shrub_p": 0.35},
     "overhang_clear_m": 5.0,  # 道路の上に張り出す枝の、路面からの最低の高さ
+    # 庭木（森の地図の 4）：集落の庭・生け垣。小さめの広葉樹と、ときどき檜（生け垣・庭の針葉樹）、低木
+    "garden": {"spacing": 5.0, "p": 0.6, "size": [0.45, 0.8], "conifer_share": 0.2, "shrub_spacing": 2.5, "shrub_p": 0.55},
 }
 DTYPE = [("x", "f8"), ("y", "f8"), ("z", "f8"), ("pattern", "U16"), ("angle_deg", "f4"), ("scale", "f4")]
 
@@ -108,6 +110,22 @@ def place(area, fm, ground, keep, models, cfg, seed=1, species=None, road_surfac
             size = rng.uniform(*tier["size"], len(P)).astype(np.float32)
             out.append((P, z, pats, size, d))
         lo = hi
+
+    if g := cfg.get("garden"):
+        for spacing, p, small in ((g["spacing"], g["p"], False), (g["shrub_spacing"], g["shrub_p"], True)):
+            P = _grid(bounds, spacing, cfg["jitter"], rng)
+            if isinstance(area, BaseGeometry):
+                P = P[shapely.contains_xy(area, P[:, 0], P[:, 1])]
+            P = P[fm.at(P) == 4]
+            P = P[(rng.random(len(P)) < p) & ~keep.blocked(P)]
+            z = ground.z(P); ok = np.isfinite(z); P, z = P[ok], z[ok]
+            if small:
+                names = np.full(len(P), "shrub")
+            else:
+                names = np.where(rng.random(len(P)) < g["conifer_share"], "hinoki", "broadleaf")
+            pats = np.array([species[n][rng.integers(len(species[n]))] for n in names], dtype="U16")
+            size = (rng.uniform(0.8, 1.25, len(P)) if small else rng.uniform(*g["size"], len(P))).astype(np.float32)
+            out.append((P, z, pats, size, keep.course_distance(P)))
 
     # 下草（シダ・低木）：道路のそばの森の中だけ
     u = cfg["understory"]

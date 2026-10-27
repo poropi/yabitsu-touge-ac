@@ -1,3 +1,4 @@
+import pytest
 import numpy as np
 
 from yabitsu import forestmap
@@ -96,3 +97,47 @@ def test_brown_near_houses_is_farmland():
     house = [np.array([[0.0, 18.0], [4.0, 18.0], [4.0, 22.0], [0.0, 22.0]])]
     forestmap.farm_filter(fm, rgb, 1.0, house, [], {**CFG, "farm_m": 150.0})
     assert fm.at(np.array([[60.0, 20.0], [380.0, 20.0]])).tolist() == [0, 2]
+
+
+def test_restore_above_water_brings_back_forest_on_land_inside_a_lake_outline():
+    """OSM の湖の輪郭が陸の斜面まで含んでいた（北原の南東の丘）：水面＋3 m より高く、写真で森のマスだけ森に戻す。"""
+    fm = forestmap.ForestMap(x0=0.0, y1=40.0, cell=4.0, cls=np.ones((10, 10), np.uint8))
+    raw = fm.cls.copy(); raw[:, 9] = 0                                         # 東の端の列は写真でも森でない
+    lake = [np.array([[0.0, 0.0], [40.0, 0.0], [40.0, 40.0], [0.0, 40.0]])]
+    forestmap.clear_polygons(fm, lake)
+    zf = lambda xy: np.where(np.asarray(xy)[:, 0] < 20.0, 284.0, 300.0)       # 西半分は水面の高さ、東半分は陸
+    n = forestmap.restore_above_water(fm, raw, lake, zf, 285.0)
+    got = fm.at(np.array([[10.0, 10.0], [30.0, 10.0], [38.0, 10.0]]))
+    assert got.tolist() == [0, 1, 0] and n == 10 * 4                          # 東半分（x 20〜36）の 4 列だけ
+
+
+def test_mountain_forest_greens_steep_slopes_but_keeps_bare_rock_villages_and_flat_fields():
+    """山の斜面は森：急な斜面の開けた土地のうち、写真で森（集落で外した茶色い広葉樹）か緑っぽい所を森に。ベージュの崩れ・家のまわり・平らな畑は残す。"""
+    cls = np.zeros((4, 4), np.uint8)
+    fm = forestmap.ForestMap(x0=0.0, y1=16.0, cell=4.0, cls=cls)
+    raw = np.zeros((4, 4), np.uint8); raw[0, 0] = 2                                # (0,0)：写真では広葉樹（集落の判定で外した）
+    rgb = np.zeros((8, 8, 3), np.uint8)
+    rgb[...] = (90, 110, 90)                                                      # 緑っぽい（夏の森）
+    rgb[0:2, 2:4] = (200, 185, 160)                                               # (0,1)：ベージュのむき出しの土
+    keep = np.zeros((4, 4), bool); keep[0, 2] = True                              # (0,2)：家のまわり
+    slope = np.full((4, 4), 30.0, np.float32); slope[0, 3] = 3.0                  # (0,3)：平らな畑
+    n = forestmap.mountain_forest(fm, raw, rgb, 2.0, keep, slope)
+    assert fm.cls[0].tolist() == [2, 0, 0, 0]
+    assert (fm.cls[1:] == 2).all() and n == 1 + 12
+
+
+def test_slope_map_measures_degrees_from_the_ground():
+    fm = forestmap.ForestMap(x0=0.0, y1=40.0, cell=4.0, cls=np.zeros((10, 10), np.uint8))
+    s = forestmap.slope_map(fm, lambda xy: np.asarray(xy)[:, 0] * 0.5)            # 東へ 1 m で 0.5 m 上る ＝ 26.6°
+    assert s[5, 5] == pytest.approx(26.57, abs=0.05)
+
+
+def test_settlement_keeps_textured_light_green_as_garden():
+    """集落で森にしない明るい緑のうち、緑っぽい所（G>B）は庭木（4）、灰色の屋根の並びは何も無し（名古木の道ぞい、2026-10-28）。"""
+    cls = np.ones((10, 20), np.uint8)
+    fm = forestmap.ForestMap(x0=0.0, y1=40.0, cell=4.0, cls=cls)
+    rgb = np.zeros((40, 80, 3), np.uint8)
+    rgb[:, :40] = (150, 175, 110)       # 明るい緑（庭木・生け垣）：明るさ 0.57 は settle_lum_max より明るい
+    rgb[:, 40:] = (140, 140, 145)       # 灰色の屋根
+    forestmap.settlement_filter(fm, rgb, 1.0, np.ones((10, 20), bool), CFG)
+    assert fm.at(np.array([[20.0, 20.0], [60.0, 20.0]])).tolist() == [4, 0]

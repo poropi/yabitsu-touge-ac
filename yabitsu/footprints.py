@@ -76,6 +76,39 @@ def merged(gsi, osm):
     return out
 
 
+def overture_polygons(path):
+    """Overture Maps の建物（data/raw/overture_buildings.json。日本は Microsoft の機械学習の輪郭が多い）：[(多角形, tags)]。"""
+    import json
+    out = []
+    for f in json.loads(path.read_text(encoding="utf-8"))["features"]:
+        g = f["geometry"]
+        for rings in ([g["coordinates"]] if g["type"] == "Polygon" else g["coordinates"]):
+            c = np.asarray(rings[0], float)
+            x, y = geo.to_local(c[:, 1], c[:, 0])
+            poly = Polygon(np.c_[x, y]).buffer(0)
+            if poly.area > 8.0:
+                out.append((poly, {"_id": f["id"], "_src": f.get("src")}))
+    return out
+
+
+def fill_gaps(base, extra, overlap=0.2):
+    """base（merged の結果）に、どれとも重ならない（重なりが小さい方の面積の overlap 未満の）extra の建物を "ov" として足す。
+    地理院の外周線（基盤地図情報・最適化ベクトルタイルとも）に無い家が名古木の道ぞいで何軒も抜け、芝生に見えた（2026-10-28）。"""
+    from shapely.strtree import STRtree
+    polys = [p for p, _, _ in base]
+    tree = STRtree(polys) if polys else None
+    out = list(base)
+    for e, t in extra:
+        hit = False
+        for k in (tree.query(e) if tree is not None else []):
+            b = polys[int(k)]
+            if e.intersection(b).area > overlap * min(e.area, b.area):
+                hit = True; break
+        if not hit:
+            out.append((e, "ov", t))
+    return out
+
+
 def roof_rgb(cache, poly, px=0.5):
     """空中写真の、外周線の内側（0.5m 内側）の画素の色の中央値（0〜1）。"""
     import numpy as np

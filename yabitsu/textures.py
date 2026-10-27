@@ -5,6 +5,7 @@ from PIL import Image
 
 MATERIALS = {
     "asphalt": {"texture": "textures/asphalt.png", "shader": "ksPerPixel"},
+    "asphalt_tunnel": {"texture": "textures/asphalt.png", "shader": "ksPerPixel"},   # トンネルの中の路面（絵は asphalt。RainFX の水たまりに入れない）
     "concrete": {"texture": "textures/concrete.png", "shader": "ksPerPixel"},
     "ground": {"texture": "textures/ground.png", "shader": "ksPerPixel"},
     "line_white": {"texture": "textures/line_white.png", "shader": "ksPerPixel"},
@@ -81,6 +82,11 @@ MATERIALS = {
     "gravel_dark": {"texture": "textures/gravel_dark.png", "shader": "ksPerPixel"}, # 暗い灰色の砂利と小石（護摩屋敷の水の場所）
     "gravel_grey": {"texture": "textures/gravel_grey.png", "shader": "ksPerPixel"}, # 道より少し明るい灰色の砂利の広場（青山荘の入口）
     "mesh_green": {"texture": "textures/mesh_green.png", "shader": "ksPerPixelAT", "alpha": True, "two_sided": True},   # 緑のひし形の金網（すき間は透明。護摩屋敷の水の裏）
+    "concrete_moss": {"texture": "textures/concrete_moss.png", "shader": "ksPerPixel"}, # 苔と黒い汚れの古いコンクリート（地獄沢橋の欄干）
+    "rock_moss": {"texture": "textures/rock_moss.png", "shader": "ksPerPixel"},         # 沢の苔むした灰色の岩（地獄沢）
+    "steel_galv": {"texture": "textures/steel_galv.png", "shader": "ksPerPixel"},       # 亜鉛めっきの鋼の欄干（札掛橋。pole_grey はゲームの日なたで白く見えた）
+    "kenchi_moss": {"texture": "textures/kenchi_moss.png", "shader": "ksPerPixel"},     # 苔むした間知石の谷積み（大洞トンネルの坑口。1 枚 ＝ 2 m 四方）
+    "concrete_grey": {"texture": "textures/concrete_grey.png", "shader": "ksPerPixel"}, # 灰色のコンクリート（吹風トンネルの坑口。concrete は日なたで白く見えた）
 }
 
 
@@ -347,6 +353,48 @@ def _shingles(w=512, h=512, seed=48):
     return _u8(np.stack([g * (1.05 - moss * 0.4), g * (0.92 + moss * 0.3), g * (0.82 - moss * 0.2)], -1))
 
 
+def _concrete_moss(w=512, h=512, seed=56):
+    """古いコンクリートの欄干：明るい灰褐色に、上から垂れた黒い汚れの縦すじと、緑の苔のまだら（ストリートビュー 地獄沢橋 2025-07）。"""
+    rng = np.random.default_rng(seed)
+    n = periodic_noise(w, 12, rng); m = periodic_noise(w, 48, rng); streak = periodic_noise(w, 6, rng)
+    g = 0.52 + 0.10 * (n - 0.5)
+    dirt = np.clip((np.repeat(streak.mean(0, keepdims=True), h, 0) - 0.45) * 2.5, 0, 1) * 0.35   # 縦すじ（列ごとの汚れ）
+    g = g * (1 - dirt)
+    moss = np.clip((m - 0.5) * 2.5, 0, 1) * (0.6 + 0.4 * n)
+    stone = np.stack([g * 1.02, g * 0.99, g * 0.92], -1)
+    green = np.stack([0.26 + 0.08 * n, 0.33 + 0.10 * n, 0.12 + 0.04 * n], -1)
+    return _u8(stone * (1 - moss[..., None]) + green * moss[..., None])
+
+
+def _rock_moss(w=512, h=512, seed=57):
+    """沢の岩：割れ目の暗い灰色の石に、上半分に多い苔のまだら（ストリートビュー 地獄沢 2025-07）。"""
+    rng = np.random.default_rng(seed)
+    blob = periodic_noise(w, 30, rng); crack = periodic_noise(w, 5, rng); m = periodic_noise(w, 40, rng)
+    g = 0.40 + 0.14 * (blob - 0.5) - 0.10 * (crack < 0.3)
+    moss = np.clip((m - 0.52) * 2.8, 0, 1) * np.linspace(1.0, 0.4, h)[:, None]   # v が小さい方（上）に苔が多い
+    stone = np.stack([g, g * 0.99, g * 0.94], -1)
+    green = np.stack([0.24 + 0.08 * crack, 0.32 + 0.10 * crack, 0.10 + 0.04 * crack], -1)
+    return _u8(stone * (1 - moss[..., None]) + green * moss[..., None])
+
+
+def _kenchi_moss(w=512, h=512, seed=58, stones=5):
+    """苔むした間知石の谷積み（石を 45° に立てた菱形の並び）：灰色の石ごとに明るさを変え、目地は暗く、苔は大きなまだら。
+    1 枚 ＝ 2 m 四方に stones 個 × stones 個の石（大洞トンネルの坑口、ストリートビュー 2025-07）。"""
+    rng = np.random.default_rng(seed)
+    yy, xx = np.mgrid[0:h, 0:w] / np.array([h, w])[:, None, None] * stones
+    u, v = xx + yy, xx - yy                                   # 45° に回した格子
+    iu, iv = np.floor(u), np.floor(v); fu, fv = u - iu, v - iv
+    joint = np.minimum.reduce([fu, 1 - fu, fv, 1 - fv]) < 0.06
+    tint = rng.uniform(0.85, 1.15, (4 * stones + 4, 4 * stones + 4))[(iu.astype(int) % (4 * stones + 4)), (iv.astype(int) % (4 * stones + 4))]
+    n = periodic_noise(w, 10, rng); m = periodic_noise(w, 60, rng)
+    g = (0.46 + 0.10 * (n - 0.5)) * tint
+    g = np.where(joint, g * 0.45, g)
+    moss = np.clip((m - 0.45) * 2.2, 0, 1) * (0.6 + 0.4 * n)
+    stone = np.stack([g * 1.0, g * 0.98, g * 0.92], -1)
+    green = np.stack([0.25 + 0.08 * n, 0.33 + 0.10 * n, 0.12 + 0.04 * n], -1)
+    return _u8(stone * (1 - moss[..., None]) + green * moss[..., None])
+
+
 def _lava_moss(w=512, h=512, seed=49):
     """苔むした黒い溶岩石：穴の多い暗い灰色の塊に、明るい黄緑の苔のまだら（利用者の写真 2020〜2025）。"""
     rng = np.random.default_rng(seed)
@@ -609,6 +657,17 @@ def sign_texture(text, bg, fg, w_px, h_px, border=None):
     return im
 
 
+def panel_sign_texture(panels, w_px, h_px, frame="#FFFFFF"):
+    """縦に区切った看板（コンビニの立て看板：店名・P・たばこ・矢印）。panels=[{"text", "bg", "fg", "h"（高さの割合）}]。白い縁つき。"""
+    from PIL import ImageDraw
+    im = Image.new("RGB", (w_px, h_px), _rgb(frame)); y = int(h_px * 0.03); m = int(w_px * 0.06)
+    tot = sum(float(p_.get("h", 1.0)) for p_ in panels); avail = h_px - 2 * y - int(h_px * 0.015) * (len(panels) - 1)
+    for p_ in panels:
+        hh = int(avail * float(p_.get("h", 1.0)) / tot)
+        im.paste(sign_texture(p_["text"], p_.get("bg", "#FFFFFF"), p_.get("fg", "#000000"), w_px - 2 * m, hh), (m, y)); y += hh + int(h_px * 0.015)
+    return im
+
+
 def _barricade(w=512, h=128):
     """工事用の柵の横板：黄と黒の斜めのしま（1枚＝1.8m）。"""
     yy, xx = np.mgrid[0:h, 0:w]
@@ -746,6 +805,11 @@ def write_textures(out_dir):
             "pole_brown": _gray(64, 51, 0.30, 0.03, (1.10, 0.80, 0.62)),
             "pole_blue": _gray(64, 52, 0.50, 0.04, (0.35, 0.65, 1.45)),
             "lava_moss": _lava_moss(),
+            "concrete_moss": _concrete_moss(),
+            "rock_moss": _rock_moss(),
+            "steel_galv": _gray(128, 58, 0.42, 0.05, (0.98, 1.0, 1.03)),
+            "kenchi_moss": _kenchi_moss(),
+            "concrete_grey": _gray(512, 59, 0.40, 0.10, (1.0, 0.99, 0.96), coarse=24, fine=2),
             "flagstone": _flagstone(),
             "gravel_grey": _gray(512, 54, 0.33, 0.26, (0.97, 1.0, 1.04), coarse=3, fine=1, specks=0.10),   # 写真の砂利は道の約 1.25 倍の明るさ（A090）。asphalt (67) の 1.25 倍
             "gravel_dark": _gray(512, 53, 0.19, 0.16, (1.0, 0.98, 0.94), coarse=3, fine=1, specks=0.08)}   # ゲームでは約 2.2 倍に明るく見える（2026-10-25 の撮影で画像 95 → 210、写真は 85〜140）ので平均 50
@@ -753,6 +817,9 @@ def write_textures(out_dir):
     for name, a in imgs.items():
         paths[name] = out / Path(MATERIALS[name]["texture"]).name
         Image.fromarray(a).save(paths[name])
+    for name, spec in MATERIALS.items():   # 絵を共有する材質（asphalt_tunnel は asphalt.png）
+        if name not in paths and (out / Path(spec["texture"]).name) in paths.values():
+            paths[name] = out / Path(spec["texture"]).name
     return paths
 
 

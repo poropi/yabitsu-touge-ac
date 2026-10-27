@@ -215,7 +215,7 @@ def signal_meshes(signals, z_fn, prefix="town_signal"):
 
 
 def object_meshes(objects, z_fn, prefix="town_obj"):
-    """objects = [{"kind": bus_stop | guard_pipe | stele | pole | torii | lantern | hoarding | mirror | road_sign | bench | tree_stake | vending | bollard | retaining_wall | delineator | sawhorse | cushion_drum, "points": [[lat, lon], ...], ...}]"""
+    """objects = [{"kind": bus_stop | guard_pipe | stele | pole | torii | lantern | hoarding | mirror | road_sign | bench | tree_stake | vending | bollard | retaining_wall | delineator | sawhorse | cushion_drum | concrete_rail | steel_rail | rock | cascade, "points": [[lat, lon], ...], ...}]"""
     groups, walls, mat_walls, fence_walls = {}, [], {}, []
     add = lambda mat, part: groups.setdefault(mat, []).append(part)
     zf = lambda p: float(z_fn(np.atleast_1d(p[0]), np.atleast_1d(p[1]))[0])
@@ -382,6 +382,73 @@ def object_meshes(objects, z_fn, prefix="town_obj"):
                 fence_walls.append(_quad(q[i], q[i + 1], min(za, zb) - 0.3, max(za, zb) + h + 0.2, both=True))
             for p in q:
                 z = zf(p); add(mat, _box(p, (1, 0), 0.07, 0.07, z - 0.1, z + h + 0.05))
+        elif kind == "concrete_rail":   # コンクリートの欄干（地獄沢橋）：post_every_m おきの角柱、上の太い笠木、その下の細い横木 rails、
+            # 両端の太く高い親柱。fascia_m：橋の外側（outside＝線の進む向きの左なら +1、右なら -1）の側面を路面から下へ。見えない当たり判定の壁つき
+            q = np.asarray(LineString(pts).segmentize(float(ob.get("post_every_m", 1.7))).coords); h = float(ob.get("height_m", 0.8))
+            mat = ob.get("material", "concrete_moss"); out_s = float(ob.get("outside", 1.0)); fas = float(ob.get("fascia_m", 0.0))
+            for i in range(len(q) - 1):
+                za, zb = zf(q[i]), zf(q[i + 1]); u = q[i + 1] - q[i]; L = float(np.linalg.norm(u)); u = u / L; c = (q[i] + q[i + 1]) / 2; zm = (za + zb) / 2
+                n = np.array([-u[1], u[0]]) * out_s
+                add(mat, _box(c, u, 0.2, L, zm + h - 0.18, zm + h))                      # 笠木
+                for r in ob.get("rails", [0.3, 0.55]):
+                    add(mat, _box(c, u, 0.1, L, zm + r - 0.05, zm + r + 0.05))            # 横木
+                if fas > 0:   # 橋の側面（床版の厚み）：外側の面を路面から fascia_m 下まで
+                    a0, b0 = q[i] + n * 0.12, q[i + 1] + n * 0.12
+                    add(mat, _quad(b0, a0, min(za, zb) - fas, max(za, zb), both=True) if out_s > 0 else _quad(a0, b0, min(za, zb) - fas, max(za, zb), both=True))
+                fence_walls.append(_quad(q[i], q[i + 1], min(za, zb) - 0.3, max(za, zb) + h + 0.2, both=True))
+            for k, p in enumerate(q):
+                end = k in (0, len(q) - 1); w = 0.3 if end else 0.18
+                d = q[min(k + 1, len(q) - 1)] - q[max(k - 1, 0)]
+                add(mat, _box(p, d, w, w, zf(p) - 0.1, zf(p) + h + (0.12 if end else 0.0)))
+        elif kind == "steel_rail":   # 橋の鋼の欄干（札掛橋）：コンクリートの地覆（幅 curb_w・高さ curb_h）の上に、post_every_m おきの角の柱と
+            # 平たい横木 rails（路面からの高さ）。material（既定 steel_galv＝亜鉛めっきの灰色）。見えない当たり判定の壁つき
+            q = np.asarray(LineString(pts).segmentize(float(ob.get("post_every_m", 2.0))).coords); mat = ob.get("material", "steel_galv")
+            cw, ch = float(ob.get("curb_w", 0.35)), float(ob.get("curb_h", 0.25)); rails = ob.get("rails", [0.6, 1.05]); top = max(rails)
+            pr = float(ob.get("pipe_r", 0.0)); bars = ob.get("bars")   # pipe_r：横木を丸い管に（塩水橋）。bars：{"every_m","z0","z1"} 内側の縦格子
+            for i in range(len(q) - 1):
+                za, zb = zf(q[i]), zf(q[i + 1]); u = q[i + 1] - q[i]; L = float(np.linalg.norm(u)); u = u / L; c = (q[i] + q[i + 1]) / 2; zm = (za + zb) / 2
+                add("concrete", _box(c, u, cw, L, zm - 0.6, zm + ch))                      # 地覆（橋の縁の立ち上がりと床版の側面）
+                for r in rails:
+                    if pr > 0:
+                        add(mat, _slanted(q[i] - u * pr, za + r, q[i + 1] + u * pr, zb + r, pr, 8))
+                    else:
+                        add(mat, _box(c, u, 0.07, L, zm + r - 0.07, zm + r + 0.05))
+                if bars:
+                    b0, b1, st = float(bars.get("z0", ch)), float(bars.get("z1", 0.8)), float(bars.get("every_m", 0.15))
+                    for z2 in (b0, b1):
+                        add(mat, _box(c, u, 0.04, L, zm + z2 - 0.03, zm + z2 + 0.03))
+                    for tt in np.arange(st / 2, L, st):
+                        pp = q[i] + u * tt; zz = za + (zb - za) * tt / L
+                        add(mat, _quad(pp - u * 0.012, pp + u * 0.012, zz + b0, zz + b1, both=True))
+                fence_walls.append(_quad(q[i], q[i + 1], min(za, zb) - 0.3, max(za, zb) + top + 0.2, both=True))
+            for k, p in enumerate(q):
+                d = q[min(k + 1, len(q) - 1)] - q[max(k - 1, 0)]
+                add(mat, _box(p, d, 0.1, 0.1, zf(p) + ch, zf(p) + top + 0.05))
+        elif kind == "rock":   # 沢の岩：points ごとに sizes[k]=[幅, 高さ]（無ければ size）。ゆがんだ楕円の 8 角を 3 段にして上を丸め、
+            # sink（高さに対する割合）だけ地面に埋める。material（既定 rock_moss）
+            rng = np.random.default_rng(int(ob.get("seed", 7))); sizes = ob.get("sizes") or [ob.get("size", [1.0, 0.6])] * len(pts)
+            a = np.linspace(0, 2 * np.pi, 8, endpoint=False)
+            for p, (w, hh) in zip(pts, sizes):
+                z = zf(p) - float(ob.get("sink", 0.3)) * hh; rot = rng.uniform(0, np.pi); ell = rng.uniform(0.6, 1.0)
+                v = []
+                for sc, zz in ((1.0, z), (0.9, z + 0.55 * hh), (0.5, z + 0.9 * hh)):
+                    j = sc * (1.0 + rng.uniform(-0.18, 0.18, 8))
+                    xy = np.c_[np.cos(a + rot) * w / 2 * j, np.sin(a + rot) * w / 2 * ell * j]
+                    v.append(np.c_[p + xy, zz + rng.uniform(-0.05, 0.05, 8) * hh])
+                v = np.r_[np.concatenate(v), [[*p, z + hh]]]
+                fs = [[k * 8 + i, k * 8 + (i + 1) % 8, (k + 1) * 8 + (i + 1) % 8, (k + 1) * 8 + i] for k in range(2) for i in range(8)]
+                fs += [[16 + i, 16 + (i + 1) % 8, 24, 24] for i in range(8)]
+                uv = np.c_[np.r_[np.tile(np.arange(8) / 8 * 2.0, 3), 0.5], 1.0 - (v[:, 2] - z) / max(hh, 0.1)]
+                add(ob.get("material", "rock_moss"), (v, np.array(fs), uv))
+        elif kind == "cascade":   # 沢の白い流れ：points＝流れを横切る線の左右 2 点。水面（z_abs、無ければ地面＋water_m）に、下流（down_deg の向き）へ foam_m の白い泡の面と、
+            # 線の上に高さ lip_m の白い落ち口の面（小さな段の滝）
+            a0, b0 = pts[0], pts[1]; r = np.radians(float(ob["down_deg"])); d = np.array([np.sin(r), np.cos(r)])
+            wz = float(ob.get("water_m", 0.3)); fm = float(ob.get("foam_m", 1.5)); lip = float(ob.get("lip_m", 0.3))
+            za, zb = (float(ob["z_abs"]),) * 2 if "z_abs" in ob else (zf(a0) + wz, zf(b0) + wz)   # z_abs：水面の高さ（沢の線の高さ）
+            v = np.array([[*a0, za + 0.04], [*b0, zb + 0.04], [*(b0 + d * fm), zb - 0.12 * fm + 0.04], [*(a0 + d * fm), za - 0.12 * fm + 0.04]])
+            add("water_fall", (v, np.array([[0, 1, 2, 3], [3, 2, 1, 0]]), np.array([[0, 0], [1, 0], [1, 1], [0, 1]], float)))
+            if lip > 0:
+                add("water_fall", _quad(a0, b0, min(za, zb) - lip, max(za, zb) + 0.05, both=True))
         elif kind == "mesh_fence":   # 金網のフェンス（高さ height_m、2.0 m おきに灰色の支柱）。material：網の絵（既定は緑の縦格子 railing_bars）
             q = np.asarray(LineString(pts).segmentize(2.0).coords); h = float(ob.get("height_m", 1.5))
             for i in range(len(q) - 1):
@@ -474,6 +541,9 @@ def write_pole_sign_textures(signs, out_dir, prefix="town"):
              "trail_map": tx.trail_map_texture, "terayama_toilet_front": tx.terayama_toilet_front_texture,
              "cafe_front": tx.cafe_front_texture, "cafe_attic": tx.cafe_attic_texture, "rail_band": tx.rail_band_texture,
              "hall_front": tx.hall_front_texture, "hall_sign": tx.hall_sign_texture}[s["style"]](int(w * px * 2), int(h * px * 2)).save(out / f"{mat}.png")
+        elif s.get("panels"):   # 縦に区切った看板（コンビニの立て看板）
+            from .textures import panel_sign_texture
+            panel_sign_texture(s["panels"], int(w * px * 2), int(h * px * 2)).save(out / f"{mat}.png")
         elif s.get("style") == "wood_carved":   # 木を彫って白く塗った看板（lines に行ごとの大きさ・帯）
             from .textures import wood_sign_texture
             wood_sign_texture(s["lines"], int(w * px * 2), int(h * px * 2)).save(out / f"{mat}.png")

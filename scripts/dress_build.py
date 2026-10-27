@@ -32,7 +32,9 @@ RETEX = {
     "line_white": ("paint_white", (1, 1), "line"), "line_orange": ("paint_orange", (1, 1), "line"),
     "wall_kenchi": ("kenchi", (2, 2), "wall"), "wall_block": ("block_wall", (2, 1), "wall"),
     "wall_concrete": ("concrete_wall", (2, 2), "wall"),
+    "wall_ishigaki": ("ishigaki", (2, 2), "wall"),   # 名古木の町の石積み（間知石の谷積み）。kenchi を 2.5 倍にした絵は網目に見えた（2026-10-28）
 }
+TOWN_WALL_S = 1000.0     # 町の中（s3_dress.csv の「町の中」）の間知の擁壁は石積みの絵にする
 
 
 def dress_rows(path):
@@ -65,7 +67,12 @@ def retex_assign(cl, rows, s_range):
         elif k == "road_plane":
             assign[name] = "plane_town"
         elif k == "wall":
-            assign[name] = f"wall_{finish.get(name, 'kenchi')}"
+            fin = finish.get(name, 'kenchi')
+            if fin == "kenchi":
+                v = np.load(MANIFEST / m["meshes"][name]["file"])["verts"]
+                if cl["s"][tree.query(v[:, :2].mean(0))[1]] - s_range[0] < TOWN_WALL_S:
+                    fin = "ishigaki"
+            assign[name] = f"wall_{fin}"
         elif k in ("line_white", "line_orange"):
             continue                      # 線は引き直す（dress_lines）ので貼り替えない
         elif k == "parapet":
@@ -90,7 +97,7 @@ def write_retex_textures(keys, ext_dir: Path):
             from PIL import ImageEnhance
             comp = ImageEnhance.Color(comp).enhance(0.75)
         lum = np.asarray(comp.convert("L"), float) / 255.0
-        n = dress_tex.height_to_normal(lum, dress_tex.TEXTURES[base].normal)
+        n = dress_tex.height_to_normal(lum, dress_tex.normal_strength(base))
         nm = Image.fromarray(((n * 0.5 + 0.5) * 255).astype(np.uint8))
         (ext_dir / f"dress_{key}.dds").write_bytes(kn5.dds_bytes(comp))
         (ext_dir / f"dress_{key}_nm.dds").write_bytes(kn5.dds_bytes(nm))

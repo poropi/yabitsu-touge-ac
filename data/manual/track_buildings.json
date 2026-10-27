@@ -1159,47 +1159,48 @@
 },
 {
 "id": "osm371207635",
-"name": "",
+"name": "西の板張りの小屋",
 "footprint": [
 [
-35.4408914,
-139.2122615
+35.4409237,
+139.2121429
 ],
 [
-35.440824,
-139.2122598
+35.4409223,
+139.2122253
 ],
 [
-35.4408266,
-139.2121035
+35.4407943,
+139.2122221
 ],
 [
-35.440894,
-139.2121052
+35.4407957,
+139.2121397
 ],
 [
-35.4408914,
-139.2122615
+35.4409237,
+139.2121429
 ]
 ],
 "storeys": 1,
-"height_m": 3.2,
+"height_m": 2.8,
 "roof": {
 "type": "gable",
-"rise_m": 1.5,
-"color": "#6B4A36"
+"rise_m": 1.3,
+"color": "#6E5040"
 },
-"wall": "#5C4A3C",
-"windows": true,
+"wall": "#4E3A2C",
+"windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": true
+"checked": true,
+"note": "焦げ茶の板張りの平屋、さびたトタンの切妻。長い辺を道（東）に向ける（OSM の外周線を 90° 回した、写真 A270 で 228°〜312°）（諸戸山林事務所のまわり（ストリートビュー panoid LsQE0E7eMQ1Ekg5V3AhLhw 2025-07、OSM、航空写真、2026-10-26））"
 },
 {
 "id": "osm371207645",
-"name": "",
+"name": "南の板張りの小屋",
 "footprint": [
 [
 35.4406902,
@@ -1223,19 +1224,20 @@
 ]
 ],
 "storeys": 1,
-"height_m": 3.2,
+"height_m": 2.8,
 "roof": {
 "type": "gable",
-"rise_m": 1.5,
-"color": "#6B4A36"
+"rise_m": 1.3,
+"color": "#6E5040"
 },
-"wall": "#5C4A3C",
-"windows": true,
+"wall": "#4E3A2C",
+"windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": true
+"checked": true,
+"note": "焦げ茶の板張りの平屋、さびたトタンの切妻（写真 A180 の遠く）（諸戸山林事務所のまわり（ストリートビュー panoid LsQE0E7eMQ1Ekg5V3AhLhw 2025-07、OSM、航空写真、2026-10-26））"
 },
 {
 "id": "osm369868058",
@@ -100618,7 +100620,7 @@
 },
 {
 "id": "osm371207637",
-"name": "",
+"name": "南の板張りの小屋",
 "footprint": [
 [
 35.4405382,
@@ -100642,23 +100644,24 @@
 ]
 ],
 "storeys": 1,
-"height_m": 3.2,
+"height_m": 2.8,
 "roof": {
 "type": "gable",
-"rise_m": 1.5,
-"color": "#6B4A36"
+"rise_m": 1.3,
+"color": "#6E5040"
 },
-"wall": "#5C4A3C",
-"windows": true,
+"wall": "#4E3A2C",
+"windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": true
+"checked": true,
+"note": "焦げ茶の板張りの平屋、さびたトタンの切妻（写真 A180 の遠く）（諸戸山林事務所のまわり（ストリートビュー panoid LsQE0E7eMQ1Ekg5V3AhLhw 2025-07、OSM、航空写真、2026-10-26））"
 },
 {
 "id": "osm371207639",
-"name": "",
+"name": "トタンの小屋",
 "footprint": [
 [
 35.44104,
@@ -100681,20 +100684,21 @@
 139.2125223
 ]
 ],
-"storeys": 2,
-"height_m": 5.0,
+"storeys": 1,
+"height_m": 3.6,
 "roof": {
 "type": "gable",
-"rise_m": 1.2,
-"color": "#7A7670"
+"rise_m": 1.0,
+"color": "#8C9092"
 },
-"wall": "#B8B2A6",
+"wall": "#A2A6A8",
 "windows": false,
 "shopfront": [],
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": true
+"checked": true,
+"note": "銀色のトタン張りの小屋、トタンの切妻（写真 A045・A090）（諸戸山林事務所のまわり（ストリートビュー panoid LsQE0E7eMQ1Ekg5V3AhLhw 2025-07、OSM、航空写真、2026-10-26））"
 },
 {
 "id": "osm595991860",
@@ -101033,5 +101037,9241 @@
 "lot": null,
 "checked": true,
 "note": "右（北西）の平屋、赤茶のトタンの片流れ屋根（ユーザーの売店の写真 2026-10-23：焦げ茶の板の看板建築、正面上に「国民宿舎 丹沢ホーム ヤビツ峠売店」、右に赤茶のトタンの片流れの小屋とコカ・コーラの自動販売機、野面石の台と段）（正面は絵 annex_front） 壁の色は日なたで明るく見えすぎた（ゲームの撮影 v13 で南の面が (225,198,179)）ので暗くした（2026-10-25）"
+},
+{
+"id": "osm371207678",
+"name": "諸戸山林事務所",
+"footprint": [
+[
+35.4409082,
+139.2126587
+],
+[
+35.4407859,
+139.2126901
+],
+[
+35.4407554,
+139.2125109
+],
+[
+35.4408781,
+139.2124794
+],
+[
+35.4409082,
+139.2126587
+]
+],
+"storeys": 2,
+"height_m": 6.0,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"ridge_deg": 348.0,
+"color": "#4A4844"
+},
+"wall": "#5A4E40",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": true,
+"note": "焦げ茶の板張りの 2 階建て、長い辺（軒）を道に向けた切妻（写真 A090・A135）。OSM の L 字の本体、写真の方位から石垣の約 6 m 奥へ（東へ 8 m ずらした）（諸戸山林事務所のまわり（ストリートビュー panoid LsQE0E7eMQ1Ekg5V3AhLhw 2025-07、OSM、航空写真、2026-10-26））"
+},
+{
+"id": "osm371207678_n",
+"name": "諸戸山林事務所（北の出っ張り）",
+"footprint": [
+[
+35.4408839,
+139.2125136
+],
+[
+35.4409165,
+139.2125052
+],
+[
+35.4409296,
+139.212582
+],
+[
+35.4408966,
+139.2125904
+],
+[
+35.4408839,
+139.2125136
+]
+],
+"storeys": 2,
+"height_m": 5.4,
+"roof": {
+"type": "gable",
+"rise_m": 1.2,
+"color": "#4A4844"
+},
+"wall": "#5A4E40",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": true,
+"note": "諸戸山林事務所の北の出っ張り（諸戸山林事務所のまわり（ストリートビュー panoid LsQE0E7eMQ1Ekg5V3AhLhw 2025-07、OSM、航空写真、2026-10-26））"
+},
+{
+"id": "osm371207642",
+"name": "南東の板張りの建物",
+"footprint": [
+[
+35.4406965,
+139.2124168
+],
+[
+35.4406899,
+139.2125907
+],
+[
+35.4405728,
+139.212584
+],
+[
+35.4405793,
+139.2124101
+],
+[
+35.4406965,
+139.2124168
+]
+],
+"storeys": 1,
+"height_m": 4.0,
+"roof": {
+"type": "gable",
+"rise_m": 1.6,
+"color": "#4A4844"
+},
+"wall": "#5A4E40",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": true,
+"note": "焦げ茶の板張りの平屋（写真 A135・A180 の石垣の奥）（諸戸山林事務所のまわり（ストリートビュー panoid LsQE0E7eMQ1Ekg5V3AhLhw 2025-07、OSM、航空写真、2026-10-26））"
+},
+{
+"id": "v1315_m5215",
+"name": "",
+"footprint": [
+[
+35.3809012,
+139.2341295
+],
+[
+35.3808996,
+139.2342109
+],
+[
+35.3808755,
+139.2342102
+],
+[
+35.3808772,
+139.2341288
+],
+[
+35.3809012,
+139.2341295
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#4A4A4A"
+},
+"wall": "#EDEBE6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1477_m5139",
+"name": "",
+"footprint": [
+[
+35.3815991,
+139.235897
+],
+[
+35.3816085,
+139.2360003
+],
+[
+35.3815556,
+139.2360075
+],
+[
+35.3815462,
+139.2359042
+],
+[
+35.3815991,
+139.235897
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1478_m5128",
+"name": "",
+"footprint": [
+[
+35.3816398,
+139.2359049
+],
+[
+35.3817162,
+139.2359008
+],
+[
+35.38172,
+139.236009
+],
+[
+35.3816436,
+139.2360131
+],
+[
+35.3816398,
+139.2359049
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1477_m5117",
+"name": "",
+"footprint": [
+[
+35.3817279,
+139.2359077
+],
+[
+35.3818174,
+139.2359024
+],
+[
+35.3818207,
+139.235988
+],
+[
+35.3817313,
+139.2359933
+],
+[
+35.3817279,
+139.2359077
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1499_m5140",
+"name": "",
+"footprint": [
+[
+35.3815646,
+139.2361112
+],
+[
+35.3816302,
+139.23615
+],
+[
+35.3815874,
+139.2362588
+],
+[
+35.3815218,
+139.23622
+],
+[
+35.3815646,
+139.2361112
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1590_m5121",
+"name": "",
+"footprint": [
+[
+35.381791,
+139.2372599
+],
+[
+35.3817014,
+139.2372563
+],
+[
+35.3817052,
+139.237117
+],
+[
+35.3817947,
+139.2371206
+],
+[
+35.381791,
+139.2372599
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1514_m5118",
+"name": "",
+"footprint": [
+[
+35.3817526,
+139.2363137
+],
+[
+35.3817918,
+139.2363102
+],
+[
+35.3817968,
+139.2363956
+],
+[
+35.3817576,
+139.2363991
+],
+[
+35.3817526,
+139.2363137
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1517_m5106",
+"name": "",
+"footprint": [
+[
+35.3819037,
+139.2364281
+],
+[
+35.3818568,
+139.2364299
+],
+[
+35.3818548,
+139.2363522
+],
+[
+35.3819018,
+139.2363504
+],
+[
+35.3819037,
+139.2364281
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1585_m5043",
+"name": "",
+"footprint": [
+[
+35.3824651,
+139.2371555
+],
+[
+35.3824411,
+139.2371549
+],
+[
+35.382442,
+139.2371024
+],
+[
+35.382466,
+139.2371031
+],
+[
+35.3824651,
+139.2371555
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1526_m5039",
+"name": "",
+"footprint": [
+[
+35.3824979,
+139.2365165
+],
+[
+35.3824551,
+139.2364801
+],
+[
+35.3824797,
+139.2364367
+],
+[
+35.3825225,
+139.2364731
+],
+[
+35.3824979,
+139.2365165
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1497_m5079",
+"name": "",
+"footprint": [
+[
+35.3821601,
+139.2362402
+],
+[
+35.3820581,
+139.2361454
+],
+[
+35.3820918,
+139.2360909
+],
+[
+35.3821938,
+139.2361858
+],
+[
+35.3821601,
+139.2362402
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1505_m5085",
+"name": "",
+"footprint": [
+[
+35.3821239,
+139.2362952
+],
+[
+35.3820706,
+139.2363363
+],
+[
+35.3820095,
+139.2362171
+],
+[
+35.3820628,
+139.236176
+],
+[
+35.3821239,
+139.2362952
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1511_m5097",
+"name": "",
+"footprint": [
+[
+35.3819787,
+139.2363995
+],
+[
+35.3818994,
+139.2362842
+],
+[
+35.3819397,
+139.2362426
+],
+[
+35.382019,
+139.2363579
+],
+[
+35.3819787,
+139.2363995
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1498_m5112",
+"name": "",
+"footprint": [
+[
+35.3817635,
+139.2361963
+],
+[
+35.381722,
+139.2361969
+],
+[
+35.3817212,
+139.2361299
+],
+[
+35.3819115,
+139.2361267
+],
+[
+35.3819125,
+139.2362233
+],
+[
+35.3818513,
+139.2362243
+],
+[
+35.3818515,
+139.2362431
+],
+[
+35.3817641,
+139.2362445
+],
+[
+35.3817635,
+139.2361963
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1478_m5102",
+"name": "",
+"footprint": [
+[
+35.3819105,
+139.2359246
+],
+[
+35.3819662,
+139.235922
+],
+[
+35.3819688,
+139.2360077
+],
+[
+35.3818705,
+139.2360122
+],
+[
+35.3818667,
+139.2358863
+],
+[
+35.3819093,
+139.2358844
+],
+[
+35.3819105,
+139.2359246
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1478_m5091",
+"name": "",
+"footprint": [
+[
+35.3820646,
+139.236021
+],
+[
+35.3819706,
+139.2360216
+],
+[
+35.3819699,
+139.2358795
+],
+[
+35.382064,
+139.2358789
+],
+[
+35.3820646,
+139.236021
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1490_m5089",
+"name": "",
+"footprint": [
+[
+35.3820073,
+139.2361502
+],
+[
+35.3819729,
+139.2360721
+],
+[
+35.3820516,
+139.23602
+],
+[
+35.382086,
+139.2360981
+],
+[
+35.3820073,
+139.2361502
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1447_m5088",
+"name": "",
+"footprint": [
+[
+35.3820507,
+139.235635
+],
+[
+35.3820289,
+139.2356365
+],
+[
+35.3820268,
+139.2355895
+],
+[
+35.3820486,
+139.235588
+],
+[
+35.3820507,
+139.235635
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#4A4A4A"
+},
+"wall": "#D8CCB4",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1354_m5098",
+"name": "",
+"footprint": [
+[
+35.3819163,
+139.2345274
+],
+[
+35.3819824,
+139.2345403
+],
+[
+35.3819722,
+139.2346188
+],
+[
+35.3819594,
+139.2346163
+],
+[
+35.3819536,
+139.2346608
+],
+[
+35.3819003,
+139.2346503
+],
+[
+35.3819163,
+139.2345274
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1415_m5090",
+"name": "",
+"footprint": [
+[
+35.3820556,
+139.2353321
+],
+[
+35.3819747,
+139.2353306
+],
+[
+35.3819762,
+139.2352019
+],
+[
+35.3820571,
+139.2352034
+],
+[
+35.3820556,
+139.2353321
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1400_m5135",
+"name": "",
+"footprint": [
+[
+35.3815993,
+139.2351514
+],
+[
+35.3816032,
+139.2350444
+],
+[
+35.3816316,
+139.2350459
+],
+[
+35.3816277,
+139.235153
+],
+[
+35.3815993,
+139.2351514
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#4A4A4A"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1399_m5140",
+"name": "",
+"footprint": [
+[
+35.3815939,
+139.2351472
+],
+[
+35.3815306,
+139.2351438
+],
+[
+35.3815344,
+139.2350357
+],
+[
+35.3815977,
+139.235039
+],
+[
+35.3815939,
+139.2351472
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1353_m5175",
+"name": "",
+"footprint": [
+[
+35.3812193,
+139.2345294
+],
+[
+35.3812859,
+139.2345324
+],
+[
+35.3812826,
+139.2346422
+],
+[
+35.3812161,
+139.2346392
+],
+[
+35.3812193,
+139.2345294
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1359_m5164",
+"name": "",
+"footprint": [
+[
+35.3813728,
+139.2347731
+],
+[
+35.3813097,
+139.2347619
+],
+[
+35.3813239,
+139.2346421
+],
+[
+35.3813056,
+139.2346388
+],
+[
+35.3813181,
+139.2345338
+],
+[
+35.3813995,
+139.2345483
+],
+[
+35.3813728,
+139.2347731
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1424_m4982",
+"name": "",
+"footprint": [
+[
+35.3830036,
+139.2354207
+],
+[
+35.3829774,
+139.2354214
+],
+[
+35.382975,
+139.2352766
+],
+[
+35.3830012,
+139.235276
+],
+[
+35.3830036,
+139.2354207
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#4A4A4A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1467_m5015",
+"name": "",
+"footprint": [
+[
+35.3826885,
+139.2357663
+],
+[
+35.3827486,
+139.2358424
+],
+[
+35.3827068,
+139.235892
+],
+[
+35.3826467,
+139.2358159
+],
+[
+35.3826885,
+139.2357663
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1589_m4911",
+"name": "",
+"footprint": [
+[
+35.3836672,
+139.2372184
+],
+[
+35.3836104,
+139.2372205
+],
+[
+35.3836079,
+139.2371199
+],
+[
+35.3836647,
+139.2371178
+],
+[
+35.3836672,
+139.2372184
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1594_m4906",
+"name": "",
+"footprint": [
+[
+35.3837016,
+139.2372325
+],
+[
+35.383676,
+139.2372404
+],
+[
+35.3836672,
+139.2371975
+],
+[
+35.3836928,
+139.2371896
+],
+[
+35.3837016,
+139.2372325
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#3A5A8C"
+},
+"wall": "#E6E1D8",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1576_m4909",
+"name": "",
+"footprint": [
+[
+35.38369,
+139.2370676
+],
+[
+35.3836266,
+139.2370694
+],
+[
+35.3836249,
+139.2369783
+],
+[
+35.3836882,
+139.2369765
+],
+[
+35.38369,
+139.2370676
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1527_m4864",
+"name": "",
+"footprint": [
+[
+35.3840421,
+139.2364453
+],
+[
+35.3840856,
+139.2364578
+],
+[
+35.3840735,
+139.2365214
+],
+[
+35.3840299,
+139.2365089
+],
+[
+35.3840421,
+139.2364453
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#C9C9C6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1457_m4926",
+"name": "",
+"footprint": [
+[
+35.3835409,
+139.2357553
+],
+[
+35.3834624,
+139.2357507
+],
+[
+35.3834658,
+139.2356612
+],
+[
+35.3835444,
+139.2356657
+],
+[
+35.3835409,
+139.2357553
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1492_m4783",
+"name": "",
+"footprint": [
+[
+35.3847737,
+139.2360652
+],
+[
+35.3847752,
+139.2360197
+],
+[
+35.3848287,
+139.2360222
+],
+[
+35.3848251,
+139.2361387
+],
+[
+35.3847421,
+139.2361348
+],
+[
+35.3847443,
+139.2360638
+],
+[
+35.3847737,
+139.2360652
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1493_m4794",
+"name": "",
+"footprint": [
+[
+35.3846704,
+139.2361699
+],
+[
+35.3846668,
+139.2360252
+],
+[
+35.3847138,
+139.2360235
+],
+[
+35.3847174,
+139.2361682
+],
+[
+35.3846704,
+139.2361699
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1514_m4797",
+"name": "",
+"footprint": [
+[
+35.3847004,
+139.2362729
+],
+[
+35.3846825,
+139.2364019
+],
+[
+35.3846273,
+139.2363904
+],
+[
+35.3846451,
+139.2362614
+],
+[
+35.3847004,
+139.2362729
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1526_m4852",
+"name": "",
+"footprint": [
+[
+35.3841475,
+139.2364135
+],
+[
+35.3842152,
+139.2364435
+],
+[
+35.3841953,
+139.2365111
+],
+[
+35.3841276,
+139.2364811
+],
+[
+35.3841475,
+139.2364135
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1517_m4847",
+"name": "",
+"footprint": [
+[
+35.3842251,
+139.2364238
+],
+[
+35.3841899,
+139.2364164
+],
+[
+35.3842036,
+139.2363187
+],
+[
+35.3842387,
+139.2363261
+],
+[
+35.3842251,
+139.2364238
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1521_m4828",
+"name": "",
+"footprint": [
+[
+35.3844215,
+139.2364859
+],
+[
+35.3843457,
+139.2364764
+],
+[
+35.3843575,
+139.2363357
+],
+[
+35.3844332,
+139.2363453
+],
+[
+35.3844215,
+139.2364859
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1524_m4840",
+"name": "",
+"footprint": [
+[
+35.3842306,
+139.2364274
+],
+[
+35.3842421,
+139.236333
+],
+[
+35.3843341,
+139.2363499
+],
+[
+35.3843075,
+139.2365676
+],
+[
+35.3842176,
+139.2365511
+],
+[
+35.3842327,
+139.2364278
+],
+[
+35.3842306,
+139.2364274
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1560_m4817",
+"name": "",
+"footprint": [
+[
+35.3843861,
+139.2369004
+],
+[
+35.3845197,
+139.2367018
+],
+[
+35.3845874,
+139.2367703
+],
+[
+35.3844537,
+139.2369688
+],
+[
+35.3843861,
+139.2369004
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1579_m4807",
+"name": "",
+"footprint": [
+[
+35.3845918,
+139.2369609
+],
+[
+35.3846504,
+139.2370233
+],
+[
+35.3845697,
+139.2371372
+],
+[
+35.3845111,
+139.2370748
+],
+[
+35.3845918,
+139.2369609
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1536_m4799",
+"name": "",
+"footprint": [
+[
+35.3846994,
+139.2365501
+],
+[
+35.3846633,
+139.2366447
+],
+[
+35.3845916,
+139.2366035
+],
+[
+35.3846277,
+139.2365089
+],
+[
+35.3846994,
+139.2365501
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1582_m4713",
+"name": "",
+"footprint": [
+[
+35.385421,
+139.2370465
+],
+[
+35.3854073,
+139.2369641
+],
+[
+35.3854619,
+139.2369504
+],
+[
+35.3854858,
+139.2370946
+],
+[
+35.3854585,
+139.2371015
+],
+[
+35.3854697,
+139.2371684
+],
+[
+35.3853899,
+139.2371884
+],
+[
+35.3853685,
+139.2370596
+],
+[
+35.385421,
+139.2370465
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1540_m4701",
+"name": "",
+"footprint": [
+[
+35.3854878,
+139.2366949
+],
+[
+35.3854831,
+139.2365422
+],
+[
+35.3855704,
+139.2365382
+],
+[
+35.3855751,
+139.2366909
+],
+[
+35.3854878,
+139.2366949
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1551_m4717",
+"name": "",
+"footprint": [
+[
+35.385416,
+139.236812
+],
+[
+35.385344,
+139.2368156
+],
+[
+35.385339,
+139.2366629
+],
+[
+35.3854448,
+139.2366577
+],
+[
+35.3854482,
+139.2367622
+],
+[
+35.3854145,
+139.2367638
+],
+[
+35.385416,
+139.236812
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1539_m4715",
+"name": "",
+"footprint": [
+[
+35.3854482,
+139.2366514
+],
+[
+35.3853618,
+139.2366547
+],
+[
+35.3853595,
+139.2365623
+],
+[
+35.3854459,
+139.236559
+],
+[
+35.3854482,
+139.2366514
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1492_m4773",
+"name": "",
+"footprint": [
+[
+35.384924,
+139.2361221
+],
+[
+35.3848354,
+139.2361192
+],
+[
+35.3848369,
+139.2360509
+],
+[
+35.3849255,
+139.2360537
+],
+[
+35.384924,
+139.2361221
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1302_m4580",
+"name": "",
+"footprint": [
+[
+35.3865947,
+139.2340143
+],
+[
+35.3865868,
+139.2339668
+],
+[
+35.3866268,
+139.2339569
+],
+[
+35.3866346,
+139.2340045
+],
+[
+35.3865947,
+139.2340143
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#C9C9C6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1301_m4570",
+"name": "",
+"footprint": [
+[
+35.3867535,
+139.2339431
+],
+[
+35.3867548,
+139.2339994
+],
+[
+35.3866456,
+139.2340033
+],
+[
+35.3866442,
+139.2339471
+],
+[
+35.3867535,
+139.2339431
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1468_m4658",
+"name": "",
+"footprint": [
+[
+35.3859673,
+139.2358468
+],
+[
+35.38588,
+139.2358741
+],
+[
+35.3858587,
+139.235772
+],
+[
+35.3859193,
+139.235753
+],
+[
+35.3859235,
+139.2357732
+],
+[
+35.3859502,
+139.2357648
+],
+[
+35.3859673,
+139.2358468
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1467_m4645",
+"name": "",
+"footprint": [
+[
+35.3859881,
+139.2359054
+],
+[
+35.3859781,
+139.2356955
+],
+[
+35.3860522,
+139.2356901
+],
+[
+35.386058,
+139.2358119
+],
+[
+35.3860907,
+139.2358095
+],
+[
+35.3860949,
+139.2358977
+],
+[
+35.3859881,
+139.2359054
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1482_m4626",
+"name": "",
+"footprint": [
+[
+35.386175,
+139.2360306
+],
+[
+35.3861826,
+139.2358999
+],
+[
+35.3862413,
+139.235905
+],
+[
+35.3862338,
+139.2360358
+],
+[
+35.386175,
+139.2360306
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1481_m4657",
+"name": "",
+"footprint": [
+[
+35.3859486,
+139.2360072
+],
+[
+35.3859005,
+139.2360091
+],
+[
+35.3858978,
+139.2359073
+],
+[
+35.3859458,
+139.2359053
+],
+[
+35.3859486,
+139.2360072
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1541_m4674",
+"name": "",
+"footprint": [
+[
+35.3857338,
+139.2366629
+],
+[
+35.3857359,
+139.2365825
+],
+[
+35.3858255,
+139.236586
+],
+[
+35.3858234,
+139.2366664
+],
+[
+35.3857338,
+139.2366629
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1542_m4687",
+"name": "",
+"footprint": [
+[
+35.3856959,
+139.2367337
+],
+[
+35.3856172,
+139.2367357
+],
+[
+35.3856139,
+139.2365373
+],
+[
+35.3856926,
+139.2365353
+],
+[
+35.3856959,
+139.2367337
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1592_m4666",
+"name": "",
+"footprint": [
+[
+35.3858165,
+139.2371127
+],
+[
+35.3858864,
+139.2371099
+],
+[
+35.3858899,
+139.2372411
+],
+[
+35.3858201,
+139.237244
+],
+[
+35.3858165,
+139.2371127
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1479_m4450",
+"name": "",
+"footprint": [
+[
+35.3877591,
+139.235975
+],
+[
+35.3877433,
+139.2358853
+],
+[
+35.3878185,
+139.2358654
+],
+[
+35.3878343,
+139.235955
+],
+[
+35.3877591,
+139.235975
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1478_m4441",
+"name": "",
+"footprint": [
+[
+35.3878875,
+139.2358909
+],
+[
+35.3878942,
+139.2359333
+],
+[
+35.3878531,
+139.2359431
+],
+[
+35.3878464,
+139.2359007
+],
+[
+35.3878875,
+139.2358909
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#D8CCB4",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1503_m4441",
+"name": "",
+"footprint": [
+[
+35.3878875,
+139.2362607
+],
+[
+35.3878613,
+139.2362621
+],
+[
+35.3878558,
+139.2361052
+],
+[
+35.387882,
+139.2361038
+],
+[
+35.3878875,
+139.2362607
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1521_m4513",
+"name": "",
+"footprint": [
+[
+35.3871992,
+139.2363337
+],
+[
+35.3872721,
+139.2363537
+],
+[
+35.3872544,
+139.2364508
+],
+[
+35.3871815,
+139.2364308
+],
+[
+35.3871992,
+139.2363337
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1424_m4220",
+"name": "",
+"footprint": [
+[
+35.3898975,
+139.2353256
+],
+[
+35.3898363,
+139.2353458
+],
+[
+35.3898237,
+139.2352882
+],
+[
+35.3898849,
+139.2352681
+],
+[
+35.3898975,
+139.2353256
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#C8C8C8"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1417_m4278",
+"name": "",
+"footprint": [
+[
+35.3893622,
+139.2351731
+],
+[
+35.3893769,
+139.2352634
+],
+[
+35.3893159,
+139.2352782
+],
+[
+35.3893013,
+139.2351879
+],
+[
+35.3893622,
+139.2351731
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1584_m4316",
+"name": "",
+"footprint": [
+[
+35.3889755,
+139.2370419
+],
+[
+35.3890368,
+139.2370559
+],
+[
+35.3890305,
+139.2370974
+],
+[
+35.3889692,
+139.2370834
+],
+[
+35.3889755,
+139.2370419
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#8C8478"
+},
+"wall": "#E6E1D8",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1384_m4034",
+"name": "",
+"footprint": [
+[
+35.3916039,
+139.2348304
+],
+[
+35.3915686,
+139.2349261
+],
+[
+35.3914616,
+139.2348665
+],
+[
+35.391497,
+139.2347709
+],
+[
+35.3916039,
+139.2348304
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1346_m4153",
+"name": "",
+"footprint": [
+[
+35.3905063,
+139.2344743
+],
+[
+35.3904233,
+139.2344777
+],
+[
+35.3904215,
+139.2344134
+],
+[
+35.3905045,
+139.23441
+],
+[
+35.3905063,
+139.2344743
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1353_m4164",
+"name": "",
+"footprint": [
+[
+35.3903873,
+139.2344596
+],
+[
+35.3903917,
+139.2345693
+],
+[
+35.3903338,
+139.2345728
+],
+[
+35.3903295,
+139.234463
+],
+[
+35.3903873,
+139.2344596
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1330_m4151",
+"name": "",
+"footprint": [
+[
+35.3904321,
+139.2341781
+],
+[
+35.3905488,
+139.2342203
+],
+[
+35.3905173,
+139.2343511
+],
+[
+35.3904007,
+139.2343089
+],
+[
+35.3904321,
+139.2341781
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1414_m3916",
+"name": "",
+"footprint": [
+[
+35.392593,
+139.2351983
+],
+[
+35.3925775,
+139.2351558
+],
+[
+35.3926113,
+139.2351373
+],
+[
+35.3926267,
+139.2351799
+],
+[
+35.392593,
+139.2351983
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1428_m3940",
+"name": "",
+"footprint": [
+[
+35.3924082,
+139.2352552
+],
+[
+35.3924479,
+139.2353632
+],
+[
+35.3923698,
+139.2354065
+],
+[
+35.3923301,
+139.2352985
+],
+[
+35.3924082,
+139.2352552
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1468_m3822",
+"name": "",
+"footprint": [
+[
+35.3934538,
+139.2357099
+],
+[
+35.3934714,
+139.2358127
+],
+[
+35.3934411,
+139.2358205
+],
+[
+35.3934235,
+139.2357177
+],
+[
+35.3934538,
+139.2357099
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1488_m3792",
+"name": "",
+"footprint": [
+[
+35.3937626,
+139.2359832
+],
+[
+35.3937648,
+139.2360475
+],
+[
+35.393684,
+139.2360516
+],
+[
+35.393682,
+139.2359927
+],
+[
+35.393658,
+139.235994
+],
+[
+35.3936554,
+139.235919
+],
+[
+35.3937951,
+139.2359118
+],
+[
+35.3937975,
+139.2359815
+],
+[
+35.3937626,
+139.2359832
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1512_m3788",
+"name": "",
+"footprint": [
+[
+35.3937806,
+139.2362695
+],
+[
+35.3937346,
+139.2362615
+],
+[
+35.3937393,
+139.2362208
+],
+[
+35.3937853,
+139.2362287
+],
+[
+35.3937806,
+139.2362695
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1503_m3725",
+"name": "",
+"footprint": [
+[
+35.3943085,
+139.2361073
+],
+[
+35.3943517,
+139.236113
+],
+[
+35.394346,
+139.236178
+],
+[
+35.3943028,
+139.2361723
+],
+[
+35.3943085,
+139.2361073
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1366_m3766",
+"name": "",
+"footprint": [
+[
+35.3939692,
+139.2345718
+],
+[
+35.3939852,
+139.2346933
+],
+[
+35.3939299,
+139.2347044
+],
+[
+35.3939138,
+139.2345828
+],
+[
+35.3939692,
+139.2345718
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1389_m3746",
+"name": "",
+"footprint": [
+[
+35.3941643,
+139.2349399
+],
+[
+35.39409,
+139.2349374
+],
+[
+35.3940925,
+139.2348275
+],
+[
+35.3941668,
+139.23483
+],
+[
+35.3941643,
+139.2349399
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1388_m3756",
+"name": "",
+"footprint": [
+[
+35.3940001,
+139.234817
+],
+[
+35.3940787,
+139.2348128
+],
+[
+35.3940833,
+139.234944
+],
+[
+35.3940047,
+139.2349482
+],
+[
+35.3940001,
+139.234817
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1401_m3767",
+"name": "",
+"footprint": [
+[
+35.3939301,
+139.2349897
+],
+[
+35.3939551,
+139.2349921
+],
+[
+35.3939515,
+139.2350494
+],
+[
+35.3939265,
+139.235047
+],
+[
+35.3939301,
+139.2349897
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#4A4A4A"
+},
+"wall": "#D8CCB4",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1402_m3785",
+"name": "",
+"footprint": [
+[
+35.3938149,
+139.2350869
+],
+[
+35.3937352,
+139.235083
+],
+[
+35.3937385,
+139.2349839
+],
+[
+35.3938182,
+139.2349879
+],
+[
+35.3938149,
+139.2350869
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1377_m3797",
+"name": "",
+"footprint": [
+[
+35.3937203,
+139.2348133
+],
+[
+35.3936623,
+139.2348349
+],
+[
+35.3936277,
+139.2346949
+],
+[
+35.3936857,
+139.2346733
+],
+[
+35.3937203,
+139.2348133
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1380_m3807",
+"name": "",
+"footprint": [
+[
+35.3936309,
+139.2348443
+],
+[
+35.3935615,
+139.2348671
+],
+[
+35.393532,
+139.234732
+],
+[
+35.3936014,
+139.2347092
+],
+[
+35.3936309,
+139.2348443
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1399_m3808",
+"name": "",
+"footprint": [
+[
+35.3935373,
+139.2349381
+],
+[
+35.3936186,
+139.2349471
+],
+[
+35.3936108,
+139.2350548
+],
+[
+35.3935294,
+139.2350459
+],
+[
+35.3935373,
+139.2349381
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1400_m3798",
+"name": "",
+"footprint": [
+[
+35.3937042,
+139.235064
+],
+[
+35.3936234,
+139.2350599
+],
+[
+35.3936269,
+139.2349555
+],
+[
+35.3937077,
+139.2349596
+],
+[
+35.3937042,
+139.235064
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1392_m3778",
+"name": "",
+"footprint": [
+[
+35.393795,
+139.2349626
+],
+[
+35.3937936,
+139.2348929
+],
+[
+35.3938963,
+139.2348898
+],
+[
+35.3938977,
+139.2349595
+],
+[
+35.393795,
+139.2349626
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1373_m3788",
+"name": "",
+"footprint": [
+[
+35.3937394,
+139.234791
+],
+[
+35.3937048,
+139.234672
+],
+[
+35.3937688,
+139.234644
+],
+[
+35.3938034,
+139.2347629
+],
+[
+35.3937394,
+139.234791
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1371_m3779",
+"name": "",
+"footprint": [
+[
+35.3938191,
+139.23476
+],
+[
+35.3937917,
+139.2346407
+],
+[
+35.3938565,
+139.2346183
+],
+[
+35.3938839,
+139.2347375
+],
+[
+35.3938191,
+139.23476
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1340_m3809",
+"name": "",
+"footprint": [
+[
+35.3935509,
+139.234386
+],
+[
+35.3935371,
+139.2343353
+],
+[
+35.3935686,
+139.2343225
+],
+[
+35.3935824,
+139.2343732
+],
+[
+35.3935509,
+139.234386
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1349_m3761",
+"name": "",
+"footprint": [
+[
+35.3939625,
+139.2345016
+],
+[
+35.3939585,
+139.2343985
+],
+[
+35.3940196,
+139.234395
+],
+[
+35.3940236,
+139.2344981
+],
+[
+35.3939625,
+139.2345016
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1288_m3709",
+"name": "",
+"footprint": [
+[
+35.3944583,
+139.2336867
+],
+[
+35.394519,
+139.2337247
+],
+[
+35.3944684,
+139.2338459
+],
+[
+35.3944078,
+139.2338078
+],
+[
+35.3944583,
+139.2336867
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1517_m3608",
+"name": "",
+"footprint": [
+[
+35.3953413,
+139.2362297
+],
+[
+35.3954222,
+139.2362291
+],
+[
+35.3954228,
+139.2363498
+],
+[
+35.3953419,
+139.2363504
+],
+[
+35.3953413,
+139.2362297
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1523_m3580",
+"name": "",
+"footprint": [
+[
+35.395597,
+139.2362879
+],
+[
+35.3956855,
+139.2362914
+],
+[
+35.3956822,
+139.23642
+],
+[
+35.3955936,
+139.2364165
+],
+[
+35.395597,
+139.2362879
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1512_m3581",
+"name": "",
+"footprint": [
+[
+35.3956765,
+139.2362775
+],
+[
+35.395587,
+139.2362816
+],
+[
+35.3955839,
+139.2361798
+],
+[
+35.3956734,
+139.2361757
+],
+[
+35.3956765,
+139.2362775
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1528_m3447",
+"name": "",
+"footprint": [
+[
+35.3967982,
+139.2363271
+],
+[
+35.3969035,
+139.2363681
+],
+[
+35.3968783,
+139.2364655
+],
+[
+35.396773,
+139.2364245
+],
+[
+35.3967982,
+139.2363271
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1483_m3347",
+"name": "",
+"footprint": [
+[
+35.3977774,
+139.2358214
+],
+[
+35.3977745,
+139.2359635
+],
+[
+35.3976937,
+139.235961
+],
+[
+35.3976966,
+139.235819
+],
+[
+35.3977774,
+139.2358214
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1191_m3094",
+"name": "",
+"footprint": [
+[
+35.4000131,
+139.2327316
+],
+[
+35.3999581,
+139.2327134
+],
+[
+35.399982,
+139.2326049
+],
+[
+35.400037,
+139.2326231
+],
+[
+35.4000131,
+139.2327316
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1179_m3090",
+"name": "",
+"footprint": [
+[
+35.4000679,
+139.2325948
+],
+[
+35.3999981,
+139.2325902
+],
+[
+35.4000032,
+139.2324741
+],
+[
+35.400073,
+139.2324787
+],
+[
+35.4000679,
+139.2325948
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1223_m3087",
+"name": "",
+"footprint": [
+[
+35.4001129,
+139.2330539
+],
+[
+35.4000114,
+139.2330553
+],
+[
+35.4000108,
+139.2329856
+],
+[
+35.4001123,
+139.2329841
+],
+[
+35.4001129,
+139.2330539
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1256_m3039",
+"name": "",
+"footprint": [
+[
+35.4004629,
+139.2334484
+],
+[
+35.4004515,
+139.2333034
+],
+[
+35.4005261,
+139.2332945
+],
+[
+35.4005375,
+139.2334395
+],
+[
+35.4004629,
+139.2334484
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1282_m3023",
+"name": "",
+"footprint": [
+[
+35.400618,
+139.2337032
+],
+[
+35.400615,
+139.2336241
+],
+[
+35.4006761,
+139.2336207
+],
+[
+35.4006791,
+139.2336998
+],
+[
+35.400618,
+139.2337032
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1284_m3031",
+"name": "",
+"footprint": [
+[
+35.4006112,
+139.2336208
+],
+[
+35.4006082,
+139.2337387
+],
+[
+35.4005263,
+139.2337355
+],
+[
+35.4005294,
+139.2336176
+],
+[
+35.4006112,
+139.2336208
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1275_m3079",
+"name": "",
+"footprint": [
+[
+35.4001498,
+139.2335682
+],
+[
+35.4001568,
+139.2336065
+],
+[
+35.4001297,
+139.2336139
+],
+[
+35.4001227,
+139.2335756
+],
+[
+35.4001498,
+139.2335682
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1232_m3121",
+"name": "",
+"footprint": [
+[
+35.3998128,
+139.2331468
+],
+[
+35.3997057,
+139.2331599
+],
+[
+35.3997003,
+139.2330935
+],
+[
+35.3998073,
+139.2330804
+],
+[
+35.3998128,
+139.2331468
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1272_m3167",
+"name": "",
+"footprint": [
+[
+35.3993842,
+139.2336289
+],
+[
+35.3993011,
+139.2336266
+],
+[
+35.3993036,
+139.2334926
+],
+[
+35.3993866,
+139.2334948
+],
+[
+35.3993842,
+139.2336289
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1186_m3343",
+"name": "",
+"footprint": [
+[
+35.3977537,
+139.2326545
+],
+[
+35.3977316,
+139.2326464
+],
+[
+35.3977453,
+139.2325897
+],
+[
+35.3977674,
+139.2325978
+],
+[
+35.3977537,
+139.2326545
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#8C8478"
+},
+"wall": "#A88E74",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1305_m3210",
+"name": "",
+"footprint": [
+[
+35.399003,
+139.2340105
+],
+[
+35.3988931,
+139.2339761
+],
+[
+35.3989214,
+139.2338401
+],
+[
+35.3990313,
+139.2338746
+],
+[
+35.399003,
+139.2340105
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1290_m3201",
+"name": "",
+"footprint": [
+[
+35.3990682,
+139.2338369
+],
+[
+35.3989781,
+139.2337971
+],
+[
+35.3990125,
+139.2336799
+],
+[
+35.3991026,
+139.2337196
+],
+[
+35.3990682,
+139.2338369
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1472_m3344",
+"name": "",
+"footprint": [
+[
+35.3977898,
+139.2358126
+],
+[
+35.3977199,
+139.2358105
+],
+[
+35.3977215,
+139.2357327
+],
+[
+35.3977914,
+139.2357348
+],
+[
+35.3977898,
+139.2358126
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1491_m3300",
+"name": "",
+"footprint": [
+[
+35.3980868,
+139.2360203
+],
+[
+35.3980857,
+139.2359505
+],
+[
+35.3982255,
+139.2359471
+],
+[
+35.3982267,
+139.2360168
+],
+[
+35.3980868,
+139.2360203
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1353_m3093",
+"name": "",
+"footprint": [
+[
+35.4000416,
+139.2344876
+],
+[
+35.3999729,
+139.2344689
+],
+[
+35.3999859,
+139.2343973
+],
+[
+35.4000546,
+139.2344161
+],
+[
+35.4000416,
+139.2344876
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1339_m3078",
+"name": "",
+"footprint": [
+[
+35.4001178,
+139.234301
+],
+[
+35.4000502,
+139.2342964
+],
+[
+35.4000527,
+139.2342429
+],
+[
+35.4002423,
+139.2342559
+],
+[
+35.4002392,
+139.2343228
+],
+[
+35.4001956,
+139.2343198
+],
+[
+35.4001942,
+139.2343519
+],
+[
+35.4001549,
+139.2343492
+],
+[
+35.4001536,
+139.2343786
+],
+[
+35.4001144,
+139.2343759
+],
+[
+35.4001178,
+139.234301
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1321_m3013",
+"name": "",
+"footprint": [
+[
+35.4007519,
+139.234147
+],
+[
+35.4006983,
+139.2341322
+],
+[
+35.4007151,
+139.2340402
+],
+[
+35.4007687,
+139.2340549
+],
+[
+35.4007519,
+139.234147
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1297_m3031",
+"name": "",
+"footprint": [
+[
+35.4005574,
+139.2337945
+],
+[
+35.4005924,
+139.2337945
+],
+[
+35.4005924,
+139.2338589
+],
+[
+35.4005574,
+139.2338589
+],
+[
+35.4005574,
+139.2337945
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#C8C8C8"
+},
+"wall": "#E6E1D8",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1297_m3036",
+"name": "",
+"footprint": [
+[
+35.4004984,
+139.2337945
+],
+[
+35.4005531,
+139.2337945
+],
+[
+35.4005531,
+139.2338669
+],
+[
+35.4004984,
+139.2338669
+],
+[
+35.4004984,
+139.2337945
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#C8C8C8"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1302_m3012",
+"name": "",
+"footprint": [
+[
+35.4007654,
+139.2338248
+],
+[
+35.4007631,
+139.2339374
+],
+[
+35.4007206,
+139.2339361
+],
+[
+35.4007229,
+139.2338235
+],
+[
+35.4007654,
+139.2338248
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1301_m3003",
+"name": "",
+"footprint": [
+[
+35.4008598,
+139.2339204
+],
+[
+35.4007703,
+139.2339246
+],
+[
+35.4007672,
+139.233827
+],
+[
+35.4008916,
+139.2338211
+],
+[
+35.4008932,
+139.233872
+],
+[
+35.4008583,
+139.2338737
+],
+[
+35.4008598,
+139.2339204
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1317_m2997",
+"name": "",
+"footprint": [
+[
+35.4009459,
+139.2339876
+],
+[
+35.4009416,
+139.2341018
+],
+[
+35.4008175,
+139.2340948
+],
+[
+35.4008218,
+139.2339806
+],
+[
+35.4009459,
+139.2339876
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1326_m2995",
+"name": "",
+"footprint": [
+[
+35.4009282,
+139.234117
+],
+[
+35.4009265,
+139.2341799
+],
+[
+35.4008719,
+139.2341777
+],
+[
+35.4008736,
+139.2341149
+],
+[
+35.4009282,
+139.234117
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#C8C8C8"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1338_m2779",
+"name": "",
+"footprint": [
+[
+35.4028847,
+139.2343008
+],
+[
+35.4028137,
+139.2343028
+],
+[
+35.402812,
+139.234209
+],
+[
+35.4028829,
+139.234207
+],
+[
+35.4028847,
+139.2343008
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1316_m2777",
+"name": "",
+"footprint": [
+[
+35.4028919,
+139.2338566
+],
+[
+35.4029398,
+139.2341465
+],
+[
+35.4028327,
+139.2341731
+],
+[
+35.4027848,
+139.2338832
+],
+[
+35.4028919,
+139.2338566
+]
+],
+"storeys": 2,
+"height_m": 6.0,
+"roof": {
+"type": "flat",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1286_m2714",
+"name": "",
+"footprint": [
+[
+35.4034519,
+139.2336705
+],
+[
+35.4034434,
+139.2337164
+],
+[
+35.4034039,
+139.2337055
+],
+[
+35.4034123,
+139.2336595
+],
+[
+35.4034519,
+139.2336705
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1219_m2706",
+"name": "",
+"footprint": [
+[
+35.4034484,
+139.2330238
+],
+[
+35.4033933,
+139.2329558
+],
+[
+35.4034905,
+139.232837
+],
+[
+35.4034998,
+139.2328484
+],
+[
+35.4035365,
+139.2328036
+],
+[
+35.403607,
+139.2328905
+],
+[
+35.4034247,
+139.2331131
+],
+[
+35.4034001,
+139.2330828
+],
+[
+35.4034484,
+139.2330238
+]
+],
+"storeys": 2,
+"height_m": 6.0,
+"roof": {
+"type": "flat",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1146_m2674",
+"name": "",
+"footprint": [
+[
+35.4038491,
+139.232199
+],
+[
+35.4037462,
+139.2322327
+],
+[
+35.4037139,
+139.2320837
+],
+[
+35.4038168,
+139.2320501
+],
+[
+35.4038491,
+139.232199
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1177_m2755",
+"name": "",
+"footprint": [
+[
+35.4030949,
+139.2324964
+],
+[
+35.4030161,
+139.2325163
+],
+[
+35.40301,
+139.2324802
+],
+[
+35.4030888,
+139.2324604
+],
+[
+35.4030949,
+139.2324964
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1146_m2836",
+"name": "",
+"footprint": [
+[
+35.4023174,
+139.232126
+],
+[
+35.4023435,
+139.2321507
+],
+[
+35.402325,
+139.2321801
+],
+[
+35.4022989,
+139.2321555
+],
+[
+35.4023174,
+139.232126
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1157_m2835",
+"name": "",
+"footprint": [
+[
+35.4023274,
+139.2323018
+],
+[
+35.4023044,
+139.2322856
+],
+[
+35.4023266,
+139.2322382
+],
+[
+35.4023496,
+139.2322544
+],
+[
+35.4023274,
+139.2323018
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1232_m2829",
+"name": "",
+"footprint": [
+[
+35.4024575,
+139.2331286
+],
+[
+35.4023393,
+139.2331559
+],
+[
+35.4023238,
+139.2330549
+],
+[
+35.402442,
+139.2330276
+],
+[
+35.4024575,
+139.2331286
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1279_m2810",
+"name": "",
+"footprint": [
+[
+35.4025776,
+139.2335719
+],
+[
+35.4025776,
+139.233655
+],
+[
+35.4025513,
+139.233655
+],
+[
+35.4025513,
+139.2335719
+],
+[
+35.4025776,
+139.2335719
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#C8C8C8"
+},
+"wall": "#A88E74",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1244_m2966",
+"name": "",
+"footprint": [
+[
+35.4010694,
+139.2332627
+],
+[
+35.4010689,
+139.2332055
+],
+[
+35.4012475,
+139.2332035
+],
+[
+35.401248,
+139.2332607
+],
+[
+35.4010694,
+139.2332627
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1191_m2998",
+"name": "",
+"footprint": [
+[
+35.400881,
+139.2326338
+],
+[
+35.4008838,
+139.2326698
+],
+[
+35.4008513,
+139.2326736
+],
+[
+35.4008485,
+139.2326376
+],
+[
+35.400881,
+139.2326338
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1180_m2888",
+"name": "",
+"footprint": [
+[
+35.401801,
+139.2324808
+],
+[
+35.4019124,
+139.2324783
+],
+[
+35.4019139,
+139.2325802
+],
+[
+35.4018025,
+139.2325827
+],
+[
+35.401801,
+139.2324808
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v976_m2653",
+"name": "",
+"footprint": [
+[
+35.4039171,
+139.230291
+],
+[
+35.4039312,
+139.2302201
+],
+[
+35.4039972,
+139.2302398
+],
+[
+35.4039831,
+139.2303107
+],
+[
+35.4039171,
+139.230291
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1125_m2538",
+"name": "",
+"footprint": [
+[
+35.4049958,
+139.231852
+],
+[
+35.4050361,
+139.2318642
+],
+[
+35.405019,
+139.2319491
+],
+[
+35.4049786,
+139.2319368
+],
+[
+35.4049958,
+139.231852
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#8C8478"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1011_m2342",
+"name": "",
+"footprint": [
+[
+35.4067846,
+139.2306521
+],
+[
+35.4067447,
+139.2306421
+],
+[
+35.4067515,
+139.2306019
+],
+[
+35.4067913,
+139.2306119
+],
+[
+35.4067846,
+139.2306521
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#C8C8C8"
+},
+"wall": "#E9E2CF",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1083_m2390",
+"name": "",
+"footprint": [
+[
+35.4063226,
+139.2313638
+],
+[
+35.4063445,
+139.231363
+],
+[
+35.4063477,
+139.231497
+],
+[
+35.4063259,
+139.2314978
+],
+[
+35.4063226,
+139.2313638
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1068_m2348",
+"name": "",
+"footprint": [
+[
+35.4066893,
+139.2314918
+],
+[
+35.4066152,
+139.2310547
+],
+[
+35.4067501,
+139.2310203
+],
+[
+35.4068242,
+139.2314574
+],
+[
+35.4066893,
+139.2314918
+]
+],
+"storeys": 3,
+"height_m": 9.0,
+"roof": {
+"type": "flat",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1137_m2518",
+"name": "",
+"footprint": [
+[
+35.4052299,
+139.2320399
+],
+[
+35.4051515,
+139.2320461
+],
+[
+35.4051498,
+139.2320141
+],
+[
+35.4052282,
+139.2320078
+],
+[
+35.4052299,
+139.2320399
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1093_m2295",
+"name": "",
+"footprint": [
+[
+35.4072932,
+139.231571
+],
+[
+35.407197,
+139.231571
+],
+[
+35.407197,
+139.2315575
+],
+[
+35.4071183,
+139.2315575
+],
+[
+35.4071183,
+139.2316085
+],
+[
+35.4070965,
+139.2316085
+],
+[
+35.4070965,
+139.2314985
+],
+[
+35.4072932,
+139.2314985
+],
+[
+35.4072932,
+139.231571
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1084_m2319",
+"name": "",
+"footprint": [
+[
+35.4069859,
+139.2314601
+],
+[
+35.4069641,
+139.2314608
+],
+[
+35.406963,
+139.2314126
+],
+[
+35.4069849,
+139.2314118
+],
+[
+35.4069859,
+139.2314601
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#5E8C6A"
+},
+"wall": "#E9E2CF",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v982_m2274",
+"name": "",
+"footprint": [
+[
+35.4074807,
+139.2302993
+],
+[
+35.4074117,
+139.2303592
+],
+[
+35.4073979,
+139.2303353
+],
+[
+35.4073154,
+139.2304069
+],
+[
+35.407268,
+139.2303246
+],
+[
+35.4074195,
+139.2301931
+],
+[
+35.4074807,
+139.2302993
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1016_m2158",
+"name": "",
+"footprint": [
+[
+35.4084748,
+139.2307332
+],
+[
+35.4083743,
+139.2307301
+],
+[
+35.4083765,
+139.2306228
+],
+[
+35.408477,
+139.230626
+],
+[
+35.4084748,
+139.2307332
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1088_m2143",
+"name": "",
+"footprint": [
+[
+35.4085489,
+139.2314107
+],
+[
+35.4085837,
+139.2314142
+],
+[
+35.4085768,
+139.2315181
+],
+[
+35.4085421,
+139.2315146
+],
+[
+35.4085489,
+139.2314107
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1096_m2153",
+"name": "",
+"footprint": [
+[
+35.4084471,
+139.231497
+],
+[
+35.4085097,
+139.2315056
+],
+[
+35.4085001,
+139.23161
+],
+[
+35.4084375,
+139.2316014
+],
+[
+35.4084471,
+139.231497
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1068_m2095",
+"name": "",
+"footprint": [
+[
+35.408985,
+139.2312052
+],
+[
+35.4090143,
+139.2312061
+],
+[
+35.4090127,
+139.2312812
+],
+[
+35.4089834,
+139.2312802
+],
+[
+35.408985,
+139.2312052
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1064_m2048",
+"name": "",
+"footprint": [
+[
+35.4094071,
+139.2311692
+],
+[
+35.4094363,
+139.2311675
+],
+[
+35.4094385,
+139.2312225
+],
+[
+35.4094092,
+139.2312242
+],
+[
+35.4094071,
+139.2311692
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#C9C9C6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1026_m2048",
+"name": "",
+"footprint": [
+[
+35.4094431,
+139.2307497
+],
+[
+35.4094257,
+139.2308241
+],
+[
+35.4093893,
+139.2308113
+],
+[
+35.4094067,
+139.2307369
+],
+[
+35.4094431,
+139.2307497
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#C9C9C6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1017_m1919",
+"name": "",
+"footprint": [
+[
+35.410539,
+139.2306268
+],
+[
+35.4106073,
+139.2306069
+],
+[
+35.4106281,
+139.2307149
+],
+[
+35.4105598,
+139.2307348
+],
+[
+35.410539,
+139.2306268
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v752_m1544",
+"name": "",
+"footprint": [
+[
+35.4139278,
+139.2277803
+],
+[
+35.4139185,
+139.2276758
+],
+[
+35.4139617,
+139.22767
+],
+[
+35.413971,
+139.2277745
+],
+[
+35.4139278,
+139.2277803
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v837_m1626",
+"name": "",
+"footprint": [
+[
+35.4132506,
+139.2287315
+],
+[
+35.4131429,
+139.2286828
+],
+[
+35.4131684,
+139.2285978
+],
+[
+35.4132762,
+139.2286466
+],
+[
+35.4132506,
+139.2287315
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v922_m1591",
+"name": "",
+"footprint": [
+[
+35.413518,
+139.2296278
+],
+[
+35.4135201,
+139.229577
+],
+[
+35.4135463,
+139.2295787
+],
+[
+35.4135441,
+139.2296295
+],
+[
+35.413518,
+139.2296278
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v932_m1611",
+"name": "",
+"footprint": [
+[
+35.4133779,
+139.2296978
+],
+[
+35.4133786,
+139.2297326
+],
+[
+35.4133283,
+139.229734
+],
+[
+35.4133277,
+139.2296991
+],
+[
+35.4133779,
+139.2296978
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#EDEBE6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v967_m1696",
+"name": "",
+"footprint": [
+[
+35.4126171,
+139.2301182
+],
+[
+35.4125576,
+139.2301304
+],
+[
+35.412551,
+139.230082
+],
+[
+35.4126106,
+139.2300698
+],
+[
+35.4126171,
+139.2301182
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v906_m1827",
+"name": "",
+"footprint": [
+[
+35.4114146,
+139.2294167
+],
+[
+35.4114271,
+139.2294595
+],
+[
+35.4113949,
+139.2294736
+],
+[
+35.4113824,
+139.2294308
+],
+[
+35.4114146,
+139.2294167
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm668_1860",
+"name": "",
+"footprint": [
+[
+35.4445777,
+139.2118342
+],
+[
+35.4445679,
+139.2118822
+],
+[
+35.4445155,
+139.2118661
+],
+[
+35.4445253,
+139.2118181
+],
+[
+35.4445777,
+139.2118342
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#4A4A4A"
+},
+"wall": "#C9C9C6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm492_2190",
+"name": "",
+"footprint": [
+[
+35.4475217,
+139.2138118
+],
+[
+35.4475171,
+139.2137834
+],
+[
+35.4474961,
+139.2137886
+],
+[
+35.447489,
+139.2137447
+],
+[
+35.4475541,
+139.2137288
+],
+[
+35.4475659,
+139.213801
+],
+[
+35.4475217,
+139.2138118
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm611_2274",
+"name": "",
+"footprint": [
+[
+35.4484353,
+139.2124947
+],
+[
+35.4483612,
+139.2126153
+],
+[
+35.4481362,
+139.2124071
+],
+[
+35.4482103,
+139.2122865
+],
+[
+35.4484353,
+139.2124947
+]
+],
+"storeys": 2,
+"height_m": 6.0,
+"roof": {
+"type": "flat",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm516_3762",
+"name": "",
+"footprint": [
+[
+35.461753,
+139.2133774
+],
+[
+35.4617079,
+139.2134688
+],
+[
+35.4616519,
+139.2134272
+],
+[
+35.4616971,
+139.2133358
+],
+[
+35.461753,
+139.2133774
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm695_1380",
+"name": "",
+"footprint": [
+[
+35.4403131,
+139.2116352
+],
+[
+35.4402215,
+139.2116743
+],
+[
+35.4402059,
+139.2116193
+],
+[
+35.440161,
+139.2116384
+],
+[
+35.4401339,
+139.2115427
+],
+[
+35.4402431,
+139.2114961
+],
+[
+35.4402661,
+139.2115775
+],
+[
+35.4402934,
+139.2115658
+],
+[
+35.4403131,
+139.2116352
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm499_620",
+"name": "",
+"footprint": [
+[
+35.4334082,
+139.2137376
+],
+[
+35.4334286,
+139.2138556
+],
+[
+35.4333471,
+139.2138769
+],
+[
+35.4333266,
+139.2137588
+],
+[
+35.4334082,
+139.2137376
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm796_564",
+"name": "",
+"footprint": [
+[
+35.4329561,
+139.2105386
+],
+[
+35.4329309,
+139.2106133
+],
+[
+35.4327631,
+139.2105279
+],
+[
+35.4327883,
+139.2104532
+],
+[
+35.4329561,
+139.2105386
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm873_477",
+"name": "",
+"footprint": [
+[
+35.4321085,
+139.2097082
+],
+[
+35.4320417,
+139.2097176
+],
+[
+35.432037,
+139.2096673
+],
+[
+35.4321038,
+139.2096579
+],
+[
+35.4321085,
+139.2097082
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm866_484",
+"name": "",
+"footprint": [
+[
+35.4321718,
+139.2098023
+],
+[
+35.4321449,
+139.2097989
+],
+[
+35.4321417,
+139.2098388
+],
+[
+35.432095,
+139.209833
+],
+[
+35.4321051,
+139.2097093
+],
+[
+35.4321375,
+139.2097133
+],
+[
+35.4321369,
+139.2097213
+],
+[
+35.432178,
+139.2097263
+],
+[
+35.4321718,
+139.2098023
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm366_164",
+"name": "",
+"footprint": [
+[
+35.4293238,
+139.2152597
+],
+[
+35.429356,
+139.2152545
+],
+[
+35.4293677,
+139.2153639
+],
+[
+35.4292204,
+139.2153876
+],
+[
+35.4292027,
+139.2152215
+],
+[
+35.4293177,
+139.215203
+],
+[
+35.4293238,
+139.2152597
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm58_214",
+"name": "",
+"footprint": [
+[
+35.4297333,
+139.2186546
+],
+[
+35.4297569,
+139.218659
+],
+[
+35.4297507,
+139.2187088
+],
+[
+35.4297272,
+139.2187044
+],
+[
+35.4297333,
+139.2186546
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "vm314_m1064",
+"name": "",
+"footprint": [
+[
+35.4181575,
+139.2159185
+],
+[
+35.4182592,
+139.2159149
+],
+[
+35.4182608,
+139.2159846
+],
+[
+35.4181591,
+139.2159881
+],
+[
+35.4181575,
+139.2159185
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v715_m1246",
+"name": "",
+"footprint": [
+[
+35.41659,
+139.2272512
+],
+[
+35.4166558,
+139.2272374
+],
+[
+35.4166715,
+139.2273495
+],
+[
+35.4166056,
+139.2273633
+],
+[
+35.41659,
+139.2272512
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v834_m1256",
+"name": "",
+"footprint": [
+[
+35.4166096,
+139.2285917
+],
+[
+35.4165996,
+139.2286519
+],
+[
+35.4164821,
+139.2286225
+],
+[
+35.4164921,
+139.2285623
+],
+[
+35.4166096,
+139.2285917
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v867_m1265",
+"name": "",
+"footprint": [
+[
+35.4164155,
+139.2290053
+],
+[
+35.4164472,
+139.2288988
+],
+[
+35.416525,
+139.2289337
+],
+[
+35.4164933,
+139.2290402
+],
+[
+35.4164155,
+139.2290053
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v913_m1315",
+"name": "",
+"footprint": [
+[
+35.4160032,
+139.2294357
+],
+[
+35.4160535,
+139.2294042
+],
+[
+35.4160995,
+139.229515
+],
+[
+35.4159919,
+139.2295822
+],
+[
+35.4159318,
+139.2294374
+],
+[
+35.4159891,
+139.2294016
+],
+[
+35.4160032,
+139.2294357
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v923_m1302",
+"name": "",
+"footprint": [
+[
+35.4161426,
+139.2295383
+],
+[
+35.4161621,
+139.2296286
+],
+[
+35.4161232,
+139.2296411
+],
+[
+35.4161038,
+139.2295509
+],
+[
+35.4161426,
+139.2295383
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#C8C8C8"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1675_m3599",
+"name": "",
+"footprint": [
+[
+35.3954039,
+139.2380341
+],
+[
+35.3954898,
+139.2379456
+],
+[
+35.3955426,
+139.2380228
+],
+[
+35.3954566,
+139.2381113
+],
+[
+35.3954039,
+139.2380341
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1667_m3608",
+"name": "",
+"footprint": [
+[
+35.3954511,
+139.2379332
+],
+[
+35.3953889,
+139.2380146
+],
+[
+35.3953284,
+139.237945
+],
+[
+35.3953906,
+139.2378636
+],
+[
+35.3954511,
+139.2379332
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1648_m3642",
+"name": "",
+"footprint": [
+[
+35.3950209,
+139.2377722
+],
+[
+35.3950186,
+139.2376972
+],
+[
+35.3951495,
+139.2376909
+],
+[
+35.3951519,
+139.2377659
+],
+[
+35.3950209,
+139.2377722
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1705_m4616",
+"name": "",
+"footprint": [
+[
+35.3862755,
+139.2383747
+],
+[
+35.3863517,
+139.2383957
+],
+[
+35.3863368,
+139.2384774
+],
+[
+35.3862606,
+139.2384564
+],
+[
+35.3862755,
+139.2383747
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1720_m4621",
+"name": "",
+"footprint": [
+[
+35.3862563,
+139.2385193
+],
+[
+35.3863146,
+139.2385626
+],
+[
+35.3862711,
+139.238651
+],
+[
+35.3862127,
+139.2386078
+],
+[
+35.3862563,
+139.2385193
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1727_m4611",
+"name": "",
+"footprint": [
+[
+35.386339,
+139.2385756
+],
+[
+35.3864108,
+139.2387097
+],
+[
+35.3863673,
+139.2387447
+],
+[
+35.3862956,
+139.2386106
+],
+[
+35.386339,
+139.2385756
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1790_m4675",
+"name": "",
+"footprint": [
+[
+35.385735,
+139.2393131
+],
+[
+35.3858289,
+139.239317
+],
+[
+35.3858261,
+139.2394188
+],
+[
+35.3857322,
+139.2394149
+],
+[
+35.385735,
+139.2393131
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1793_m4691",
+"name": "",
+"footprint": [
+[
+35.3856934,
+139.2393064
+],
+[
+35.3856692,
+139.2394964
+],
+[
+35.3855731,
+139.239478
+],
+[
+35.3855973,
+139.2392881
+],
+[
+35.3856934,
+139.2393064
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1762_m4760",
+"name": "",
+"footprint": [
+[
+35.3850294,
+139.2391106
+],
+[
+35.384963,
+139.2390682
+],
+[
+35.3849916,
+139.2390007
+],
+[
+35.385058,
+139.2390431
+],
+[
+35.3850294,
+139.2391106
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1756_m4744",
+"name": "",
+"footprint": [
+[
+35.3851328,
+139.2389272
+],
+[
+35.3852067,
+139.238976
+],
+[
+35.3851743,
+139.2390498
+],
+[
+35.3851004,
+139.239001
+],
+[
+35.3851328,
+139.2389272
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1767_m4751",
+"name": "",
+"footprint": [
+[
+35.3851141,
+139.2391843
+],
+[
+35.3850372,
+139.2391345
+],
+[
+35.3850751,
+139.2390464
+],
+[
+35.385152,
+139.2390962
+],
+[
+35.3851141,
+139.2391843
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#C8C8C8"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1788_m4708",
+"name": "",
+"footprint": [
+[
+35.3854278,
+139.2394053
+],
+[
+35.3854323,
+139.2392795
+],
+[
+35.3855371,
+139.2392852
+],
+[
+35.3855325,
+139.239411
+],
+[
+35.3854278,
+139.2394053
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1753_m4778",
+"name": "",
+"footprint": [
+[
+35.3849705,
+139.2389797
+],
+[
+35.3849434,
+139.2390566
+],
+[
+35.3847222,
+139.2389395
+],
+[
+35.3847492,
+139.2388626
+],
+[
+35.3849705,
+139.2389797
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1736_m4774",
+"name": "",
+"footprint": [
+[
+35.3848717,
+139.2387165
+],
+[
+35.3849252,
+139.2387643
+],
+[
+35.3848913,
+139.2388212
+],
+[
+35.3848379,
+139.2387735
+],
+[
+35.3848717,
+139.2387165
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1739_m4766",
+"name": "",
+"footprint": [
+[
+35.3849737,
+139.2388626
+],
+[
+35.3849136,
+139.2388129
+],
+[
+35.3849461,
+139.2387539
+],
+[
+35.3850062,
+139.2388036
+],
+[
+35.3849737,
+139.2388626
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1681_m4735",
+"name": "",
+"footprint": [
+[
+35.3852142,
+139.238088
+],
+[
+35.3853034,
+139.2381904
+],
+[
+35.3852581,
+139.2382498
+],
+[
+35.3851689,
+139.2381473
+],
+[
+35.3852142,
+139.238088
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1613_m4857",
+"name": "",
+"footprint": [
+[
+35.3841167,
+139.2374488
+],
+[
+35.3841043,
+139.2374138
+],
+[
+35.3841471,
+139.2373911
+],
+[
+35.3841594,
+139.2374261
+],
+[
+35.3841167,
+139.2374488
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1616_m4848",
+"name": "",
+"footprint": [
+[
+35.3841692,
+139.2374028
+],
+[
+35.3842544,
+139.2374058
+],
+[
+35.384252,
+139.237509
+],
+[
+35.3841668,
+139.237506
+],
+[
+35.3841692,
+139.2374028
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1652_m4827",
+"name": "",
+"footprint": [
+[
+35.3844339,
+139.2379074
+],
+[
+35.3843691,
+139.237899
+],
+[
+35.3843779,
+139.2377955
+],
+[
+35.3844428,
+139.2378039
+],
+[
+35.3844339,
+139.2379074
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1689_m4834",
+"name": "",
+"footprint": [
+[
+35.3843718,
+139.2382276
+],
+[
+35.3843706,
+139.2383014
+],
+[
+35.3843029,
+139.2382998
+],
+[
+35.384304,
+139.2382261
+],
+[
+35.3843718,
+139.2382276
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1729_m4814",
+"name": "",
+"footprint": [
+[
+35.3845542,
+139.2387513
+],
+[
+35.3844814,
+139.238746
+],
+[
+35.3844856,
+139.2386578
+],
+[
+35.3845584,
+139.2386631
+],
+[
+35.3845542,
+139.2387513
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1731_m4783",
+"name": "",
+"footprint": [
+[
+35.384786,
+139.2386691
+],
+[
+35.3848454,
+139.2387151
+],
+[
+35.3848177,
+139.2387688
+],
+[
+35.3847583,
+139.2387228
+],
+[
+35.384786,
+139.2386691
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1724_m4916",
+"name": "",
+"footprint": [
+[
+35.3834914,
+139.2385866
+],
+[
+35.3837251,
+139.2386359
+],
+[
+35.3837154,
+139.238705
+],
+[
+35.3834817,
+139.2386557
+],
+[
+35.3834914,
+139.2385866
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1711_m4915",
+"name": "",
+"footprint": [
+[
+35.3835176,
+139.2385498
+],
+[
+35.3835182,
+139.2384345
+],
+[
+35.383597,
+139.2384351
+],
+[
+35.3835967,
+139.2384901
+],
+[
+35.3837344,
+139.2384912
+],
+[
+35.3837341,
+139.2385515
+],
+[
+35.3835176,
+139.2385498
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1633_m4867",
+"name": "",
+"footprint": [
+[
+35.3840609,
+139.2376703
+],
+[
+35.3840217,
+139.2376734
+],
+[
+35.3840191,
+139.2376227
+],
+[
+35.3840583,
+139.2376196
+],
+[
+35.3840609,
+139.2376703
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#4A4A4A"
+},
+"wall": "#E6E1D8",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1607_m4879",
+"name": "",
+"footprint": [
+[
+35.3839464,
+139.2373874
+],
+[
+35.383918,
+139.2373884
+],
+[
+35.3839169,
+139.2373428
+],
+[
+35.3839453,
+139.2373418
+],
+[
+35.3839464,
+139.2373874
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1704_m4957",
+"name": "",
+"footprint": [
+[
+35.3832217,
+139.2383887
+],
+[
+35.3832618,
+139.2384034
+],
+[
+35.3832456,
+139.2384699
+],
+[
+35.3832054,
+139.2384551
+],
+[
+35.3832217,
+139.2383887
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1785_m4939",
+"name": "",
+"footprint": [
+[
+35.383427,
+139.2392963
+],
+[
+35.3834198,
+139.2393649
+],
+[
+35.383366,
+139.2393564
+],
+[
+35.3833732,
+139.2392878
+],
+[
+35.383427,
+139.2392963
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#C8C8C8"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1809_m4924",
+"name": "",
+"footprint": [
+[
+35.3834889,
+139.2395124
+],
+[
+35.3835872,
+139.2395163
+],
+[
+35.3835831,
+139.2396744
+],
+[
+35.3834944,
+139.2396709
+],
+[
+35.3834962,
+139.2395986
+],
+[
+35.3834867,
+139.2395982
+],
+[
+35.3834889,
+139.2395124
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1805_m4933",
+"name": "",
+"footprint": [
+[
+35.383438,
+139.2395041
+],
+[
+35.3834851,
+139.2395078
+],
+[
+35.3834808,
+139.2395894
+],
+[
+35.3834337,
+139.2395857
+],
+[
+35.383438,
+139.2395041
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#9A9A9A"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1779_m5170",
+"name": "",
+"footprint": [
+[
+35.3813643,
+139.239305
+],
+[
+35.3813009,
+139.2393373
+],
+[
+35.381265,
+139.2392311
+],
+[
+35.3813285,
+139.2391988
+],
+[
+35.3813643,
+139.239305
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1771_m5189",
+"name": "",
+"footprint": [
+[
+35.3811946,
+139.239124
+],
+[
+35.3811739,
+139.239256
+],
+[
+35.3811031,
+139.2392392
+],
+[
+35.3811237,
+139.2391073
+],
+[
+35.3811946,
+139.239124
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1769_m5197",
+"name": "",
+"footprint": [
+[
+35.3811073,
+139.2392137
+],
+[
+35.3810461,
+139.2392116
+],
+[
+35.3810485,
+139.2391071
+],
+[
+35.3811097,
+139.2391092
+],
+[
+35.3811073,
+139.2392137
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1808_m5088",
+"name": "",
+"footprint": [
+[
+35.3821086,
+139.2395298
+],
+[
+35.382054,
+139.2396713
+],
+[
+35.3820068,
+139.239644
+],
+[
+35.3820614,
+139.2395024
+],
+[
+35.3821086,
+139.2395298
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1728_m5077",
+"name": "",
+"footprint": [
+[
+35.3821923,
+139.2387877
+],
+[
+35.3820827,
+139.2387501
+],
+[
+35.382112,
+139.2386218
+],
+[
+35.3822215,
+139.2386593
+],
+[
+35.3821923,
+139.2387877
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#9A9A9A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1693_m5108",
+"name": "",
+"footprint": [
+[
+35.3818463,
+139.238263
+],
+[
+35.3819096,
+139.2382669
+],
+[
+35.3819047,
+139.2383846
+],
+[
+35.3818415,
+139.2383807
+],
+[
+35.3818463,
+139.238263
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1689_m5115",
+"name": "",
+"footprint": [
+[
+35.381777,
+139.2382196
+],
+[
+35.3818402,
+139.238224
+],
+[
+35.3818347,
+139.2383443
+],
+[
+35.3817714,
+139.2383399
+],
+[
+35.381777,
+139.2382196
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#EDEBE6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1675_m5111",
+"name": "",
+"footprint": [
+[
+35.3818953,
+139.2382066
+],
+[
+35.3817904,
+139.2382019
+],
+[
+35.3817951,
+139.2380476
+],
+[
+35.3818999,
+139.2380523
+],
+[
+35.3818953,
+139.2382066
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1609_m5102",
+"name": "",
+"footprint": [
+[
+35.3818737,
+139.2374347
+],
+[
+35.3818754,
+139.2373623
+],
+[
+35.381965,
+139.2373655
+],
+[
+35.3819633,
+139.2374379
+],
+[
+35.3818737,
+139.2374347
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1646_m5117",
+"name": "",
+"footprint": [
+[
+35.3818246,
+139.237773
+],
+[
+35.3818254,
+139.2378427
+],
+[
+35.3817576,
+139.2378439
+],
+[
+35.3817568,
+139.2377742
+],
+[
+35.3818246,
+139.237773
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1637_m5116",
+"name": "",
+"footprint": [
+[
+35.3817644,
+139.2376428
+],
+[
+35.3818414,
+139.2376501
+],
+[
+35.381834,
+139.2377663
+],
+[
+35.381757,
+139.237759
+],
+[
+35.3817644,
+139.2376428
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#4A4A4A"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1625_m5115",
+"name": "",
+"footprint": [
+[
+35.3818312,
+139.237521
+],
+[
+35.3818349,
+139.2376308
+],
+[
+35.3817738,
+139.2376339
+],
+[
+35.3817701,
+139.2375241
+],
+[
+35.3818312,
+139.237521
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1622_m5135",
+"name": "",
+"footprint": [
+[
+35.3816614,
+139.2375154
+],
+[
+35.3816599,
+139.2375797
+],
+[
+35.3815824,
+139.237577
+],
+[
+35.3815839,
+139.2375126
+],
+[
+35.3816614,
+139.2375154
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#C9C9C6",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1609_m5117",
+"name": "",
+"footprint": [
+[
+35.3818191,
+139.2374348
+],
+[
+35.3817378,
+139.2374199
+],
+[
+35.3817455,
+139.2373569
+],
+[
+35.3818268,
+139.2373718
+],
+[
+35.3818191,
+139.2374348
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#D8CCB4",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1602_m5119",
+"name": "",
+"footprint": [
+[
+35.3818332,
+139.2372856
+],
+[
+35.3818315,
+139.2373607
+],
+[
+35.3817035,
+139.2373564
+],
+[
+35.3817052,
+139.2372814
+],
+[
+35.3818332,
+139.2372856
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1610_m5135",
+"name": "",
+"footprint": [
+[
+35.3815795,
+139.2373609
+],
+[
+35.3816777,
+139.2373662
+],
+[
+35.3816746,
+139.2374534
+],
+[
+35.3815764,
+139.2374482
+],
+[
+35.3815795,
+139.2373609
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#8C8478"
+},
+"wall": "#E9E2CF",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1655_m5171",
+"name": "",
+"footprint": [
+[
+35.3813137,
+139.2378802
+],
+[
+35.3813166,
+139.237939
+],
+[
+35.3812839,
+139.2379414
+],
+[
+35.381281,
+139.2378826
+],
+[
+35.3813137,
+139.2378802
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#8C8478"
+},
+"wall": "#D8CCB4",
+"windows": false,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1689_m5125",
+"name": "",
+"footprint": [
+[
+35.3816813,
+139.2382192
+],
+[
+35.3817556,
+139.2382219
+],
+[
+35.3817528,
+139.2383356
+],
+[
+35.3816785,
+139.2383328
+],
+[
+35.3816813,
+139.2382192
+]
+],
+"storeys": 2,
+"height_m": 6.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.8,
+"color": "#6E6E6E"
+},
+"wall": "#A88E74",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
+},
+{
+"id": "v1727_m5218",
+"name": "",
+"footprint": [
+[
+35.3808946,
+139.2387596
+],
+[
+35.3808627,
+139.2387584
+],
+[
+35.3808655,
+139.2386432
+],
+[
+35.3808973,
+139.2386443
+],
+[
+35.3808946,
+139.2387596
+]
+],
+"storeys": 1,
+"height_m": 3.3,
+"roof": {
+"type": "gable",
+"rise_m": 1.4,
+"color": "#3A5A8C"
+},
+"wall": "#E6E1D8",
+"windows": true,
+"shopfront": [],
+"signs": [],
+"canopy": null,
+"lot": null,
+"checked": false,
+"source": "overture"
 }
 ]

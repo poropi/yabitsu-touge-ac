@@ -52,7 +52,8 @@ def build(out_dir=None):
     soaking = materials & {'asphalt', 'concrete_circles', 'visual_concrete_circles', 'dress_patch'}
     # concrete は壁・側溝にも共有される。路面だけをメッシュ名で選択する。
     paving = sorted({n for _, m in manifests.values() for n, item in m['meshes'].items()
-                     if n.startswith('1ROAD_') and item['material'] in {'concrete', 'pavers', 'tiles'}})
+                     if n.startswith('1ROAD_') and item['material'] in {'concrete', 'pavers', 'tiles'}
+                     and not n.endswith('_tun')})   # _tun：トンネルの中の側溝（雨よけの下で水たまりを作らない）
     rough = materials & {'ground', 'ground_far', 'visual_ground_far', 'horizon', 'tree', 'hedge',
                          'gravel', 'riverbed', 'wood', 'wood_bars', 'mt_leaves_edge', 'mt_leaves_lane',
                          'parking_trousers', 'parking_skin', 'parking_hair', 'parking_rubber'}

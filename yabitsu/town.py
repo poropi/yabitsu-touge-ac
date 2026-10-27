@@ -456,7 +456,7 @@ class Town:
             u = (b - a) / max(np.linalg.norm(b - a), 1e-9); n = np.array([-u[1], u[0]])
             mid = (a + b) / 2
             front = n if d.contains(Point(*(mid + n * 1.0))) else -n   # 柵の手前＝走れる側
-            if c.get("barricade", True):
+            if c.get("barricade", True) and self.spec.get("barricades", True):   # spec の barricades=false：柵は出さず、見えない壁だけ
                 out += to.barricade_meshes(a, b, self.ground.z, front, k)
         lines = self.boundary_walls() + [LineString(_xy([c["a"], c["b"]])) for c in self.closures]
         out += to.wall_meshes(lines, self.ground.z)

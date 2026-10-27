@@ -177,7 +177,9 @@ def _mark_quad(sec, s, lat, fwd, size):
         v.append((p[0], p[1], float(surface_height(lj, zj, sec.slope[j], sec.crown[j])) + LIFT))
     v = np.array(v)
     # 四隅は 奥から見て 手前右・手前左・奥左・奥右。uv は走る車から見て u が左→右、v が手前→奥（画像は正立のまま貼る）
-    return v, np.array([(0, 1, 2, 3)]), np.array([(1, 0), (0, 0), (0, 1), (1, 1)], float)
+    # 面は 3→2→1→0 の順で上向き（0→1→2→3 は下向きで、材質は片面なのでゲームでは裏になって見えなかった。Blender の描画は裏も描くので
+    # 気づかなかった。2026-10-27 札掛橋の「県道70号」）
+    return v, np.array([(3, 2, 1, 0)]), np.array([(1, 0), (0, 0), (0, 1), (1, 1)], float)
 
 
 def marking_meshes(sec, diamonds, rows):
