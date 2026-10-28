@@ -4,7 +4,27 @@
 
 ## ダウンロード（Assetto Corsa の MOD）
 
-**[最新版のダウンロード（Releases）](https://github.com/poropi/yabitsu-touge-ac/releases/latest)** から `yabitsu-touge-ac-v<版>.zip` を落とし、Content Manager の画面に zip を落とすか、zip の中の `content` フォルダを Assetto Corsa のフォルダに上書きでコピーします。Custom Shaders Patch（CSP）を入れると、森と路面・擁壁などの模様が表示されます。
+**[最新版のダウンロード（Releases）](https://github.com/poropi/yabitsu-touge-ac/releases/latest)** から `yabitsu-touge-ac-v<版>.zip` を落とし、Content Manager の画面に zip を落とすか、zip の中の `content` フォルダを Assetto Corsa のフォルダに上書きでコピーします。前の版から更新するときは、`content/tracks/yabitsu` を消してから入れると古いファイルが残りません。
+
+### 推奨環境
+
+| | |
+|---|---|
+| 必要 | Custom Shaders Patch（CSP）。森・路面や擁壁の模様・夜の明かり・雨・環境音は CSP で表示します |
+| 確かめた CSP | 0.3.0-preview619（これより古い版では確かめていません） |
+| 天気 | Pure 2.57 で確かめました（なくても走れます） |
+| 確かめた PC | Core i7-14700K / GeForce RTX 5070 / メモリ 64GB / Windows 11 |
+| 重さ | 5120×1440 全画面で全線を走って、平均 約 64 FPS・最低 約 48 FPS（町の区間がいちばん重い） |
+| ディスク | 展開後 約 2.2GB（zip は約 1GB） |
+
+### 確かめたときの AC の設定
+
+- 画面：5120×1440 全画面、垂直同期なし、アンチエイリアス 4x、異方性フィルタ 16x
+- 影 2048、ワールドの細かさ 3、煙 3、モーションブラーなし
+- CSP：Extra FX・Rain FX・Reflections FX・Particles FX・Windscreen FX を入れた状態
+- これより弱い PC では、解像度・影・ワールドの細かさを下げてください。
+
+菜の花台・ヤビツ峠の駐車の車は、作った PC の AC の車のデータを使うため、配布する zip には入っていません。
 
 このリポジトリにあるのは、コースを作るためのプログラム（Python）と、手で確かめて書いたデータです。できあがったコースのファイル（.kn5 など）と、ダウンロードした地図・標高・空中写真は入っていません。
 
@@ -52,6 +72,8 @@ uv run python -m scripts.track_08_acfiles          # レイアウト・コース
 - **OpenStreetMap**：道・建物・橋・トンネル・川・湖・信号などの位置と形。© OpenStreetMap contributors。データは [ODbL](https://opendatacommons.org/licenses/odbl/) のもとで使えます。このリポジトリの `data/manual/` のうち OSM から作ったもの（建物の外形など）も ODbL に従います。
 - **国土地理院**：標高タイル（dem5a・dem5b・dem）、空中写真（全国最新写真 seamlessphoto）、基盤地図情報の建物の外形（ベクトルタイル）。出典：国土地理院（[地理院タイル](https://maps.gsi.go.jp/development/ichiran.html)）を加工して作成。
 - **Poly Haven**（[polyhaven.com](https://polyhaven.com)、CC0）：森の木の葉・針葉・シダ・樹皮の写真素材（fir_tree_01・tree_small_02・fern_02）を切り出して組み直しました。森の植える場所と樹種は、上の空中写真から判定しています（`docs/forest.md`）。
+- **Overture Maps Foundation**（ODbL）：地理院・OSM に無い建物の輪郭の一部。
+- **ambientCG**（[ambientcg.com](https://ambientcg.com)、CC0）：家の壁・屋根の写真素材。
 - **Freesound**（CC0）：cartoonrob の日本の蝉、tomasloos の日本の鳥・小川の録音を加工して使用。出典と処理は [docs/environment.md](docs/environment.md) に記載。
 - **Google ストリートビュー**：建物・標識・壁などの見た目を確かめるために見ただけです。画像はこのリポジトリに入っていません。
 

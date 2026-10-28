@@ -1,5 +1,5 @@
 version = 1
-revision = 5
+revision = 3
 requires-python = ">=3.12"
 
 [[package]]
@@ -930,7 +930,7 @@ wheels = [
 
 [[package]]
 name = "yabitsu"
-version = "0.0.2"
+version = "0.0.3"
 source = { virtual = "." }
 dependencies = [
     { name = "matplotlib" },
