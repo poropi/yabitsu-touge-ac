@@ -174,10 +174,9 @@ def main():
             b = min(track_blds, key=lambda q: q.footprint.distance(c))
             if b.footprint.distance(c) < 10:
                 b.roof = {"type": "hip", "rise_m": 4.5, "color": "#6B5B45"}; b.wall = "#8A7356"; b.windows = False
-    # S3 の名古木〜1.7 km の道ぞいの家は部品の家（house_kit）。箱に窓の絵の家はストリートビューと全く違って見えた（2026-10-28）
+    # コース全体の家は部品の家（house_kit）。箱に窓の絵の家はストリートビューと全く違って見えた（2026-10-28）
     from yabitsu import house_kit
-    s3_0 = float(bounds["s3"][0])
-    hk_blds, track_blds, hk_line, hk_road = house_kit.split(track_blds, sec, s3_0)
+    hk_blds, track_blds, hk_line, hk_road = house_kit.split(track_blds, sec)
     for name, rel in buildings.write_textures(track_blds, config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel)
     assembly.add_meshes(m, [(f"{n[:-3]}_trk{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in
@@ -233,7 +232,7 @@ def main():
         m.add_material(name, texture=rel)
     lots = json.loads((config.DATA_MANUAL / "s3_lots.json").read_text(encoding="utf-8"))   # 店の駐車場・敷地の舗装と白線
     assembly.add_meshes(m, tw.lot_meshes(lots), group=config.TOWN_GROUP)
-    hk_town, blds, _, _ = house_kit.split(blds, sec, s3_0)
+    hk_town, blds, _, _ = house_kit.split(blds, sec)
     for name, rel in buildings.write_textures(blds, config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel)
     avoid = tw.paved_avoid()
@@ -241,10 +240,13 @@ def main():
     t_items, t_pals = house_kit.house_meshes(hk_town, tw.ground.z, hk_road, near_line=hk_line, avoid=avoid)
     for name, rel in house_kit.write_textures(hk_pals + t_pals, config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel)
-    assembly.add_meshes(m, [(f"{n[:-3]}_hk{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in buildings.merge_by_material(hk_items)])
-    assembly.add_meshes(m, [(f"{n[:-3]}_hkt{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in buildings.merge_by_material(t_items)],
+    assembly.add_meshes(m, [(f"{n[:-3]}_hk{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in house_kit.merge_by_cell(hk_items)])
+    assembly.add_meshes(m, [(f"{n[:-3]}_hkt{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in house_kit.merge_by_cell(t_items)],
                         group=config.TOWN_GROUP)
     print(f"部品の家：道ぞい {len(hk_blds)} 軒・町 {len(hk_town)} 軒、三角形 {sum(len(x[2]) for x in hk_items + t_items) * 2}", flush=True)
+    form = start_lot.road_formation(sec, 0.0, float(sec.s[-1])); shapely.prepare(form)   # 当たり判定の壁が道の上に無いか（AI の車が止まった）
+    on_road = sorted({n for n, v, f, uv, mat, r in hk_items + t_items if n.startswith("1WALL_") and shapely.contains_xy(form, v[:, 0], v[:, 1]).any()})
+    print(f"部品の家：道の上に壁がある家 {len(on_road)} {on_road[:10]}", flush=True)
     for j, k in others:   # ほかの交差点の町：別の kn5（j.group）。名前は town → 交差点の名前
         rn = lambda items, j=j: nagoki.rename_meshes(items, j.name)
         assembly.add_meshes(m, rn(k.meshes()), group=j.group)
@@ -254,11 +256,17 @@ def main():
         lp = config.DATA_MANUAL / j.lots
         if lp.exists():
             assembly.add_meshes(m, rn(k.lot_meshes(json.loads(lp.read_text(encoding="utf-8")))), group=j.group)
-        kb = nagoki.load_buildings(j)
+        kb_kit, kb, _, _ = house_kit.split(nagoki.load_buildings(j), sec)
         for name, rel in buildings.write_textures(kb, config.TRACK_BUILD_DIR / "textures").items():
             m.add_material(name, texture=rel)
         assembly.add_meshes(m, [(f"{n}_{j.name}", *rest) for n, *rest in
                                 buildings.merge_by_material(buildings.building_meshes(kb, k.ground.z, k.paved_avoid()))], group=j.group)
+        j_items, j_pals = house_kit.house_meshes(kb_kit, k.ground.z, hk_road, near_line=hk_line, avoid=k.paved_avoid())
+        for name, rel in house_kit.write_textures(j_pals, config.TRACK_BUILD_DIR / "textures").items():
+            m.add_material(name, texture=rel)
+        assembly.add_meshes(m, [(f"{n[:-3]}_hk{j.name}{n[-3:]}", v, f, uv, mat, r) for n, v, f, uv, mat, r in
+                                house_kit.merge_by_cell(j_items)], group=j.group)
+        print(f"部品の家：{j.name} {len(kb_kit)} 軒、三角形 {sum(len(x[2]) for x in j_items) * 2}", flush=True)
     el = side_roads.load_elements()
     assembly.add_meshes(m, motorway.meshes(mws))
     skip = {i for x in mws for i in x.way_ids}

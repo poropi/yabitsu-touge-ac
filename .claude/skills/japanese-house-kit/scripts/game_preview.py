@@ -16,7 +16,7 @@ ground = forest_ground.load_ground(MANIFEST); sec = Section.load_json("data/proc
 m = np.hypot(sec.x - cx, sec.y - cy) < a.radius + 60; road = np.c_[sec.x[m], sec.y[m]]
 B = [bl.Building.from_spec(d) for d in json.load(open(config.DATA_MANUAL / "track_buildings.json")) + json.load(open(config.DATA_MANUAL / "s3_buildings.json"))
      if not d.get("gone")]
-B = [b for b in B if b.footprint.distance(Point(cx, cy)) < a.radius - 5 and b.footprint.area >= 15 and b.roof.get("type") != "flat" and b.footprint.area <= 260]
+B = [b for b in B if b.footprint.distance(Point(cx, cy)) < a.radius - 5 and b.footprint.area >= 15]   # 平屋根・大きな建物・店も部品で（flat_parts）
 gz = lambda x, y: ground.z(np.c_[np.atleast_1d(x), np.atleast_1d(y)])
 items, pals = hk.house_meshes(B, gz, road, near_line=LineString(road))
 mats = hk.write_textures(pals, f"{a.out}/hk_tex")

@@ -16,6 +16,8 @@ SH = 2.9            # 階の高さ
 FL = 0.5            # 基礎（一番高い地面から 1 階の床）
 REVEAL = 0.1        # 窓のへこみ（壁の面からガラスまで）
 NEAR_M = 35.0       # 道からこの距離までの家は凹凸あり
+HOUSE_MIN_M2 = 15.0  # これより小さい建物は物置（flat_parts の shed）。部品の家に替えたとき 216 棟（8〜14 m²）が抜けていた（2026-10-28）
+SHED_MIN_M2 = 2.0    # 箱の家（buildings.building_meshes）と同じ下限
 WALLS = ("#ECEAE4", "#E6E0D2", "#D9D2C2", "#C9C4BA", "#B8AE9C", "#8C8478", "#5A5650", "#3E4656", "#5A4636", "#7A8A78")
 ROOFS = ("#5A3C2C", "#3A3A3C", "#4C4840", "#2E3438", "#6A4A36")
 TILE = 256          # 窓の絵 1 枚の画素
@@ -89,10 +91,47 @@ def rect_of(fp, road_xy):
     return c, max(e[0], e[1]), min(e[0], e[1]), ang
 
 
-def palette(bid, wall=None, roof=None):
+def rect_poly(c, L, W, ang):
+    from shapely.geometry import Polygon
+    ca, sa = math.cos(ang), math.sin(ang)
+    return Polygon([(c[0] + ca * x - sa * y, c[1] + sa * x + ca * y) for x, y in ((-L / 2, -W / 2), (L / 2, -W / 2), (L / 2, W / 2), (-L / 2, W / 2))])
+
+
+FIT_PAD = 1.2       # ベランダ・軒・雨樋・室外機のぶん、長方形の外にこれだけ空ける
+
+
+def fit_rect(fp, road_xy, avoid=None, snap=True):
+    """家の長方形 (中心, L, W, 角度)。snap なら半間刻み（4 間以上）。長方形（＋FIT_PAD）が avoid（道など）にかかるなら、
+    半間ずつ小さくし、0.3 m ずつ離す。収まらなければ None。輪郭を道で切ったあと長方形を取り直して切り上げると道の上に戻り、
+    当たり判定の壁で AI の車が止まった（S4 2806 m、2026-10-28）。"""
+    c, L, W, ang = rect_of(fp, road_xy)
+    lo = 4 * M if snap else 2.4
+    if snap:
+        L, W = max(4, round(L / M)) * M, max(4, round(W / M)) * M
+    if avoid is None or avoid.is_empty:
+        return c, L, W, ang
+    c = np.asarray(c, float)
+    for it in range(40):
+        ov = rect_poly(c, L, W, ang).buffer(FIT_PAD).intersection(avoid)
+        if ov.area < 0.01:
+            return c, L, W, ang
+        if it % 2 == 0 and (L > lo or W > lo):
+            if L >= W and L > lo:
+                L -= M if snap else 0.5
+            elif W > lo:
+                W -= M if snap else 0.5
+            else:
+                L -= M if snap else 0.5
+            continue
+        d = c - np.asarray(ov.centroid.coords[0]); n = np.linalg.norm(d)
+        c = c + (d / n if n > 1e-6 else np.zeros(2)) * 0.3
+    return None
+
+
+def palette(bid, wall=None, roof=None, clad=None):
     r = _seed(bid)
     wall = wall or WALLS[r % len(WALLS)]
-    clad = "tin" if (facades._hex(wall).mean() < 0.4 and r % 5 == 0) else ("plaster" if r % 3 == 0 else "siding")
+    clad = clad or ("tin" if (facades._hex(wall).mean() < 0.4 and r % 5 == 0) else ("plaster" if r % 3 == 0 else "siding"))
     roof = roof or ROOFS[(r >> 4) % len(ROOFS)]
     return dict(wall=f"hkw_{clad}_{_hx(wall)}", wall_hex=wall, clad=clad, roof=f"hkr_{_hx(roof)}", roof_hex=roof,
                 trim="hk_trim_white" if (r >> 8) % 3 else "hk_trim_dark", win="hk_win_silver" if (r >> 10) % 5 < 3 else "hk_win_bronze",
@@ -123,10 +162,10 @@ def _win_uv(kind):
     return [[u0, v0], [u0 + 0.25, v0], [u0 + 0.25, v0 + 0.5], [u0, v0 + 0.5]]
 
 
-def house_parts(bid, fp, ground_z, road_xy, storeys=2, near=True, wall=None, roof=None, roof_type=None):
+def house_parts(bid, fp, ground_z, road_xy, storeys=2, near=True, wall=None, roof=None, roof_type=None, rect=None, clad=None):
     import random
     rnd = random.Random(_seed(bid, "layout"))
-    c, L, W, ang = rect_of(fp, road_xy)
+    c, L, W, ang = rect or rect_of(fp, road_xy)
     nx, ny = max(4, round(L / M)), max(4, round(W / M)); L, W = nx * M, ny * M
     ring = np.asarray(fp.exterior.coords)
     zg = np.asarray(ground_z(ring[:, 0], ring[:, 1]), float); zg = zg[np.isfinite(zg)]
@@ -134,7 +173,7 @@ def house_parts(bid, fp, ground_z, road_xy, storeys=2, near=True, wall=None, roo
     z_low = min(zg.min(), zc) if len(zg) else zc; floor = (max(zg.max(), zc) if len(zg) else zc) + FL
     ca, sa = math.cos(ang), math.sin(ang)
     P = lambda x, y, z: (c[0] + ca * x - sa * y, c[1] + sa * x + ca * y, floor + z)    # 家の局所 → 世界
-    pal = palette(bid, wall, roof); G = Parts()
+    pal = palette(bid, wall, roof, clad); G = Parts()
     x0, x1, y0, y1 = -L / 2, L / 2, -W / 2, W / 2
     G.box(pal["base"], P, x0, x1, y0, y1, z_low - floor - 0.3, 0.0, tile=2.0)
     has_balc = storeys >= 2 and rnd.random() < 0.8
@@ -286,6 +325,180 @@ def store_parts(bid, fp, ground_z, road_xy, name="", wall="#F4F4F2"):
     return G.items(bid, wm), dict(wall=wm, wall_hex=wall, clad="plaster", roof="hk_trim_white", roof_hex="#ECEBE6", store_name=name)
 
 
+SHOWROOM = ("Honda", "ダイハツ", "バイク", "ガレージ", "販売", "Cars")
+
+
+def flat_kind(b):
+    """平屋根の建物の種類：shed（物置・車庫）・factory（工場・倉庫・車の販売店）・block（アパート・事務所）。"""
+    a = b.footprint.area
+    if b.storeys <= 1 and a < 60:
+        return "shed"
+    # 600 m² 以上を全部工場にしていたら、3 階建ての宿泊施設（札掛森の家）が窓の少ないトタンの箱になった（2026-10-28）
+    if any(k in (b.name or "") for k in SHOWROOM) or (b.storeys <= 1 and (a >= 150 or b.height_m >= 4.5) and not b.shopfront) \
+            or (b.storeys <= 2 and a >= 1500):
+        return "factory"
+    return "block"
+
+
+def flat_parts(bid, fp, ground_z, road_xy, b, near=True, rect=None, kind=None):
+    """平屋根の建物（アパート・事務所・工場・倉庫・物置・店）。寸法は references.md（多くは推定）。
+    block：階高 3.0 m、アルミの窓（窓の絵）、道の側の 2 階より上にベランダの手すり、端に鉄骨の外階段、パラペット、屋上の室外機。
+    factory：角波トタンの 1 層（高さは建物の高さ、4.5〜7 m）、高い位置の横長の窓、正面にシャッター（販売店は 1 階をガラス張り）。
+    shed：トタンの壁と正面のシャッター。店（shopfront・signs）は 1 階の正面をガラス張りにする（看板は buildings._signs）。"""
+    import random
+    rnd = random.Random(_seed(bid, "flat"))
+    kind = kind or flat_kind(b)
+    c, L, W, ang = rect or rect_of(fp, road_xy)
+    ring = np.asarray(fp.exterior.coords)
+    zg = np.asarray(ground_z(ring[:, 0], ring[:, 1]), float); zg = zg[np.isfinite(zg)]
+    zc = float(np.asarray(ground_z(np.atleast_1d(c[0]), np.atleast_1d(c[1])), float)[0])
+    z_low = min(zg.min(), zc) if len(zg) else zc
+    shop = bool(b.shopfront or b.signs)
+    base = 0.1 if (shop or kind != "block") else 0.4      # 店は buildings.BASE_SHOP_H（看板の高さがそこから）
+    floor = (max(zg.max(), zc) if len(zg) else zc) + base
+    ca, sa = math.cos(ang), math.sin(ang)
+    P = lambda x, y, z: (c[0] + ca * x - sa * y, c[1] + sa * x + ca * y, floor + z)
+    clad = "tin" if kind in ("factory", "shed") and not any(k in (b.name or "") for k in SHOWROOM) else ("plaster" if rnd.random() < 0.6 else "siding")
+    pal = palette(bid, b.wall, "#8E8E8A"); pal["wall"] = f"hkw_{clad}_{_hx(pal['wall_hex'])}"; pal["clad"] = clad
+    pal["roof"] = "hk_base"; pal["bld"] = b                     # 平らな屋根はコンクリートの灰色、看板の絵は write_textures で
+    G = Parts()
+    x0, x1, y0, y1 = -L / 2, L / 2, -W / 2, W / 2
+    if kind == "block":
+        n_st = max(1, int(b.storeys)); SHF = 3.0; H = n_st * SHF
+    elif kind == "factory":
+        n_st = 1; H = float(np.clip(b.height_m, 4.5, 7.0)); SHF = H
+    else:
+        n_st = 1; H = float(np.clip(b.height_m, 2.4, 3.2)); SHF = H
+    G.box(pal["base"], P, x0, x1, y0, y1, z_low - floor - 0.3, 0.0, tile=2.0)
+    faces = {"front": ((x0, y1), (1, 0), (0, 1), L), "back": ((x1, y0), (-1, 0), (0, -1), L),
+             "right": ((x1, y1), (0, -1), (1, 0), W), "left": ((x0, y0), (0, 1), (-1, 0), W)}
+    balc = kind == "block" and n_st >= 2 and not shop and rnd.random() < 0.65
+    for face, (o, ud, od, flen) in faces.items():
+        F = lambda u, d, z, o=o, ud=ud, od=od: P(o[0] + ud[0] * u + od[0] * d, o[1] + ud[1] * u + od[1] * d, z)
+        FQ = lambda mat, pts, uv: G.quad(mat, pts[::-1], uv[::-1])
+        wq = lambda p0, p1, q0, q1: FQ(pal["wall"], [F(p0, 0, q0), F(p1, 0, q0), F(p1, 0, q1), F(p0, 0, q1)],
+                                       [[p0 / 2, q0 / 2], [p1 / 2, q0 / 2], [p1 / 2, q1 / 2], [p0 / 2, q1 / 2]])
+
+        def opening(a, b_, z0, z1, tex, mat=None, uv=None, frame=True):
+            dd = -REVEAL if near else 0.015
+            FQ(mat or pal["win"], [F(a, dd, z0), F(b_, dd, z0), F(b_, dd, z1), F(a, dd, z1)], uv or _win_uv(tex))
+            if near and frame:
+                FQ(pal["trim"], [F(a, 0, z0), F(a, dd, z0), F(a, dd, z1), F(a, 0, z1)], [[0, 0], [0.1, 0], [0.1, 1], [0, 1]])
+                FQ(pal["trim"], [F(b_, dd, z0), F(b_, 0, z0), F(b_, 0, z1), F(b_, dd, z1)], [[0, 0], [0.1, 0], [0.1, 1], [0, 1]])
+                FQ(pal["trim"], [F(a, dd, z1), F(b_, dd, z1), F(b_, 0, z1), F(a, 0, z1)], [[0, 0], [1, 0], [1, 0.1], [0, 0.1]])
+                if z0 > 0.2:
+                    FQ(pal["trim"], [F(a, 0, z0), F(b_, 0, z0), F(b_, dd, z0), F(a, dd, z0)], [[0, 0], [1, 0], [1, 0.1], [0, 0.1]])
+
+        def row(z0, z1, zlo, zhi, picks, bay):
+            """zlo〜zhi の帯に、bay m ごとの区画で窓（picks から選ぶ）か壁を並べる。窓は z0〜z1。"""
+            n = max(1, int(round(flen / bay))); bw = flen / n
+            for i in range(n):
+                u, k = i * bw, rnd.choice(picks)
+                if k is None:
+                    wq(u, u + bw, zlo, zhi); continue
+                ow, tex = k
+                a, b_ = u + (bw - min(ow, bw - 0.3)) / 2, u + (bw + min(ow, bw - 0.3)) / 2
+                wq(u, a, zlo, zhi); wq(b_, u + bw, zlo, zhi); wq(a, b_, zlo, z0); wq(a, b_, z1, zhi)
+                opening(a, b_, z0, z1, tex)
+
+        if shop and face == "front":            # 店の 1 階の正面：ガラス張り（中の棚の絵）
+            g0, g1 = 0.5, flen - 0.5
+            wq(0, g0, 0, 3.0); wq(g1, flen, 0, 3.0); wq(g0, g1, 2.6, 3.0)
+            opening(g0, g1, 0.05, 2.6, None, "hk_shop_glass", [[0, 0], [(g1 - g0) / 3.0, 0], [(g1 - g0) / 3.0, 1], [0, 1]], frame=False)
+            z_from = 3.0
+        elif kind == "factory" and face == "front" and clad != "tin":   # 車の販売店：1 階はショールームのガラス
+            g0, g1 = 0.4, flen * rnd.uniform(0.55, 0.8)
+            wq(0, g0, 0, 3.4); wq(g1, flen, 0, 3.4); wq(g0, g1, 3.2, 3.4)
+            opening(g0, g1, 0.05, 3.2, None, "hk_showroom", [[0, 0], [(g1 - g0) / 3.0, 0], [(g1 - g0) / 3.0, 1], [0, 1]], frame=False)
+            z_from = 3.4
+        elif kind in ("factory", "shed") and face == "front":         # シャッター
+            sw = min(flen - 0.6, 3.6 if kind == "factory" else 2.4); sh = min(H - 0.6, 3.6 if kind == "factory" else 2.1)
+            n = 1 if kind == "shed" or flen < 9 else min(3, int(flen // 7))
+            us = [flen * (i + 0.5) / n for i in range(n)]
+            u = 0.0
+            for m_ in us:
+                a, b_ = m_ - sw / 2, m_ + sw / 2
+                wq(u, a, 0, H); wq(a, b_, sh, H)
+                opening(a, b_, 0.0, sh, None, "hk_shutter", [[0, 0], [sw / 2, 0], [sw / 2, sh / 2], [0, sh / 2]], frame=False)
+                if near:
+                    G.box(pal["metal"], lambda p, q, r, F=F: F(p, q, r), a - 0.1, b_ + 0.1, 0.0, 0.35, sh, sh + 0.4)
+                u = b_
+            wq(u, flen, 0, H)
+            continue
+        else:
+            z_from = 0.0
+        if kind == "block":
+            for st in range(n_st):
+                zb = st * SHF
+                if zb < z_from:
+                    continue
+                if face == "front":
+                    picks = [(1.7, "big"), (1.7, "big_lace"), (1.7, "big_shutter")] if (balc and st >= 1) or st == 0 else [(1.65, "koshi"), (1.65, "koshi_lace")]
+                    if st == 0 and not balc:
+                        picks += [(1.65, "koshi"), None]
+                    row(zb + (0.05 if picks[0][0] >= 1.7 else 0.9), zb + 2.05, zb, zb + SHF, picks, 3.64)
+                elif face == "back":
+                    row(zb + 1.0, zb + 2.0, zb, zb + SHF, [(1.2, "koshi"), (0.6, "small"), (0.6, "small"), None], 2.73)
+                else:
+                    row(zb + 1.2, zb + 1.95, zb, zb + SHF, [(0.6, "small"), None, None], 2.73)
+                if st > 0 and near:
+                    G.box(pal["trim"], lambda p, q, r, F=F: F(p, q, r), 0, flen, 0.0, 0.05, zb - 0.05, zb + 0.05)
+            if z_from > 0:
+                wq(0, flen, z_from, max(z_from, H)) if n_st * SHF <= z_from else None
+        elif kind == "factory":
+            if z_from > 0:
+                wq(0, flen, z_from, H)
+            else:
+                zr0 = min(H - 1.2, 3.0)
+                wq(0, flen, 0, zr0); wq(0, flen, zr0 + 0.7, H)
+                n = max(1, int(flen // 2.73)); bw = flen / n
+                for i in range(n):
+                    a, b_ = i * bw + 0.15, (i + 1) * bw - 0.15
+                    wq(i * bw, a, zr0, zr0 + 0.7); wq(b_, (i + 1) * bw, zr0, zr0 + 0.7)
+                    opening(a, b_, zr0, zr0 + 0.7, "small", frame=False)
+        else:
+            wq(0, flen, 0, H)
+    if balc:                                   # 道の側のベランダ（2 階から上）：床の板と手すり
+        for st in range(1, n_st):
+            zb = st * SHF; D = 1.2
+            G.box(pal["base"], P, x0 + 0.3, x1 - 0.3, y1, y1 + D, zb - 0.2, zb)
+            G.box(pal["wall"] if rnd.random() < 0.5 else pal["metal"], P, x0 + 0.3, x1 - 0.3, y1 + D - 0.08, y1 + D, zb, zb + 1.1)
+            if near:
+                for xx in (x0 + 0.3, x1 - 0.38):
+                    G.box(pal["metal"], P, xx, xx + 0.08, y1, y1 + D, zb, zb + 1.1)
+    G.quad(pal["roof"], [P(x0, y0, H), P(x1, y0, H), P(x1, y1, H), P(x0, y1, H)], [[0, 0], [L / 2, 0], [L / 2, W / 2], [0, W / 2]])
+    par = 0.6 if kind == "block" else 0.3
+    for (a, b_, c_, d_) in ((x0, x1, y1 - 0.15, y1), (x0, x1, y0, y0 + 0.15), (x0, x0 + 0.15, y0, y1), (x1 - 0.15, x1, y0, y1)):
+        G.box(pal["wall"], P, a, b_, c_, d_, H, H + par)
+    for (a, b_, c_, d_) in ((x0 - 0.03, x1 + 0.03, y1 - 0.18, y1 + 0.03), (x0 - 0.03, x1 + 0.03, y0 - 0.03, y0 + 0.18),
+                            (x0 - 0.03, x0 + 0.18, y0, y1), (x1 - 0.18, x1 + 0.03, y0, y1)):   # 笠木（パラペットの上だけ）
+        G.box(pal["trim"], P, a, b_, c_, d_, H + par, H + par + 0.06)
+    if near and kind == "block" and n_st >= 2:   # 端の鉄骨の外階段（幅 1.0 m、踊り場ごと）
+        sx = x1 if rnd.random() < 0.5 else x0 - 1.1
+        G.box(pal["metal"], P, sx, sx + 1.1, y0 + 0.5, y0 + 3.5, 0.0, 0.08)
+        for st in range(1, n_st):
+            zb = st * SHF
+            G.box(pal["metal"], P, sx, sx + 1.1, y0 + 0.5, y0 + 3.5, zb - 0.15, zb)
+            G.box(pal["metal"], P, sx + 1.05 if sx >= x1 else sx, sx + 1.1 if sx >= x1 else sx + 0.05, y0 + 0.5, y0 + 3.5, zb, zb + 1.1)
+        for xx in (sx, sx + 1.05):
+            G.cyl(pal["metal"], P(xx, y0 + 0.55, 0), P(xx, y0 + 0.55, H), 0.05, seg=4)
+            G.cyl(pal["metal"], P(xx, y0 + 3.45, 0), P(xx, y0 + 3.45, H), 0.05, seg=4)
+    if near:
+        for k in range(1 + int(L // 8)):
+            ax = x0 + (k + 0.5) * L / (1 + int(L // 8))
+            G.box(pal["ac"], P, ax - 0.4, ax + 0.4, y0 + 1.0, y0 + 1.6, H, H + 0.7)
+    return G.items(bid, pal["wall"]), pal
+
+
+def shutter_image(w=256, h=256):
+    """シャッター（2 m 四方）：銀灰色の横の細いすじ。"""
+    a = np.full((h, w, 3), 168.0)
+    for y in range(0, h, 6):
+        a[y:y + 1] -= 34; a[y + 1:y + 2] += 18
+    a += np.linspace(8, -14, h)[:, None, None]
+    return Image.fromarray(np.clip(a, 0, 255).astype(np.uint8))
+
+
 SPLIT_M = 15.0      # これより長い輪郭は、約 11 m ずつ 1 m 空けて別の家に（1 軒にすると窓が延々と並び、工場や長屋に見えた）
 
 
@@ -313,14 +526,33 @@ def house_meshes(buildings, ground_z, road_xy, near_line=None, avoid=None):
             out += items; pals.append(pal); continue
         if avoid is not None and not avoid.is_empty:
             fp = fp.difference(avoid)
-            if fp.is_empty or fp.area < 15:
+            if fp.is_empty or fp.area < SHED_MIN_M2:
                 continue
             if fp.geom_type != "Polygon":
                 fp = max(fp.geoms, key=lambda g: g.area)
+        if fp.area < SHED_MIN_M2:
+            continue
         near = near_line is None or fp.distance(near_line) < NEAR_M
+        small = fp.area < HOUSE_MIN_M2
+        if small or b.roof.get("type", "flat") == "flat" or b.shopfront or b.signs or b.canopy or b.footprint.area > 260:
+            from . import buildings as bl
+            r = fit_rect(fp, road_xy, avoid, snap=False)
+            if r is None:
+                continue
+            items, pal = flat_parts(b.id, fp, ground_z, road_xy, b, near=near, rect=r, kind="shed" if small else None)
+            items += bl._signs(b, fp, ground_z)                       # 店の看板・ひさしは箱の家と同じ作り
+            if b.canopy:
+                from shapely.geometry import Polygon as _Poly
+                from shapely.geometry.polygon import orient
+                items += bl._canopy(b, orient(_Poly(bl._xy(b.canopy["points"])).buffer(0), 1.0), ground_z, fp)
+            out += items; pals.append(pal); continue
         for k, piece in enumerate(_split_long(fp)):
+            r = fit_rect(piece, road_xy, avoid)
+            if r is None:
+                continue
             items, pal = house_parts(f"{b.id}_{k}" if k else b.id, piece, ground_z, road_xy, storeys=2 if piece.area > 45 else 1, near=near,
-                                     wall=None, roof=b.roof.get("color"))
+                                     wall=b.wall, roof=b.roof.get("color"), rect=r, clad=facades.cladding_of(b),   # 色と壁の材料は建物データ
+                                     roof_type=b.roof.get("type") if b.roof.get("type") in ("hip", "gable") else None)
             out += items; pals.append(pal)
     return out, pals
 
@@ -394,8 +626,16 @@ def write_textures(pals, out_dir):
     save("hk_metal", _flat("#8E9296")); save("hk_ac", _flat("#D6D6D0"))
     base = facades.detail("Concrete034", 2.0, 2.0, 2.0, 0.5, 0.6)[..., None] * facades._hex("#A9A79F")[None, None, :]
     save("hk_base", Image.fromarray(np.clip(base * 255, 0, 255).astype(np.uint8)))
+    save("hk_store_glass", store_glass()); save("hk_shutter", shutter_image())
+    save("hk_shop_glass", shop_glass()); save("hk_showroom", shop_glass(showroom=True))
+    for p in pals:                                                     # 店の看板（buildings._signs の材質）
+        b = p.get("bld")
+        for n, sg in enumerate(b.signs if b is not None else []):
+            from .textures import sign_texture
+            w_px = int(np.clip(float(sg.get("w_m", 3.0)) * 96, 96, 1024)); h_px = int(np.clip(float(sg.get("h_m", 1.0)) * 96, 48, 512))
+            save(f"sign_{b.id}_{n}", sign_texture(sg["text"], sg.get("bg", "#FFFFFF"), sg.get("fg", "#000000"), w_px, h_px))
     if any(p.get("store_name") is not None for p in pals):
-        save("hk_store_glass", store_glass()); save("hk_store_band", store_band()); save("hk_store_pillar", _flat("#5A4030"))
+        save("hk_store_band", store_band()); save("hk_store_pillar", _flat("#5A4030"))
         from .textures import sign_texture
         nm = next(p["store_name"] for p in pals if p.get("store_name") is not None) or "STORE"
         save("hk_store_name", sign_texture(nm, "#FFFFFF", "#008C45", 480, 160))
@@ -410,23 +650,35 @@ def write_textures(pals, out_dir):
 
 
 # ---------------- コースの組み立てへのつなぎ ----------------
-S3_RANGE = (0.0, 1700.0)   # S3 の起点（名古木）からの距離：まずこの区間の道ぞいだけ部品の家に置き換える
-BAND_M = 80.0
-
-
-def split(buildings, sec, s0):
-    """buildings を (部品の家にするもの, 今までどおり) に分ける。S3_RANGE の道から BAND_M 以内の、勾配屋根・260 m² 以下・
-    店の看板／ガラス／屋根だけの建物でないもの。"""
+def split(buildings, sec):
+    """buildings を (部品で建てるもの, 今までどおり) に分ける。コース全体の建物を部品で建てる（勾配屋根の家は house_parts、
+    平屋根・大きな建物・店は flat_parts）。屋根だけの建物（canopy の self）だけは今までどおり。名古木〜1.7 km だけにしていたら、その先は箱のままだった（2026-10-28）。
+    返り値の線・点はコース全体の中心線（家の正面を道へ向ける・近い家に凹凸を付ける）。"""
     from shapely.geometry import LineString
-    m = (sec.s >= s0 + S3_RANGE[0]) & (sec.s <= s0 + S3_RANGE[1])
-    line = LineString(np.c_[sec.x[m], sec.y[m]])
     kit, rest = [], []
     for b in buildings:
-        ok = getattr(b, "kit", None) == "conv_store" or (
-            b.roof.get("type", "flat") != "flat" and b.footprint.area <= 260 and not b.shopfront and not b.signs and not b.canopy
-            and b.footprint.distance(line) < BAND_M)
+        # 屋根だけの建物（ガソリンスタンドの屋根）と、写真に合わせて一軒ずつ作った建物・社寺（kit: keep）は今までどおり。
+        # keep を部品の家にしたら、峠の売店・神社・かやぶきの古民家までありふれた 2 階建てになった（2026-10-28）
+        ok = not (b.canopy and b.canopy.get("self")) and getattr(b, "kit", None) != "keep"
         (kit if ok else rest).append(b)
-    return kit, rest, line, np.c_[sec.x[m], sec.y[m]]
+    road = np.c_[sec.x, sec.y]
+    return kit, rest, LineString(road), road
+
+
+CELL_M = 300.0      # まとめる区画。コース全体で材質ごとに 1 つにまとめると視界の外でも描かれ、全線で約 7 FPS 落ちた（2026-10-28）
+
+
+def merge_by_cell(items, cell=CELL_M):
+    """部品を CELL_M 四方の区画ごとに、材質でまとめる（buildings.merge_by_material を区画ごとに）。名前は ..._c<x>_<y>_NN。"""
+    from . import buildings as bl
+    cells = {}
+    for it in items:
+        c = it[1][:, :2].mean(0)
+        cells.setdefault((int(c[0] // cell), int(c[1] // cell)), []).append(it)
+    out = []
+    for (cx, cy), its in sorted(cells.items()):
+        out += [(f"{n[:-3]}_c{cx}_{cy}{n[-3:]}".replace("-", "m"), v, f, uv, mat, r) for n, v, f, uv, mat, r in bl.merge_by_material(its)]
+    return out
 
 
 def store_glass(w=768, h=640):
@@ -447,6 +699,27 @@ def store_glass(w=768, h=640):
     a = np.asarray(im, float) * 0.78 + np.array([30, 40, 50.0]) * 0.22            # ガラス越しの色
     im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)); d = ImageDraw.Draw(im)
     d.rectangle([w // 2 - 5, 0, w // 2 + 5, h], fill=(150, 152, 154)); d.rectangle([0, 0, w, 8], fill=(150, 152, 154)); d.rectangle([0, h - 8, w, h], fill=(150, 152, 154))
+    return im
+
+
+def shop_glass(w=768, h=640, showroom=False):
+    """店・ショールームのガラス（横 3 m・縦 2.6 m）：外の空が映った青みの灰色、奥の明るい床と天井の明かり、縦の桟 1.5 m おき、
+    店は入口の扉の枠と小さな貼り紙。コンビニの棚の絵（store_glass）は食堂や車の店に合わなかった（2026-10-28）。"""
+    rng = np.random.default_rng(11 if showroom else 5)
+    y = np.linspace(0, 1, h)[:, None, None]
+    a = np.zeros((h, w, 3)) + (np.array([150, 162, 172.0]) * (1 - y) + np.array([96, 104, 112.0]) * y)   # 空の映り込み（上が明るい）
+    if showroom:
+        a[int(h * 0.62):] = a[int(h * 0.62):] * 0.5 + np.array([200, 200, 196.0]) * 0.5                    # 奥の明るい床
+    im = Image.fromarray(np.clip(a, 0, 255).astype(np.uint8)); d = ImageDraw.Draw(im)
+    for k in range(4):                                                                                    # 天井の明かり
+        x = int((k + 0.5) * w / 4); d.rectangle([x - 50, int(h * 0.08), x + 50, int(h * 0.1)], fill=(236, 236, 228))
+    if not showroom:
+        for k in range(rng.integers(1, 3)):                                                               # 貼り紙
+            x = int(rng.uniform(0.05, 0.75) * w); d.rectangle([x, int(h * 0.3), x + int(w * 0.08), int(h * 0.45)], fill=tuple(int(v) for v in rng.integers(150, 250, 3)))
+        d.rectangle([int(w * 0.42), int(h * 0.05), int(w * 0.58), h], outline=(120, 122, 124), width=6)  # 入口の扉
+    for x in (0, w // 2, w - 1):                                                                          # 縦の桟（1.5 m おき）
+        d.rectangle([x - 6, 0, x + 6, h], fill=(170, 172, 174))
+    d.rectangle([0, 0, w, 10], fill=(170, 172, 174)); d.rectangle([0, h - 12, w, h], fill=(170, 172, 174))
     return im
 
 

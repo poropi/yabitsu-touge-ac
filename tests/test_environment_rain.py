@@ -18,17 +18,13 @@ def test_current_materials_cover_roads_and_visual_paint_without_wetting_walls(tm
     ini = configparser.ConfigParser(interpolation=None)
     ini.read(path)
     section = ini["RAIN_FX"]
-    puddles = set(section["puddles_materials"].split(","))
+    assert section["puddles_materials"] == "" and section["puddles_meshes"] == ""   # 水たまりは作らない（トンネルで鏡になった）
     paint = set(section["lines_materials"].split(","))
-    assert {"asphalt", "concrete_circles", "visual_concrete_circles"} <= puddles
     assert {"visual_line_white", "visual_paint_red", "visual_paint_green", "dress_text_40",
             "dress_green", "dress_red", "mt_mark_diamond"} <= paint
     assert "asphalt" in section["soaking_materials"].split(",")
-    assert not {"concrete", "ground", "visual_ground_far", "tunnel_wall"} & puddles
+    assert not {"concrete", "ground", "visual_ground_far", "tunnel_wall"} & set(section["soaking_materials"].split(","))
     assert "visual_ground_far" in section["rough_materials"].split(",")
-    meshes = set(section["puddles_meshes"].split(","))
-    assert "1ROAD_s1_lot" in meshes
-    assert all(name.startswith("1ROAD_") for name in meshes)
     assert "relief_materials" not in section
     assert report["tunnel_count"] == 3
 

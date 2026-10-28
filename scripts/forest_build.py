@@ -226,9 +226,14 @@ def main():
     vk = forest_place.view_clear_keep(trees, models, zones)
     trees = trees[vk]
     log(t0, f"眺めの開けた場所の木を {int((~vk).sum()):,} 本取り除きました")
-    keep_sight = forest_place.sightline_keep(trees, models, cxy, cz, cfg.get("sight", {}))
-    for g in keep_areas:
-        keep_sight |= shapely.contains_xy(g, np.asarray(trees.x, float), np.asarray(trees.y, float))
+    sight = cfg.get("sight", {})
+    keep_sight = forest_place.sightline_keep(trees, models, cxy, cz, sight, include_shrubs=True)
+    # 写真に合わせて植えた所（keep_sight）も、目の高さから 1 m の高さの路面への見通しにかかる木は取り除く（道の上の高い枝葉は残る）。
+    # 丸ごと外していたら、塩水橋（S5 4,360〜4,475 m）で道をおおう広葉樹に 7.5〜10 m 先しか見えなかった（2026-10-28）
+    if keep_areas:
+        low = forest_place.sightline_keep(trees, models, cxy, cz, {**sight, "target_h": [1.0]}, include_shrubs=True)
+        for g in keep_areas:
+            keep_sight |= shapely.contains_xy(g, np.asarray(trees.x, float), np.asarray(trees.y, float)) & low
     np.save(out / "removed_sight.npy", np.asarray(trees[~keep_sight]))
     trees = trees[keep_sight]
     log(t0, f"コースの視界をさえぎる木を {int((~keep_sight).sum()):,} 本取り除きました")

@@ -254,3 +254,14 @@ def test_fill_bare_plants_only_where_nothing_grows(world):
     assert (np.abs(add.y) > 3.0).all()                                        # 道の上には植えない
     again = fp.fill_bare(np.concatenate([np.asarray(t0), np.asarray(add)]).view(np.recarray), ground, keep, SPECIES, zone)
     assert len(again) < len(add) * 0.1                                        # 埋めた後はほとんど足さない
+
+
+def test_sightline_removes_roadside_shrub_on_curve_when_asked():
+    """S5 のカーブの内側の低木で 20〜27 m 先しか見えなかった（2026-10-28）。低木は include_shrubs で調べる。シダは調べない。"""
+    a = np.linspace(-np.pi / 2, 0.2, 120)
+    cl = np.c_[40 * np.cos(a), 40 + 40 * np.sin(a)]
+    z = np.zeros(len(cl))
+    at = lambda r, p: _one(r * np.cos(-0.7), 40 + r * np.sin(-0.7), 0.0, p)
+    t = np.concatenate([at(36.5, "shrub_a"), at(36.5, "fern_a")]).view(np.recarray)
+    assert fp.sightline_keep(t, MODELS, cl, z, fp.DEFAULT_SIGHT).tolist() == [True, True]
+    assert fp.sightline_keep(t, MODELS, cl, z, fp.DEFAULT_SIGHT, include_shrubs=True).tolist() == [False, True]

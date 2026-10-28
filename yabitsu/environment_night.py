@@ -95,10 +95,11 @@ def build(out_dir=None):
         add(name,q,np.array([[0,1,2],[0,2,3],[2,1,0],[3,2,0]]),material)
     tunnel_positions=[]; street_positions=[]; vending_positions=[]; signal_count=0; windows=0
     # 全体の壁から最大36窓だけ選び、すべての家を発光させない。
-    candidates=[]
+    candidates=[]; kit_lit=[]
     for name,info in original['meshes'].items():
         mat=info['material']
-        wanted=mat in ('signal_head','signal_ped','tunnel_lamp','vending_front') or ('signal_poles' in name) or (mat.startswith('facade_') and mat.endswith('_w') and name.startswith('1WALL_bld_'))
+        wanted=mat in ('signal_head','signal_ped','tunnel_lamp','vending_front') or ('signal_poles' in name) or (mat.startswith('facade_') and mat.endswith('_w') and name.startswith('1WALL_bld_')) \
+            or mat in ('hk_win_silver','hk_win_bronze')   # 部品の家（house_kit）の窓ガラスの板。箱の家の窓の壁が無くなり、夜の窓が 0 になった（2026-10-28）
         if not wanted: continue
         d=np.load(source/info['file']); v,f,uv=d['verts'],d['faces'],d['uvs']
         if mat in ('signal_head','signal_ped'):
@@ -131,6 +132,16 @@ def build(out_dir=None):
                 chosen.append(p)
                 if len(chosen)==3: break
             street_positions.extend(chosen)
+        elif mat in ('hk_win_silver','hk_win_bronze'):
+            # 部品の家の窓：窓の板 1 枚＝四角 1 つ。kit_window_share の割合を光らせ、300 m 区画ごとに 1 つにまとめる（下で追加）。
+            # 箱の家の 36 枚のくじ引きのままだと、1 万枚の窓のうち 36 枚で、町を撮っても 1 枚も光っていなかった（2026-10-28）
+            krng=np.random.default_rng(__import__("zlib").crc32(name.encode()) ^ settings["seed"])
+            for face in f:
+                q=v[face]; tx=uv[face]; u0,v0=tx[:,0].min(),tx[:,1].min()
+                col,row=int(round(u0*4)),(0 if v0>=.49 else 1)
+                if row==1 and col in (1,2,3): continue        # 扉・シャッターを下ろした窓は光らせない
+                if np.ptp(q[:,2])<.6 or krng.random()>=settings.get('kit_window_share',0.08): continue
+                c=q.mean(0); kit_lit.append(c+(q-c)*.84+_normal(q)*.012)
         else:
             for face in f:
                 if len(face)!=4: continue
@@ -139,6 +150,13 @@ def build(out_dir=None):
                 u0=np.ceil(tx[:,0].min())+.31; v0=np.ceil(tx[:,1].min())+.39
                 if u0+.38>tx[:,0].max() or v0+.37>tx[:,1].max(): continue
                 candidates.append((name,q,tx,u0,v0)); break
+    cells={}
+    for q in kit_lit:
+        cells.setdefault(tuple((q.mean(0)[:2]//300).astype(int)),[]).append(q)
+    for (cx,cy),qs in sorted(cells.items()):
+        vv=np.concatenate(qs); ff=np.concatenate([np.array([[0,1,2],[0,2,3],[2,1,0],[3,2,0]])+4*k for k in range(len(qs))])
+        add(f'env_window_hk_c{cx}_{cy}'.replace('-','m'),vv,ff,'env_window'); windows+=len(qs)
+        report['cameras_ac'].setdefault('residential_window',{'position':ac_position(qs[0].mean(0)+_normal(qs[0])*9),'target':ac_position(qs[0].mean(0))})
     # 元manifest順に偏らない固定seedの抽出。
     rng=np.random.default_rng(settings['seed'])
     for i in sorted(rng.choice(len(candidates),min(settings['window_limit'],len(candidates)),replace=False)):

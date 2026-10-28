@@ -278,8 +278,9 @@ def _resample(cl, z, step):
     return np.c_[np.interp(ss, s, cl[:, 0]), np.interp(ss, s, cl[:, 1])], np.interp(ss, s, z)
 
 
-def sightline_keep(trees, models, cl, cl_z, cfg) -> np.ndarray:
-    """True＝残す。下草（シダ・低木）と、植えたばかりの細い若木（sapling）は調べない。"""
+def sightline_keep(trees, models, cl, cl_z, cfg, include_shrubs=False) -> np.ndarray:
+    """True＝残す。下草（シダ・草）と、植えたばかりの細い若木（sapling）は調べない。低木（shrub）は include_shrubs のときだけ調べる
+    （S5 のカーブの内側の低木で 20〜27 m 先しか見えなかった、2026-10-28）。"""
     from scipy.spatial import cKDTree
     cfg = {**DEFAULT_SIGHT, **cfg}
     P, Z = _resample(np.asarray(cl, float), np.asarray(cl_z, float), cfg["step_m"])
@@ -288,6 +289,8 @@ def sightline_keep(trees, models, cl, cl_z, cfg) -> np.ndarray:
     keep = np.ones(len(trees), bool)
     pats = np.asarray(trees.pattern)
     big = ~(_under(pats) | np.char.startswith(pats, "sapling"))
+    if include_shrubs:
+        big |= np.char.startswith(pats, "shrub")
     xy = np.c_[trees.x, trees.y]
     dist, i0 = cKDTree(P).query(xy)
     cand = np.flatnonzero(big & (dist < cfg["near_m"]))
