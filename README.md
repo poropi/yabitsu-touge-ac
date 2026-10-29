@@ -75,10 +75,13 @@ uv run python -m scripts.track_08_acfiles          # レイアウト・コース
 - **Overture Maps Foundation**（ODbL）：地理院・OSM に無い建物の輪郭の一部。
 - **ambientCG**（[ambientcg.com](https://ambientcg.com)、CC0）：家の壁・屋根の写真素材。
 - **Freesound**（CC0）：cartoonrob の日本の蝉、tomasloos の日本の鳥・小川の録音を加工して使用。出典と処理は [docs/environment.md](docs/environment.md) に記載。
+- **Microsoft Rocketbox Avatar Library**（[github.com/microsoft/Microsoft-Rocketbox](https://github.com/microsoft/Microsoft-Rocketbox)、MIT、Copyright (c) 2020 Microsoft）：菜の花台の見物客の人物。ライセンス文は [assets/free/rocketbox/LICENSE.md](assets/free/rocketbox/LICENSE.md)。
 - **Google ストリートビュー**：建物・標識・壁などの見た目を確かめるために見ただけです。画像はこのリポジトリに入っていません。
 
 このプロジェクトは Google、国土地理院、OpenStreetMap、Kunos Simulazioni（Assetto Corsa）とは関係ありません。
 
 ## ライセンス
 
-プログラムのライセンスはまだ決めていません。データの部分は、上の出典のライセンスに従います。
+- **プログラム**（`yabitsu/`・`scripts/`・`blender_scripts/`・`tests/` など）：[MIT License](LICENSE)。
+- **コース**（配布する zip の中身：`.kn5`・テクスチャ・レイアウトなど、ここで作ったもの）：[クリエイティブ・コモンズ 表示-非営利 4.0 国際（CC BY-NC 4.0）](https://creativecommons.org/licenses/by-nc/4.0/deed.ja)。作者（poropi）とこのリポジトリを表示すれば、改造・再配布してかまいません。販売や有料での配布はできません。
+- **出典のデータ・素材**：上の出典それぞれのライセンスに従います。OpenStreetMap・Overture から作ったデータ（`data/manual/` の建物の外形など）は ODbL です。Rocketbox の人物は MIT です。出典の表示は、改造版・再配布でも残してください。

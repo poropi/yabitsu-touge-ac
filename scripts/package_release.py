@@ -67,8 +67,15 @@ README = """ヤビツ峠（Yabitsu Touge）for Assetto Corsa  v{version}
   ・建物の輪郭の一部：Overture Maps Foundation（ODbL）
   ・森の木の写真素材：Poly Haven（CC0）、壁・屋根の写真素材：ambientCG（CC0）
   ・環境音：Freesound の cartoonrob（日本の蝉）、tomasloos（日本の鳥と小川）の録音（CC0）を加工
+  ・菜の花台の見物客：Microsoft Rocketbox Avatar Library（MIT、Copyright (c) 2020 Microsoft。LICENSE-Rocketbox.txt）
   ・建物・標識などの見た目は Google ストリートビューを見て確かめました（画像は入っていません）。
   Google・国土地理院・OpenStreetMap・Overture Maps・Kunos Simulazioni とは関係ありません。
+
+■ ライセンス
+  このコースは CC BY-NC 4.0（クリエイティブ・コモンズ 表示-非営利 4.0 国際）で配布します。
+  https://creativecommons.org/licenses/by-nc/4.0/deed.ja
+  作者（{author}）とリポジトリの URL を表示すれば、改造・再配布してかまいません。販売や有料での配布はできません。
+  上の出典の表示は、改造版・再配布でも残してください（地図データは ODbL、見物客の人物は MIT に従います）。
 
 ■ 作った人
   {author}  https://github.com/poropi/yabitsu-touge-ac
@@ -83,8 +90,12 @@ Install: drop the zip into Content Manager, or copy the "content" folder into yo
 (delete content/tracks/yabitsu first when updating). About 2.2 GB unpacked.
 Credits: GSI Japan (elevation tiles, seamless aerial photos, basic map vector tiles), (c) OpenStreetMap contributors (ODbL),
 Overture Maps Foundation buildings (ODbL), Poly Haven and ambientCG textures (CC0), Freesound recordings by cartoonrob and tomasloos (CC0).
+Spectators at Nanohanadai: Microsoft Rocketbox Avatar Library (MIT, Copyright (c) 2020 Microsoft, see LICENSE-Rocketbox.txt).
 Not affiliated with Google, GSI, OpenStreetMap, Overture Maps or Kunos Simulazioni.
+License: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/). You may modify and share it with credit to {author}
+and this repository, but not sell it or distribute it for a fee. Keep the credits above (map data ODbL, spectators MIT).
 """
+ROCKETBOX_LICENSE = config.PROJECT_ROOT / "assets" / "free" / "rocketbox" / "LICENSE.md"   # 見物客の人物（MIT）：表示を同梱する
 
 
 def package(track_dir, out_dir, version, author=AUTHOR):
@@ -94,6 +105,7 @@ def package(track_dir, out_dir, version, author=AUTHOR):
     base = f"content/tracks/{TRACK_NAME}"
     with zipfile.ZipFile(path, "w", zipfile.ZIP_DEFLATED, compresslevel=6) as z:
         z.writestr("README.txt", README.format(version=version, author=author).replace("\n", "\r\n").encode("utf-8-sig"))
+        z.writestr("LICENSE-Rocketbox.txt", ROCKETBOX_LICENSE.read_text(encoding="utf-8").replace("\n", "\r\n"))
         for p in sorted(track_dir.rglob("*")):
             if not p.is_file() or any(k in p.relative_to(track_dir).as_posix() for k in EXCLUDE):
                 continue
