@@ -21,6 +21,11 @@ def test_release_zip_has_the_ac_folder_layout_and_versioned_ui(tmp_path):
     assert "content/tracks/yabitsu/yabitsu_main.kn5" in names and "content/tracks/yabitsu/models_s1_up.ini" in names
     assert ui["version"] == "0.0.1" and ui["author"] == "poropi" and ui["name"] == "ヤビツ峠 S1"
     assert any(n.startswith("README") and "/" not in n for n in names)
+    with zipfile.ZipFile(z) as f:
+        readme = f.read("README.txt").decode("utf-8-sig")
+        rocketbox = f.read("LICENSE-Rocketbox.txt").decode("utf-8")
+    assert "CC BY-NC 4.0" in readme and "Rocketbox" in readme   # コースのライセンスと、同梱する人物（MIT）の表示
+    assert "Copyright (c) 2020 Microsoft" in rocketbox and "MIT License" in rocketbox
     assert z.name == "yabitsu-touge-ac-v0.0.1.zip"
     assert json.loads((track / "ui" / "s1_up" / "ui_track.json").read_text(encoding="utf-8")).get("version") is None   # 入っているコースは変えない
 
