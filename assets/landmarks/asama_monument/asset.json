@@ -1,0 +1,29 @@
+{
+  "name": "浅間神社駐車場の石碑",
+  "source": "sengen_monument_color_v2.blend",
+  "source_sha256": "4943b5c5b21d9f61271fc3ed3c5b2a4e338508934eded4fa78adabae8281bc2e",
+  "format": "Blender 5.2",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y"
+  },
+  "placement_spec": "data/manual/s2_asama.json の monument",
+  "preview": "export/compare/asama/monument2_shaded_after.png",
+  "comparison": "export/compare/asama/monument2_reference_comparison.jpg",
+  "views": "export/compare/asama/monument2_views.jpg",
+  "status": "依頼02: 石碑・碑文面・台座の材質を修正。元blend保持、名前・構成・形状保持。ベイクは依頼元が実施。今回KN5/コース生成なし。",
+  "notes": [
+    "アクティブな制作シーンには石碑・台座のほか足元の草、撮影用の地面・カメラ・照明が含まれる。",
+    "絶対寸法と背面は推定。上部の題字の書体は近似。細かい本文は未判読のため抽象刻線。",
+    "石肌はBlenderの手続き型マテリアル。ゲーム用に書き出す際はテクスチャへのベイクが必要。"
+  ],
+  "previous_source": "sengen_monument.blend",
+  "rebuild": "blender_scripts/recolor_asama_monument_v2.py",
+  "preview_script": "blender_scripts/preview_asama_monument_v2.py",
+  "validation": [
+    "export/compare/asama/monument2_readback_check.json",
+    "export/compare/asama/monument2_structure_readback.json",
+    "export/compare/asama/monument2_color_samples.json"
+  ]
+}

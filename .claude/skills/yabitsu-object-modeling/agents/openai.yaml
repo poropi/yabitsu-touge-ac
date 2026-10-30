@@ -1,0 +1,4 @@
+interface:
+  display_name: "ヤビツ峠のオブジェクト制作"
+  short_description: "写真を参照するBlender制作・ライブ表示・形状検証・AC向け変換"
+  default_prompt: "$yabitsu-object-modeling を使い、参照写真からコース用オブジェクトをBlenderで制作してください。"
