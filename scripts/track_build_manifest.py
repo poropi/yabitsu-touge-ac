@@ -38,9 +38,12 @@ def main():
     from yabitsu import gomayashiki_area
     goma_spec = gomayashiki_area.load(config.DATA_MANUAL / "s4_gomayashiki.json")
     goma_site = gomayashiki_area.build(goma_spec, sec) if goma_spec else None
-    sites = [x for x in (pass_site, tera_site, goma_site) if x]
+    from yabitsu import asama_area   # 浅間神社の入口の駐車場（航空写真・ストリートビュー 2025-07）
+    asama = asama_area.load(config.DATA_MANUAL / "s2_asama.json")
+    asama_site = asama_area.build(asama, sec) if asama else None
+    sites = [x for x in (pass_site, tera_site, goma_site, asama_site) if x]
     assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps],   # 町の範囲と分かれる所は多角形で作る
-                      mouths=[mo for x in sites for mo in x.mouths()],   # 峠・寺山・護摩屋敷のわき道の入口は側溝をくぼませない
+                      mouths=[mo for x in sites for mo in x.mouths()],   # 峠・寺山・護摩屋敷のわき道の入口と浅間神社の駐車場の前は側溝をくぼませない
                       no_lines=[r for x in (tera_site, goma_site) if x for r in x.no_lines()],   # 寺山富士見橋のまわりは路肩の白線が無い
                       dry=[(t_.s0, t_.s1) for t_ in __import__("yabitsu.tunnel", fromlist=["x"]).from_osm(side_roads.load_elements(), sec)])   # トンネルの中は水たまりを作らない材質
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
@@ -76,18 +79,34 @@ def main():
     minoge = minoge_area.load(config.DATA_MANUAL / "s2_minoge.json")
     if minoge:
         assembly.add_pass_area(m, minoge_area.build(minoge, sec, minoge_area.dem_ground()))
-    from yabitsu import asama_area   # 浅間神社の入口：広場・石積み・石段・社号標・石碑（参考：nanohanadai・ストリートビュー）
-    asama = asama_area.load(config.DATA_MANUAL / "s2_asama.json")
-    if asama:
+    if asama:   # 浅間神社の入口の駐車場：広場・石積み・石段・社号標・石碑・看板
         import shutil as _sh
         tdir = config.TRACK_BUILD_DIR / "textures"; tdir.mkdir(parents=True, exist_ok=True)
         _sh.copy2(config.PROJECT_ROOT / "assets" / "dress" / "kenchi.png", tdir / "kenchi.png")
         asama_area.pillar_texture(asama["pillar"]["text"], tdir / "asama_pillar.png")
         asama_area.board_texture(tdir / "asama_board.png")
+        asama_area.notice_texture(tdir / "asama_notice.png")
         m.add_material("kenchi", texture="textures/kenchi.png")
+        from PIL import Image as _Im   # 茂みの陰に入った奥の石積み：写真（000・045）で RGB 約 46、日なたの石段の左の壁は約 120 → 間知の絵を 0.85 倍
+        _k = np.asarray(_Im.open(tdir / "kenchi.png").convert("RGB"), np.float32) * 0.85   # 0.6 では茂みの描画の陰と重なって真っ黒になった
+        _Im.fromarray(_k.clip(0, 255).astype(np.uint8)).save(tdir / "kenchi_shade.png")
+        m.add_material("kenchi_shade", texture="textures/kenchi_shade.png")
+        m.add_material("asama_notice", texture="textures/asama_notice.png")
+        mon = config.PROJECT_ROOT / asama["monument"]["model"] / "monument.png"   # 石碑の焼き付け（blender_scripts/bake_asama_monument.py）
+        if mon.exists():
+            _sh.copy2(mon, tdir / "asama_monument.png")
+            m.add_material("asama_monument", texture="textures/asama_monument.png")
+        for key, lm in asama.get("landmarks", {}).items():   # Codex 制作の蔓草・立札・草の画像（葉と草は透過）
+            if key == "note" or not asama_area._landmark_exists(lm):
+                continue
+            src = config.PROJECT_ROOT / lm["dir"]
+            pngs = {lm["material"]: lm["texture"]} if lm.get("texture") else {f'{lm["material"]}_{n[-1]}': f"{n}.png" for n in lm["names"]}
+            for mat, png in pngs.items():
+                _sh.copy2(src / png, tdir / f"{mat}.png")
+                m.add_material(mat, texture=f"textures/{mat}.png", alpha=key != "post")
         m.add_material("asama_pillar", texture="textures/asama_pillar.png")
         m.add_material("asama_board", texture="textures/asama_board.png")
-        assembly.add_pass_area(m, asama_area.build(asama, sec))
+        assembly.add_pass_area(m, asama_site)
     if tera_site:   # 寺山富士見橋：広場・わき道・トイレ（正面の絵はトイレの横の長さ・壁の高さの割合で書く）
         from yabitsu import textures as _tx
         _L, _ = tera_spec["toilet"]["size"]; _H = tera_spec["toilet"]["wall_h"]
@@ -196,7 +215,8 @@ def main():
         so = json.loads((config.DATA_MANUAL / f"{sn}_objects.json").read_text(encoding="utf-8"))
         skip += [tuple(float(v) for v in geo.to_local(*ob["points"][0])) for ob in so.get("objects", []) if len(ob.get("points", [])) == 1]
         skip += [tuple(float(v) for v in geo.to_local(*ob["at"])) for ob in so.get("pole_signs", [])]
-    poi_nodes = [e for e in poi_el if e.get("type") == "node" and "lat" in e]
+    replaced = {(asama or {}).get("monument", {}).get("osm_id")}   # 手で作り込んだ物と同じ OSM の点（浅間神社の駐車場の石碑「愛林共栄」）は作らない
+    poi_nodes = [e for e in poi_el if e.get("type") == "node" and "lat" in e and e.get("id") not in replaced]
     assembly.add_meshes(m, pois.meshes(pois.place(poi_nodes, sec, skip), ground))
     assembly.add_meshes(m, town_objects.signal_meshes(ro["signals"], road_z, prefix="s3_signal"))
     assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(ro["objects"], sec), road_z, prefix="s3_obj"))   # 路面の中のバス停は道の外へ

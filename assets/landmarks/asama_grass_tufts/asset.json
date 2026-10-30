@@ -1,0 +1,130 @@
+{
+  "asset_id": "asama_grass_tufts",
+  "source": "asama_grass_tufts_v2.blend",
+  "generator": "blender_scripts/build_asama_grass_tufts_v2.py",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "根元中央",
+    "east": "+X"
+  },
+  "references": {
+    "panoid": "nG1sfblUAy-_p5ZKlAB6pw",
+    "date": "2025-07",
+    "fov_vertical_deg": 90,
+    "pitch_down_deg": 4.13,
+    "images": [
+      "export/compare/asama/sv_a_000.png",
+      "export/compare/asama/sv_a_045.png",
+      "export/compare/asama/sv_a_090.png",
+      "export/compare/asama/sv_a_315.png"
+    ],
+    "urls": [
+      "https://www.google.com/maps/@35.4072027,139.215505,3a,90y,0h,85.87t/data=!3m6!1e1!3m4!1snG1sfblUAy-_p5ZKlAB6pw!2e0!7i16384!8i8192",
+      "https://www.google.com/maps/@35.4072027,139.215505,3a,90y,45h,85.87t/data=!3m6!1e1!3m4!1snG1sfblUAy-_p5ZKlAB6pw!2e0!7i16384!8i8192",
+      "https://www.google.com/maps/@35.4072027,139.215505,3a,90y,90h,85.87t/data=!3m6!1e1!3m4!1snG1sfblUAy-_p5ZKlAB6pw!2e0!7i16384!8i8192",
+      "https://www.google.com/maps/@35.4072027,139.215505,3a,90y,315h,85.87t/data=!3m6!1e1!3m4!1snG1sfblUAy-_p5ZKlAB6pw!2e0!7i16384!8i8192"
+    ],
+    "usage": "比較参照のみ。制作元・テクスチャに写真を含めない。"
+  },
+  "dimension_basis": "依頼の写真に合わせ高さ0.58/0.81/1.06m、株幅0.66/0.84/0.99m。104/106/107枚の葉を幅14〜22mm、7区間の弓状曲線で密生。株全体の寸法を合わせる縮尺調整を含む。現地未実測。",
+  "parts": [
+    {
+      "name": "grass_a",
+      "triangles": 2912,
+      "vertices": 3328,
+      "bounds_m": [
+        [
+          -0.3031768202781677,
+          -0.326118141412735,
+          0.0
+        ],
+        [
+          0.3217135965824127,
+          0.33388185501098633,
+          0.5799999833106995
+        ]
+      ],
+      "blades": 104,
+      "height_m": 0.58,
+      "width_max_m": 0.66
+    },
+    {
+      "name": "grass_b",
+      "triangles": 2968,
+      "vertices": 3392,
+      "bounds_m": [
+        [
+          -0.4335692524909973,
+          -0.4151914715766907,
+          0.0
+        ],
+        [
+          0.40643075108528137,
+          0.4204114079475403,
+          0.8100000023841858
+        ]
+      ],
+      "blades": 106,
+      "height_m": 0.81,
+      "width_max_m": 0.84
+    },
+    {
+      "name": "grass_c",
+      "triangles": 2996,
+      "vertices": 3424,
+      "bounds_m": [
+        [
+          -0.5215194821357727,
+          -0.5093855261802673,
+          0.0
+        ],
+        [
+          0.44142255187034607,
+          0.48061448335647583,
+          1.059999942779541
+        ]
+      ],
+      "blades": 107,
+      "height_m": 1.06,
+      "width_max_m": 0.99
+    }
+  ],
+  "texture": "grass_atlas_v2.png",
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "v": "m,+Z上,正面-Y",
+    "uv": "v=0画像上端",
+    "f": "三角形"
+  },
+  "double_sided": "裏面は頂点を分けた逆巻き面で明示的に二重化。三角形数に裏面を含む。",
+  "approximations": [
+    "植物種は写真から未同定。細長い弓状の葉の株として近似。",
+    "葉の本数・裏面・個々の曲がり方は推定。穂は写真で明確でないため作らない。"
+  ],
+  "game_status": "NPZとPNGまで。コースへの配置・KN5・実ゲーム表示は依頼範囲外のため未実施。",
+  "checks": [
+    "export/compare/asama/grass2_readback_check.json",
+    "export/compare/asama/grass2_npz_check.json"
+  ],
+  "delivery_check": "export/compare/asama/plants2_delivery_check.json",
+  "npz_preview": [
+    "export/compare/asama/grass2_npz_0.png",
+    "export/compare/asama/grass2_npz_1.png",
+    "export/compare/asama/grass2_npz_2.png"
+  ],
+  "comparison": "export/compare/asama/grass2_reference_comparison.jpg",
+  "preview": "export/compare/asama/grass2_views.jpg",
+  "previous_source": "asama_grass_tufts.blend",
+  "npz_preview_script": "blender_scripts/preview_asama_npz_v2.py",
+  "texture_opaque_mean_srgb": [
+    152.45,
+    189.2,
+    86.45
+  ]
+}

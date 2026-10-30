@@ -1,6 +1,8 @@
 """森の確認画像を描く（scripts.forest_build --render から呼ばれる）。
 使い方: blender -b --factory-startup --python blender_scripts/render_forest.py -- <出力フォルダ> <area>
 出力フォルダの views.json（カメラ）・trees.npy（配置）・extension/trees/*.zip（木）と、manifest のメッシュ（コース）を使う。
+環境変数 SAVE_BLEND=<パス> のときは描かずに、最初のカメラの範囲の場面へ全部のカメラ（名前＝views の name）を置き、
+画像を詰めて .blend に保存する（Blender の画面で見せる用）。
 """
 import json
 import sys
@@ -189,13 +191,8 @@ def instance_trees(sc, objs, win):
     return len(t)
 
 
-for v in views:
-    sc = reset()
-    load_course(sc, v["window"])
-    load_dress(sc, v["window"])
-    objs = tree_objects(v.get("lod", 1))
-    n = instance_trees(sc, objs, v.get("tree_window", v["window"]))   # 遠くを見る絵では、木だけ狭い範囲にできる
-    cam = bpy.data.objects.new("cam", bpy.data.cameras.new("cam")); sc.collection.objects.link(cam)
+def make_cam(sc, v):
+    cam = bpy.data.objects.new(v["name"], bpy.data.cameras.new(v["name"])); sc.collection.objects.link(cam)
     cam.data.clip_end = v.get("clip_end", 20000)
     if v["type"] == "top":
         cx, cy, size = v["center"][0], v["center"][1], v["size"]
@@ -209,7 +206,25 @@ for v in views:
         cam.rotation_euler = (np.arctan2(np.hypot(d[0], d[1]), -d[2]), 0, np.arctan2(d[1], d[0]) - np.pi / 2)
         cam.data.lens = v.get("lens", 24)
         sc.render.resolution_x, sc.render.resolution_y = v.get("res", (1600, 900))
+    return cam
+
+
+SAVE = __import__("os").environ.get("SAVE_BLEND")
+for v in views:
+    sc = reset()
+    load_course(sc, v["window"])
+    load_dress(sc, v["window"])
+    objs = tree_objects(v.get("lod", 1))
+    n = instance_trees(sc, objs, v.get("tree_window", v["window"]))   # 遠くを見る絵では、木だけ狭い範囲にできる
+    cams = [make_cam(sc, w) for w in (views if SAVE else [v])]
+    cam = cams[0]
     sc.camera = cam
+    if SAVE:
+        bpy.ops.file.pack_all()
+        bpy.context.preferences.filepaths.file_preview_type = "NONE"   # .blend の保存でサムネイルを作らない（tests/test_blender_save_no_thumbnail.py）
+        bpy.ops.wm.save_as_mainfile(filepath=SAVE)
+        print("saved", SAVE, "trees", n, flush=True)
+        break
     sc.render.filepath = str(out / "views" / f"{v['name']}.png")
     bpy.ops.render.render(write_still=True)
     print("rendered", v["name"], "trees", n, flush=True)

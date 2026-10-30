@@ -1,0 +1,78 @@
+{
+  "asset_id": "asama_shrine_post",
+  "source": "asama_shrine_post.blend",
+  "generator": "blender_scripts/build_asama_small_assets.py",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "根元中央",
+    "east": "+X"
+  },
+  "references": {
+    "panoid": "nG1sfblUAy-_p5ZKlAB6pw",
+    "date": "2025-07",
+    "fov_vertical_deg": 90,
+    "pitch_down_deg": 4.13,
+    "images": [
+      "export/compare/asama/sv_a_000.png",
+      "export/compare/asama/sv_a_045.png",
+      "export/compare/asama/sv_a_090.png",
+      "export/compare/asama/sv_a_315.png"
+    ],
+    "urls": [
+      "https://www.google.com/maps/@35.4072027,139.215505,3a,90y,0h,85.87t/data=!3m6!1e1!3m4!1snG1sfblUAy-_p5ZKlAB6pw!2e0!7i16384!8i8192",
+      "https://www.google.com/maps/@35.4072027,139.215505,3a,90y,45h,85.87t/data=!3m6!1e1!3m4!1snG1sfblUAy-_p5ZKlAB6pw!2e0!7i16384!8i8192",
+      "https://www.google.com/maps/@35.4072027,139.215505,3a,90y,90h,85.87t/data=!3m6!1e1!3m4!1snG1sfblUAy-_p5ZKlAB6pw!2e0!7i16384!8i8192",
+      "https://www.google.com/maps/@35.4072027,139.215505,3a,90y,315h,85.87t/data=!3m6!1e1!3m4!1snG1sfblUAy-_p5ZKlAB6pw!2e0!7i16384!8i8192"
+    ],
+    "usage": "比較参照のみ。制作元・テクスチャに写真を含めない。"
+  },
+  "dimension_basis": "写真の柱の高さ幅比・階段に対する大きさから推定。未実測。0.20m角×2.40m。",
+  "parts": [
+    {
+      "name": "post",
+      "triangles": 92,
+      "vertices": 112,
+      "bounds_m": [
+        [
+          -0.10000000149011612,
+          -0.10000000149011612,
+          0.0
+        ],
+        [
+          0.10000000149011612,
+          0.10000000149011612,
+          2.4000000953674316
+        ]
+      ]
+    }
+  ],
+  "texture": "post_atlas.png",
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "v": "m,+Z上,正面-Y",
+    "uv": "v=0画像上端",
+    "f": "三角形"
+  },
+  "double_sided": "閉じた角柱",
+  "approximations": [
+    "見えない北面・西面・木口・底面は推定。",
+    "文字は読めた浅間神社のみ。既存の明朝体を近似に使い、筆跡の完全一致はしない。",
+    "木目・割れ・汚れは写真の分布を参考にした自作手続き材質。"
+  ],
+  "game_status": "NPZとPNGまで。コースへの配置・KN5・実ゲーム表示は依頼範囲外のため未実施。",
+  "checks": [
+    "export/compare/asama/post_validation.json"
+  ],
+  "delivery_check": "export/compare/asama/post_grass_vines_delivery_check.json",
+  "npz_preview": [
+    "export/compare/asama/post_npz_0.png"
+  ],
+  "comparison": "export/compare/asama/post_reference_comparison.jpg",
+  "preview": "export/compare/asama/post_views.jpg"
+}
