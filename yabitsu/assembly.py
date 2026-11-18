@@ -209,7 +209,7 @@ def add_terrain(m, near, far, mid=None, far_photo=False):
             m.add_mesh(GROUP, f"TERRAIN_FAR_s1_{k:02d}", v, f, uv, "ground")
 
 
-def add_features(m, sec, feats):
+def add_features(m, sec, feats, right_walk_joins=()):
     off = dict(zip(("L", "R"), ft.sidewalk_offsets(sec, feats)))  # 壁・生け垣・欄干は歩道の外側に立てる
     shelf = ft.shelf_widths(sec, feats)
     for k, f in enumerate(feats):
@@ -223,7 +223,7 @@ def add_features(m, sec, feats):
             f2 = ft.Feature(f.s_from, f.s_to, f.side, f.type, f.height_m or ft.FENCE_HEIGHT, f.note, f.width_m)
             m.add_mesh(GROUP, f"1WALL_track_fence_{k:03d}", *ft.parapet_mesh(sec, f2, off[f.side]), "railing_bars")
         elif f.type == "sidewalk":
-            top, sides = ft.sidewalk_mesh(sec, f)
+            top, sides = ft.sidewalk_mesh(sec, f, join_previous=f.side == "R" and f.s_from in right_walk_joins)
             m.add_mesh(GROUP, f"1ROAD_track_sidewalk_{k:03d}", *top, f.material or "concrete")   # 行の material（黒っぽい舗装の路肩は asphalt）
             m.add_mesh(GROUP, f"track_sidewalk_{k:03d}_curb", *sides, "concrete")
         elif f.type == "hedge":

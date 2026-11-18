@@ -139,18 +139,29 @@ def r70_rail_layout(length, span=R70_RAIL_SPAN):
     return n, length / n
 
 
-def r70_guardrail_meshes(sec, f, parts):
+def r70_guardrail_meshes(sec, f, parts, span_m=R70_RAIL_SPAN, line_feature=None):
     """Codex の W 形ガードレール（parts＝{"span": (v, f, uv), "end": (v, f, uv)}）を、基準線に沿って並べる。[(verts, faces, uvs, part)]。
     part は 'span'（4 m 前後の区切りを、まとめて 1 つ）と 'end'（両端の袖）。進む向きの左の柵は +s へ、右の柵は −s へつなぐ（−Y が道の側になる）。"""
-    rows, side, lat, ze = guardrail_line(sec, f)
-    s0, s1 = float(sec.s[rows[0]]), float(sec.s[rows[-1]])
-    n, L = r70_rail_layout(s1 - s0)
+    rows, side, lat, ze = guardrail_line(sec, line_feature if line_feature is not None else f)
+    if line_feature is None:
+        s0, s1 = float(sec.s[rows[0]]), float(sec.s[rows[-1]])
+    else:
+        # 種類を切り替える所も、元のガードレールの基準線上で端点を共有する。
+        s0, s1 = f.s_from, f.s_to
+    n, L = r70_rail_layout(s1 - s0, span_m)
     sv, sf, su = parts["span"]
-    kx = L / R70_RAIL_SPAN
+    kx = L / span_m
+    first, last = (s0, s1) if side > 0 else (s1, s0)
+    outside = () if line_feature is None else (line_feature.s_from, line_feature.s_to)
     out, V, F, U = [], [], [], []
     for j in range(n):
         base = s0 + j * L if side > 0 else s1 - j * L
         s_at = (lambda x, b=base: b + x * kx) if side > 0 else (lambda x, b=base: b - x * kx)
+        if outside:
+            # 外端は、支柱などが部品の基準長をはみ出す分も区間内に収める。
+            a = min(0.0, sv[:, 0].min()) if j == 0 and first in outside else 0.0
+            b = max(span_m, sv[:, 0].max()) if j == n - 1 and last in outside else span_m
+            s_at = lambda x, start=base, u=a, scale=L / (b - a): start + side * (x - u) * scale
         V.append(bend_on_rail(sv, sec, rows, side, lat, ze, s_at)); F.append(sf + sum(len(a) for a in V[:-1])); U.append(su)
         if sum(len(a) for a in V) > 60000:
             out.append((np.concatenate(V), np.concatenate(F), np.concatenate(U), "span")); V, F, U = [], [], []
@@ -162,6 +173,11 @@ def r70_guardrail_meshes(sec, f, parts):
         v = ev * [(-1 if flip else 1), 1, 1]
         fc = ef[:, ::-1] if flip else ef
         b = (s0 if side > 0 else s1) if at_start else (s1 if side > 0 else s0)
+        if outside:
+            if b not in outside:
+                continue
+            delta = side * v[:, 0]
+            b -= delta.min() if b == outside[0] else delta.max()
         s_at = (lambda x, b=b: b + x) if side > 0 else (lambda x, b=b: b - x)
         out.append((bend_on_rail(v, sec, rows, side, lat, ze, s_at), fc, eu, "end"))
     return out

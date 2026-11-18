@@ -61,11 +61,12 @@ def meshes(sec, bridges, rng, ground_z):
         if bid not in rng:
             continue
         s0, s1 = rng[bid]
+        right_extra = float(b.get("right_extension_m", 0.0))
         # 親柱と銘板（両端・両側）
         for end, s in (("a", s0), ("b", s1)):
             i, c, d, n = _row(sec, s)
             for sd in (1, -1):
-                hw = (sec.hw_left[i] if sd > 0 else sec.hw_right[i]) + GUTTER_WIDTH + POST_W / 2
+                hw = (sec.hw_left[i] if sd > 0 else sec.hw_right[i] + right_extra) + GUTTER_WIDTH + POST_W / 2
                 p = c + n * sd * hw; z = float(sec.edge_z(sd)[i])
                 out.append((f"bridge_{bid}_post_{end}{'L' if sd > 0 else 'R'}", *_box(p, d, n, POST_W, POST_W, z - 0.2, z + POST_H),
                             b.get("post_material", "stone"), True))   # post_material：親柱の材質（塩水橋は明るいコンクリート）
@@ -82,7 +83,7 @@ def meshes(sec, bridges, rng, ground_z):
             V, F = [], []
             for k, i in enumerate(rows_r):
                 n = np.array([-math.sin(sec.heading[i]), math.cos(sec.heading[i])]); c = np.array([sec.x[i], sec.y[i]])
-                hw = (sec.hw_left[i] if sd > 0 else sec.hw_right[i]) + GUTTER_WIDTH; z = float(sec.edge_z(sd)[i])
+                hw = (sec.hw_left[i] if sd > 0 else sec.hw_right[i] + right_extra) + GUTTER_WIDTH; z = float(sec.edge_z(sd)[i])
                 p = c + n * sd * hw
                 V += [[*p, z - 0.1], [*p, z + RAIL_H]]
                 if k:
@@ -99,7 +100,7 @@ def meshes(sec, bridges, rng, ground_z):
             parts = []
             for s in np.unique(np.r_[np.arange(s0 + 3.0, s1 - 2.0, ARCH_EVERY), (s0 + s1) / 2, s1 - 3.0]):   # まん中（一番高い所）を含める
                 i, c, d, n = _row(sec, s); z = float(sec.z[i])
-                l = sec.hw_left[i] + GUTTER_WIDTH + 0.4; r = sec.hw_right[i] + GUTTER_WIDTH + 0.4
+                l = sec.hw_left[i] + GUTTER_WIDTH + 0.4; r = sec.hw_right[i] + GUTTER_WIDTH + right_extra + 0.4
                 rise = ARCH_CLEAR * (1 - (2 * (s - s0) / max(s1 - s0, 1e-9) - 1) ** 2) * 0.35 + ARCH_CLEAR * 0.65
                 for off in (l, -r):
                     parts.append(_box(c + n * off, d, n, 0.5, 0.5, z, z + rise))
@@ -114,7 +115,7 @@ def meshes(sec, bridges, rng, ground_z):
         V, F = [], []
         for k, i in enumerate(rows):
             n = np.array([-math.sin(sec.heading[i]), math.cos(sec.heading[i])]); c = np.array([sec.x[i], sec.y[i]])
-            l = sec.hw_left[i] + GUTTER_WIDTH; r = sec.hw_right[i] + GUTTER_WIDTH; z = float(sec.z[i])
+            l = sec.hw_left[i] + GUTTER_WIDTH; r = sec.hw_right[i] + GUTTER_WIDTH + right_extra; z = float(sec.z[i])
             V += [[*(c - n * r), z - 0.1], [*(c - n * r), z - dep], [*(c + n * l), z - dep], [*(c + n * l), z - 0.1]]
             if k:
                 a = 4 * (k - 1)

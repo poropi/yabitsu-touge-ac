@@ -12,10 +12,11 @@ import json
 import shutil
 
 import numpy as np
+import shapely
 from PIL import Image, ImageEnhance
 
-from yabitsu import (acdata, config, dress_lines, dress_mountain as dm, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5, layouts,
-                     geo, nagoki, side_roads, track, tunnel)
+from yabitsu import (acdata, config, dress_lines, dress_mountain as dm, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5, landmarks, layouts,
+                     fubuki, geo, nagoki, side_roads, terrain, track, tunnel)
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
 
@@ -32,6 +33,7 @@ RETEX = {
     "mt_gutter": ("gutter", (1, 2), "gutter"),        # gutter_mountain は縦の縞が板のように見えた
     "mt_line_white": ("paint_white", (1, 1), "line"), "mt_line_orange": ("paint_orange", (1, 1), "line"),
     "mt_wall_kenchi": ("kenchi", (2, 2), "wall"), "mt_wall_kenchi_moss": ("kenchi_moss", (2, 2), "wall"),
+    "mt_wall_fubuki_kenchi": ("kenchi_moss", (2, 2), "wall"),
     "mt_wall_block": ("kenchi_block", (2, 2), "wall"), "mt_wall_concrete": ("concrete_wall", (2, 2), "wall"),
     "mt_wall_kitahara": ("kenchi_block", (2, 2), "wall"),
     "mt_wall_block_aged": ("kenchi_block", (2, 2), "wall"),   # 古びて茶色がかった間知ブロック（峠の駐車場の向かい）
@@ -47,8 +49,10 @@ RETEX = {
 }
 # ストリートビューと見比べて決めた 明るさ・鮮やかさ・コントラスト
 TONE = {"mt_road": 0.68, "mt_plane": 0.68, "mt_road_dark": 0.9, "mt_gutter": 0.72, "mt_wall_kenchi_moss": 0.72, "mt_wall_nozura": 0.62,
-        "mt_wall_block": 0.82, "mt_wall_block_aged": 0.56, "mt_wall_rock_net": 0.8, "mt_terrain": 0.85}
-SATURATION = {"mt_wall_kenchi_moss": 0.85, "mt_terrain": 0.8, "mt_gutter": 0.8, "mt_wall_rock_net": 0.6}
+        "mt_wall_block": 0.82, "mt_wall_block_aged": 0.56, "mt_wall_rock_net": 0.8, "mt_terrain": 0.85,
+        "mt_wall_fubuki_kenchi": 0.80}
+SATURATION = {"mt_wall_kenchi_moss": 0.85, "mt_terrain": 0.8, "mt_gutter": 0.8, "mt_wall_rock_net": 0.6,
+              "mt_wall_fubuki_kenchi": 0.42}
 CONTRAST = {"mt_road": 0.7, "mt_plane": 0.7}
 
 
@@ -122,6 +126,8 @@ PORTAL_TINT = {"s5_2442_portal": np.array([0.23, 0.23, 0.20]),   # 4 回目の�
               
                "s5_10663_portal": np.array([0.60, 0.64, 0.67]), "s5_10937_portal": np.array([0.60, 0.64, 0.67])}
 
+FUBUKI_TINT = {"wall_top_concrete_2m": np.array([0.54, 0.56, 0.59])}
+
 
 # 坑口の上の金網の柵（tunnel の osm id, 端）→ (r70_fence の部品, 並べる数)。S5 4091 m の小さなトンネルの峠側（ストリートビュー R70-0717_f 2025-07）
 PORTAL_TOP_FENCE = {("131561907", "a"): ("wire_mesh", 4)}
@@ -135,7 +141,10 @@ PLATE_REDO = {"s5_10937_portal": ("吹風トンネル", 0.55, 0.81)}
 # 隠す部品の裏側の写し（kn5 に書き出すとき、両面の材質の部品には裏向きの写し <名前>_back が自動で作られ、元の名前だけを隠すと裏側が残る）。
 # 2026-11-01 に吹風トンネル出口の橋で、隠したはずの元の茶色い手すりが欄干の窓と上に見えた。まずこの橋だけ（隠している両面の部品はほかに 94 個ある）
 # 2026-11-02：吹風トンネル入口の赤いアーチ橋（S5 10507〜10607 m）で、古い橋の赤い門の裏側の写しが Codex の橋の先に残っていた（写真 R70-0978_f には無い）
-HIDE_BACK_TOO = {"bridge_131561909_rail_L", "bridge_131561909_rail_R", "bridge_131561912_arch"}
+HIDE_BACK_TOO = {
+    "bridge_131561909_rail_L", "bridge_131561909_rail_R",
+    "bridge_131561912_arch", "bridge_131561912_rail_L", "bridge_131561912_rail_R",
+}
 # 草地の緑（mt_grass）にする地形の塊（表の grass の範囲で分けない）。吹風トンネル入口の坑口の裏の盛り土：写真 R70-0981_f は坑口の上が緑で、
 # 植物の隙間から土色の盛り土が横長の帯に見えた（2026-11-01）
 GRASS_MESHES = {"1GRASS_s1_terrain_tunnel_32745017_a"}
@@ -179,13 +188,19 @@ def retex_assign(sec, cl, bounds, feats, rows):
                 if sname in dm.R70_SECTIONS and fin in R70_WALL and "古い" not in (f.note or ""):   # 「古い」ブロックは古いブロックの絵のまま（2026-11-01）
                     fin = R70_WALL[fin]
                 assign[name] = f"mt_wall_{fin}"
+    for cap in man["meshes"]:
+        if not cap.startswith("track_fubuki_wall_cap_") or cap in taken:
+            continue
+        front = f"1WALL_s1_retaining_{cap.rsplit('_', 1)[1]}"
+        if front in assign:
+            assign[cap] = assign[front]
     assign.update(dm.town_walls(man["meshes"], taken))
     if "1WALL_s1_objg_retaining_wall_grey" in assign:   # 峠の駐車場の向かいの擁壁の南の端（s4 の擁壁と同じ古びた間知ブロック）
         assign["1WALL_s1_objg_retaining_wall_grey"] = "mt_wall_block_aged"
     if "1WALL_kitahara_obj_retaining" in assign:
         assign["1WALL_kitahara_obj_retaining"] = "mt_wall_kitahara"
     # 地形（土手・林の地面）：中心がいちばん近い道の s が山道の範囲（表の bare_ground を除く）にあるもの
-    grass = ranges(bounds, rows, "grass")   # 草地の仕上げ（mt_grass）にする地形の範囲
+    grass = [r for r in ranges(bounds, rows, "grass") if r[2]["value"] != "fubuki_slope"]
     for name in man["meshes"]:
         if name.startswith("1GRASS_terayama_") and name not in taken:
             assign[name] = "mt_grass"
@@ -206,7 +221,7 @@ def retex_assign(sec, cl, bounds, feats, rows):
     return assign
 
 
-def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex):
+def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex, feats=()):
     """草地（mt_grass）に貼った地形の塊のうち、表の grass・green_ground のどちらの範囲にも入らない面（面の真ん中の s で判定）を
     別の形にして mt_terrain にする。残りの面は mt_grass のまま（今までと同じ見た目）。どちらも仕上げの kn5 に足し、元の塊は隠す（当たり判定は元のまま）。
     地形の塊は 300 m ほどあり、寺山富士見橋の草地の範囲に中心が入った塊は、護摩屋敷の水の斜面まで草地になっていた（2026-10-25）。
@@ -214,8 +229,10 @@ def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex):
     from scipy.spatial import cKDTree
     man = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))
     tree = cKDTree(np.c_[cl["x"], cl["y"]])
-    near = ranges(bounds, rows, "grass") + ranges(bounds, rows, "green_ground")
-    hide = []
+    grass = ranges(bounds, rows, "grass")
+    near = [r for r in grass if r[2]["value"] != "fubuki_slope"] + ranges(bounds, rows, "green_ground")
+    local = [r for r in grass if r[2]["value"] == "fubuki_slope"]
+    hide = split_fubuki_grass(sec, bounds, feats, local, man["meshes"], assign, m) if local else []
     for name, e in man["meshes"].items():
         if assign.get(name) != "mt_grass" or not name.startswith(("1GRASS_s1_terrain", "1GRASS_track_mid")) or name in GRASS_MESHES:
             continue
@@ -233,6 +250,31 @@ def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex):
         del assign[name]; hide.append(name)
     if hide:   # 絵は貼り替えで決まる（この材質の絵は使われない）
         m.add_material("mt_split_ground", color=(0.30, 0.28, 0.20))
+    return hide
+
+
+def split_fubuki_grass(sec, bounds, feats, ranges_, meshes, assign, m):
+    """右法面の地形だけを、擁壁天端とフェンスの平面線で切って貼り分ける。"""
+    footprint = fubuki.slope_footprint(sec, feats, bounds["s5"][0], ranges_)
+    if footprint.is_empty:
+        return []
+    hide = []
+    for name, e in meshes.items():
+        if not name.startswith("1GRASS_s1_terrain") or assign.get(name) != "mt_terrain":
+            continue
+        with np.load(MANIFEST / e["file"]) as data:
+            v = data["verts"]
+            if not footprint.intersects(shapely.box(*v[:, :2].min(0), *v[:, :2].max(0))):
+                continue
+            split = fubuki.split_slope_triangles(v, kn5._triangles(data["faces"]), data["uvs"], footprint)
+        if not split:
+            continue
+        for tag, key, mesh in split:
+            nm = f"mtsplit_{name[len('1GRASS_'):]}_fubuki_{tag}"
+            m.add_mesh(GROUP, nm, *mesh, "mt_split_ground")
+            assign[nm] = key
+        del assign[name]
+        hide.append(name)
     return hide
 
 
@@ -304,6 +346,14 @@ def build_parts(sec, bounds, feats, rows, m: Manifest):
                 continue
             piece = features.Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m)   # width_m：路肩の外の縁へ出す幅（2026-11-01）
             in_r70 = any(bounds[x][0] <= (a + b) / 2 <= bounds[x][1] for x in dm.R70_SECTIONS)
+            if kind in ("pipe", "pipe_mesh"):
+                span, end = r70_part("r70_guardrail", kind), r70_part("r70_guardrail", "pipe_end")
+                if span is not None and end is not None:
+                    for q, (v, fc, uv, part) in enumerate(dm.r70_guardrail_meshes(
+                            sec, piece, {"span": span, "end": end}, span_m=2.0, line_feature=f)):
+                        mat = f"mt_r70_rail_{kind}" if part == "span" else "mt_r70_rail_pipe_end"
+                        m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_pipe_{part}_{q}", v, fc, uv, mat)
+                    continue
             span, end = r70_part("r70_guardrail", "w_beam"), r70_part("r70_guardrail", "w_beam_end")
             if in_r70 and span is not None and end is not None:   # S4・S5：Codex の W 形ガードレールを基準線に沿って並べる
                 tone = "rust" if kind == "wbeam_aged" else "white"
@@ -353,6 +403,11 @@ def add_poles(sec, bounds, m: Manifest):
         if len(v):
             m.add_mesh(GROUP, f"mt_wires_{k:03d}", v, f, uv, "mt_wire")
     return len(allp)
+
+
+def whole_bridge_part(bridge):
+    """新しい橋の部品がメッシュと画像の両方揃っていれば使う。"""
+    return fubuki.preferred_bridge_part(bridge) or ("r70_bridges", bridge["whole"])
 
 
 def add_r70_structures(sec, bounds, m: Manifest, tex):
@@ -440,9 +495,10 @@ def add_r70_structures(sec, bounds, m: Manifest, tex):
                 print("橋が見つからない", b["place"]); continue
             g = geo_of(f"bridge_{best}_girder")
             i = int(np.argmin(np.abs(sec.s - g["s"])))
-            part = landmarks.load("r70_bridges", b["whole"])
+            asset, name = whole_bridge_part(b)
+            part = landmarks.load(asset, name)
             v = dm.r70_whole_bridge_verts(sec, i, part[0])   # 部品の +Y を道の進む向きへ（進入の端が −Y＝峠の側）、路面は部品の Z＝0.7 m、高さは道の勾配に沿う
-            m.add_mesh(GROUP, f"mt_r70_bridge_{k:02d}_{b['whole']}", v, part[1], part[2], mat_for("r70_bridges", b["whole"]))
+            m.add_mesh(GROUP, f"mt_r70_bridge_{k:02d}_{name}", v, part[1], part[2], mat_for(asset, name))
             hide += [n for n in vis if re.match(rf"^(1WALL_)?bridge_{best}_", n)]
             used |= {n for n in rails if n.startswith(f"bridge_{best}_")}
             n_whole += 1
@@ -556,6 +612,40 @@ def add_r70_structures(sec, bounds, m: Manifest, tex):
     return sorted(set(hide))
 
 
+def copy_fubuki_texture(name, src, dest):
+    landmarks.copy_texture(src, dest)
+    if name in FUBUKI_TINT:
+        with Image.open(dest) as im:
+            rgba = np.asarray(im.convert("RGBA")).copy()
+        rgba[..., :3] = np.clip(rgba[..., :3] * FUBUKI_TINT[name], 0, 255).astype(np.uint8)
+        Image.fromarray(rgba).save(dest)
+
+
+def add_fubuki_parts(sec, bounds, feats, m: Manifest, tex):
+    """納品済みの吹風入口の部品だけを山の仕上げに入れる。"""
+    s5 = bounds["s5"][0]
+    meshes = fubuki.wall_top_meshes(sec, s5, feats)
+    spec = fubuki.load()
+    names = [run["part"] for run in spec["slope_fences"]] + [spec["gate"]["post"], spec["gate"]["wall"]]
+    if any(fubuki.part_ready(name) for name in names):
+        with (np.load(config.DATA_PROCESSED / "track_terrain_near.npz") as near,
+              np.load(config.DATA_PROCESSED / "track_terrain_mid.npz") as mid):
+            ground = terrain.terrain_mesh_z(near, mid)
+            meshes += fubuki.slope_fence_meshes(sec, s5, ground)
+            meshes += fubuki.gate_meshes(sec, s5, feats, ground)
+    mats = set()
+    for tag, name, v, faces, uv in meshes:
+        mat = landmarks.material(fubuki.ASSET, name)
+        if mat not in mats:
+            src = landmarks.texture(fubuki.ASSET, name)
+            copy_fubuki_texture(name, src, tex / f"{mat}.png")
+            with Image.open(src) as im:
+                alpha = "A" in im.getbands() and im.getchannel("A").getextrema()[0] < 255
+            m.add_material(mat, texture=f"textures/{mat}.png", alpha=alpha, two_sided=True)
+            mats.add(mat)
+        m.add_mesh(GROUP, f"mt_fubuki_{tag}", v, faces, uv, mat)
+
+
 def add_road_marks(sec, bounds, m: Manifest, tex):
     """路面の文字・数字・ひし形（data/manual/road_markings.csv。s は区間の起点から）。"""
     marks = [{**r, "s": float(r["s"]) + bounds[r["section"]][0]}
@@ -654,17 +744,22 @@ def main():
     LMD = config.DATA_PROCESSED / "landmarks"
     for mat, src in (("mt_r70_pole", LMD / "r70_utility_pole/concrete.png"),
                      ("mt_r70_rail_span_white", LMD / "r70_guardrail/w_beam.png"), ("mt_r70_rail_span_rust", LMD / "r70_guardrail/w_beam_rust.png"),
-                     ("mt_r70_rail_end_white", LMD / "r70_guardrail/w_beam_end.png"), ("mt_r70_rail_end_rust", LMD / "r70_guardrail/w_beam_end_rust.png")):
+                     ("mt_r70_rail_end_white", LMD / "r70_guardrail/w_beam_end.png"), ("mt_r70_rail_end_rust", LMD / "r70_guardrail/w_beam_end_rust.png"),
+                     ("mt_r70_rail_pipe", LMD / "r70_guardrail/pipe.png"),
+                     ("mt_r70_rail_pipe_mesh", LMD / "r70_guardrail/pipe_mesh.png"),
+                     ("mt_r70_rail_pipe_end", LMD / "r70_guardrail/pipe_end.png")):
         if src.exists():
             landmarks.copy_texture(src, tex / f"{mat}.png")
-            m.add_material(mat, texture=f"textures/{mat}.png", two_sided=mat.startswith("mt_r70_rail"))
+            m.add_material(mat, texture=f"textures/{mat}.png", alpha=mat == "mt_r70_rail_pipe_mesh",
+                           two_sided=mat.startswith("mt_r70_rail"))
     npoles = add_poles(sec, bounds, m)
     hide += add_r70_structures(sec, bounds, m, tex)
+    add_fubuki_parts(sec, bounds, feats, m, tex)
     kita_hidden, kita_poles = add_kitahara_details(m, tex)
     hide += kita_hidden
     npoles += kita_poles
     assign = retex_assign(sec, cl, bounds, feats, rows)
-    split_hidden = split_grass_terrain(sec, cl, bounds, rows, assign, m, tex)   # 草地の範囲の境をまたぐ地形の塊を分ける
+    split_hidden = split_grass_terrain(sec, cl, bounds, rows, assign, m, tex, feats)   # 草地の範囲の境をまたぐ地形の塊を分ける
     hide += split_hidden
     m.save()
     kn5_path = OUT / f"{GROUP}.kn5"

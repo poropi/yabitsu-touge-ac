@@ -1,0 +1,929 @@
+{
+  "asset_id": "r70_fubuki",
+  "source": "r70_fubuki.blend",
+  "generator": "blender_scripts/build_r70_fubuki.py",
+  "blender_generator": "blender_scripts/r70_fubuki_source.py",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各partのorigin参照"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0が画像の上端。Blender・landmarks.loadで1-v。",
+    "location": "制作元と同じフォルダ"
+  },
+  "texture_method": "1024角。塗装・れんが・金属表札・コンクリートを自作。全材質不透明。",
+  "source_image_usage": "ストリートビューは照合専用。配布物への画素転用なし。",
+  "game_status": "単体で照合。コース側の配置とゲーム確認は監督担当。",
+  "triangle_total": 14680,
+  "source_visibility": "部品ごとにコレクション。初期表示は赤い橋。",
+  "parts": [
+    {
+      "name": "slope_fence_wire_2m",
+      "meaning": "斜面の菱形金網",
+      "triangles": 868,
+      "vertices": 1652,
+      "dimensions_m": [
+        2.031626,
+        0.06,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.03,
+          -0.03,
+          0.0
+        ],
+        [
+          2.001626,
+          0.03,
+          1.5
+        ]
+      ],
+      "origin": "支柱の根元中央",
+      "front": "-Y",
+      "textures": [
+        "slope_fence_wire_2m.png"
+      ],
+      "components": [
+        {
+          "name": "鋼管支柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "柱頭キャップ",
+          "triangle_start": 44,
+          "triangle_count": 44
+        },
+        {
+          "name": "網の固定帯",
+          "triangle_start": 88,
+          "triangle_count": 108
+        },
+        {
+          "name": "菱形の網線",
+          "triangle_start": 196,
+          "triangle_count": 616
+        },
+        {
+          "name": "上下の張線",
+          "triangle_start": 812,
+          "triangle_count": 56
+        }
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0968_f.jpg",
+          "panoid": "aXGAS7Mwg9Bc7IoMFdsGoQ",
+          "date": "2025年7月",
+          "station_m": 10338,
+          "heading": 4.8,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.507497,139.2309995,3a,90y,4.8h,88t/data=!3m6!1e1!3m4!1saXGAS7Mwg9Bc7IoMFdsGoQ!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70/work/fubuki10/R70-0969_f.jpg",
+          "panoid": "58VSdUWR0wq872L8nCW1aA",
+          "date": "2025年7月",
+          "station_m": 10363,
+          "heading": 5.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.507703,139.2310175,3a,90y,5.5h,88t/data=!3m6!1e1!3m4!1s58VSdUWR0wq872L8nCW1aA!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70/work/fubuki10/R70-0970_f.jpg",
+          "panoid": "-000Y1uQ2bqL3aNgglucvg",
+          "date": "2025年7月",
+          "station_m": 10388,
+          "heading": 5.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 92,
+          "url": "https://www.google.com/maps/@35.5079507,139.231041,3a,90y,5.5h,92t/data=!3m6!1e1!3m4!1s-000Y1uQ2bqL3aNgglucvg!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0971_f.jpg",
+          "panoid": "DnYTr4d8vKR44knvrL2d-w",
+          "date": "2025年7月",
+          "station_m": 10413,
+          "heading": 5.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5082382,139.2310693,3a,90y,5.5h,88t/data=!3m6!1e1!3m4!1sDnYTr4d8vKR44knvrL2d-w!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0972_f.jpg",
+          "panoid": "RDyrZgr849nF9CcY_1Lt1A",
+          "date": "2025年7月",
+          "station_m": 10438,
+          "heading": 4.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5084421,139.231088,3a,90y,4.5h,88t/data=!3m6!1e1!3m4!1sRDyrZgr849nF9CcY_1Lt1A!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70/work/fubuki10/R70-0973_f.jpg",
+          "panoid": "Mj98uRjcL-Xzw382cw9ywQ",
+          "date": "2025年7月",
+          "station_m": 10463,
+          "heading": 4.4,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5086083,139.2311041,3a,90y,4.4h,88t/data=!3m6!1e1!3m4!1sMj98uRjcL-Xzw382cw9ywQ!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0974_f.jpg",
+          "panoid": "tGVLWK0x-FJ9G6iBlqumwQ",
+          "date": "2025年7月",
+          "station_m": 10488,
+          "heading": 4.4,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5088537,139.2311269,3a,90y,4.4h,88t/data=!3m6!1e1!3m4!1stGVLWK0x-FJ9G6iBlqumwQ!2e0!7i16384!8i8192"
+        }
+      ],
+      "dimension_basis": "dimension_evidence.json",
+      "repeat_length_m": 2,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "slope_fence_wire_end",
+      "meaning": "金網の終端支柱",
+      "triangles": 196,
+      "vertices": 324,
+      "dimensions_m": [
+        0.06,
+        0.06,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.03,
+          -0.03,
+          0.0
+        ],
+        [
+          0.03,
+          0.03,
+          1.5
+        ]
+      ],
+      "origin": "支柱の根元中央",
+      "front": "-Y",
+      "textures": [
+        "slope_fence_wire_end.png"
+      ],
+      "components": [
+        {
+          "name": "鋼管支柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "柱頭キャップ",
+          "triangle_start": 44,
+          "triangle_count": 44
+        },
+        {
+          "name": "網の固定帯",
+          "triangle_start": 88,
+          "triangle_count": 108
+        }
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0968_f.jpg",
+          "panoid": "aXGAS7Mwg9Bc7IoMFdsGoQ",
+          "date": "2025年7月",
+          "station_m": 10338,
+          "heading": 4.8,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.507497,139.2309995,3a,90y,4.8h,88t/data=!3m6!1e1!3m4!1saXGAS7Mwg9Bc7IoMFdsGoQ!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70/work/fubuki10/R70-0969_f.jpg",
+          "panoid": "58VSdUWR0wq872L8nCW1aA",
+          "date": "2025年7月",
+          "station_m": 10363,
+          "heading": 5.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.507703,139.2310175,3a,90y,5.5h,88t/data=!3m6!1e1!3m4!1s58VSdUWR0wq872L8nCW1aA!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70/work/fubuki10/R70-0970_f.jpg",
+          "panoid": "-000Y1uQ2bqL3aNgglucvg",
+          "date": "2025年7月",
+          "station_m": 10388,
+          "heading": 5.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 92,
+          "url": "https://www.google.com/maps/@35.5079507,139.231041,3a,90y,5.5h,92t/data=!3m6!1e1!3m4!1s-000Y1uQ2bqL3aNgglucvg!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0971_f.jpg",
+          "panoid": "DnYTr4d8vKR44knvrL2d-w",
+          "date": "2025年7月",
+          "station_m": 10413,
+          "heading": 5.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5082382,139.2310693,3a,90y,5.5h,88t/data=!3m6!1e1!3m4!1sDnYTr4d8vKR44knvrL2d-w!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0972_f.jpg",
+          "panoid": "RDyrZgr849nF9CcY_1Lt1A",
+          "date": "2025年7月",
+          "station_m": 10438,
+          "heading": 4.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5084421,139.231088,3a,90y,4.5h,88t/data=!3m6!1e1!3m4!1sRDyrZgr849nF9CcY_1Lt1A!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70/work/fubuki10/R70-0973_f.jpg",
+          "panoid": "Mj98uRjcL-Xzw382cw9ywQ",
+          "date": "2025年7月",
+          "station_m": 10463,
+          "heading": 4.4,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5086083,139.2311041,3a,90y,4.4h,88t/data=!3m6!1e1!3m4!1sMj98uRjcL-Xzw382cw9ywQ!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0974_f.jpg",
+          "panoid": "tGVLWK0x-FJ9G6iBlqumwQ",
+          "date": "2025年7月",
+          "station_m": 10488,
+          "heading": 4.4,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5088537,139.2311269,3a,90y,4.4h,88t/data=!3m6!1e1!3m4!1stGVLWK0x-FJ9G6iBlqumwQ!2e0!7i16384!8i8192"
+        }
+      ],
+      "dimension_basis": "dimension_evidence.json"
+    },
+    {
+      "name": "slope_fence_bar_2m",
+      "meaning": "橋側の黒い縦格子",
+      "triangles": 216,
+      "vertices": 432,
+      "dimensions_m": [
+        2.028,
+        0.056,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.028,
+          -0.028,
+          0.0
+        ],
+        [
+          2.0,
+          0.028,
+          1.5
+        ]
+      ],
+      "origin": "支柱の根元中央",
+      "front": "-Y",
+      "textures": [
+        "slope_fence_bar_2m.png"
+      ],
+      "components": [
+        {
+          "name": "角形支柱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "角形柱頭",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "上下の角形横桟",
+          "triangle_start": 24,
+          "triangle_count": 24
+        },
+        {
+          "name": "縦格子",
+          "triangle_start": 48,
+          "triangle_count": 168
+        }
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0974_f.jpg",
+          "panoid": "tGVLWK0x-FJ9G6iBlqumwQ",
+          "date": "2025年7月",
+          "station_m": 10488,
+          "heading": 4.4,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5088537,139.2311269,3a,90y,4.4h,88t/data=!3m6!1e1!3m4!1stGVLWK0x-FJ9G6iBlqumwQ!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0975_f.jpg",
+          "panoid": "DYHrZvTnXO6rtcx7BNo_Jw",
+          "date": "2025年7月",
+          "station_m": 10513,
+          "heading": 4.6,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5091024,139.2311511,3a,90y,4.6h,88t/data=!3m6!1e1!3m4!1sDYHrZvTnXO6rtcx7BNo_Jw!2e0!7i16384!8i8192"
+        }
+      ],
+      "dimension_basis": "dimension_evidence.json",
+      "repeat_length_m": 2,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "slope_fence_bar_end",
+      "meaning": "縦格子の終端支柱",
+      "triangles": 24,
+      "vertices": 48,
+      "dimensions_m": [
+        0.056,
+        0.056,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.028,
+          -0.028,
+          0.0
+        ],
+        [
+          0.028,
+          0.028,
+          1.5
+        ]
+      ],
+      "origin": "支柱の根元中央",
+      "front": "-Y",
+      "textures": [
+        "slope_fence_bar_end.png"
+      ],
+      "components": [
+        {
+          "name": "角形支柱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "角形柱頭",
+          "triangle_start": 12,
+          "triangle_count": 12
+        }
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0974_f.jpg",
+          "panoid": "tGVLWK0x-FJ9G6iBlqumwQ",
+          "date": "2025年7月",
+          "station_m": 10488,
+          "heading": 4.4,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5088537,139.2311269,3a,90y,4.4h,88t/data=!3m6!1e1!3m4!1stGVLWK0x-FJ9G6iBlqumwQ!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0975_f.jpg",
+          "panoid": "DYHrZvTnXO6rtcx7BNo_Jw",
+          "date": "2025年7月",
+          "station_m": 10513,
+          "heading": 4.6,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5091024,139.2311511,3a,90y,4.6h,88t/data=!3m6!1e1!3m4!1sDYHrZvTnXO6rtcx7BNo_Jw!2e0!7i16384!8i8192"
+        }
+      ],
+      "dimension_basis": "dimension_evidence.json"
+    },
+    {
+      "name": "red_arch_bridge_v2",
+      "meaning": "釜田川橋の上部工・欄干",
+      "triangles": 13280,
+      "vertices": 26560,
+      "dimensions_m": [
+        14.145,
+        99.0,
+        12.563248
+      ],
+      "bounds_m": [
+        [
+          -5.6225,
+          -49.5,
+          -1.889748
+        ],
+        [
+          8.5225,
+          49.5,
+          10.6735
+        ]
+      ],
+      "origin": "橋長の中央・道路中心線、路面から0.70 m下",
+      "front": "-Y",
+      "textures": [
+        "red_arch_bridge_v2.png"
+      ],
+      "components": [
+        {
+          "name": "灰色の床側桁",
+          "triangle_start": 0,
+          "triangle_count": 204
+        },
+        {
+          "name": "欄干の地覆",
+          "triangle_start": 204,
+          "triangle_count": 204
+        },
+        {
+          "name": "欄干の横桟",
+          "triangle_start": 408,
+          "triangle_count": 612
+        },
+        {
+          "name": "欄干の親支柱",
+          "triangle_start": 1020,
+          "triangle_count": 612
+        },
+        {
+          "name": "欄干の上段縦格子",
+          "triangle_start": 1632,
+          "triangle_count": 3600
+        },
+        {
+          "name": "床下へ降りるアーチリブ",
+          "triangle_start": 5232,
+          "triangle_count": 388
+        },
+        {
+          "name": "リブの継目板",
+          "triangle_start": 5620,
+          "triangle_count": 132
+        },
+        {
+          "name": "上フランジの取付座",
+          "triangle_start": 5752,
+          "triangle_count": 360
+        },
+        {
+          "name": "縦材と上端ハンチ",
+          "triangle_start": 6112,
+          "triangle_count": 224
+        },
+        {
+          "name": "脚位置の赤い短帯",
+          "triangle_start": 6336,
+          "triangle_count": 20
+        },
+        {
+          "name": "脚部の横つなぎ",
+          "triangle_start": 6356,
+          "triangle_count": 36
+        },
+        {
+          "name": "脚位置の赤い短帯",
+          "triangle_start": 6392,
+          "triangle_count": 20
+        },
+        {
+          "name": "脚部の横つなぎ",
+          "triangle_start": 6412,
+          "triangle_count": 36
+        },
+        {
+          "name": "灰色の床側桁",
+          "triangle_start": 6448,
+          "triangle_count": 204
+        },
+        {
+          "name": "欄干の地覆",
+          "triangle_start": 6652,
+          "triangle_count": 204
+        },
+        {
+          "name": "欄干の横桟",
+          "triangle_start": 6856,
+          "triangle_count": 612
+        },
+        {
+          "name": "欄干の親支柱",
+          "triangle_start": 7468,
+          "triangle_count": 612
+        },
+        {
+          "name": "欄干の上段縦格子",
+          "triangle_start": 8080,
+          "triangle_count": 3600
+        },
+        {
+          "name": "床下へ降りるアーチリブ",
+          "triangle_start": 11680,
+          "triangle_count": 388
+        },
+        {
+          "name": "リブの継目板",
+          "triangle_start": 12068,
+          "triangle_count": 132
+        },
+        {
+          "name": "上フランジの取付座",
+          "triangle_start": 12200,
+          "triangle_count": 360
+        },
+        {
+          "name": "縦材と上端ハンチ",
+          "triangle_start": 12560,
+          "triangle_count": 224
+        },
+        {
+          "name": "脚位置の赤い短帯",
+          "triangle_start": 12784,
+          "triangle_count": 20
+        },
+        {
+          "name": "脚部の横つなぎ",
+          "triangle_start": 12804,
+          "triangle_count": 36
+        },
+        {
+          "name": "脚位置の赤い短帯",
+          "triangle_start": 12840,
+          "triangle_count": 20
+        },
+        {
+          "name": "脚部の横つなぎ",
+          "triangle_start": 12860,
+          "triangle_count": 36
+        },
+        {
+          "name": "上部の横桁",
+          "triangle_start": 12896,
+          "triangle_count": 36
+        },
+        {
+          "name": "横桁の添接板",
+          "triangle_start": 12932,
+          "triangle_count": 24
+        },
+        {
+          "name": "上部の横桁",
+          "triangle_start": 12956,
+          "triangle_count": 36
+        },
+        {
+          "name": "横桁の添接板",
+          "triangle_start": 12992,
+          "triangle_count": 24
+        },
+        {
+          "name": "上部の横桁",
+          "triangle_start": 13016,
+          "triangle_count": 36
+        },
+        {
+          "name": "横桁の添接板",
+          "triangle_start": 13052,
+          "triangle_count": 24
+        },
+        {
+          "name": "上部の横桁",
+          "triangle_start": 13076,
+          "triangle_count": 36
+        },
+        {
+          "name": "横桁の添接板",
+          "triangle_start": 13112,
+          "triangle_count": 24
+        },
+        {
+          "name": "床下横桁",
+          "triangle_start": 13136,
+          "triangle_count": 144
+        }
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0975_f.jpg",
+          "panoid": "DYHrZvTnXO6rtcx7BNo_Jw",
+          "date": "2025年7月",
+          "station_m": 10513,
+          "heading": 4.6,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5091024,139.2311511,3a,90y,4.6h,88t/data=!3m6!1e1!3m4!1sDYHrZvTnXO6rtcx7BNo_Jw!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70/work/fubuki10/R70-0976_f.jpg",
+          "panoid": "y6_bzFCfQexwVv2OhZs92g",
+          "date": "2025年7月",
+          "station_m": 10538,
+          "heading": 4.6,
+          "fov_deg": 90,
+          "tilt_url_deg": 92,
+          "url": "https://www.google.com/maps/@35.5093527,139.231174,3a,90y,4.6h,92t/data=!3m6!1e1!3m4!1sy6_bzFCfQexwVv2OhZs92g!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0978_f.jpg",
+          "panoid": "ekmMEN-SxY9uxDhbTGa3lA",
+          "date": "2025年7月",
+          "station_m": 10588,
+          "heading": 4.6,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5098034,139.2312202,3a,90y,4.6h,88t/data=!3m6!1e1!3m4!1sekmMEN-SxY9uxDhbTGa3lA!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0978_b.jpg",
+          "panoid": "ekmMEN-SxY9uxDhbTGa3lA",
+          "date": "2025年7月",
+          "station_m": 10588,
+          "heading": 184.6,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5098034,139.2312202,3a,90y,184.6h,88t/data=!3m6!1e1!3m4!1sekmMEN-SxY9uxDhbTGa3lA!2e0!7i16384!8i8192"
+        }
+      ],
+      "dimension_basis": "dimension_evidence.json",
+      "length_m": 99,
+      "deck_z_m": 0.7,
+      "long_axis": "+Y",
+      "entry_y_m": -49.5,
+      "rail_center_x_m": [
+        -4.4,
+        7.3
+      ],
+      "arch_center_x_m": [
+        -5.23,
+        8.129999999999999
+      ]
+    },
+    {
+      "name": "wall_top_concrete_2m",
+      "meaning": "擁壁天端の白いコンクリート壁",
+      "triangles": 20,
+      "vertices": 36,
+      "dimensions_m": [
+        2.0,
+        0.22,
+        0.86
+      ],
+      "bounds_m": [
+        [
+          0.0,
+          -0.11,
+          0.0
+        ],
+        [
+          2.0,
+          0.11,
+          0.86
+        ]
+      ],
+      "origin": "始端小口の底面中央",
+      "front": "-Y",
+      "textures": [
+        "wall_top_concrete_2m.png"
+      ],
+      "components": [
+        {
+          "name": "小口",
+          "triangle_start": 0,
+          "triangle_count": 8
+        },
+        {
+          "name": "底面",
+          "triangle_start": 8,
+          "triangle_count": 2
+        },
+        {
+          "name": "白壁の側面",
+          "triangle_start": 10,
+          "triangle_count": 2
+        },
+        {
+          "name": "天端と面取り",
+          "triangle_start": 12,
+          "triangle_count": 6
+        },
+        {
+          "name": "白壁の側面",
+          "triangle_start": 18,
+          "triangle_count": 2
+        }
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0978_f.jpg",
+          "panoid": "ekmMEN-SxY9uxDhbTGa3lA",
+          "date": "2025年7月",
+          "station_m": 10588,
+          "heading": 4.6,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5098034,139.2312202,3a,90y,4.6h,88t/data=!3m6!1e1!3m4!1sekmMEN-SxY9uxDhbTGa3lA!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0980_f.jpg",
+          "panoid": "2jJvAHqxzbxl8bh_qEQShQ",
+          "date": "2025年7月",
+          "station_m": 10638,
+          "heading": 5.7,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5101751,139.2312541,3a,90y,5.7h,88t/data=!3m6!1e1!3m4!1s2jJvAHqxzbxl8bh_qEQShQ!2e0!7i16384!8i8192"
+        }
+      ],
+      "dimension_basis": "dimension_evidence.json",
+      "repeat_length_m": 2,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    },
+    {
+      "name": "gate_brick_post",
+      "meaning": "表札付きのれんが門柱",
+      "triangles": 56,
+      "vertices": 112,
+      "dimensions_m": [
+        1.2,
+        1.355,
+        2.5
+      ],
+      "bounds_m": [
+        [
+          -0.6,
+          -0.695,
+          0.0
+        ],
+        [
+          0.6,
+          0.66,
+          2.5
+        ]
+      ],
+      "origin": "れんが本体の底面中央",
+      "front": "-Y",
+      "textures": [
+        "gate_brick_post.png"
+      ],
+      "components": [
+        {
+          "name": "門柱本体",
+          "triangle_start": 0,
+          "triangle_count": 20
+        },
+        {
+          "name": "額縁付き表札",
+          "triangle_start": 20,
+          "triangle_count": 36
+        }
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0971_f.jpg",
+          "panoid": "DnYTr4d8vKR44knvrL2d-w",
+          "date": "2025年7月",
+          "station_m": 10413,
+          "heading": 5.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5082382,139.2310693,3a,90y,5.5h,88t/data=!3m6!1e1!3m4!1sDnYTr4d8vKR44knvrL2d-w!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0972_b.jpg",
+          "panoid": "RDyrZgr849nF9CcY_1Lt1A",
+          "date": "2025年7月",
+          "station_m": 10438,
+          "heading": 184.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5084421,139.231088,3a,90y,184.5h,88t/data=!3m6!1e1!3m4!1sRDyrZgr849nF9CcY_1Lt1A!2e0!7i16384!8i8192"
+        }
+      ],
+      "dimension_basis": "dimension_evidence.json"
+    },
+    {
+      "name": "gate_brick_wall_2m",
+      "meaning": "門外側の低いれんが塀",
+      "triangles": 20,
+      "vertices": 40,
+      "dimensions_m": [
+        2.0,
+        0.25,
+        0.48
+      ],
+      "bounds_m": [
+        [
+          0.0,
+          -0.125,
+          0.0
+        ],
+        [
+          2.0,
+          0.125,
+          0.48
+        ]
+      ],
+      "origin": "始端小口の底辺中央",
+      "front": "-Y",
+      "textures": [
+        "gate_brick_wall_2m.png"
+      ],
+      "components": [
+        {
+          "name": "低塀本体",
+          "triangle_start": 0,
+          "triangle_count": 20
+        }
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0971_f.jpg",
+          "panoid": "DnYTr4d8vKR44knvrL2d-w",
+          "date": "2025年7月",
+          "station_m": 10413,
+          "heading": 5.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5082382,139.2310693,3a,90y,5.5h,88t/data=!3m6!1e1!3m4!1sDnYTr4d8vKR44knvrL2d-w!2e0!7i16384!8i8192"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0972_b.jpg",
+          "panoid": "RDyrZgr849nF9CcY_1Lt1A",
+          "date": "2025年7月",
+          "station_m": 10438,
+          "heading": 184.5,
+          "fov_deg": 90,
+          "tilt_url_deg": 88,
+          "url": "https://www.google.com/maps/@35.5084421,139.231088,3a,90y,184.5h,88t/data=!3m6!1e1!3m4!1sRDyrZgr849nF9CcY_1Lt1A!2e0!7i16384!8i8192"
+        }
+      ],
+      "dimension_basis": "dimension_evidence.json",
+      "repeat_length_m": 2,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2,
+          0,
+          0
+        ]
+      ]
+    }
+  ],
+  "round_15_generators": [
+    "blender_scripts/r70_fubuki_bridge_color_15.py",
+    "blender_scripts/build_r70_fubuki_gate_15.py"
+  ]
+}

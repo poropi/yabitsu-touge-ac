@@ -336,6 +336,7 @@
    "section": "s5",
    "s": 10588.0,
    "whole": "red_arch_bridge",
+   "preferred_whole": {"asset": "r70_fubuki", "name": "red_arch_bridge_v2"},
    "length_m": 99.0,
    "note": "釜田川橋の全構造。県資料99m。10513の欄干と重複注意／釜田川橋の有力候補として県PDF10頁・村統計53頁の橋長99mを採用。アーチ支間とは区別。"
   },

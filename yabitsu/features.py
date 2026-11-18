@@ -10,6 +10,7 @@ from .meshgen import ribbon, wall_ribbon
 from .terrain import CUT_SLOPE
 
 WALL_LEAN = 0.3
+WALL_BASE_DROP = 0.3
 WALL_CUT_SLOPE = 3.0
 # 擁壁の行は地形をこれだけ下げてから削る。壁は路面の 0.3 m 下から立つので、道の縁の高さから削ると壁の下 2.7 m ほどは地形が壁より手前に出た（2026-11-01）
 WALL_CUT_DROP = 0.6
@@ -219,9 +220,13 @@ def _side_ribbon(sec, sl, side, offs, dz, ze, offset=None):
     return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], u_scale=1.0)
 
 
-def sidewalk_mesh(sec, f):
+def sidewalk_mesh(sec, f, join_previous=False):
     """歩道：側溝の外側から幅 f.width_m、上面は道の縁＋CURB_HEIGHT。内側の縁に縦の縁石の面（乗り上げられる段差）。"""
-    sl, side, hw, ze = _side_arrays(sec, f)
+    sl, side, _, ze = _side_arrays(sec, f)
+    if join_previous and sl.start > 0 and sec.s[sl.start] > f.s_from:
+        # 連続する歩道の継ぎ目が格子の間なら、前の歩道の終端の行を共有する。
+        sl = slice(sl.start - 1, sl.stop)
+        ze = sec.edge_z(side)[sl]
     # (上面＝走る面, 縦の面＝縁石と、地形とのすき間を隠すため下へ垂らした外の縁)
     top = _side_ribbon(sec, sl, side, [0.0, f.width_m], [CURB_HEIGHT, CURB_HEIGHT], ze)
     curb = _side_ribbon(sec, sl, side, [0.0, 0.0], [0.0, CURB_HEIGHT], ze)
@@ -269,7 +274,7 @@ def overpass_meshes(sec, f):
 def retaining_wall_mesh(sec, f, offset=None):
     sl, side, hw, ze = _side_arrays(sec, f, offset)
     L0 = hw + GUTTER_WIDTH
-    return wall_ribbon(sec, sl, side, L0, L0 + WALL_LEAN * f.height_m, ze - 0.3, ze + f.height_m)
+    return wall_ribbon(sec, sl, side, L0, L0 + WALL_LEAN * f.height_m, ze - WALL_BASE_DROP, ze + f.height_m)
 
 
 def _runs(mask, s, min_len, max_gap):

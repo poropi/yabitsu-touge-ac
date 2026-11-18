@@ -93,6 +93,7 @@
  {
   "osm_id": 131561912,
   "name": "釜田川橋",
+  "right_extension_m": 2.9,
   "kana": "釜田川橋",
   "rail": "steel",
   "rail_color": "#A8ABAA",

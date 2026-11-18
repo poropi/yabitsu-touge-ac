@@ -53,6 +53,22 @@ def road_frame(sec, X, Y):
     return {"idx": idx, "lat": -dx * np.sin(h) + dy * np.cos(h), "along": dx * np.cos(h) + dy * np.sin(h), "dist": dist}
 
 
+def edit_roadside_grid(sec, near, start, end, reach, edit):
+    """指定区間の周囲だけを切り出し、地形の高さを編集する。edit には行番号・通し距離・横距離を渡す。"""
+    rows = (sec.s >= start - 2) & (sec.s <= end + 2)
+    if not rows.any():
+        return
+    xs, ys = near["xs"], near["ys"]
+    ix = np.flatnonzero((xs >= sec.x[rows].min() - reach) & (xs <= sec.x[rows].max() + reach))
+    iy = np.flatnonzero((ys >= sec.y[rows].min() - reach) & (ys <= sec.y[rows].max() + reach))
+    X, Y = np.meshgrid(xs[ix], ys[iy])
+    frame = road_frame(sec, X, Y)
+    idx = frame["idx"]
+    cells = np.ix_(iy, ix)
+    z = near["Z"][cells]
+    near["Z"][cells] = edit(z.ravel(), idx, sec.s[idx] + frame["along"], frame["lat"]).reshape(z.shape)
+
+
 def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_left=None, side_extra_right=None, channels=(),
           keep_rows=None, no_fill_rows=None, lake=None, cut_drop_left=None, cut_drop_right=None):
     """cut_drop_*（行ごと）があれば、切り土の斜面をそれだけ下げる（擁壁の裏：features.cut_drops）。
@@ -104,7 +120,8 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
             z[sel] = np.where(d == 0, zp - UNDER_DEPTH, np.clip(z[sel], zp - FILL_SLOPE * d, zp + CUT_SLOPE * d))
             e[sel] = np.where(d == 0, 0.0, np.minimum(e[sel], d))
         if len(shape) == 2 and min(shape) > 1:
-            z = _sink_pass_cells(z, np.asarray(X)[0], np.asarray(Y)[:, 0], pads)
+            lower_paved_cells(z, np.asarray(X)[0], np.asarray(Y)[:, 0],
+                              [p for p in pads if p.get("kind") == "pass"], PASS_EDGE_DROP)
         z = np.where(e_road <= ROAD_CAP_M, np.minimum(z, road_cap), z)   # 道のすぐ横の高い土台（家など）が、道の上に地形を持ち上げないように
     if channels:   # 川の溝（water.Stream.channel）：溝の中は川底、まわりは岸の勾配 BANK で元の地形へ
         from .water import BANK
@@ -132,13 +149,11 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
     return z.reshape(shape), e.reshape(shape)
 
 
-def _sink_pass_cells(z, xs, ys, pads):
-    """舗装を描く土台（峠の面 kind=pass）にかかる格子の四角は、4 つの角を面より下げる（中は UNDER_DEPTH、外は PASS_EDGE_DROP）。
+def lower_paved_cells(z, xs, ys, pads, outside_drop):
+    """舗装を描く土台にかかる格子の四角は、4 つの角を面より下げる（中は UNDER_DEPTH、外は outside_drop）。
     角が全部 面の外の斜面の上にある四角に面の角が入り込んでも、三角形が舗装の上に出ない。ほかの土台に戻されないよう、全部の土台のあとで下げるだけ。"""
-    nx = len(xs); z = z.copy()
+    nx = len(xs)
     for p in pads:
-        if p.get("kind") != "pass":
-            continue
         poly = Polygon(p["polygon"])
         x0, y0, x1, y1 = poly.bounds
         i0, i1 = max(np.searchsorted(xs, x0) - 1, 0), min(np.searchsorted(xs, x1), nx - 1)
@@ -155,8 +170,7 @@ def _sink_pass_cells(z, xs, ys, pads):
             cx, cy, z0, gx, gy = p["plane"]
             zp = z0 + gx * (cx_ - cx) + gy * (cy_ - cy)
         inside = shapely.contains_xy(poly, cx_, cy_)
-        z[corners] = np.minimum(z[corners], zp - np.where(inside, UNDER_DEPTH, PASS_EDGE_DROP))
-    return z
+        z.flat[corners] = np.minimum(z.flat[corners], zp - np.where(inside, UNDER_DEPTH, outside_drop))
 
 
 STEEP_UV_NZ = 0.7071   # これより法線の上向きが小さい（45° より急な）四角は横から UV を当てる

@@ -1,0 +1,15 @@
+{
+ "slope_fences": [
+  {"s_from": 10338, "s_to": 10405, "part": "slope_fence_wire_2m", "end": "slope_fence_wire_end"},
+  {"s_from": 10445, "s_to": 10500, "part": "slope_fence_wire_2m", "end": "slope_fence_wire_end"},
+  {"s_from": 10500, "s_to": 10504, "part": "slope_fence_bar_2m"}
+ ],
+ "wall_top": {"s_from": 10610, "s_to": 10675, "part": "wall_top_concrete_2m"},
+ "gate": {
+  "post": "gate_brick_post",
+  "wall": "gate_brick_wall_2m",
+  "offset_from_walk_m": 1.5,
+  "posts_m": [10418.5, 10428.15],
+  "walls_m": [[10408.5, 10418.5], [10428.15, 10435.2]]
+ }
+}

@@ -4,7 +4,7 @@ import numpy as np
 import shapely
 from shapely.geometry import LineString
 
-from yabitsu import (assembly, buildings, config, features, gsi, layouts, minoge_area, motorway, nagoki, overpasses, pass_area,
+from yabitsu import (assembly, buildings, config, features, fubuki, gsi, layouts, minoge_area, motorway, nagoki, overpasses, pass_area,
                      pavements, scenery, side_roads, start_lot, terrain, textures, town_objects, track, trees)
 from yabitsu.crosssection import Section
 from yabitsu.manifest import Manifest
@@ -77,7 +77,12 @@ def main():
     assembly.add_bay_lines(m, sec, cs.parse_bay_rows(track.load_section_rows("busbays", bounds)))
     pads0 = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
     stubs, feats = nagoki.track_stubs(sec, pads0, features.load_features_rows(track.load_section_rows("features", bounds)))
-    assembly.add_features(m, sec, feats)   # 分かれ道の入口で切った壁・ガードレール
+    from yabitsu import bridge_parts
+    brs = bridge_parts.load(config.DATA_MANUAL / "s5_bridges.json")
+    feats, brs = fubuki.kamatagawa_parts(feats, brs, bounds["s5"][0])
+    assembly.add_features(m, sec, feats, right_walk_joins=fubuki.walk_joins(bounds["s5"][0]))   # 分かれ道の入口で切った壁・ガードレール
+    for name, v, faces, uv, mat in fubuki.wall_cap_meshes(sec, feats, bounds["s5"][0], ground_mesh):
+        m.add_mesh(assembly.GROUP, name, v, faces, uv, mat)
     for name, v, f, uv, mat in pavements.meshes(sec, pavements.load_rows(
             assembly._cut_rows(track.load_section_rows("pavements", bounds), [z.main_skip for z in sps]))):
         m.add_mesh(assembly.GROUP, name, v, f, uv, mat)
@@ -147,8 +152,7 @@ def main():
     from shapely.ops import unary_union as _uu
     # stubs は上で作った（入口は本線と歩道から離してある）
     assembly.add_meshes(m, side_roads.stub_meshes(stubs))
-    from yabitsu import bridge_parts   # S5 の名前のある橋（親柱・銘板・欄干・桁・橋脚・赤いアーチ）
-    brs = bridge_parts.load(config.DATA_MANUAL / "s5_bridges.json")
+    # S5 の名前のある橋（親柱・銘板・欄干・桁・橋脚・赤いアーチ）
     rng = bridge_parts.ranges(sec, side_roads.load_elements(), {int(b["osm_id"]) for b in brs})
     for name, rel in bridge_parts.write_plate_textures(brs, config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel)

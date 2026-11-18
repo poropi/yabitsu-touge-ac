@@ -1497,7 +1497,8 @@
    ],
    "bearing": 77.4,
    "src": "S5-0981-01",
-   "dz": -0.11
+   "dz": -0.11,
+   "at_road_edge": true
   },
   {
    "asset": "r70_road_signs",

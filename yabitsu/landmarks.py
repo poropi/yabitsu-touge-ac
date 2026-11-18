@@ -18,12 +18,23 @@ from . import config
 DIR = config.DATA_PROCESSED / "landmarks"
 
 
+def part_dir(asset, name):
+    """吹風の納品部品は、メッシュと画像が揃った制作元からも読める。"""
+    processed = DIR / asset
+    if asset == "r70_fubuki":
+        delivered = config.PROJECT_ROOT / "assets" / "landmarks" / asset
+        for directory in (processed, delivered):
+            if (directory / f"{name}.npz").is_file() and (directory / f"{name}.png").is_file():
+                return directory
+    return processed
+
+
 def exists(asset, name):
-    return (DIR / asset / f"{name}.npz").exists()
+    return (part_dir(asset, name) / f"{name}.npz").exists()
 
 
 def load(asset, name, uv_top=True):
-    d = np.load(DIR / asset / f"{name}.npz")
+    d = np.load(part_dir(asset, name) / f"{name}.npz")
     uv = np.array(d["uv"], float)
     if uv_top:
         uv[:, 1] = 1.0 - uv[:, 1]
@@ -36,10 +47,11 @@ def material(asset, name, tex=None):
 
 def texture(asset, name, tex=None):
     """部品の画像（<tex>.png か <名前>.png。無ければ部品のフォルダの最初の png）。"""
-    p = DIR / asset / f"{tex or name}.png"
+    directory = part_dir(asset, name)
+    p = directory / f"{tex or name}.png"
     if p.exists():
         return p
-    pngs = sorted((DIR / asset).glob("*.png"))
+    pngs = sorted(directory.glob("*.png"))
     return pngs[0] if pngs else None
 
 

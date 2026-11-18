@@ -2,7 +2,7 @@ import json
 
 import numpy as np
 
-from yabitsu import config, features, gsi, nagoki, start_lot, terrain, track
+from yabitsu import config, features, fubuki, gsi, nagoki, start_lot, terrain, track
 from yabitsu.crosssection import Section
 
 P = config.DATA_PROCESSED
@@ -11,7 +11,8 @@ P = config.DATA_PROCESSED
 # 道路の範囲を広げる決まりで、道路と側溝の下や坑口の盛り土の縁まで変わってしまうため（2026-11-01、吹風トンネル入口の A：左の擁壁を
 # 坑口まで延ばす、E：右の広い路肩。ユーザー「道路を弄る理由が不明」「予定外を出さないように」）
 # 2026-11-02、E の 2：橋の手前（10480〜10507 m）の右の擁壁と歩道を釜田川橋まで延ばした所も同じ扱い
-TERRAIN_AS_BEFORE = [("s5", 10675.0, 10684.0, "L"), ("s5", 10607.0, 10684.0, "R"), ("s5", 10480.0, 10507.0, "R")]
+TERRAIN_AS_BEFORE = [("s5", 10675.0, 10684.0, "L"), ("s5", 10607.0, 10684.0, "R"), ("s5", 10480.0, 10507.0, "R"),
+                     ("s5", 10507.0, 10607.0, "R")]  # 橋の歩道の下は谷のまま
 # 歩道の下の地形だけを、歩道の面より WALK_BELOW 下まで下げる範囲（前の地形が高い点だけ。道路・側溝の下と歩道の外は前のまま）
 WALK_FLOOR = [("s5", 10607.0, 10684.0, "R"), ("s5", 10480.0, 10507.0, "R")]
 WALK_BELOW = 0.3
@@ -61,6 +62,94 @@ def lower_under_walks(sec, near, feats, bounds):
     return n
 
 
+def shape_fubuki_gate(sec, near, feats, bounds, pads=()):
+    """門前の高い地面だけを下げ、分かれ道にかかる三角形を路面より下に置く。"""
+    start, end = float(bounds["s5"][0]) + np.array([10405.0, 10435.0])
+    foot = sec.hw_right + features.GUTTER_WIDTH + features.sidewalk_offsets(sec, feats)[1]
+    level = sec.edge_z(-1) + features.CURB_HEIGHT - 0.03
+
+    def apron(z, idx, s, lat):
+        d = -lat
+        along = np.clip(np.minimum(s - start, end - s) / 2.0, 0, 1)
+        across = np.clip((14.0 - d) / 3.0, 0, 1)
+        w = np.where(d > foot[idx], along * across, 0)
+        return np.where(w > 0, z - w * np.maximum(z - level[idx], 0), z)
+
+    terrain.edit_roadside_grid(sec, near, start, end, 16.0, apron)
+    stub = [p for p in pads if p.get("name") == "side_stub_595991910_0" and p.get("kind") == "stub"]
+    if stub:
+        terrain.lower_paved_cells(near["Z"], near["xs"], near["ys"], stub, 0.0)
+
+
+def raise_fubuki_slope(sec, near, feats, bounds):
+    """延ばした右擁壁の裏だけを盛り、橋の手前に法面の上端をつくる。"""
+    s5 = float(bounds["s5"][0])
+    foot = sec.hw_right + features.GUTTER_WIDTH + features.sidewalk_offsets(sec, feats)[1]
+    edge = sec.edge_z(-1)
+    for _, wall in fubuki.walls_after_gate(feats, s5):
+        slope_base = foot + features.WALL_LEAN * wall.height_m
+        base_z = edge + wall.height_m
+
+        def fill(z, idx, s, lat):
+            d = -lat
+            crest = fubuki.crest_offset(s - s5)
+            up = np.clip((d - slope_base[idx]) / (crest - slope_base[idx] - 0.5), 0, 1)
+            target = base_z[idx] + up * (sec.z[idx] + 6.5 - base_z[idx])
+            along = np.clip(np.minimum((s - (s5 + 10485)) / 8.0, (wall.s_to - s) / 2.5), 0, 1)
+            across = np.clip((crest + 8.0 - d) / 6.0, 0, 1)
+            w = np.where((s >= wall.s_from) & (d >= slope_base[idx]), along * across, 0)
+            return z + w * np.maximum(target - z, 0)
+
+        if wall.s_to > s5 + 10485:
+            terrain.edit_roadside_grid(sec, near, max(wall.s_from, s5 + 10485), wall.s_to, 24.0, fill)
+        if wall.s_from >= s5 + 10450:
+            continue
+
+        def fill_after_gate(z, idx, s, lat):
+            d = -lat
+            base = slope_base[idx]
+            crest = fubuki.crest_offset(s - s5)
+            up = np.clip((d - base) / (crest - base), 0, 1)
+            target = edge[idx] + wall.height_m + up * (5.5 - wall.height_m)
+            along = np.clip(np.minimum((s - wall.s_from) / 2.0, (s5 + 10452 - s) / 5.0), 0, 1)
+            # 白い家の横では壁のすぐ裏だけを盛り、床を過ぎてから法面を広げる。
+            reach = np.interp(s - s5, [10442, 10445], [7.25, 16.0])
+            across = np.clip(reach - d, 0, 1)
+            w = np.where(d >= base, along * across, 0)
+            return z + w * np.maximum(target - z, 0)
+
+        terrain.edit_roadside_grid(sec, near, wall.s_from, s5 + 10452, 17.0, fill_after_gate)
+
+
+def clear_fubuki_wall_face(sec, near, feats, bounds):
+    """側溝の外だけを削り、地形の粗い三角形が擁壁の手前に出ないようにする。"""
+    s5 = float(bounds["s5"][0])
+    gutter = sec.hw_right + features.GUTTER_WIDTH
+    foot = gutter + features.sidewalk_offsets(sec, feats)[1]
+    edge = sec.edge_z(-1)
+
+    for _, wall in fubuki.walls_after_gate(feats, s5):
+        start = max(wall.s_from, s5 + 10480)
+        if start >= wall.s_to:
+            continue
+        lean = features.WALL_LEAN * wall.height_m
+        rise = wall.height_m + features.WALL_BASE_DROP
+
+        def cut(z, idx, s, lat):
+            d = -lat
+            from_foot = d - foot[idx]
+            # 壁面の延長より上にある格子点は、壁を横切る三角形を手前へ出す。
+            # 天端より奥では、その三角形を支える範囲だけを調べ、壁面の延長より低い盛り土を保つ。
+            face_z = edge[idx] - features.WALL_BASE_DROP + rise * from_foot / lean
+            ceiling = np.where(from_foot <= lean, np.minimum(face_z, edge[idx] - features.WALL_BASE_DROP), face_z) - 0.12
+            w = np.clip((s - start) / 2.0, 0, 1)
+            active = ((s <= wall.s_to) & (d > gutter[idx])
+                      & ((from_foot <= lean) | ((from_foot <= lean + terrain.NEAR_CELL * np.sqrt(2)) & (z > face_z))))
+            return np.where(active, z - w * np.maximum(z - ceiling, 0), z)
+
+        terrain.edit_roadside_grid(sec, near, start, wall.s_to, 14.0, cut)
+
+
 def main():
     sec = Section.load_json(P / "track_section.json")
     pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
@@ -96,6 +185,9 @@ def main():
                               town=[(tw.ground, nagoki.circle(), paved)] + [z.town_override() for z in nagoki.load_splits(sec)]
                               + [(k.ground, nagoki.circle(j), k.drivable().union(k.carriageway).union(k.sidewalk)) for j, k in others])
     print("歩道の下で下げた地形の点", lower_under_walks(sec, near, feats_all, bounds))
+    shape_fubuki_gate(sec, near, feats_all, bounds, pads)
+    raise_fubuki_slope(sec, near, feats_all, bounds)
+    clear_fubuki_wall_face(sec, near, feats_all, bounds)
     np.savez_compressed(P / "track_terrain_near.npz", **near)
     mid = terrain.build_mid(sec, sampler, pads, channels=chans, keep_rows=keep, no_fill_rows=no_fill, lake=lake)   # 道から 200m まで
     np.savez_compressed(P / "track_terrain_mid.npz", **mid)
