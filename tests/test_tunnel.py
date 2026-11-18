@@ -138,3 +138,46 @@ def test_osm_tunnel_ends_can_be_shifted_to_match_street_view(monkeypatch):
     monkeypatch.setattr(tunnel, "_shifts", lambda: {"7": {"s0_shift_m": 20.0, "s1_shift_m": -5.0}})
     t = tunnel.from_osm(ws, sec)[0]
     assert t.s0 == pytest.approx(120.0, abs=0.6) and t.s1 == pytest.approx(155.0, abs=0.6)
+
+
+def test_oodora_exit_restores_ground_for_the_nine_aperture_rays():
+    from yabitsu import config, kn5, side_roads
+    from yabitsu.crosssection import Section
+
+    root = config.DATA_PROCESSED
+    sec = Section.load_json(root / "track_section.json")
+    tunnels = tunnel.from_osm(side_roads.load_elements(), sec)
+    target = next(t for t in tunnels if t.osm_id == 131561908)
+    i = tunnel._rows(sec, target)[-1]
+    c, n, _, _ = tunnel._frame(sec, i)
+    # 依頼18の同じ車線位置、高さ、5 m地点と、0.075 m刻みで未交差だった9本。
+    origin = np.array([-796.8312895330268, 5395.629797327247, 442.36345467862344])
+    offsets = np.array([[2.9375, .1875], [2.8625, .2625], [2.9375, .2625], [2.8625, .3375],
+                        [2.9375, .3375], [2.8625, .4125], [2.9375, .4125], [2.9375, .4875], [2.9375, .5625]])
+    endpoints = np.c_[c + offsets[:, :1] * n, sec.z[i] + offsets[:, 1]]
+    flat = lambda x, y: np.full(np.shape(x), 450.0)
+    before = tunnel.meshes(sec, tunnels, {}, flat)
+    with np.load(root / "track_terrain_near.npz") as data:
+        near = {key: data[key] for key in ("xs", "ys", "Z", "H")}
+    after = tunnel.meshes(sec, tunnels, {}, flat, near=near)
+    existing = {mesh[0]: mesh for mesh in before}
+    additions = [mesh for mesh in after if mesh[0] not in existing]
+    assert set(mesh[0] for mesh in after) == existing.keys() | {"1GRASS_s1_terrain_tunnel_131561908_b_cell"}
+    for mesh in after:
+        if mesh[0] in existing:
+            for actual, original in zip(mesh[1:4], existing[mesh[0]][1:4]):
+                np.testing.assert_array_equal(actual, original)
+    hits = np.zeros(len(endpoints), bool)
+    for _, v, f, uv, mat, renderable in additions:
+        outward = np.array([n[1], -n[0]])
+        assert np.min((v[:, :2] - c) @ outward) >= -1e-9
+        assert mat == "ground" and renderable
+        for a, b, d in v[kn5._triangles(f)]:
+            normal = np.cross(b - a, d - a)
+            assert normal[2] > 0
+            for j, ray in enumerate(endpoints - origin):
+                if ray @ normal >= 0:
+                    continue
+                u, w, t = np.linalg.solve(np.column_stack((b - a, d - a, -ray)), origin - a)
+                hits[j] |= u >= 0 and w >= 0 and u + w <= 1 and t >= 1
+    assert np.count_nonzero(~hits) == 0

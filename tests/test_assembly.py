@@ -147,3 +147,44 @@ def test_road_inside_a_tunnel_is_a_separate_dry_piece_and_other_names_stay():
         assert set(m0.meshes) <= set(m1.meshes)
         faces = lambda m, names: sum(len(np.load(Path(m.root) / m.meshes[n]["file"])["faces"]) for n in names)
         assert faces(m0, ["1ROAD_s1_00"]) == faces(m1, ["1ROAD_s1_00", "1ROAD_s1_00_tun"])
+
+
+def test_s5_edge_lines_clear_full_concrete_paving_with_tapered_ends(tmp_path):
+    import numpy as np
+    from dataclasses import fields
+    from yabitsu import config, pavements, side_roads, track, tunnel
+    from yabitsu.crosssection import Section
+
+    bounds = track.load_bounds()
+    s5_start = bounds["s5"][0]
+    sec = Section.load_json(config.DATA_PROCESSED / "track_section.json")
+    dry = [(t.s0, t.s1) for t in tunnel.from_osm(side_roads.load_elements(), sec)
+           if t.s0 >= s5_start + 4000 and t.s1 <= s5_start + 4140]
+    window = (sec.s >= s5_start + 4000) & (sec.s <= s5_start + 4140)
+    sec = Section(*(getattr(sec, field.name)[window] for field in fields(Section)))
+    paving = pavements.load_rows(track.load_section_rows("pavements", {"s5": bounds["s5"]}))
+    concrete = [p for p in paving if p.kind == "concrete_plain"]
+    assert [(p.s_from - s5_start, p.s_to - s5_start) for p in concrete] == [(4030, 4110)]
+    _, verts, _, uv, _ = pavements.meshes(sec, concrete)[0]
+    paving_rows = verts.reshape(-1, 5, 3)
+    paving_s = uv[::5, 1] * 4
+    inside = (sec.s >= s5_start + 4030) & (sec.s <= s5_start + 4110)
+    taper_start, taper_end = sec.s[inside][[0, -1]]
+    m = Manifest(tmp_path)
+    baseline = Manifest(tmp_path / "baseline")
+    assembly.add_road(m, sec, dry=dry, paving=paving)
+    assembly.add_road(baseline, sec, dry=dry)
+    for side, columns in (("L", [2, 4]), ("R", [0, 2])):
+        with np.load(tmp_path / m.meshes[f"LINES_s1_edge{side}_00"]["file"]) as line:
+            lines = line["verts"].reshape(-1, 2, 3)
+        with np.load(baseline.root / baseline.meshes[f"LINES_s1_edge{side}_00"]["file"]) as line:
+            original = line["verts"].reshape(-1, 2, 3)
+        unchanged = (sec.s <= taper_start) | (sec.s >= taper_end)
+        np.testing.assert_array_equal(lines[unchanged], original[unchanged])
+        pavement_at_edges = paving_rows[np.searchsorted(paving_s, sec.s[inside])][:, columns]
+        delta = pavement_at_edges[:, 1] - pavement_at_edges[:, 0]
+        offset = lines[inside, :, :2] - pavement_at_edges[:, :1, :2]
+        fraction = (offset * delta[:, None, :2]).sum(axis=-1) / (delta[:, :2] ** 2).sum(axis=-1)[:, None]
+        clearance = lines[inside, :, 2] - (pavement_at_edges[:, :1, 2] + fraction * delta[:, None, 2])
+        assert clearance[1:-1].min() >= 0.009
+        np.testing.assert_allclose(clearance[[0, -1]], 0, atol=1e-9)

@@ -92,7 +92,10 @@ def mouth_strip(sec, sl, side, rows):
     return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], face_mask=np.asarray(rows, bool)[:, None])
 
 
-def line(sec, sl, center_lat, width=0.15, lift=0.005, dash=None, row_mask=None):
+LINE_LIFT = 0.005
+
+
+def line(sec, sl, center_lat, width=0.15, lift=LINE_LIFT, dash=None, row_mask=None):
     lat = np.asarray(center_lat, float)[:, None] + np.array([-width / 2, width / 2])[None, :]
     z = surface_height(lat, _cols(sec, sl, sec.z), _cols(sec, sl, sec.slope), _cols(sec, sl, sec.crown)) + lift
     s = sec.s[sl]

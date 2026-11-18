@@ -54,12 +54,19 @@ def _dry_runs(sec, i0, i1, dry):
     return out
 
 
-def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=(), no_lines=(), dry=()):
+def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=(), no_lines=(), dry=(), paving=()):
     """skip の範囲（町の範囲・島で分かれる所：道は多角形で作る）は帯を作らない。skip は (s0, s1) かその並び。
     mouths（(side, s0, s1) の並び）：わき道が接している所。その側は側溝を作らずに路面を続け、路肩の線を破線にする。
     no_lines（(side, s0, s1) の並び）：路肩の白線を引かない所。
     dry（(s0, s1) の並び：トンネルの中）：その所の路面・側溝は名前に _tun を付けた別の部品にし、路面の材質を asphalt_tunnel にする
-    （RainFX の水たまり・濡れの材質に入れない。雨のときトンネルの中の路面が出口を鏡のように映していた。2026-10-28）。ほかの部品の名前は変えない。"""
+    （RainFX の水たまり・濡れの材質に入れない）。平らなコンクリート舗装の上では路肩線を 1 cm 上げる。
+    舗装区間の最初と最後の断面は元の高さにして、隣の断面との間ですり付ける。"""
+    edge_raise = np.zeros(sec.n)
+    for patch in paving:
+        if patch.kind == "concrete_plain":
+            first = np.searchsorted(sec.s, patch.s_from)
+            last = np.searchsorted(sec.s, patch.s_to, side="right") - 1
+            edge_raise[first + 1:last] = 0.01
     chunks = [(a + i0, a + i1) for a, b in _keep_spans(sec, skip) for i0, i1 in mg.split_rows(b - a + 1, rows_per_chunk)]
     for k, (i0, i1) in enumerate(chunks):
         sl = slice(i0, i1 + 1)
@@ -90,11 +97,12 @@ def add_road(m, sec, rows_per_chunk=200, skip=None, mouths=(), no_lines=(), dry=
             for sd, s0, s1 in no_lines:
                 bare |= (sd == side) & (s >= s0) & (s <= s1)
             bare = bare[:-1] | bare[1:]
+            lift = mg.LINE_LIFT + edge_raise[sl, None] if edge_raise[sl].any() else mg.LINE_LIFT
             if (~seg & ~bare).any():
-                m.add_mesh(GROUP, f"LINES_s1_edge{tag}_{k:02d}", *mg.line(sec, sl, side * (hw - 0.25), row_mask=~seg & ~bare), "line_white")
+                m.add_mesh(GROUP, f"LINES_s1_edge{tag}_{k:02d}", *mg.line(sec, sl, side * (hw - 0.25), lift=lift, row_mask=~seg & ~bare), "line_white")
             if (seg & ~bare).any():
                 m.add_mesh(GROUP, f"LINES_s1_edge{tag}_mouth_{k:02d}",
-                           *mg.line(sec, sl, side * (hw - 0.25), dash=MOUTH_DASH, row_mask=seg & ~bare), "line_white")
+                           *mg.line(sec, sl, side * (hw - 0.25), lift=lift, dash=MOUTH_DASH, row_mask=seg & ~bare), "line_white")
 
 
 CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("line_white", None),

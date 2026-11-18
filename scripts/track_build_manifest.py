@@ -59,18 +59,23 @@ def main():
     asama = asama_area.load(config.DATA_MANUAL / "s2_asama.json")
     asama_site = asama_area.build(asama, sec) if asama else None
     sites = [x for x in (pass_site, tera_site, goma_site, asama_site) if x]
+    from yabitsu import tunnel
+    tns = tunnel.from_osm(side_roads.load_elements(), sec)
+    bounds = track.load_bounds()
+    paving = pavements.load_rows(assembly._cut_rows(
+        track.load_section_rows("pavements", bounds), [z.main_skip for z in sps]))
     assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps],   # 町の範囲と分かれる所は多角形で作る
                       mouths=[mo for x in sites for mo in x.mouths()]   # 峠・寺山・護摩屋敷のわき道の入口と浅間神社の駐車場の前は側溝をくぼませない
                       + start_lot.mouths(json.loads((P / "track_pads.json").read_text(encoding="utf-8")), sec),   # 菜の花台の駐車場の入口も
                       no_lines=[r for x in (tera_site, goma_site) if x for r in x.no_lines()],   # 寺山富士見橋のまわりは路肩の白線が無い
-                      dry=[(t_.s0, t_.s1) for t_ in __import__("yabitsu.tunnel", fromlist=["x"]).from_osm(side_roads.load_elements(), sec)])   # トンネルの中は水たまりを作らない材質
+                      dry=[(t.s0, t.s1) for t in tns],   # トンネルの中は水たまりを作らない材質
+                      paving=paving)
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
     mid = dict(np.load(P / "track_terrain_mid.npz"))
     add_far_photo(m, far)
     assembly.add_terrain(m, near, far, mid, far_photo=True)
     ground = terrain.terrain_z(near, mid)   # 景色の建物・道は、できあがった地形の上に置く
     ground_mesh = terrain.terrain_mesh_z(near, mid)   # 地面に立てる小物は、メッシュの三角形どおりの高さ（急な斜面で浮かない）
-    bounds = track.load_bounds()
     assembly.add_centrelines(m, sec, track.load_section_rows("centrelines", bounds), s_min=tw.main_skip[1],
                              gaps=[z.main_skip for z in sps] + [k.main_skip for _, k in others])
     from yabitsu import crosssection as cs
@@ -83,8 +88,7 @@ def main():
     assembly.add_features(m, sec, feats, right_walk_joins=fubuki.walk_joins(bounds["s5"][0]))   # 分かれ道の入口で切った壁・ガードレール
     for name, v, faces, uv, mat in fubuki.wall_cap_meshes(sec, feats, bounds["s5"][0], ground_mesh):
         m.add_mesh(assembly.GROUP, name, v, faces, uv, mat)
-    for name, v, f, uv, mat in pavements.meshes(sec, pavements.load_rows(
-            assembly._cut_rows(track.load_section_rows("pavements", bounds), [z.main_skip for z in sps]))):
+    for name, v, f, uv, mat in pavements.meshes(sec, paving):
         m.add_mesh(assembly.GROUP, name, v, f, uv, mat)
     pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
     lot_spec = config.DATA_MANUAL / "s1_start_lot.json"
@@ -159,8 +163,7 @@ def main():
     for name, rel in bridge_parts.rail_textures(brs, config.TRACK_BUILD_DIR / "textures").items():
         m.add_material(name, texture=rel, alpha=True, two_sided=True)   # 格子のすき間は透明
     assembly.add_meshes(m, bridge_parts.meshes(sec, brs, rng, ground))
-    from yabitsu import tunnel, textures as _tx   # トンネル（筒・照明・坑口・表札）
-    tns = tunnel.from_osm(side_roads.load_elements(), sec)
+    from yabitsu import textures as _tx   # トンネル（筒・照明・坑口・表札）
     tspec = json.loads((config.DATA_MANUAL / "s5_tunnels.json").read_text(encoding="utf-8")) if (config.DATA_MANUAL / "s5_tunnels.json").exists() else {}
     for tn in tns:
         txt = tspec.get(str(tn.osm_id), {}).get("plate", tn.name)
@@ -168,7 +171,7 @@ def main():
             pth = config.TRACK_BUILD_DIR / "textures" / f"tunnel_plate_{tn.osm_id}.png"; pth.parent.mkdir(parents=True, exist_ok=True)
             _tx.sign_texture(txt, "#E9E6DC", "#1C1C1C", 512, 112, border="#555555").save(pth)
             m.add_material(f"tunnel_plate_{tn.osm_id}", texture=f"textures/{pth.name}")
-    assembly.add_meshes(m, tunnel.meshes(sec, tns, tspec, ground))
+    assembly.add_meshes(m, tunnel.meshes(sec, tns, tspec, ground, near=near))
     from yabitsu import water   # S4 の川・沢（水面・川原）、堰・砂防ダム、湧き水の水くみ場
     streams, falls, springs = water.load(sec)
     form_all = start_lot.road_formation(sec, 0.0, float(sec.s[-1]))

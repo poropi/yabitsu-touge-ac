@@ -12,8 +12,9 @@ def main():
     path,report=environment_night.build()
     print('夜間環境:',path,report['counts'])
     rain_path,rain_report=environment_rain.build(path.parent)
-    print('雨設定:',rain_path,'トンネル',rain_report['tunnel_count'],
-          '雨除け',len(rain_report['occluders']))
+    print('雨設定:',rain_path,'トンネル総数',rain_report['tunnel_count'],
+          '雨よけを出したトンネル',rain_report['occluder_tunnel_count'],
+          '雨よけの箱',len(rain_report['occluders']))
     audio_path,audio_report=environment_audio.build()
     print('環境音:',len(audio_report['sources']),'反響領域:',len(audio_report['reverb_zones']))
     environment_seasons.write_config(path.parent)

@@ -83,9 +83,47 @@ def _rows(sec, t):
     return [int(np.argmin(np.abs(sec.s - s))) for s in np.r_[np.arange(t.s0, t.s1, STEP), t.s1]]
 
 
-def meshes(sec, tunnels, spec, ground_z):
+def _oodora_exit_ground(near, center, outward):
+    """大洞の宮ヶ瀬側で抜いた2 mセルを、坑口面より外側だけ元の地表に戻す。"""
+    from .terrain import grid_mesh_chunks
+
+    xs, ys = near["xs"], near["ys"]
+    # 調査時の H[5487, 323] の中心。格子の原点が変わっても同じ場所を引く。
+    col = np.searchsorted(xs, -797.0, side="right") - 1
+    row = np.searchsorted(ys, 5401.0, side="right") - 1
+    if not (0 <= row < len(ys) - 1 and 0 <= col < len(xs) - 1 and near["H"][row, col]):
+        return None
+    x, y = slice(col, col + 2), slice(row, row + 2)
+    v, f, uv = grid_mesh_chunks(xs[x], ys[y], near["Z"][y, x], np.ones((1, 1), bool))[0]
+    distance = (v[:, :2] - center) @ outward
+    if not distance.min() < 0 < distance.max():
+        return None
+    vertices, uvs = list(v), list(uv)
+    faces, cuts = [], {}
+    q = f[0]
+    # KN5 と同じ対角で三角形にしてから切る。切り口の高さとUVは元の三角形上で補間する。
+    for tri in (q[[0, 1, 2]], q[[0, 2, 3]]):
+        polygon = []
+        for a, b in zip(np.roll(tri, 1), tri):
+            if distance[a] * distance[b] < 0:
+                edge = tuple(sorted((a, b)))
+                if edge not in cuts:
+                    t = distance[a] / (distance[a] - distance[b])
+                    cuts[edge] = len(vertices)
+                    vertices.append(v[a] + t * (v[b] - v[a]))
+                    uvs.append(uv[a] + t * (uv[b] - uv[a]))
+                polygon.append(cuts[edge])
+            if distance[b] >= 0:
+                polygon.append(b)
+        faces.extend((polygon[0], b, c) for b, c in zip(polygon[1:], polygon[2:]))
+    from .meshgen import compact
+    return compact(np.asarray(vertices), np.asarray(faces, np.int32), np.asarray(uvs))
+
+
+def meshes(sec, tunnels, spec, ground_z, near=None):
     """トンネルの筒（当たり判定つき、内向き）・照明・両側の坑口（アーチの穴のあいた面）・表札。
-    spec = {"<osm_id>": {"plate": 表札の文字}}。ground_z はできあがった地形の高さ（坑口の面の上の端に使う）。"""
+    spec = {"<osm_id>": {"plate": 表札の文字}}。ground_z はできあがった地形の高さ（坑口の面の上の端に使う）。
+    near があるときは、大洞の宮ヶ瀬側で欠けたセルの外側も出力する。"""
     out = []
     for t in tunnels:
         rows = _rows(sec, t)
@@ -121,6 +159,11 @@ def meshes(sec, tunnels, spec, ground_z):
         sp = (spec or {}).get(str(t.osm_id), {})
         for tag, s, sgn in (("a", t.s0, -1.0), ("b", t.s1, 1.0)):
             out += _portal(sec, t, tag, s, sgn, ground_z, sp.get("plate", t.name), sp.get("portal", "concrete"))
+        if t.osm_id == 131561908 and near is not None and "H" in near:
+            c, n, _, _ = _frame(sec, rows[-1])
+            ground = _oodora_exit_ground(near, c, np.array([n[1], -n[0]]))
+            if ground is not None:
+                out.append(("1GRASS_s1_terrain_tunnel_131561908_b_cell", *ground, "ground", True))
     return out
 
 
