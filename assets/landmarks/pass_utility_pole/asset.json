@@ -1,0 +1,165 @@
+{
+  "part_info": {
+    "pole_shop": {
+      "meaning": "電柱1本。売店脇の灰白テーパー柱。短い引込線のみ。",
+      "front": "-Y"
+    },
+    "pole_north": {
+      "meaning": "電柱1本。北入口の灰白コンクリート柱。短い引込線のみ。",
+      "front": "-Y"
+    },
+    "pole_opposite_red": {
+      "meaning": "対岸の赤褐色の細い支柱。全機器と型式は未確認、単純形。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "pole_shop": [
+      -1.5,
+      0,
+      0
+    ],
+    "pole_north": [
+      0,
+      0,
+      0
+    ],
+    "pole_opposite_red": [
+      1.5,
+      0,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 512,
+  "refs": [
+    "codex07/sv_lotn_000.png",
+    "codex07/sv_lotn_225.png",
+    "codex07/sv_mid_270.png",
+    "codex07/sv_toilet_225.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "腕木/碍子/箱/引込線は写真の可視範囲と一般構造から推定。箱の型式と管理銘板未確認。",
+    "北入口variantの全設備構成は写真の遮蔽で未確認のため推定。全コース用架線は含めない。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "stair_assembly": null,
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_utility_pole",
+  "source": "pass_utility_pole.blend",
+  "parts": [
+    {
+      "name": "pole_shop",
+      "triangles": 820,
+      "vertices": 1478,
+      "dimensions_m": [
+        1.9282,
+        0.9314,
+        10.0
+      ],
+      "bounds_m": [
+        [
+          -0.9641033411026001,
+          -0.4657152593135834,
+          0.0
+        ],
+        [
+          0.9641033411026001,
+          0.4657152593135834,
+          10.0
+        ]
+      ],
+      "assembly_offset_m": [
+        -0.000152,
+        7e-05,
+        0.0
+      ],
+      "meaning": "電柱1本。売店脇の灰白テーパー柱。短い引込線のみ。",
+      "front": "-Y"
+    },
+    {
+      "name": "pole_north",
+      "triangles": 820,
+      "vertices": 1468,
+      "dimensions_m": [
+        1.9282,
+        0.9314,
+        9.2
+      ],
+      "bounds_m": [
+        [
+          -0.9641033411026001,
+          -0.4657152593135834,
+          0.0
+        ],
+        [
+          0.9641033411026001,
+          0.4657152593135834,
+          9.199999809265137
+        ]
+      ],
+      "assembly_offset_m": [
+        -0.000152,
+        7e-05,
+        0.0
+      ],
+      "meaning": "電柱1本。北入口の灰白コンクリート柱。短い引込線のみ。",
+      "front": "-Y"
+    },
+    {
+      "name": "pole_opposite_red",
+      "triangles": 68,
+      "vertices": 127,
+      "dimensions_m": [
+        1.2011,
+        0.15,
+        9.0
+      ],
+      "bounds_m": [
+        [
+          -0.6005656719207764,
+          -0.07500000298023224,
+          0.0
+        ],
+        [
+          0.6005656719207764,
+          0.07500000298023224,
+          9.0
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "対岸の赤褐色の細い支柱。全機器と型式は未確認、単純形。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

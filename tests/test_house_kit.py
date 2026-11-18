@@ -176,8 +176,14 @@ def test_hand_made_buildings_and_nanohanadai_tower_are_not_turned_into_houses():
     assert all(b.id != "osm952587264" for b in B)
     sec = Section.load_json(str(config.DATA_PROCESSED / "track_section.json"))
     kit, rest, _, _ = hk.split(B, sec)
-    keep = {"manual_pass_shop_main", "osm184602558", "osm952810353", "osm369868058", "osm371207678"}
+    keep = {"osm184602558", "osm952810353", "osm371207678"}
     assert keep <= {b.id for b in rest} and not keep & {b.id for b in kit}
+    # 名水きまぐれ喫茶は、県道 70 号の Codex の建物（r70_buildings/s4_2120_cafe、data/manual/s45_route70.json）に置き換えた（2026-10-31）
+    assert raw["osm369868058"]["gone"] is True and raw["osm369868058"]["replaced_by"] == "r70_buildings/s4_2120_cafe"
+    r70 = json.loads((config.DATA_MANUAL / "s45_route70.json").read_text(encoding="utf-8"))["landmarks"]
+    assert any(it["asset"] == "r70_buildings" and it["name"] == "s4_2120_cafe" for it in r70)
+    for i in ("manual_pass_shop_main", "manual_pass_shop_annex", "osm1103246795"):   # 峠の売店・丘の上のレストハウスは Codex の部品（s1_pass.json の landmarks）だけ
+        assert raw[i]["gone"] is True and all(b.id != i for b in B)
 
 
 def test_kit_house_uses_the_wall_colour_and_cladding_from_the_data():

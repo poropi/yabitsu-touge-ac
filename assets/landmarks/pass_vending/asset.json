@@ -1,0 +1,123 @@
+{
+  "part_info": {
+    "vending_a": {
+      "meaning": "赤い自販機a。商品列・選択ボタン・硬貨部・取出口を自作画像で再現。",
+      "front": "-Y"
+    },
+    "vending_b": {
+      "meaning": "赤い自販機b。商品列・選択ボタン・硬貨部・取出口を自作画像で再現。",
+      "front": "-Y"
+    }
+  },
+  "generator": "blender_scripts/build_pass_shop.py",
+  "refs": [
+    "codex07/sv_shop_225.png",
+    "codex07/sv_shop_270.png",
+    "codex07/sv_u1_135.png"
+  ],
+  "preview_offsets": {
+    "vending_a": [
+      -0.55,
+      0,
+      0
+    ],
+    "vending_b": [
+      0.55,
+      0,
+      0
+    ]
+  },
+  "dimension_basis": "一般的な飲料機の高さ1.85mを仮定した写真比率。現地実測ではない。",
+  "approximations": [
+    "右の2台目は正面が隠れるため商品列と操作部を左機と同構成に推定。",
+    "商品ラベル・商標の細文字は再現せず、自作の色面で近似。"
+  ],
+  "reference_views": {
+    "reference_shop270": [
+      1,
+      -2,
+      0.45
+    ]
+  },
+  "asset_id": "pass_vending",
+  "source": "pass_vending.blend",
+  "parts": [
+    {
+      "name": "vending_a",
+      "triangles": 258,
+      "vertices": 532,
+      "dimensions_m": [
+        1.01,
+        0.8525,
+        1.85
+      ],
+      "bounds_m": [
+        [
+          -0.5049999952316284,
+          -0.42624999582767487,
+          0.0
+        ],
+        [
+          0.5049999952316284,
+          0.42624999582767487,
+          1.8499999046325684
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.00775,
+        0.0
+      ],
+      "meaning": "赤い自販機a。商品列・選択ボタン・硬貨部・取出口を自作画像で再現。",
+      "front": "-Y"
+    },
+    {
+      "name": "vending_b",
+      "triangles": 258,
+      "vertices": 532,
+      "dimensions_m": [
+        1.01,
+        0.8525,
+        1.85
+      ],
+      "bounds_m": [
+        [
+          -0.5049999952316284,
+          -0.42624999582767487,
+          0.0
+        ],
+        [
+          0.5049999952316284,
+          0.42624999582767487,
+          1.8499999046325684
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.00775,
+        0.0
+      ],
+      "meaning": "赤い自販機b。商品列・選択ボタン・硬貨部・取出口を自作画像で再現。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

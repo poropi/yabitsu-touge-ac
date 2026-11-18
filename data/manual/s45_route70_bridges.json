@@ -1,0 +1,425 @@
+{
+ "note": "県道 70 号（S4・S5）の橋と トンネルの Codex の部品の割り当て（export/compare/route70/route70_delivery_09.md の表から。s は区間の起点から、写真の地点の見積り）。scripts/dress_mountain.py が、近くの今の欄干・坑口の見た目を隠してこの部品を置く。skip の行は置かない。",
+ "bridges": [
+  {
+   "place": "S4 1520m",
+   "section": "s4",
+   "s": 1520.0,
+   "left": "log_3m",
+   "right": "log_3m",
+   "post": "log_terminal",
+   "length_m": 8.0,
+   "plate": null,
+   "note": "擬木の柱は写真で約3m間隔。専用の丸太形端柱／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 1645m",
+   "section": "s4",
+   "s": 1645.0,
+   "left": "steel_black_2m",
+   "right": "steel_black_2m",
+   "post": "square_10",
+   "length_m": 24.0,
+   "plate": null,
+   "note": "縦格子は両側。長さ20m前後の依頼値から推定24m／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 1720m",
+   "section": "s4",
+   "s": 1720.0,
+   "left": "concrete_two_2m",
+   "right": "concrete_two_2m",
+   "post": "square_09",
+   "length_m": 8.0,
+   "plate": null,
+   "note": "手前に白い注意板。橋外のガードレールは別／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 1895m",
+   "section": "s4",
+   "s": 1895.0,
+   "left": "timber_lattice_2m",
+   "right": "timber_lattice_2m",
+   "post": "timber_terminal",
+   "length_m": 10.0,
+   "plate": null,
+   "note": "写真右の明るい縦格子と木調端柱を優先／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 2095m",
+   "section": "s4",
+   "s": 2095.0,
+   "left": "wbeam_white_2m",
+   "right": "solid_concrete_2m",
+   "post": null,
+   "length_m": 13.0,
+   "plate": null,
+   "note": "左は白防護板、右は低壁／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない。"
+  },
+  {
+   "place": "S4 2694m",
+   "section": "s4",
+   "s": 2694.0,
+   "left": "pipe_moss_two_2m",
+   "right": "pipe_moss_two_2m",
+   "post": "square_08",
+   "length_m": 7.0,
+   "plate": "hinokisawa_name",
+   "note": "檜沢橋の青文字の縦札が読める／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない。"
+  },
+  {
+   "place": "S4 2969m",
+   "section": "s4",
+   "s": 2969.0,
+   "left": "pipe_moss_two_2m",
+   "right": "pipe_moss_two_2m",
+   "post": "square_09",
+   "length_m": 10.0,
+   "plate": "tokoyo_name",
+   "note": "右横材は白に近い灰褐色／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない。"
+  },
+  {
+   "place": "S4 3069m",
+   "section": "s4",
+   "s": 3069.0,
+   "left": "concrete_two_2m",
+   "right": "concrete_two_2m",
+   "post": "large_stone",
+   "length_m": 18.0,
+   "plate": null,
+   "note": "親柱の文字は未判読／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 3369m",
+   "section": "s4",
+   "s": 3369.0,
+   "left": "steel_white_lattice_2m",
+   "right": "steel_white_two_2m",
+   "post": "square_10",
+   "length_m": 14.0,
+   "plate": null,
+   "note": "BACK写真の右側が進行方向左。左右を区別／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 3919m",
+   "section": "s4",
+   "s": 3919.0,
+   "left": "pipe_white_two_2m",
+   "right": "pipe_white_two_2m",
+   "post": "square_10",
+   "length_m": 12.0,
+   "plate": null,
+   "note": "親柱0.3m程度。写真では幅を近似／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 4269m",
+   "section": "s4",
+   "s": 4269.0,
+   "left": "concrete_two_2m",
+   "right": "concrete_two_2m",
+   "post": "square_09",
+   "length_m": 8.0,
+   "plate": "kiyotaki_name",
+   "note": "写真は無開口壁でなく2段横材と支柱。説明を訂正／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない。"
+  },
+  {
+   "place": "S4 4768m",
+   "section": "s4",
+   "s": 4768.0,
+   "left": "concrete_two_2m",
+   "right": "concrete_two_2m",
+   "post": "square_10",
+   "length_m": 13.0,
+   "plate": "jigokuzawa_name",
+   "note": "木調横桟の太い角柱／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない。"
+  },
+  {
+   "place": "S4 5468m",
+   "section": "s4",
+   "s": 5468.0,
+   "left": "pipe_white_two_2m",
+   "right": "pipe_white_two_2m",
+   "post": "square_10",
+   "length_m": 8.0,
+   "plate": null,
+   "note": "白い太い角柱／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 5793m",
+   "section": "s4",
+   "s": 5793.0,
+   "left": "timber_2m",
+   "right": "timber_2m",
+   "post": "square_09",
+   "length_m": 10.0,
+   "plate": null,
+   "note": "木調の角形横桟。長さは推定／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S4 6093m",
+   "section": "s4",
+   "s": 6093.0,
+   "left": "steel_white_two_2m",
+   "right": "steel_white_two_2m",
+   "post": null,
+   "length_m": 12.0,
+   "plate": null,
+   "note": "遠景。長さ・欄干詳細の不確かさ±50%。札掛橋と同一の可能性、併置保留／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。",
+   "skip": "札掛橋（S4 6168m）と同じ橋の候補（Codex：併置保留）"
+  },
+  {
+   "place": "S4 6168m",
+   "section": "s4",
+   "s": 6168.0,
+   "left": "pipe_white_three_2m",
+   "right": "pipe_white_three_2m",
+   "post": "square_10",
+   "length_m": 21.0,
+   "plate": null,
+   "note": "写真は3段の白横桁。見える複数スパンから推定／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない。"
+  },
+  {
+   "place": "S4 6367m",
+   "section": "s4",
+   "s": 6367.0,
+   "left": "wood_clad_2m",
+   "right": "wood_clad_2m",
+   "post": "square_09",
+   "length_m": 10.0,
+   "plate": null,
+   "note": "横材に茶色化粧板／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 43m",
+   "section": "s5",
+   "s": 43.0,
+   "left": "steel_rust_2m",
+   "right": "steel_rust_2m",
+   "post": "square_10",
+   "length_m": 18.0,
+   "plate": null,
+   "note": "写真では横材3段。依頼説明の2段から訂正／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 1168m",
+   "section": "s5",
+   "s": 1168.0,
+   "left": "pipe_moss_two_2m",
+   "right": "steel_brown_lattice_2m",
+   "post": null,
+   "length_m": 6.0,
+   "plate": "yoshida_name",
+   "note": "写真の右側は板壁ではなく細い縦格子／写真の吉田橋の札と県PDF10頁609行の橋長6m。"
+  },
+  {
+   "place": "S5 4216m",
+   "section": "s5",
+   "s": 4216.0,
+   "left": "steel_white_lattice_2m",
+   "right": "wood_clad_2m",
+   "post": null,
+   "length_m": 8.0,
+   "plate": null,
+   "note": "BACK右側の白格子と左側の木調横材を分ける／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 4591m",
+   "section": "s5",
+   "s": 4591.0,
+   "left": "pipe_gray_three_2m",
+   "right": "pipe_gray_three_2m",
+   "post": "rounded_08",
+   "length_m": 18.0,
+   "plate": null,
+   "note": "塩水橋。丸頭親柱／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない。"
+  },
+  {
+   "place": "S5 4841m",
+   "section": "s5",
+   "s": 4841.0,
+   "left": "timber_2m",
+   "right": "timber_2m",
+   "post": "square_09",
+   "length_m": 8.0,
+   "plate": null,
+   "note": "木調低欄干。全長は推定／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 5390m",
+   "section": "s5",
+   "s": 5390.0,
+   "whole": "aouji_bridge",
+   "length_m": 20.0,
+   "note": "片側トラスを含む全構造。県橋梁点検一覧の橋長20mを採用。路面は含まない／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない"
+  },
+  {
+   "place": "S5 8064m",
+   "section": "s5",
+   "s": 8064.0,
+   "left": "concrete_two_2m",
+   "right": "concrete_two_2m",
+   "post": "square_09",
+   "length_m": 6.0,
+   "plate": null,
+   "note": "短い木目風コンクリート／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 8689m",
+   "section": "s5",
+   "s": 8689.0,
+   "left": "steel_white_lattice_2m",
+   "right": "steel_white_two_2m",
+   "post": "square_10",
+   "length_m": 14.0,
+   "plate": null,
+   "note": "BACK右側は角横桁、左側は縦格子／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 8938m",
+   "section": "s5",
+   "s": 8938.0,
+   "left": "steel_white_two_2m",
+   "right": "steel_white_two_2m",
+   "post": null,
+   "length_m": 6.0,
+   "plate": null,
+   "note": "遠景の薄い鋼製欄干／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 9813m",
+   "section": "s5",
+   "s": 9813.0,
+   "left": "steel_white_lattice_2m",
+   "right": "steel_white_lattice_2m",
+   "post": "brick_10",
+   "length_m": 100.0,
+   "plate": null,
+   "note": "0947は前景、0949は橋内、0952は同じ橋終端の可能性。重複配置しない／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 9938m",
+   "section": "s5",
+   "s": 9938.0,
+   "left": "steel_white_lattice_2m",
+   "right": "steel_white_lattice_2m",
+   "post": "brick_10",
+   "length_m": 100.0,
+   "plate": null,
+   "note": "9813の橋と同一候補。レンガ親柱はこの記録で供給／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。",
+   "skip": "S5 9813m と同じ橋の候補"
+  },
+  {
+   "place": "S5 10338m",
+   "section": "s5",
+   "s": 10338.0,
+   "left": "pipe_white_three_2m",
+   "right": "steel_brown_lattice_2m",
+   "post": null,
+   "length_m": 30.0,
+   "plate": null,
+   "note": "BACK左の茶格子は進行方向右。旧橋が並ぶ可能性／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 10513m",
+   "section": "s5",
+   "s": 10513.0,
+   "left": "steel_white_lattice_2m",
+   "right": "steel_white_lattice_2m",
+   "post": "square_11",
+   "length_m": 99.0,
+   "plate": null,
+   "note": "赤アーチと同一橋の取付区間。別橋として重ねない／釜田川橋の有力候補として県PDF10頁・村統計53頁の橋長99mを採用。アーチ支間とは区別。",
+   "skip": "赤いアーチ橋（S5 10588m）の取付区間（Codex：別橋として重ねない）"
+  },
+  {
+   "place": "S5 10588m",
+   "section": "s5",
+   "s": 10588.0,
+   "whole": "red_arch_bridge",
+   "length_m": 99.0,
+   "note": "釜田川橋の全構造。県資料99m。10513の欄干と重複注意／釜田川橋の有力候補として県PDF10頁・村統計53頁の橋長99mを採用。アーチ支間とは区別。"
+  },
+  {
+   "place": "S5 10937m",
+   "section": "s5",
+   "s": 10937.0,
+   "left": "concrete_window_2m",
+   "right": "concrete_window_2m",
+   "tint": {"rgb": [1.0, 0.93, 0.78], "brown_dark": 0.6, "note": "写真 R70-0992_b（2025-07）：苔の付いた古いコンクリート（日なた (143,133,98)、路面との比 0.84・0.81・0.63。ゲームは 0.83・0.87・0.81 で白かった）と焦げ茶の鉄の手すり（2026-11-01）"},
+   "post": "stone_10",
+   "length_m": 40.0,
+   "plate": null,
+   "note": "両側は異なる高さ／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。写真 R70-0992_b：欄干の上の鉄の縦格子は付けない（2026-11-01 ユーザーの判断で除外）。"
+  },
+  {
+   "place": "S5 11037m",
+   "section": "s5",
+   "s": 11037.0,
+   "left": "pipe_white_three_2m",
+   "right": "pipe_white_three_2m",
+   "post": null,
+   "length_m": 50.0,
+   "plate": null,
+   "note": "右外側は旧橋の茶格子。別部品として併記／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 11162m",
+   "section": "s5",
+   "s": 11162.0,
+   "left": "concrete_window_2m",
+   "right": "window_brown_top_2m",
+   "post": "roundcap_10",
+   "length_m": 36.0,
+   "plate": null,
+   "note": "写真右の増設手すりを維持。10937から続く旧橋の可能性／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 11287m",
+   "section": "s5",
+   "s": 11287.0,
+   "left": "concrete_window_2m",
+   "right": "concrete_window_2m",
+   "post": "stone_arch_10",
+   "length_m": 50.0,
+   "plate": null,
+   "note": "1006と1008は同一橋の両端候補／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  },
+  {
+   "place": "S5 11437m",
+   "section": "s5",
+   "s": 11437.0,
+   "left": "steel_brown_lattice_2m",
+   "right": "steel_brown_lattice_2m",
+   "post": "s5_11437_stone",
+   "length_m": 54.0,
+   "plate": null,
+   "note": "親柱は熊野橋の可能性。先頭字が写真左端で切れ、全文の刻字は再現しない／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+  }
+ ],
+ "tunnels": [
+  {
+   "place": "S5 2442m",
+   "section": "s5",
+   "s": 2442.0,
+   "portal_a": "s5_2442_portal",
+   "portal_b": "s5_2442_portal",
+   "note": "大洞トンネル。0652_f坑門の字を拡大して判読。 逆側坑門は指定参照がないため同じ坑門の180°回転で近似。"
+  },
+  {
+   "place": "S5 4091m",
+   "section": "s5",
+   "s": 4091.0,
+   "portal_a": "s5_4091_portal",
+   "portal_b": "s5_4091_portal",
+   "note": "塩水隧道（同定は推定、名板は作らない）。県道70号の3本の順序と小断面。写真に名板なし。 坑門は内部側写真しかなく外観と逆側は推定。別年度資料には25mの記載も"
+  },
+  {
+   "place": "S5 10663m",
+   "section": "s5",
+   "s": 10663.0,
+   "portal_a": "s5_10663_portal",
+   "portal_b": "s5_10937_portal",
+   "note": "吹風トンネル。0992_bの「吹風トンネル」の6字を実画像で判読。県R6一覧と整合。拾い出しの仮称を無確認では使っていない。 中間部の線形・灯具間隔は未実測。直"
+  }
+ ]
+}

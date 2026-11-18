@@ -1,0 +1,425 @@
+{
+  "asset_id": "r70_lights",
+  "source": "r70_lights.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 1500,
+  "parts": [
+    {
+      "name": "arm",
+      "meaning": "円弧アームの独立柱街灯",
+      "triangles": 512,
+      "vertices": 984,
+      "dimensions_m": [
+        0.3614,
+        1.72238,
+        7.07
+      ],
+      "bounds_m": [
+        [
+          -0.180701,
+          -1.64238,
+          0.0
+        ],
+        [
+          0.180701,
+          0.08,
+          7.07
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "arm.png"
+      ],
+      "components": [
+        {
+          "name": "細い鋼管柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 44,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 72,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 100,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 128,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 156,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 184,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 212,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 240,
+          "triangle_count": 28
+        },
+        {
+          "name": "水銀灯風の灯具",
+          "triangle_start": 268,
+          "triangle_count": 128
+        },
+        {
+          "name": "灯具下面のガラス",
+          "triangle_start": 396,
+          "triangle_count": 72
+        },
+        {
+          "name": "柱下端の補強",
+          "triangle_start": 468,
+          "triangle_count": 44
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "灯具輪郭と腕の曲率は写真からの近似。発光・夜間設定は含まない。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0962-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0962_f.jpg",
+          "url": "https://www.google.com/maps/@35.5062529,139.2306142,3a,90y,44.5h,88t/data=!3m4!1e1!3m2!1szyyKv3mNnSpEzJBLa1jyTw!2e0?hl=ja",
+          "description": "細い灰色の柱、先端が道へ曲がり灯具が付く。橋の左端のすぐ先、法面際。高さ約7 m。"
+        },
+        {
+          "oid": "S5-1015-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1016_b.jpg",
+          "url": "https://www.google.com/maps/@35.5174674,139.2313804,3a,90y,144.4h,88t/data=!3m4!1e1!3m2!1s2uBSTqP_6z0A7zMQnszNSQ!2e0?hl=ja",
+          "description": "灰色の細い単柱、先端が道へ曲がる腕、高さ約7m、擁壁の上"
+        },
+        {
+          "oid": "S5-1021-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1021_f.jpg",
+          "url": "https://www.google.com/maps/@35.5186002,139.2310768,3a,90y,347.0h,88t/data=!3m4!1e1!3m2!1sizYB7sUWYbsTH5b657df2Q!2e0?hl=ja",
+          "description": "灰色の単柱、先端が道へ大きく曲がる腕の水銀灯風、高さ約8m、交差点の手前の右縁"
+        },
+        {
+          "oid": "S5-0954-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0956_f.jpg",
+          "url": "https://www.google.com/maps/@35.5053002,139.2294398,3a,90y,29.9h,88t/data=!3m4!1e1!3m2!1sbpr6zoWOm5Q5YmIfQ1j8hQ!2e0?hl=ja",
+          "description": "細い灰色の柱、先端が道へ曲がり灯具が付く。高さ約7 m。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0962-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0962_f.jpg",
+        "url": "https://www.google.com/maps/@35.5062529,139.2306142,3a,90y,44.5h,88t/data=!3m4!1e1!3m2!1szyyKv3mNnSpEzJBLa1jyTw!2e0?hl=ja",
+        "description": "細い灰色の柱、先端が道へ曲がり灯具が付く。橋の左端のすぐ先、法面際。高さ約7 m。"
+      },
+      "preview_views": {
+        "front": "r70_lights_arm_front.png",
+        "left": "r70_lights_arm_left.png",
+        "right": "r70_lights_arm_right.png",
+        "back_estimated": "r70_lights_arm_back_estimated.png",
+        "top": "r70_lights_arm_top.png",
+        "persp": "r70_lights_arm_persp.png",
+        "reference": "r70_lights_arm_reference.png"
+      }
+    },
+    {
+      "name": "arm_arc",
+      "meaning": "円弧アームの独立柱街灯",
+      "triangles": 512,
+      "vertices": 984,
+      "dimensions_m": [
+        0.3614,
+        1.72238,
+        7.47
+      ],
+      "bounds_m": [
+        [
+          -0.180701,
+          -1.64238,
+          0.0
+        ],
+        [
+          0.180701,
+          0.08,
+          7.47
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "arm_arc.png"
+      ],
+      "components": [
+        {
+          "name": "細い鋼管柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 44,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 72,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 100,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 128,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 156,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 184,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 212,
+          "triangle_count": 28
+        },
+        {
+          "name": "円弧のアーム",
+          "triangle_start": 240,
+          "triangle_count": 28
+        },
+        {
+          "name": "水銀灯風の灯具",
+          "triangle_start": 268,
+          "triangle_count": 128
+        },
+        {
+          "name": "灯具下面のガラス",
+          "triangle_start": 396,
+          "triangle_count": 72
+        },
+        {
+          "name": "柱下端の補強",
+          "triangle_start": 468,
+          "triangle_count": 44
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "灯具輪郭と腕の曲率は写真からの近似。発光・夜間設定は含まない。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0981-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0982_b.jpg",
+          "url": "https://www.google.com/maps/@35.5106693,139.231301,3a,90y,184.7h,88t/data=!3m4!1e1!3m2!1sPuilbu9_IeL2orAcqnrYAQ!2e0?hl=ja",
+          "description": "左の路肩の細い鋼管ポール、先端が道の方へ弧を描く照明、高さ約7m。トンネル坑口の左"
+        },
+        {
+          "oid": "S5-0784-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_b.jpg",
+          "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,273.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+          "description": "木製土留め壁に付いた小さな灯具（円筒グローブ）"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0981-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0982_b.jpg",
+        "url": "https://www.google.com/maps/@35.5106693,139.231301,3a,90y,184.7h,88t/data=!3m4!1e1!3m2!1sPuilbu9_IeL2orAcqnrYAQ!2e0?hl=ja",
+        "description": "左の路肩の細い鋼管ポール、先端が道の方へ弧を描く照明、高さ約7m。トンネル坑口の左"
+      },
+      "preview_views": {
+        "front": "r70_lights_arm_arc_front.png",
+        "left": "r70_lights_arm_arc_left.png",
+        "right": "r70_lights_arm_arc_right.png",
+        "back_estimated": "r70_lights_arm_arc_back_estimated.png",
+        "top": "r70_lights_arm_arc_top.png",
+        "persp": "r70_lights_arm_arc_persp.png",
+        "reference": "r70_lights_arm_arc_reference.png"
+      }
+    },
+    {
+      "name": "wall",
+      "meaning": "土留め壁の小型グローブ灯",
+      "triangles": 164,
+      "vertices": 336,
+      "dimensions_m": [
+        0.2,
+        0.355,
+        0.44
+      ],
+      "bounds_m": [
+        [
+          -0.1,
+          -0.3,
+          0.0
+        ],
+        [
+          0.1,
+          0.055,
+          0.44
+        ]
+      ],
+      "origin": "取付基準中央の最下点。地上に直接立てる部品ではない。",
+      "front": "-Y",
+      "textures": [
+        "wall.png"
+      ],
+      "components": [
+        {
+          "name": "壁の取付板",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い壁付け腕",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "グローブ台",
+          "triangle_start": 24,
+          "triangle_count": 44
+        },
+        {
+          "name": "円筒グローブ",
+          "triangle_start": 68,
+          "triangle_count": 96
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "写真の解像度が低いため細部と寸法は推定。原点は灯具下面を含む取付位置基準。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0981-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0982_b.jpg",
+          "url": "https://www.google.com/maps/@35.5106693,139.231301,3a,90y,184.7h,88t/data=!3m4!1e1!3m2!1sPuilbu9_IeL2orAcqnrYAQ!2e0?hl=ja",
+          "description": "左の路肩の細い鋼管ポール、先端が道の方へ弧を描く照明、高さ約7m。トンネル坑口の左"
+        },
+        {
+          "oid": "S5-0784-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_b.jpg",
+          "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,273.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+          "description": "木製土留め壁に付いた小さな灯具（円筒グローブ）"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0784-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_b.jpg",
+        "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,273.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+        "description": "木製土留め壁に付いた小さな灯具（円筒グローブ）"
+      },
+      "preview_views": {
+        "front": "r70_lights_wall_front.png",
+        "left": "r70_lights_wall_left.png",
+        "right": "r70_lights_wall_right.png",
+        "back_estimated": "r70_lights_wall_back_estimated.png",
+        "top": "r70_lights_wall_top.png",
+        "persp": "r70_lights_wall_persp.png",
+        "reference": "r70_lights_wall_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "S5-0981-01は壁付けではなくarm_arc。wallはS5-0784-04のみ。"
+  ],
+  "references": {
+    "arm": [
+      {
+        "oid": "S5-0962-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0962_f.jpg",
+        "url": "https://www.google.com/maps/@35.5062529,139.2306142,3a,90y,44.5h,88t/data=!3m4!1e1!3m2!1szyyKv3mNnSpEzJBLa1jyTw!2e0?hl=ja",
+        "description": "細い灰色の柱、先端が道へ曲がり灯具が付く。橋の左端のすぐ先、法面際。高さ約7 m。"
+      },
+      {
+        "oid": "S5-1015-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1016_b.jpg",
+        "url": "https://www.google.com/maps/@35.5174674,139.2313804,3a,90y,144.4h,88t/data=!3m4!1e1!3m2!1s2uBSTqP_6z0A7zMQnszNSQ!2e0?hl=ja",
+        "description": "灰色の細い単柱、先端が道へ曲がる腕、高さ約7m、擁壁の上"
+      },
+      {
+        "oid": "S5-1021-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1021_f.jpg",
+        "url": "https://www.google.com/maps/@35.5186002,139.2310768,3a,90y,347.0h,88t/data=!3m4!1e1!3m2!1sizYB7sUWYbsTH5b657df2Q!2e0?hl=ja",
+        "description": "灰色の単柱、先端が道へ大きく曲がる腕の水銀灯風、高さ約8m、交差点の手前の右縁"
+      },
+      {
+        "oid": "S5-0954-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0956_f.jpg",
+        "url": "https://www.google.com/maps/@35.5053002,139.2294398,3a,90y,29.9h,88t/data=!3m4!1e1!3m2!1sbpr6zoWOm5Q5YmIfQ1j8hQ!2e0?hl=ja",
+        "description": "細い灰色の柱、先端が道へ曲がり灯具が付く。高さ約7 m。"
+      }
+    ],
+    "wall": [
+      {
+        "oid": "S5-0981-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0982_b.jpg",
+        "url": "https://www.google.com/maps/@35.5106693,139.231301,3a,90y,184.7h,88t/data=!3m4!1e1!3m2!1sPuilbu9_IeL2orAcqnrYAQ!2e0?hl=ja",
+        "description": "左の路肩の細い鋼管ポール、先端が道の方へ弧を描く照明、高さ約7m。トンネル坑口の左"
+      },
+      {
+        "oid": "S5-0784-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_b.jpg",
+        "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,273.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+        "description": "木製土留め壁に付いた小さな灯具（円筒グローブ）"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "arm",
+    "image": "R70-0962_f.jpg",
+    "crop_pixels": [
+      400,
+      160,
+      640,
+      600
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

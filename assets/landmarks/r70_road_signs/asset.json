@@ -1,0 +1,1170 @@
+{
+  "asset_id": "r70_road_signs",
+  "source": "r70_road_signs.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 1000,
+  "parts": [
+    {
+      "name": "warning_diamond",
+      "meaning": "45cm角の警戒ひし形・白柱",
+      "triangles": 50,
+      "vertices": 88,
+      "dimensions_m": [
+        0.6364,
+        0.09583,
+        2.5182
+      ],
+      "bounds_m": [
+        [
+          -0.318198,
+          -0.0673,
+          0.0
+        ],
+        [
+          0.318198,
+          0.028532,
+          2.518198
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "warning_diamond.png",
+        "warning_diamond_face_deer.png",
+        "warning_diamond_face_left.png",
+        "warning_diamond_face_right.png"
+      ],
+      "components": [
+        {
+          "name": "45cm角の警戒ひし形",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "45cm角の警戒ひし形 印刷面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "白い支柱",
+          "triangle_start": 14,
+          "triangle_count": 36
+        }
+      ],
+      "dimension_basis": "https://laws.e-gov.go.jp/law/335M50004002003/ 別表第二（図092:警戒45cm、120:丸60cm、059/060:交差道路標識80cm）。work/reference_audit.md参照。",
+      "approximations": [
+        "鹿の図柄は写真の輪郭から近似。支柱中心高2.2mは写真推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0313-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0313_f.jpg",
+          "url": "https://www.google.com/maps/@35.4303231,139.2158968,3a,90y,329.1h,88t/data=!3m4!1e1!3m2!1sxZY4tp1f9EigqRgkh3XtaQ!2e0?hl=ja",
+          "description": "黄色いひし形（一辺約0.6〜0.8 m）、黒い鹿の跳ねる図柄。白い細い柱（高さ約2 m）。道の左端のすぐ脇"
+        },
+        {
+          "oid": "S4-0380-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+          "description": "細い柱に付く黄橙色の縦長の板、幅約0.4 m・高さ約0.8 m、黒字2列。高さ約2 m。"
+        },
+        {
+          "oid": "S4-0385-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_b.jpg",
+          "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,159.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+          "description": "灰色の細い柱にひし形の警戒標識（黄橙色、黒い右カーブの矢印、幅約0.6 m）。その下に縦書きの補助板「右カーブ／注意」（黄橙色、約0.4×0.7 m）。後ろ向き（峠へ向かう車用）。高さ約2.5 m。道の左（山側でなく谷側のガードレールの内側）。"
+        },
+        {
+          "oid": "S4-0468-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0468_b.jpg",
+          "url": "https://www.google.com/maps/@35.4492353,139.2133735,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1s08ISPoSgaV1H5L-IFS5Pig!2e0?hl=ja",
+          "description": "黄色いひし形（一辺約 0.6 m）、黒い曲がり矢印は右へ折れる向き、細い鉄柱。後ろ画像の右端＝進行左側の橋のたもと"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0313-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0313_f.jpg",
+        "url": "https://www.google.com/maps/@35.4303231,139.2158968,3a,90y,329.1h,88t/data=!3m4!1e1!3m2!1sxZY4tp1f9EigqRgkh3XtaQ!2e0?hl=ja",
+        "description": "黄色いひし形（一辺約0.6〜0.8 m）、黒い鹿の跳ねる図柄。白い細い柱（高さ約2 m）。道の左端のすぐ脇"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_warning_diamond_front.png",
+        "left": "r70_road_signs_warning_diamond_left.png",
+        "right": "r70_road_signs_warning_diamond_right.png",
+        "back_estimated": "r70_road_signs_warning_diamond_back_estimated.png",
+        "top": "r70_road_signs_warning_diamond_top.png",
+        "persp": "r70_road_signs_warning_diamond_persp.png",
+        "reference": "r70_road_signs_warning_diamond_reference.png"
+      }
+    },
+    {
+      "name": "warning_diamond_with_text",
+      "meaning": "右カーブの警戒ひし形＋縦書き補助板・一本柱",
+      "triangles": 64,
+      "vertices": 116,
+      "dimensions_m": [
+        0.6364,
+        0.09703,
+        2.9682
+      ],
+      "bounds_m": [
+        [
+          -0.318198,
+          -0.0685,
+          0.0
+        ],
+        [
+          0.318198,
+          0.028532,
+          2.968198
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "warning_diamond_with_text.png",
+        "warning_diamond_with_text_face_right_curve.png"
+      ],
+      "components": [
+        {
+          "name": "警戒ひし形と補助板の上板",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "警戒ひし形と補助板の上板 印刷面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "共用の一本柱",
+          "triangle_start": 14,
+          "triangle_count": 36
+        },
+        {
+          "name": "黄橙色の補助板",
+          "triangle_start": 50,
+          "triangle_count": 12
+        },
+        {
+          "name": "補助板の右カーブ注意",
+          "triangle_start": 62,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "https://laws.e-gov.go.jp/law/335M50004002003/ 別表第二（図092:警戒45cm、120:丸60cm、059/060:交差道路標識80cm）。work/reference_audit.md参照。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0313-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0313_f.jpg",
+          "url": "https://www.google.com/maps/@35.4303231,139.2158968,3a,90y,329.1h,88t/data=!3m4!1e1!3m2!1sxZY4tp1f9EigqRgkh3XtaQ!2e0?hl=ja",
+          "description": "黄色いひし形（一辺約0.6〜0.8 m）、黒い鹿の跳ねる図柄。白い細い柱（高さ約2 m）。道の左端のすぐ脇"
+        },
+        {
+          "oid": "S4-0380-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+          "description": "細い柱に付く黄橙色の縦長の板、幅約0.4 m・高さ約0.8 m、黒字2列。高さ約2 m。"
+        },
+        {
+          "oid": "S4-0385-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_b.jpg",
+          "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,159.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+          "description": "灰色の細い柱にひし形の警戒標識（黄橙色、黒い右カーブの矢印、幅約0.6 m）。その下に縦書きの補助板「右カーブ／注意」（黄橙色、約0.4×0.7 m）。後ろ向き（峠へ向かう車用）。高さ約2.5 m。道の左（山側でなく谷側のガードレールの内側）。"
+        },
+        {
+          "oid": "S4-0468-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0468_b.jpg",
+          "url": "https://www.google.com/maps/@35.4492353,139.2133735,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1s08ISPoSgaV1H5L-IFS5Pig!2e0?hl=ja",
+          "description": "黄色いひし形（一辺約 0.6 m）、黒い曲がり矢印は右へ折れる向き、細い鉄柱。後ろ画像の右端＝進行左側の橋のたもと"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0385-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_b.jpg",
+        "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,159.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+        "description": "灰色の細い柱にひし形の警戒標識（黄橙色、黒い右カーブの矢印、幅約0.6 m）。その下に縦書きの補助板「右カーブ／注意」（黄橙色、約0.4×0.7 m）。後ろ向き（峠へ向かう車用）。高さ約2.5 m。道の左（山側でなく谷側のガードレールの内側）。"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_warning_diamond_with_text_front.png",
+        "left": "r70_road_signs_warning_diamond_with_text_left.png",
+        "right": "r70_road_signs_warning_diamond_with_text_right.png",
+        "back_estimated": "r70_road_signs_warning_diamond_with_text_back_estimated.png",
+        "top": "r70_road_signs_warning_diamond_with_text_top.png",
+        "persp": "r70_road_signs_warning_diamond_with_text_persp.png",
+        "reference": "r70_road_signs_warning_diamond_with_text_reference.png"
+      }
+    },
+    {
+      "name": "warning_text",
+      "meaning": "黄橙の縦長注意板（ひし形とは別形）",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.4,
+        0.099,
+        2.4
+      ],
+      "bounds_m": [
+        [
+          -0.2,
+          -0.073,
+          0.0
+        ],
+        [
+          0.2,
+          0.026,
+          2.4
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "warning_text.png",
+        "warning_text_face_construction_50m.png",
+        "warning_text_face_narrow.png",
+        "warning_text_face_right_curve.png",
+        "warning_text_face_left_curve.png",
+        "warning_text_face_slow.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0313-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0313_f.jpg",
+          "url": "https://www.google.com/maps/@35.4303231,139.2158968,3a,90y,329.1h,88t/data=!3m4!1e1!3m2!1sxZY4tp1f9EigqRgkh3XtaQ!2e0?hl=ja",
+          "description": "黄色いひし形（一辺約0.6〜0.8 m）、黒い鹿の跳ねる図柄。白い細い柱（高さ約2 m）。道の左端のすぐ脇"
+        },
+        {
+          "oid": "S4-0380-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+          "description": "細い柱に付く黄橙色の縦長の板、幅約0.4 m・高さ約0.8 m、黒字2列。高さ約2 m。"
+        },
+        {
+          "oid": "S4-0385-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_b.jpg",
+          "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,159.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+          "description": "灰色の細い柱にひし形の警戒標識（黄橙色、黒い右カーブの矢印、幅約0.6 m）。その下に縦書きの補助板「右カーブ／注意」（黄橙色、約0.4×0.7 m）。後ろ向き（峠へ向かう車用）。高さ約2.5 m。道の左（山側でなく谷側のガードレールの内側）。"
+        },
+        {
+          "oid": "S4-0468-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0468_b.jpg",
+          "url": "https://www.google.com/maps/@35.4492353,139.2133735,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1s08ISPoSgaV1H5L-IFS5Pig!2e0?hl=ja",
+          "description": "黄色いひし形（一辺約 0.6 m）、黒い曲がり矢印は右へ折れる向き、細い鉄柱。後ろ画像の右端＝進行左側の橋のたもと"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0313-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0313_f.jpg",
+        "url": "https://www.google.com/maps/@35.4303231,139.2158968,3a,90y,329.1h,88t/data=!3m4!1e1!3m2!1sxZY4tp1f9EigqRgkh3XtaQ!2e0?hl=ja",
+        "description": "黄色いひし形（一辺約0.6〜0.8 m）、黒い鹿の跳ねる図柄。白い細い柱（高さ約2 m）。道の左端のすぐ脇"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_warning_text_front.png",
+        "left": "r70_road_signs_warning_text_left.png",
+        "right": "r70_road_signs_warning_text_right.png",
+        "back_estimated": "r70_road_signs_warning_text_back_estimated.png",
+        "top": "r70_road_signs_warning_text_top.png",
+        "persp": "r70_road_signs_warning_text_persp.png",
+        "reference": "r70_road_signs_warning_text_reference.png"
+      }
+    },
+    {
+      "name": "regulatory_round",
+      "meaning": "最高速度・転回禁止の丸標識",
+      "triangles": 230,
+      "vertices": 340,
+      "dimensions_m": [
+        0.6,
+        0.09633,
+        2.5
+      ],
+      "bounds_m": [
+        [
+          -0.3,
+          -0.0678,
+          0.0
+        ],
+        [
+          0.3,
+          0.028532,
+          2.5
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "regulatory_round.png",
+        "regulatory_round_face_30.png",
+        "regulatory_round_face_40.png",
+        "regulatory_round_face_no_uturn.png"
+      ],
+      "components": [
+        {
+          "name": "直径60cm丸標識",
+          "triangle_start": 0,
+          "triangle_count": 156
+        },
+        {
+          "name": "直径60cm丸標識 印刷面",
+          "triangle_start": 156,
+          "triangle_count": 38
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 194,
+          "triangle_count": 36
+        }
+      ],
+      "dimension_basis": "https://laws.e-gov.go.jp/law/335M50004002003/ 別表第二（図092:警戒45cm、120:丸60cm、059/060:交差道路標識80cm）。work/reference_audit.md参照。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0355-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+          "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+          "description": "細い灰色の柱に付く丸い規制標識（直径約0.6 m、赤い縁、白地に青の「30」）。高さ約2 m、ガードレールの外側、電柱の脇。根元にオレンジ色のドラム（コーン）が2個。"
+        },
+        {
+          "oid": "S5-0777-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_b.jpg",
+          "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+          "description": "白地の方形板、約0.6×0.9m、文字は黒、ガードレールの支柱に木杭で支える。上部に小さな札、板は傾いて古い"
+        },
+        {
+          "oid": "S5-0993-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0993_f.jpg",
+          "url": "https://www.google.com/maps/@35.5131353,139.2317263,3a,90y,24.0h,88t/data=!3m4!1e1!3m2!1sdUe4e4mV5oZZDewVx-KP2A!2e0?hl=ja",
+          "description": "丸い規制標識が横に2枚並ぶ。左はUターン禁止（赤丸、青地に黒のUターン矢印の赤斜線ではなく赤輪）、右は最高速度40km/h。直径約0.6m、下に補助標識（白い横長の矢印板）。細い銀色の1本柱。道の左縁から約2m"
+        },
+        {
+          "oid": "S5-0928-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0928_b.jpg",
+          "url": "https://www.google.com/maps/@35.4997222,139.2319696,3a,90y,204.1h,88t/data=!3m4!1e1!3m2!1sAdh8hvbspjRZUTfirioZjw!2e0?hl=ja",
+          "description": "白地の縦長看板（約0.6×1.2m）、青文字で「…ング／（通）行禁止」、下に厚木土木事務所・厚木警察署の名。細い白い単柱、高さ約3m。ガードレール切れ目のすぐ後ろに立つ。裏から見える後方画像のみ"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0355-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+        "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+        "description": "細い灰色の柱に付く丸い規制標識（直径約0.6 m、赤い縁、白地に青の「30」）。高さ約2 m、ガードレールの外側、電柱の脇。根元にオレンジ色のドラム（コーン）が2個。"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_regulatory_round_front.png",
+        "left": "r70_road_signs_regulatory_round_left.png",
+        "right": "r70_road_signs_regulatory_round_right.png",
+        "back_estimated": "r70_road_signs_regulatory_round_back_estimated.png",
+        "top": "r70_road_signs_regulatory_round_top.png",
+        "persp": "r70_road_signs_regulatory_round_persp.png",
+        "reference": "r70_road_signs_regulatory_round_reference.png"
+      }
+    },
+    {
+      "name": "regulatory_double",
+      "meaning": "転回禁止＋最高速度40の横並び二枚と左右矢印",
+      "triangles": 370,
+      "vertices": 560,
+      "dimensions_m": [
+        1.35,
+        0.12824,
+        2.7
+      ],
+      "bounds_m": [
+        [
+          -0.675,
+          -0.094,
+          0.0
+        ],
+        [
+          0.675,
+          0.034238,
+          2.7
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "regulatory_double.png",
+        "regulatory_double_face_no_uturn_40.png"
+      ],
+      "components": [
+        {
+          "name": "共通支柱",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "横腕",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "丸板0",
+          "triangle_start": 48,
+          "triangle_count": 124
+        },
+        {
+          "name": "丸板0 印刷面",
+          "triangle_start": 172,
+          "triangle_count": 30
+        },
+        {
+          "name": "丸板1",
+          "triangle_start": 202,
+          "triangle_count": 124
+        },
+        {
+          "name": "丸板1 印刷面",
+          "triangle_start": 326,
+          "triangle_count": 30
+        },
+        {
+          "name": "補助標識の厚み",
+          "triangle_start": 356,
+          "triangle_count": 12
+        },
+        {
+          "name": "左右矢印",
+          "triangle_start": 368,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "https://laws.e-gov.go.jp/law/335M50004002003/ 別表第二（図092:警戒45cm、120:丸60cm、059/060:交差道路標識80cm）。work/reference_audit.md参照。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0355-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+          "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+          "description": "細い灰色の柱に付く丸い規制標識（直径約0.6 m、赤い縁、白地に青の「30」）。高さ約2 m、ガードレールの外側、電柱の脇。根元にオレンジ色のドラム（コーン）が2個。"
+        },
+        {
+          "oid": "S5-0777-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_b.jpg",
+          "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+          "description": "白地の方形板、約0.6×0.9m、文字は黒、ガードレールの支柱に木杭で支える。上部に小さな札、板は傾いて古い"
+        },
+        {
+          "oid": "S5-0993-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0993_f.jpg",
+          "url": "https://www.google.com/maps/@35.5131353,139.2317263,3a,90y,24.0h,88t/data=!3m4!1e1!3m2!1sdUe4e4mV5oZZDewVx-KP2A!2e0?hl=ja",
+          "description": "丸い規制標識が横に2枚並ぶ。左はUターン禁止（赤丸、青地に黒のUターン矢印の赤斜線ではなく赤輪）、右は最高速度40km/h。直径約0.6m、下に補助標識（白い横長の矢印板）。細い銀色の1本柱。道の左縁から約2m"
+        },
+        {
+          "oid": "S5-0928-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0928_b.jpg",
+          "url": "https://www.google.com/maps/@35.4997222,139.2319696,3a,90y,204.1h,88t/data=!3m4!1e1!3m2!1sAdh8hvbspjRZUTfirioZjw!2e0?hl=ja",
+          "description": "白地の縦長看板（約0.6×1.2m）、青文字で「…ング／（通）行禁止」、下に厚木土木事務所・厚木警察署の名。細い白い単柱、高さ約3m。ガードレール切れ目のすぐ後ろに立つ。裏から見える後方画像のみ"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0993-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0993_f.jpg",
+        "url": "https://www.google.com/maps/@35.5131353,139.2317263,3a,90y,24.0h,88t/data=!3m4!1e1!3m2!1sdUe4e4mV5oZZDewVx-KP2A!2e0?hl=ja",
+        "description": "丸い規制標識が横に2枚並ぶ。左はUターン禁止（赤丸、青地に黒のUターン矢印の赤斜線ではなく赤輪）、右は最高速度40km/h。直径約0.6m、下に補助標識（白い横長の矢印板）。細い銀色の1本柱。道の左縁から約2m"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_regulatory_double_front.png",
+        "left": "r70_road_signs_regulatory_double_left.png",
+        "right": "r70_road_signs_regulatory_double_right.png",
+        "back_estimated": "r70_road_signs_regulatory_double_back_estimated.png",
+        "top": "r70_road_signs_regulatory_double_top.png",
+        "persp": "r70_road_signs_regulatory_double_persp.png",
+        "reference": "r70_road_signs_regulatory_double_reference.png"
+      }
+    },
+    {
+      "name": "route_hexagon",
+      "meaning": "県道70の六角形路線番号板",
+      "triangles": 60,
+      "vertices": 102,
+      "dimensions_m": [
+        0.46,
+        0.08943,
+        2.5
+      ],
+      "bounds_m": [
+        [
+          -0.23,
+          -0.0628,
+          0.0
+        ],
+        [
+          0.23,
+          0.02663,
+          2.5
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "route_hexagon.png",
+        "route_hexagon_face_70.png"
+      ],
+      "components": [
+        {
+          "name": "県道番号六角板",
+          "triangle_start": 0,
+          "triangle_count": 20
+        },
+        {
+          "name": "県道番号六角板 印刷面",
+          "triangle_start": 20,
+          "triangle_count": 4
+        },
+        {
+          "name": "細い白い柱",
+          "triangle_start": 24,
+          "triangle_count": 36
+        }
+      ],
+      "dimension_basis": "https://laws.e-gov.go.jp/law/335M50004002003/ 別表第二（図092:警戒45cm、120:丸60cm、059/060:交差道路標識80cm）。work/reference_audit.md参照。 通常県道盾は外接幅0.46m・高さ0.40mを写真比で推定。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0557-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0557_b.jpg",
+          "url": "https://www.google.com/maps/@35.4657676,139.2136238,3a,90y,174.8h,88t/data=!3m4!1e1!3m2!1sH_q8l_1E8vzCECsC1Wx7mg!2e0?hl=ja",
+          "description": "青い六角形（おむすび形）の県道番号標識、数字「70」白、直径約0.5 m、その下に小さな白い地名板。細い白い鋼管の柱1本、地面からの高さ約2.5 m、ガードレールの外側（谷側）の苔の斜面から立つ"
+        },
+        {
+          "oid": "S5-0964-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0964_b.jpg",
+          "url": "https://www.google.com/maps/@35.5066362,139.2308966,3a,90y,197.5h,88t/data=!3m4!1e1!3m2!1sbHct9bTs8LmDwThe-yp-5g!2e0?hl=ja",
+          "description": "青い丸（逆三角形ではなく円形に近い、県道の番号標識）に白で「70」。細い灰色の柱、ガードレール脇の路肩。直径約0.5 m、高さ約2.2 m。"
+        },
+        {
+          "oid": "S5-1022-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_f.jpg",
+          "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,337.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja",
+          "description": "青緑色の細長い六角形の路線標識、白字「64」、直径約0.4m×0.25m、灰色の細い単柱（高さ約3m）の上部に付く。道路左側の擁壁の前の歩道"
+        },
+        {
+          "oid": "S4-0453-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0454_b.jpg",
+          "url": "https://www.google.com/maps/@35.4466001,139.212317,3a,90y,149.0h,88t/data=!3m4!1e1!3m2!1sQhxkmoNjIqFaTvVuhas9pA!2e0?hl=ja",
+          "description": "丸い暗色地の小さな標識、直径約 0.35 m、白字「70」。電柱の中ほど（約 2.5 m）に付く。下に小さな補助板"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0557-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0557_b.jpg",
+        "url": "https://www.google.com/maps/@35.4657676,139.2136238,3a,90y,174.8h,88t/data=!3m4!1e1!3m2!1sH_q8l_1E8vzCECsC1Wx7mg!2e0?hl=ja",
+        "description": "青い六角形（おむすび形）の県道番号標識、数字「70」白、直径約0.5 m、その下に小さな白い地名板。細い白い鋼管の柱1本、地面からの高さ約2.5 m、ガードレールの外側（谷側）の苔の斜面から立つ"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_route_hexagon_front.png",
+        "left": "r70_road_signs_route_hexagon_left.png",
+        "right": "r70_road_signs_route_hexagon_right.png",
+        "back_estimated": "r70_road_signs_route_hexagon_back_estimated.png",
+        "top": "r70_road_signs_route_hexagon_top.png",
+        "persp": "r70_road_signs_route_hexagon_persp.png",
+        "reference": "r70_road_signs_route_hexagon_reference.png"
+      }
+    },
+    {
+      "name": "route_hexagon_place",
+      "meaning": "県道70＋白い清川村の地名小板",
+      "triangles": 74,
+      "vertices": 130,
+      "dimensions_m": [
+        0.46,
+        0.09013,
+        2.5
+      ],
+      "bounds_m": [
+        [
+          -0.23,
+          -0.0635,
+          0.0
+        ],
+        [
+          0.23,
+          0.02663,
+          2.5
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "route_hexagon_place.png",
+        "route_hexagon_place_face_70_清川村.png"
+      ],
+      "components": [
+        {
+          "name": "県道番号六角板",
+          "triangle_start": 0,
+          "triangle_count": 20
+        },
+        {
+          "name": "県道番号六角板 印刷面",
+          "triangle_start": 20,
+          "triangle_count": 4
+        },
+        {
+          "name": "細い白い柱",
+          "triangle_start": 24,
+          "triangle_count": 36
+        },
+        {
+          "name": "県道盾下の白い地名板",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "清川村の印刷面",
+          "triangle_start": 72,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "https://laws.e-gov.go.jp/law/335M50004002003/ 別表第二（図092:警戒45cm、120:丸60cm、059/060:交差道路標識80cm）。work/reference_audit.md参照。",
+      "approximations": [
+        "白い小板の下段は判読できないため空白。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0557-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0557_b.jpg",
+          "url": "https://www.google.com/maps/@35.4657676,139.2136238,3a,90y,174.8h,88t/data=!3m4!1e1!3m2!1sH_q8l_1E8vzCECsC1Wx7mg!2e0?hl=ja",
+          "description": "青い六角形（おむすび形）の県道番号標識、数字「70」白、直径約0.5 m、その下に小さな白い地名板。細い白い鋼管の柱1本、地面からの高さ約2.5 m、ガードレールの外側（谷側）の苔の斜面から立つ"
+        },
+        {
+          "oid": "S5-0964-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0964_b.jpg",
+          "url": "https://www.google.com/maps/@35.5066362,139.2308966,3a,90y,197.5h,88t/data=!3m4!1e1!3m2!1sbHct9bTs8LmDwThe-yp-5g!2e0?hl=ja",
+          "description": "青い丸（逆三角形ではなく円形に近い、県道の番号標識）に白で「70」。細い灰色の柱、ガードレール脇の路肩。直径約0.5 m、高さ約2.2 m。"
+        },
+        {
+          "oid": "S5-1022-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_f.jpg",
+          "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,337.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja",
+          "description": "青緑色の細長い六角形の路線標識、白字「64」、直径約0.4m×0.25m、灰色の細い単柱（高さ約3m）の上部に付く。道路左側の擁壁の前の歩道"
+        },
+        {
+          "oid": "S4-0453-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0454_b.jpg",
+          "url": "https://www.google.com/maps/@35.4466001,139.212317,3a,90y,149.0h,88t/data=!3m4!1e1!3m2!1sQhxkmoNjIqFaTvVuhas9pA!2e0?hl=ja",
+          "description": "丸い暗色地の小さな標識、直径約 0.35 m、白字「70」。電柱の中ほど（約 2.5 m）に付く。下に小さな補助板"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0557-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0557_b.jpg",
+        "url": "https://www.google.com/maps/@35.4657676,139.2136238,3a,90y,174.8h,88t/data=!3m4!1e1!3m2!1sH_q8l_1E8vzCECsC1Wx7mg!2e0?hl=ja",
+        "description": "青い六角形（おむすび形）の県道番号標識、数字「70」白、直径約0.5 m、その下に小さな白い地名板。細い白い鋼管の柱1本、地面からの高さ約2.5 m、ガードレールの外側（谷側）の苔の斜面から立つ"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_route_hexagon_place_front.png",
+        "left": "r70_road_signs_route_hexagon_place_left.png",
+        "right": "r70_road_signs_route_hexagon_place_right.png",
+        "back_estimated": "r70_road_signs_route_hexagon_place_back_estimated.png",
+        "top": "r70_road_signs_route_hexagon_place_top.png",
+        "persp": "r70_road_signs_route_hexagon_place_persp.png",
+        "reference": "r70_road_signs_route_hexagon_place_reference.png"
+      }
+    },
+    {
+      "name": "route_crossroad_64",
+      "meaning": "交差道路標識118の2-B/C、中央六角盾64",
+      "triangles": 84,
+      "vertices": 144,
+      "dimensions_m": [
+        0.8,
+        0.12283,
+        2.735
+      ],
+      "bounds_m": [
+        [
+          -0.4,
+          -0.0943,
+          0.0
+        ],
+        [
+          0.4,
+          0.028532,
+          2.735
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "route_crossroad_64.png",
+        "route_crossroad_64_face_64.png"
+      ],
+      "components": [
+        {
+          "name": "80cm幅の交差道路横板",
+          "triangle_start": 0,
+          "triangle_count": 20
+        },
+        {
+          "name": "80cm幅の交差道路横板 印刷面",
+          "triangle_start": 20,
+          "triangle_count": 4
+        },
+        {
+          "name": "中央の青い六角盾64",
+          "triangle_start": 24,
+          "triangle_count": 20
+        },
+        {
+          "name": "中央の青い六角盾64 印刷面",
+          "triangle_start": 44,
+          "triangle_count": 4
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 48,
+          "triangle_count": 36
+        }
+      ],
+      "dimension_basis": "https://laws.e-gov.go.jp/law/335M50004002003/ 別表第二（図092:警戒45cm、120:丸60cm、059/060:交差道路標識80cm）。work/reference_audit.md参照。",
+      "approximations": [
+        "中央の青い盾を横板より上下各15mm突出させた。微細な県道欄は省略。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0557-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0557_b.jpg",
+          "url": "https://www.google.com/maps/@35.4657676,139.2136238,3a,90y,174.8h,88t/data=!3m4!1e1!3m2!1sH_q8l_1E8vzCECsC1Wx7mg!2e0?hl=ja",
+          "description": "青い六角形（おむすび形）の県道番号標識、数字「70」白、直径約0.5 m、その下に小さな白い地名板。細い白い鋼管の柱1本、地面からの高さ約2.5 m、ガードレールの外側（谷側）の苔の斜面から立つ"
+        },
+        {
+          "oid": "S5-0964-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0964_b.jpg",
+          "url": "https://www.google.com/maps/@35.5066362,139.2308966,3a,90y,197.5h,88t/data=!3m4!1e1!3m2!1sbHct9bTs8LmDwThe-yp-5g!2e0?hl=ja",
+          "description": "青い丸（逆三角形ではなく円形に近い、県道の番号標識）に白で「70」。細い灰色の柱、ガードレール脇の路肩。直径約0.5 m、高さ約2.2 m。"
+        },
+        {
+          "oid": "S5-1022-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_f.jpg",
+          "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,337.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja",
+          "description": "青緑色の細長い六角形の路線標識、白字「64」、直径約0.4m×0.25m、灰色の細い単柱（高さ約3m）の上部に付く。道路左側の擁壁の前の歩道"
+        },
+        {
+          "oid": "S4-0453-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0454_b.jpg",
+          "url": "https://www.google.com/maps/@35.4466001,139.212317,3a,90y,149.0h,88t/data=!3m4!1e1!3m2!1sQhxkmoNjIqFaTvVuhas9pA!2e0?hl=ja",
+          "description": "丸い暗色地の小さな標識、直径約 0.35 m、白字「70」。電柱の中ほど（約 2.5 m）に付く。下に小さな補助板"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-1022-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_f.jpg",
+        "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,337.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja",
+        "description": "青緑色の細長い六角形の路線標識、白字「64」、直径約0.4m×0.25m、灰色の細い単柱（高さ約3m）の上部に付く。道路左側の擁壁の前の歩道"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_route_crossroad_64_front.png",
+        "left": "r70_road_signs_route_crossroad_64_left.png",
+        "right": "r70_road_signs_route_crossroad_64_right.png",
+        "back_estimated": "r70_road_signs_route_crossroad_64_back_estimated.png",
+        "top": "r70_road_signs_route_crossroad_64_top.png",
+        "persp": "r70_road_signs_route_crossroad_64_persp.png",
+        "reference": "r70_road_signs_route_crossroad_64_reference.png"
+      }
+    },
+    {
+      "name": "bridge_name_plate",
+      "meaning": "青白の縦書き橋名板",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.35,
+        0.098,
+        2.525
+      ],
+      "bounds_m": [
+        [
+          -0.175,
+          -0.073,
+          0.0
+        ],
+        [
+          0.175,
+          0.025,
+          2.525
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "bridge_name_plate.png",
+        "bridge_name_plate_face_檜沢橋.png",
+        "bridge_name_plate_face_常世橋.png",
+        "bridge_name_plate_face_地獄沢橋.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "札掛橋・清滝橋・?小屋橋は判読不確かなため文字画像を作らない。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0405-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0405_b.jpg",
+          "url": "https://www.google.com/maps/@35.4392589,139.2109631,3a,90y,195.1h,88t/data=!3m4!1e1!3m2!1s5FBPqY1ofVl5e8sJk0UqVg!2e0?hl=ja",
+          "description": "縦長の白い板に青い縁と青い文字で「檜沢橋」の縦書き、板は約 0.4×1.0 m、細い鉄柱 1 本（高さ約 2.5 m）の上部。柱の下方に白い小さな反射板（細長い板）が 2 つ付く。橋の端の右側、道の縁から約 2 m"
+        },
+        {
+          "oid": "S4-0416-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0416_b.jpg",
+          "url": "https://www.google.com/maps/@35.4412118,139.2123289,3a,90y,161.7h,88t/data=!3m4!1e1!3m2!1sFC44M2XyIVR1Tefhhk62Nw!2e0?hl=ja",
+          "description": "青地に白の縦書き「常世橋」の小さな板（約 0.3×0.8 m）、細い鉄柱 1 本（高さ約 2 m）の上部。柱の下に小さな白い札が付く。橋の端の右側、道の縁から約 2 m"
+        },
+        {
+          "oid": "S4-0488-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0488_b.jpg",
+          "url": "https://www.google.com/maps/@35.4528688,139.212457,3a,90y,105.6h,88t/data=!3m4!1e1!3m2!1scO3wHJZCVJE8dl1VPoSZGQ!2e0?hl=ja",
+          "description": "青地に白字の縦書き、約 0.35×0.9 m、細い鉄柱 1 本（高さ約 3 m）。橋の手前の道の右（進行方向右）の斜面の足元"
+        },
+        {
+          "oid": "S5-0601-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0601_b.jpg",
+          "url": "https://www.google.com/maps/@35.4723018,139.2160458,3a,90y,119.1h,88t/data=!3m4!1e1!3m2!1s_GkUHBKVZaYiwzVXSmrQtA!2e0?hl=ja",
+          "description": "クリーム色〜黄味の縦長の板（幅約 0.5 m、高さ約 1.3 m）、黒の縦書き「吉田橋」。曲がった細い柱の上に付く。橋の手前の路肩、道の縁から約 1 m。高さ約 2.5 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0405-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0405_b.jpg",
+        "url": "https://www.google.com/maps/@35.4392589,139.2109631,3a,90y,195.1h,88t/data=!3m4!1e1!3m2!1s5FBPqY1ofVl5e8sJk0UqVg!2e0?hl=ja",
+        "description": "縦長の白い板に青い縁と青い文字で「檜沢橋」の縦書き、板は約 0.4×1.0 m、細い鉄柱 1 本（高さ約 2.5 m）の上部。柱の下方に白い小さな反射板（細長い板）が 2 つ付く。橋の端の右側、道の縁から約 2 m"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_bridge_name_plate_front.png",
+        "left": "r70_road_signs_bridge_name_plate_left.png",
+        "right": "r70_road_signs_bridge_name_plate_right.png",
+        "back_estimated": "r70_road_signs_bridge_name_plate_back_estimated.png",
+        "top": "r70_road_signs_bridge_name_plate_top.png",
+        "persp": "r70_road_signs_bridge_name_plate_persp.png",
+        "reference": "r70_road_signs_bridge_name_plate_reference.png"
+      }
+    },
+    {
+      "name": "bridge_name_plate_yoshida",
+      "meaning": "クリーム色の大きい吉田橋名板",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.5,
+        0.101,
+        2.5
+      ],
+      "bounds_m": [
+        [
+          -0.25,
+          -0.073,
+          0.0
+        ],
+        [
+          0.25,
+          0.028,
+          2.5
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "bridge_name_plate_yoshida.png",
+        "bridge_name_plate_yoshida_face_吉田橋.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0405-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0405_b.jpg",
+          "url": "https://www.google.com/maps/@35.4392589,139.2109631,3a,90y,195.1h,88t/data=!3m4!1e1!3m2!1s5FBPqY1ofVl5e8sJk0UqVg!2e0?hl=ja",
+          "description": "縦長の白い板に青い縁と青い文字で「檜沢橋」の縦書き、板は約 0.4×1.0 m、細い鉄柱 1 本（高さ約 2.5 m）の上部。柱の下方に白い小さな反射板（細長い板）が 2 つ付く。橋の端の右側、道の縁から約 2 m"
+        },
+        {
+          "oid": "S4-0416-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0416_b.jpg",
+          "url": "https://www.google.com/maps/@35.4412118,139.2123289,3a,90y,161.7h,88t/data=!3m4!1e1!3m2!1sFC44M2XyIVR1Tefhhk62Nw!2e0?hl=ja",
+          "description": "青地に白の縦書き「常世橋」の小さな板（約 0.3×0.8 m）、細い鉄柱 1 本（高さ約 2 m）の上部。柱の下に小さな白い札が付く。橋の端の右側、道の縁から約 2 m"
+        },
+        {
+          "oid": "S4-0488-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0488_b.jpg",
+          "url": "https://www.google.com/maps/@35.4528688,139.212457,3a,90y,105.6h,88t/data=!3m4!1e1!3m2!1scO3wHJZCVJE8dl1VPoSZGQ!2e0?hl=ja",
+          "description": "青地に白字の縦書き、約 0.35×0.9 m、細い鉄柱 1 本（高さ約 3 m）。橋の手前の道の右（進行方向右）の斜面の足元"
+        },
+        {
+          "oid": "S5-0601-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0601_b.jpg",
+          "url": "https://www.google.com/maps/@35.4723018,139.2160458,3a,90y,119.1h,88t/data=!3m4!1e1!3m2!1s_GkUHBKVZaYiwzVXSmrQtA!2e0?hl=ja",
+          "description": "クリーム色〜黄味の縦長の板（幅約 0.5 m、高さ約 1.3 m）、黒の縦書き「吉田橋」。曲がった細い柱の上に付く。橋の手前の路肩、道の縁から約 1 m。高さ約 2.5 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0405-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0405_b.jpg",
+        "url": "https://www.google.com/maps/@35.4392589,139.2109631,3a,90y,195.1h,88t/data=!3m4!1e1!3m2!1s5FBPqY1ofVl5e8sJk0UqVg!2e0?hl=ja",
+        "description": "縦長の白い板に青い縁と青い文字で「檜沢橋」の縦書き、板は約 0.4×1.0 m、細い鉄柱 1 本（高さ約 2.5 m）の上部。柱の下方に白い小さな反射板（細長い板）が 2 つ付く。橋の端の右側、道の縁から約 2 m"
+      },
+      "preview_views": {
+        "front": "r70_road_signs_bridge_name_plate_yoshida_front.png",
+        "left": "r70_road_signs_bridge_name_plate_yoshida_left.png",
+        "right": "r70_road_signs_bridge_name_plate_yoshida_right.png",
+        "back_estimated": "r70_road_signs_bridge_name_plate_yoshida_back_estimated.png",
+        "top": "r70_road_signs_bridge_name_plate_yoshida_top.png",
+        "persp": "r70_road_signs_bridge_name_plate_yoshida_persp.png",
+        "reference": "r70_road_signs_bridge_name_plate_yoshida_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "guide_blueは地名が確定しないため依頼の指示どおり制作しない。",
+    "駐車注意の長方形はr70_boards.small_plateに分離。",
+    "県道64はroute_crossroad_64。70と同じ盾の画像替えにはしない。",
+    "縦長注意文字板をwarning_textとしてひし形から分離。"
+  ],
+  "references": {
+    "warning_diamond": [
+      {
+        "oid": "S4-0313-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0313_f.jpg",
+        "url": "https://www.google.com/maps/@35.4303231,139.2158968,3a,90y,329.1h,88t/data=!3m4!1e1!3m2!1sxZY4tp1f9EigqRgkh3XtaQ!2e0?hl=ja",
+        "description": "黄色いひし形（一辺約0.6〜0.8 m）、黒い鹿の跳ねる図柄。白い細い柱（高さ約2 m）。道の左端のすぐ脇"
+      },
+      {
+        "oid": "S4-0380-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+        "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+        "description": "細い柱に付く黄橙色の縦長の板、幅約0.4 m・高さ約0.8 m、黒字2列。高さ約2 m。"
+      },
+      {
+        "oid": "S4-0385-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_b.jpg",
+        "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,159.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+        "description": "灰色の細い柱にひし形の警戒標識（黄橙色、黒い右カーブの矢印、幅約0.6 m）。その下に縦書きの補助板「右カーブ／注意」（黄橙色、約0.4×0.7 m）。後ろ向き（峠へ向かう車用）。高さ約2.5 m。道の左（山側でなく谷側のガードレールの内側）。"
+      },
+      {
+        "oid": "S4-0468-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0468_b.jpg",
+        "url": "https://www.google.com/maps/@35.4492353,139.2133735,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1s08ISPoSgaV1H5L-IFS5Pig!2e0?hl=ja",
+        "description": "黄色いひし形（一辺約 0.6 m）、黒い曲がり矢印は右へ折れる向き、細い鉄柱。後ろ画像の右端＝進行左側の橋のたもと"
+      }
+    ],
+    "regulatory_round": [
+      {
+        "oid": "S4-0355-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+        "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+        "description": "細い灰色の柱に付く丸い規制標識（直径約0.6 m、赤い縁、白地に青の「30」）。高さ約2 m、ガードレールの外側、電柱の脇。根元にオレンジ色のドラム（コーン）が2個。"
+      },
+      {
+        "oid": "S5-0777-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_b.jpg",
+        "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+        "description": "白地の方形板、約0.6×0.9m、文字は黒、ガードレールの支柱に木杭で支える。上部に小さな札、板は傾いて古い"
+      },
+      {
+        "oid": "S5-0993-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0993_f.jpg",
+        "url": "https://www.google.com/maps/@35.5131353,139.2317263,3a,90y,24.0h,88t/data=!3m4!1e1!3m2!1sdUe4e4mV5oZZDewVx-KP2A!2e0?hl=ja",
+        "description": "丸い規制標識が横に2枚並ぶ。左はUターン禁止（赤丸、青地に黒のUターン矢印の赤斜線ではなく赤輪）、右は最高速度40km/h。直径約0.6m、下に補助標識（白い横長の矢印板）。細い銀色の1本柱。道の左縁から約2m"
+      },
+      {
+        "oid": "S5-0928-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0928_b.jpg",
+        "url": "https://www.google.com/maps/@35.4997222,139.2319696,3a,90y,204.1h,88t/data=!3m4!1e1!3m2!1sAdh8hvbspjRZUTfirioZjw!2e0?hl=ja",
+        "description": "白地の縦長看板（約0.6×1.2m）、青文字で「…ング／（通）行禁止」、下に厚木土木事務所・厚木警察署の名。細い白い単柱、高さ約3m。ガードレール切れ目のすぐ後ろに立つ。裏から見える後方画像のみ"
+      }
+    ],
+    "route_hexagon": [
+      {
+        "oid": "S5-0557-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0557_b.jpg",
+        "url": "https://www.google.com/maps/@35.4657676,139.2136238,3a,90y,174.8h,88t/data=!3m4!1e1!3m2!1sH_q8l_1E8vzCECsC1Wx7mg!2e0?hl=ja",
+        "description": "青い六角形（おむすび形）の県道番号標識、数字「70」白、直径約0.5 m、その下に小さな白い地名板。細い白い鋼管の柱1本、地面からの高さ約2.5 m、ガードレールの外側（谷側）の苔の斜面から立つ"
+      },
+      {
+        "oid": "S5-0964-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0964_b.jpg",
+        "url": "https://www.google.com/maps/@35.5066362,139.2308966,3a,90y,197.5h,88t/data=!3m4!1e1!3m2!1sbHct9bTs8LmDwThe-yp-5g!2e0?hl=ja",
+        "description": "青い丸（逆三角形ではなく円形に近い、県道の番号標識）に白で「70」。細い灰色の柱、ガードレール脇の路肩。直径約0.5 m、高さ約2.2 m。"
+      },
+      {
+        "oid": "S5-1022-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_f.jpg",
+        "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,337.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja",
+        "description": "青緑色の細長い六角形の路線標識、白字「64」、直径約0.4m×0.25m、灰色の細い単柱（高さ約3m）の上部に付く。道路左側の擁壁の前の歩道"
+      },
+      {
+        "oid": "S4-0453-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0454_b.jpg",
+        "url": "https://www.google.com/maps/@35.4466001,139.212317,3a,90y,149.0h,88t/data=!3m4!1e1!3m2!1sQhxkmoNjIqFaTvVuhas9pA!2e0?hl=ja",
+        "description": "丸い暗色地の小さな標識、直径約 0.35 m、白字「70」。電柱の中ほど（約 2.5 m）に付く。下に小さな補助板"
+      }
+    ],
+    "bridge_name_plate": [
+      {
+        "oid": "S4-0405-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0405_b.jpg",
+        "url": "https://www.google.com/maps/@35.4392589,139.2109631,3a,90y,195.1h,88t/data=!3m4!1e1!3m2!1s5FBPqY1ofVl5e8sJk0UqVg!2e0?hl=ja",
+        "description": "縦長の白い板に青い縁と青い文字で「檜沢橋」の縦書き、板は約 0.4×1.0 m、細い鉄柱 1 本（高さ約 2.5 m）の上部。柱の下方に白い小さな反射板（細長い板）が 2 つ付く。橋の端の右側、道の縁から約 2 m"
+      },
+      {
+        "oid": "S4-0416-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0416_b.jpg",
+        "url": "https://www.google.com/maps/@35.4412118,139.2123289,3a,90y,161.7h,88t/data=!3m4!1e1!3m2!1sFC44M2XyIVR1Tefhhk62Nw!2e0?hl=ja",
+        "description": "青地に白の縦書き「常世橋」の小さな板（約 0.3×0.8 m）、細い鉄柱 1 本（高さ約 2 m）の上部。柱の下に小さな白い札が付く。橋の端の右側、道の縁から約 2 m"
+      },
+      {
+        "oid": "S4-0488-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0488_b.jpg",
+        "url": "https://www.google.com/maps/@35.4528688,139.212457,3a,90y,105.6h,88t/data=!3m4!1e1!3m2!1scO3wHJZCVJE8dl1VPoSZGQ!2e0?hl=ja",
+        "description": "青地に白字の縦書き、約 0.35×0.9 m、細い鉄柱 1 本（高さ約 3 m）。橋の手前の道の右（進行方向右）の斜面の足元"
+      },
+      {
+        "oid": "S5-0601-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0601_b.jpg",
+        "url": "https://www.google.com/maps/@35.4723018,139.2160458,3a,90y,119.1h,88t/data=!3m4!1e1!3m2!1s_GkUHBKVZaYiwzVXSmrQtA!2e0?hl=ja",
+        "description": "クリーム色〜黄味の縦長の板（幅約 0.5 m、高さ約 1.3 m）、黒の縦書き「吉田橋」。曲がった細い柱の上に付く。橋の手前の路肩、道の縁から約 1 m。高さ約 2.5 m"
+      }
+    ],
+    "guide_blue": [
+      {
+        "oid": "S5-1017-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1019_f.jpg",
+        "url": "https://www.google.com/maps/@35.5180873,139.2311664,3a,90y,352.8h,88t/data=!3m4!1e1!3m2!1sQmVPieHnV9xNve2npLn90A!2e0?hl=ja",
+        "description": "青地の四角い案内標識、約2m×1.2m、白文字で2段4地名と左右矢印。道の左端の細い柱に付く。交差点の予告"
+      },
+      {
+        "oid": "S4-0298-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0298_b.jpg",
+        "url": "https://www.google.com/maps/@35.4284116,139.2188832,3a,90y,146.3h,88t/data=!3m4!1e1!3m2!1s7Ykm47CuD4F3PRNxaEgSyw!2e0?hl=ja",
+        "description": "青い円形の小さな標識。柱に付く。遠くの建物の手前。何の標識か読めない"
+      },
+      {
+        "oid": "S4-0530-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0530_b.jpg",
+        "url": "https://www.google.com/maps/@35.4609003,139.213469,3a,90y,166.0h,88t/data=!3m4!1e1!3m2!1s33b8V1i9cDzndc-jMsSoYg!2e0?hl=ja",
+        "description": "後ろ向きで奥の左手に小さな緑の板。清川村の境の標識かもしれない。字は読めない"
+      },
+      {
+        "oid": "S5-0814-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0814_f.jpg",
+        "url": "https://www.google.com/maps/@35.4863133,139.2166297,3a,90y,35.9h,88t/data=!3m4!1e1!3m2!1sNhPvFpmbKKGySB7efrNhOg!2e0?hl=ja",
+        "description": "遠くの左の縁に小さな青い標識、柱1本"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "route_hexagon_place",
+    "image": "R70-0557_b.jpg",
+    "crop_pixels": [
+      410,
+      300,
+      550,
+      670
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

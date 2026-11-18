@@ -10,7 +10,8 @@
     ]
    ],
    "facing_deg": 182.5,
-   "note": "カーブミラー（ストリートビュー s=100）"
+   "note": "カーブミラー（ストリートビュー s=100）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -21,7 +22,8 @@
     ]
    ],
    "facing_deg": 208.5,
-   "note": "カーブミラー（ストリートビュー s=1210）"
+   "note": "カーブミラー（ストリートビュー s=1210）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -32,7 +34,8 @@
     ]
    ],
    "facing_deg": 146.6,
-   "note": "カーブミラー（ストリートビュー s=1350）"
+   "note": "カーブミラー（ストリートビュー s=1350）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -43,7 +46,8 @@
     ]
    ],
    "facing_deg": 313.3,
-   "note": "カーブミラー（ストリートビュー s=1600）"
+   "note": "カーブミラー（ストリートビュー s=1600）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -54,7 +58,8 @@
     ]
    ],
    "facing_deg": 280.4,
-   "note": "カーブミラー（ストリートビュー s=2000）"
+   "note": "カーブミラー（ストリートビュー s=2000）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -65,7 +70,8 @@
     ]
    ],
    "facing_deg": 262.0,
-   "note": "カーブミラー（ストリートビュー s=2050）"
+   "note": "カーブミラー（ストリートビュー s=2050）",
+   "replaced_by": "r70_removed"
   },
   {
    "kind": "mirror",
@@ -76,7 +82,8 @@
     ]
    ],
    "facing_deg": 106.5,
-   "note": "カーブミラー（ストリートビュー s=2750）"
+   "note": "カーブミラー（ストリートビュー s=2750）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -87,7 +94,8 @@
     ]
    ],
    "facing_deg": 1.7,
-   "note": "カーブミラー（ストリートビュー s=3550）"
+   "note": "カーブミラー（ストリートビュー s=3550）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -98,7 +106,8 @@
     ]
    ],
    "facing_deg": 340.2,
-   "note": "カーブミラー（ストリートビュー s=3700）"
+   "note": "カーブミラー（ストリートビュー s=3700）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -109,7 +118,8 @@
     ]
    ],
    "facing_deg": 349.2,
-   "note": "カーブミラー（ストリートビュー s=4800）"
+   "note": "カーブミラー（ストリートビュー s=4800）",
+   "replaced_by": "r70"
   },
   {
    "kind": "mirror",
@@ -120,7 +130,8 @@
     ]
    ],
    "facing_deg": 255.3,
-   "note": "カーブミラー（ストリートビュー s=5300）"
+   "note": "カーブミラー（ストリートビュー s=5300）",
+   "replaced_by": "r70"
   },
   {
    "kind": "road_sign",
@@ -132,7 +143,8 @@
    ],
    "facing_deg": 311.0,
    "note": "速度制限 30（ストリートビュー s=600）",
-   "sign": "speed30"
+   "sign": "speed30",
+   "replaced_by": "r70"
   },
   {
    "kind": "road_sign",
@@ -144,7 +156,8 @@
    ],
    "facing_deg": 54.9,
    "note": "速度制限 30（ストリートビュー s=1505）",
-   "sign": "speed30"
+   "sign": "speed30",
+   "replaced_by": "r70"
   },
   {
    "kind": "road_sign",
@@ -156,7 +169,8 @@
    ],
    "facing_deg": 88.6,
    "note": "速度制限 30（ストリートビュー s=3650）",
-   "sign": "speed30"
+   "sign": "speed30",
+   "replaced_by": "r70"
   },
   {
    "kind": "road_sign",
@@ -168,7 +182,8 @@
    ],
    "facing_deg": 75.3,
    "note": "速度制限 30（ストリートビュー s=5300）",
-   "sign": "speed30"
+   "sign": "speed30",
+   "replaced_by": "r70"
   },
   {
    "kind": "road_sign",
@@ -180,7 +195,8 @@
    ],
    "facing_deg": 70.0,
    "note": "警戒標識（ストリートビュー s=2200）",
-   "sign": "warning"
+   "sign": "warning",
+   "replaced_by": "r70"
   },
   {
    "kind": "road_sign",
@@ -373,7 +389,8 @@
     ]
    ],
    "facing_deg": 150.0,
-   "_tera": true
+   "_tera": true,
+   "replaced_by": "r70"
   },
   {
    "note": "わき道の北の電柱（000° で方位 318°、看板の奥）",
@@ -503,7 +520,8 @@
      139.209405
     ]
    ],
-   "_goma": true
+   "_goma": true,
+   "replaced_by": "r70"
   },
   {
    "kind": "cabinet",
@@ -947,7 +965,8 @@
      139.2121629
     ]
    ],
-   "_s42100": true
+   "_s42100": true,
+   "replaced_by": "r70"
   },
   {
    "kind": "cone",
@@ -959,7 +978,8 @@
      139.2121958
     ]
    ],
-   "_s42100": true
+   "_s42100": true,
+   "replaced_by": "r70"
   },
   {
    "_s44750": true,
@@ -1050,7 +1070,8 @@
     ]
    ],
    "facing_deg": 306.0,
-   "note": "速度制限 30（写真 A135 の奥、橋の南東の北東）。地獄沢橋のまわり（ストリートビュー panoid 8jzR3JiEoAkgt4Mo4ymSPQ 2025-07、OSM、2026-10-27）"
+   "note": "速度制限 30（写真 A135 の奥、橋の南東の北東）。地獄沢橋のまわり（ストリートビュー panoid 8jzR3JiEoAkgt4Mo4ymSPQ 2025-07、OSM、2026-10-27）",
+   "replaced_by": "r70"
   },
   {
    "_s44750": true,

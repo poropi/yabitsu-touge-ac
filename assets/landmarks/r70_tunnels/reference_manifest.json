@@ -1,0 +1,59 @@
+[
+  {
+    "oid": "S5-0717-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0718_f.jpg",
+    "url": "https://www.google.com/maps/@35.4848731,139.2070134,3a,90y,222.8h,88t/data=!3m4!1e1!3m2!1s_ecbrB75Un8m6PvxEgAZBg!2e0?hl=ja",
+    "place": "S5 4091〜4091 m：素掘り風の小トンネル（コンクリート坑口）",
+    "description": "コンクリートの坑口のある短い道路トンネル。坑口は半円アーチ、開口は幅約 3.5 m・高さ約 3.5 m、道幅いっぱい。坑口の壁は約 5 m 四方で苔・汚れ、右上に配管が這う。名の板・照明は見えない。向こう側が明るく抜ける。短い。内部：前半は壁・天井に格子状の補強（鋼製メッシュ／ロックボルトの板）を張り、壁下部は高さ約 ",
+    "camera": {
+      "pano": "_ecbrB75Un8m6PvxEgAZBg",
+      "lat": 35.4848731,
+      "lon": 139.2070134,
+      "heading_deg": 222.8,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      800,
+      0,
+      700
+    ]
+  },
+  {
+    "oid": "S5-0974-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0981_f.jpg",
+    "url": "https://www.google.com/maps/@35.510424,139.2312777,3a,90y,6.8h,88t/data=!3m4!1e1!3m2!1sRR6Xs7wcCKyp5mvKCOKwoA!2e0?hl=ja",
+    "place": "S5 10663〜10663 m：トンネル坑口（コンクリート坑門、名板付き）",
+    "description": "道の先のトンネル。コンクリートの坑門（台形に立ち上がる壁面、上部に帯状の名板で字は読めない）、アーチ形の坑口、高さ約5m。左に街灯、右に橋と同じ欄干（ガードパイプ＋金網）",
+    "camera": {
+      "pano": "RR6Xs7wcCKyp5mvKCOKwoA",
+      "lat": 35.510424,
+      "lon": 139.2312777,
+      "heading_deg": 6.8,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      760,
+      330,
+      495
+    ]
+  },
+  {
+    "oid": "S5-0992-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0992_b.jpg",
+    "url": "https://www.google.com/maps/@35.5129099,139.2316065,3a,90y,201.1h,88t/data=!3m4!1e1!3m2!1s5rUCeGfK0nLmKkYW92j4cQ!2e0?hl=ja",
+    "place": "S5 10937〜10937 m：吹風トンネル（宮ヶ瀬側でなく峠側＝後ろの坑口）",
+    "description": "コンクリート製の坑口。半円形の開口で壁面は灰色の面壁、上部に金属の名板が並ぶ。右側の坑口外に電柱（細い柱）あり。坑口前の路面はアスファルト、センターは黄の実線",
+    "camera": {
+      "pano": "5rUCeGfK0nLmKkYW92j4cQ",
+      "lat": 35.5129099,
+      "lon": 139.2316065,
+      "heading_deg": 201.1,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      795,
+      176,
+      575
+    ]
+  }
+]

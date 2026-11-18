@@ -113,7 +113,7 @@ def test_repeated_csp_sections_use_numeric_or_auto_indices(tmp_path):
     e=module(); e.build(tmp_path)
     text=(tmp_path/'extension/parts/night.ini').read_text()
     names=re.findall(r'^\[(LIGHT_SERIES_[^]]+|MATERIAL_ADJUSTMENT_[^]]+|SHADER_REPLACEMENT_[^]]+)\]$',text,re.M)
-    assert len(names)==13
+    assert len(names)==14   # 峠の Codex の自動販売機の発光（ENV_VENDING_PASS）を足した
     assert all(re.fullmatch(r'(LIGHT_SERIES|MATERIAL_ADJUSTMENT|SHADER_REPLACEMENT)_(\d+|\.\.\.)',n) for n in names)
 
 
@@ -129,7 +129,7 @@ def test_vending_front_faces_out_of_body_and_keeps_texture(tmp_path):
         if info['material']=='vending_front':
             z=np.load(config.TRACK_BUILD_DIR/info['file']); n_front+=len(e._components(z['verts'],z['faces']))
     fronts=[v for v in m['meshes'].values() if v['material']=='env_vending_front']
-    assert len(fronts)==n_front>=2
+    assert len(fronts)==n_front>=1   # 峠の売店の 1 台は Codex の部品（下で確かめる）
     for info in fronts:
         z=np.load(tmp_path/info['file']); q=z['verts'][z['faces'][0]]
         c=z['verts'].mean(0); body=min(bodies,key=lambda b:np.linalg.norm(c-b))
@@ -138,3 +138,5 @@ def test_vending_front_faces_out_of_body_and_keeps_texture(tmp_path):
         assert np.ptp(z['uvs'],axis=0).min()>.9
     ini=read_sections(tmp_path/'extension/parts/night.ini')
     assert ini['MATERIAL_ADJUSTMENT_ENV_VENDING']['materials']=='env_vending_front'
+    pv={v['material'] for v in source['meshes'].values() if v['material'].startswith('lm_pass_vending_')}
+    assert len(pv)==1 and set(ini['MATERIAL_ADJUSTMENT_ENV_VENDING_PASS']['materials'].split(','))==pv   # 峠の Codex の自動販売機も夜に光る

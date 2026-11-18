@@ -1,3 +1,4 @@
+import pytest
 import math
 
 import numpy as np
@@ -178,12 +179,99 @@ def test_lot_details_from_street_view():
     spec = start_lot.load_spec(config.DATA_MANUAL / "s1_start_lot.json")
     pad = {"z": 563.0, "polygon": [[0, 0], [1, 0], [1, 1], [0, 1]]}
     names = {n: (v, mat) for n, v, f, uv, mat, r in start_lot.meshes(spec, pad)}
+    rep = set(spec.get("replaced", []))   # Codex の部品（landmarks）に替えた石碑・トイレは、簡単な形を作らない
     for need in ("s1_shelter_roof", "1WALL_s1_shelter_posts", "1ROAD_s1_hill_stairs", "s1_hill_handrails",
-                 "s1_monument_plaque", "s1_building_truss"):
+                 *(() if "monument" in rep else ("s1_monument_plaque",)), *(() if "building" in rep else ("s1_building_truss",))):
         assert need in names, need
+    from yabitsu import landmarks
+    for asset, part in (("nanohanadai_toilet", "walls"), ("nanohanadai_monument", "monument")):
+        if landmarks.exists(asset, part):
+            assert any(n.startswith("s1_lm_") and n.endswith(part) for n in names), part
     roof = names["s1_shelter_roof"][0]
     assert roof[:, 2].min() > 563.0 + spec["shelter"]["mound"] + 2.0
     st = names["1ROAD_s1_hill_stairs"][0]
     assert st[:, 2].max() >= spec["hill_stairs"]["z1"] - 0.05
-    fl = [p for p in start_lot.flat_pads(spec, pad) if p["name"] in ("shelter_mound", "hill_stairs")]
+    fl = [p for p in start_lot.flat_pads(spec, pad) if p["name"] in ("shelter_mound", "shelter_hill", "hill_stairs")]   # 丘があれば shelter_hill
     assert len(fl) == 2 and "plane" in [p for p in fl if p["name"] == "hill_stairs"][0]
+
+
+def test_lot_surface_meets_road_edge_without_step():
+    """駐車場の入口：舗装は道路（側溝の外の縁）の高さから LOT_JOIN_M かけて駐車場の高さへ寄せる。すき間も段差も無い（2026-10-30
+    ゲームで道路から駐車場へ入ると段差で衝撃が出た：舗装は 562.27 の平らで、道路の縁は 562.31〜562.80、間に 0.2〜0.4 m のすき間）。"""
+    import numpy as np
+    from shapely.geometry import Point, Polygon
+    from yabitsu import start_lot
+    from yabitsu.crosssection import GUTTER_WIDTH, Section
+    n = 200
+    s = np.linspace(0, 199, n)
+    sec = Section(s=s, x=s.copy(), y=np.zeros(n), z=np.linspace(10.0, 12.0, n), heading=np.zeros(n), curvature=np.zeros(n),
+                  lanes=np.full(n, 2), bridge=np.zeros(n, bool), hw_left=np.full(n, 3.0), hw_right=np.full(n, 3.0), slope=np.zeros(n), crown=np.zeros(n))
+    spec = {"origin": [100.0, 3.0 + GUTTER_WIDTH + 0.3], "axis_deg": 0.0}
+    lot = Polygon([(80, 3.9), (120, 3.9), (120, 30), (80, 30)])          # 道路（側溝まで y 3.6）との間に 0.3 m のすき間
+    v, f, uv = start_lot.lot_surface(spec, {"polygon": list(lot.exterior.coords), "z": 10.5}, sec)
+    road_edge = 3.0 + GUTTER_WIDTH
+    tri = v[f]
+    cen = tri.mean(1)
+    near = cen[:, 1] < road_edge + 0.2
+    assert near.any()                                                     # すき間を埋めた
+    for x0 in (85.0, 100.0, 115.0):                                       # 縁の高さ＝道路の縁、4 m 先で駐車場の高さ
+        ze = 10.0 + 2.0 * x0 / 199
+        on = (np.abs(v[:, 0] - x0) < 0.3)
+        e = on & (np.abs(v[:, 1] - road_edge) < 0.05)
+        assert e.any() and np.allclose(v[e, 2], ze, atol=0.02)
+    far = v[:, 1] > road_edge + start_lot.LOT_JOIN_M + 0.01
+    assert far.any() and np.allclose(v[far, 2], 10.5, atol=1e-6)
+    # 隣り合う頂点（同じ位置）の高さがそろう＝割れ目が無い
+    key = np.round(v[:, :2], 4)
+    _, inv = np.unique(key, axis=0, return_inverse=True)
+    for k in np.unique(inv):
+        zz = v[inv == k, 2]
+        assert np.ptp(zz) < 1e-6
+    # 坂はゆるい（縁の差 ≤ 0.5 m を 4 m で）
+    for t in tri:
+        d = np.hypot(*(t[:, None, :2] - t[None, :, :2]).reshape(-1, 2).T)
+        dz = np.abs(t[:, None, 2] - t[None, :, 2]).ravel()
+        ok = d > 1e-6
+        assert (dz[ok] / d[ok]).max() < 0.2
+
+
+def test_lot_entrance_has_no_gutter_dip():
+    """駐車場の入口では側溝の V 字のくぼみ（深さ 0.12 m）を作らず、路面を道路の縁の高さのまま延ばす（mouths）。
+    2026-10-30 ゲームで、舗装を寄せたあとも側溝のくぼみが段差として残っていた。"""
+    import numpy as np
+    from shapely.geometry import Polygon
+    from yabitsu import assembly, start_lot
+    from yabitsu.crosssection import GUTTER_WIDTH, Section
+    from yabitsu.manifest import Manifest
+    n = 200
+    s = np.linspace(0, 199, n)
+    sec = Section(s=s, x=s.copy(), y=np.zeros(n), z=np.full(n, 10.0), heading=np.zeros(n), curvature=np.zeros(n),
+                  lanes=np.full(n, 2), bridge=np.zeros(n, bool), hw_left=np.full(n, 3.0), hw_right=np.full(n, 3.0),
+                  slope=np.zeros(n), crown=np.zeros(n))
+    lot = {"kind": "lot", "polygon": list(Polygon([(80, 3.9), (120, 3.9), (120, 30), (80, 30)]).exterior.coords), "z": 10.0}
+    mo = start_lot.mouths([lot], sec)
+    assert len(mo) == 1 and mo[0][0] == 1 and mo[0][1] <= 80.5 and mo[0][2] >= 119.5
+    import tempfile
+    m = Manifest(tempfile.mkdtemp())
+    assembly.add_road(m, sec, mouths=mo)
+    for name, e in m.meshes.items():
+        if name.startswith("1ROAD_s1_gutterL"):
+            d = np.load(m.root / e["file"]); fv = d["verts"][np.unique(d["faces"])]   # 面に使われている頂点
+            dip = fv[(fv[:, 0] > 82) & (fv[:, 0] < 118) & (fv[:, 1] > 3.0 + 0.05) & (fv[:, 1] < 3.0 + GUTTER_WIDTH - 0.05)]
+            assert not len(dip) or dip[:, 2].min() > 10.0 - 0.01, "入口に側溝のくぼみが残っている"
+    assert any(k.startswith("1ROAD_s1_mouthL") for k in m.meshes)
+
+
+def test_shelter_hill_replaces_the_low_mound():
+    """東屋の島の丘（shelter.hill：a・b の多角形と、駐車場からの高さ dz）。あれば小さな丸い盛り土の代わりに、その形の平らな上の面を
+    地形に置く（上の面の地形＝駐車場＋dz）。2026-10-30 写真で東屋の床は約 565.6 m、今の島は 563.2〜563.6 m で北の道より低かった。"""
+    from yabitsu import config, start_lot, terrain
+    spec = start_lot.load_spec(config.DATA_MANUAL / "s1_start_lot.json")
+    pad = {"z": 562.27, "polygon": [[0, 0], [1, 0], [1, 1], [0, 1]]}
+    spec = {**spec, "shelter": {**spec["shelter"], "mound": 3.33,
+                                "hill": {"points": [[20, 0], [28, 0], [28, 6], [20, 6]], "dz": 3.33}}}
+    fl = {p["name"]: p for p in start_lot.flat_pads(spec, pad)}
+    assert "shelter_mound" not in fl and "shelter_hill" in fl
+    assert fl["shelter_hill"]["z"] - terrain.UNDER_DEPTH == pytest.approx(562.27 + 3.33)
+    names = {n: v for n, v, f, uv, mat, r in start_lot.meshes(spec, pad)}
+    assert names["1WALL_s1_shelter_posts"][:, 2].min() == pytest.approx(562.27 + 3.33 - 0.5)

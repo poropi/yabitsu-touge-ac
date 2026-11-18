@@ -1,0 +1,162 @@
+{
+  "part_info": {
+    "large_white": {
+      "meaning": "登山口の大きい白い案内板。題字・本文は未判読、神奈川県のみ判読。",
+      "front": "-Y"
+    },
+    "small_weathered": {
+      "meaning": "大白板左下の小型褪色板。全文未判読。",
+      "front": "-Y"
+    },
+    "parking_notice": {
+      "meaning": "駐車場前の青見出し付き白い利用案内板。文字未判読。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "large_white": [
+      0.0,
+      0.0,
+      0
+    ],
+    "small_weathered": [
+      2.8,
+      0.0,
+      0
+    ],
+    "parking_notice": [
+      5.6,
+      0.0,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 512,
+  "refs": [
+    "codex07/sv_toilet_000.png",
+    "codex07/sv_toilet_045.png",
+    "codex07/sv_u2_225.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "題字・本文・図を創作せず薄い線と色面。支持部裏面は推定。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_info_boards",
+  "source": "pass_info_boards.blend",
+  "parts": [
+    {
+      "name": "large_white",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        1.05,
+        0.0935,
+        1.53
+      ],
+      "bounds_m": [
+        [
+          -0.5249999761581421,
+          -0.04674999974668026,
+          0.0
+        ],
+        [
+          0.5249999761581421,
+          0.04674999974668026,
+          1.5299999713897705
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "登山口の大きい白い案内板。題字・本文は未判読、神奈川県のみ判読。",
+      "front": "-Y"
+    },
+    {
+      "name": "small_weathered",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        0.5,
+        0.0935,
+        0.955
+      ],
+      "bounds_m": [
+        [
+          -0.25,
+          -0.04674999974668026,
+          0.0
+        ],
+        [
+          0.25,
+          0.04674999974668026,
+          0.9549999833106995
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "大白板左下の小型褪色板。全文未判読。",
+      "front": "-Y"
+    },
+    {
+      "name": "parking_notice",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        0.65,
+        0.0935,
+        1.25
+      ],
+      "bounds_m": [
+        [
+          -0.32499998807907104,
+          -0.04674999974668026,
+          0.0
+        ],
+        [
+          0.32499998807907104,
+          0.04674999974668026,
+          1.25
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "駐車場前の青見出し付き白い利用案内板。文字未判読。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

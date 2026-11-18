@@ -1,0 +1,2823 @@
+{
+  "asset_id": "r70_boards",
+  "source": "r70_boards.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 1000,
+  "parts": [
+    {
+      "name": "post_board",
+      "meaning": "事故多発・通行注意の白い単柱看板",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.4,
+        0.098,
+        2.6
+      ],
+      "bounds_m": [
+        [
+          -0.2,
+          -0.073,
+          0.0
+        ],
+        [
+          0.2,
+          0.025,
+          2.6
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post_board.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0300-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+          "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+          "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+        },
+        {
+          "oid": "S4-0315-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+        },
+        {
+          "oid": "S4-0382-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+        },
+        {
+          "oid": "S4-0411-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+          "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+          "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0300-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+        "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+        "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+      },
+      "preview_views": {
+        "front": "r70_boards_post_board_front.png",
+        "left": "r70_boards_post_board_left.png",
+        "right": "r70_boards_post_board_right.png",
+        "back_estimated": "r70_boards_post_board_back_estimated.png",
+        "top": "r70_boards_post_board_top.png",
+        "persp": "r70_boards_post_board_persp.png",
+        "reference": "r70_boards_post_board_reference.png"
+      }
+    },
+    {
+      "name": "post_board_narrow",
+      "meaning": "幅員狭小の単柱注意板",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.4,
+        0.098,
+        2.4
+      ],
+      "bounds_m": [
+        [
+          -0.2,
+          -0.073,
+          0.0
+        ],
+        [
+          0.2,
+          0.025,
+          2.4
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post_board_narrow.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0300-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+          "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+          "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+        },
+        {
+          "oid": "S4-0315-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+        },
+        {
+          "oid": "S4-0382-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+        },
+        {
+          "oid": "S4-0411-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+          "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+          "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0300-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+        "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+        "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+      },
+      "preview_views": {
+        "front": "r70_boards_post_board_narrow_front.png",
+        "left": "r70_boards_post_board_narrow_left.png",
+        "right": "r70_boards_post_board_narrow_right.png",
+        "back_estimated": "r70_boards_post_board_narrow_back_estimated.png",
+        "top": "r70_boards_post_board_narrow_top.png",
+        "persp": "r70_boards_post_board_narrow_persp.png",
+        "reference": "r70_boards_post_board_narrow_reference.png"
+      }
+    },
+    {
+      "name": "post_board_forest",
+      "meaning": "森林整備の木枠・木柱2本の看板",
+      "triangles": 142,
+      "vertices": 268,
+      "dimensions_m": [
+        1.58,
+        0.117,
+        1.58
+      ],
+      "bounds_m": [
+        [
+          -0.79,
+          -0.092,
+          0.0
+        ],
+        [
+          0.79,
+          0.025,
+          1.58
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post_board_forest.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "縦枠",
+          "triangle_start": 14,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦枠",
+          "triangle_start": 26,
+          "triangle_count": 12
+        },
+        {
+          "name": "横枠",
+          "triangle_start": 38,
+          "triangle_count": 12
+        },
+        {
+          "name": "横枠",
+          "triangle_start": 50,
+          "triangle_count": 12
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 62,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 90,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 118,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 130,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0300-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+          "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+          "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+        },
+        {
+          "oid": "S4-0315-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+        },
+        {
+          "oid": "S4-0382-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+        },
+        {
+          "oid": "S4-0411-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+          "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+          "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0315-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+        "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+        "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+      },
+      "preview_views": {
+        "front": "r70_boards_post_board_forest_front.png",
+        "left": "r70_boards_post_board_forest_left.png",
+        "right": "r70_boards_post_board_forest_right.png",
+        "back_estimated": "r70_boards_post_board_forest_back_estimated.png",
+        "top": "r70_boards_post_board_forest_top.png",
+        "persp": "r70_boards_post_board_forest_persp.png",
+        "reference": "r70_boards_post_board_forest_reference.png"
+      }
+    },
+    {
+      "name": "post_board_wall_cafe",
+      "meaning": "壁に付く横長の店看板（柱なし）",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        3.0,
+        0.0705,
+        0.8
+      ],
+      "bounds_m": [
+        [
+          -1.5,
+          -0.018,
+          0.0
+        ],
+        [
+          1.5,
+          0.0525,
+          0.8
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post_board_wall_cafe.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 14,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 26,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0300-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+          "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+          "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+        },
+        {
+          "oid": "S4-0315-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+        },
+        {
+          "oid": "S4-0382-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+        },
+        {
+          "oid": "S4-0411-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+          "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+          "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0382-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+        "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+        "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+      },
+      "preview_views": {
+        "front": "r70_boards_post_board_wall_cafe_front.png",
+        "left": "r70_boards_post_board_wall_cafe_left.png",
+        "right": "r70_boards_post_board_wall_cafe_right.png",
+        "back_estimated": "r70_boards_post_board_wall_cafe_back_estimated.png",
+        "top": "r70_boards_post_board_wall_cafe_top.png",
+        "persp": "r70_boards_post_board_wall_cafe_persp.png",
+        "reference": "r70_boards_post_board_wall_cafe_reference.png"
+      }
+    },
+    {
+      "name": "post_board_bosco",
+      "meaning": "BOSCOの木脚2本の緑の案内板",
+      "triangles": 94,
+      "vertices": 172,
+      "dimensions_m": [
+        1.8,
+        0.098,
+        1.4
+      ],
+      "bounds_m": [
+        [
+          -0.9,
+          -0.073,
+          0.0
+        ],
+        [
+          0.9,
+          0.025,
+          1.4
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post_board_bosco.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0300-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+          "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+          "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+        },
+        {
+          "oid": "S4-0315-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+        },
+        {
+          "oid": "S4-0382-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+        },
+        {
+          "oid": "S4-0411-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+          "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+          "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0411-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+        "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+        "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+      },
+      "preview_views": {
+        "front": "r70_boards_post_board_bosco_front.png",
+        "left": "r70_boards_post_board_bosco_left.png",
+        "right": "r70_boards_post_board_bosco_right.png",
+        "back_estimated": "r70_boards_post_board_bosco_back_estimated.png",
+        "top": "r70_boards_post_board_bosco_top.png",
+        "persp": "r70_boards_post_board_bosco_persp.png",
+        "reference": "r70_boards_post_board_bosco_reference.png"
+      }
+    },
+    {
+      "name": "post_board_no_parking",
+      "meaning": "ここは駐車場ではありませんの看板",
+      "triangles": 94,
+      "vertices": 172,
+      "dimensions_m": [
+        0.75,
+        0.098,
+        1.55
+      ],
+      "bounds_m": [
+        [
+          -0.375,
+          -0.073,
+          0.0
+        ],
+        [
+          0.375,
+          0.025,
+          1.55
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post_board_no_parking.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0902-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+        },
+        {
+          "oid": "S4-0455-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0455_f.jpg",
+          "url": "https://www.google.com/maps/@35.4468069,139.212161,3a,90y,330.1h,88t/data=!3m4!1e1!3m2!1sI-x-LuyTp9pNbuGoSeJHZQ!2e0?hl=ja",
+          "description": "茶色の木板に白い文字、矢印は右向き（約 0.5×0.2 m）、斜面の低い所に立てかけ。ガードレールの外、縁から約 4 m"
+        },
+        {
+          "oid": "S4-0459-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_b.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,228.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い木板に黒の「P」、約 0.4×0.4 m、木の根元の低い位置に斜めに取り付け。広場の入口"
+        },
+        {
+          "oid": "S4-0482-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0482_b.jpg",
+          "url": "https://www.google.com/maps/@35.4519713,139.212171,3a,90y,179.3h,88t/data=!3m4!1e1!3m2!1sAq3SICovU0S8yW58ttJbnQ!2e0?hl=ja",
+          "description": "白い縦長の板（約 0.25×0.5 m）に縦書きの黒字。橙色のカーブミラーの柱の中ほど"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0902-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+        "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+        "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+      },
+      "preview_views": {
+        "front": "r70_boards_post_board_no_parking_front.png",
+        "left": "r70_boards_post_board_no_parking_left.png",
+        "right": "r70_boards_post_board_no_parking_right.png",
+        "back_estimated": "r70_boards_post_board_no_parking_back_estimated.png",
+        "top": "r70_boards_post_board_no_parking_top.png",
+        "persp": "r70_boards_post_board_no_parking_persp.png",
+        "reference": "r70_boards_post_board_no_parking_reference.png"
+      }
+    },
+    {
+      "name": "post_board_step",
+      "meaning": "出入口段差ありの注意板",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.45,
+        0.098,
+        1.8
+      ],
+      "bounds_m": [
+        [
+          -0.225,
+          -0.073,
+          0.0
+        ],
+        [
+          0.225,
+          0.025,
+          1.8
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post_board_step.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0300-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+          "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+          "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+        },
+        {
+          "oid": "S4-0315-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+        },
+        {
+          "oid": "S4-0382-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+        },
+        {
+          "oid": "S4-0411-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+          "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+          "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0300-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+        "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+        "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+      },
+      "preview_views": {
+        "front": "r70_boards_post_board_step_front.png",
+        "left": "r70_boards_post_board_step_left.png",
+        "right": "r70_boards_post_board_step_right.png",
+        "back_estimated": "r70_boards_post_board_step_back_estimated.png",
+        "top": "r70_boards_post_board_step_top.png",
+        "persp": "r70_boards_post_board_step_persp.png",
+        "reference": "r70_boards_post_board_step_reference.png"
+      }
+    },
+    {
+      "name": "post_board_camera",
+      "meaning": "監視中の道路施設注意板",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.6,
+        0.098,
+        1.75
+      ],
+      "bounds_m": [
+        [
+          -0.3,
+          -0.073,
+          0.0
+        ],
+        [
+          0.3,
+          0.025,
+          1.75
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post_board_camera.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0300-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+          "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+          "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+        },
+        {
+          "oid": "S4-0315-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+        },
+        {
+          "oid": "S4-0382-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+        },
+        {
+          "oid": "S4-0411-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+          "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+          "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0300-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+        "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+        "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+      },
+      "preview_views": {
+        "front": "r70_boards_post_board_camera_front.png",
+        "left": "r70_boards_post_board_camera_left.png",
+        "right": "r70_boards_post_board_camera_right.png",
+        "back_estimated": "r70_boards_post_board_camera_back_estimated.png",
+        "top": "r70_boards_post_board_camera_top.png",
+        "persp": "r70_boards_post_board_camera_persp.png",
+        "reference": "r70_boards_post_board_camera_reference.png"
+      }
+    },
+    {
+      "name": "stand_board",
+      "meaning": "落石注意の金属自立看板",
+      "triangles": 142,
+      "vertices": 268,
+      "dimensions_m": [
+        0.6,
+        0.64,
+        1.25716
+      ],
+      "bounds_m": [
+        [
+          -0.3,
+          -0.215,
+          0.0
+        ],
+        [
+          0.3,
+          0.425,
+          1.257156
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stand_board.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 94,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 106,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 118,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 130,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0382-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地、赤とピンクの字。置き看板、幅約1 m・高さ約0.5 m。店の前。"
+        },
+        {
+          "oid": "S5-0782-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0782_b.jpg",
+          "url": "https://www.google.com/maps/@35.4852501,139.2108073,3a,90y,299.6h,88t/data=!3m4!1e1!3m2!1sULpRI_YRpXyccdHA7RPiSQ!2e0?hl=ja",
+          "description": "黄地黒文字の大きな方形板、約0.6×1.0m、上に落石の絵、金属脚2本で自立"
+        },
+        {
+          "oid": "S5-0786-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0787_b.jpg",
+          "url": "https://www.google.com/maps/@35.4855282,139.2118666,3a,90y,336.8h,88t/data=!3m4!1e1!3m2!1s5UuERxxf7dR_4r2eY33GgA!2e0?hl=ja",
+          "description": "蛍光黄の縦長板、約0.4×1.2m、黒字縦書き、ガードレールの内側に脚で立つ"
+        },
+        {
+          "oid": "S5-0948-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0949_b.jpg",
+          "url": "https://www.google.com/maps/@35.50377,139.229677,3a,90y,166.3h,88t/data=!3m4!1e1!3m2!1sHVM3FGSYkAvJqe0pgFJmBA!2e0?hl=ja",
+          "description": "橋の右側の高欄の内側に立つ白地の縦長立て看板、高さ約1.8 m 幅約0.7 m、黒字の縦書き。細い脚2本。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0782-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0782_b.jpg",
+        "url": "https://www.google.com/maps/@35.4852501,139.2108073,3a,90y,299.6h,88t/data=!3m4!1e1!3m2!1sULpRI_YRpXyccdHA7RPiSQ!2e0?hl=ja",
+        "description": "黄地黒文字の大きな方形板、約0.6×1.0m、上に落石の絵、金属脚2本で自立"
+      },
+      "preview_views": {
+        "front": "r70_boards_stand_board_front.png",
+        "left": "r70_boards_stand_board_left.png",
+        "right": "r70_boards_stand_board_right.png",
+        "back_estimated": "r70_boards_stand_board_back_estimated.png",
+        "top": "r70_boards_stand_board_top.png",
+        "persp": "r70_boards_stand_board_persp.png",
+        "reference": "r70_boards_stand_board_reference.png"
+      }
+    },
+    {
+      "name": "stand_board_slow",
+      "meaning": "蛍光黄の徐行してください看板",
+      "triangles": 142,
+      "vertices": 268,
+      "dimensions_m": [
+        0.4,
+        0.64,
+        1.45631
+      ],
+      "bounds_m": [
+        [
+          -0.2,
+          -0.215,
+          0.0
+        ],
+        [
+          0.2,
+          0.425,
+          1.456306
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stand_board_slow.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 94,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 106,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 118,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 130,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0382-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地、赤とピンクの字。置き看板、幅約1 m・高さ約0.5 m。店の前。"
+        },
+        {
+          "oid": "S5-0782-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0782_b.jpg",
+          "url": "https://www.google.com/maps/@35.4852501,139.2108073,3a,90y,299.6h,88t/data=!3m4!1e1!3m2!1sULpRI_YRpXyccdHA7RPiSQ!2e0?hl=ja",
+          "description": "黄地黒文字の大きな方形板、約0.6×1.0m、上に落石の絵、金属脚2本で自立"
+        },
+        {
+          "oid": "S5-0786-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0787_b.jpg",
+          "url": "https://www.google.com/maps/@35.4855282,139.2118666,3a,90y,336.8h,88t/data=!3m4!1e1!3m2!1s5UuERxxf7dR_4r2eY33GgA!2e0?hl=ja",
+          "description": "蛍光黄の縦長板、約0.4×1.2m、黒字縦書き、ガードレールの内側に脚で立つ"
+        },
+        {
+          "oid": "S5-0948-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0949_b.jpg",
+          "url": "https://www.google.com/maps/@35.50377,139.229677,3a,90y,166.3h,88t/data=!3m4!1e1!3m2!1sHVM3FGSYkAvJqe0pgFJmBA!2e0?hl=ja",
+          "description": "橋の右側の高欄の内側に立つ白地の縦長立て看板、高さ約1.8 m 幅約0.7 m、黒字の縦書き。細い脚2本。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0786-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0787_b.jpg",
+        "url": "https://www.google.com/maps/@35.4855282,139.2118666,3a,90y,336.8h,88t/data=!3m4!1e1!3m2!1s5UuERxxf7dR_4r2eY33GgA!2e0?hl=ja",
+        "description": "蛍光黄の縦長板、約0.4×1.2m、黒字縦書き、ガードレールの内側に脚で立つ"
+      },
+      "preview_views": {
+        "front": "r70_boards_stand_board_slow_front.png",
+        "left": "r70_boards_stand_board_slow_left.png",
+        "right": "r70_boards_stand_board_slow_right.png",
+        "back_estimated": "r70_boards_stand_board_slow_back_estimated.png",
+        "top": "r70_boards_stand_board_slow_top.png",
+        "persp": "r70_boards_stand_board_slow_persp.png",
+        "reference": "r70_boards_stand_board_slow_reference.png"
+      }
+    },
+    {
+      "name": "stand_board_narrow",
+      "meaning": "幅員狭少の自立看板",
+      "triangles": 142,
+      "vertices": 268,
+      "dimensions_m": [
+        0.4,
+        0.64,
+        1.45631
+      ],
+      "bounds_m": [
+        [
+          -0.2,
+          -0.215,
+          0.0
+        ],
+        [
+          0.2,
+          0.425,
+          1.456306
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stand_board_narrow.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 94,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 106,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 118,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 130,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0382-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地、赤とピンクの字。置き看板、幅約1 m・高さ約0.5 m。店の前。"
+        },
+        {
+          "oid": "S5-0782-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0782_b.jpg",
+          "url": "https://www.google.com/maps/@35.4852501,139.2108073,3a,90y,299.6h,88t/data=!3m4!1e1!3m2!1sULpRI_YRpXyccdHA7RPiSQ!2e0?hl=ja",
+          "description": "黄地黒文字の大きな方形板、約0.6×1.0m、上に落石の絵、金属脚2本で自立"
+        },
+        {
+          "oid": "S5-0786-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0787_b.jpg",
+          "url": "https://www.google.com/maps/@35.4855282,139.2118666,3a,90y,336.8h,88t/data=!3m4!1e1!3m2!1s5UuERxxf7dR_4r2eY33GgA!2e0?hl=ja",
+          "description": "蛍光黄の縦長板、約0.4×1.2m、黒字縦書き、ガードレールの内側に脚で立つ"
+        },
+        {
+          "oid": "S5-0948-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0949_b.jpg",
+          "url": "https://www.google.com/maps/@35.50377,139.229677,3a,90y,166.3h,88t/data=!3m4!1e1!3m2!1sHVM3FGSYkAvJqe0pgFJmBA!2e0?hl=ja",
+          "description": "橋の右側の高欄の内側に立つ白地の縦長立て看板、高さ約1.8 m 幅約0.7 m、黒字の縦書き。細い脚2本。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0382-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+        "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+        "description": "白地、赤とピンクの字。置き看板、幅約1 m・高さ約0.5 m。店の前。"
+      },
+      "preview_views": {
+        "front": "r70_boards_stand_board_narrow_front.png",
+        "left": "r70_boards_stand_board_narrow_left.png",
+        "right": "r70_boards_stand_board_narrow_right.png",
+        "back_estimated": "r70_boards_stand_board_narrow_back_estimated.png",
+        "top": "r70_boards_stand_board_narrow_top.png",
+        "persp": "r70_boards_stand_board_narrow_persp.png",
+        "reference": "r70_boards_stand_board_narrow_reference.png"
+      }
+    },
+    {
+      "name": "stand_board_bridge_parking",
+      "meaning": "橋上の駐車禁止看板",
+      "triangles": 142,
+      "vertices": 268,
+      "dimensions_m": [
+        0.7,
+        0.64,
+        1.75528
+      ],
+      "bounds_m": [
+        [
+          -0.35,
+          -0.215,
+          0.0
+        ],
+        [
+          0.35,
+          0.425,
+          1.75528
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stand_board_bridge_parking.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 94,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 106,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 118,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 130,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0382-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地、赤とピンクの字。置き看板、幅約1 m・高さ約0.5 m。店の前。"
+        },
+        {
+          "oid": "S5-0782-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0782_b.jpg",
+          "url": "https://www.google.com/maps/@35.4852501,139.2108073,3a,90y,299.6h,88t/data=!3m4!1e1!3m2!1sULpRI_YRpXyccdHA7RPiSQ!2e0?hl=ja",
+          "description": "黄地黒文字の大きな方形板、約0.6×1.0m、上に落石の絵、金属脚2本で自立"
+        },
+        {
+          "oid": "S5-0786-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0787_b.jpg",
+          "url": "https://www.google.com/maps/@35.4855282,139.2118666,3a,90y,336.8h,88t/data=!3m4!1e1!3m2!1s5UuERxxf7dR_4r2eY33GgA!2e0?hl=ja",
+          "description": "蛍光黄の縦長板、約0.4×1.2m、黒字縦書き、ガードレールの内側に脚で立つ"
+        },
+        {
+          "oid": "S5-0948-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0949_b.jpg",
+          "url": "https://www.google.com/maps/@35.50377,139.229677,3a,90y,166.3h,88t/data=!3m4!1e1!3m2!1sHVM3FGSYkAvJqe0pgFJmBA!2e0?hl=ja",
+          "description": "橋の右側の高欄の内側に立つ白地の縦長立て看板、高さ約1.8 m 幅約0.7 m、黒字の縦書き。細い脚2本。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0948-07",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0949_b.jpg",
+        "url": "https://www.google.com/maps/@35.50377,139.229677,3a,90y,166.3h,88t/data=!3m4!1e1!3m2!1sHVM3FGSYkAvJqe0pgFJmBA!2e0?hl=ja",
+        "description": "橋の右側の高欄の内側に立つ白地の縦長立て看板、高さ約1.8 m 幅約0.7 m、黒字の縦書き。細い脚2本。"
+      },
+      "preview_views": {
+        "front": "r70_boards_stand_board_bridge_parking_front.png",
+        "left": "r70_boards_stand_board_bridge_parking_left.png",
+        "right": "r70_boards_stand_board_bridge_parking_right.png",
+        "back_estimated": "r70_boards_stand_board_bridge_parking_back_estimated.png",
+        "top": "r70_boards_stand_board_bridge_parking_top.png",
+        "persp": "r70_boards_stand_board_bridge_parking_persp.png",
+        "reference": "r70_boards_stand_board_bridge_parking_reference.png"
+      }
+    },
+    {
+      "name": "stand_board_coffee",
+      "meaning": "店頭の低い名水コーヒー看板",
+      "triangles": 142,
+      "vertices": 268,
+      "dimensions_m": [
+        1.0,
+        0.64,
+        0.81
+      ],
+      "bounds_m": [
+        [
+          -0.5,
+          -0.215,
+          0.0
+        ],
+        [
+          0.5,
+          0.425,
+          0.810001
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stand_board_coffee.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 94,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 106,
+          "triangle_count": 12
+        },
+        {
+          "name": "後ろへ開いた自立脚",
+          "triangle_start": 118,
+          "triangle_count": 12
+        },
+        {
+          "name": "転倒防止の足",
+          "triangle_start": 130,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0382-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "白地、赤とピンクの字。置き看板、幅約1 m・高さ約0.5 m。店の前。"
+        },
+        {
+          "oid": "S5-0782-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0782_b.jpg",
+          "url": "https://www.google.com/maps/@35.4852501,139.2108073,3a,90y,299.6h,88t/data=!3m4!1e1!3m2!1sULpRI_YRpXyccdHA7RPiSQ!2e0?hl=ja",
+          "description": "黄地黒文字の大きな方形板、約0.6×1.0m、上に落石の絵、金属脚2本で自立"
+        },
+        {
+          "oid": "S5-0786-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0787_b.jpg",
+          "url": "https://www.google.com/maps/@35.4855282,139.2118666,3a,90y,336.8h,88t/data=!3m4!1e1!3m2!1s5UuERxxf7dR_4r2eY33GgA!2e0?hl=ja",
+          "description": "蛍光黄の縦長板、約0.4×1.2m、黒字縦書き、ガードレールの内側に脚で立つ"
+        },
+        {
+          "oid": "S5-0948-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0949_b.jpg",
+          "url": "https://www.google.com/maps/@35.50377,139.229677,3a,90y,166.3h,88t/data=!3m4!1e1!3m2!1sHVM3FGSYkAvJqe0pgFJmBA!2e0?hl=ja",
+          "description": "橋の右側の高欄の内側に立つ白地の縦長立て看板、高さ約1.8 m 幅約0.7 m、黒字の縦書き。細い脚2本。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0382-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+        "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+        "description": "白地、赤とピンクの字。置き看板、幅約1 m・高さ約0.5 m。店の前。"
+      },
+      "preview_views": {
+        "front": "r70_boards_stand_board_coffee_front.png",
+        "left": "r70_boards_stand_board_coffee_left.png",
+        "right": "r70_boards_stand_board_coffee_right.png",
+        "back_estimated": "r70_boards_stand_board_coffee_back_estimated.png",
+        "top": "r70_boards_stand_board_coffee_top.png",
+        "persp": "r70_boards_stand_board_coffee_persp.png",
+        "reference": "r70_boards_stand_board_coffee_reference.png"
+      }
+    },
+    {
+      "name": "small_plate",
+      "meaning": "支柱2本の白い駐車注意札",
+      "triangles": 94,
+      "vertices": 172,
+      "dimensions_m": [
+        0.5,
+        0.098,
+        1.35
+      ],
+      "bounds_m": [
+        [
+          -0.25,
+          -0.073,
+          0.0
+        ],
+        [
+          0.25,
+          0.025,
+          1.35
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "small_plate.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0902-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+        },
+        {
+          "oid": "S4-0455-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0455_f.jpg",
+          "url": "https://www.google.com/maps/@35.4468069,139.212161,3a,90y,330.1h,88t/data=!3m4!1e1!3m2!1sI-x-LuyTp9pNbuGoSeJHZQ!2e0?hl=ja",
+          "description": "茶色の木板に白い文字、矢印は右向き（約 0.5×0.2 m）、斜面の低い所に立てかけ。ガードレールの外、縁から約 4 m"
+        },
+        {
+          "oid": "S4-0459-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_b.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,228.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い木板に黒の「P」、約 0.4×0.4 m、木の根元の低い位置に斜めに取り付け。広場の入口"
+        },
+        {
+          "oid": "S4-0482-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0482_b.jpg",
+          "url": "https://www.google.com/maps/@35.4519713,139.212171,3a,90y,179.3h,88t/data=!3m4!1e1!3m2!1sAq3SICovU0S8yW58ttJbnQ!2e0?hl=ja",
+          "description": "白い縦長の板（約 0.25×0.5 m）に縦書きの黒字。橙色のカーブミラーの柱の中ほど"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0902-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+        "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+        "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+      },
+      "preview_views": {
+        "front": "r70_boards_small_plate_front.png",
+        "left": "r70_boards_small_plate_left.png",
+        "right": "r70_boards_small_plate_right.png",
+        "back_estimated": "r70_boards_small_plate_back_estimated.png",
+        "top": "r70_boards_small_plate_top.png",
+        "persp": "r70_boards_small_plate_persp.png",
+        "reference": "r70_boards_small_plate_reference.png"
+      }
+    },
+    {
+      "name": "small_plate_attention",
+      "meaning": "ミラーの柱へ付く注意札（柱なし）",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        0.16,
+        0.0705,
+        0.5
+      ],
+      "bounds_m": [
+        [
+          -0.08,
+          -0.018,
+          0.0
+        ],
+        [
+          0.08,
+          0.0525,
+          0.5
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "small_plate_attention.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 14,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 26,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0902-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+        },
+        {
+          "oid": "S4-0455-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0455_f.jpg",
+          "url": "https://www.google.com/maps/@35.4468069,139.212161,3a,90y,330.1h,88t/data=!3m4!1e1!3m2!1sI-x-LuyTp9pNbuGoSeJHZQ!2e0?hl=ja",
+          "description": "茶色の木板に白い文字、矢印は右向き（約 0.5×0.2 m）、斜面の低い所に立てかけ。ガードレールの外、縁から約 4 m"
+        },
+        {
+          "oid": "S4-0459-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_b.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,228.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い木板に黒の「P」、約 0.4×0.4 m、木の根元の低い位置に斜めに取り付け。広場の入口"
+        },
+        {
+          "oid": "S4-0482-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0482_b.jpg",
+          "url": "https://www.google.com/maps/@35.4519713,139.212171,3a,90y,179.3h,88t/data=!3m4!1e1!3m2!1sAq3SICovU0S8yW58ttJbnQ!2e0?hl=ja",
+          "description": "白い縦長の板（約 0.25×0.5 m）に縦書きの黒字。橙色のカーブミラーの柱の中ほど"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0482-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0482_b.jpg",
+        "url": "https://www.google.com/maps/@35.4519713,139.212171,3a,90y,179.3h,88t/data=!3m4!1e1!3m2!1sAq3SICovU0S8yW58ttJbnQ!2e0?hl=ja",
+        "description": "白い縦長の板（約 0.25×0.5 m）に縦書きの黒字。橙色のカーブミラーの柱の中ほど"
+      },
+      "preview_views": {
+        "front": "r70_boards_small_plate_attention_front.png",
+        "left": "r70_boards_small_plate_attention_left.png",
+        "right": "r70_boards_small_plate_attention_right.png",
+        "back_estimated": "r70_boards_small_plate_attention_back_estimated.png",
+        "top": "r70_boards_small_plate_attention_top.png",
+        "persp": "r70_boards_small_plate_attention_persp.png",
+        "reference": "r70_boards_small_plate_attention_reference.png"
+      }
+    },
+    {
+      "name": "small_plate_parking",
+      "meaning": "木に付く黄色いP札（柱なし）",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        0.4,
+        0.0705,
+        0.4
+      ],
+      "bounds_m": [
+        [
+          -0.2,
+          -0.018,
+          0.0
+        ],
+        [
+          0.2,
+          0.0525,
+          0.4
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "small_plate_parking.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 14,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 26,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0902-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+        },
+        {
+          "oid": "S4-0455-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0455_f.jpg",
+          "url": "https://www.google.com/maps/@35.4468069,139.212161,3a,90y,330.1h,88t/data=!3m4!1e1!3m2!1sI-x-LuyTp9pNbuGoSeJHZQ!2e0?hl=ja",
+          "description": "茶色の木板に白い文字、矢印は右向き（約 0.5×0.2 m）、斜面の低い所に立てかけ。ガードレールの外、縁から約 4 m"
+        },
+        {
+          "oid": "S4-0459-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_b.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,228.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い木板に黒の「P」、約 0.4×0.4 m、木の根元の低い位置に斜めに取り付け。広場の入口"
+        },
+        {
+          "oid": "S4-0482-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0482_b.jpg",
+          "url": "https://www.google.com/maps/@35.4519713,139.212171,3a,90y,179.3h,88t/data=!3m4!1e1!3m2!1sAq3SICovU0S8yW58ttJbnQ!2e0?hl=ja",
+          "description": "白い縦長の板（約 0.25×0.5 m）に縦書きの黒字。橙色のカーブミラーの柱の中ほど"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0459-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_b.jpg",
+        "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,228.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+        "description": "黄色い木板に黒の「P」、約 0.4×0.4 m、木の根元の低い位置に斜めに取り付け。広場の入口"
+      },
+      "preview_views": {
+        "front": "r70_boards_small_plate_parking_front.png",
+        "left": "r70_boards_small_plate_parking_left.png",
+        "right": "r70_boards_small_plate_parking_right.png",
+        "back_estimated": "r70_boards_small_plate_parking_back_estimated.png",
+        "top": "r70_boards_small_plate_parking_top.png",
+        "persp": "r70_boards_small_plate_parking_persp.png",
+        "reference": "r70_boards_small_plate_parking_reference.png"
+      }
+    },
+    {
+      "name": "small_plate_flick",
+      "meaning": "木の右向きFLICK案内札（柱なし）",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        0.5,
+        0.0705,
+        0.2
+      ],
+      "bounds_m": [
+        [
+          -0.25,
+          -0.018,
+          0.0
+        ],
+        [
+          0.25,
+          0.0525,
+          0.2
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "small_plate_flick.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 14,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 26,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0902-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+        },
+        {
+          "oid": "S4-0455-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0455_f.jpg",
+          "url": "https://www.google.com/maps/@35.4468069,139.212161,3a,90y,330.1h,88t/data=!3m4!1e1!3m2!1sI-x-LuyTp9pNbuGoSeJHZQ!2e0?hl=ja",
+          "description": "茶色の木板に白い文字、矢印は右向き（約 0.5×0.2 m）、斜面の低い所に立てかけ。ガードレールの外、縁から約 4 m"
+        },
+        {
+          "oid": "S4-0459-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_b.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,228.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い木板に黒の「P」、約 0.4×0.4 m、木の根元の低い位置に斜めに取り付け。広場の入口"
+        },
+        {
+          "oid": "S4-0482-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0482_b.jpg",
+          "url": "https://www.google.com/maps/@35.4519713,139.212171,3a,90y,179.3h,88t/data=!3m4!1e1!3m2!1sAq3SICovU0S8yW58ttJbnQ!2e0?hl=ja",
+          "description": "白い縦長の板（約 0.25×0.5 m）に縦書きの黒字。橙色のカーブミラーの柱の中ほど"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0455-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0455_f.jpg",
+        "url": "https://www.google.com/maps/@35.4468069,139.212161,3a,90y,330.1h,88t/data=!3m4!1e1!3m2!1sI-x-LuyTp9pNbuGoSeJHZQ!2e0?hl=ja",
+        "description": "茶色の木板に白い文字、矢印は右向き（約 0.5×0.2 m）、斜面の低い所に立てかけ。ガードレールの外、縁から約 4 m"
+      },
+      "preview_views": {
+        "front": "r70_boards_small_plate_flick_front.png",
+        "left": "r70_boards_small_plate_flick_left.png",
+        "right": "r70_boards_small_plate_flick_right.png",
+        "back_estimated": "r70_boards_small_plate_flick_back_estimated.png",
+        "top": "r70_boards_small_plate_flick_top.png",
+        "persp": "r70_boards_small_plate_flick_persp.png",
+        "reference": "r70_boards_small_plate_flick_reference.png"
+      }
+    },
+    {
+      "name": "parking_clearance_notice",
+      "meaning": "ガードレールの木支えに付く長方形の駐車注意板",
+      "triangles": 94,
+      "vertices": 172,
+      "dimensions_m": [
+        0.6,
+        0.098,
+        1.23
+      ],
+      "bounds_m": [
+        [
+          -0.3,
+          -0.073,
+          0.0
+        ],
+        [
+          0.3,
+          0.025,
+          1.23
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "parking_clearance_notice.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0902-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+        },
+        {
+          "oid": "S4-0455-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0455_f.jpg",
+          "url": "https://www.google.com/maps/@35.4468069,139.212161,3a,90y,330.1h,88t/data=!3m4!1e1!3m2!1sI-x-LuyTp9pNbuGoSeJHZQ!2e0?hl=ja",
+          "description": "茶色の木板に白い文字、矢印は右向き（約 0.5×0.2 m）、斜面の低い所に立てかけ。ガードレールの外、縁から約 4 m"
+        },
+        {
+          "oid": "S4-0459-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_b.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,228.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い木板に黒の「P」、約 0.4×0.4 m、木の根元の低い位置に斜めに取り付け。広場の入口"
+        },
+        {
+          "oid": "S4-0482-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0482_b.jpg",
+          "url": "https://www.google.com/maps/@35.4519713,139.212171,3a,90y,179.3h,88t/data=!3m4!1e1!3m2!1sAq3SICovU0S8yW58ttJbnQ!2e0?hl=ja",
+          "description": "白い縦長の板（約 0.25×0.5 m）に縦書きの黒字。橙色のカーブミラーの柱の中ほど"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0777-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_b.jpg",
+        "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+        "description": "白地の方形板、約0.6×0.9m、文字は黒、ガードレールの支柱に木杭で支える。上部に小さな札、板は傾いて古い"
+      },
+      "preview_views": {
+        "front": "r70_boards_parking_clearance_notice_front.png",
+        "left": "r70_boards_parking_clearance_notice_left.png",
+        "right": "r70_boards_parking_clearance_notice_right.png",
+        "back_estimated": "r70_boards_parking_clearance_notice_back_estimated.png",
+        "top": "r70_boards_parking_clearance_notice_top.png",
+        "persp": "r70_boards_parking_clearance_notice_persp.png",
+        "reference": "r70_boards_parking_clearance_notice_reference.png"
+      }
+    },
+    {
+      "name": "notice_board",
+      "meaning": "木枠と複数の白い掲示紙。本文は未判読で空白。",
+      "triangles": 142,
+      "vertices": 268,
+      "dimensions_m": [
+        1.58,
+        0.137,
+        1.605
+      ],
+      "bounds_m": [
+        [
+          -0.79,
+          -0.092,
+          0.0
+        ],
+        [
+          0.79,
+          0.045,
+          1.605
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "notice_board.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "縦枠",
+          "triangle_start": 14,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦枠",
+          "triangle_start": 26,
+          "triangle_count": 12
+        },
+        {
+          "name": "横枠",
+          "triangle_start": 38,
+          "triangle_count": 12
+        },
+        {
+          "name": "横枠",
+          "triangle_start": 50,
+          "triangle_count": 12
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 62,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 90,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 118,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 130,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0315-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "看板の隣の白い掲示板。小さな白い紙が格子状に並ぶ。幅約1.5 m。字は読めない"
+        },
+        {
+          "oid": "S4-0380-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+          "description": "煉瓦の壁に付く額入りの板、花の飾り縁、幅約0.7 m・高さ約0.9 m。中の小さな字は読めない。"
+        },
+        {
+          "oid": "S4-0413-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0413_f.jpg",
+          "url": "https://www.google.com/maps/@35.4405633,139.2122709,3a,90y,21.8h,88t/data=!3m4!1e1!3m2!1s14xZ73tk1f6NAOfdd0B4Lw!2e0?hl=ja",
+          "description": "緑色の板（約 1.5×1.0 m）、白い字が小さく何行も並ぶが読めない。茶色の木の柱に取り付け、道の右の木立の脇、道から約 4 m"
+        },
+        {
+          "oid": "S4-0545-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_f.jpg",
+          "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,348.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+          "description": "道の左の茶色い太い柱から横腕が伸び、黒い横長のLED掲示板（約1.5×0.5 m）が道の上に出る。赤い警告灯つき。表示は暗く「…事故…」のように見えるが読めない"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0315-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+        "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+        "description": "看板の隣の白い掲示板。小さな白い紙が格子状に並ぶ。幅約1.5 m。字は読めない"
+      },
+      "preview_views": {
+        "front": "r70_boards_notice_board_front.png",
+        "left": "r70_boards_notice_board_left.png",
+        "right": "r70_boards_notice_board_right.png",
+        "back_estimated": "r70_boards_notice_board_back_estimated.png",
+        "top": "r70_boards_notice_board_top.png",
+        "persp": "r70_boards_notice_board_persp.png",
+        "reference": "r70_boards_notice_board_reference.png"
+      }
+    },
+    {
+      "name": "notice_board_aoyamaso",
+      "meaning": "壁付けの額入り青山荘案内板",
+      "triangles": 86,
+      "vertices": 172,
+      "dimensions_m": [
+        0.78,
+        0.0895,
+        0.96
+      ],
+      "bounds_m": [
+        [
+          -0.39,
+          -0.037,
+          0.0
+        ],
+        [
+          0.39,
+          0.0525,
+          0.96
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "notice_board_aoyamaso.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "縦枠",
+          "triangle_start": 14,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦枠",
+          "triangle_start": 26,
+          "triangle_count": 12
+        },
+        {
+          "name": "横枠",
+          "triangle_start": 38,
+          "triangle_count": 12
+        },
+        {
+          "name": "横枠",
+          "triangle_start": 50,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 62,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 74,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0315-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "看板の隣の白い掲示板。小さな白い紙が格子状に並ぶ。幅約1.5 m。字は読めない"
+        },
+        {
+          "oid": "S4-0380-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+          "description": "煉瓦の壁に付く額入りの板、花の飾り縁、幅約0.7 m・高さ約0.9 m。中の小さな字は読めない。"
+        },
+        {
+          "oid": "S4-0413-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0413_f.jpg",
+          "url": "https://www.google.com/maps/@35.4405633,139.2122709,3a,90y,21.8h,88t/data=!3m4!1e1!3m2!1s14xZ73tk1f6NAOfdd0B4Lw!2e0?hl=ja",
+          "description": "緑色の板（約 1.5×1.0 m）、白い字が小さく何行も並ぶが読めない。茶色の木の柱に取り付け、道の右の木立の脇、道から約 4 m"
+        },
+        {
+          "oid": "S4-0545-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_f.jpg",
+          "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,348.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+          "description": "道の左の茶色い太い柱から横腕が伸び、黒い横長のLED掲示板（約1.5×0.5 m）が道の上に出る。赤い警告灯つき。表示は暗く「…事故…」のように見えるが読めない"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0380-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+        "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+        "description": "煉瓦の壁に付く額入りの板、花の飾り縁、幅約0.7 m・高さ約0.9 m。中の小さな字は読めない。"
+      },
+      "preview_views": {
+        "front": "r70_boards_notice_board_aoyamaso_front.png",
+        "left": "r70_boards_notice_board_aoyamaso_left.png",
+        "right": "r70_boards_notice_board_aoyamaso_right.png",
+        "back_estimated": "r70_boards_notice_board_aoyamaso_back_estimated.png",
+        "top": "r70_boards_notice_board_aoyamaso_top.png",
+        "persp": "r70_boards_notice_board_aoyamaso_persp.png",
+        "reference": "r70_boards_notice_board_aoyamaso_reference.png"
+      }
+    },
+    {
+      "name": "notice_board_led",
+      "meaning": "Γ柱・黒い電光掲示板と赤い警告灯",
+      "triangles": 200,
+      "vertices": 380,
+      "dimensions_m": [
+        2.14,
+        0.299,
+        5.41
+      ],
+      "bounds_m": [
+        [
+          -0.14,
+          -0.159,
+          0.0
+        ],
+        [
+          2.0,
+          0.14,
+          5.41
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "notice_board_led.png"
+      ],
+      "components": [
+        {
+          "name": "Γ型の太い柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "道路上への横腕",
+          "triangle_start": 44,
+          "triangle_count": 36
+        },
+        {
+          "name": "LED情報板の筐体",
+          "triangle_start": 80,
+          "triangle_count": 12
+        },
+        {
+          "name": "表示面",
+          "triangle_start": 92,
+          "triangle_count": 12
+        },
+        {
+          "name": "赤色警告灯台",
+          "triangle_start": 104,
+          "triangle_count": 36
+        },
+        {
+          "name": "赤色警告灯",
+          "triangle_start": 140,
+          "triangle_count": 60
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "表示文は判読できないため消灯の黒面。柱径と張出し長は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0315-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+          "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+          "description": "看板の隣の白い掲示板。小さな白い紙が格子状に並ぶ。幅約1.5 m。字は読めない"
+        },
+        {
+          "oid": "S4-0380-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+          "description": "煉瓦の壁に付く額入りの板、花の飾り縁、幅約0.7 m・高さ約0.9 m。中の小さな字は読めない。"
+        },
+        {
+          "oid": "S4-0413-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0413_f.jpg",
+          "url": "https://www.google.com/maps/@35.4405633,139.2122709,3a,90y,21.8h,88t/data=!3m4!1e1!3m2!1s14xZ73tk1f6NAOfdd0B4Lw!2e0?hl=ja",
+          "description": "緑色の板（約 1.5×1.0 m）、白い字が小さく何行も並ぶが読めない。茶色の木の柱に取り付け、道の右の木立の脇、道から約 4 m"
+        },
+        {
+          "oid": "S4-0545-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_f.jpg",
+          "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,348.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+          "description": "道の左の茶色い太い柱から横腕が伸び、黒い横長のLED掲示板（約1.5×0.5 m）が道の上に出る。赤い警告灯つき。表示は暗く「…事故…」のように見えるが読めない"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0545-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_f.jpg",
+        "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,348.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+        "description": "道の左の茶色い太い柱から横腕が伸び、黒い横長のLED掲示板（約1.5×0.5 m）が道の上に出る。赤い警告灯つき。表示は暗く「…事故…」のように見えるが読めない"
+      },
+      "preview_views": {
+        "front": "r70_boards_notice_board_led_front.png",
+        "left": "r70_boards_notice_board_led_left.png",
+        "right": "r70_boards_notice_board_led_right.png",
+        "back_estimated": "r70_boards_notice_board_led_back_estimated.png",
+        "top": "r70_boards_notice_board_led_top.png",
+        "persp": "r70_boards_notice_board_led_persp.png",
+        "reference": "r70_boards_notice_board_led_reference.png"
+      }
+    },
+    {
+      "name": "nobori",
+      "meaning": "細い木柱2本に固定された縦長の黄色看板",
+      "triangles": 94,
+      "vertices": 172,
+      "dimensions_m": [
+        0.5,
+        0.098,
+        2.6
+      ],
+      "bounds_m": [
+        [
+          -0.25,
+          -0.073,
+          0.0
+        ],
+        [
+          0.25,
+          0.025,
+          2.6
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "nobori.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0890-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0890_f.jpg",
+          "url": "https://www.google.com/maps/@35.4979005,139.2230015,3a,90y,32.9h,88t/data=!3m4!1e1!3m2!1sd8j1sTpKQAp-5G6E2N41VA!2e0?hl=ja",
+          "description": "黄色地に黒字の縦長の看板、幅約0.5m×高さ約2.2m、茶色の柱2本（のぼり用の細い柱）に取り付く。ガードレールのすぐ外（谷側）、2枚が横に並ぶ。ガードレールに隠れて足元は見えない。字の下に小さい注意書きあり（？）"
+        },
+        {
+          "oid": "S5-0888-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0888_b.jpg",
+          "url": "https://www.google.com/maps/@35.4975503,139.2227421,3a,90y,223.2h,88t/data=!3m4!1e1!3m2!1sNFhxBFlp1aj6IuR9vGr0eA!2e0?hl=ja",
+          "description": "黄色地に黒字の縦長の細い看板（のぼり形）、斜めに傾いて立つ。約0.5m×2m。ガードレールの谷側に2枚並ぶ（手前の傾いた物と奥の物）。「この先」で始まり道の狭さなどの注意書きらしい"
+        },
+        {
+          "oid": "S4-0382-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_f.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,63.1h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "細い竿に付く縦長ののぼり旗、幅約0.5 m・高さ約1.8 m、橙とピンクの字。右の草地の駐車場の入口付近。"
+        },
+        {
+          "oid": "S5-0902-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_b.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,243.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "橋の入口の左（進む向き）に立つ黄色ののぼり形看板、約0.4m×1.2m、橙の細い柱のそば。0890の物と同じ型"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0890-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0890_f.jpg",
+        "url": "https://www.google.com/maps/@35.4979005,139.2230015,3a,90y,32.9h,88t/data=!3m4!1e1!3m2!1sd8j1sTpKQAp-5G6E2N41VA!2e0?hl=ja",
+        "description": "黄色地に黒字の縦長の看板、幅約0.5m×高さ約2.2m、茶色の柱2本（のぼり用の細い柱）に取り付く。ガードレールのすぐ外（谷側）、2枚が横に並ぶ。ガードレールに隠れて足元は見えない。字の下に小さい注意書きあり（？）"
+      },
+      "preview_views": {
+        "front": "r70_boards_nobori_front.png",
+        "left": "r70_boards_nobori_left.png",
+        "right": "r70_boards_nobori_right.png",
+        "back_estimated": "r70_boards_nobori_back_estimated.png",
+        "top": "r70_boards_nobori_top.png",
+        "persp": "r70_boards_nobori_persp.png",
+        "reference": "r70_boards_nobori_reference.png"
+      }
+    },
+    {
+      "name": "construction_board",
+      "meaning": "青枠の工事看板・緑支柱2本",
+      "triangles": 94,
+      "vertices": 172,
+      "dimensions_m": [
+        1.5,
+        0.098,
+        2.15
+      ],
+      "bounds_m": [
+        [
+          -0.75,
+          -0.073,
+          0.0
+        ],
+        [
+          0.75,
+          0.025,
+          2.15
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "construction_board.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 42,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 70,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 82,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0737-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0737_b.jpg",
+          "url": "https://www.google.com/maps/@35.4813767,139.2044889,3a,90y,77.9h,88t/data=!3m4!1e1!3m2!1scu_JzXeRmxa57mZbZitE5w!2e0?hl=ja",
+          "description": "青と白の大きな看板、仮囲いのフェンスに付く、約 1×1.5 m。令和7年8月29日まで 8:00-17:00"
+        },
+        {
+          "oid": "S5-0851-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0851_f.jpg",
+          "url": "https://www.google.com/maps/@35.4900655,139.2206416,3a,90y,313.2h,88t/data=!3m4!1e1!3m2!1sZuMFa6J7oB8YeZ1SjayJ8w!2e0?hl=ja",
+          "description": "ガードレール外側に立つ青縁の大きな看板。幅約 1.5 m・高さ約 2 m。土砂崩壊対策の道路災害防除工事の案内。緑色の支柱 2 本"
+        },
+        {
+          "oid": "S5-0939-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0939_f.jpg",
+          "url": "https://www.google.com/maps/@35.501857,139.2309218,3a,90y,314.9h,88t/data=!3m4!1e1!3m2!1seWcQKDQ-_GxediPRjVmFmw!2e0?hl=ja",
+          "description": "左の石積みの縁に立つ橙色の縦長の板（約0.4×0.9m）、細い支柱、高さ約1.2m。字は読めない"
+        },
+        {
+          "oid": "S5-0778-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_b.jpg",
+          "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+          "description": "柵に付く白地・赤文字の小札、約0.5×0.4m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0851-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0851_f.jpg",
+        "url": "https://www.google.com/maps/@35.4900655,139.2206416,3a,90y,313.2h,88t/data=!3m4!1e1!3m2!1sZuMFa6J7oB8YeZ1SjayJ8w!2e0?hl=ja",
+        "description": "ガードレール外側に立つ青縁の大きな看板。幅約 1.5 m・高さ約 2 m。土砂崩壊対策の道路災害防除工事の案内。緑色の支柱 2 本"
+      },
+      "preview_views": {
+        "front": "r70_boards_construction_board_front.png",
+        "left": "r70_boards_construction_board_left.png",
+        "right": "r70_boards_construction_board_right.png",
+        "back_estimated": "r70_boards_construction_board_back_estimated.png",
+        "top": "r70_boards_construction_board_top.png",
+        "persp": "r70_boards_construction_board_persp.png",
+        "reference": "r70_boards_construction_board_reference.png"
+      }
+    },
+    {
+      "name": "construction_board_bridge",
+      "meaning": "仮囲いへ付ける橋塗替え工事看板",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        1.0,
+        0.0705,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.5,
+          -0.018,
+          0.0
+        ],
+        [
+          0.5,
+          0.0525,
+          1.5
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "construction_board_bridge.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 14,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 26,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "判読できた文字だけ描画。小さな発行者名・本文・電話番号の不明箇所は空白。",
+        "裏面の固定具・脚の奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0737-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0737_b.jpg",
+          "url": "https://www.google.com/maps/@35.4813767,139.2044889,3a,90y,77.9h,88t/data=!3m4!1e1!3m2!1scu_JzXeRmxa57mZbZitE5w!2e0?hl=ja",
+          "description": "青と白の大きな看板、仮囲いのフェンスに付く、約 1×1.5 m。令和7年8月29日まで 8:00-17:00"
+        },
+        {
+          "oid": "S5-0851-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0851_f.jpg",
+          "url": "https://www.google.com/maps/@35.4900655,139.2206416,3a,90y,313.2h,88t/data=!3m4!1e1!3m2!1sZuMFa6J7oB8YeZ1SjayJ8w!2e0?hl=ja",
+          "description": "ガードレール外側に立つ青縁の大きな看板。幅約 1.5 m・高さ約 2 m。土砂崩壊対策の道路災害防除工事の案内。緑色の支柱 2 本"
+        },
+        {
+          "oid": "S5-0939-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0939_f.jpg",
+          "url": "https://www.google.com/maps/@35.501857,139.2309218,3a,90y,314.9h,88t/data=!3m4!1e1!3m2!1seWcQKDQ-_GxediPRjVmFmw!2e0?hl=ja",
+          "description": "左の石積みの縁に立つ橙色の縦長の板（約0.4×0.9m）、細い支柱、高さ約1.2m。字は読めない"
+        },
+        {
+          "oid": "S5-0778-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_b.jpg",
+          "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+          "description": "柵に付く白地・赤文字の小札、約0.5×0.4m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0737-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0737_b.jpg",
+        "url": "https://www.google.com/maps/@35.4813767,139.2044889,3a,90y,77.9h,88t/data=!3m4!1e1!3m2!1scu_JzXeRmxa57mZbZitE5w!2e0?hl=ja",
+        "description": "青と白の大きな看板、仮囲いのフェンスに付く、約 1×1.5 m。令和7年8月29日まで 8:00-17:00"
+      },
+      "preview_views": {
+        "front": "r70_boards_construction_board_bridge_front.png",
+        "left": "r70_boards_construction_board_bridge_left.png",
+        "right": "r70_boards_construction_board_bridge_right.png",
+        "back_estimated": "r70_boards_construction_board_bridge_back_estimated.png",
+        "top": "r70_boards_construction_board_bridge_top.png",
+        "persp": "r70_boards_construction_board_bridge_persp.png",
+        "reference": "r70_boards_construction_board_bridge_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "post_boardの店看板は壁付けで柱なし。森林板は木枠と2本柱。",
+    "stand_board/small_plate/notice_boardには形状差があるため名前を分離。",
+    "noboriは写真では布旗ではなく2本の竿に留めた縦長の板。",
+    "未判読の文章は空白。雨量規制板の区間名が不明なので全文画像は作らない。"
+  ],
+  "references": {
+    "post_board": [
+      {
+        "oid": "S4-0300-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_b.jpg",
+        "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,103.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+        "description": "オレンジ色〜黄色の縦長の板（幅約0.4 m×高さ約0.8 m）、黒文字で縦書き「事故多発」「通行注意」、右下に衝突を表す星形のマーク。白い細い丸柱（高さ約2.5 m）に付く。ガードレールのすぐ外側で、柱の足元に赤いオレンジ反射体付きの支柱が隣接"
+      },
+      {
+        "oid": "S4-0315-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+        "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+        "description": "横長の木枠つきの青い板（幅約1.5 m×高さ約1.2 m）。上に黄色い大文字「森林整備を行っています」、下は青い帯に小さな字（読めない）。木の柱2本で立つ。ガードレールの終端の右手前"
+      },
+      {
+        "oid": "S4-0382-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+        "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+        "description": "白地に青い字の横長の板、幅約3 m・高さ約0.8 m。店の1階屋根の上の壁に付く。電柱が手前でかかる。"
+      },
+      {
+        "oid": "S4-0411-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0411_f.jpg",
+        "url": "https://www.google.com/maps/@35.4403563,139.2118966,3a,90y,44.4h,88t/data=!3m4!1e1!3m2!1sqJcf-bulCfFBhWLPUB0Qxw!2e0?hl=ja",
+        "description": "深緑の四角い板（約 1.8×1.1 m）、白と黄の大きな字「BOSCO」と黄色い S 形のロゴ、下に細い赤字（Auto Camp ... Base と見えるが小さく不確か）、「50M」「直進」と白い上向き矢印。2 本の木の脚で斜面の上に斜めに立てかけ、道の左縁から約 2 m、道より高い所。後ろに黄色い斜め棒"
+      }
+    ],
+    "stand_board": [
+      {
+        "oid": "S4-0382-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+        "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+        "description": "白地、赤とピンクの字。置き看板、幅約1 m・高さ約0.5 m。店の前。"
+      },
+      {
+        "oid": "S5-0782-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0782_b.jpg",
+        "url": "https://www.google.com/maps/@35.4852501,139.2108073,3a,90y,299.6h,88t/data=!3m4!1e1!3m2!1sULpRI_YRpXyccdHA7RPiSQ!2e0?hl=ja",
+        "description": "黄地黒文字の大きな方形板、約0.6×1.0m、上に落石の絵、金属脚2本で自立"
+      },
+      {
+        "oid": "S5-0786-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0787_b.jpg",
+        "url": "https://www.google.com/maps/@35.4855282,139.2118666,3a,90y,336.8h,88t/data=!3m4!1e1!3m2!1s5UuERxxf7dR_4r2eY33GgA!2e0?hl=ja",
+        "description": "蛍光黄の縦長板、約0.4×1.2m、黒字縦書き、ガードレールの内側に脚で立つ"
+      },
+      {
+        "oid": "S5-0948-07",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0949_b.jpg",
+        "url": "https://www.google.com/maps/@35.50377,139.229677,3a,90y,166.3h,88t/data=!3m4!1e1!3m2!1sHVM3FGSYkAvJqe0pgFJmBA!2e0?hl=ja",
+        "description": "橋の右側の高欄の内側に立つ白地の縦長立て看板、高さ約1.8 m 幅約0.7 m、黒字の縦書き。細い脚2本。"
+      }
+    ],
+    "small_plate": [
+      {
+        "oid": "S5-0902-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+        "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+        "description": "白地に黒字の縦長の立て札、約0.5m×1.1m、青い縁、青の細い柱2本。バーの手前に立つ"
+      },
+      {
+        "oid": "S4-0455-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0455_f.jpg",
+        "url": "https://www.google.com/maps/@35.4468069,139.212161,3a,90y,330.1h,88t/data=!3m4!1e1!3m2!1sI-x-LuyTp9pNbuGoSeJHZQ!2e0?hl=ja",
+        "description": "茶色の木板に白い文字、矢印は右向き（約 0.5×0.2 m）、斜面の低い所に立てかけ。ガードレールの外、縁から約 4 m"
+      },
+      {
+        "oid": "S4-0459-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_b.jpg",
+        "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,228.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+        "description": "黄色い木板に黒の「P」、約 0.4×0.4 m、木の根元の低い位置に斜めに取り付け。広場の入口"
+      },
+      {
+        "oid": "S4-0482-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0482_b.jpg",
+        "url": "https://www.google.com/maps/@35.4519713,139.212171,3a,90y,179.3h,88t/data=!3m4!1e1!3m2!1sAq3SICovU0S8yW58ttJbnQ!2e0?hl=ja",
+        "description": "白い縦長の板（約 0.25×0.5 m）に縦書きの黒字。橙色のカーブミラーの柱の中ほど"
+      }
+    ],
+    "notice_board": [
+      {
+        "oid": "S4-0315-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0315_f.jpg",
+        "url": "https://www.google.com/maps/@35.4307344,139.2155747,3a,90y,317.2h,88t/data=!3m4!1e1!3m2!1sZLU3gRHp6HaeaKDl6j66QQ!2e0?hl=ja",
+        "description": "看板の隣の白い掲示板。小さな白い紙が格子状に並ぶ。幅約1.5 m。字は読めない"
+      },
+      {
+        "oid": "S4-0380-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+        "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+        "description": "煉瓦の壁に付く額入りの板、花の飾り縁、幅約0.7 m・高さ約0.9 m。中の小さな字は読めない。"
+      },
+      {
+        "oid": "S4-0413-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0413_f.jpg",
+        "url": "https://www.google.com/maps/@35.4405633,139.2122709,3a,90y,21.8h,88t/data=!3m4!1e1!3m2!1s14xZ73tk1f6NAOfdd0B4Lw!2e0?hl=ja",
+        "description": "緑色の板（約 1.5×1.0 m）、白い字が小さく何行も並ぶが読めない。茶色の木の柱に取り付け、道の右の木立の脇、道から約 4 m"
+      },
+      {
+        "oid": "S4-0545-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_f.jpg",
+        "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,348.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+        "description": "道の左の茶色い太い柱から横腕が伸び、黒い横長のLED掲示板（約1.5×0.5 m）が道の上に出る。赤い警告灯つき。表示は暗く「…事故…」のように見えるが読めない"
+      }
+    ],
+    "nobori": [
+      {
+        "oid": "S5-0890-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0890_f.jpg",
+        "url": "https://www.google.com/maps/@35.4979005,139.2230015,3a,90y,32.9h,88t/data=!3m4!1e1!3m2!1sd8j1sTpKQAp-5G6E2N41VA!2e0?hl=ja",
+        "description": "黄色地に黒字の縦長の看板、幅約0.5m×高さ約2.2m、茶色の柱2本（のぼり用の細い柱）に取り付く。ガードレールのすぐ外（谷側）、2枚が横に並ぶ。ガードレールに隠れて足元は見えない。字の下に小さい注意書きあり（？）"
+      },
+      {
+        "oid": "S5-0888-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0888_b.jpg",
+        "url": "https://www.google.com/maps/@35.4975503,139.2227421,3a,90y,223.2h,88t/data=!3m4!1e1!3m2!1sNFhxBFlp1aj6IuR9vGr0eA!2e0?hl=ja",
+        "description": "黄色地に黒字の縦長の細い看板（のぼり形）、斜めに傾いて立つ。約0.5m×2m。ガードレールの谷側に2枚並ぶ（手前の傾いた物と奥の物）。「この先」で始まり道の狭さなどの注意書きらしい"
+      },
+      {
+        "oid": "S4-0382-06",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_f.jpg",
+        "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,63.1h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+        "description": "細い竿に付く縦長ののぼり旗、幅約0.5 m・高さ約1.8 m、橙とピンクの字。右の草地の駐車場の入口付近。"
+      },
+      {
+        "oid": "S5-0902-07",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_b.jpg",
+        "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,243.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+        "description": "橋の入口の左（進む向き）に立つ黄色ののぼり形看板、約0.4m×1.2m、橙の細い柱のそば。0890の物と同じ型"
+      }
+    ],
+    "construction_board": [
+      {
+        "oid": "S5-0737-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0737_b.jpg",
+        "url": "https://www.google.com/maps/@35.4813767,139.2044889,3a,90y,77.9h,88t/data=!3m4!1e1!3m2!1scu_JzXeRmxa57mZbZitE5w!2e0?hl=ja",
+        "description": "青と白の大きな看板、仮囲いのフェンスに付く、約 1×1.5 m。令和7年8月29日まで 8:00-17:00"
+      },
+      {
+        "oid": "S5-0851-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0851_f.jpg",
+        "url": "https://www.google.com/maps/@35.4900655,139.2206416,3a,90y,313.2h,88t/data=!3m4!1e1!3m2!1sZuMFa6J7oB8YeZ1SjayJ8w!2e0?hl=ja",
+        "description": "ガードレール外側に立つ青縁の大きな看板。幅約 1.5 m・高さ約 2 m。土砂崩壊対策の道路災害防除工事の案内。緑色の支柱 2 本"
+      },
+      {
+        "oid": "S5-0939-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0939_f.jpg",
+        "url": "https://www.google.com/maps/@35.501857,139.2309218,3a,90y,314.9h,88t/data=!3m4!1e1!3m2!1seWcQKDQ-_GxediPRjVmFmw!2e0?hl=ja",
+        "description": "左の石積みの縁に立つ橙色の縦長の板（約0.4×0.9m）、細い支柱、高さ約1.2m。字は読めない"
+      },
+      {
+        "oid": "S5-0778-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_b.jpg",
+        "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+        "description": "柵に付く白地・赤文字の小札、約0.5×0.4m"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "post_board_bosco",
+    "image": "R70-0411_f.jpg",
+    "crop_pixels": [
+      150,
+      500,
+      550,
+      1000
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

@@ -11,6 +11,8 @@ from .terrain import CUT_SLOPE
 
 WALL_LEAN = 0.3
 WALL_CUT_SLOPE = 3.0
+# 擁壁の行は地形をこれだけ下げてから削る。壁は路面の 0.3 m 下から立つので、道の縁の高さから削ると壁の下 2.7 m ほどは地形が壁より手前に出た（2026-11-01）
+WALL_CUT_DROP = 0.6
 GUARDRAIL_OFFSET = 0.1
 SIDES = {"L": 1, "R": -1}
 TYPES = ("guardrail", "retaining_wall", "parapet", "fence", "sidewalk", "hedge", "overpass")
@@ -124,6 +126,15 @@ def cut_slopes(sec, feats):
     return cut[1], cut[-1]
 
 
+def cut_drops(sec, feats):
+    """左右それぞれ、行ごとに切り土を下げる高さ（擁壁の行は WALL_CUT_DROP、ほかは 0）。"""
+    drop = {1: np.zeros(sec.n), -1: np.zeros(sec.n)}
+    for f in feats:
+        if f.type == "retaining_wall":
+            drop[SIDES[f.side]][rows_of(sec, f)] = WALL_CUT_DROP
+    return drop[1], drop[-1]
+
+
 def _side_arrays(sec, f, offset=None):
     """offset（行ごと）があれば、道の端をそれだけ外へずらす（歩道の外側に立つ壁など）。"""
     sl = rows_of(sec, f); side = SIDES[f.side]
@@ -179,8 +190,11 @@ def shelf_mesh(sec, f, offset):
 
 
 def guardrail_meshes(sec, f):
+    """ガードレール：側溝の外側の縁＋GUARDRAIL_OFFSET。行の width_m があれば、その幅だけ外（路肩の外の縁）へ出し、縁石の高さだけ上げる
+    （書いた行だけ。歩道と重なるほかの手すりは道の縁のまま。吹風トンネル入口の手前の広い路肩、2026-11-01）。"""
     sl, side, hw, ze = _side_arrays(sec, f)
-    L = hw + GUTTER_WIDTH + GUARDRAIL_OFFSET
+    L = hw + GUTTER_WIDTH + GUARDRAIL_OFFSET + f.width_m
+    ze = ze + (CURB_HEIGHT if f.width_m > 0 else 0.0)
     visual = wall_ribbon(sec, sl, side, L, L, ze + 0.55, ze + 0.85)
     collision = wall_ribbon(sec, sl, side, L, L, ze - 0.3, ze + 1.2)
     return visual, collision

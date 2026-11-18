@@ -39,6 +39,10 @@ RETEX = {
     "mt_wall_norikae": ("norikae", (8, 8), "wall"), "mt_wall_shotcrete": ("shotcrete", (2, 2), "wall"),
     "mt_wall_nozura": ("nozura", (1.9, 1.9), "wall"),     # 無料素材の野面石積み（ヤビツ峠のわき道）
     "mt_terrain": ("forest_floor", (2, 2), "terrain"),
+    # 県道 70 号（S4・S5）の擁壁は Codex の表面の画像（data/processed/landmarks/r70_retaining_wall/<名前>_surface.png、横 4 m×縦 1 m で継ぎ目なし、2026-10-31）
+    "mt_wall_r70_stone": ("r70:stone", (4, 1), "wall"), "mt_wall_r70_block": ("r70:block", (4, 1), "wall"),
+    "mt_wall_r70_shotcrete": ("r70:shotcrete", (4, 1), "wall"), "mt_wall_r70_concrete": ("r70:concrete", (4, 1), "wall"),
+    "mt_wall_r70_slope_frame": ("r70:slope_frame", (4, 1), "wall"),
     "mt_grass": ("forest_floor", (2, 2), "terrain"),   # 草地（林の地面の写真を緑に染める。表の grass の範囲と寺山の広場）
 }
 # ストリートビューと見比べて決めた 明るさ・鮮やかさ・コントラスト
@@ -106,6 +110,43 @@ def cut(a, b, gs):
     return [(x0, x1) for x0, x1 in pieces if x1 - x0 >= 5.0]
 
 
+R70_WALL = {"kenchi_moss": "r70_stone", "kenchi": "r70_stone", "nozura": "r70_stone", "block": "r70_block", "block_aged": "r70_block"}
+# 岩・落石防護網は今のまま。Codex の吹き付け・コンクリート・のり枠（*_surface.png）は筋がにじんだ絵で、今の画像より悪く見えたので使わない（2026-10-31 の照合）
+
+
+# Codex の坑口の絵に掛ける色（ストリートビュー 2025-07 とゲームの撮影 2026-11-01 で、坑口の壁のアーチの上の平均の色の比。ゲームでは白く光り、
+# 写真は苔の緑がかった暗い石（大洞）・黒ずんだ古いコンクリート（S5 4091 m）・汚れた灰色のコンクリート（吹風）だった）
+PORTAL_TINT = {"s5_2442_portal": np.array([0.23, 0.23, 0.20]),   # 4 回目の撮影で坑門/路面の明るさが写真 0.50・ゲーム 0.80 → 0.62 倍（2026-11-01）
+                 # 坑門の面は絵の灰色の地（128,132,120）の一色。0.45・0.50・0.38 と 0.30・0.33・0.26 はゲームで薄い緑に見えた（2026-11-01）
+               "s5_4091_portal": np.array([0.49, 0.43, 0.39]),   # 坑門/路面：写真 0.48・ゲーム 0.57 → 0.84 倍
+              
+               "s5_10663_portal": np.array([0.60, 0.64, 0.67]), "s5_10937_portal": np.array([0.60, 0.64, 0.67])}
+
+
+# 坑口の上の金網の柵（tunnel の osm id, 端）→ (r70_fence の部品, 並べる数)。S5 4091 m の小さなトンネルの峠側（ストリートビュー R70-0717_f 2025-07）
+PORTAL_TOP_FENCE = {("131561907", "a"): ("wire_mesh", 4)}
+# 坑口の脇の柱（tunnel の osm id, 端）→ (r70_utility_pole の部品, 塗る色, 坑門の右の端からの横 m, 手前へ m)。S5 4091 m の峠側の右のオレンジの柱
+# （ストリートビュー R70-0717_f 2025-07。拾い出し S5-0717-03）
+PORTAL_POLE = {("131561907", "a"): ("steel_green", (205, 120, 40), 0.6, -1.0)}
+# 坑口の正面を今の坑口の壁の正面に合わせる（tunnel の osm id, 端）。吹風トンネル出口（写真 R70-0992_b）は 1 枚の平らな壁で、Codex の坑口が 2.7 m 張り出して見えた（2026-11-01）
+PORTAL_FLUSH = {("32745017", "b")}
+# 名板の札の並べ直しと描き直し：坑口の部品 → (字, 札の大きさ m, 札の中心の間隔 m)。写真 R70-0992_b の札は約 0.55 m 角・0.81 m おき、青みの灰色の地に黒い筆文字
+PLATE_REDO = {"s5_10937_portal": ("吹風トンネル", 0.55, 0.81)}
+# 隠す部品の裏側の写し（kn5 に書き出すとき、両面の材質の部品には裏向きの写し <名前>_back が自動で作られ、元の名前だけを隠すと裏側が残る）。
+# 2026-11-01 に吹風トンネル出口の橋で、隠したはずの元の茶色い手すりが欄干の窓と上に見えた。まずこの橋だけ（隠している両面の部品はほかに 94 個ある）
+# 2026-11-02：吹風トンネル入口の赤いアーチ橋（S5 10507〜10607 m）で、古い橋の赤い門の裏側の写しが Codex の橋の先に残っていた（写真 R70-0978_f には無い）
+HIDE_BACK_TOO = {"bridge_131561909_rail_L", "bridge_131561909_rail_R", "bridge_131561912_arch"}
+# 草地の緑（mt_grass）にする地形の塊（表の grass の範囲で分けない）。吹風トンネル入口の坑口の裏の盛り土：写真 R70-0981_f は坑口の上が緑で、
+# 植物の隙間から土色の盛り土が横長の帯に見えた（2026-11-01）
+GRASS_MESHES = {"1GRASS_s1_terrain_tunnel_32745017_a"}
+
+
+def r70_part(asset, name):
+    """Codex の部品（npz）。無ければ None（今の作り方のまま）。"""
+    from yabitsu import landmarks
+    return landmarks.load(asset, name) if landmarks.exists(asset, name) else None
+
+
 def retex_assign(sec, cl, bounds, feats, rows):
     man = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))
     from scipy.spatial import cKDTree
@@ -135,6 +176,8 @@ def retex_assign(sec, cl, bounds, feats, rows):
             elif k == "wall":
                 f = feats[int(name.rsplit("_", 1)[1])]
                 fin = override((f.s_from + f.s_to) / 2, walls, f.side) or dm.wall_finish(f.note)
+                if sname in dm.R70_SECTIONS and fin in R70_WALL and "古い" not in (f.note or ""):   # 「古い」ブロックは古いブロックの絵のまま（2026-11-01）
+                    fin = R70_WALL[fin]
                 assign[name] = f"mt_wall_{fin}"
     assign.update(dm.town_walls(man["meshes"], taken))
     if "1WALL_s1_objg_retaining_wall_grey" in assign:   # 峠の駐車場の向かいの擁壁の南の端（s4 の擁壁と同じ古びた間知ブロック）
@@ -158,6 +201,8 @@ def retex_assign(sec, cl, bounds, feats, rows):
             assign[name] = "mt_terrain"
         if inside(s, grass):
             assign[name] = "mt_grass"
+    for name in GRASS_MESHES & set(man["meshes"]):
+        assign[name] = "mt_grass"
     return assign
 
 
@@ -172,7 +217,7 @@ def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex):
     near = ranges(bounds, rows, "grass") + ranges(bounds, rows, "green_ground")
     hide = []
     for name, e in man["meshes"].items():
-        if assign.get(name) != "mt_grass" or not name.startswith(("1GRASS_s1_terrain", "1GRASS_track_mid")):
+        if assign.get(name) != "mt_grass" or not name.startswith(("1GRASS_s1_terrain", "1GRASS_track_mid")) or name in GRASS_MESHES:
             continue
         z = np.load(MANIFEST / e["file"]); v, f, uv = z["verts"], z["faces"], z["uvs"]
         s = cl["s"][tree.query(v[f].mean(1)[:, :2])[1]]
@@ -195,7 +240,10 @@ def write_retex_textures(keys, ext_dir):
     for key in keys:
         base, base_m, layout = RETEX[key]
         u_m, v_m, rot = dress_retex.UV_LAYOUT[layout]
-        img, _ = dress_tex.load(base)
+        if base.startswith("r70:"):
+            img = Image.open(config.DATA_PROCESSED / "landmarks" / "r70_retaining_wall" / f"{base[4:]}_surface.png")
+        else:
+            img, _ = dress_tex.load(base)
         if base in dress_retex.ENLARGE:
             img = dress_retex.enlarge(img.convert("RGB"), dress_retex.ENLARGE[base])
         comp = dress_retex.compose(img.convert("RGB"), base_m, u_m, v_m, rot)
@@ -219,7 +267,7 @@ def write_retex_textures(keys, ext_dir):
             g = np.asarray(comp.convert("L"), float)[..., None] / 255.0
             comp = Image.fromarray(np.clip((0.55 + 0.9 * g) * np.array([74, 92, 44], float), 0, 255).astype(np.uint8))
         lum = np.asarray(comp.convert("L"), float) / 255.0
-        n = dress_tex.height_to_normal(lum, dress_tex.TEXTURES[base].normal)
+        n = dress_tex.height_to_normal(lum, 1.0 if base.startswith("r70:") else dress_tex.TEXTURES[base].normal)
         nm = Image.fromarray(((n * 0.5 + 0.5) * 255).astype(np.uint8))
         (ext_dir / f"dress_{key}.dds").write_bytes(kn5.dds_bytes(comp))
         (ext_dir / f"dress_{key}_nm.dds").write_bytes(kn5.dds_bytes(nm))
@@ -254,7 +302,14 @@ def build_parts(sec, bounds, feats, rows, m: Manifest):
                 uv = np.c_[uv[:, 0] * 2.0 / dress_parts.FENCES["white_bar"][0][2], uv[:, 1]]
                 m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_bars", v, fc, uv, "mt_bars")
                 continue
-            piece = features.Feature(a, b, f.side, f.type, f.height_m, f.note)
+            piece = features.Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m)   # width_m：路肩の外の縁へ出す幅（2026-11-01）
+            in_r70 = any(bounds[x][0] <= (a + b) / 2 <= bounds[x][1] for x in dm.R70_SECTIONS)
+            span, end = r70_part("r70_guardrail", "w_beam"), r70_part("r70_guardrail", "w_beam_end")
+            if in_r70 and span is not None and end is not None:   # S4・S5：Codex の W 形ガードレールを基準線に沿って並べる
+                tone = "rust" if kind == "wbeam_aged" else "white"
+                for q, (v, fc, uv, part) in enumerate(dm.r70_guardrail_meshes(sec, piece, {"span": span, "end": end})):
+                    m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_r70{part}_{q}", v, fc, uv, f"mt_r70_rail_{part}_{tone}")
+                continue
             mat = "mt_guardrail_aged" if kind == "wbeam_aged" else "mt_guardrail"
             for q, (v, fc, uv, part) in enumerate(dm.guardrail_meshes(sec, piece)):
                 m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_{part}_{q}", v, fc, uv, mat if part == "beam" else "mt_post")
@@ -287,12 +342,218 @@ def add_poles(sec, bounds, m: Manifest):
         if not poles:
             continue
         allp += poles
-        v, f, uv = dress_parts.pole_mesh(poles)
-        m.add_mesh(GROUP, f"mt_poles_{k:03d}", v, f, uv, "mt_pole")
+        part = r70_part("r70_utility_pole", "concrete") if r["section"] in dm.R70_SECTIONS else None
+        if part is not None:      # S4・S5：Codex のコンクリート電柱（腕金・碍子つき）
+            v, f, uv = dm.r70_pole_mesh(poles, part)
+            m.add_mesh(GROUP, f"mt_poles_{k:03d}", v, f, uv, "mt_r70_pole")
+        else:
+            v, f, uv = dress_parts.pole_mesh(poles)
+            m.add_mesh(GROUP, f"mt_poles_{k:03d}", v, f, uv, "mt_pole")
         v, f, uv = dress_parts.wire_mesh(poles, n_wires=3)
         if len(v):
             m.add_mesh(GROUP, f"mt_wires_{k:03d}", v, f, uv, "mt_wire")
     return len(allp)
+
+
+def add_r70_structures(sec, bounds, m: Manifest, tex):
+    """S4・S5 の橋の欄干・親柱・橋名板と、青宇治橋・赤いアーチ橋の全体、トンネルの坑口を Codex の部品にする
+    （data/manual/s45_route70_bridges.json。export/compare/route70/route70_delivery_09.md の割り当て表）。
+    近くの今の欄干（bridge_*_rail_L/R、1WALL_track_fence_*）・親柱・坑口の見た目を隠す名前を返す。当たり判定（1WALL_bridge_*_rail・
+    トンネルの内壁）は今のまま残す。今の欄干が見つからない橋は置かない（当たり判定の無い欄干を作らない）。"""
+    import re
+    from scipy.spatial import cKDTree
+    from yabitsu import landmarks
+    sp = config.DATA_MANUAL / "s45_route70_bridges.json"
+    if not sp.exists():
+        return []
+    spec = json.loads(sp.read_text(encoding="utf-8"))
+    meshes = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))["meshes"]
+    tree = cKDTree(np.c_[sec.x, sec.y])
+    lo, hi = float(bounds["s4"][0]), float(bounds["s5"][1])
+
+    def geo_of(name):
+        v = np.load(MANIFEST / meshes[name]["file"])["verts"]
+        i = tree.query(v[:, :2])[1]
+        h = sec.heading[i]
+        d = -(v[:, 0] - sec.x[i]) * np.sin(h) + (v[:, 1] - sec.y[i]) * np.cos(h)
+        ss = sec.s[i]
+        return {"s0": float(ss.min()), "s1": float(ss.max()), "s": float(np.median(ss)), "side": 1 if np.median(d) > 0 else -1,
+                "lat": float(np.median(np.abs(d))), "z": float(v[:, 2].min()), "xy": v[:, :2].mean(0)}
+
+    vis = [n for n, mm in meshes.items() if mm.get("renderable", True)]
+    rails = {n: geo_of(n) for n in vis if re.match(r"^(bridge_\d+_rail_[LR]|1WALL_track_fence_\d+)$", n)}
+    rails = {n: g for n, g in rails.items() if lo <= g["s"] <= hi}
+    mats = {}
+
+    def mat_for(asset, name, tint=None, tag=""):
+        key = f"mt_r70_{asset[4:]}_{name}{tag}"
+        if key not in mats:
+            src = landmarks.texture(asset, name)
+            landmarks.copy_texture(src, tex / f"{key}.png")
+            if name in PLATE_REDO:   # 名板の札の地と字を写真に合わせて描き直す（色はこのあとの PORTAL_TINT が坑門と同じに掛かる）
+                pv, pf, puv = landmarks.load(asset, name)
+                im_ = Image.open(tex / f"{key}.png"); a_ = np.asarray(im_.convert("RGB"))
+                H_ = a_.shape[0]   # この部品の uv は v＝0 が絵の下（絵の行＝(1−v)×H）
+                ys_, cnt_ = np.unique(np.round(pv[:, 1], 3), return_counts=True)
+                on_face = (np.abs(np.round(pv[pf][:, :, 1], 3) - ys_[np.argmax(cnt_)]) < 1e-3).all(1)   # 坑門の正面（いちばん頂点の多い y）の面
+                c_ = puv[pf[on_face]].mean(1); px = np.c_[c_[:, 0] * H_, (1 - c_[:, 1]) * H_].astype(int).clip(0, H_ - 1)
+                cols, n_ = np.unique(a_[px[:, 1], px[:, 0]] // 8, axis=0, return_counts=True)
+                face_rgb = cols[np.argmax(n_)] * 8 + 4.0                                # 正面の面でいちばん多い色（坑門の灰色）
+                fi = dm._plate_faces(pf, puv, H_)
+                cells = sorted({(int(round(puv[pf[t]][:, 0].min() * H_)), int(round((1 - puv[pf[t]][:, 1].max()) * H_)),
+                                 int(round(puv[pf[t]][:, 0].max() * H_)), int(round((1 - puv[pf[t]][:, 1].min()) * H_))) for t in fi})
+                cells = [c for c in cells if c[2] - c[0] > 20]
+                out_ = dm.r70_plate_texture(im_, PLATE_REDO[name][0], cells, face_rgb)
+                if im_.mode == "RGBA":
+                    out_ = out_.convert("RGBA"); out_.putalpha(im_.getchannel("A"))
+                out_.save(tex / f"{key}.png")
+            if tint is not None:   # 橋ごとの色（同じ部品を使うほかの橋は変えない）
+                im_ = Image.open(tex / f"{key}.png"); a_ = np.asarray(im_.convert("RGBA"), float)
+                a_[..., :3] *= np.asarray(tint["rgb"], float)
+                if tint.get("brown_dark"):   # 茶色の手すり（赤が青より 25 以上強い所）をさらに暗く
+                    br = a_[..., 0] - a_[..., 2] > 25
+                    a_[br, :3] *= tint["brown_dark"]
+                Image.fromarray(np.clip(a_, 0, 255).astype(np.uint8), "RGBA").convert(im_.mode).save(tex / f"{key}.png")
+            if name in PORTAL_TINT:   # 坑口の色をストリートビューに合わせる
+                im_ = Image.open(tex / f"{key}.png"); a_ = np.asarray(im_.convert("RGBA"), float)
+                a_[..., :3] *= PORTAL_TINT[name]
+                Image.fromarray(np.clip(a_, 0, 255).astype(np.uint8), "RGBA").convert(im_.mode).save(tex / f"{key}.png")
+            im = Image.open(src)
+            alpha = im.mode == "RGBA" and np.asarray(im)[..., 3].min() < 250
+            m.add_material(key, texture=f"textures/{key}.png", alpha=bool(alpha), two_sided=True)
+            mats[key] = True
+        return key
+
+    hide, used, n_rail, n_whole, n_port = [], set(), 0, 0, 0
+    lm_path = config.DATA_MANUAL / "s45_route70.json"   # 写真から位置を出して置いた橋名板（本体の組み立て）。同じ橋に二重に置かない
+    photo_plates = {t for it in (json.loads(lm_path.read_text(encoding="utf-8"))["landmarks"] if lm_path.exists() else [])
+                    for t in ("hinokisawa", "tokoyo", "jigokuzawa", "kiyotaki", "yoshida", "aouji") if t in (it.get("tex") or it["name"])}
+    for k, b in enumerate(spec["bridges"]):
+        if b.get("skip"):
+            continue
+        ps = float(bounds[b["section"]][0]) + b["s"]
+        half = b["length_m"] / 2 + 30.0
+        if "whole" in b:                                  # 青宇治橋・赤いアーチ橋：今の橋（bridge_<id>_*）の見た目を全部隠して、全体を置く
+            gids = {re.match(r"^(?:1WALL_)?bridge_(\d+)_girder$", n).group(1) for n in vis if re.match(r"^bridge_\d+_girder$", n)}
+            best = min(gids, key=lambda g: abs(geo_of(f"bridge_{g}_girder")["s"] - ps), default=None)
+            if best is None or abs(geo_of(f"bridge_{best}_girder")["s"] - ps) > half:
+                print("橋が見つからない", b["place"]); continue
+            g = geo_of(f"bridge_{best}_girder")
+            i = int(np.argmin(np.abs(sec.s - g["s"])))
+            part = landmarks.load("r70_bridges", b["whole"])
+            v = dm.r70_whole_bridge_verts(sec, i, part[0])   # 部品の +Y を道の進む向きへ（進入の端が −Y＝峠の側）、路面は部品の Z＝0.7 m、高さは道の勾配に沿う
+            m.add_mesh(GROUP, f"mt_r70_bridge_{k:02d}_{b['whole']}", v, part[1], part[2], mat_for("r70_bridges", b["whole"]))
+            hide += [n for n in vis if re.match(rf"^(1WALL_)?bridge_{best}_", n)]
+            used |= {n for n in rails if n.startswith(f"bridge_{best}_")}
+            n_whole += 1
+            continue
+        for side_name, sd in (("left", 1), ("right", -1)):
+            cand = [(abs(g["s"] - ps), n) for n, g in rails.items() if n not in used and g["side"] == sd and g["s1"] >= ps - half and g["s0"] <= ps + half]
+            if not cand:
+                print("欄干が見つからない", b["place"], side_name); continue
+            n = min(cand)[1]
+            g = rails[n]
+            used.add(n); hide.append(n)
+            pname = b[side_name]
+            span = 3.0 if pname.startswith("log") else 2.0
+            v, f, uv = dm.r70_run_mesh(sec, g["s0"], g["s1"], sd, g["lat"], landmarks.load("r70_bridges", pname), span)
+            tint = b.get("tint")   # この橋だけの色（写真の苔の付いた古いコンクリートなど）
+            m.add_mesh(GROUP, f"mt_r70_bridge_{k:02d}_{side_name}", v, f, uv,
+                       mat_for("r70_bridges", pname, tint, f"_b{k:02d}" if tint else ""))
+            n_rail += 1
+            behind = b.get(f"{side_name}_top")   # 欄干の上に載せる柵（吹風トンネル出口の橋の焦げ茶の鉄の縦格子、写真 R70-0992_b。2026-11-01）
+            if behind:
+                fa, fn = behind["part"].split(":")
+                fp = landmarks.load(fa, fn); fpv = np.array(fp[0], float)
+                fpv[:, 2] = behind["z0_m"] + fpv[:, 2] * behind["height_m"] / fpv[:, 2].max()   # 欄干の天端から height_m の高さに縮める
+                fv, ff, fu = dm.r70_run_mesh(sec, g["s0"], g["s1"], sd, g["lat"], (fpv, fp[1], fp[2]), 2.0, centered=False)
+                key = f"mt_{fa}_{fn}_paint_b{k:02d}"
+                if key not in mats:
+                    im_ = Image.open(landmarks.texture(fa, fn)).convert("RGB")
+                    g_ = np.asarray(im_.convert("L"), float)[..., None] / 255.0
+                    Image.fromarray(np.clip((0.45 + 0.75 * g_) * np.array(behind["rgb"], float), 0, 255).astype(np.uint8)).save(tex / f"{key}.png")
+                    m.add_material(key, texture=f"textures/{key}.png", two_sided=True); mats[key] = True
+                m.add_mesh(GROUP, f"mt_r70_bridge_{k:02d}_{side_name}_top", fv, ff, fu, key)
+            if b.get("post"):                             # 親柱：欄干の両端。S5 の今の親柱・銘板は隠す
+                for j, at in enumerate((g["s0"], g["s1"])):
+                    v, f, uv = dm.r70_post_mesh(sec, at, sd, g["lat"], landmarks.load("r70_bridges", b["post"]))
+                    m.add_mesh(GROUP, f"mt_r70_bridge_{k:02d}_{side_name}_post{j}", v, f, uv, mat_for("r70_bridges", b["post"]))
+                mm = re.match(r"^bridge_(\d+)_rail_", n)
+                if mm:
+                    hide += [x for x in vis if re.match(rf"^bridge_{mm.group(1)}_(post|plate)_", x)]
+            if b.get("plate") and sd == 1 and b["plate"].replace("_name", "") not in photo_plates:   # 橋名板：左の入口の親柱の脇（写真から位置を出した札が無い橋だけ）
+                v, f, uv = dm.r70_post_mesh(sec, g["s0"] - 0.45, sd, g["lat"], landmarks.load("r70_bridges", b["plate"]))
+                m.add_mesh(GROUP, f"mt_r70_bridge_{k:02d}_plate", v, f, uv, mat_for("r70_bridges", b["plate"]))
+    # トンネルの坑口
+    tids = sorted({re.match(r"^tunnel_(\d+)_portal_a$", n).group(1) for n in vis if re.match(r"^tunnel_\d+_portal_a$", n)})
+    for t in spec["tunnels"]:
+        ps = float(bounds[t["section"]][0]) + t["s"]
+        best, bd = None, 1e9
+        for tid in tids:
+            ga, gb = geo_of(f"tunnel_{tid}_portal_a"), geo_of(f"tunnel_{tid}_portal_b")
+            dd = max(0.0, min(ga["s"], gb["s"]) - ps, ps - max(ga["s"], gb["s"]))
+            if dd < bd:
+                best, bd = (tid, ga, gb), dd
+        if best is None or bd > 60:
+            print("トンネルが見つからない", t["place"]); continue
+        tid, ga, gb = best
+        ends = sorted([("a", ga, gb), ("b", gb, ga)], key=lambda e: e[1]["s"])      # 峠の側（s の小さい方）に portal_a の部品
+        for (end, g, other), pname in zip(ends, (t["portal_a"], t["portal_b"])):
+            out = g["xy"] - other["xy"]; out = out / np.linalg.norm(out)              # 外へ向く向き＝部品の −Y
+            if (tid, end) in PORTAL_FLUSH:   # 壁の面に合わせる向き（両端を結ぶ向きはカーブしたトンネルで壁から 10° ほどずれる）
+                out = dm.r70_wall_normal(np.load(MANIFEST / meshes[f"tunnel_{tid}_portal_{end}"]["file"])["verts"][:, :2], out)
+            uy = -out; ux = np.array([uy[1], -uy[0]])
+            part = landmarks.load("r70_tunnels", pname)
+            # 置く所はアーチの縁（rim）の真ん中、高さは縁の底（＝路面）。今の坑口の壁（portal：幅 30 m・高さ 10〜37 m）は山肌の切れ目をふさいでいるので
+            # 残し、名板だけ隠す。縁は口の内側の裏打ちとして残し、Codex の坑口は縁が外へはみ出さない大きさにする。2026-10-31 に壁ごと隠して壁の底の高さに置いたら、坑口のまわりに穴が開き（奥が見えて鏡のよう）、
+            # 坑口が路面より 1〜12.6 m 低く沈んだ（ゲームの画面で見つかった）
+            rim = geo_of(f"tunnel_{tid}_rim_{end}")
+            rv = np.load(MANIFEST / meshes[f"tunnel_{tid}_rim_{end}"]["file"])["verts"]
+            d = rv[:, :2] - rim["xy"]
+            k = dm.r70_cover_scale(part, np.c_[d @ ux, rv[:, 2] - rim["z"]])   # 今の縁（高さ 6.5〜7.6 m）が Codex の坑口の外へはみ出さない大きさに
+            q = part[0] * k
+            if pname in PLATE_REDO:   # 名板の札を写真の大きさ・間隔に並べ直す（倍率 k を掛けたあとの m）
+                _, sz, pt = PLATE_REDO[pname]
+                q = dm.r70_respace_plate(q, part[1], part[2], sz, pt)
+            if (tid, end) in PORTAL_FLUSH:   # 正面（いちばん広い面の y）を今の坑口の壁の正面の 3 cm 手前に
+                wv = np.load(MANIFEST / meshes[f"tunnel_{tid}_portal_{end}"]["file"])["verts"]
+                wall_out = float(((wv[:, :2] - rim["xy"]) @ out).max())
+                ys, cnt = np.unique(np.round(part[0][:, 1], 3), return_counts=True)
+                face_y = float(ys[np.argmax(cnt)]) * k
+                q = dm.r70_portal_setback(q, face_y, wall_out)
+                hide.append(f"tunnel_{tid}_rim_{end}")   # 今の縁取りは壁より 0.25 m 手前に出ていて、下げた坑口の前で名板を隠した（2026-11-01）。口のまわりは今の坑口の壁がふさぐ
+                print(f"トンネルの坑口 {t['place']} {pname}：正面を壁の正面（縁から外へ {wall_out:.2f} m）の 3 cm 手前へ {float(q[0, 1] - part[0][0, 1] * k):+.2f} m")
+            v = np.c_[rim["xy"][0] + q[:, 0] * ux[0] + q[:, 1] * uy[0], rim["xy"][1] + q[:, 0] * ux[1] + q[:, 1] * uy[1], rim["z"] + q[:, 2]]
+            print(f"トンネルの坑口 {t['place']} {pname}：{k:.2f} 倍（今の縁を覆う）")
+            m.add_mesh(GROUP, f"mt_r70_tunnel_{tid}_{end}", v, part[1], part[2], mat_for("r70_tunnels", pname))
+            hide += [n for n in vis if re.match(rf"^tunnel_{tid}_plate_{end}$", n)]   # 縁は口の内側の裏打ちとして残す
+            n_port += 1
+            if (tid, end) in PORTAL_TOP_FENCE:   # 坑口の上の金網の柵（坑門の天端の奥寄り、横に並べる）
+                fname, nu = PORTAL_TOP_FENCE[(tid, end)]
+                fp = landmarks.load("r70_fence", fname); L_ = float(fp[0][:, 0].max())
+                yb = float(q[:, 1].min()) + 0.4   # 天端の手前寄り（奥寄りは盛り土の土手に埋まった。2026-11-01）
+                ztop = rim["z"] + float(q[q[:, 1] < q[:, 1].min() + 0.8, 2].max())   # 手前の縁の高さ（部品のいちばん高い所では浮いて見えた）
+                for u in range(nu):
+                    x0 = -nu * L_ / 2 + u * L_
+                    fv = np.c_[rim["xy"][0] + (x0 + fp[0][:, 0]) * ux[0] + (yb + fp[0][:, 1]) * uy[0],
+                               rim["xy"][1] + (x0 + fp[0][:, 0]) * ux[1] + (yb + fp[0][:, 1]) * uy[1], ztop + fp[0][:, 2]]
+                    m.add_mesh(GROUP, f"mt_r70_tunnel_{tid}_{end}_fence_{u}", fv, fp[1], fp[2], mat_for("r70_fence", fname))
+            if (tid, end) in PORTAL_POLE:   # 坑口の脇の柱（坑口から見て右＝部品の +X、手前＝−Y）
+                pn, rgb, dx, dy = PORTAL_POLE[(tid, end)]
+                pp = landmarks.load("r70_utility_pole", pn); x_ = float(q[:, 0].max()) + dx
+                pv = np.c_[rim["xy"][0] + (x_ + pp[0][:, 0]) * ux[0] + (dy + pp[0][:, 1]) * uy[0],
+                           rim["xy"][1] + (x_ + pp[0][:, 0]) * ux[1] + (dy + pp[0][:, 1]) * uy[1], rim["z"] + pp[0][:, 2]]
+                key = f"mt_r70_pole_{pn}_paint"
+                if key not in mats:
+                    im_ = Image.open(landmarks.texture("r70_utility_pole", pn)).convert("RGB")
+                    g_ = np.asarray(im_.convert("L"), float)[..., None] / 255.0
+                    Image.fromarray(np.clip((0.45 + 0.75 * g_) * np.array(rgb, float), 0, 255).astype(np.uint8)).save(tex / f"{key}.png")
+                    m.add_material(key, texture=f"textures/{key}.png", two_sided=True); mats[key] = True
+                m.add_mesh(GROUP, f"mt_r70_tunnel_{tid}_{end}_pole", pv, pp[1], pp[2], key)
+    # 坑口の上の帯（壁の上から山の中が見えた）は、坑口の壁を筒のまわりだけにして、その上を盛り土でふさいだ（yabitsu/tunnel.py の _portal・_backfill）
+    hide += [f"{n}_back" for n in hide if n in HIDE_BACK_TOO]   # 裏側の写しも隠す
+    print(f"Codex の橋：欄干 {n_rail} 本・全体 {n_whole} 本、トンネルの坑口 {n_port} 個、隠す今の見た目 {len(set(hide))}")
+    return sorted(set(hide))
 
 
 def add_road_marks(sec, bounds, m: Manifest, tex):
@@ -389,7 +650,16 @@ def main():
     # 暗くした画像が効かなかった（2026-10-26 の撮影 v1・v2 で柱の色が同じ (146,152,164)）
     m.add_material("mt_pole", texture="textures/pole_mt.png")
     m.add_material("mt_wire", color=(0.12, 0.12, 0.12), two_sided=True)
+    from yabitsu import landmarks   # S4・S5 の Codex の部品の画像（1 辺 1024 まで）
+    LMD = config.DATA_PROCESSED / "landmarks"
+    for mat, src in (("mt_r70_pole", LMD / "r70_utility_pole/concrete.png"),
+                     ("mt_r70_rail_span_white", LMD / "r70_guardrail/w_beam.png"), ("mt_r70_rail_span_rust", LMD / "r70_guardrail/w_beam_rust.png"),
+                     ("mt_r70_rail_end_white", LMD / "r70_guardrail/w_beam_end.png"), ("mt_r70_rail_end_rust", LMD / "r70_guardrail/w_beam_end_rust.png")):
+        if src.exists():
+            landmarks.copy_texture(src, tex / f"{mat}.png")
+            m.add_material(mat, texture=f"textures/{mat}.png", two_sided=mat.startswith("mt_r70_rail"))
     npoles = add_poles(sec, bounds, m)
+    hide += add_r70_structures(sec, bounds, m, tex)
     kita_hidden, kita_poles = add_kitahara_details(m, tex)
     hide += kita_hidden
     npoles += kita_poles

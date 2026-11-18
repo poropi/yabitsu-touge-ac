@@ -1,0 +1,201 @@
+{
+  "part_info": {
+    "trail_white_post": {
+      "meaning": "白木標柱の単体推定形。写真に寸法・題字の確実な裏付けなし。",
+      "front": "-Y"
+    },
+    "trail_brown_directions": {
+      "meaning": "登山口の複数段茶色方向板。行先未判読。",
+      "front": "-Y"
+    },
+    "trail_blue_notice": {
+      "meaning": "茶方向標の下の小青白注意板。文章未判読。",
+      "front": "-Y"
+    },
+    "trail_green_notice": {
+      "meaning": "登山口右の緑地白表示の小板。文字未判読。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "trail_white_post": [
+      0.0,
+      0.0,
+      0
+    ],
+    "trail_brown_directions": [
+      2.8,
+      0.0,
+      0
+    ],
+    "trail_blue_notice": [
+      5.6,
+      0.0,
+      0
+    ],
+    "trail_green_notice": [
+      0.0,
+      2.2,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 1024,
+  "refs": [
+    "codex07/sv_toilet_045.png",
+    "codex07/sv_toilet_090.png",
+    "codex07/sv_toilet_135.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "白木標柱の寸法/文字は未確定の推定部品。実際に観察できた茶方向板/緑小板とは別部品。",
+    "茶方向板は白い短線で文字密度のみ近似。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_trail_posts",
+  "source": "pass_trail_posts.blend",
+  "parts": [
+    {
+      "name": "trail_white_post",
+      "triangles": 18,
+      "vertices": 34,
+      "dimensions_m": [
+        0.13,
+        0.131,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.06499999761581421,
+          -0.06549999862909317,
+          0.0
+        ],
+        [
+          0.06499999761581421,
+          0.06549999862909317,
+          1.5
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "白木標柱の単体推定形。写真に寸法・題字の確実な裏付けなし。",
+      "front": "-Y"
+    },
+    {
+      "name": "trail_brown_directions",
+      "triangles": 84,
+      "vertices": 160,
+      "dimensions_m": [
+        0.72,
+        0.117,
+        1.4
+      ],
+      "bounds_m": [
+        [
+          -0.36000001430511475,
+          -0.05850000120699406,
+          0.0
+        ],
+        [
+          0.36000001430511475,
+          0.05850000120699406,
+          1.399999976158142
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "登山口の複数段茶色方向板。行先未判読。",
+      "front": "-Y"
+    },
+    {
+      "name": "trail_blue_notice",
+      "triangles": 26,
+      "vertices": 52,
+      "dimensions_m": [
+        0.33,
+        0.076,
+        0.405
+      ],
+      "bounds_m": [
+        [
+          -0.16500000655651093,
+          -0.03800000064074993,
+          0.0
+        ],
+        [
+          0.16500000655651093,
+          0.03800000064074993,
+          0.4050000011920929
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "茶方向標の下の小青白注意板。文章未判読。",
+      "front": "-Y"
+    },
+    {
+      "name": "trail_green_notice",
+      "triangles": 26,
+      "vertices": 52,
+      "dimensions_m": [
+        0.3,
+        0.0785,
+        1.21
+      ],
+      "bounds_m": [
+        [
+          -0.15000000596046448,
+          -0.039250001311302185,
+          0.0
+        ],
+        [
+          0.15000000596046448,
+          0.039250001311302185,
+          1.209999918937683
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "登山口右の緑地白表示の小板。文字未判読。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

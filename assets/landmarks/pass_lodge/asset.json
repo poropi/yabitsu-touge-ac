@@ -1,0 +1,163 @@
+{
+  "part_info": {
+    "lodge_walls": {
+      "meaning": "2025年に見える白い縦波板の長壁と低い基礎。",
+      "front": "-Y（駐車場へ向く西長壁）"
+    },
+    "lodge_roof": {
+      "meaning": "灰紫色の金属切妻屋根、三角採光帯、前後トラス。",
+      "front": "-Y（駐車場へ向く西長壁）"
+    },
+    "lodge_end_details": {
+      "meaning": "同棟の南妻面の掲示、腰掛け、入口マーク。",
+      "front": "-Y（駐車場へ向く西長壁）"
+    }
+  },
+  "generator": "blender_scripts/build_pass_lodge.py",
+  "resolution": 2048,
+  "front_azimuth_deg": 256,
+  "roof_footprint_m": [
+    12.4,
+    9.2
+  ],
+  "placement_exclusion_group": "pass_toilet_building",
+  "alternative_to": "pass_toilet",
+  "identity_status": "白い長い棟はpass_toiletの西長壁と同一棟である可能性が高い。指定IDとして同じ本体を別の正面軸で供給。両方を独立2棟として配置しない。",
+  "refs": [
+    "codex07/sv_shop_045.png",
+    "codex07/sv_shop_090.png",
+    "codex07/sv_mid_000.png",
+    "codex07/sv_mid_045.png",
+    "codex07/gsat20.png",
+    "codex07/gsat21.png"
+  ],
+  "dimension_basis": "work07/building_measurements.jsonの共有屋根候補。gsat20 NW(738,258),NE(811,242),SE(836,339),SW(763,355)、10m=81px、12.37×9.23m。独立した4棟目の輪郭は未確認。",
+  "approximations": [
+    "pass_toiletと同じ形の代替データで、単独建物の存在を確定したものではない。同位置に両方を配置しない。",
+    "2014年の三ノ塔・塔ノ岳 Mt.Tounodakeの大文字は2025年の壁に見えないため、現在版へは入れていない。",
+    "背面と内部、三角採光面の奥行き/材質は推定。本文や貼紙は自作の線と色面。"
+  ],
+  "reference_views": {
+    "reference_shop090": [
+      0,
+      -2,
+      0.04
+    ],
+    "reference_mid045": [
+      1,
+      -2,
+      0.1
+    ]
+  },
+  "assembly_notes": "NPZ各部品にassembly_offset_mを加えると代替モデルを復元。正面は駐車場側の長壁−Y。pass_toiletと同時配置しない。",
+  "asset_id": "pass_lodge",
+  "source": "pass_lodge.blend",
+  "parts": [
+    {
+      "name": "lodge_walls",
+      "triangles": 1130,
+      "vertices": 2260,
+      "dimensions_m": [
+        11.41,
+        7.792,
+        2.86
+      ],
+      "bounds_m": [
+        [
+          -5.705000638961792,
+          -3.8960002660751343,
+          0.0
+        ],
+        [
+          5.705000638961792,
+          3.8960002660751343,
+          2.859999895095825
+        ]
+      ],
+      "assembly_offset_m": [
+        -0.235,
+        -0.006,
+        0.0
+      ],
+      "meaning": "2025年に見える白い縦波板の長壁と低い基礎。",
+      "front": "-Y（駐車場へ向く西長壁）"
+    },
+    {
+      "name": "lodge_roof",
+      "triangles": 1292,
+      "vertices": 2704,
+      "dimensions_m": [
+        12.54,
+        9.2693,
+        4.7531
+      ],
+      "bounds_m": [
+        [
+          -6.270000457763672,
+          -4.63466739654541,
+          0.0
+        ],
+        [
+          6.270000457763672,
+          4.63466739654541,
+          4.753055810928345
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.18
+      ],
+      "meaning": "灰紫色の金属切妻屋根、三角採光帯、前後トラス。",
+      "front": "-Y（駐車場へ向く西長壁）"
+    },
+    {
+      "name": "lodge_end_details",
+      "triangles": 708,
+      "vertices": 1320,
+      "dimensions_m": [
+        1.5088,
+        7.65,
+        3.6537
+      ],
+      "bounds_m": [
+        [
+          -0.7544171810150146,
+          -3.825000047683716,
+          0.0
+        ],
+        [
+          0.7544171810150146,
+          3.825000047683716,
+          3.6537208557128906
+        ]
+      ],
+      "assembly_offset_m": [
+        5.415583,
+        -0.0,
+        0.0
+      ],
+      "meaning": "同棟の南妻面の掲示、腰掛け、入口マーク。",
+      "front": "-Y（駐車場へ向く西長壁）"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

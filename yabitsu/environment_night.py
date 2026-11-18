@@ -8,7 +8,7 @@ from PIL import Image
 from scipy.sparse import coo_matrix
 from scipy.sparse.csgraph import connected_components
 
-from . import config, kn5, start_lot
+from . import config, geo, kn5, start_lot
 from .manifest import Manifest
 from .parking_props import _tube
 
@@ -89,6 +89,17 @@ def build(out_dir=None):
             d=np.load(source/info['file'])
             vending_bodies.extend(c.mean(0) for c in _components(d['verts'],d['faces']))
     report={'note':settings['note'],'counts':{},'cameras_ac':{},'street_positions':[],'sources':[]}
+    # 峠の売店の自動販売機は Codex の部品（data/manual/s1_pass.json の landmarks、材質 lm_pass_vending_*。2026-10-31）。
+    # 正面（部品の −Y＝bearing の向き）の 0.7 m 前に明かりを置く。
+    pass_vending=set(); pass_vending_positions=[]
+    pass_items=[it for it in (json.loads((config.DATA_MANUAL/'s1_pass.json').read_text(encoding='utf-8')).get('landmarks') or [])
+                if it['asset']=='pass_vending']
+    for info in original['meshes'].values():
+        if not info['material'].startswith('lm_pass_vending_') or not pass_items: continue
+        c=np.load(source/info['file'])['verts'].mean(0)
+        it=min(pass_items,key=lambda it:np.hypot(*(np.asarray(geo.to_local(*it['ll']),float)-c[:2])))
+        b=np.radians(it['bearing']); pass_vending.add(info['material'])
+        pass_vending_positions.append(c+np.array([np.sin(b),np.cos(b),0.0])*.7)
     def add(name,v,f,material):
         m.add_mesh(GROUP,name,v,f,np.zeros((len(v),2)),material)
     def quad(name,q,material):
@@ -190,7 +201,7 @@ def build(out_dir=None):
         # 幅30cmの小面。昼はalpha=0、遠方はCSPのdistant glowへ。
         vv.extend(p+np.array([[-.15,0,-.15],[.15,0,-.15],[.15,0,.15],[-.15,0,.15]])); ff.extend([[base,base+1,base+2],[base,base+2,base+3],[base+2,base+1,base],[base+3,base+2,base]])
     add('env_city_hadano',np.asarray(vv),np.asarray(ff),'env_city')
-    report['counts']={'signals':signal_count,'windows':windows,'street_lights':len(street_positions),'tunnel_lights':len(tunnel_positions),'vending_lights':len(vending_positions),'city_dots':len(selected)}
+    report['counts']={'signals':signal_count,'windows':windows,'street_lights':len(street_positions),'tunnel_lights':len(tunnel_positions),'vending_lights':len(vending_positions)+len(pass_vending_positions),'city_dots':len(selected)}
     report['street_positions']=[ac_position(p) for p in street_positions]
     report['cameras_ac']['nanohanadai_city']={'position':ac_position(np.r_[frame.xy(-45,-1.8),z+1.7]),'target':ac_position(selected.mean(0)+[0,0,4])}
     report['cameras_ac']['nanohanadai_parking']={'position':ac_position(np.r_[frame.xy(-42,6),z+2]),'target':ac_position(street_positions[-2])}
@@ -208,9 +219,11 @@ def build(out_dir=None):
     ini+=_emission('STREET','env_lamp','1,0.86,0.63,3')
     ini+=_emission('TUNNEL','tunnel_lamp','1,0.84,0.55,3','ALWAYS_ON')
     ini+=_emission('VENDING','env_vending_front','1,0.94,0.83,1.2')
+    if pass_vending:   # 峠の売店の Codex の自動販売機は正面だけの板が無いので、本体の絵を夜だけ弱く光らせる
+        ini+=_emission('VENDING_PASS',','.join(sorted(pass_vending)),'0.55,0.5,0.45,1')
     ini+=_series('STREET',street_positions,'1,0.86,0.65,10',13)
     ini+=_series('TUNNEL',tunnel_positions,'1,0.84,0.60,7',10,'ALWAYS_ON')
-    ini+=_series('VENDING',vending_positions,'1,0.94,0.83,1.5',3)
+    ini+=_series('VENDING',vending_positions+pass_vending_positions,'1,0.94,0.83,1.5',3)
     m.save(); (root/'retex.json').write_text('{}'); (root/'hidden.json').write_text('[]')
     ini_path=root/'extension/parts/night.ini'; ini_path.parent.mkdir(parents=True,exist_ok=True); ini_path.write_text(ini,encoding='utf-8')
     (root/'report.json').write_text(json.dumps(report,ensure_ascii=False,indent=2),encoding='utf-8')

@@ -1,0 +1,549 @@
+{
+  "asset_id": "r70_curve_mirror",
+  "source": "r70_curve_mirror.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 1500,
+  "parts": [
+    {
+      "name": "round_1",
+      "meaning": "丸1面鏡",
+      "triangles": 390,
+      "vertices": 740,
+      "dimensions_m": [
+        0.81192,
+        0.247,
+        3.258
+      ],
+      "bounds_m": [
+        [
+          -0.405962,
+          -0.142,
+          0.0
+        ],
+        [
+          0.405962,
+          0.105,
+          3.258
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "round_1.png",
+        "round_1_gray.png"
+      ],
+      "components": [
+        {
+          "name": "橙色支柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "鏡の橙の縁と背面",
+          "triangle_start": 44,
+          "triangle_count": 124
+        },
+        {
+          "name": "凸面鏡",
+          "triangle_start": 168,
+          "triangle_count": 160
+        },
+        {
+          "name": "上半分の雨よけ",
+          "triangle_start": 328,
+          "triangle_count": 24
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 352,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 364,
+          "triangle_count": 12
+        },
+        {
+          "name": "注意札",
+          "triangle_start": 376,
+          "triangle_count": 12
+        },
+        {
+          "name": "注意の縦書き",
+          "triangle_start": 388,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "鏡面は自作銀灰色の勾配。実景反射や動的反射ではない。",
+        "背面金具・庇の奥行き・鏡の曲率は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0300-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0300_b.jpg",
+          "url": "https://www.google.com/maps/@35.4287771,139.2186469,3a,90y,136.8h,88t/data=!3m4!1e1!3m2!1sGekoq_cdY0bWEyKEZpB_-w!2e0?hl=ja",
+          "description": "オレンジ色の丸い縁の鏡を、オレンジ色の太い柱1本に取り付ける。鏡は直径約0.8〜1 m。柱に縦書きの白い札「注意」とその下に小さい縦書き（読めない）。ガードレールの終端のすぐ外側。手前にガードレール終端の赤い札と白い玉がある"
+        },
+        {
+          "oid": "S4-0301-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_f.jpg",
+          "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,283.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+          "description": "オレンジ色の縁の丸い鏡1面、オレンジ色の細い柱。鏡の直径約0.8 m。ガードレールの外側すぐ。奥に鉄塔が見える"
+        },
+        {
+          "oid": "S4-0333-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0334_b.jpg",
+          "url": "https://www.google.com/maps/@35.432623,139.2125581,3a,90y,64.0h,88t/data=!3m4!1e1!3m2!1sSZGB0zIbnr3jHkCqijAMYg!2e0?hl=ja",
+          "description": "丸い鏡1面とオレンジ色の柱。ヘアピン手前の谷側。0334Bでは大きく写る（鏡の直径約0.8 m）"
+        },
+        {
+          "oid": "S4-0337-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0338_b.jpg",
+          "url": "https://www.google.com/maps/@35.4318698,139.2120412,3a,90y,347.5h,88t/data=!3m4!1e1!3m2!1s8OeF88RJlBt748TIdE82DQ!2e0?hl=ja",
+          "description": "丸い鏡1面。縁はオレンジ。オレンジ色の柱で、足元はガードレールの内側のコンクリート帯の脇。鏡面は大きく約1 m。0337Fで遠くに小さく見える"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0337-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0338_b.jpg",
+        "url": "https://www.google.com/maps/@35.4318698,139.2120412,3a,90y,347.5h,88t/data=!3m4!1e1!3m2!1s8OeF88RJlBt748TIdE82DQ!2e0?hl=ja",
+        "description": "丸い鏡1面。縁はオレンジ。オレンジ色の柱で、足元はガードレールの内側のコンクリート帯の脇。鏡面は大きく約1 m。0337Fで遠くに小さく見える"
+      },
+      "preview_views": {
+        "front": "r70_curve_mirror_round_1_front.png",
+        "left": "r70_curve_mirror_round_1_left.png",
+        "right": "r70_curve_mirror_round_1_right.png",
+        "back_estimated": "r70_curve_mirror_round_1_back_estimated.png",
+        "top": "r70_curve_mirror_round_1_top.png",
+        "persp": "r70_curve_mirror_round_1_persp.png",
+        "reference": "r70_curve_mirror_round_1_reference.png"
+      }
+    },
+    {
+      "name": "round_2",
+      "meaning": "丸2面・上下と向きを変えた鏡",
+      "triangles": 708,
+      "vertices": 1352,
+      "dimensions_m": [
+        0.72338,
+        0.59346,
+        3.506
+      ],
+      "bounds_m": [
+        [
+          -0.357032,
+          -0.321105,
+          0.0
+        ],
+        [
+          0.366349,
+          0.272351,
+          3.506
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "round_2.png",
+        "round_2_gray.png"
+      ],
+      "components": [
+        {
+          "name": "橙色支柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "鏡の橙の縁と背面",
+          "triangle_start": 44,
+          "triangle_count": 124
+        },
+        {
+          "name": "凸面鏡",
+          "triangle_start": 168,
+          "triangle_count": 160
+        },
+        {
+          "name": "上半分の雨よけ",
+          "triangle_start": 328,
+          "triangle_count": 24
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 352,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 364,
+          "triangle_count": 12
+        },
+        {
+          "name": "鏡の橙の縁と背面",
+          "triangle_start": 376,
+          "triangle_count": 124
+        },
+        {
+          "name": "凸面鏡",
+          "triangle_start": 500,
+          "triangle_count": 160
+        },
+        {
+          "name": "上半分の雨よけ",
+          "triangle_start": 660,
+          "triangle_count": 24
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 684,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 696,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "鏡面は自作銀灰色の勾配。実景反射や動的反射ではない。",
+        "背面金具・庇の奥行き・鏡の曲率は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0582-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0582_f.jpg",
+          "url": "https://www.google.com/maps/@35.469411,139.2175836,3a,90y,68.9h,88t/data=!3m4!1e1!3m2!1sGzGi7si5XXnUERCcSD7NMg!2e0?hl=ja",
+          "description": "オレンジ色の1本柱に丸い鏡が上下2面、直径約0.6m。ヘアピンの先の盛り土の上、ガードレールの外"
+        },
+        {
+          "oid": "S5-0995-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0995_f.jpg",
+          "url": "https://www.google.com/maps/@35.5135009,139.2319703,3a,90y,28.7h,88t/data=!3m4!1e1!3m2!1sLlzdUlFDgdCpzBST0kxqPg!2e0?hl=ja",
+          "description": "遠方右に丸い板が2枚背中合わせのように見える。細い1本柱"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0582-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0582_f.jpg",
+        "url": "https://www.google.com/maps/@35.469411,139.2175836,3a,90y,68.9h,88t/data=!3m4!1e1!3m2!1sGzGi7si5XXnUERCcSD7NMg!2e0?hl=ja",
+        "description": "オレンジ色の1本柱に丸い鏡が上下2面、直径約0.6m。ヘアピンの先の盛り土の上、ガードレールの外"
+      },
+      "preview_views": {
+        "front": "r70_curve_mirror_round_2_front.png",
+        "left": "r70_curve_mirror_round_2_left.png",
+        "right": "r70_curve_mirror_round_2_right.png",
+        "back_estimated": "r70_curve_mirror_round_2_back_estimated.png",
+        "top": "r70_curve_mirror_round_2_top.png",
+        "persp": "r70_curve_mirror_round_2_persp.png",
+        "reference": "r70_curve_mirror_round_2_reference.png"
+      }
+    },
+    {
+      "name": "oval_1",
+      "meaning": "横長の楕円鏡",
+      "triangles": 376,
+      "vertices": 712,
+      "dimensions_m": [
+        1.0149,
+        0.247,
+        3.4172
+      ],
+      "bounds_m": [
+        [
+          -0.507452,
+          -0.142,
+          0.0
+        ],
+        [
+          0.507452,
+          0.105,
+          3.4172
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "oval_1.png",
+        "oval_1_gray.png"
+      ],
+      "components": [
+        {
+          "name": "橙色支柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "鏡の橙の縁と背面",
+          "triangle_start": 44,
+          "triangle_count": 124
+        },
+        {
+          "name": "凸面鏡",
+          "triangle_start": 168,
+          "triangle_count": 160
+        },
+        {
+          "name": "上半分の雨よけ",
+          "triangle_start": 328,
+          "triangle_count": 24
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 352,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 364,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "鏡面は自作銀灰色の勾配。実景反射や動的反射ではない。",
+        "背面金具・庇の奥行き・鏡の曲率は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0664-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0664_b.jpg",
+          "url": "https://www.google.com/maps/@35.478178,139.2109661,3a,90y,148.2h,88t/data=!3m4!1e1!3m2!1sFc3rRh9JtR86yOAFVKA-tQ!2e0?hl=ja",
+          "description": "楕円（横長）の鏡1面、幅約0.8m、さび色の細い支柱1本、ガードレールのすぐ外側の草の中"
+        },
+        {
+          "oid": "S5-0934-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0934_b.jpg",
+          "url": "https://www.google.com/maps/@35.5008866,139.2316546,3a,90y,144.2h,88t/data=!3m4!1e1!3m2!1sDXyHeK9BvjgJvo5Gk4zMfg!2e0?hl=ja",
+          "description": "道の右（谷側）、ガードレールの外に立つオレンジ色の柱に付く楕円（横長）の大きなカーブミラー1面。鏡の幅約1.0m、縁は茶〜オレンジ。柱の下部に細長い標識板（字は読めない）が付く。高さ約3.5m。後方の画像で見える"
+        },
+        {
+          "oid": "S4-0361-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0362_b.jpg",
+          "url": "https://www.google.com/maps/@35.4312561,139.2094001,3a,90y,194.1h,88t/data=!3m4!1e1!3m2!1sFZ_MVrdPV1g8IGuJz1vOcw!2e0?hl=ja",
+          "description": "大きい楕円の銀色の鏡（約1.2×0.8 m）。柱はオレンジ色で2本が並ぶ。道の右の林の際。0361Fでは遠く、裏側が灰色の円盤に見える。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0934-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0934_b.jpg",
+        "url": "https://www.google.com/maps/@35.5008866,139.2316546,3a,90y,144.2h,88t/data=!3m4!1e1!3m2!1sDXyHeK9BvjgJvo5Gk4zMfg!2e0?hl=ja",
+        "description": "道の右（谷側）、ガードレールの外に立つオレンジ色の柱に付く楕円（横長）の大きなカーブミラー1面。鏡の幅約1.0m、縁は茶〜オレンジ。柱の下部に細長い標識板（字は読めない）が付く。高さ約3.5m。後方の画像で見える"
+      },
+      "preview_views": {
+        "front": "r70_curve_mirror_oval_1_front.png",
+        "left": "r70_curve_mirror_oval_1_left.png",
+        "right": "r70_curve_mirror_oval_1_right.png",
+        "back_estimated": "r70_curve_mirror_oval_1_back_estimated.png",
+        "top": "r70_curve_mirror_oval_1_top.png",
+        "persp": "r70_curve_mirror_oval_1_persp.png",
+        "reference": "r70_curve_mirror_oval_1_reference.png"
+      }
+    },
+    {
+      "name": "oval_1_twin_post",
+      "meaning": "楕円鏡・二本柱",
+      "triangles": 420,
+      "vertices": 784,
+      "dimensions_m": [
+        1.21789,
+        0.247,
+        3.408
+      ],
+      "bounds_m": [
+        [
+          -0.678943,
+          -0.142,
+          0.0
+        ],
+        [
+          0.538943,
+          0.105,
+          3.408
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "oval_1_twin_post.png",
+        "oval_1_twin_post_gray.png"
+      ],
+      "components": [
+        {
+          "name": "橙色支柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "並列の橙色支柱",
+          "triangle_start": 44,
+          "triangle_count": 44
+        },
+        {
+          "name": "鏡の橙の縁と背面",
+          "triangle_start": 88,
+          "triangle_count": 124
+        },
+        {
+          "name": "凸面鏡",
+          "triangle_start": 212,
+          "triangle_count": 160
+        },
+        {
+          "name": "上半分の雨よけ",
+          "triangle_start": 372,
+          "triangle_count": 24
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 396,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面金具",
+          "triangle_start": 408,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "鏡面は自作銀灰色の勾配。実景反射や動的反射ではない。",
+        "背面金具・庇の奥行き・鏡の曲率は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0664-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0664_b.jpg",
+          "url": "https://www.google.com/maps/@35.478178,139.2109661,3a,90y,148.2h,88t/data=!3m4!1e1!3m2!1sFc3rRh9JtR86yOAFVKA-tQ!2e0?hl=ja",
+          "description": "楕円（横長）の鏡1面、幅約0.8m、さび色の細い支柱1本、ガードレールのすぐ外側の草の中"
+        },
+        {
+          "oid": "S5-0934-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0934_b.jpg",
+          "url": "https://www.google.com/maps/@35.5008866,139.2316546,3a,90y,144.2h,88t/data=!3m4!1e1!3m2!1sDXyHeK9BvjgJvo5Gk4zMfg!2e0?hl=ja",
+          "description": "道の右（谷側）、ガードレールの外に立つオレンジ色の柱に付く楕円（横長）の大きなカーブミラー1面。鏡の幅約1.0m、縁は茶〜オレンジ。柱の下部に細長い標識板（字は読めない）が付く。高さ約3.5m。後方の画像で見える"
+        },
+        {
+          "oid": "S4-0361-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0362_b.jpg",
+          "url": "https://www.google.com/maps/@35.4312561,139.2094001,3a,90y,194.1h,88t/data=!3m4!1e1!3m2!1sFZ_MVrdPV1g8IGuJz1vOcw!2e0?hl=ja",
+          "description": "大きい楕円の銀色の鏡（約1.2×0.8 m）。柱はオレンジ色で2本が並ぶ。道の右の林の際。0361Fでは遠く、裏側が灰色の円盤に見える。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0361-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0362_b.jpg",
+        "url": "https://www.google.com/maps/@35.4312561,139.2094001,3a,90y,194.1h,88t/data=!3m4!1e1!3m2!1sFZ_MVrdPV1g8IGuJz1vOcw!2e0?hl=ja",
+        "description": "大きい楕円の銀色の鏡（約1.2×0.8 m）。柱はオレンジ色で2本が並ぶ。道の右の林の際。0361Fでは遠く、裏側が灰色の円盤に見える。"
+      },
+      "preview_views": {
+        "front": "r70_curve_mirror_oval_1_twin_post_front.png",
+        "left": "r70_curve_mirror_oval_1_twin_post_left.png",
+        "right": "r70_curve_mirror_oval_1_twin_post_right.png",
+        "back_estimated": "r70_curve_mirror_oval_1_twin_post_back_estimated.png",
+        "top": "r70_curve_mirror_oval_1_twin_post_top.png",
+        "persp": "r70_curve_mirror_oval_1_twin_post_persp.png",
+        "reference": "r70_curve_mirror_oval_1_twin_post_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "S5-0995-03は横並び規制標識の背面でありround_2へ割り当てない。",
+    "S4-0361-03の2本柱はoval_1_twin_post。丸1面に見える鏡が写真の斜視で楕円になる場合がある。"
+  ],
+  "references": {
+    "round_1": [
+      {
+        "oid": "S4-0300-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0300_b.jpg",
+        "url": "https://www.google.com/maps/@35.4287771,139.2186469,3a,90y,136.8h,88t/data=!3m4!1e1!3m2!1sGekoq_cdY0bWEyKEZpB_-w!2e0?hl=ja",
+        "description": "オレンジ色の丸い縁の鏡を、オレンジ色の太い柱1本に取り付ける。鏡は直径約0.8〜1 m。柱に縦書きの白い札「注意」とその下に小さい縦書き（読めない）。ガードレールの終端のすぐ外側。手前にガードレール終端の赤い札と白い玉がある"
+      },
+      {
+        "oid": "S4-0301-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0301_f.jpg",
+        "url": "https://www.google.com/maps/@35.4288844,139.2184361,3a,90y,283.6h,88t/data=!3m4!1e1!3m2!1sGMnsLHRRlnToEctplQPW8A!2e0?hl=ja",
+        "description": "オレンジ色の縁の丸い鏡1面、オレンジ色の細い柱。鏡の直径約0.8 m。ガードレールの外側すぐ。奥に鉄塔が見える"
+      },
+      {
+        "oid": "S4-0333-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0334_b.jpg",
+        "url": "https://www.google.com/maps/@35.432623,139.2125581,3a,90y,64.0h,88t/data=!3m4!1e1!3m2!1sSZGB0zIbnr3jHkCqijAMYg!2e0?hl=ja",
+        "description": "丸い鏡1面とオレンジ色の柱。ヘアピン手前の谷側。0334Bでは大きく写る（鏡の直径約0.8 m）"
+      },
+      {
+        "oid": "S4-0337-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0338_b.jpg",
+        "url": "https://www.google.com/maps/@35.4318698,139.2120412,3a,90y,347.5h,88t/data=!3m4!1e1!3m2!1s8OeF88RJlBt748TIdE82DQ!2e0?hl=ja",
+        "description": "丸い鏡1面。縁はオレンジ。オレンジ色の柱で、足元はガードレールの内側のコンクリート帯の脇。鏡面は大きく約1 m。0337Fで遠くに小さく見える"
+      }
+    ],
+    "round_2": [
+      {
+        "oid": "S5-0582-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0582_f.jpg",
+        "url": "https://www.google.com/maps/@35.469411,139.2175836,3a,90y,68.9h,88t/data=!3m4!1e1!3m2!1sGzGi7si5XXnUERCcSD7NMg!2e0?hl=ja",
+        "description": "オレンジ色の1本柱に丸い鏡が上下2面、直径約0.6m。ヘアピンの先の盛り土の上、ガードレールの外"
+      },
+      {
+        "oid": "S5-0995-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0995_f.jpg",
+        "url": "https://www.google.com/maps/@35.5135009,139.2319703,3a,90y,28.7h,88t/data=!3m4!1e1!3m2!1sLlzdUlFDgdCpzBST0kxqPg!2e0?hl=ja",
+        "description": "遠方右に丸い板が2枚背中合わせのように見える。細い1本柱"
+      }
+    ],
+    "oval_1": [
+      {
+        "oid": "S5-0664-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0664_b.jpg",
+        "url": "https://www.google.com/maps/@35.478178,139.2109661,3a,90y,148.2h,88t/data=!3m4!1e1!3m2!1sFc3rRh9JtR86yOAFVKA-tQ!2e0?hl=ja",
+        "description": "楕円（横長）の鏡1面、幅約0.8m、さび色の細い支柱1本、ガードレールのすぐ外側の草の中"
+      },
+      {
+        "oid": "S5-0934-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0934_b.jpg",
+        "url": "https://www.google.com/maps/@35.5008866,139.2316546,3a,90y,144.2h,88t/data=!3m4!1e1!3m2!1sDXyHeK9BvjgJvo5Gk4zMfg!2e0?hl=ja",
+        "description": "道の右（谷側）、ガードレールの外に立つオレンジ色の柱に付く楕円（横長）の大きなカーブミラー1面。鏡の幅約1.0m、縁は茶〜オレンジ。柱の下部に細長い標識板（字は読めない）が付く。高さ約3.5m。後方の画像で見える"
+      },
+      {
+        "oid": "S4-0361-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0362_b.jpg",
+        "url": "https://www.google.com/maps/@35.4312561,139.2094001,3a,90y,194.1h,88t/data=!3m4!1e1!3m2!1sFZ_MVrdPV1g8IGuJz1vOcw!2e0?hl=ja",
+        "description": "大きい楕円の銀色の鏡（約1.2×0.8 m）。柱はオレンジ色で2本が並ぶ。道の右の林の際。0361Fでは遠く、裏側が灰色の円盤に見える。"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "round_1",
+    "image": "R70-0338_b.jpg",
+    "crop_pixels": [
+      245,
+      220,
+      480,
+      800
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

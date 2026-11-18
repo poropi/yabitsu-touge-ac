@@ -1,0 +1,86 @@
+{
+  "part_info": {
+    "cycle_rack_A": {
+      "meaning": "自転車用木製A脚台。上横材CYCLE RACKは判読できた範囲。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "cycle_rack_A": [
+      0.0,
+      0.0,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 512,
+  "refs": [
+    "codex07/sv_toilet_045.png",
+    "codex07/sv_toilet_090.png",
+    "codex07/sv_u2_225.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "木材の角断面・黒留め板を採用。細ネジは省略。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_bike_rack",
+  "source": "pass_bike_rack.blend",
+  "parts": [
+    {
+      "name": "cycle_rack_A",
+      "triangles": 110,
+      "vertices": 220,
+      "dimensions_m": [
+        1.85,
+        0.75,
+        0.9385
+      ],
+      "bounds_m": [
+        [
+          -0.925000011920929,
+          -0.3749799579381943,
+          0.0
+        ],
+        [
+          0.925000011920929,
+          0.3749799579381943,
+          0.9385150074958801
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "自転車用木製A脚台。上横材CYCLE RACKは判読できた範囲。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

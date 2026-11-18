@@ -208,6 +208,9 @@ def main():
     trees = forest_place.place(area, fm, ground, keep, models, cfg.get("place", {}), road_surface=surface, zones=zones)
     # keep_sight：写真に合わせて植えた所（峠のトイレ前の紅葉など）。コースの視界の判定では消さない
     keep_areas = [z["inside"] for z in zones if z.get("keep_sight") and "inside" in z]
+    # sight_exempt：盛り土が見通しをもともとさえぎる所（菜の花台のヘアピンの内側の島）。木も草も見通しの判定で消さない
+    # （判定は地形を見ないので、島の木と縁の草まで消えて土がむき出しになっていた。2026-10-30 ユーザーが絵で確認した計画）
+    exempt_areas = [z["inside"] for z in zones if z.get("sight_exempt") and "inside" in z]
     for fb in cfg.get("fill_bare", []):   # むき出しの地面を埋める（峠のまわりなど）
         fz = {**fb, "center": [float(v) for v in geo.to_local(*fb["center_ll"])],
               "open": [[*map(float, geo.to_local(*o["center_ll"])), o["radius"]] for o in fb.get("open", [])]}
@@ -234,6 +237,8 @@ def main():
         low = forest_place.sightline_keep(trees, models, cxy, cz, {**sight, "target_h": [1.0]}, include_shrubs=True)
         for g in keep_areas:
             keep_sight |= shapely.contains_xy(g, np.asarray(trees.x, float), np.asarray(trees.y, float)) & low
+    for g in exempt_areas:
+        keep_sight |= shapely.contains_xy(g, np.asarray(trees.x, float), np.asarray(trees.y, float))
     np.save(out / "removed_sight.npy", np.asarray(trees[~keep_sight]))
     trees = trees[keep_sight]
     log(t0, f"コースの視界をさえぎる木を {int((~keep_sight).sum()):,} 本取り除きました")

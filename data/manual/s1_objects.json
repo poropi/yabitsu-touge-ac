@@ -24,7 +24,8 @@
      139.2194168
     ]
    ],
-   "facing_deg": 250
+   "facing_deg": 250,
+   "replaced_by": "pass_bus_stop"
   },
   {
    "note": "わき道の東の縁の木のベンチ（石積みを背に、わき道を向く）",
@@ -47,7 +48,8 @@
      139.2194153
     ]
    ],
-   "facing_deg": 255
+   "facing_deg": 255,
+   "replaced_by": "pass_benches"
   },
   {
    "note": "島の西の先端のすぐ北西、本線とわき道の継ぎ目の赤い車止め（ストリートビュー 345° に見える2本。2026-10-23 島とわき道を Google マップの形にしたので置き直した）",
@@ -120,7 +122,8 @@
      35.4278772,
      139.2193294
     ]
-   ]
+   ],
+   "replaced_by": "pass_road_items"
   },
   {
    "note": "右の小屋の前のコカ・コーラの自動販売機（赤）",
@@ -133,7 +136,8 @@
    ],
    "facing_deg": 60.4,
    "color": "red",
-   "z_from": "ground"
+   "z_from": "ground",
+   "replaced_by": "pass_vending"
   },
   {
    "note": "売店の裏の通信用の白い鉄塔（ユーザーの写真）",
@@ -159,7 +163,8 @@
      35.4279514,
      139.2189574
     ]
-   ]
+   ],
+   "replaced_by": "pass_utility_pole"
   },
   {
    "note": "トイレ前の角地の本線側の縁石の上のオレンジのポール（Street View 012°）",
@@ -190,7 +195,8 @@
      139.2191426
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_road_items"
   },
   {
    "note": "トイレ前の角地のわき道側の縁石の上のオレンジのポール",
@@ -205,7 +211,8 @@
      139.219239
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_road_items"
   },
   {
    "note": "駐車場の本線側の縁石の帯と角の植え込みのオレンジのポール（Street View 300°・駐車場 130°）",
@@ -236,7 +243,8 @@
      139.2190623
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_road_items"
   },
   {
    "note": "本線の西の縁の砂利の帯の木の A 型の柵（脚 3 つ・横木 2 本、頭を白いロープでつなぐ。Street View 駐車場 190°・250°）",
@@ -257,7 +265,8 @@
      139.2189828
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_bike_rack"
   },
   {
    "note": "自動販売機の前のオレンジの横木の A 型の柵（灰色の三角の板を下げる。Street View 駐車場 190°）",
@@ -279,7 +288,8 @@
      139.2190078
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_barriers"
   },
   {
    "note": "売店の前の小さな A 型の柵 2 台（灰色の三角の板。Street View 駐車場 190°）",
@@ -299,7 +309,8 @@
      139.2190378
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "removed"
   },
   {
    "note": "（同上）2 台目",
@@ -319,7 +330,8 @@
      139.2190496
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "removed"
   },
   {
    "note": "間知ブロックの擁壁の南の端の前の紅白の緩衝ドラム（Street View 駐車場 250° の 293° の向き・320°）。擁壁の手前の草地（道の縁の高さ）に立つので本線の高さ",
@@ -330,7 +342,8 @@
      139.2189493
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_road_items"
   },
   {
    "note": "間知ブロックの擁壁の南の端（道から離れて草地の奥に立ち、左の端の足元は野面石。Street View 駐車場 250° の 249° の向き）。走る時の見た目は間知ブロック",
@@ -366,7 +379,8 @@
      139.2189782
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_utility_pole"
   },
   {
    "note": "電柱の右の灰白の機器の箱（柱の上の小さい箱。Street View 駐車場 190°）",
@@ -383,7 +397,8 @@
      139.2189701
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_site_equipment"
   },
   {
    "note": "（同上）中くらいの箱",
@@ -400,7 +415,8 @@
      139.218961
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_site_equipment"
   },
   {
    "note": "（同上）背の高い白い箱（横の溝）",
@@ -416,7 +432,8 @@
      139.2189509
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_site_equipment"
   },
   {
    "note": "機器の箱の裏の金網のフェンス（Street View 駐車場 190°）",
@@ -433,16 +450,17 @@
      139.2189187
     ]
    ],
-   "_toilet": true
+   "_toilet": true,
+   "replaced_by": "pass_site_equipment"
   }
  ],
  "pole_signs": [
   {
-   "note": "島の木の看板（灰色がかった板に白い彫り文字、英語の行は茶色の帯、丸太の柱2本は頭が白い。ストリートビューの写真）",
+   "note": "島の木の看板（灰色がかった板に白い彫り文字、英語の行は茶色の帯、丸太の柱2本は頭が白い。ストリートビューの写真）（2026-10-31 写真 4 枚で南の先の近くへ 3 m 動かした。向きはそのまま）",
    "text": "丹沢大山国定公園\nTANZAWA OYAMA QUASI-NATIONAL PARK\nヤビツ峠\nYABITSU PASS\n761M",
    "at": [
-    35.4278926,
-    139.2193389
+    35.42786739,
+    139.21935286
    ],
    "facing_deg": 165,
    "w_m": 1.9,
@@ -488,7 +506,8 @@
    "facing_deg": 60.4,
    "w_m": 6.0,
    "h_m": 5.6,
-   "z_m": 0.0
+   "z_m": 0.0,
+   "replaced_by": "pass_shop"
   },
   {
    "note": "売店の右の小屋の正面の絵（クリーム色の幕板と暗い中）",
@@ -502,7 +521,8 @@
    "facing_deg": 60.4,
    "w_m": 3.8,
    "h_m": 2.7,
-   "z_m": 0.0
+   "z_m": 0.0,
+   "replaced_by": "pass_shop"
   },
   {
    "note": "北の入口の北の木の看板（Street View 駐車場 030°）",

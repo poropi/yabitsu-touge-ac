@@ -8,11 +8,11 @@ import numpy as np
 from .crosssection import surface_height
 from .meshgen import compact, ribbon
 
-KINDS = ("red_stripes", "green_stripes", "concrete_circles", "crosswalk", "stop_line", "stop_line_down", "red_half_up", "red_half_down")
+KINDS = ("red_stripes", "green_stripes", "concrete_circles", "concrete_plain", "crosswalk", "stop_line", "stop_line_down", "red_half_up", "red_half_down")
 LIFT = 0.005
 STRIPE_LEN, STRIPE_EVERY = 0.6, 1.8
 BAR_W, BAR_EVERY, CURB_GAP = 0.45, 0.9, 0.5
-MATERIALS = {"red_stripes": "paint_red", "green_stripes": "paint_green", "concrete_circles": "concrete_circles", "crosswalk": "line_white",
+MATERIALS = {"red_stripes": "paint_red", "green_stripes": "paint_green", "concrete_circles": "concrete_circles", "concrete_plain": "concrete_plain", "crosswalk": "line_white",
              "stop_line": "line_white", "stop_line_down": "line_white", "red_half_up": "paint_red", "red_half_down": "paint_red"}
 
 
@@ -43,12 +43,12 @@ def _rows(sec, a, b, ends_only=False):
     return s, at(sec.x), at(sec.y), h, at(sec.z), at(sec.slope), at(sec.crown), at(sec.hw_left), at(sec.hw_right)
 
 
-def _patch(sec, a, b, lat_lo, lat_hi, n_lat=5, mask=None, ends_only=False):
+def _patch(sec, a, b, lat_lo, lat_hi, n_lat=5, mask=None, ends_only=False, uv_m=2.0):
     s, x, y, h, z, sl, cr, hl, hr = _rows(sec, a, b, ends_only)
     lo = lat_lo(hl, hr)[:, None]; hi = lat_hi(hl, hr)[:, None]
     lat = lo + (hi - lo) * np.linspace(0, 1, n_lat)[None, :]
     zz = surface_height(lat, z[:, None], sl[:, None], cr[:, None]) + LIFT
-    return ribbon(x, y, h, lat, zz, s, u_scale=2.0, v_scale=2.0, face_mask=mask)
+    return ribbon(x, y, h, lat, zz, s, u_scale=uv_m, v_scale=uv_m, face_mask=mask)
 
 
 def meshes(sec, pavements):
@@ -57,6 +57,8 @@ def meshes(sec, pavements):
         name = f"LINES_track_pave_{k:03d}"
         if p.kind == "concrete_circles":
             v, f, uv = _patch(sec, p.s_from, p.s_to, lambda hl, hr: -hr, lambda hl, hr: hl)
+        elif p.kind == "concrete_plain":   # 絵 1 枚＝4 m（横の継ぎ目が 4 m おき）
+            v, f, uv = _patch(sec, p.s_from, p.s_to, lambda hl, hr: -hr, lambda hl, hr: hl, uv_m=4.0)
         elif p.kind == "stop_line":  # 上り（s が増える向き）の車線＝道の左半分
             v, f, uv = _patch(sec, p.s_from, p.s_to, lambda hl, hr: np.zeros_like(hl), lambda hl, hr: hl, n_lat=2, ends_only=True)
         elif p.kind == "stop_line_down":  # 下りの車線＝道の右半分

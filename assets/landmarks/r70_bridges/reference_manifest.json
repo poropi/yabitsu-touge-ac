@@ -1,0 +1,876 @@
+[
+  {
+    "oid": "S4-0358-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0358_f.jpg",
+    "url": "https://www.google.com/maps/@35.4306424,139.2090517,3a,90y,340.7h,88t/data=!3m4!1e1!3m2!1sTCCprfMzXgzi7fVlFQmz5w!2e0?hl=ja",
+    "place": "S4 1520〜1520 m：小さな橋（擬木の欄干、両側）",
+    "description": "路面幅いっぱいの小さな橋か暗渠。両側に灰色の擬木（丸太風コンクリート）の太い支柱と2段の横木の欄干、高さ約0.9 m。支柱は約3 m間隔。橋の長さ約8 m。右の欄干は0358Fで長く見える。",
+    "camera": {
+      "pano": "TCCprfMzXgzi7fVlFQmz5w",
+      "lat": 35.4306424,
+      "lon": 139.2090517,
+      "heading_deg": 340.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      161,
+      563,
+      772
+    ]
+  },
+  {
+    "oid": "S4-0363-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0363_f.jpg",
+    "url": "https://www.google.com/maps/@35.4315345,139.2094812,3a,90y,10.2h,88t/data=!3m4!1e1!3m2!1szxHFegqV20P04ug9I5PU6g!2e0?hl=ja",
+    "place": "S4 1645〜1645 m：橋（黒い鋼製の欄干、護摩屋敷付近）",
+    "description": "全長約20 m（推測）の橋。両側に黒塗りの鋼製欄干（上段の笠木と縦格子）高さ約1 m、下は灰色のコンクリートの縁石。路面は網目状の溝（グルービング）。0363Bの右の親柱に黒い銘板（白文字）があり「護摩屋敷橋」に見えるが小さく確実ではない。路面に白字で「県道70号」。",
+    "camera": {
+      "pano": "zxHFegqV20P04ug9I5PU6g",
+      "lat": 35.4315345,
+      "lon": 139.2094812,
+      "heading_deg": 10.2,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      322,
+      547,
+      756
+    ]
+  },
+  {
+    "oid": "S4-0366-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0366_b.jpg",
+    "url": "https://www.google.com/maps/@35.432102,139.2099418,3a,90y,227.2h,88t/data=!3m4!1e1!3m2!1sxowPNgR0OgWlZ5n0SG-_VA!2e0?hl=ja",
+    "place": "S4 1720〜1720 m：小さな橋（コンクリート親柱と2段の手すり）",
+    "description": "路面幅の小さな橋。両側に灰色の角柱の親柱と2段の横木の手すり、高さ約0.9 m、長さ約8 m。0366Bの右手前に親柱（灰色の塊）があり、黒っぽい銘板が付くが字は見えない。白い板が手すりに掛かる。",
+    "camera": {
+      "pano": "xowPNgR0OgWlZ5n0SG-_VA",
+      "lat": 35.432102,
+      "lon": 139.2099418,
+      "heading_deg": 227.2,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1362,
+      756,
+      900
+    ]
+  },
+  {
+    "oid": "S4-0373-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0373_f.jpg",
+    "url": "https://www.google.com/maps/@35.4334186,139.2109986,3a,90y,14.6h,88t/data=!3m4!1e1!3m2!1sZdHhAz7DoVV6h3w_d3kkYA!2e0?hl=ja",
+    "place": "S4 1895〜1895 m：小さな橋（新しい木の手すり、石の縁）",
+    "description": "路面幅の小さな橋。両側に新しい薄い黄褐色の木の手すり（縦格子と笠木、高さ約0.9 m）、下に苔の石積みの縁。長さ約10 m。",
+    "camera": {
+      "pano": "ZdHhAz7DoVV6h3w_d3kkYA",
+      "lat": 35.4334186,
+      "lon": 139.2109986,
+      "heading_deg": 14.6,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1415,
+      643,
+      868
+    ]
+  },
+  {
+    "oid": "S4-0381-06",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_f.jpg",
+    "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,80.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+    "place": "S4 2095〜2095 m：門戸口橋（コンクリートの縁とガードレール）",
+    "description": "小さな橋。路面に白字で「門戸口橋」。右の縁は灰色のコンクリートの低い壁。左は白いガードレール。橋名板は見えない。長さ約10 m。",
+    "camera": {
+      "pano": "FwGqLMjsgOhR_bnQC5qV0Q",
+      "lat": 35.4347442,
+      "lon": 139.2118438,
+      "heading_deg": 80.3,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      981,
+      523,
+      659
+    ]
+  },
+  {
+    "oid": "S4-0404-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0405_b.jpg",
+    "url": "https://www.google.com/maps/@35.4392589,139.2109631,3a,90y,195.1h,88t/data=!3m4!1e1!3m2!1s5FBPqY1ofVl5e8sJk0UqVg!2e0?hl=ja",
+    "place": "S4 2694〜2694 m：檜沢橋（短い道路橋、白い鋼管の欄干）",
+    "description": "沢をまたぐ短い橋（長さ約 15〜20 m、幅は道幅のまま約 4.5 m）。両側に白く塗った 2 段の鋼管欄干、約 2 m おきのコンクリート支柱、端は四角いコンクリートの親柱（高さ約 0.8 m）。欄干は苔と汚れで緑がかる。橋の入口の手前（進行方向右）に橋名板と柱あり",
+    "camera": {
+      "pano": "5FBPqY1ofVl5e8sJk0UqVg",
+      "lat": 35.4392589,
+      "lon": 139.2109631,
+      "heading_deg": 195.1,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1100,
+      520,
+      800
+    ]
+  },
+  {
+    "oid": "S4-0415-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0416_b.jpg",
+    "url": "https://www.google.com/maps/@35.4412118,139.2123289,3a,90y,161.7h,88t/data=!3m4!1e1!3m2!1sFC44M2XyIVR1Tefhhk62Nw!2e0?hl=ja",
+    "place": "S4 2969〜2969 m：常世橋（短い橋、灰褐色の鋼管の欄干）",
+    "description": "短い道路橋（長さ約 8〜10 m、幅は道幅のまま約 4.5 m）。両側に灰褐色の 2 段の横棒の欄干、約 2 m おきの角柱、端は角形のコンクリート親柱（高さ約 0.9 m）。橋の上の舗装に白い「県道70号」の路面標示。沢を越える",
+    "camera": {
+      "pano": "FC44M2XyIVR1Tefhhk62Nw",
+      "lat": 35.4412118,
+      "lon": 139.2123289,
+      "heading_deg": 161.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1180,
+      520,
+      670
+    ]
+  },
+  {
+    "oid": "S4-0420-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0420_f.jpg",
+    "url": "https://www.google.com/maps/@35.4420671,139.2124486,3a,90y,48.3h,88t/data=!3m4!1e1!3m2!1sPQjpdOh9CfsPcA9eM0dQ7w!2e0?hl=ja",
+    "place": "S4 3069〜3069 m：石の親柱とコンクリートの欄干の短い橋（名は読めない）",
+    "description": "沢をまたぐ短い橋（長さ約 15〜20 m）。両側に苔むしたコンクリート（石造風）の角柱（約 25×25 cm、高さ約 0.9 m、約 2 m おき）と 2 段の横木状の手すり。入口の右に大きな石の親柱（約 0.6×1.0 m、高さ約 1 m）、表面に橋の名が 2 列彫られているが字は読めない。奥の橋の端に白い W 型の",
+    "camera": {
+      "pano": "PQjpdOh9CfsPcA9eM0dQ7w",
+      "lat": 35.4420671,
+      "lon": 139.2124486,
+      "heading_deg": 48.3,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1410,
+      700,
+      950
+    ]
+  },
+  {
+    "oid": "S4-0432-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0432_b.jpg",
+    "url": "https://www.google.com/maps/@35.4445438,139.2131101,3a,90y,196.5h,88t/data=!3m4!1e1!3m2!1sqCQHeiC6Hc2zBaaZjhXOPQ!2e0?hl=ja",
+    "place": "S4 3369〜3369 m：格子欄干の短い橋（銘板あり）",
+    "description": "沢をまたぐ短い橋（長さ約 12〜15 m、幅は道幅のまま約 4.5 m）。両側の欄干は灰白色の鋼製、約 2 m おきの角柱、手前の左側（進行方向右）は 2 段の横桟、右側は細い縦桟が密に並ぶ格子型。左側の欄干の中ほどに黒い銘板（約 0.5×0.2 m）があるが字は読めない。入口の左に四角いコンクリートの親柱",
+    "camera": {
+      "pano": "qCQHeiC6Hc2zBaaZjhXOPQ",
+      "lat": 35.4445438,
+      "lon": 139.2131101,
+      "heading_deg": 196.5,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      560,
+      560,
+      870
+    ]
+  },
+  {
+    "oid": "S4-0454-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0454_b.jpg",
+    "url": "https://www.google.com/maps/@35.4466001,139.212317,3a,90y,149.0h,88t/data=!3m4!1e1!3m2!1sQhxkmoNjIqFaTvVuhas9pA!2e0?hl=ja",
+    "place": "S4 3919〜3919 m：小橋（コンクリート角柱の親柱と 2 段の鋼管手すり）",
+    "description": "道と同幅の短い橋、長さ約 12 m。親柱は約 0.3×0.3 m の灰色コンクリート角柱で高さ約 1 m、間に鋼管の手すり 2 段（白灰色）。橋名板は読めない",
+    "camera": {
+      "pano": "QhxkmoNjIqFaTvVuhas9pA",
+      "lat": 35.4466001,
+      "lon": 139.212317,
+      "heading_deg": 149.0,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      459,
+      576,
+      640
+    ]
+  },
+  {
+    "oid": "S4-0467-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0468_b.jpg",
+    "url": "https://www.google.com/maps/@35.4492353,139.2133735,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1s08ISPoSgaV1H5L-IFS5Pig!2e0?hl=ja",
+    "place": "S4 4269〜4269 m：清滝橋（小橋、白いコンクリートの欄干）",
+    "description": "道と同幅の小さなコンクリート橋、長さ約 8 m。欄干は白い低いコンクリートの壁で端に角のある親柱。路面は灰色コンクリート",
+    "camera": {
+      "pano": "08ISPoSgaV1H5L-IFS5Pig",
+      "lat": 35.4492353,
+      "lon": 139.2133735,
+      "heading_deg": 192.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      507,
+      544,
+      656
+    ]
+  },
+  {
+    "oid": "S4-0488-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0488_b.jpg",
+    "url": "https://www.google.com/maps/@35.4528688,139.212457,3a,90y,105.6h,88t/data=!3m4!1e1!3m2!1scO3wHJZCVJE8dl1VPoSZGQ!2e0?hl=ja",
+    "place": "S4 4768〜4768 m：地獄沢橋（コンクリート親柱と木調の横木欄干）",
+    "description": "道と同幅の短い橋、長さ約 10 m。親柱は約 0.4×0.4 m の灰色コンクリート角柱で高さ約 1 m、間に横木 2〜3 段の欄干（灰褐色、古い木材か型押しコンクリート）。路面に「県道」の文字が白で描かれる",
+    "camera": {
+      "pano": "cO3wHJZCVJE8dl1VPoSZGQ",
+      "lat": 35.4528688,
+      "lon": 139.212457,
+      "heading_deg": 105.6,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      780,
+      500,
+      560
+    ]
+  },
+  {
+    "oid": "S4-0516-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0516_b.jpg",
+    "url": "https://www.google.com/maps/@35.4579347,139.2135011,3a,90y,184.9h,88t/data=!3m4!1e1!3m2!1sgbeGiF63jHQu1p-gryikTw!2e0?hl=ja",
+    "place": "S4 5468〜5468 m：小橋（両側にガードパイプ式の欄干、路肩はコンクリート縁石）",
+    "description": "幅約4mの小さな橋。両側に白い2段の鋼管欄干と白い角柱の親柱（欄干の端は板付き）、谷を渡る。橋の長さ約8m。後ろ（峠側）に見える",
+    "camera": {
+      "pano": "gbeGiF63jHQu1p-gryikTw",
+      "lat": 35.4579347,
+      "lon": 139.2135011,
+      "heading_deg": 184.9,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      763,
+      520,
+      800
+    ]
+  },
+  {
+    "oid": "S4-0529-06",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0529_b.jpg",
+    "url": "https://www.google.com/maps/@35.4606582,139.2135569,3a,90y,160.7h,88t/data=!3m4!1e1!3m2!1sMggo05KK8-HP1N9KrCIHbg!2e0?hl=ja",
+    "place": "S4 5793〜5793 m：橋の欄干（木目調・両側）",
+    "description": "後ろ側の短い橋の両側に、茶色の横桟の欄干（コンクリート製で木に似た形）。親柱は太い角柱、苔が付く",
+    "camera": {
+      "pano": "Mggo05KK8-HP1N9KrCIHbg",
+      "lat": 35.4606582,
+      "lon": 139.2135569,
+      "heading_deg": 160.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      2150,
+      620,
+      730
+    ]
+  },
+  {
+    "oid": "S4-0541-03",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0541_f.jpg",
+    "url": "https://www.google.com/maps/@35.4627619,139.2152645,3a,90y,41.4h,88t/data=!3m4!1e1!3m2!1sqUaIos7-6GmDjtOa2GnMDg!2e0?hl=ja",
+    "place": "S4 6093〜6093 m：橋（遠景・低い欄干）",
+    "description": "前方左の谷に見える小さな橋。欄干は低く灰色。距離約80 m",
+    "camera": {
+      "pano": "qUaIos7-6GmDjtOa2GnMDg",
+      "lat": 35.4627619,
+      "lon": 139.2152645,
+      "heading_deg": 41.4,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      420,
+      520,
+      null
+    ]
+  },
+  {
+    "oid": "S4-0543-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0544_b.jpg",
+    "url": "https://www.google.com/maps/@35.4633151,139.2152855,3a,90y,131.0h,88t/data=!3m4!1e1!3m2!1sILSMZtoLlh3d79UVF4tY8A!2e0?hl=ja",
+    "place": "S4 6168〜6168 m：札掛橋（短い橋、鋼製欄干）",
+    "description": "道が谷を渡る短い橋。両側に低い鋼製の欄干（横桟）、幅は1車線ほど。橋の手前に名前の青い札",
+    "camera": {
+      "pano": "ILSMZtoLlh3d79UVF4tY8A",
+      "lat": 35.4633151,
+      "lon": 139.2152855,
+      "heading_deg": 131.0,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      400,
+      516,
+      870
+    ]
+  },
+  {
+    "oid": "S4-0552-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0552_b.jpg",
+    "url": "https://www.google.com/maps/@35.4648013,139.2141758,3a,90y,129.8h,88t/data=!3m4!1e1!3m2!1si6GBuqZooZ-Q0SKV8bqaxQ!2e0?hl=ja",
+    "place": "S4 6367〜6367 m：小さな橋（木の化粧板つき欄干）",
+    "description": "道幅のまま小さな沢を渡る短い橋。両側にガードレール形式の欄干に木の化粧板（茶色）が付く。橋長約8 m、欄干高約1 m。0551 の前方では左側に、0552 の後方では両側に見える",
+    "camera": {
+      "pano": "i6GBuqZooZ-Q0SKV8bqaxQ",
+      "lat": 35.4648013,
+      "lon": 139.2141758,
+      "heading_deg": 129.8,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      850,
+      490,
+      560
+    ]
+  },
+  {
+    "oid": "S5-0555-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0556_b.jpg",
+    "url": "https://www.google.com/maps/@35.4655234,139.2136461,3a,90y,174.7h,88t/data=!3m4!1e1!3m2!1sVQMPJFDr5sRF3odM1Lvfsw!2e0?hl=ja",
+    "place": "S5 43〜43 m：小さな橋（赤茶の鋼製欄干）",
+    "description": "道幅のまま沢を渡る短い橋、欄干は赤茶色の水平2段＋縦材の手すり形、高さ約1 m、橋長約15 m、床版の縁はコンクリートで苔。橋の手前は左右ともガードレールで受ける",
+    "camera": {
+      "pano": "VQMPJFDr5sRF3odM1Lvfsw",
+      "lat": 35.4655234,
+      "lon": 139.2136461,
+      "heading_deg": 174.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1000,
+      520,
+      800
+    ]
+  },
+  {
+    "oid": "S5-0600-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0601_b.jpg",
+    "url": "https://www.google.com/maps/@35.4723018,139.2160458,3a,90y,119.1h,88t/data=!3m4!1e1!3m2!1s_GkUHBKVZaYiwzVXSmrQtA!2e0?hl=ja",
+    "place": "S5 1168〜1168 m：小さな橋（沢をまたぐ、低い欄干）",
+    "description": "カーブの先、沢をまたぐ短い橋（幅は道と同じ、長さ約 6〜8 m）。左の欄干は緑白の低いガードパイプ、右の欄干は茶色の板張りの低い壁（長さ約 3 m）。右の端に細い標識柱のような柱が立つ",
+    "camera": {
+      "pano": "_GkUHBKVZaYiwzVXSmrQtA",
+      "lat": 35.4723018,
+      "lon": 139.2160458,
+      "heading_deg": 119.1,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      640,
+      497,
+      560
+    ]
+  },
+  {
+    "oid": "S5-0652-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0652_f.jpg",
+    "url": "https://www.google.com/maps/@35.475885,139.2103972,3a,90y,309.3h,88t/data=!3m4!1e1!3m2!1sw-k7lGnHUWWy4-N1sIaeCg!2e0?hl=ja",
+    "place": "S5 2442〜2442 m：短いトンネル（坑口・内部）",
+    "description": "道を横切るように山側へ入る短いトンネル。坑口はアーチ形、石積み風の化粧壁、幅約4m・高さ約4m、上に黒い板の名札（字は読めない）。右側に翼壁。トンネルの中は白っぽい壁",
+    "camera": {
+      "pano": "w-k7lGnHUWWy4-N1sIaeCg",
+      "lat": 35.475885,
+      "lon": 139.2103972,
+      "heading_deg": 309.3,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      990,
+      290,
+      490
+    ]
+  },
+  {
+    "oid": "S5-0722-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0723_b.jpg",
+    "url": "https://www.google.com/maps/@35.484019,139.2061611,3a,90y,43.6h,88t/data=!3m4!1e1!3m2!1sWXrPHIzLKN84uwTOWa6bHw!2e0?hl=ja",
+    "place": "S5 4216〜4216 m：小さな橋（白い欄干）",
+    "description": "道が谷を渡る短い橋。両側に欄干：進行方向の左は白い鋼製の柵（横桟 2 本＋縦の細い桟、苔・汚れ）、右は低いコンクリートの腰壁に白い手すり。橋長は約 6〜8 m、幅は道と同じ（約 3.5 m）。橋の両端にガードレールがつながる。親柱・名の板は見えない",
+    "camera": {
+      "pano": "WXrPHIzLKN84uwTOWa6bHw",
+      "lat": 35.484019,
+      "lon": 139.2061611,
+      "heading_deg": 43.6,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      940,
+      500,
+      640
+    ]
+  },
+  {
+    "oid": "S5-0737-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_b.jpg",
+    "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,164.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+    "place": "S5 4591〜4591 m：塩水橋（小さな桁橋、鋼管の高欄） ／ 橋の親柱（コンクリート、銘板つき）",
+    "description": "道の続きにかかる橋、幅は車 1 台＋α（約 4 m）、両側に灰色の鋼管 3 段の高欄（手すり）、縁は低いコンクリート",
+    "camera": {
+      "pano": "yZzf6E0V4LEysnr7_oQZnA",
+      "lat": 35.4814328,
+      "lon": 139.2042275,
+      "heading_deg": 164.3,
+      "date": "2022年11月"
+    },
+    "photo_xy_hint": [
+      1150,
+      500,
+      640
+    ]
+  },
+  {
+    "oid": "S5-0737-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_b.jpg",
+    "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,164.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+    "place": "S5 4591〜4591 m：塩水橋（小さな桁橋、鋼管の高欄） ／ 橋の親柱（コンクリート、銘板つき）",
+    "description": "橋のたもとの丸みのあるコンクリート柱、高さ約 0.8 m、黒い銘板が付く",
+    "camera": {
+      "pano": "yZzf6E0V4LEysnr7_oQZnA",
+      "lat": 35.4814328,
+      "lon": 139.2042275,
+      "heading_deg": 164.3,
+      "date": "2022年11月"
+    },
+    "photo_xy_hint": [
+      725,
+      540,
+      660
+    ]
+  },
+  {
+    "oid": "S5-0748-04",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0748_f.jpg",
+    "url": "https://www.google.com/maps/@35.4835611,139.2049455,3a,90y,30.9h,88t/data=!3m4!1e1!3m2!1szJJO2nQgcgPtPHs5hSOQFA!2e0?hl=ja",
+    "place": "S5 4841〜4841 m：小橋（木調の欄干）",
+    "description": "小さな橋。欄干は茶色い木調の低い柵。橋の手前の右に青い橋名板あり（0749）。0748前では左の欄干が先に見える",
+    "camera": {
+      "pano": "zJJO2nQgcgPtPHs5hSOQFA",
+      "lat": 35.4835611,
+      "lon": 139.2049455,
+      "heading_deg": 30.9,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      640,
+      520,
+      560
+    ]
+  },
+  {
+    "oid": "S5-0769-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0770_f.jpg",
+    "url": "https://www.google.com/maps/@35.4867701,139.2084097,3a,90y,107.7h,88t/data=!3m4!1e1!3m2!1scS5M4fdBAp6XllKHQiDrYQ!2e0?hl=ja",
+    "place": "S5 5390〜5390 m：橋（トラス、青宇治橋）",
+    "description": "片側（左）に鉄骨トラスの橋、右側は板張りの高欄＋ガードパイプ風の手すり。床は舗装。幅約4m、長さ約15m以上",
+    "camera": {
+      "pano": "cS5M4fdBAp6XllKHQiDrYQ",
+      "lat": 35.4867701,
+      "lon": 139.2084097,
+      "heading_deg": 107.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      700,
+      400,
+      560
+    ]
+  },
+  {
+    "oid": "S5-0877-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0877_f.jpg",
+    "url": "https://www.google.com/maps/@35.4953951,139.2213459,3a,90y,11.9h,88t/data=!3m4!1e1!3m2!1sJ1TbbxdN7wNKownVAXzjCw!2e0?hl=ja",
+    "place": "S5 8064〜8064 m：小さな橋（コンクリート欄干、木目風・苔つき）",
+    "description": "幅約4 m・長さ約6 mの小橋。両側に低い欄干（高さ約0.8 m）、木の手すり風の横桟型のコンクリート、苔で緑っぽい。親柱は太い角柱",
+    "camera": {
+      "pano": "J1TbbxdN7wNKownVAXzjCw",
+      "lat": 35.4953951,
+      "lon": 139.2213459,
+      "heading_deg": 11.9,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      900,
+      640,
+      780
+    ]
+  },
+  {
+    "oid": "S5-0901-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_b.jpg",
+    "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,243.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+    "place": "S5 8689〜8689 m：短い橋（欄干つき、舗装）",
+    "description": "幅員約3.5〜4mの小さな橋、長さ約12〜15m、路面は舗装でつなぎ目あり。両側に高さ約1mの薄い黄緑〜灰色の欄干（パイプか板状のガードレール型）。入口の手前に工事用バリケードあり。先に砂利の広場が見える。0902後方から見ると、橋の入口に橙色の細い柱（高さ約1m）が両側に1本ずつあり、左側の欄干は灰色のパイプ状ガード",
+    "camera": {
+      "pano": "9sj-caRlbk5ZJrOHrSwYRg",
+      "lat": 35.498438,
+      "lon": 139.2258779,
+      "heading_deg": 243.6,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      527,
+      484,
+      613
+    ]
+  },
+  {
+    "oid": "S5-0912-03",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0912_f.jpg",
+    "url": "https://www.google.com/maps/@35.4990151,139.2284075,3a,90y,27.9h,88t/data=!3m4!1e1!3m2!1spUAkqUl9tgvw-Jq3Ra2tmg!2e0?hl=ja",
+    "place": "S5 8938〜8938 m：小さな橋（欄干つき）",
+    "description": "前方左、ガードレールの先にある短い橋の欄干（白っぽい鋼製）、長さ約5m",
+    "camera": {
+      "pano": "pUAkqUl9tgvw-Jq3Ra2tmg",
+      "lat": 35.4990151,
+      "lon": 139.2284075,
+      "heading_deg": 27.9,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      580,
+      490,
+      515
+    ]
+  },
+  {
+    "oid": "S5-0947-03",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0947_f.jpg",
+    "url": "https://www.google.com/maps/@35.5033285,139.2298102,3a,90y,346.7h,88t/data=!3m4!1e1!3m2!1sBQVBOGB7eTTz5z0gj04s1g!2e0?hl=ja",
+    "place": "S5 9813〜9863 m：橋（前方、欄干付き） ／ 橋（鋼製の高欄つき）",
+    "description": "前方約70mに橋の入口。左は白いガードレール、右は黒い鋼管の手すりが橋まで続く。橋の名の板は読めない",
+    "camera": {
+      "pano": "BQVBOGB7eTTz5z0gj04s1g",
+      "lat": 35.5033285,
+      "lon": 139.2298102,
+      "heading_deg": 346.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      772,
+      482,
+      498
+    ]
+  },
+  {
+    "oid": "S5-0948-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0949_b.jpg",
+    "url": "https://www.google.com/maps/@35.50377,139.229677,3a,90y,166.3h,88t/data=!3m4!1e1!3m2!1sHVM3FGSYkAvJqe0pgFJmBA!2e0?hl=ja",
+    "place": "S5 9813〜9863 m：橋（前方、欄干付き） ／ 橋（鋼製の高欄つき）",
+    "description": "道路の宮ヶ瀬側前方に続く橋。両側に細い鋼製の高欄（横桁3段、縦柱）、右側に歩道状の縁。",
+    "camera": {
+      "pano": "HVM3FGSYkAvJqe0pgFJmBA",
+      "lat": 35.50377,
+      "lon": 139.229677,
+      "heading_deg": 166.3,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      800,
+      470,
+      520
+    ]
+  },
+  {
+    "oid": "S5-0952-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0952_b.jpg",
+    "url": "https://www.google.com/maps/@35.5043795,139.2294929,3a,90y,166.7h,88t/data=!3m4!1e1!3m2!1svt1E6rWvJnyTiN4fLbCEOw!2e0?hl=ja",
+    "place": "S5 9938〜10013 m：橋の親柱（赤茶レンガ張り） ／ 橋の親柱（赤茶レンガ張り） ／ コンクリート高欄（窓あき、古い橋・擁壁状） ／ コンクリート高欄（窓あき）左側",
+    "description": "橋の宮ヶ瀬側でなく手前（峠側）の終端にある四角い親柱、赤茶のレンガ調、高さ約1 m。橋の高欄の端。プレートあり（字は読めない）。",
+    "camera": {
+      "pano": "vt1E6rWvJnyTiN4fLbCEOw",
+      "lat": 35.5043795,
+      "lon": 139.2294929,
+      "heading_deg": 166.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      355,
+      520,
+      665
+    ]
+  },
+  {
+    "oid": "S5-0952-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0952_b.jpg",
+    "url": "https://www.google.com/maps/@35.5043795,139.2294929,3a,90y,166.7h,88t/data=!3m4!1e1!3m2!1svt1E6rWvJnyTiN4fLbCEOw!2e0?hl=ja",
+    "place": "S5 9938〜10013 m：橋の親柱（赤茶レンガ張り） ／ 橋の親柱（赤茶レンガ張り） ／ コンクリート高欄（窓あき、古い橋・擁壁状） ／ コンクリート高欄（窓あき）左側",
+    "description": "進行方向左の橋終端の親柱、赤茶レンガ調、高さ約1 m。",
+    "camera": {
+      "pano": "vt1E6rWvJnyTiN4fLbCEOw",
+      "lat": 35.5043795,
+      "lon": 139.2294929,
+      "heading_deg": 166.7,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1480,
+      570,
+      710
+    ]
+  },
+  {
+    "oid": "S5-0968-08",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0968_b.jpg",
+    "url": "https://www.google.com/maps/@35.507497,139.2309995,3a,90y,184.8h,88t/data=!3m4!1e1!3m2!1saXGAS7Mwg9Bc7IoMFdsGoQ!2e0?hl=ja",
+    "place": "S5 10338〜10338 m：橋の欄干（茶色い鋼製）",
+    "description": "橋の茶色い鋼製の高欄（縦格子+手すり2段）。右手前に見えるのは橋の端、後方では路面の両側に続く",
+    "camera": {
+      "pano": "aXGAS7Mwg9Bc7IoMFdsGoQ",
+      "lat": 35.507497,
+      "lon": 139.2309995,
+      "heading_deg": 184.8,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      700,
+      480,
+      600
+    ]
+  },
+  {
+    "oid": "S5-0975-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0975_f.jpg",
+    "url": "https://www.google.com/maps/@35.5091024,139.2311511,3a,90y,4.6h,88t/data=!3m4!1e1!3m2!1sDYHrZvTnXO6rtcx7BNo_Jw!2e0?hl=ja",
+    "place": "S5 10513〜10513 m：橋の欄干・左（灰白の鋼製） ／ 橋の欄干・右（灰白の鋼製、橋名板付き）",
+    "description": "橋の左側の鋼製高欄、縦格子＋上下の横桁、灰白、高さ約1.1m、橋の全長にわたり続く",
+    "camera": {
+      "pano": "DYHrZvTnXO6rtcx7BNo_Jw",
+      "lat": 35.5091024,
+      "lon": 139.2311511,
+      "heading_deg": 4.6,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      250,
+      320,
+      480
+    ]
+  },
+  {
+    "oid": "S5-0975-03",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0975_f.jpg",
+    "url": "https://www.google.com/maps/@35.5091024,139.2311511,3a,90y,4.6h,88t/data=!3m4!1e1!3m2!1sDYHrZvTnXO6rtcx7BNo_Jw!2e0?hl=ja",
+    "place": "S5 10513〜10513 m：橋の欄干・左（灰白の鋼製） ／ 橋の欄干・右（灰白の鋼製、橋名板付き）",
+    "description": "橋の右側の鋼製高欄、縦格子＋横桁、灰白、高さ約1.1m。中ほどに小さなオレンジの板（橋名板か）が付く。外側は湖面",
+    "camera": {
+      "pano": "DYHrZvTnXO6rtcx7BNo_Jw",
+      "lat": 35.5091024,
+      "lon": 139.2311511,
+      "heading_deg": 4.6,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1000,
+      380,
+      560
+    ]
+  },
+  {
+    "oid": "S5-0970-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0978_b.jpg",
+    "url": "https://www.google.com/maps/@35.5098034,139.2312202,3a,90y,184.6h,88t/data=!3m4!1e1!3m2!1sekmMEN-SxY9uxDhbTGa3lA!2e0?hl=ja",
+    "place": "S5 10588〜10613 m：赤い鋼製アーチ橋（遠方、橋の先にトンネル坑口） ／ 橋の親柱（右、名板付き、コンクリート） ／ 橋の親柱（左、名板付き、コンクリート）",
+    "description": "赤塗装の鋼製アーチ橋（上路でなく中路の2本アーチ、アーチリブは箱形断面、柱＋横つなぎ材、橋の幅は2車線＋両側の歩車境界）。全長約50〜60m、橋面に両側の灰白の欄干。",
+    "camera": {
+      "pano": "ekmMEN-SxY9uxDhbTGa3lA",
+      "lat": 35.5098034,
+      "lon": 139.2312202,
+      "heading_deg": 184.6,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1000,
+      380,
+      500
+    ]
+  },
+  {
+    "oid": "S5-0979-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0979_b.jpg",
+    "url": "https://www.google.com/maps/@35.5100093,139.2312385,3a,90y,185.6h,88t/data=!3m4!1e1!3m2!1sq8d9MtlOXCuUJa0DYjuPEQ!2e0?hl=ja",
+    "place": "S5 10588〜10613 m：赤い鋼製アーチ橋（遠方、橋の先にトンネル坑口） ／ 橋の親柱（右、名板付き、コンクリート） ／ 橋の親柱（左、名板付き、コンクリート）",
+    "description": "橋の端の左側のコンクリート親柱、高さ約1.1m、幅約0.5m、正面に金属または石の名板。取付けのコンクリート袖壁が後方へ続く",
+    "camera": {
+      "pano": "q8d9MtlOXCuUJa0DYjuPEQ",
+      "lat": 35.5100093,
+      "lon": 139.2312385,
+      "heading_deg": 185.6,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      536,
+      520,
+      585
+    ]
+  },
+  {
+    "oid": "S5-0992-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0992_f.jpg",
+    "url": "https://www.google.com/maps/@35.5129099,139.2316065,3a,90y,21.1h,88t/data=!3m4!1e1!3m2!1s5rUCeGfK0nLmKkYW92j4cQ!2e0?hl=ja",
+    "place": "S5 10937〜10962 m：橋（コンクリート高欄、右側に金属の手すり付き） ／ 橋の親柱（左、石造り風の名板付き）",
+    "description": "坑口の直後から始まる橋。左は低いコンクリート高欄（窓のような凹み付き、高さ約0.8m）、右は同様の高欄の上に茶色い金属の縦格子手すりが付く（高さ合計約1.5m）。路面アスファルト、幅は2車線",
+    "camera": {
+      "pano": "5rUCeGfK0nLmKkYW92j4cQ",
+      "lat": 35.5129099,
+      "lon": 139.2316065,
+      "heading_deg": 21.1,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1000,
+      420,
+      520
+    ]
+  },
+  {
+    "oid": "S5-0993-03",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0993_f.jpg",
+    "url": "https://www.google.com/maps/@35.5131353,139.2317263,3a,90y,24.0h,88t/data=!3m4!1e1!3m2!1sdUe4e4mV5oZZDewVx-KP2A!2e0?hl=ja",
+    "place": "S5 10937〜10962 m：橋（コンクリート高欄、右側に金属の手すり付き） ／ 橋の親柱（左、石造り風の名板付き）",
+    "description": "橋の左の親柱。コンクリートに名板らしき字が刻まれているが読めない。高さ約1m",
+    "camera": {
+      "pano": "dUe4e4mV5oZZDewVx-KP2A",
+      "lat": 35.5131353,
+      "lon": 139.2317263,
+      "heading_deg": 24.0,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      120,
+      590,
+      740
+    ]
+  },
+  {
+    "oid": "S5-0996-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0996_f.jpg",
+    "url": "https://www.google.com/maps/@35.5136814,139.2320928,3a,90y,29.3h,88t/data=!3m4!1e1!3m2!1sXorkZqkewQ174_dCtzv-UQ!2e0?hl=ja",
+    "place": "S5 11037〜11037 m：橋（白い横桟の高欄、両側） ／ 橋の右に並ぶ旧い橋の茶色い縦格子手すり",
+    "description": "白い3段の横パイプの高欄（高さ約1.1m）が両側に続く橋。路面アスファルト、センターは橙の実線",
+    "camera": {
+      "pano": "XorkZqkewQ174_dCtzv-UQ",
+      "lat": 35.5136814,
+      "lon": 139.2320928,
+      "heading_deg": 29.3,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1100,
+      500,
+      700
+    ]
+  },
+  {
+    "oid": "S5-0996-04",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-0996_f.jpg",
+    "url": "https://www.google.com/maps/@35.5136814,139.2320928,3a,90y,29.3h,88t/data=!3m4!1e1!3m2!1sXorkZqkewQ174_dCtzv-UQ!2e0?hl=ja",
+    "place": "S5 11037〜11037 m：橋（白い横桟の高欄、両側） ／ 橋の右に並ぶ旧い橋の茶色い縦格子手すり",
+    "description": "白い高欄の外側に、茶色い金属の縦格子の手すり（高さ約1.2m）が続く。隣り合う別の橋かもしれない",
+    "camera": {
+      "pano": "XorkZqkewQ174_dCtzv-UQ",
+      "lat": 35.5136814,
+      "lon": 139.2320928,
+      "heading_deg": 29.3,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1100,
+      520,
+      610
+    ]
+  },
+  {
+    "oid": "S5-1001-02",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-1001_f.jpg",
+    "url": "https://www.google.com/maps/@35.5146847,139.2327785,3a,90y,29.4h,88t/data=!3m4!1e1!3m2!1sEiA2ic3X7SUfHJtyQ45cAQ!2e0?hl=ja",
+    "place": "S5 11162〜11162 m：橋（コンクリート高欄、窓状の開口付き、両側）",
+    "description": "高さ約0.9mのコンクリート高欄、一定間隔で四角い窓が開く。端は丸いキャップ付き親柱。路面アスファルト",
+    "camera": {
+      "pano": "EiA2ic3X7SUfHJtyQ45cAQ",
+      "lat": 35.5146847,
+      "lon": 139.2327785,
+      "heading_deg": 29.4,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1300,
+      520,
+      640
+    ]
+  },
+  {
+    "oid": "S5-1006-05",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-1006_f.jpg",
+    "url": "https://www.google.com/maps/@35.5156952,139.2329448,3a,90y,343.1h,88t/data=!3m4!1e1!3m2!1sPIqhVedSo_2L5F9wnoovLg!2e0?hl=ja",
+    "place": "S5 11287〜11337 m：橋（コンクリート高欄、窓状の開口付き、親柱あり、両側） ／ 橋の欄干（コンクリート、両側）",
+    "description": "前方の橋。親柱は左・右に石積み風のブロック（左はアーチ形の凹みの名板らしき物）、高欄は窓状の開口が並ぶ高さ約0.9m",
+    "camera": {
+      "pano": "PIqhVedSo_2L5F9wnoovLg",
+      "lat": 35.5156952,
+      "lon": 139.2329448,
+      "heading_deg": 343.1,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      640,
+      496,
+      540
+    ]
+  },
+  {
+    "oid": "S5-1008-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-1008_f.jpg",
+    "url": "https://www.google.com/maps/@35.516201,139.2327454,3a,90y,342.5h,88t/data=!3m4!1e1!3m2!1sK_CHJwbVizZNB8PEOV9Ttg!2e0?hl=ja",
+    "place": "S5 11287〜11337 m：橋（コンクリート高欄、窓状の開口付き、親柱あり、両側） ／ 橋の欄干（コンクリート、両側）",
+    "description": "コンクリートの低い欄干（高さ約0.9m）、窓状の開口が並ぶ。古い橋、親柱は見えない。車道の右に狭い段差の路肩",
+    "camera": {
+      "pano": "K_CHJwbVizZNB8PEOV9Ttg",
+      "lat": 35.516201,
+      "lon": 139.2327454,
+      "heading_deg": 342.5,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      200,
+      500,
+      760
+    ]
+  },
+  {
+    "oid": "S5-1012-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-1012_f.jpg",
+    "url": "https://www.google.com/maps/@35.5170121,139.232213,3a,90y,304.9h,88t/data=!3m4!1e1!3m2!1s1inn-n7TqA_B1W4Io-cVqQ!2e0?hl=ja",
+    "place": "S5 11437〜11487 m：橋（茶色の木目調の高欄、両側） ／ 橋の親柱（石造、橋名彫り）",
+    "description": "茶色い木目調の鋼製高欄、縦格子と横桁、高さ約1.1m。両側に連続。右の高欄に小さな銘板（橋名か？）。橋の長さは前方約30m以上",
+    "camera": {
+      "pano": "1inn-n7TqA_B1W4Io-cVqQ",
+      "lat": 35.5170121,
+      "lon": 139.232213,
+      "heading_deg": 304.9,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      1250,
+      500,
+      800
+    ]
+  },
+  {
+    "oid": "S5-1014-01",
+    "image": "export/compare/route70_inventory_20261030/images/sv/R70-1014_b.jpg",
+    "url": "https://www.google.com/maps/@35.5172406,139.2317353,3a,90y,122.2h,88t/data=!3m4!1e1!3m2!1svmx8D0wHR_FoFWbjgfd8IA!2e0?hl=ja",
+    "place": "S5 11437〜11487 m：橋（茶色の木目調の高欄、両側） ／ 橋の親柱（石造、橋名彫り）",
+    "description": "灰色の石の親柱、高さ約1m、幅約0.6m、橋名を彫る。進行方向右側の橋端（BACK画像左端）",
+    "camera": {
+      "pano": "vmx8D0wHR_FoFWbjgfd8IA",
+      "lat": 35.5172406,
+      "lon": 139.2317353,
+      "heading_deg": 122.2,
+      "date": "2025年7月"
+    },
+    "photo_xy_hint": [
+      100,
+      430,
+      720
+    ]
+  }
+]

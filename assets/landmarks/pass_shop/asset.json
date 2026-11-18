@@ -1,0 +1,223 @@
+{
+  "part_info": {
+    "shop_body": {
+      "meaning": "主棟の板壁・前柱・梁・引っ込んだ店先。自販機は含まない。",
+      "front": "-Y"
+    },
+    "shop_sign": {
+      "meaning": "正面上部の白い看板文字。国民宿舎・丹沢ホーム・ヤビツ峠売店を自作画像化。",
+      "front": "-Y"
+    },
+    "shop_annex": {
+      "meaning": "主棟右の低い下屋・自販機囲い・屋根。",
+      "front": "-Y"
+    },
+    "shop_stone_base": {
+      "meaning": "売店の足元だけの野面石台。周辺の擁壁は含めない。",
+      "front": "-Y"
+    },
+    "shop_steps": {
+      "meaning": "道路側の石段3段。台とは独立した部品。",
+      "front": "-Y"
+    }
+  },
+  "generator": "blender_scripts/build_pass_shop.py",
+  "resolution": 2048,
+  "front_azimuth_deg": 59,
+  "roof_footprint_m": [
+    8.5,
+    4.59
+  ],
+  "refs": [
+    "codex07/sv_shop_225.png",
+    "codex07/sv_shop_270.png",
+    "codex07/sv_mid_180.png",
+    "codex07/sv_lotn_180.png"
+  ],
+  "dimension_basis": "航空写真計測と写真のシャッター/自販機の比率。詳細はwork07/building_measurements.jsonと納品報告。",
+  "approximations": [
+    "背面は植生に隠れるため推定。壁の厚さ・内部・屋根裏は推定。",
+    "シャッター落書きは文字未判読のため黒い曲線で形と密度を近似。窓の貼紙は色面と線。",
+    "下屋の奥の壁と台奥側の形状は推定。"
+  ],
+  "reference_views": {
+    "reference_shop225": [
+      -0.8,
+      -2,
+      0.45
+    ],
+    "reference_shop270": [
+      1,
+      -2,
+      0.45
+    ]
+  },
+  "asset_id": "pass_shop",
+  "source": "pass_shop.blend",
+  "parts": [
+    {
+      "name": "shop_body",
+      "triangles": 1024,
+      "vertices": 2048,
+      "dimensions_m": [
+        5.9075,
+        4.6215,
+        4.775
+      ],
+      "bounds_m": [
+        [
+          -2.953749895095825,
+          -2.310750126838684,
+          0.0
+        ],
+        [
+          2.953749895095825,
+          2.310750126838684,
+          4.775000035762787
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.045,
+        0.62
+      ],
+      "meaning": "主棟の板壁・前柱・梁・引っ込んだ店先。自販機は含まない。",
+      "front": "-Y"
+    },
+    {
+      "name": "shop_sign",
+      "triangles": 14,
+      "vertices": 28,
+      "dimensions_m": [
+        5.61,
+        0.0886,
+        0.75
+      ],
+      "bounds_m": [
+        [
+          -2.805000066757202,
+          -0.04432499408721924,
+          0.0
+        ],
+        [
+          2.805000066757202,
+          0.04432499408721924,
+          0.75
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -2.251575,
+        4.565
+      ],
+      "meaning": "正面上部の白い看板文字。国民宿舎・丹沢ホーム・ヤビツ峠売店を自作画像化。",
+      "front": "-Y"
+    },
+    {
+      "name": "shop_annex",
+      "triangles": 228,
+      "vertices": 456,
+      "dimensions_m": [
+        2.9484,
+        4.3245,
+        3.3638
+      ],
+      "bounds_m": [
+        [
+          -1.4742188453674316,
+          -2.16225004196167,
+          0.0
+        ],
+        [
+          1.4742188453674316,
+          2.16225004196167,
+          3.3637746572494507
+        ]
+      ],
+      "assembly_offset_m": [
+        4.103906,
+        0.02475,
+        0.62
+      ],
+      "meaning": "主棟右の低い下屋・自販機囲い・屋根。",
+      "front": "-Y"
+    },
+    {
+      "name": "shop_stone_base",
+      "triangles": 1044,
+      "vertices": 3108,
+      "dimensions_m": [
+        8.6488,
+        5.0239,
+        0.6437
+      ],
+      "bounds_m": [
+        [
+          -4.324375152587891,
+          -2.5119343996047974,
+          0.0
+        ],
+        [
+          4.324375152587891,
+          2.5119343996047974,
+          0.6437152847647667
+        ]
+      ],
+      "assembly_offset_m": [
+        1.285625,
+        -0.081935,
+        -0.023715
+      ],
+      "meaning": "売店の足元だけの野面石台。周辺の擁壁は含めない。",
+      "front": "-Y"
+    },
+    {
+      "name": "shop_steps",
+      "triangles": 132,
+      "vertices": 288,
+      "dimensions_m": [
+        2.975,
+        1.17,
+        0.555
+      ],
+      "bounds_m": [
+        [
+          -1.4874999523162842,
+          -0.5850000381469727,
+          0.0
+        ],
+        [
+          1.4874999523162842,
+          0.5850000381469727,
+          0.5550000071525574
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -3.06,
+        0.0
+      ],
+      "meaning": "道路側の石段3段。台とは独立した部品。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

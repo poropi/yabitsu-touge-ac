@@ -2,7 +2,7 @@
 区間を足して通しの距離が変わっても、地点は動かない。"""
 import json
 import math
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 import numpy as np
@@ -27,12 +27,15 @@ class Layout:
     timing_start: tuple
     finish: tuple
     pits: str
+    # 駐車場の中から出る（2026-10-30 菜の花台の S2 下り・S3 上り）：{"spec": 駐車場の寸法の json（a・b の座標）, "pad": 高さを取る区画,
+    # "a", "b": 先頭の位置, "spacing": 前後の間隔, "stagger": 左右のずらし}。並びとホットラップの開始位置を +a（出口）向きに置く
+    start_in_lot: dict = field(default=None, compare=False, hash=False)
 
 
 def load_layouts(path=None):
     rows = json.loads(Path(path or config.DATA_MANUAL / "layouts.json").read_text(encoding="utf-8"))
     return [Layout(r["name"], r["title"], r["section"], int(r["direction"]), tuple(r["grid"]), tuple(r["hotlap"]),
-                   tuple(r["timing_start"]), tuple(r["finish"]), r["pits"]) for r in rows]
+                   tuple(r["timing_start"]), tuple(r["finish"]), r["pits"], r.get("start_in_lot")) for r in rows]
 
 
 def s_of(sec, ll, bounds, section):
@@ -77,6 +80,24 @@ def _pits(sec, pads, layout):
     raise ValueError(f"レイアウト {layout.name} のピット「{layout.pits}」が見つかりません")
 
 
+def _lot_starts(pads, sil, n=4):
+    """駐車場の中のスタートの並び（AC_START_0〜3、前から a を spacing ずつ下げ、b を左右交互に stagger ずらす）と
+    ホットラップの開始位置（先頭の a・b）。向きは駐車場の +a（出口）。"""
+    from .start_lot import frame, load_spec
+    spec_path = Path(sil["spec"]) if Path(sil["spec"]).is_absolute() else config.DATA_MANUAL / sil["spec"]
+    f = frame(load_spec(spec_path))
+    pad = [p for p in pads if p["name"] == sil["pad"]]
+    if not pad:
+        raise ValueError(f"駐車場の区画「{sil['pad']}」が見つかりません")
+    z = pad[0]["z"] + DUMMY_Z_OFFSET; h = math.atan2(math.sin(f.heading), math.cos(f.heading))
+    out = []
+    for i in range(n):
+        x, y = f.xy(sil["a"] - i * sil["spacing"], sil["b"] + (sil["stagger"] if i % 2 == 0 else -sil["stagger"]))
+        out.append(Dummy(f"AC_START_{i}", (float(x), float(y), z), h))
+    x, y = f.xy(sil["a"], sil["b"])
+    return out + [Dummy("AC_HOTLAP_START_0", (float(x), float(y), z), h)]
+
+
 def layout_objects(sec, pads, layout, bounds):
     path = sec.path(); d = layout.direction
     at = lambda pt: point_s(sec, pt, bounds, layout.section)
@@ -86,8 +107,9 @@ def layout_objects(sec, pads, layout, bounds):
         return max(GATE_HALF_WIDTH_M, float(max(sec.hw_left[i], sec.hw_right[i])) + 1.0)
 
     s_start, s_finish = at(layout.timing_start), at(layout.finish)
-    return [*start_grid(path, at(layout.grid), d),
-            hotlap_start(path, at(layout.hotlap), d),
+    starts = _lot_starts(pads, layout.start_in_lot) if layout.start_in_lot else \
+        [*start_grid(path, at(layout.grid), d), hotlap_start(path, at(layout.hotlap), d)]
+    return [*starts,
             *timing_gate(path, s_start, d, half(s_start), "START"),
             *timing_gate(path, s_finish, d, half(s_finish), "FINISH"),
             *_pits(sec, pads, layout)]

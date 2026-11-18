@@ -1,0 +1,176 @@
+{
+  "asset_id": "r70_km_post",
+  "source": "r70_km_post.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 300,
+  "parts": [
+    {
+      "name": "post",
+      "meaning": "白い細柱と青い距離札。数字は画像差替。",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.45,
+        0.098,
+        1.725
+      ],
+      "bounds_m": [
+        [
+          -0.225,
+          -0.073,
+          0.0
+        ],
+        [
+          0.225,
+          0.025,
+          1.725
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "post.png",
+        "post_face_20.5.png",
+        "post_face_21.5.png",
+        "post_face_25.5.png",
+        "post_face_26.5.png",
+        "post_face_27.0.png",
+        "post_face_27.5.png",
+        "post_face_28.0.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "26.5と28.0は台帳の読み取りに不確かさがあるため、画像を用意するが設置前に再確認が必要。",
+        "板0.45×0.25m、中心高1.6m。遠近写真の寸法目安を採用。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0641-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0641_f.jpg",
+          "url": "https://www.google.com/maps/@35.4737628,139.2111476,3a,90y,9.3h,88t/data=!3m4!1e1!3m2!1sGMLi54EWYBPVVJnQKr8iRw!2e0?hl=ja",
+          "description": "白い細い丸柱に青い四角い板（横約0.5 m、縦約0.3 m、白縁）。道の右の路肩、ガードレールの外"
+        },
+        {
+          "oid": "S5-0681-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0681_b.jpg",
+          "url": "https://www.google.com/maps/@35.4810914,139.2108222,3a,90y,154.7h,88t/data=!3m4!1e1!3m2!1sSUXGm8ByITVp2o8fajQfbw!2e0?hl=ja",
+          "description": "白い細い支柱に小さな白い角板（青い縁）、ガードレールのすぐ外側。板は約0.3×0.2m、高さ約1.5m"
+        },
+        {
+          "oid": "S5-0897-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0897_f.jpg",
+          "url": "https://www.google.com/maps/@35.4982021,139.2247163,3a,90y,102.4h,88t/data=!3m4!1e1!3m2!1ssPNHl9dbGnl756UNsuv56A!2e0?hl=ja",
+          "description": "白い細い角柱（高さ約1.5m）の上に青地・白縁の長方形の札（約0.45m×0.25m）、白字で「27.0km」。ガードレールの谷側すぐ外"
+        },
+        {
+          "oid": "S5-0916-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0916_f.jpg",
+          "url": "https://www.google.com/maps/@35.4989538,139.2293591,3a,90y,108.5h,88t/data=!3m4!1e1!3m2!1sGEHnXE9RwwKYHtaGUMpZ_Q!2e0?hl=ja",
+          "description": "細い鋼管の柱1本に白い小板（約0.3×0.2m）、高さ約2m、ガードレールの内側"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0641-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0641_f.jpg",
+        "url": "https://www.google.com/maps/@35.4737628,139.2111476,3a,90y,9.3h,88t/data=!3m4!1e1!3m2!1sGMLi54EWYBPVVJnQKr8iRw!2e0?hl=ja",
+        "description": "白い細い丸柱に青い四角い板（横約0.5 m、縦約0.3 m、白縁）。道の右の路肩、ガードレールの外"
+      },
+      "preview_views": {
+        "front": "r70_km_post_post_front.png",
+        "left": "r70_km_post_post_left.png",
+        "right": "r70_km_post_post_right.png",
+        "back_estimated": "r70_km_post_post_back_estimated.png",
+        "top": "r70_km_post_post_top.png",
+        "persp": "r70_km_post_post_persp.png",
+        "reference": "r70_km_post_post_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [],
+  "references": {
+    "post": [
+      {
+        "oid": "S5-0641-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0641_f.jpg",
+        "url": "https://www.google.com/maps/@35.4737628,139.2111476,3a,90y,9.3h,88t/data=!3m4!1e1!3m2!1sGMLi54EWYBPVVJnQKr8iRw!2e0?hl=ja",
+        "description": "白い細い丸柱に青い四角い板（横約0.5 m、縦約0.3 m、白縁）。道の右の路肩、ガードレールの外"
+      },
+      {
+        "oid": "S5-0681-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0681_b.jpg",
+        "url": "https://www.google.com/maps/@35.4810914,139.2108222,3a,90y,154.7h,88t/data=!3m4!1e1!3m2!1sSUXGm8ByITVp2o8fajQfbw!2e0?hl=ja",
+        "description": "白い細い支柱に小さな白い角板（青い縁）、ガードレールのすぐ外側。板は約0.3×0.2m、高さ約1.5m"
+      },
+      {
+        "oid": "S5-0897-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0897_f.jpg",
+        "url": "https://www.google.com/maps/@35.4982021,139.2247163,3a,90y,102.4h,88t/data=!3m4!1e1!3m2!1ssPNHl9dbGnl756UNsuv56A!2e0?hl=ja",
+        "description": "白い細い角柱（高さ約1.5m）の上に青地・白縁の長方形の札（約0.45m×0.25m）、白字で「27.0km」。ガードレールの谷側すぐ外"
+      },
+      {
+        "oid": "S5-0916-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0916_f.jpg",
+        "url": "https://www.google.com/maps/@35.4989538,139.2293591,3a,90y,108.5h,88t/data=!3m4!1e1!3m2!1sGEHnXE9RwwKYHtaGUMpZ_Q!2e0?hl=ja",
+        "description": "細い鋼管の柱1本に白い小板（約0.3×0.2m）、高さ約2m、ガードレールの内側"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "post",
+    "image": "R70-0641_f.jpg",
+    "crop_pixels": [
+      1150,
+      390,
+      1390,
+      760
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

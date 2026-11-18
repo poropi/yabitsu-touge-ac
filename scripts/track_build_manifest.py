@@ -23,6 +23,23 @@ def add_far_photo(m, far):
     m.add_material("ground_far", texture="textures/far_photo.jpg")
 
 
+def _nanohanadai_area(sec):
+    """菜の花台の駐車場・敷石の遊歩道・展望台への道・展望台の広場（s1_start_lot.json）を合わせた範囲。"""
+    from shapely.geometry import LineString as _LS, Point as _Pt, Polygon as _Pg
+    spec = start_lot.load_spec(config.DATA_MANUAL / "s1_start_lot.json")
+    if not spec:
+        return []
+    f = start_lot.frame(spec)
+    out = [start_lot.lot_polygon(spec, sec).buffer(1.0)]
+    out += [start_lot._poly(f, r).buffer(1.5) for r in spec.get("paved", [])]
+    if "path" in spec:
+        out.append(_LS(f.xy(*np.asarray(spec["path"]["points"], float).T)).buffer(spec["path"]["width"] / 2 + 1.5))
+    if "tower" in spec:
+        out.append(_Pt(*f.xy(spec["tower"]["a"], spec["tower"]["b"])).buffer(spec["tower"]["plaza_r"]))
+    out += [start_lot._poly(f, r) for r in spec.get("flats", [])]   # 芝生など平らにした所（OSM の小道は手で引いた道から 4〜5 m ずれている）
+    return out
+
+
 def main():
     sec = Section.load_json(P / "track_section.json")
     m = Manifest(config.TRACK_BUILD_DIR)
@@ -43,7 +60,8 @@ def main():
     asama_site = asama_area.build(asama, sec) if asama else None
     sites = [x for x in (pass_site, tera_site, goma_site, asama_site) if x]
     assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps],   # 町の範囲と分かれる所は多角形で作る
-                      mouths=[mo for x in sites for mo in x.mouths()],   # 峠・寺山・護摩屋敷のわき道の入口と浅間神社の駐車場の前は側溝をくぼませない
+                      mouths=[mo for x in sites for mo in x.mouths()]   # 峠・寺山・護摩屋敷のわき道の入口と浅間神社の駐車場の前は側溝をくぼませない
+                      + start_lot.mouths(json.loads((P / "track_pads.json").read_text(encoding="utf-8")), sec),   # 菜の花台の駐車場の入口も
                       no_lines=[r for x in (tera_site, goma_site) if x for r in x.no_lines()],   # 寺山富士見橋のまわりは路肩の白線が無い
                       dry=[(t_.s0, t_.s1) for t_ in __import__("yabitsu.tunnel", fromlist=["x"]).from_osm(side_roads.load_elements(), sec)])   # トンネルの中は水たまりを作らない材質
     near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
@@ -73,7 +91,16 @@ def main():
     assembly.add_trees(m, trees.scatter(near, pads + start_lot.flats_for(lot_spec, pads), pad_clear_m=5.0,
                                         avoid=nagoki.tree_free_areas(sec, bounds, blds + track_blds)))
     assembly.add_pads(m, pads)
-    assembly.add_start_lot(m, start_lot.load_spec(lot_spec), pads)
+    _lot = start_lot.load_spec(lot_spec)
+    if _lot.get("landmarks"):   # 菜の花台の Codex の部品の画像（data/processed/landmarks → textures）
+        import shutil as _sh2
+        from yabitsu import landmarks as _lm
+        _td = config.TRACK_BUILD_DIR / "textures"; _td.mkdir(parents=True, exist_ok=True)
+        for _mat, (_png, _alpha) in _lm.materials(_lot["landmarks"]).items():
+            if _png:
+                _sh2.copy2(_png, _td / f"{_mat}.png")
+                m.add_material(_mat, texture=f"textures/{_mat}.png", alpha=_alpha)
+    assembly.add_start_lot(m, _lot, pads, sec)   # 入口で舗装を道路と段差なくつなぐ
     if pass_site:
         assembly.add_pass_area(m, pass_site)
     minoge = minoge_area.load(config.DATA_MANUAL / "s2_minoge.json")
@@ -181,6 +208,7 @@ def main():
                            + ([tera_site.area().buffer(6.0)] if tera_site else [])
                            + ([goma_site.area().buffer(3.0)] if goma_site else [])   # 護摩屋敷の水の広場・わき道の輪（OSM のわき道を重ねない）   # 寺山富士見橋の広場・わき道・草地（OSM の小道を重ねない。OSM のわき道はストリートビューより 4 m 北にずれている）
                            + [unary_union(nagoki.sidewalk_polygons(sec, feats)).buffer(0.3)]   # 歩道の上に建物を立てない
+                           + _nanohanadai_area(sec)   # 菜の花台の園地（手で作った遊歩道・展望台の道。OSM の小道を重ねない）
                            + [Polygon(p["polygon"]) for p in pads if p.get("kind") in ("lot", "pass", "site", "plaza", "branch")
                               and "house" not in p["name"] and not p.get("buildings_ok")])
     from yabitsu import pois
@@ -234,8 +262,28 @@ def main():
             z = np.where(np.isfinite(pz), pz, z)
         return z
 
+    if pass_site and pass_site.spec.get("landmarks"):   # ヤビツ峠の Codex の部品（売店・トイレ・小物。data/processed/landmarks/pass_*）
+        from yabitsu import landmarks as _lm
+        _td = config.TRACK_BUILD_DIR / "textures"; _td.mkdir(parents=True, exist_ok=True)
+        for _mat, (_png, _alpha) in _lm.materials(pass_site.spec["landmarks"]).items():
+            if _png:
+                _lm.copy_texture(_png, _td / f"{_mat}.png")   # 1 辺 1024 まで（kn5 は無圧縮）
+                m.add_material(_mat, texture=f"textures/{_mat}.png", alpha=_alpha)
+        assembly.add_meshes(m, _lm.place_ll(pass_site.spec["landmarks"], flats_or_ground, "s1_pass_lm", ground_fn=ground_mesh))
+    r70_path = config.DATA_MANUAL / "s45_route70.json"   # 県道 70 号（S4・S5）の Codex の部品（data/processed/landmarks/r70_*）。ミラー・標識・看板など
+    if r70_path.exists():
+        from yabitsu import landmarks as _lm
+        r70 = json.loads(r70_path.read_text(encoding="utf-8"))["landmarks"]
+        _td = config.TRACK_BUILD_DIR / "textures"; _td.mkdir(parents=True, exist_ok=True)
+        for _mat, (_png, _alpha) in _lm.materials(r70).items():
+            if _png:
+                _lm.copy_texture(_png, _td / f"{_mat}.png")
+                m.add_material(_mat, texture=f"textures/{_mat}.png", alpha=_alpha)
+        assembly.add_meshes(m, _lm.place_ll(r70, road_z, "r70_lm", ground_fn=ground_mesh))   # z を書いた物は縁の路面の高さ。split で s4・s5 の kn5 へ
     for sn in ("s1", "s4", "s5"):   # S1（峠）・S4・S5 の標識・看板・ベンチなど（data/manual/sN_objects.json）
         so = json.loads((config.DATA_MANUAL / f"{sn}_objects.json").read_text(encoding="utf-8"))
+        so["objects"] = [o for o in so["objects"] if not o.get("replaced_by")]          # Codex の部品に替えた物（峠の landmarks）は作らない
+        so["pole_signs"] = [o for o in so.get("pole_signs", []) if not o.get("replaced_by")]
         on_road = [o for o in so["objects"] if o.get("z_from") != "ground"]
         on_ground = [o for o in so["objects"] if o.get("z_from") == "ground"]   # 台の上など、地形の高さに立てる物（売店の自動販売機）
         assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(on_road, sec), pass_or_road_z if sn == "s1" else road_z,

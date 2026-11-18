@@ -1,0 +1,1273 @@
+{
+  "asset_id": "r70_drain",
+  "source": "r70_drain.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 400,
+  "parts": [
+    {
+      "name": "u_gutter",
+      "meaning": "幅0.4mの開渠U字側溝・2m区切り",
+      "triangles": 36,
+      "vertices": 72,
+      "dimensions_m": [
+        2.0,
+        0.4,
+        0.33
+      ],
+      "bounds_m": [
+        [
+          0.0,
+          -0.2,
+          0.0
+        ],
+        [
+          2.0,
+          0.2,
+          0.33
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "u_gutter.png"
+      ],
+      "components": [
+        {
+          "name": "U溝の底",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "U溝の両側壁",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "U溝の両側壁",
+          "triangle_start": 24,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "底面がz=0、溝天端z=.33m。路面と天端を合わせる場合zを路面-.33mとする。土砂・落葉は別途配置。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0385-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+          "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+          "description": "道の右縁のコンクリートU字溝または縁石。幅約0.4 m、苔が付く。"
+        },
+        {
+          "oid": "S4-0407-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0409_f.jpg",
+          "url": "https://www.google.com/maps/@35.4400493,139.2115031,3a,90y,58.1h,88t/data=!3m4!1e1!3m2!1sFwmnq_GrdPMRc-Yf7Pbu4A!2e0?hl=ja",
+          "description": "道の右縁に沿うコンクリートの U 字側溝（幅約 0.3 m）、蓋なし。路面より少し低い。苔と土砂がたまる"
+        },
+        {
+          "oid": "S4-0440-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0441_b.jpg",
+          "url": "https://www.google.com/maps/@35.4457836,139.2128586,3a,90y,8.0h,88t/data=!3m4!1e1!3m2!1shXxgUeycN6-Rt2hEFq4DZg!2e0?hl=ja",
+          "description": "道の左縁に沿う細いコンクリートの U 字側溝（幅約 0.3 m、蓋なし）、0440〜0442 は路肩の草の外に帯状に見える。灰色、苔"
+        },
+        {
+          "oid": "S4-0540-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0540_f.jpg",
+          "url": "https://www.google.com/maps/@35.4625945,139.215047,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sOdwmZZMDU2MKHkn0OmkHGQ!2e0?hl=ja",
+          "description": "右の法面の下に沿うコンクリートのU字側溝、幅約0.4 m、枯れ葉や土で一部埋まる。ふたなし"
+        }
+      ],
+      "repeat_length_m": 2.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S4-0385-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+        "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+        "description": "道の右縁のコンクリートU字溝または縁石。幅約0.4 m、苔が付く。"
+      },
+      "preview_views": {
+        "front": "r70_drain_u_gutter_front.png",
+        "left": "r70_drain_u_gutter_left.png",
+        "right": "r70_drain_u_gutter_right.png",
+        "back_estimated": "r70_drain_u_gutter_back_estimated.png",
+        "top": "r70_drain_u_gutter_top.png",
+        "persp": "r70_drain_u_gutter_persp.png",
+        "reference": "r70_drain_u_gutter_reference.png"
+      }
+    },
+    {
+      "name": "grating",
+      "meaning": "1.0×0.6mの長方形グレーチング",
+      "triangles": 166,
+      "vertices": 332,
+      "dimensions_m": [
+        1.04,
+        0.635,
+        0.052
+      ],
+      "bounds_m": [
+        [
+          -0.52,
+          -0.3175,
+          0.0
+        ],
+        [
+          0.52,
+          0.3175,
+          0.052
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "grating.png"
+      ],
+      "components": [
+        {
+          "name": "長辺の枠",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "長辺の枠",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "短辺の枠",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "短辺の枠",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 48,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 52,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 56,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 60,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 64,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 68,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 72,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 76,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 80,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 84,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 88,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 92,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 96,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 100,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 104,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 108,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 112,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 116,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 120,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 124,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 128,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 132,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 136,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 140,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 144,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 148,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 152,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 156,
+          "triangle_count": 4
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 160,
+          "triangle_count": 2
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 162,
+          "triangle_count": 2
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 164,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "薄い蓋・格子のすき間は実形状。裏面・桟の片側を省略した低負荷形状。路面に置く際は上面を路面へ合わせる。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0617-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0617_f.jpg",
+          "url": "https://www.google.com/maps/@35.4732695,139.2128351,3a,90y,204.9h,88t/data=!3m4!1e1!3m2!1sLxQQXCY3vfNZBfONOTNOGg!2e0?hl=ja",
+          "description": "長方形の鋼製格子ぶた、約 1.0 × 0.6 m、コンクリート縁、路面の左寄り"
+        },
+        {
+          "oid": "S5-0657-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0657_f.jpg",
+          "url": "https://www.google.com/maps/@35.4768263,139.2105763,3a,90y,46.8h,88t/data=!3m4!1e1!3m2!1sckDU8GduXidF8TP4tBhgRg!2e0?hl=ja",
+          "description": "路面を横切る鋼製グレーチングのふた、幅約0.4m×道幅いっぱい（約3m）、左の側溝へつながる"
+        },
+        {
+          "oid": "S5-0711-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0711_f.jpg",
+          "url": "https://www.google.com/maps/@35.4856583,139.2084892,3a,90y,296.1h,88t/data=!3m4!1e1!3m2!1sjyw9kOvbcdJetlo1yZbzmw!2e0?hl=ja",
+          "description": "路面を横切る細長い鉄のグレーチング。幅は道いっぱい（約 3 m）、奥行き約 0.3 m"
+        },
+        {
+          "oid": "S5-0799-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0799_f.jpg",
+          "url": "https://www.google.com/maps/@35.4853438,139.2137877,3a,90y,21.1h,88t/data=!3m4!1e1!3m2!1sSbmK5vlGUQXFB-WtpuE4IA!2e0?hl=ja",
+          "description": "路面を横切る溝に鉄の格子蓋、幅約 0.5 m、道幅いっぱい（約 4 m）。右端の道の縁で集水ますの蓋（約 0.6 m 角）につながる。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0617-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0617_f.jpg",
+        "url": "https://www.google.com/maps/@35.4732695,139.2128351,3a,90y,204.9h,88t/data=!3m4!1e1!3m2!1sLxQQXCY3vfNZBfONOTNOGg!2e0?hl=ja",
+        "description": "長方形の鋼製格子ぶた、約 1.0 × 0.6 m、コンクリート縁、路面の左寄り"
+      },
+      "preview_views": {
+        "front": "r70_drain_grating_front.png",
+        "left": "r70_drain_grating_left.png",
+        "right": "r70_drain_grating_right.png",
+        "back_estimated": "r70_drain_grating_back_estimated.png",
+        "top": "r70_drain_grating_top.png",
+        "persp": "r70_drain_grating_persp.png",
+        "reference": "r70_drain_grating_reference.png"
+      }
+    },
+    {
+      "name": "grating_cross",
+      "meaning": "道路横断用3.0×0.4mのグレーチング",
+      "triangles": 394,
+      "vertices": 788,
+      "dimensions_m": [
+        3.04,
+        0.435,
+        0.052
+      ],
+      "bounds_m": [
+        [
+          -1.52,
+          -0.2175,
+          0.0
+        ],
+        [
+          1.52,
+          0.2175,
+          0.052
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "grating_cross.png"
+      ],
+      "components": [
+        {
+          "name": "長辺の枠",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "長辺の枠",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "短辺の枠",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "短辺の枠",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 48,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 52,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 56,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 60,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 64,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 68,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 72,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 76,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 80,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 84,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 88,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 92,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 96,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 100,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 104,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 108,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 112,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 116,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 120,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 124,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 128,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 132,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 136,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 140,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 144,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 148,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 152,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 156,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 160,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 164,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 168,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 172,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 176,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 180,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 184,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 188,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 192,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 196,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 200,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 204,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 208,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 212,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 216,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 220,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 224,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 228,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 232,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 236,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 240,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 244,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 248,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 252,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 256,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 260,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 264,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 268,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 272,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 276,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 280,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 284,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 288,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 292,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 296,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 300,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 304,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 308,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 312,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 316,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 320,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 324,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 328,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 332,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 336,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 340,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 344,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 348,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 352,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 356,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 360,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 364,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 368,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 372,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 376,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 380,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 384,
+          "triangle_count": 4
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 388,
+          "triangle_count": 2
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 390,
+          "triangle_count": 2
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 392,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "薄い蓋・格子のすき間は実形状。裏面・桟の片側を省略した低負荷形状。路面に置く際は上面を路面へ合わせる。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0617-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0617_f.jpg",
+          "url": "https://www.google.com/maps/@35.4732695,139.2128351,3a,90y,204.9h,88t/data=!3m4!1e1!3m2!1sLxQQXCY3vfNZBfONOTNOGg!2e0?hl=ja",
+          "description": "長方形の鋼製格子ぶた、約 1.0 × 0.6 m、コンクリート縁、路面の左寄り"
+        },
+        {
+          "oid": "S5-0657-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0657_f.jpg",
+          "url": "https://www.google.com/maps/@35.4768263,139.2105763,3a,90y,46.8h,88t/data=!3m4!1e1!3m2!1sckDU8GduXidF8TP4tBhgRg!2e0?hl=ja",
+          "description": "路面を横切る鋼製グレーチングのふた、幅約0.4m×道幅いっぱい（約3m）、左の側溝へつながる"
+        },
+        {
+          "oid": "S5-0711-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0711_f.jpg",
+          "url": "https://www.google.com/maps/@35.4856583,139.2084892,3a,90y,296.1h,88t/data=!3m4!1e1!3m2!1sjyw9kOvbcdJetlo1yZbzmw!2e0?hl=ja",
+          "description": "路面を横切る細長い鉄のグレーチング。幅は道いっぱい（約 3 m）、奥行き約 0.3 m"
+        },
+        {
+          "oid": "S5-0799-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0799_f.jpg",
+          "url": "https://www.google.com/maps/@35.4853438,139.2137877,3a,90y,21.1h,88t/data=!3m4!1e1!3m2!1sSbmK5vlGUQXFB-WtpuE4IA!2e0?hl=ja",
+          "description": "路面を横切る溝に鉄の格子蓋、幅約 0.5 m、道幅いっぱい（約 4 m）。右端の道の縁で集水ますの蓋（約 0.6 m 角）につながる。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0617-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0617_f.jpg",
+        "url": "https://www.google.com/maps/@35.4732695,139.2128351,3a,90y,204.9h,88t/data=!3m4!1e1!3m2!1sLxQQXCY3vfNZBfONOTNOGg!2e0?hl=ja",
+        "description": "長方形の鋼製格子ぶた、約 1.0 × 0.6 m、コンクリート縁、路面の左寄り"
+      },
+      "preview_views": {
+        "front": "r70_drain_grating_cross_front.png",
+        "left": "r70_drain_grating_cross_left.png",
+        "right": "r70_drain_grating_cross_right.png",
+        "back_estimated": "r70_drain_grating_cross_back_estimated.png",
+        "top": "r70_drain_grating_cross_top.png",
+        "persp": "r70_drain_grating_cross_persp.png",
+        "reference": "r70_drain_grating_cross_reference.png"
+      }
+    },
+    {
+      "name": "catch_basin",
+      "meaning": "0.4m角の集水ますの格子蓋",
+      "triangles": 98,
+      "vertices": 196,
+      "dimensions_m": [
+        0.44,
+        0.435,
+        0.052
+      ],
+      "bounds_m": [
+        [
+          -0.22,
+          -0.2175,
+          0.0
+        ],
+        [
+          0.22,
+          0.2175,
+          0.052
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "catch_basin.png"
+      ],
+      "components": [
+        {
+          "name": "長辺の枠",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "長辺の枠",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "短辺の枠",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "短辺の枠",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 48,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 52,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 56,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 60,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 64,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 68,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 72,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 76,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 80,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 84,
+          "triangle_count": 4
+        },
+        {
+          "name": "縦の格子",
+          "triangle_start": 88,
+          "triangle_count": 4
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 92,
+          "triangle_count": 2
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 94,
+          "triangle_count": 2
+        },
+        {
+          "name": "細い横格子",
+          "triangle_start": 96,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "薄い蓋・格子のすき間は実形状。裏面・桟の片側を省略した低負荷形状。路面に置く際は上面を路面へ合わせる。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0645-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0645_f.jpg",
+          "url": "https://www.google.com/maps/@35.4746357,139.2109888,3a,90y,356.1h,88t/data=!3m4!1e1!3m2!1ss6wzTDvvnoQQTOt7PK0J0w!2e0?hl=ja",
+          "description": "路面左寄りの小さな四角い鉄のふた（約0.4 m 角）"
+        },
+        {
+          "oid": "S5-0789-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0789_f.jpg",
+          "url": "https://www.google.com/maps/@35.4851497,139.2121507,3a,90y,155.3h,88t/data=!3m4!1e1!3m2!1sDQAwo65jha1yV1IdpfgfSg!2e0?hl=ja",
+          "description": "舗装路の中央やや右に鉄の格子蓋 1 つ、約 0.4 m 角。"
+        },
+        {
+          "oid": "S5-0816-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0816_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866161,139.217019,3a,90y,57.5h,88t/data=!3m4!1e1!3m2!1sebZBJ0F2rJIuYi6X5-pUIQ!2e0?hl=ja",
+          "description": "左の山側の縁に鉄のグレーチング蓋の集水ます（約0.4×0.5m）"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0645-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0645_f.jpg",
+        "url": "https://www.google.com/maps/@35.4746357,139.2109888,3a,90y,356.1h,88t/data=!3m4!1e1!3m2!1ss6wzTDvvnoQQTOt7PK0J0w!2e0?hl=ja",
+        "description": "路面左寄りの小さな四角い鉄のふた（約0.4 m 角）"
+      },
+      "preview_views": {
+        "front": "r70_drain_catch_basin_front.png",
+        "left": "r70_drain_catch_basin_left.png",
+        "right": "r70_drain_catch_basin_right.png",
+        "back_estimated": "r70_drain_catch_basin_back_estimated.png",
+        "top": "r70_drain_catch_basin_top.png",
+        "persp": "r70_drain_catch_basin_persp.png",
+        "reference": "r70_drain_catch_basin_reference.png"
+      }
+    },
+    {
+      "name": "manhole",
+      "meaning": "直径0.7mの錆色鉄蓋",
+      "triangles": 196,
+      "vertices": 360,
+      "dimensions_m": [
+        0.7,
+        0.7,
+        0.0355
+      ],
+      "bounds_m": [
+        [
+          -0.35,
+          -0.35,
+          0.0
+        ],
+        [
+          0.35,
+          0.35,
+          0.0355
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "manhole.png"
+      ],
+      "components": [
+        {
+          "name": "鉄蓋の縁",
+          "triangle_start": 0,
+          "triangle_count": 156
+        },
+        {
+          "name": "鉄蓋上面",
+          "triangle_start": 156,
+          "triangle_count": 40
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "自治体の紋章・未判読文字は描かず、滑止めの幾何学模様だけを自作。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0972-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0972_f.jpg",
+          "url": "https://www.google.com/maps/@35.5084421,139.231088,3a,90y,4.5h,88t/data=!3m4!1e1!3m2!1sRDyrZgr849nF9CcY_1Lt1A!2e0?hl=ja",
+          "description": "左路肩のU字溝（グレーチング蓋）、車線内に丸い鉄蓋のマンホール（直径約0.7m、さび色）"
+        },
+        {
+          "oid": "S5-0751-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0751_b.jpg",
+          "url": "https://www.google.com/maps/@35.4841029,139.2053911,3a,90y,229.6h,88t/data=!3m4!1e1!3m2!1s5WKKV-TDXbqntO3JdliUng!2e0?hl=ja",
+          "description": "路面中央寄りの円形マンホール蓋（直径約0.6m、茶色の鉄蓋）"
+        },
+        {
+          "oid": "S5-0770-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0770_b.jpg",
+          "url": "https://www.google.com/maps/@35.4867701,139.2084097,3a,90y,287.7h,88t/data=!3m4!1e1!3m2!1scS5M4fdBAp6XllKHQiDrYQ!2e0?hl=ja",
+          "description": "直径約0.6 mの丸いふた、路面の中央寄り"
+        },
+        {
+          "oid": "S5-0784-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_f.jpg",
+          "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,93.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+          "description": "丸いふた、直径約0.6m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0972-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0972_f.jpg",
+        "url": "https://www.google.com/maps/@35.5084421,139.231088,3a,90y,4.5h,88t/data=!3m4!1e1!3m2!1sRDyrZgr849nF9CcY_1Lt1A!2e0?hl=ja",
+        "description": "左路肩のU字溝（グレーチング蓋）、車線内に丸い鉄蓋のマンホール（直径約0.7m、さび色）"
+      },
+      "preview_views": {
+        "front": "r70_drain_manhole_front.png",
+        "left": "r70_drain_manhole_left.png",
+        "right": "r70_drain_manhole_right.png",
+        "back_estimated": "r70_drain_manhole_back_estimated.png",
+        "top": "r70_drain_manhole_top.png",
+        "persp": "r70_drain_manhole_persp.png",
+        "reference": "r70_drain_manhole_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [],
+  "references": {
+    "u_gutter": [
+      {
+        "oid": "S4-0385-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+        "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+        "description": "道の右縁のコンクリートU字溝または縁石。幅約0.4 m、苔が付く。"
+      },
+      {
+        "oid": "S4-0407-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0409_f.jpg",
+        "url": "https://www.google.com/maps/@35.4400493,139.2115031,3a,90y,58.1h,88t/data=!3m4!1e1!3m2!1sFwmnq_GrdPMRc-Yf7Pbu4A!2e0?hl=ja",
+        "description": "道の右縁に沿うコンクリートの U 字側溝（幅約 0.3 m）、蓋なし。路面より少し低い。苔と土砂がたまる"
+      },
+      {
+        "oid": "S4-0440-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0441_b.jpg",
+        "url": "https://www.google.com/maps/@35.4457836,139.2128586,3a,90y,8.0h,88t/data=!3m4!1e1!3m2!1shXxgUeycN6-Rt2hEFq4DZg!2e0?hl=ja",
+        "description": "道の左縁に沿う細いコンクリートの U 字側溝（幅約 0.3 m、蓋なし）、0440〜0442 は路肩の草の外に帯状に見える。灰色、苔"
+      },
+      {
+        "oid": "S4-0540-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0540_f.jpg",
+        "url": "https://www.google.com/maps/@35.4625945,139.215047,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sOdwmZZMDU2MKHkn0OmkHGQ!2e0?hl=ja",
+        "description": "右の法面の下に沿うコンクリートのU字側溝、幅約0.4 m、枯れ葉や土で一部埋まる。ふたなし"
+      }
+    ],
+    "grating": [
+      {
+        "oid": "S5-0617-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0617_f.jpg",
+        "url": "https://www.google.com/maps/@35.4732695,139.2128351,3a,90y,204.9h,88t/data=!3m4!1e1!3m2!1sLxQQXCY3vfNZBfONOTNOGg!2e0?hl=ja",
+        "description": "長方形の鋼製格子ぶた、約 1.0 × 0.6 m、コンクリート縁、路面の左寄り"
+      },
+      {
+        "oid": "S5-0657-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0657_f.jpg",
+        "url": "https://www.google.com/maps/@35.4768263,139.2105763,3a,90y,46.8h,88t/data=!3m4!1e1!3m2!1sckDU8GduXidF8TP4tBhgRg!2e0?hl=ja",
+        "description": "路面を横切る鋼製グレーチングのふた、幅約0.4m×道幅いっぱい（約3m）、左の側溝へつながる"
+      },
+      {
+        "oid": "S5-0711-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0711_f.jpg",
+        "url": "https://www.google.com/maps/@35.4856583,139.2084892,3a,90y,296.1h,88t/data=!3m4!1e1!3m2!1sjyw9kOvbcdJetlo1yZbzmw!2e0?hl=ja",
+        "description": "路面を横切る細長い鉄のグレーチング。幅は道いっぱい（約 3 m）、奥行き約 0.3 m"
+      },
+      {
+        "oid": "S5-0799-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0799_f.jpg",
+        "url": "https://www.google.com/maps/@35.4853438,139.2137877,3a,90y,21.1h,88t/data=!3m4!1e1!3m2!1sSbmK5vlGUQXFB-WtpuE4IA!2e0?hl=ja",
+        "description": "路面を横切る溝に鉄の格子蓋、幅約 0.5 m、道幅いっぱい（約 4 m）。右端の道の縁で集水ますの蓋（約 0.6 m 角）につながる。"
+      }
+    ],
+    "manhole": [
+      {
+        "oid": "S5-0972-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0972_f.jpg",
+        "url": "https://www.google.com/maps/@35.5084421,139.231088,3a,90y,4.5h,88t/data=!3m4!1e1!3m2!1sRDyrZgr849nF9CcY_1Lt1A!2e0?hl=ja",
+        "description": "左路肩のU字溝（グレーチング蓋）、車線内に丸い鉄蓋のマンホール（直径約0.7m、さび色）"
+      },
+      {
+        "oid": "S5-0751-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0751_b.jpg",
+        "url": "https://www.google.com/maps/@35.4841029,139.2053911,3a,90y,229.6h,88t/data=!3m4!1e1!3m2!1s5WKKV-TDXbqntO3JdliUng!2e0?hl=ja",
+        "description": "路面中央寄りの円形マンホール蓋（直径約0.6m、茶色の鉄蓋）"
+      },
+      {
+        "oid": "S5-0770-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0770_b.jpg",
+        "url": "https://www.google.com/maps/@35.4867701,139.2084097,3a,90y,287.7h,88t/data=!3m4!1e1!3m2!1scS5M4fdBAp6XllKHQiDrYQ!2e0?hl=ja",
+        "description": "直径約0.6 mの丸いふた、路面の中央寄り"
+      },
+      {
+        "oid": "S5-0784-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_f.jpg",
+        "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,93.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+        "description": "丸いふた、直径約0.6m"
+      }
+    ],
+    "catch_basin": [
+      {
+        "oid": "S5-0645-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0645_f.jpg",
+        "url": "https://www.google.com/maps/@35.4746357,139.2109888,3a,90y,356.1h,88t/data=!3m4!1e1!3m2!1ss6wzTDvvnoQQTOt7PK0J0w!2e0?hl=ja",
+        "description": "路面左寄りの小さな四角い鉄のふた（約0.4 m 角）"
+      },
+      {
+        "oid": "S5-0789-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0789_f.jpg",
+        "url": "https://www.google.com/maps/@35.4851497,139.2121507,3a,90y,155.3h,88t/data=!3m4!1e1!3m2!1sDQAwo65jha1yV1IdpfgfSg!2e0?hl=ja",
+        "description": "舗装路の中央やや右に鉄の格子蓋 1 つ、約 0.4 m 角。"
+      },
+      {
+        "oid": "S5-0816-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0816_f.jpg",
+        "url": "https://www.google.com/maps/@35.4866161,139.217019,3a,90y,57.5h,88t/data=!3m4!1e1!3m2!1sebZBJ0F2rJIuYi6X5-pUIQ!2e0?hl=ja",
+        "description": "左の山側の縁に鉄のグレーチング蓋の集水ます（約0.4×0.5m）"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "grating",
+    "image": "R70-0617_f.jpg",
+    "crop_pixels": [
+      460,
+      700,
+      700,
+      930
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

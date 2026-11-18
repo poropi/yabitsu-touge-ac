@@ -1,0 +1,123 @@
+{
+  "part_info": {
+    "barrier_A_short": {
+      "meaning": "売店右空地のA脚バリケード。白い小札の文章未判読。",
+      "front": "-Y"
+    },
+    "barrier_A_long": {
+      "meaning": "売店右空地のA脚バリケード。白い小札の文章未判読。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "barrier_A_short": [
+      0.0,
+      0.0,
+      0
+    ],
+    "barrier_A_long": [
+      2.8,
+      0.0,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 512,
+  "refs": [
+    "codex07/sv_lotn_225.png",
+    "codex07/sv_lotn_135.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "自転車台に似るが別の赤茶横材・小札付きバリケードとして分離。隠れた脚は推定。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_barriers",
+  "source": "pass_barriers.blend",
+  "parts": [
+    {
+      "name": "barrier_A_short",
+      "triangles": 110,
+      "vertices": 220,
+      "dimensions_m": [
+        1.5,
+        0.6515,
+        0.8447
+      ],
+      "bounds_m": [
+        [
+          -0.75,
+          -0.3257490545511246,
+          0.0
+        ],
+        [
+          0.75,
+          0.3257490545511246,
+          0.8446559309959412
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "売店右空地のA脚バリケード。白い小札の文章未判読。",
+      "front": "-Y"
+    },
+    {
+      "name": "barrier_A_long",
+      "triangles": 110,
+      "vertices": 220,
+      "dimensions_m": [
+        1.8,
+        0.6515,
+        0.8447
+      ],
+      "bounds_m": [
+        [
+          -0.8999999761581421,
+          -0.3257490545511246,
+          0.0
+        ],
+        [
+          0.8999999761581421,
+          0.3257490545511246,
+          0.8446559309959412
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "売店右空地のA脚バリケード。白い小札の文章未判読。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

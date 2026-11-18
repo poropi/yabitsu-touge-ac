@@ -32,6 +32,7 @@ MATERIALS = {
     "paint_green": {"texture": "textures/paint_green.png", "shader": "ksPerPixel"},
     "line_orange": {"texture": "textures/line_orange.png", "shader": "ksPerPixel"},
     "concrete_circles": {"texture": "textures/concrete_circles.png", "shader": "ksPerPixel"},
+    "concrete_plain": {"texture": "textures/concrete_plain.png", "shader": "ksPerPixel"},
     "hedge": {"texture": "textures/hedge.png", "shader": "ksPerPixel"},
     "barricade": {"texture": "textures/barricade.png", "shader": "ksPerPixel", "two_sided": True},
     "cone": {"texture": "textures/cone.png", "shader": "ksPerPixel"},
@@ -180,6 +181,21 @@ def concrete_circles(size=512, ring_px=32, seed=17):
     g = 0.66 * (0.93 + 0.14 * periodic_noise(size, 3, rng))
     g = np.where((r > ring_px * 0.28) & (r < ring_px * 0.36), g * 0.62, g)
     return _u8(np.stack([g, g * 0.99, g * 0.96], -1))
+
+
+def concrete_plain(size=512, seed=31):
+    """平らなコンクリート舗装：明るい灰色に、端に横の継ぎ目（1 枚＝4 m 四方なので 4 m おき）と細いひび割れ。S5 4091 m の小さなトンネルの前後
+    （ストリートビュー R70-0716・0717 2025-07。丸い模様は無い）。"""
+    rng = np.random.default_rng(seed)
+    g = 0.62 * (0.92 + 0.16 * periodic_noise(size, 4, rng)) * (0.96 + 0.06 * periodic_noise(size, 32, rng))
+    yy, xx = np.mgrid[0:size, 0:size]
+    g = np.where(yy < 3, g * 0.55, g)                                   # 横の継ぎ目
+    for _ in range(3):                                                  # 細いひび割れ（折れ線）
+        x = rng.uniform(0, size); y0 = rng.uniform(0, size)
+        for y in range(int(y0), int(y0) + size // 3):
+            x += rng.normal(0, 1.2); xi = int(x) % size; yi = y % size
+            g[yi, xi] *= 0.6
+    return _u8(np.stack([g, g * 0.99, g * 0.95], -1))
 
 
 def wood(size=256, seed=15):
@@ -759,6 +775,7 @@ def write_textures(out_dir):
             "paint_green": _gray(256, 24, 0.55, 0.08, (0.64, 0.78, 0.62)),
             "line_orange": _gray(256, 19, 0.80, 0.05, (1.0, 0.62, 0.16)),
             "concrete_circles": concrete_circles(),
+            "concrete_plain": concrete_plain(),
             "hedge": _gray(512, 20, 0.42, 0.30, (0.55, 1.0, 0.45), coarse=6, fine=2),
             "barricade": _barricade(),
             "cone": _cone(),

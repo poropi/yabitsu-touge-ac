@@ -1,0 +1,1048 @@
+{
+  "asset_id": "r70_construction",
+  "source": "r70_construction.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 800,
+  "parts": [
+    {
+      "name": "drum",
+      "meaning": "黄色い蓋・赤白の市松反射を持つ円筒緩衝体",
+      "triangles": 392,
+      "vertices": 732,
+      "dimensions_m": [
+        0.738,
+        0.738,
+        0.9355
+      ],
+      "bounds_m": [
+        [
+          -0.369,
+          -0.369,
+          0.0
+        ],
+        [
+          0.369,
+          0.369,
+          0.9355
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "drum.png"
+      ],
+      "components": [
+        {
+          "name": "黄色い胴の縁",
+          "triangle_start": 0,
+          "triangle_count": 48
+        },
+        {
+          "name": "黄色い胴の縁",
+          "triangle_start": 48,
+          "triangle_count": 48
+        },
+        {
+          "name": "赤白の反射チェッカー胴",
+          "triangle_start": 96,
+          "triangle_count": 48
+        },
+        {
+          "name": "黄色い胴の縁",
+          "triangle_start": 144,
+          "triangle_count": 48
+        },
+        {
+          "name": "黄色い胴の縁",
+          "triangle_start": 192,
+          "triangle_count": 48
+        },
+        {
+          "name": "黄色い上蓋",
+          "triangle_start": 240,
+          "triangle_count": 92
+        },
+        {
+          "name": "注水口",
+          "triangle_start": 332,
+          "triangle_count": 36
+        },
+        {
+          "name": "蓋の取っ手",
+          "triangle_start": 368,
+          "triangle_count": 12
+        },
+        {
+          "name": "蓋の取っ手",
+          "triangle_start": 380,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "一般的な円筒型の写真輪郭を近似。製品固有の刻印、落書き、連結穴の微細形状は省略。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0545-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_b.jpg",
+          "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,168.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+          "description": "後ろ向き画像で見える。赤と白の縞のプラスチック製ドラム缶（高さ約0.9 m）、上に黄色い蓋。進行の左側"
+        },
+        {
+          "oid": "S5-0737-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0737_f.jpg",
+          "url": "https://www.google.com/maps/@35.4813767,139.2044889,3a,90y,257.9h,88t/data=!3m4!1e1!3m2!1scu_JzXeRmxa57mZbZitE5w!2e0?hl=ja",
+          "description": "橋のたもと左の円筒形ドラム、黄色の帯と赤白の市松、高さ約 0.9 m"
+        },
+        {
+          "oid": "S5-0749-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0749_f.jpg",
+          "url": "https://www.google.com/maps/@35.4837886,139.2050731,3a,90y,31.2h,88t/data=!3m4!1e1!3m2!1sA6uFaFUMXZ-uXGbTedAvDg!2e0?hl=ja",
+          "description": "赤白の縞（市松）の円筒形バリケード。高さ約0.8m、路肩の草地の際に1個"
+        },
+        {
+          "oid": "S5-0771-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_b.jpg",
+          "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,292.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+          "description": "橋の端（進む向き左）に置かれた赤白格子の円筒、直径約0.8 m、高さ約1m、落書きあり"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0545-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_b.jpg",
+        "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,168.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+        "description": "後ろ向き画像で見える。赤と白の縞のプラスチック製ドラム缶（高さ約0.9 m）、上に黄色い蓋。進行の左側"
+      },
+      "preview_views": {
+        "front": "r70_construction_drum_front.png",
+        "left": "r70_construction_drum_left.png",
+        "right": "r70_construction_drum_right.png",
+        "back_estimated": "r70_construction_drum_back_estimated.png",
+        "top": "r70_construction_drum_top.png",
+        "persp": "r70_construction_drum_persp.png",
+        "reference": "r70_construction_drum_reference.png"
+      }
+    },
+    {
+      "name": "water_barrier",
+      "meaning": "黄色い蓋・赤白の市松反射を持つ円筒緩衝体",
+      "triangles": 392,
+      "vertices": 732,
+      "dimensions_m": [
+        0.697,
+        0.697,
+        0.8355
+      ],
+      "bounds_m": [
+        [
+          -0.3485,
+          -0.3485,
+          0.0
+        ],
+        [
+          0.3485,
+          0.3485,
+          0.8355
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "water_barrier.png"
+      ],
+      "components": [
+        {
+          "name": "黄色い胴の縁",
+          "triangle_start": 0,
+          "triangle_count": 48
+        },
+        {
+          "name": "黄色い胴の縁",
+          "triangle_start": 48,
+          "triangle_count": 48
+        },
+        {
+          "name": "赤白の反射チェッカー胴",
+          "triangle_start": 96,
+          "triangle_count": 48
+        },
+        {
+          "name": "黄色い胴の縁",
+          "triangle_start": 144,
+          "triangle_count": 48
+        },
+        {
+          "name": "黄色い胴の縁",
+          "triangle_start": 192,
+          "triangle_count": 48
+        },
+        {
+          "name": "黄色い上蓋",
+          "triangle_start": 240,
+          "triangle_count": 92
+        },
+        {
+          "name": "注水口",
+          "triangle_start": 332,
+          "triangle_count": 36
+        },
+        {
+          "name": "蓋の取っ手",
+          "triangle_start": 368,
+          "triangle_count": 12
+        },
+        {
+          "name": "蓋の取っ手",
+          "triangle_start": 380,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "一般的な円筒型の写真輪郭を近似。製品固有の刻印、落書き、連結穴の微細形状は省略。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0896-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0896_b.jpg",
+          "url": "https://www.google.com/maps/@35.4982783,139.2244257,3a,90y,288.1h,88t/data=!3m4!1e1!3m2!1s3FYYeXTXT_6OXdqvp22VbQ!2e0?hl=ja",
+          "description": "山側の路肩にある、黄色の樽型の連結ブロック（水入りバリケード）2基、赤白の縞の面あり。各約0.5m×1m、高さ約0.8m。道の左の縁に置かれる。工事の仮設物"
+        },
+        {
+          "oid": "S5-0901-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0901_f.jpg",
+          "url": "https://www.google.com/maps/@35.4982282,139.2257361,3a,90y,30.4h,88t/data=!3m4!1e1!3m2!1sbQpvWL7-KcaGPp7O25FZhQ!2e0?hl=ja",
+          "description": "橋の入口の左に、黄色と赤白の水入りバリケード1基（直径約0.6m、高さ約0.9m）と、その脇の黒い鉄の門型枠（高さ約1.2m、幅約0.8m）。岩との間にすき間"
+        },
+        {
+          "oid": "S5-1018-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1018_f.jpg",
+          "url": "https://www.google.com/maps/@35.5178881,139.2312036,3a,90y,351.9h,88t/data=!3m4!1e1!3m2!1sSdjBnjEo_QtbEdvdiyvFgQ!2e0?hl=ja",
+          "description": "赤白の市松模様のプラスチック樽（ドラム）、高さ約1m、直径約0.6m、路肩の端"
+        },
+        {
+          "oid": "S4-0381-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,260.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+          "description": "建物の前の草に置かれた木のA型バリケード。幅約1.2 m・高さ約1.1 m。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0896-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0896_b.jpg",
+        "url": "https://www.google.com/maps/@35.4982783,139.2244257,3a,90y,288.1h,88t/data=!3m4!1e1!3m2!1s3FYYeXTXT_6OXdqvp22VbQ!2e0?hl=ja",
+        "description": "山側の路肩にある、黄色の樽型の連結ブロック（水入りバリケード）2基、赤白の縞の面あり。各約0.5m×1m、高さ約0.8m。道の左の縁に置かれる。工事の仮設物"
+      },
+      "preview_views": {
+        "front": "r70_construction_water_barrier_front.png",
+        "left": "r70_construction_water_barrier_left.png",
+        "right": "r70_construction_water_barrier_right.png",
+        "back_estimated": "r70_construction_water_barrier_back_estimated.png",
+        "top": "r70_construction_water_barrier_top.png",
+        "persp": "r70_construction_water_barrier_persp.png",
+        "reference": "r70_construction_water_barrier_reference.png"
+      }
+    },
+    {
+      "name": "cone",
+      "meaning": "0.7m赤白カラーコーン",
+      "triangles": 312,
+      "vertices": 504,
+      "dimensions_m": [
+        0.38,
+        0.38,
+        0.7
+      ],
+      "bounds_m": [
+        [
+          -0.19,
+          -0.19,
+          0.0
+        ],
+        [
+          0.19,
+          0.19,
+          0.7
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "cone.png",
+        "cone_green.png",
+        "cone_orange.png"
+      ],
+      "components": [
+        {
+          "name": "四角いコーンの台",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "コーンの帯",
+          "triangle_start": 12,
+          "triangle_count": 60
+        },
+        {
+          "name": "コーンの帯",
+          "triangle_start": 72,
+          "triangle_count": 60
+        },
+        {
+          "name": "コーンの帯",
+          "triangle_start": 132,
+          "triangle_count": 60
+        },
+        {
+          "name": "コーンの帯",
+          "triangle_start": 192,
+          "triangle_count": 60
+        },
+        {
+          "name": "コーンの帯",
+          "triangle_start": 252,
+          "triangle_count": 60
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0545-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_b.jpg",
+          "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,168.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+          "description": "ドラム缶の手前にある三角コーン、赤白縞、高さ約0.7 m"
+        },
+        {
+          "oid": "S5-0760-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0760_f.jpg",
+          "url": "https://www.google.com/maps/@35.4856872,139.2065182,3a,90y,77.6h,88t/data=!3m4!1e1!3m2!1svzLVUCf17wKBfogMkQg8fQ!2e0?hl=ja",
+          "description": "赤白のカラーコーン 1 個（高さ約0.7m）、左の側溝脇の斜面に倒れかけて置かれる"
+        },
+        {
+          "oid": "S5-0850-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0850_b.jpg",
+          "url": "https://www.google.com/maps/@35.4898826,139.2208393,3a,90y,134.4h,88t/data=!3m4!1e1!3m2!1szTRqoo09OGdIfLmUmRlx4w!2e0?hl=ja",
+          "description": "ガードレールの端、路肩に置かれた緑色の三角コーン 1 つ。高さ約 0.7 m"
+        },
+        {
+          "oid": "S5-0851-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0851_f.jpg",
+          "url": "https://www.google.com/maps/@35.4900655,139.2206416,3a,90y,313.2h,88t/data=!3m4!1e1!3m2!1sZuMFa6J7oB8YeZ1SjayJ8w!2e0?hl=ja",
+          "description": "擁壁の足元、道の左端に並ぶオレンジの三角コーン。途中に白いバー付きの物（コーンバー）もあり、10 個ほど"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0545-06",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_b.jpg",
+        "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,168.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+        "description": "ドラム缶の手前にある三角コーン、赤白縞、高さ約0.7 m"
+      },
+      "preview_views": {
+        "front": "r70_construction_cone_front.png",
+        "left": "r70_construction_cone_left.png",
+        "right": "r70_construction_cone_right.png",
+        "back_estimated": "r70_construction_cone_back_estimated.png",
+        "top": "r70_construction_cone_top.png",
+        "persp": "r70_construction_cone_persp.png",
+        "reference": "r70_construction_cone_reference.png"
+      }
+    },
+    {
+      "name": "wood_A",
+      "meaning": "古い木製A型バリケード",
+      "triangles": 72,
+      "vertices": 144,
+      "dimensions_m": [
+        1.25,
+        0.70696,
+        1.07041
+      ],
+      "bounds_m": [
+        [
+          -0.625,
+          -0.35348,
+          0.0
+        ],
+        [
+          0.625,
+          0.35348,
+          1.070407
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "wood_A.png"
+      ],
+      "components": [
+        {
+          "name": "木のA脚",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "木のA脚",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "木のA脚",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "木のA脚",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "木の横板",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "木の横板",
+          "triangle_start": 60,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0896-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0896_b.jpg",
+          "url": "https://www.google.com/maps/@35.4982783,139.2244257,3a,90y,288.1h,88t/data=!3m4!1e1!3m2!1s3FYYeXTXT_6OXdqvp22VbQ!2e0?hl=ja",
+          "description": "山側の路肩にある、黄色の樽型の連結ブロック（水入りバリケード）2基、赤白の縞の面あり。各約0.5m×1m、高さ約0.8m。道の左の縁に置かれる。工事の仮設物"
+        },
+        {
+          "oid": "S5-0901-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0901_f.jpg",
+          "url": "https://www.google.com/maps/@35.4982282,139.2257361,3a,90y,30.4h,88t/data=!3m4!1e1!3m2!1sbQpvWL7-KcaGPp7O25FZhQ!2e0?hl=ja",
+          "description": "橋の入口の左に、黄色と赤白の水入りバリケード1基（直径約0.6m、高さ約0.9m）と、その脇の黒い鉄の門型枠（高さ約1.2m、幅約0.8m）。岩との間にすき間"
+        },
+        {
+          "oid": "S5-1018-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1018_f.jpg",
+          "url": "https://www.google.com/maps/@35.5178881,139.2312036,3a,90y,351.9h,88t/data=!3m4!1e1!3m2!1sSdjBnjEo_QtbEdvdiyvFgQ!2e0?hl=ja",
+          "description": "赤白の市松模様のプラスチック樽（ドラム）、高さ約1m、直径約0.6m、路肩の端"
+        },
+        {
+          "oid": "S4-0381-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,260.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+          "description": "建物の前の草に置かれた木のA型バリケード。幅約1.2 m・高さ約1.1 m。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0381-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_b.jpg",
+        "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,260.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+        "description": "建物の前の草に置かれた木のA型バリケード。幅約1.2 m・高さ約1.1 m。"
+      },
+      "preview_views": {
+        "front": "r70_construction_wood_A_front.png",
+        "left": "r70_construction_wood_A_left.png",
+        "right": "r70_construction_wood_A_right.png",
+        "back_estimated": "r70_construction_wood_A_back_estimated.png",
+        "top": "r70_construction_wood_A_top.png",
+        "persp": "r70_construction_wood_A_persp.png",
+        "reference": "r70_construction_wood_A_reference.png"
+      }
+    },
+    {
+      "name": "sandbag",
+      "meaning": "吊りベルトと絞った口の大型土のう1袋",
+      "triangles": 276,
+      "vertices": 572,
+      "dimensions_m": [
+        1.01393,
+        0.85794,
+        0.84
+      ],
+      "bounds_m": [
+        [
+          -0.506963,
+          -0.428968,
+          0.0
+        ],
+        [
+          0.506963,
+          0.428968,
+          0.84
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "sandbag.png",
+        "sandbag_pink.png",
+        "sandbag_gray.png"
+      ],
+      "components": [
+        {
+          "name": "詰まった大型土のう",
+          "triangle_start": 0,
+          "triangle_count": 192
+        },
+        {
+          "name": "袋の口元",
+          "triangle_start": 192,
+          "triangle_count": 36
+        },
+        {
+          "name": "吊りベルト",
+          "triangle_start": 228,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊りベルト",
+          "triangle_start": 240,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊りベルト",
+          "triangle_start": 252,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊りベルト",
+          "triangle_start": 264,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "単体袋。護岸の積み方・かご枠は配置側で再現。解像度が低く袋のしわ・結び方は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0629-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0629_f.jpg",
+          "url": "https://www.google.com/maps/@35.471374,139.2107328,3a,90y,277.7h,88t/data=!3m4!1e1!3m2!1s-cw51Fhd13dth5BcjY469A!2e0?hl=ja",
+          "description": "沢の左岸に積まれたピンク色の大型土のう（仮設の護岸）。小さな山形に並ぶ"
+        },
+        {
+          "oid": "S5-0738-10",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_f.jpg",
+          "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,344.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+          "description": "ガードレールの外側、谷との間に灰色の土のうが連なる、高さ約 0.5 m"
+        },
+        {
+          "oid": "S5-0786-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0786_f.jpg",
+          "url": "https://www.google.com/maps/@35.4857094,139.2117201,3a,90y,85.9h,88t/data=!3m4!1e1!3m2!1sXvPjkb0I7NSqSQ6xhsjJXw!2e0?hl=ja",
+          "description": "ガードレールの外側に白い袋・かご状の物が積まれた小さな護岸"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0629-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0629_f.jpg",
+        "url": "https://www.google.com/maps/@35.471374,139.2107328,3a,90y,277.7h,88t/data=!3m4!1e1!3m2!1s-cw51Fhd13dth5BcjY469A!2e0?hl=ja",
+        "description": "沢の左岸に積まれたピンク色の大型土のう（仮設の護岸）。小さな山形に並ぶ"
+      },
+      "preview_views": {
+        "front": "r70_construction_sandbag_front.png",
+        "left": "r70_construction_sandbag_left.png",
+        "right": "r70_construction_sandbag_right.png",
+        "back_estimated": "r70_construction_sandbag_back_estimated.png",
+        "top": "r70_construction_sandbag_top.png",
+        "persp": "r70_construction_sandbag_persp.png",
+        "reference": "r70_construction_sandbag_reference.png"
+      }
+    },
+    {
+      "name": "barricade",
+      "meaning": "赤白反射板と金属A脚のバリケード",
+      "triangles": 76,
+      "vertices": 152,
+      "dimensions_m": [
+        1.8,
+        0.63377,
+        1.10921
+      ],
+      "bounds_m": [
+        [
+          -0.9,
+          -0.316883,
+          0.0
+        ],
+        [
+          0.9,
+          0.316883,
+          1.109209
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "barricade.png"
+      ],
+      "components": [
+        {
+          "name": "鋼管A脚",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "鋼管A脚",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "鋼管A脚",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "鋼管A脚",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "反射横板",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "斜め反射塗り",
+          "triangle_start": 60,
+          "triangle_count": 2
+        },
+        {
+          "name": "反射横板",
+          "triangle_start": 62,
+          "triangle_count": 12
+        },
+        {
+          "name": "斜め反射塗り",
+          "triangle_start": 74,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "0856の水詰め型はwater_barrierを使用。これは0733の分岐入口用の鋼管A脚型。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0856-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0856_f.jpg",
+          "url": "https://www.google.com/maps/@35.4909465,139.2199587,3a,90y,5.4h,88t/data=!3m4!1e1!3m2!1sEZRR1p50nlLy6R8cNin_ew!2e0?hl=ja",
+          "description": "道の右端、路肩に置かれた黄色いポリタンク式の工事用バリケード。赤白の市松模様。高さ約 1 m、幅約 1 m。後ろにオレンジの三角コーン"
+        },
+        {
+          "oid": "S4-0490-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0490_b.jpg",
+          "url": "https://www.google.com/maps/@35.4528423,139.2119259,3a,90y,124.4h,88t/data=!3m4!1e1!3m2!1svZR-p9k9AvH9hwi4LaDDdQ!2e0?hl=ja",
+          "description": "赤白に塗られた鋼管の横棒（幅約 10 m、高さ約 1 m）が脇の広場の入口に連続して 3 区画。柱は赤い。白い小さな札が 2 枚付く。道の左のヘアピンの外側"
+        },
+        {
+          "oid": "S5-0733-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0733_f.jpg",
+          "url": "https://www.google.com/maps/@35.4820671,139.2050686,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1sxnLlp7mgEFPogd5-XYws3A!2e0?hl=ja",
+          "description": "左の分岐路の口に、オレンジ白の工事用バリケード 1 基とトラコーン約 5 本、一部に赤白の縞ロープ"
+        },
+        {
+          "oid": "S5-0771-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+          "description": "錆びたオレンジの柵の足元に付く黒黄斜め縞の板、高さ約0.6m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0856-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0856_f.jpg",
+        "url": "https://www.google.com/maps/@35.4909465,139.2199587,3a,90y,5.4h,88t/data=!3m4!1e1!3m2!1sEZRR1p50nlLy6R8cNin_ew!2e0?hl=ja",
+        "description": "道の右端、路肩に置かれた黄色いポリタンク式の工事用バリケード。赤白の市松模様。高さ約 1 m、幅約 1 m。後ろにオレンジの三角コーン"
+      },
+      "preview_views": {
+        "front": "r70_construction_barricade_front.png",
+        "left": "r70_construction_barricade_left.png",
+        "right": "r70_construction_barricade_right.png",
+        "back_estimated": "r70_construction_barricade_back_estimated.png",
+        "top": "r70_construction_barricade_top.png",
+        "persp": "r70_construction_barricade_persp.png",
+        "reference": "r70_construction_barricade_reference.png"
+      }
+    },
+    {
+      "name": "barricade_pipe",
+      "meaning": "脇道の入口を塞ぐ赤白の鋼管3m区間",
+      "triangles": 336,
+      "vertices": 576,
+      "dimensions_m": [
+        3.07,
+        0.07,
+        1.0
+      ],
+      "bounds_m": [
+        [
+          -1.535,
+          -0.035,
+          0.0
+        ],
+        [
+          1.535,
+          0.035,
+          1.0
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "barricade_pipe.png"
+      ],
+      "components": [
+        {
+          "name": "赤い支柱",
+          "triangle_start": 0,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤い支柱",
+          "triangle_start": 28,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 56,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 84,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 112,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 140,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 168,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 196,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 224,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 252,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 280,
+          "triangle_count": 28
+        },
+        {
+          "name": "赤白交互の横管",
+          "triangle_start": 308,
+          "triangle_count": 28
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0856-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0856_f.jpg",
+          "url": "https://www.google.com/maps/@35.4909465,139.2199587,3a,90y,5.4h,88t/data=!3m4!1e1!3m2!1sEZRR1p50nlLy6R8cNin_ew!2e0?hl=ja",
+          "description": "道の右端、路肩に置かれた黄色いポリタンク式の工事用バリケード。赤白の市松模様。高さ約 1 m、幅約 1 m。後ろにオレンジの三角コーン"
+        },
+        {
+          "oid": "S4-0490-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0490_b.jpg",
+          "url": "https://www.google.com/maps/@35.4528423,139.2119259,3a,90y,124.4h,88t/data=!3m4!1e1!3m2!1svZR-p9k9AvH9hwi4LaDDdQ!2e0?hl=ja",
+          "description": "赤白に塗られた鋼管の横棒（幅約 10 m、高さ約 1 m）が脇の広場の入口に連続して 3 区画。柱は赤い。白い小さな札が 2 枚付く。道の左のヘアピンの外側"
+        },
+        {
+          "oid": "S5-0733-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0733_f.jpg",
+          "url": "https://www.google.com/maps/@35.4820671,139.2050686,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1sxnLlp7mgEFPogd5-XYws3A!2e0?hl=ja",
+          "description": "左の分岐路の口に、オレンジ白の工事用バリケード 1 基とトラコーン約 5 本、一部に赤白の縞ロープ"
+        },
+        {
+          "oid": "S5-0771-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+          "description": "錆びたオレンジの柵の足元に付く黒黄斜め縞の板、高さ約0.6m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0490-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0490_b.jpg",
+        "url": "https://www.google.com/maps/@35.4528423,139.2119259,3a,90y,124.4h,88t/data=!3m4!1e1!3m2!1svZR-p9k9AvH9hwi4LaDDdQ!2e0?hl=ja",
+        "description": "赤白に塗られた鋼管の横棒（幅約 10 m、高さ約 1 m）が脇の広場の入口に連続して 3 区画。柱は赤い。白い小さな札が 2 枚付く。道の左のヘアピンの外側"
+      },
+      "preview_views": {
+        "front": "r70_construction_barricade_pipe_front.png",
+        "left": "r70_construction_barricade_pipe_left.png",
+        "right": "r70_construction_barricade_pipe_right.png",
+        "back_estimated": "r70_construction_barricade_pipe_back_estimated.png",
+        "top": "r70_construction_barricade_pipe_top.png",
+        "persp": "r70_construction_barricade_pipe_persp.png",
+        "reference": "r70_construction_barricade_pipe_reference.png"
+      }
+    },
+    {
+      "name": "barricade_panel",
+      "meaning": "柵の足元に付く黒黄斜め縞の防護板",
+      "triangles": 14,
+      "vertices": 28,
+      "dimensions_m": [
+        1.5,
+        0.031,
+        0.6
+      ],
+      "bounds_m": [
+        [
+          -0.75,
+          -0.016,
+          0.0
+        ],
+        [
+          0.75,
+          0.015,
+          0.6
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "barricade_panel.png"
+      ],
+      "components": [
+        {
+          "name": "黒黄の低い防護板",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "黒黄斜め縞",
+          "triangle_start": 12,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0856-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0856_f.jpg",
+          "url": "https://www.google.com/maps/@35.4909465,139.2199587,3a,90y,5.4h,88t/data=!3m4!1e1!3m2!1sEZRR1p50nlLy6R8cNin_ew!2e0?hl=ja",
+          "description": "道の右端、路肩に置かれた黄色いポリタンク式の工事用バリケード。赤白の市松模様。高さ約 1 m、幅約 1 m。後ろにオレンジの三角コーン"
+        },
+        {
+          "oid": "S4-0490-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0490_b.jpg",
+          "url": "https://www.google.com/maps/@35.4528423,139.2119259,3a,90y,124.4h,88t/data=!3m4!1e1!3m2!1svZR-p9k9AvH9hwi4LaDDdQ!2e0?hl=ja",
+          "description": "赤白に塗られた鋼管の横棒（幅約 10 m、高さ約 1 m）が脇の広場の入口に連続して 3 区画。柱は赤い。白い小さな札が 2 枚付く。道の左のヘアピンの外側"
+        },
+        {
+          "oid": "S5-0733-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0733_f.jpg",
+          "url": "https://www.google.com/maps/@35.4820671,139.2050686,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1sxnLlp7mgEFPogd5-XYws3A!2e0?hl=ja",
+          "description": "左の分岐路の口に、オレンジ白の工事用バリケード 1 基とトラコーン約 5 本、一部に赤白の縞ロープ"
+        },
+        {
+          "oid": "S5-0771-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+          "description": "錆びたオレンジの柵の足元に付く黒黄斜め縞の板、高さ約0.6m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0771-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+        "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+        "description": "錆びたオレンジの柵の足元に付く黒黄斜め縞の板、高さ約0.6m"
+      },
+      "preview_views": {
+        "front": "r70_construction_barricade_panel_front.png",
+        "left": "r70_construction_barricade_panel_left.png",
+        "right": "r70_construction_barricade_panel_right.png",
+        "back_estimated": "r70_construction_barricade_panel_back_estimated.png",
+        "top": "r70_construction_barricade_panel_top.png",
+        "persp": "r70_construction_barricade_panel_persp.png",
+        "reference": "r70_construction_barricade_panel_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "water_barrier/drum/barricadeの樽型は同系列。0856はwater_barrier、1018はdrum。木製A型・鋼管型・板型を分離。"
+  ],
+  "references": {
+    "drum": [
+      {
+        "oid": "S4-0545-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_b.jpg",
+        "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,168.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+        "description": "後ろ向き画像で見える。赤と白の縞のプラスチック製ドラム缶（高さ約0.9 m）、上に黄色い蓋。進行の左側"
+      },
+      {
+        "oid": "S5-0737-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0737_f.jpg",
+        "url": "https://www.google.com/maps/@35.4813767,139.2044889,3a,90y,257.9h,88t/data=!3m4!1e1!3m2!1scu_JzXeRmxa57mZbZitE5w!2e0?hl=ja",
+        "description": "橋のたもと左の円筒形ドラム、黄色の帯と赤白の市松、高さ約 0.9 m"
+      },
+      {
+        "oid": "S5-0749-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0749_f.jpg",
+        "url": "https://www.google.com/maps/@35.4837886,139.2050731,3a,90y,31.2h,88t/data=!3m4!1e1!3m2!1sA6uFaFUMXZ-uXGbTedAvDg!2e0?hl=ja",
+        "description": "赤白の縞（市松）の円筒形バリケード。高さ約0.8m、路肩の草地の際に1個"
+      },
+      {
+        "oid": "S5-0771-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_b.jpg",
+        "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,292.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+        "description": "橋の端（進む向き左）に置かれた赤白格子の円筒、直径約0.8 m、高さ約1m、落書きあり"
+      }
+    ],
+    "cone": [
+      {
+        "oid": "S4-0545-06",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0545_b.jpg",
+        "url": "https://www.google.com/maps/@35.4634544,139.2152004,3a,90y,168.9h,88t/data=!3m4!1e1!3m2!1sitm8flKoKwYIylTObiK5aw!2e0?hl=ja",
+        "description": "ドラム缶の手前にある三角コーン、赤白縞、高さ約0.7 m"
+      },
+      {
+        "oid": "S5-0760-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0760_f.jpg",
+        "url": "https://www.google.com/maps/@35.4856872,139.2065182,3a,90y,77.6h,88t/data=!3m4!1e1!3m2!1svzLVUCf17wKBfogMkQg8fQ!2e0?hl=ja",
+        "description": "赤白のカラーコーン 1 個（高さ約0.7m）、左の側溝脇の斜面に倒れかけて置かれる"
+      },
+      {
+        "oid": "S5-0850-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0850_b.jpg",
+        "url": "https://www.google.com/maps/@35.4898826,139.2208393,3a,90y,134.4h,88t/data=!3m4!1e1!3m2!1szTRqoo09OGdIfLmUmRlx4w!2e0?hl=ja",
+        "description": "ガードレールの端、路肩に置かれた緑色の三角コーン 1 つ。高さ約 0.7 m"
+      },
+      {
+        "oid": "S5-0851-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0851_f.jpg",
+        "url": "https://www.google.com/maps/@35.4900655,139.2206416,3a,90y,313.2h,88t/data=!3m4!1e1!3m2!1sZuMFa6J7oB8YeZ1SjayJ8w!2e0?hl=ja",
+        "description": "擁壁の足元、道の左端に並ぶオレンジの三角コーン。途中に白いバー付きの物（コーンバー）もあり、10 個ほど"
+      }
+    ],
+    "water_barrier": [
+      {
+        "oid": "S5-0896-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0896_b.jpg",
+        "url": "https://www.google.com/maps/@35.4982783,139.2244257,3a,90y,288.1h,88t/data=!3m4!1e1!3m2!1s3FYYeXTXT_6OXdqvp22VbQ!2e0?hl=ja",
+        "description": "山側の路肩にある、黄色の樽型の連結ブロック（水入りバリケード）2基、赤白の縞の面あり。各約0.5m×1m、高さ約0.8m。道の左の縁に置かれる。工事の仮設物"
+      },
+      {
+        "oid": "S5-0901-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0901_f.jpg",
+        "url": "https://www.google.com/maps/@35.4982282,139.2257361,3a,90y,30.4h,88t/data=!3m4!1e1!3m2!1sbQpvWL7-KcaGPp7O25FZhQ!2e0?hl=ja",
+        "description": "橋の入口の左に、黄色と赤白の水入りバリケード1基（直径約0.6m、高さ約0.9m）と、その脇の黒い鉄の門型枠（高さ約1.2m、幅約0.8m）。岩との間にすき間"
+      },
+      {
+        "oid": "S5-1018-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1018_f.jpg",
+        "url": "https://www.google.com/maps/@35.5178881,139.2312036,3a,90y,351.9h,88t/data=!3m4!1e1!3m2!1sSdjBnjEo_QtbEdvdiyvFgQ!2e0?hl=ja",
+        "description": "赤白の市松模様のプラスチック樽（ドラム）、高さ約1m、直径約0.6m、路肩の端"
+      },
+      {
+        "oid": "S4-0381-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_b.jpg",
+        "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,260.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+        "description": "建物の前の草に置かれた木のA型バリケード。幅約1.2 m・高さ約1.1 m。"
+      }
+    ],
+    "sandbag": [
+      {
+        "oid": "S5-0629-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0629_f.jpg",
+        "url": "https://www.google.com/maps/@35.471374,139.2107328,3a,90y,277.7h,88t/data=!3m4!1e1!3m2!1s-cw51Fhd13dth5BcjY469A!2e0?hl=ja",
+        "description": "沢の左岸に積まれたピンク色の大型土のう（仮設の護岸）。小さな山形に並ぶ"
+      },
+      {
+        "oid": "S5-0738-10",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_f.jpg",
+        "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,344.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+        "description": "ガードレールの外側、谷との間に灰色の土のうが連なる、高さ約 0.5 m"
+      },
+      {
+        "oid": "S5-0786-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0786_f.jpg",
+        "url": "https://www.google.com/maps/@35.4857094,139.2117201,3a,90y,85.9h,88t/data=!3m4!1e1!3m2!1sXvPjkb0I7NSqSQ6xhsjJXw!2e0?hl=ja",
+        "description": "ガードレールの外側に白い袋・かご状の物が積まれた小さな護岸"
+      }
+    ],
+    "barricade": [
+      {
+        "oid": "S5-0856-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0856_f.jpg",
+        "url": "https://www.google.com/maps/@35.4909465,139.2199587,3a,90y,5.4h,88t/data=!3m4!1e1!3m2!1sEZRR1p50nlLy6R8cNin_ew!2e0?hl=ja",
+        "description": "道の右端、路肩に置かれた黄色いポリタンク式の工事用バリケード。赤白の市松模様。高さ約 1 m、幅約 1 m。後ろにオレンジの三角コーン"
+      },
+      {
+        "oid": "S4-0490-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0490_b.jpg",
+        "url": "https://www.google.com/maps/@35.4528423,139.2119259,3a,90y,124.4h,88t/data=!3m4!1e1!3m2!1svZR-p9k9AvH9hwi4LaDDdQ!2e0?hl=ja",
+        "description": "赤白に塗られた鋼管の横棒（幅約 10 m、高さ約 1 m）が脇の広場の入口に連続して 3 区画。柱は赤い。白い小さな札が 2 枚付く。道の左のヘアピンの外側"
+      },
+      {
+        "oid": "S5-0733-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0733_f.jpg",
+        "url": "https://www.google.com/maps/@35.4820671,139.2050686,3a,90y,192.7h,88t/data=!3m4!1e1!3m2!1sxnLlp7mgEFPogd5-XYws3A!2e0?hl=ja",
+        "description": "左の分岐路の口に、オレンジ白の工事用バリケード 1 基とトラコーン約 5 本、一部に赤白の縞ロープ"
+      },
+      {
+        "oid": "S5-0771-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+        "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+        "description": "錆びたオレンジの柵の足元に付く黒黄斜め縞の板、高さ約0.6m"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "drum",
+    "image": "R70-0737_f.jpg",
+    "crop_pixels": [
+      40,
+      490,
+      390,
+      850
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

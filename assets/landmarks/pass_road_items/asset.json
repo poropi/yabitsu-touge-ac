@@ -1,0 +1,436 @@
+{
+  "part_info": {
+    "orange_pole": {
+      "meaning": "銀白反射帯3本の弾性オレンジポール。円錐コーンではない。",
+      "front": "-Y"
+    },
+    "camera_pole_board": {
+      "meaning": "縦書きカメラ作動中の白板。mid柱付型。",
+      "front": "-Y"
+    },
+    "camera_standing": {
+      "meaning": "縦書きカメラ作動中の白板。lotn地面立て型、上端の監視は未読。",
+      "front": "-Y"
+    },
+    "white_cylinder": {
+      "meaning": "赤白の区画帯付き白い小円筒。用途未確認。",
+      "front": "-Y"
+    },
+    "guardrail": {
+      "meaning": "白い鋼製W断面ガードレール1区間。丸い端部付き。",
+      "front": "-Y"
+    },
+    "wood_fence": {
+      "meaning": "北入口の丸太2柱と横木の柵1区間。",
+      "front": "-Y"
+    },
+    "island_rope_fence": {
+      "meaning": "島外周の丸太杭2本と垂れたロープ1区間。",
+      "front": "-Y"
+    },
+    "tree_tripod": {
+      "meaning": "若木用三脚支柱。樹木を含まない。",
+      "front": "-Y"
+    },
+    "white_stepping_stone": {
+      "meaning": "白踏石1個。トイレ横は5個推奨。",
+      "front": "-Y"
+    },
+    "manhole": {
+      "meaning": "円形鉄蓋1個。文字と市章未判読。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "orange_pole": [
+      0.0,
+      0.0,
+      0
+    ],
+    "camera_pole_board": [
+      2.8,
+      0.0,
+      0
+    ],
+    "camera_standing": [
+      5.6,
+      0.0,
+      0
+    ],
+    "white_cylinder": [
+      0.0,
+      2.2,
+      0
+    ],
+    "guardrail": [
+      2.8,
+      2.2,
+      0
+    ],
+    "wood_fence": [
+      5.6,
+      2.2,
+      0
+    ],
+    "island_rope_fence": [
+      0.0,
+      4.4,
+      0
+    ],
+    "tree_tripod": [
+      2.8,
+      4.4,
+      0
+    ],
+    "white_stepping_stone": [
+      5.6,
+      4.4,
+      0
+    ],
+    "manhole": [
+      0.0,
+      6.6000000000000005,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 512,
+  "refs": [
+    "codex07/sv_mid_045.png",
+    "codex07/sv_mid_225.png",
+    "codex07/sv_lotn_000.png",
+    "codex07/sv_lotn_225.png",
+    "codex07/sv_lotn_270.png",
+    "codex07/sv_toilet_045.png",
+    "codex07/sv_lanes_225.png",
+    "codex07/sv_lanes_270.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "木柵の北入口横木型と島のロープ型を別部品。",
+    "マンホールの文字/細意匠、白円筒の用途は未確認。白踏石は単体5個配置推奨。",
+    "ガードレールは厚さ4mmの閉じたW断面、末端は角を落とした丸角形。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "stair_assembly": null,
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_road_items",
+  "source": "pass_road_items.blend",
+  "parts": [
+    {
+      "name": "orange_pole",
+      "triangles": 164,
+      "vertices": 288,
+      "dimensions_m": [
+        0.2,
+        0.2,
+        0.7
+      ],
+      "bounds_m": [
+        [
+          -0.10000000149011612,
+          -0.10000000149011612,
+          0.0
+        ],
+        [
+          0.10000000149011612,
+          0.10000000149011612,
+          0.7000000476837158
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "銀白反射帯3本の弾性オレンジポール。円錐コーンではない。",
+      "front": "-Y"
+    },
+    {
+      "name": "camera_pole_board",
+      "triangles": 42,
+      "vertices": 76,
+      "dimensions_m": [
+        0.35,
+        0.099,
+        2.75
+      ],
+      "bounds_m": [
+        [
+          -0.17499999701976776,
+          -0.0494999997317791,
+          0.0
+        ],
+        [
+          0.17499999701976776,
+          0.0494999997317791,
+          2.75
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "縦書きカメラ作動中の白板。mid柱付型。",
+      "front": "-Y"
+    },
+    {
+      "name": "camera_standing",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        0.46,
+        0.109,
+        1.04
+      ],
+      "bounds_m": [
+        [
+          -0.23000000417232513,
+          -0.054499998688697815,
+          0.0
+        ],
+        [
+          0.23000000417232513,
+          0.054499998688697815,
+          1.0399999618530273
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "縦書きカメラ作動中の白板。lotn地面立て型、上端の監視は未読。",
+      "front": "-Y"
+    },
+    {
+      "name": "white_cylinder",
+      "triangles": 124,
+      "vertices": 216,
+      "dimensions_m": [
+        0.448,
+        0.448,
+        0.5925
+      ],
+      "bounds_m": [
+        [
+          -0.2240000069141388,
+          -0.2240000069141388,
+          0.0
+        ],
+        [
+          0.2240000069141388,
+          0.2240000069141388,
+          0.5924999713897705
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "赤白の区画帯付き白い小円筒。用途未確認。",
+      "front": "-Y"
+    },
+    {
+      "name": "guardrail",
+      "triangles": 208,
+      "vertices": 360,
+      "dimensions_m": [
+        2.25,
+        0.169,
+        0.86
+      ],
+      "bounds_m": [
+        [
+          -1.125,
+          -0.08449999988079071,
+          0.0
+        ],
+        [
+          1.125,
+          0.08449999988079071,
+          0.8600000143051147
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "白い鋼製W断面ガードレール1区間。丸い端部付き。",
+      "front": "-Y"
+    },
+    {
+      "name": "wood_fence",
+      "triangles": 112,
+      "vertices": 192,
+      "dimensions_m": [
+        1.42,
+        0.12,
+        0.85
+      ],
+      "bounds_m": [
+        [
+          -0.7099999785423279,
+          -0.05999999865889549,
+          0.0
+        ],
+        [
+          0.7099999785423279,
+          0.05999999865889549,
+          0.8500000238418579
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "北入口の丸太2柱と横木の柵1区間。",
+      "front": "-Y"
+    },
+    {
+      "name": "island_rope_fence",
+      "triangles": 136,
+      "vertices": 240,
+      "dimensions_m": [
+        1.49,
+        0.09,
+        0.58
+      ],
+      "bounds_m": [
+        [
+          -0.7450000047683716,
+          -0.04500000178813934,
+          0.0
+        ],
+        [
+          0.7450000047683716,
+          0.04500000178813934,
+          0.5799999833106995
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "島外周の丸太杭2本と垂れたロープ1区間。",
+      "front": "-Y"
+    },
+    {
+      "name": "tree_tripod",
+      "triangles": 140,
+      "vertices": 259,
+      "dimensions_m": [
+        0.8225,
+        0.837,
+        1.1501
+      ],
+      "bounds_m": [
+        [
+          -0.4112389087677002,
+          -0.4184971898794174,
+          0.0
+        ],
+        [
+          0.4112389087677002,
+          0.4184971898794174,
+          1.1501190662384033
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "若木用三脚支柱。樹木を含まない。",
+      "front": "-Y"
+    },
+    {
+      "name": "white_stepping_stone",
+      "triangles": 24,
+      "vertices": 42,
+      "dimensions_m": [
+        0.36,
+        0.25,
+        0.055
+      ],
+      "bounds_m": [
+        [
+          -0.18000000715255737,
+          -0.125,
+          0.0
+        ],
+        [
+          0.18000000715255737,
+          0.125,
+          0.054999999701976776
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "白踏石1個。トイレ横は5個推奨。",
+      "front": "-Y"
+    },
+    {
+      "name": "manhole",
+      "triangles": 168,
+      "vertices": 265,
+      "dimensions_m": [
+        0.68,
+        0.68,
+        0.0317
+      ],
+      "bounds_m": [
+        [
+          -0.3400000035762787,
+          -0.3400000035762787,
+          0.0
+        ],
+        [
+          0.3400000035762787,
+          0.3400000035762787,
+          0.031700000166893005
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "円形鉄蓋1個。文字と市章未判読。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

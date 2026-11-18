@@ -1,0 +1,327 @@
+{
+  "origin": "屋根平面中心の真下の地面。全7部品が同じ原点を共有。正面−Yは駐車場側(南東/約149度)。+Xは正面から見て右(北東)。",
+  "dimension_basis": "gsat21の屋根四隅(373,615),(506,535),(578,656),(445,736)px。zoom21/緯度35.4104428のWebMercator 0.06083777m/pxより9.44×8.57m。5mスケール約82pxと照合。輪郭読み±0.5m程度。壁体7.8×6.8m、高さ等はSV写真から推定。",
+  "roof_section_basis": "sw000/mid270の同一点を透視ray交差。SWカメラ高1.8m固定/MID相対高も解いた場合、左右肩4.747/4.761m、軒3.400/3.322m、肩間1.579m、軒間8.153m。両斜面約23度。航空写真外形9.44mに拡大して軒3.4m/肩5.0m/中央平坦幅1.8mで近似。絶対高はカメラ高の仮定に依存。",
+  "aerial_measurement": {
+    "image": "gsat21.png",
+    "roof_corners_px": [
+      [
+        373,
+        615
+      ],
+      [
+        506,
+        535
+      ],
+      [
+        578,
+        656
+      ],
+      [
+        445,
+        736
+      ]
+    ],
+    "m_per_pixel": 0.06083777,
+    "roof_dimensions_m": [
+      9.44,
+      8.57
+    ],
+    "front_azimuth_deg": 149,
+    "width_azimuth_deg": 59
+  },
+  "approximations": [
+    "背面は樹木に隠れるため、壁/石/トラスを見えている面から推定して補完。屋根外形は航空採寸、壁体寸法・高さ・棟位置・設備通路断面は写真からの推定。",
+    "石の個々の並び、木材の継手、屋上設備箱/パイプの詳細は簡略化。",
+    "トイレ内部は再現せず、入口の奥行と暗い開口だけを外観用に作った。",
+    "掲示文は判読できないため短い線と色面。",
+    "スロープは両端から中央へ上がる17.8mの局所モデル。現地の舗装面の細かな不陸・道路縦断勾配は配置担当側で調整。"
+  ],
+  "refs": [
+    "gsat21.png",
+    "sv_sw_000.png",
+    "sv_sw_045.png",
+    "sv_sw_315.png",
+    "sv_mid_225.png",
+    "sv_mid_270.png",
+    "sv_mid_315.png",
+    "sv_user_000.png",
+    "sv_user_090.png"
+  ],
+  "reference_views": {
+    "reference_sw000": [
+      -1.65,
+      -2.5,
+      -0.2
+    ],
+    "reference_mid270": [
+      1.8,
+      -2.6,
+      -0.2
+    ]
+  },
+  "references": [
+    {
+      "image": "export/compare/nanohanadai/gsat21.png",
+      "usage": "航空写真採寸/比較のみ。配布素材への転用なし。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_sw_000.png",
+      "panoid": "hCGwhUE1XaPosSAeVCOneg",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 0,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4102783,139.2092117,3a,90y,0h,85.87t/data=!3m6!1e1!3m4!1shCGwhUE1XaPosSAeVCOneg!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_sw_045.png",
+      "panoid": "hCGwhUE1XaPosSAeVCOneg",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 45,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4102783,139.2092117,3a,90y,45h,85.87t/data=!3m6!1e1!3m4!1shCGwhUE1XaPosSAeVCOneg!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_sw_315.png",
+      "panoid": "hCGwhUE1XaPosSAeVCOneg",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 315,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4102783,139.2092117,3a,90y,315h,85.87t/data=!3m6!1e1!3m4!1shCGwhUE1XaPosSAeVCOneg!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_mid_225.png",
+      "panoid": "MC9FOu1heTQ47rJo-eqsKA",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 225,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4103796,139.2093967,3a,90y,225h,85.87t/data=!3m6!1e1!3m4!1sMC9FOu1heTQ47rJo-eqsKA!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_mid_270.png",
+      "panoid": "MC9FOu1heTQ47rJo-eqsKA",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 270,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4103796,139.2093967,3a,90y,270h,85.87t/data=!3m6!1e1!3m4!1sMC9FOu1heTQ47rJo-eqsKA!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_mid_315.png",
+      "panoid": "MC9FOu1heTQ47rJo-eqsKA",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 315,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4103796,139.2093967,3a,90y,315h,85.87t/data=!3m6!1e1!3m4!1sMC9FOu1heTQ47rJo-eqsKA!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_user_000.png",
+      "panoid": "CIHM0ogKEICAgICEzoqyEg",
+      "date": "2017-07",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 0,
+      "pitch_down_deg": 0,
+      "url": "https://www.google.com/maps/@35.4101451,139.2091123,3a,90y,0h,90t/data=!3m6!1e1!3m4!1sCIHM0ogKEICAgICEzoqyEg!2e10!7i8704!8i4352",
+      "note": "利用者360の方向ラベルは真方位として扱わない。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_user_090.png",
+      "panoid": "CIHM0ogKEICAgICEzoqyEg",
+      "date": "2017-07",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 90,
+      "pitch_down_deg": 0,
+      "url": "https://www.google.com/maps/@35.4101451,139.2091123,3a,90y,90h,90t/data=!3m6!1e1!3m4!1sCIHM0ogKEICAgICEzoqyEg!2e10!7i8704!8i4352",
+      "note": "利用者360の方向ラベルは真方位として扱わない。"
+    }
+  ],
+  "generator": "blender_scripts/build_nanohanadai_toilet.py",
+  "asset_id": "nanohanadai_toilet",
+  "source": "nanohanadai_toilet.blend",
+  "parts": [
+    {
+      "name": "walls",
+      "triangles": 344,
+      "vertices": 672,
+      "dimensions_m": [
+        7.8,
+        6.95,
+        2.5956
+      ],
+      "bounds_m": [
+        [
+          -3.9000000953674316,
+          -3.549999952316284,
+          0.4844447374343872
+        ],
+        [
+          3.9000000953674316,
+          3.4000000953674316,
+          3.0799999237060547
+        ]
+      ]
+    },
+    {
+      "name": "metal_roof",
+      "triangles": 468,
+      "vertices": 936,
+      "dimensions_m": [
+        9.44,
+        8.57,
+        1.7
+      ],
+      "bounds_m": [
+        [
+          -4.720000743865967,
+          -4.284999847412109,
+          3.299999952316284
+        ],
+        [
+          4.720000743865967,
+          4.284999847412109,
+          5.0
+        ]
+      ]
+    },
+    {
+      "name": "wood_trusses",
+      "triangles": 804,
+      "vertices": 1642,
+      "dimensions_m": [
+        9.3688,
+        8.4875,
+        2.71
+      ],
+      "bounds_m": [
+        [
+          -4.69249963760376,
+          -4.297499656677246,
+          2.3199994564056396
+        ],
+        [
+          4.676314353942871,
+          4.190000057220459,
+          5.03000020980835
+        ]
+      ]
+    },
+    {
+      "name": "roof_rails",
+      "triangles": 1740,
+      "vertices": 3052,
+      "dimensions_m": [
+        1.426,
+        6.546,
+        1.385
+      ],
+      "bounds_m": [
+        [
+          -0.713000476360321,
+          -3.072999954223633,
+          5.014999866485596
+        ],
+        [
+          0.713000476360321,
+          3.4730000495910645,
+          6.399999618530273
+        ]
+      ]
+    },
+    {
+      "name": "stone_base",
+      "triangles": 14840,
+      "vertices": 26004,
+      "dimensions_m": [
+        8.08,
+        7.14,
+        2.96
+      ],
+      "bounds_m": [
+        [
+          -4.039999961853027,
+          -3.569999933242798,
+          0.0
+        ],
+        [
+          4.039999961853027,
+          3.569999933242798,
+          2.9600000381469727
+        ]
+      ]
+    },
+    {
+      "name": "ramp_walls",
+      "triangles": 972,
+      "vertices": 1944,
+      "dimensions_m": [
+        17.81,
+        1.955,
+        0.6765
+      ],
+      "bounds_m": [
+        [
+          -8.904999732971191,
+          -5.184999942779541,
+          0.0
+        ],
+        [
+          8.904999732971191,
+          -3.2300000190734863,
+          0.6764999628067017
+        ]
+      ]
+    },
+    {
+      "name": "ramp_rails",
+      "triangles": 1056,
+      "vertices": 2250,
+      "dimensions_m": [
+        17.8302,
+        0.11,
+        1.376
+      ],
+      "bounds_m": [
+        [
+          -8.915114402770996,
+          -4.974999904632568,
+          0.08000001311302185
+        ],
+        [
+          8.915114402770996,
+          -4.865000247955322,
+          1.4559577703475952
+        ]
+      ]
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "屋根平面中心の真下の地面。全7部品が同じ原点を共有。正面−Yは駐車場側(南東/約149度)。+Xは正面から見て右(北東)。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderで再読込する際は1-v。配置側でも明示的に反転する。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

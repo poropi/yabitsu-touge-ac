@@ -1,0 +1,2989 @@
+{
+ "note": "県道 70 号（S4・S5）の Codex の部品の配置（export/compare/route70/work/gen_route70_landmarks.py が作る。手で直さない）",
+ "landmarks": [
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4289106,
+    139.218348
+   ],
+   "bearing": 182.5,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=100）",
+   "z": 752.221,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4305998,
+    139.2118464
+   ],
+   "bearing": 208.5,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=1210）",
+   "z": 710.429,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4310614,
+    139.2104718
+   ],
+   "bearing": 146.6,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=1350）",
+   "z": 705.986,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "oval_1_twin_post",
+   "ll": [
+    35.4311447,
+    139.2093478
+   ],
+   "bearing": 313.3,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=1600）",
+   "z": 696.684,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4340906,
+    139.2116866
+   ],
+   "bearing": 280.4,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=2000）",
+   "z": 658.352
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4397699,
+    139.2111137
+   ],
+   "bearing": 106.5,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=2750）",
+   "z": 621.325,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4460585,
+    139.2130795
+   ],
+   "bearing": 1.7,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=3550）",
+   "z": 583.552
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4448446,
+    139.2127855
+   ],
+   "bearing": 340.2,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=3700）",
+   "z": 579.05,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4527839,
+    139.2121191
+   ],
+   "bearing": 349.2,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=4800）",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4564294,
+    139.2133665
+   ],
+   "bearing": 255.3,
+   "src": "s4_objects:mirror:カーブミラー（ストリートビュー s=5300）",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "regulatory_round",
+   "ll": [
+    35.4309865,
+    139.2144571
+   ],
+   "bearing": 311.0,
+   "src": "s4_objects:road_sign:速度制限 30（ストリートビュー s=600）",
+   "tex": "regulatory_round_face_30",
+   "z": 734.397,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "regulatory_round",
+   "ll": [
+    35.4304629,
+    139.2091003
+   ],
+   "bearing": 54.9,
+   "src": "s4_objects:road_sign:速度制限 30（ストリートビュー s=1505）",
+   "tex": "regulatory_round_face_30",
+   "z": 701.071
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "regulatory_round",
+   "ll": [
+    35.4452818,
+    139.21279
+   ],
+   "bearing": 88.6,
+   "src": "s4_objects:road_sign:速度制限 30（ストリートビュー s=3650）",
+   "tex": "regulatory_round_face_30",
+   "z": 580.16
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "regulatory_round",
+   "ll": [
+    35.4564111,
+    139.2132836
+   ],
+   "bearing": 75.3,
+   "src": "s4_objects:road_sign:速度制限 30（ストリートビュー s=5300）",
+   "tex": "regulatory_round_face_30",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_text",
+   "ll": [
+    35.4354455,
+    139.2119722
+   ],
+   "bearing": 70.0,
+   "src": "s4_objects:road_sign:警戒標識（ストリートビュー s=2200）",
+   "tex": "warning_text_face_right_curve",
+   "z": 647.747,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4308143,
+    139.2089089
+   ],
+   "bearing": 150.0,
+   "src": "s4_objects:mirror:わき道の入口の北の角のカーブミラー（338° で方位 318°・約 14 m。鏡",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.4314205,
+    139.209405
+   ],
+   "bearing": 93.70320531573647,
+   "src": "s4_objects:cushion_drum:島の南の先の紅白のドラム（090°・045°）",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_gate",
+   "name": "bollard",
+   "ll": [
+    35.4347613,
+    139.2122442
+   ],
+   "bearing": 312.2043636269987,
+   "src": "s4_objects:bollard:広場のオレンジの車止め 2 本（写真 A090・A135）",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4347475,
+    139.2121958
+   ],
+   "bearing": 321.5955583627466,
+   "src": "s4_objects:cone:広場の真ん中の赤いコーン（写真 A135・A180）",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "regulatory_round",
+   "ll": [
+    35.4527189,
+    139.2127654
+   ],
+   "bearing": 306.0,
+   "src": "s4_objects:road_sign:速度制限 30（写真 A135 の奥、橋の南東の北東）。地獄沢橋のまわり（ストリ",
+   "tex": "regulatory_round_face_30",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_2",
+   "ll": [
+    35.46952509,
+    139.21775622
+   ],
+   "bearing": 281.1,
+   "src": "s5_objects:mirror:ストリートビュー S5 709m R",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.46954593,
+    139.21775948
+   ],
+   "bearing": 274.5,
+   "src": "s5_objects:mirror:ストリートビュー S5 711m R",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4732841,
+    139.213315
+   ],
+   "bearing": 207.0,
+   "src": "s5_objects:mirror:ストリートビュー S5 1510m R",
+   "z": 453.662,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4713564,
+    139.2106815
+   ],
+   "bearing": 25.3,
+   "src": "s5_objects:mirror:ストリートビュー S5 1875m L",
+   "z": 446.832,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4806562,
+    139.2110378
+   ],
+   "bearing": 265.8,
+   "src": "s5_objects:mirror:ストリートビュー S5 3117m R",
+   "z": 433.382,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.48436927,
+    139.20977693
+   ],
+   "bearing": 198.7,
+   "src": "s5_objects:mirror:ストリートビュー S5 3712m R",
+   "z": 416.181
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4856513,
+    139.2078295
+   ],
+   "bearing": 128.9,
+   "src": "s5_objects:mirror:ストリートビュー S5 3974m R",
+   "z": 411.532,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "regulatory_round",
+   "ll": [
+    35.4847621,
+    139.2068906
+   ],
+   "bearing": 28.2,
+   "src": "s5_objects:road_sign:ストリートビュー S5 4108m R",
+   "tex": "regulatory_round_face_30",
+   "z": 410.403,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4856391,
+    139.2068258
+   ],
+   "bearing": 358.1,
+   "src": "s5_objects:mirror:ストリートビュー S5 5166m R",
+   "z": 386.986,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4854838,
+    139.2115961
+   ],
+   "bearing": 300.3,
+   "src": "s5_objects:mirror:ストリートビュー S5 5765m R",
+   "z": 367.775,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.485721,
+    139.2197092
+   ],
+   "bearing": 304.4,
+   "src": "s5_objects:mirror:ストリートビュー S5 6832m R",
+   "z": 342.064,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4885196,
+    139.2217808
+   ],
+   "bearing": 271.6,
+   "src": "s5_objects:mirror:ストリートビュー S5 7208m R",
+   "z": 329.12,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4814663,
+    139.2042763
+   ],
+   "bearing": 265.6737922246825,
+   "src": "s5_objects:delineator:北東の欄干の端のオレンジの視線誘導標（写真 A000・A315）。塩水橋のまわり",
+   "z": 407.148
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4813968,
+    139.2042106
+   ],
+   "bearing": 52.20137684537342,
+   "src": "s5_objects:cone:空き地の入口のコーン（写真 A225・A270）。塩水橋のまわり（ストリートビュ",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4287751,
+    139.2186747
+   ],
+   "bearing": 316.8,
+   "src": "S4-0300-01",
+   "z": 753.872,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "post_board",
+   "ll": [
+    35.4288853,
+    139.2184743
+   ],
+   "bearing": 223.7,
+   "src": "S4-0300-02",
+   "z": 752.827,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_diamond",
+   "ll": [
+    35.4303278,
+    139.2158543
+   ],
+   "bearing": 149.1,
+   "src": "S4-0313-01",
+   "tex": "warning_diamond_face_deer",
+   "z": 739.781,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "post_board_forest",
+   "ll": [
+    35.4307783,
+    139.2155699
+   ],
+   "bearing": 220.2,
+   "src": "S4-0315-01",
+   "z": 737.232,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4326501,
+    139.2125631
+   ],
+   "bearing": 244.0,
+   "src": "S4-0333-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4318917,
+    139.2120174
+   ],
+   "bearing": 167.5,
+   "src": "S4-0337-01",
+   "z": 718.715,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_text",
+   "ll": [
+    35.434741,
+    139.2117001
+   ],
+   "bearing": 235.7,
+   "src": "S4-0380-03",
+   "tex": "warning_text_face_left_curve",
+   "z": 652.297,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "stand_board_coffee",
+   "ll": [
+    35.434756,
+    139.212107
+   ],
+   "bearing": 357.9,
+   "src": "S4-0382-03",
+   "z": 651.106,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "chevron",
+   "ll": [
+    35.4349969,
+    139.2122545
+   ],
+   "bearing": 352.4,
+   "src": "S4-0383-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "chevron",
+   "ll": [
+    35.4349481,
+    139.212261
+   ],
+   "bearing": 352.4,
+   "src": "S4-0383-01#1",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "chevron",
+   "ll": [
+    35.4348977,
+    139.2122583
+   ],
+   "bearing": 352.4,
+   "src": "S4-0383-01#2",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "chevron",
+   "ll": [
+    35.4348469,
+    139.2122424
+   ],
+   "bearing": 352.4,
+   "src": "S4-0383-01#3",
+   "z": 650.752
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "chevron",
+   "ll": [
+    35.4348059,
+    139.2121999
+   ],
+   "bearing": 352.4,
+   "src": "S4-0383-01#4",
+   "z": 650.886,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "chevron",
+   "ll": [
+    35.434773,
+    139.2121515
+   ],
+   "bearing": 352.4,
+   "src": "S4-0383-01#5",
+   "z": 651.011,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "bridge_name_plate",
+   "ll": [
+    35.4392271,
+    139.2109929
+   ],
+   "bearing": 284.4,
+   "src": "S4-0405-03",
+   "tex": "bridge_name_plate_face_hinokisawa",
+   "z": 624.56,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "post_board_bosco",
+   "ll": [
+    35.440434,
+    139.211924
+   ],
+   "bearing": 151.5,
+   "src": "S4-0411-04",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "bridge_name_plate",
+   "ll": [
+    35.4411547,
+    139.2123754
+   ],
+   "bearing": 281.7,
+   "src": "S4-0416-03",
+   "tex": "bridge_name_plate_face_tokoyo",
+   "z": 613.832,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_diamond",
+   "ll": [
+    35.4492144,
+    139.2133419
+   ],
+   "bearing": 12.7,
+   "src": "S4-0468-01",
+   "tex": "warning_diamond_face_right",
+   "z": 546.153,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4519476,
+    139.212185
+   ],
+   "bearing": 359.3,
+   "src": "S4-0482-01",
+   "z": 530.178,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4529023,
+    139.2123963
+   ],
+   "bearing": 105.6,
+   "src": "S4-0488-01",
+   "z": 526.34,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_text",
+   "ll": [
+    35.4606764,
+    139.2135209
+   ],
+   "bearing": 160.7,
+   "src": "S4-0529-01",
+   "tex": "warning_text_face_slow",
+   "z": 468.646,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.463397,
+    139.2151673
+   ],
+   "bearing": 69.9,
+   "src": "S4-0545-05",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4634161,
+    139.2151597
+   ],
+   "bearing": 74.8,
+   "src": "S4-0545-06",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "route_hexagon_place",
+   "ll": [
+    35.4657384,
+    139.2136496
+   ],
+   "bearing": 354.8,
+   "src": "S5-0557-01",
+   "tex": "route_hexagon_place_face_70_kiyokawa",
+   "z": 449.195
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4714987,
+    139.2170583
+   ],
+   "bearing": 168.5,
+   "src": "S5-0592-01",
+   "z": 449.69,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4725805,
+    139.2169115
+   ],
+   "bearing": 155.9,
+   "src": "S5-0597-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "bridge_name_plate_yoshida",
+   "ll": [
+    35.4723299,
+    139.2162251
+   ],
+   "bearing": 214.5,
+   "src": "S5-0601-01",
+   "tex": "bridge_name_plate_yoshida_face_yoshida",
+   "z": 451.655,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.472481,
+    139.2159187
+   ],
+   "bearing": 158.0,
+   "src": "S5-0602-01",
+   "z": 451.791,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4728636,
+    139.2143922
+   ],
+   "bearing": 87.6,
+   "src": "S5-0608-01",
+   "z": 452.821
+  },
+  {
+   "asset": "r70_km_post",
+   "name": "post",
+   "ll": [
+    35.473788,
+    139.2111727
+   ],
+   "bearing": 264.5,
+   "src": "S5-0641-01",
+   "tex": "post_face_20.5",
+   "z": 437.945,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "oval_1",
+   "ll": [
+    35.4781648,
+    139.2110344
+   ],
+   "bearing": 328.2,
+   "src": "S5-0664-01",
+   "z": 438.736,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_km_post",
+   "name": "post",
+   "ll": [
+    35.4810108,
+    139.2109221
+   ],
+   "bearing": 270.0,
+   "src": "S5-0681-01",
+   "tex": "post_face_21.5",
+   "z": 432.444,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4832429,
+    139.2113504
+   ],
+   "bearing": 225.1,
+   "src": "S5-0694-01",
+   "z": 422.583,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4836449,
+    139.2111496
+   ],
+   "bearing": 158.4,
+   "src": "S5-0696-01",
+   "z": 420.607
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4849865,
+    139.2093361
+   ],
+   "bearing": 151.2,
+   "src": "S5-0706-01",
+   "z": 413.865,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4852712,
+    139.2090377
+   ],
+   "bearing": 133.7,
+   "src": "S5-0708-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4845779,
+    139.2067132
+   ],
+   "bearing": 201.0,
+   "src": "S5-0720-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4844942,
+    139.2067557
+   ],
+   "bearing": 292.4,
+   "src": "S5-0720-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4843336,
+    139.2065042
+   ],
+   "bearing": 45.5,
+   "src": "S5-0721-01",
+   "z": 409.194,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4839585,
+    139.2061695
+   ],
+   "bearing": 315.0,
+   "src": "S5-0723-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4839264,
+    139.2061302
+   ],
+   "bearing": 330.6,
+   "src": "S5-0723-01#1",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4839011,
+    139.2060988
+   ],
+   "bearing": 338.7,
+   "src": "S5-0723-01#2",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4838694,
+    139.2060596
+   ],
+   "bearing": 344.4,
+   "src": "S5-0723-01#3",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4838441,
+    139.2060282
+   ],
+   "bearing": 347.2,
+   "src": "S5-0723-01#4",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4838125,
+    139.2059889
+   ],
+   "bearing": 349.7,
+   "src": "S5-0723-01#5",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_boards",
+   "name": "construction_board_bridge",
+   "ll": [
+    35.4813429,
+    139.2045172
+   ],
+   "bearing": 331.2,
+   "src": "S5-0737-05",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.4813417,
+    139.2044609
+   ],
+   "bearing": 354.2,
+   "src": "S5-0737-03",
+   "z": 408.071,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.4838281,
+    139.2051202
+   ],
+   "bearing": 179.6,
+   "src": "S5-0749-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4856924,
+    139.2066278
+   ],
+   "bearing": 222.0,
+   "src": "S5-0760-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.4866756,
+    139.208652
+   ],
+   "bearing": 23.6,
+   "src": "S5-0771-04",
+   "z": 378.584,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.4865604,
+    139.2089864
+   ],
+   "bearing": 23.5,
+   "src": "S5-0772-02",
+   "z": 377.629,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "stand_board_narrow",
+   "ll": [
+    35.4853611,
+    139.2107622
+   ],
+   "bearing": 119.6,
+   "src": "S5-0782-02",
+   "z": 369.659,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "stand_board",
+   "ll": [
+    35.4853171,
+    139.2107923
+   ],
+   "bearing": 125.0,
+   "src": "S5-0782-01",
+   "z": 369.566,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "stand_board_slow",
+   "ll": [
+    35.4856271,
+    139.2117551
+   ],
+   "bearing": 92.7,
+   "src": "S5-0786-02",
+   "z": 366.875,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4852513,
+    139.2120427
+   ],
+   "bearing": 327.8,
+   "src": "S5-0788-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_text",
+   "ll": [
+    35.4864305,
+    139.2178923
+   ],
+   "bearing": 140.3,
+   "src": "S5-0820-01",
+   "tex": "warning_text_face_narrow",
+   "z": 345.456,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4856261,
+    139.2193637
+   ],
+   "bearing": 290.9,
+   "src": "S5-0826-01",
+   "z": 343.16,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4875337,
+    139.2212876
+   ],
+   "bearing": 68.0,
+   "src": "S5-0838-01",
+   "z": 332.644,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4898823,
+    139.2208906
+   ],
+   "bearing": 225.8,
+   "src": "S5-0850-02",
+   "z": 326.644,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4900909,
+    139.2205398
+   ],
+   "bearing": 62.3,
+   "src": "S5-0851-03",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4901111,
+    139.2205158
+   ],
+   "bearing": 69.3,
+   "src": "S5-0851-03#1",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.490125,
+    139.2205004
+   ],
+   "bearing": 72.6,
+   "src": "S5-0851-03#2",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.490146,
+    139.2204783
+   ],
+   "bearing": 76.4,
+   "src": "S5-0851-03#3",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4901599,
+    139.220464
+   ],
+   "bearing": 78.4,
+   "src": "S5-0851-03#4",
+   "z": 326.04
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4901807,
+    139.2204428
+   ],
+   "bearing": 80.7,
+   "src": "S5-0851-03#5",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4901946,
+    139.2204287
+   ],
+   "bearing": 81.9,
+   "src": "S5-0851-03#6",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4902156,
+    139.2204075
+   ],
+   "bearing": 83.5,
+   "src": "S5-0851-03#7",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4902297,
+    139.2203934
+   ],
+   "bearing": 84.3,
+   "src": "S5-0851-03#8",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4902513,
+    139.2203724
+   ],
+   "bearing": 85.5,
+   "src": "S5-0851-03#9",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "barricade",
+   "ll": [
+    35.4909744,
+    139.220006
+   ],
+   "bearing": 275.9,
+   "src": "S5-0856-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_text",
+   "ll": [
+    35.4912396,
+    139.2199839
+   ],
+   "bearing": 6.0,
+   "src": "S5-0858-01",
+   "tex": "warning_text_face_construction_50m",
+   "z": 322.617,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_gate",
+   "name": "bollard",
+   "ll": [
+    35.4926563,
+    139.219893
+   ],
+   "bearing": 225.5,
+   "src": "S5-0863-02",
+   "z": 315.693,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_gate",
+   "name": "bollard",
+   "ll": [
+    35.4926733,
+    139.2198887
+   ],
+   "bearing": 222.9,
+   "src": "S5-0863-02#1",
+   "z": 315.634,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_gate",
+   "name": "bollard",
+   "ll": [
+    35.4926903,
+    139.219885
+   ],
+   "bearing": 221.5,
+   "src": "S5-0863-02#2",
+   "z": 315.576,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_text",
+   "ll": [
+    35.4933267,
+    139.220108
+   ],
+   "bearing": 25.9,
+   "src": "S5-0867-01",
+   "tex": "warning_text_face_narrow",
+   "z": 313.632,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "post_board_narrow",
+   "ll": [
+    35.4968819,
+    139.2222545
+   ],
+   "bearing": 202.9,
+   "src": "S5-0884-03",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.4973042,
+    139.2224393
+   ],
+   "bearing": 339.0,
+   "src": "S5-0887-01",
+   "z": 312.677,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "nobori",
+   "ll": [
+    35.49791,
+    139.2230519
+   ],
+   "bearing": 212.9,
+   "src": "S5-0890-02",
+   "z": 314.657,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "water_barrier",
+   "ll": [
+    35.4983368,
+    139.2243977
+   ],
+   "bearing": 198.3,
+   "src": "S5-0896-03",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_km_post",
+   "name": "post",
+   "ll": [
+    35.4981991,
+    139.2247288
+   ],
+   "bearing": 331.7,
+   "src": "S5-0897-01",
+   "tex": "post_face_27.0",
+   "z": 314.632,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "water_barrier",
+   "ll": [
+    35.4982995,
+    139.2257319
+   ],
+   "bearing": 132.6,
+   "src": "S5-0901-02",
+   "z": 312.037,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4982656,
+    139.2257818
+   ],
+   "bearing": 270.3,
+   "src": "S5-0901-03",
+   "z": 312.158,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_gate",
+   "name": "bollard",
+   "ll": [
+    35.4984808,
+    139.225911
+   ],
+   "bearing": 167.7,
+   "src": "S5-0902-03",
+   "z": 311.495,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "post_board_no_parking",
+   "ll": [
+    35.4984849,
+    139.2259216
+   ],
+   "bearing": 172.7,
+   "src": "S5-0902-04",
+   "z": 311.469,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4985898,
+    139.2265174
+   ],
+   "bearing": 240.7,
+   "src": "S5-0904-01",
+   "z": 310.304
+  },
+  {
+   "asset": "r70_km_post",
+   "name": "post",
+   "ll": [
+    35.4989433,
+    139.2293896
+   ],
+   "bearing": 338.2,
+   "src": "S5-0916-01",
+   "tex": "post_face_27.5",
+   "z": 309.271,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "oval_1",
+   "ll": [
+    35.5008301,
+    139.2316869
+   ],
+   "bearing": 324.2,
+   "src": "S5-0934-01",
+   "z": 294.582,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "post_board_step",
+   "ll": [
+    35.5023717,
+    139.2303492
+   ],
+   "bearing": 225.0,
+   "src": "S5-0942-03",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.5025503,
+    139.2301727
+   ],
+   "bearing": 213.1,
+   "src": "S5-0943-02",
+   "z": 299.751,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "notice_board_led",
+   "ll": [
+    35.5026049,
+    139.2301553
+   ],
+   "bearing": 270.0,
+   "src": "S5-0943-04",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_boards",
+   "name": "stand_board_bridge_parking",
+   "ll": [
+    35.5037517,
+    139.229701
+   ],
+   "bearing": 268.3,
+   "src": "S5-0948-07",
+   "z": 299.845,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_lights",
+   "name": "arm",
+   "ll": [
+    35.5063822,
+    139.2306562
+   ],
+   "bearing": 150.2,
+   "src": "S5-0962-01",
+   "z": 301.567
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "route_hexagon",
+   "ll": [
+    35.5065979,
+    139.2309086
+   ],
+   "bearing": 17.5,
+   "src": "S5-0964-01",
+   "tex": "route_hexagon_face_70",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_lights",
+   "name": "arm_arc",
+   "ll": [
+    35.5105896,
+    139.2312506
+   ],
+   "bearing": 77.4,
+   "src": "S5-0981-01",
+   "dz": -0.11
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "regulatory_double",
+   "ll": [
+    35.5132122,
+    139.2316913
+   ],
+   "bearing": 204.0,
+   "src": "S5-0993-01",
+   "tex": "regulatory_double_face_no_uturn_40",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.5132846,
+    139.2318529
+   ],
+   "bearing": 298.7,
+   "src": "S5-0994-01",
+   "z": 296.505
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_diamond",
+   "ll": [
+    35.5163599,
+    139.2326927
+   ],
+   "bearing": 342.0,
+   "src": "S5-1009-03",
+   "tex": "warning_diamond_face_right",
+   "z": 302.75,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_lights",
+   "name": "arm",
+   "ll": [
+    35.5173593,
+    139.2313982
+   ],
+   "bearing": 37.7,
+   "src": "S5-1015-02",
+   "z": 302.524
+  },
+  {
+   "asset": "r70_construction",
+   "name": "water_barrier",
+   "ll": [
+    35.5179359,
+    139.2312177
+   ],
+   "bearing": 238.9,
+   "src": "S5-1018-01",
+   "z": 302.218
+  },
+  {
+   "asset": "r70_pylon",
+   "name": "tower",
+   "ll": [
+    35.4288426,
+    139.2172642
+   ],
+   "bearing": 42.7,
+   "src": "S4-0299-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4297072,
+    139.2168063
+   ],
+   "bearing": 100.1,
+   "src": "S4-0307-02",
+   "z": 746.946,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "notice_board",
+   "ll": [
+    35.4308663,
+    139.2156112
+   ],
+   "bearing": 224.3,
+   "src": "S4-0315-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "chevron",
+   "ll": [
+    35.4313337,
+    139.2146881
+   ],
+   "bearing": 96.1,
+   "src": "S4-0319-04",
+   "z": 735.035,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4323467,
+    139.2129923
+   ],
+   "bearing": 316.9,
+   "src": "S4-0332-01",
+   "z": 725.431,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4315046,
+    139.2116761
+   ],
+   "bearing": 47.6,
+   "src": "S4-0340-01",
+   "z": 716.091
+  },
+  {
+   "asset": "r70_misc",
+   "name": "equipment_box_pole",
+   "ll": [
+    35.4304728,
+    139.2090965
+   ],
+   "bearing": 73.5,
+   "src": "S4-0357-01",
+   "z": 701.046
+  },
+  {
+   "asset": "r70_boards",
+   "name": "notice_board_aoyamaso",
+   "ll": [
+    35.4346723,
+    139.2117445
+   ],
+   "bearing": 319.5,
+   "src": "S4-0380-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_misc",
+   "name": "stake",
+   "ll": [
+    35.4347212,
+    139.2118976
+   ],
+   "bearing": 342.9,
+   "src": "S4-0381-05",
+   "z": 651.56,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_misc",
+   "name": "stake",
+   "ll": [
+    35.4347911,
+    139.212182
+   ],
+   "bearing": 319.1,
+   "src": "S4-0382-10",
+   "z": 650.937,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "notice_board_aoyamaso",
+   "ll": [
+    35.4347862,
+    139.212287
+   ],
+   "bearing": 302.5,
+   "src": "S4-0382-08",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4403417,
+    139.2118173
+   ],
+   "bearing": 44.4,
+   "src": "S4-0411-01",
+   "z": 618.573
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4404759,
+    139.2122243
+   ],
+   "bearing": 250.6,
+   "src": "S4-0412-01",
+   "z": 616.442
+  },
+  {
+   "asset": "r70_boards",
+   "name": "post_board_bosco",
+   "ll": [
+    35.4412459,
+    139.2122791
+   ],
+   "bearing": 85.3,
+   "src": "S4-0416-04",
+   "z": 613.506
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4433203,
+    139.2126756
+   ],
+   "bearing": 154.0,
+   "src": "S4-0426-01",
+   "tex": "round_1_gray",
+   "z": 599.63,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "route_hexagon",
+   "ll": [
+    35.4465398,
+    139.2124109
+   ],
+   "bearing": 329.0,
+   "src": "S4-0453-02",
+   "tex": "route_hexagon_face_70",
+   "z": 567.172,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "small_plate_flick",
+   "ll": [
+    35.4468408,
+    139.2121249
+   ],
+   "bearing": 94.3,
+   "src": "S4-0455-01",
+   "z": 564.397,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "small_plate_parking",
+   "ll": [
+    35.447487,
+    139.2119772
+   ],
+   "bearing": 308.9,
+   "src": "S4-0459-05",
+   "z": 558.314
+  },
+  {
+   "asset": "r70_gate",
+   "name": "gate_wood_x",
+   "ll": [
+    35.4475269,
+    139.2120998
+   ],
+   "bearing": 318.5,
+   "src": "S4-0459-04",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_misc",
+   "name": "log_pile",
+   "ll": [
+    35.4476256,
+    139.212233
+   ],
+   "bearing": 323.1,
+   "src": "S4-0457-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4522657,
+    139.2122271
+   ],
+   "bearing": 205.0,
+   "src": "S4-0483-01",
+   "z": 529.338,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_gate",
+   "name": "gate",
+   "ll": [
+    35.4526951,
+    139.2129058
+   ],
+   "bearing": 241.7,
+   "src": "S4-0486-04",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "barricade",
+   "ll": [
+    35.4528022,
+    139.2119586
+   ],
+   "bearing": 11.6,
+   "src": "S4-0490-02",
+   "z": 523.653,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4537072,
+    139.2120304
+   ],
+   "bearing": 216.4,
+   "src": "S4-0494-01",
+   "z": 515.702,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "warning_diamond",
+   "ll": [
+    35.453971,
+    139.2124005
+   ],
+   "bearing": 230.9,
+   "src": "S4-0496-01",
+   "tex": "warning_diamond_face_left",
+   "z": 512.26,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4590735,
+    139.2132735
+   ],
+   "bearing": 11.6,
+   "src": "S4-0521-02",
+   "z": 480.273,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4610012,
+    139.213422
+   ],
+   "bearing": 166.0,
+   "src": "S4-0530-02",
+   "z": 466.836,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "notice_board_led",
+   "ll": [
+    35.4634953,
+    139.2151265
+   ],
+   "bearing": 79.4,
+   "src": "S4-0545-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.467737,
+    139.216089
+   ],
+   "bearing": 14.3,
+   "src": "S5-0571-02",
+   "z": 450.396,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4682694,
+    139.2168304
+   ],
+   "bearing": 211.9,
+   "src": "S5-0575-03",
+   "z": 450.328,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4720322,
+    139.2170492
+   ],
+   "bearing": 352.0,
+   "src": "S5-0595-01",
+   "z": 451.299,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_misc",
+   "name": "stone_steps",
+   "ll": [
+    35.4725659,
+    139.2167811
+   ],
+   "bearing": 332.1,
+   "src": "S5-0598-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4724918,
+    139.216366
+   ],
+   "bearing": 45.5,
+   "src": "S5-0599-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "sandbag",
+   "ll": [
+    35.4713608,
+    139.2106706
+   ],
+   "bearing": 30.8,
+   "src": "S5-0629-02",
+   "z": 446.781,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4726161,
+    139.2111985
+   ],
+   "bearing": 358.8,
+   "src": "S5-0636-02",
+   "z": 441.627,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4739828,
+    139.2111657
+   ],
+   "bearing": 164.2,
+   "src": "S5-0642-01",
+   "z": 437.373,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4780479,
+    139.2110789
+   ],
+   "bearing": 250.4,
+   "src": "S5-0663-01",
+   "z": 438.851,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4818763,
+    139.2113094
+   ],
+   "bearing": 198.2,
+   "src": "S5-0685-01",
+   "z": 430.597,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4826498,
+    139.2050859
+   ],
+   "bearing": 304.0,
+   "src": "S5-0730-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4819971,
+    139.2050783
+   ],
+   "bearing": 308.9,
+   "src": "S5-0733-02",
+   "z": 410.021
+  },
+  {
+   "asset": "r70_boards",
+   "name": "post_board_camera",
+   "ll": [
+    35.4815879,
+    139.2046923
+   ],
+   "bearing": 165.7,
+   "src": "S5-0734-01",
+   "z": 408.901,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "route_hexagon",
+   "ll": [
+    35.4815534,
+    139.204657
+   ],
+   "bearing": 220.3,
+   "src": "S5-0734-02",
+   "tex": "route_hexagon_face_70",
+   "z": 408.76,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_gate",
+   "name": "gate_green",
+   "ll": [
+    35.481308,
+    139.2042507
+   ],
+   "bearing": 26.4,
+   "src": "S5-0738-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "sandbag",
+   "ll": [
+    35.4814868,
+    139.2042688
+   ],
+   "bearing": 257.4,
+   "src": "S5-0738-10",
+   "z": 407.074,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4821503,
+    139.204619
+   ],
+   "bearing": 199.8,
+   "src": "S5-0741-01",
+   "z": 403.748,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_gate",
+   "name": "gate",
+   "ll": [
+    35.4837322,
+    139.2049351
+   ],
+   "bearing": 108.8,
+   "src": "S5-0749-04",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.484568,
+    139.206154
+   ],
+   "bearing": 232.2,
+   "src": "S5-0754-01",
+   "z": 391.636,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4848029,
+    139.2063614
+   ],
+   "bearing": 9.4,
+   "src": "S5-0756-01",
+   "z": 390.903,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4860002,
+    139.2072868
+   ],
+   "bearing": 203.1,
+   "src": "S5-0763-01",
+   "z": 384.953,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4865293,
+    139.207564
+   ],
+   "bearing": 23.0,
+   "src": "S5-0766-01",
+   "z": 382.714,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_bridges",
+   "name": "aouji_name",
+   "ll": [
+    35.4867866,
+    139.2084552
+   ],
+   "bearing": 201.5,
+   "src": "S5-0770-01",
+   "z": 379.272,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "barricade",
+   "ll": [
+    35.4866623,
+    139.2086927
+   ],
+   "bearing": 22.4,
+   "src": "S5-0771-03",
+   "z": 378.481,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_misc",
+   "name": "stone_steps",
+   "ll": [
+    35.4862767,
+    139.2100752
+   ],
+   "bearing": 221.9,
+   "src": "S5-0776-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole_yellow_square",
+   "ll": [
+    35.4860071,
+    139.210639
+   ],
+   "bearing": 250.1,
+   "src": "S5-0778-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4844142,
+    139.2129117
+   ],
+   "bearing": 54.8,
+   "src": "S5-0792-01",
+   "z": 361.251,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_misc",
+   "name": "concrete_steps",
+   "ll": [
+    35.485291,
+    139.2136723
+   ],
+   "bearing": 106.1,
+   "src": "S5-0799-03",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_pylon",
+   "name": "tower",
+   "ll": [
+    35.4851462,
+    139.2167122
+   ],
+   "bearing": 345.0,
+   "src": "S5-0809-05",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "route_hexagon",
+   "ll": [
+    35.4861951,
+    139.2165711
+   ],
+   "bearing": 35.9,
+   "src": "S5-0814-01",
+   "tex": "route_hexagon_face_70",
+   "z": 346.188,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4862125,
+    139.2180853
+   ],
+   "bearing": 318.6,
+   "src": "S5-0821-02",
+   "z": 345.415
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4857818,
+    139.2186804
+   ],
+   "bearing": 311.9,
+   "src": "S5-0823-01",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4867862,
+    139.2204501
+   ],
+   "bearing": 215.0,
+   "src": "S5-0833-01",
+   "z": 337.126,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_km_post",
+   "name": "post",
+   "ll": [
+    35.4875371,
+    139.2212984
+   ],
+   "bearing": 46.0,
+   "src": "S5-0838-02",
+   "tex": "post_face_25.5",
+   "z": 332.604,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "notice_board",
+   "ll": [
+    35.4901494,
+    139.2206012
+   ],
+   "bearing": 203.9,
+   "src": "S5-0851-02",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4905953,
+    139.2200849
+   ],
+   "bearing": 62.1,
+   "src": "S5-0854-03",
+   "z": 324.827,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_misc",
+   "name": "log_pile",
+   "ll": [
+    35.492677,
+    139.2199182
+   ],
+   "bearing": 268.3,
+   "src": "S5-0864-07",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_boards",
+   "name": "notice_board",
+   "ll": [
+    35.4928373,
+    139.2199081
+   ],
+   "bearing": 303.4,
+   "src": "S5-0865-03",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.4932877,
+    139.2200252
+   ],
+   "bearing": 122.2,
+   "src": "S5-0866-03",
+   "z": 313.893,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "cone",
+   "ll": [
+    35.4940392,
+    139.2205336
+   ],
+   "bearing": 290.5,
+   "src": "S5-0870-01",
+   "z": 312.456,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.4943427,
+    139.2207034
+   ],
+   "bearing": 303.2,
+   "src": "S5-0872-04",
+   "z": 312.043
+  },
+  {
+   "asset": "r70_gate",
+   "name": "bollard",
+   "ll": [
+    35.4956592,
+    139.221502
+   ],
+   "bearing": 274.4,
+   "src": "S5-0878-02",
+   "z": 311.496
+  },
+  {
+   "asset": "r70_gate",
+   "name": "bollard",
+   "ll": [
+    35.4962148,
+    139.2218376
+   ],
+   "bearing": 119.6,
+   "src": "S5-0881-01",
+   "z": 312.506
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4970974,
+    139.2224156
+   ],
+   "bearing": 180.2,
+   "src": "S5-0886-01",
+   "z": 312.467,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_boards",
+   "name": "nobori",
+   "ll": [
+    35.497516,
+    139.222736
+   ],
+   "bearing": 43.2,
+   "src": "S5-0888-03",
+   "z": 313.601,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.4987237,
+    139.2309676
+   ],
+   "bearing": 267.2,
+   "src": "S5-0922-02",
+   "z": 305.145,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.5002874,
+    139.2320091
+   ],
+   "bearing": 305.0,
+   "src": "S5-0931-01",
+   "z": 298.581
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "chevron",
+   "ll": [
+    35.500449,
+    139.2317547
+   ],
+   "bearing": 337.0,
+   "src": "S5-0932-02",
+   "z": 296.436,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_misc",
+   "name": "equipment_box_pole",
+   "ll": [
+    35.5020205,
+    139.2307535
+   ],
+   "bearing": 241.5,
+   "src": "S5-0940-03",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_road_signs",
+   "name": "regulatory_round",
+   "ll": [
+    35.5019043,
+    139.2307679
+   ],
+   "bearing": 134.9,
+   "src": "S5-0939-02",
+   "tex": "regulatory_round_face_40",
+   "z": 297.441,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_construction",
+   "name": "drum",
+   "ll": [
+    35.5024158,
+    139.2301855
+   ],
+   "bearing": 48.5,
+   "src": "S5-0943-08",
+   "z": 299.668,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_delineator",
+   "name": "pole",
+   "ll": [
+    35.5050087,
+    139.229273
+   ],
+   "bearing": 104.8,
+   "src": "S5-0954-03",
+   "z": 301.035,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_lights",
+   "name": "arm",
+   "ll": [
+    35.5053874,
+    139.2294312
+   ],
+   "bearing": 130.7,
+   "src": "S5-0954-04",
+   "z": 301.189,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_lights",
+   "name": "arm",
+   "ll": [
+    35.5057052,
+    139.2298146
+   ],
+   "bearing": 156.0,
+   "src": "S5-0958-01",
+   "z": 301.233,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_lights",
+   "name": "arm",
+   "ll": [
+    35.5060505,
+    139.2302664
+   ],
+   "bearing": 157.8,
+   "src": "S5-0960-01",
+   "z": 301.436,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_misc",
+   "name": "equipment_box",
+   "ll": [
+    35.5063944,
+    139.2306711
+   ],
+   "bearing": 122.7,
+   "src": "S5-0963-04",
+   "z_from": "ground"
+  },
+  {
+   "asset": "r70_curve_mirror",
+   "name": "round_1",
+   "ll": [
+    35.5083068,
+    139.2310269
+   ],
+   "bearing": 185.5,
+   "src": "S5-0971-01",
+   "z": 297.361,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_gate",
+   "name": "bollard",
+   "ll": [
+    35.5134702,
+    139.231966
+   ],
+   "bearing": 321.9,
+   "src": "S5-0995-04",
+   "z": 296.805,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_misc",
+   "name": "equipment_box_pole",
+   "ll": [
+    35.5153259,
+    139.2330787
+   ],
+   "bearing": 266.3,
+   "src": "S5-1004-02",
+   "z": 302.05
+  },
+  {
+   "asset": "r70_misc",
+   "name": "equipment_box_pole",
+   "ll": [
+    35.5156836,
+    139.2329686
+   ],
+   "bearing": 256.1,
+   "src": "S5-1006-01",
+   "z": 302.357
+  },
+  {
+   "asset": "r70_lights",
+   "name": "arm",
+   "ll": [
+    35.5158106,
+    139.2329093
+   ],
+   "bearing": 210.8,
+   "src": "S5-1004-03",
+   "z": 302.426,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_lights",
+   "name": "arm",
+   "ll": [
+    35.5170171,
+    139.2322126
+   ],
+   "bearing": 254.2,
+   "src": "S5-1013-01",
+   "z": 302.959,
+   "at_road_edge": true
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s4_1550_water_hut",
+   "ll": [
+    35.430618,
+    139.2087577
+   ],
+   "bearing": 66.1,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.4306033,
+     139.2087946
+    ],
+    [
+     35.4305857,
+     139.2087468
+    ],
+    [
+     35.4306504,
+     139.2087686
+    ],
+    [
+     35.4306328,
+     139.2087208
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -2.8649999999999998,
+      2.8649999999999998
+     ],
+     [
+      -2.38,
+      2.38
+     ],
+     3.36
+    ]
+   ],
+   "src": "route70_delivery_09:S4-0358-02,S4-0360-03"
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s4_1995_low_hut",
+   "ll": [
+    35.4340172,
+    139.2118175
+   ],
+   "bearing": 287.4,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.4340707,
+     139.2118043
+    ],
+    [
+     35.4340555,
+     139.2118649
+    ],
+    [
+     35.433979,
+     139.21177
+    ],
+    [
+     35.4339638,
+     139.2118307
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -5.32,
+      5.32
+     ],
+     [
+      -2.88,
+      2.88
+     ],
+     2.724990118293162
+    ]
+   ],
+   "src": "route70_delivery_09:S4-0377-04"
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s4_2120_cafe",
+   "ll": [
+    35.4346759,
+    139.2121086
+   ],
+   "bearing": 345.2,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.434738,
+     139.2121378
+    ],
+    [
+     35.4346345,
+     139.2121722
+    ],
+    [
+     35.4347174,
+     139.212045
+    ],
+    [
+     35.4346138,
+     139.2120794
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -4.365,
+      4.365
+     ],
+     [
+      -5.953749999999999,
+      5.953749999999999
+     ],
+     6.76
+    ]
+   ],
+   "src": "route70_delivery_09:S4-0382-01"
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s4_2744_tin",
+   "ll": [
+    35.4394503,
+    139.2112568
+   ],
+   "bearing": 284.9,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.4394693,
+     139.2112471
+    ],
+    [
+     35.4394631,
+     139.2112765
+    ],
+    [
+     35.4394375,
+     139.211237
+    ],
+    [
+     35.4394313,
+     139.2112665
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -1.82,
+      1.82
+     ],
+     [
+      -1.3800000000000001,
+      1.3800000000000001
+     ],
+     2.2749688232214558
+    ]
+   ],
+   "src": "route70_delivery_09:S4-0407-01"
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s4_4044_aframe",
+   "ll": [
+    35.4474702,
+    139.21228
+   ],
+   "bearing": 325.6,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.4474908,
+     139.2122861
+    ],
+    [
+     35.4474676,
+     139.2123058
+    ],
+    [
+     35.4474728,
+     139.2122543
+    ],
+    [
+     35.4474496,
+     139.212274
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -1.76,
+      1.76
+     ],
+     [
+      -1.566,
+      1.566
+     ],
+     2.93
+    ]
+   ],
+   "src": "route70_delivery_09:S4-0459-03"
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s5_7639_green_hut",
+   "ll": [
+    35.4919837,
+    139.2200192
+   ],
+   "bearing": 269.0,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.4920042,
+     139.2199979
+    ],
+    [
+     35.492005,
+     139.2200393
+    ],
+    [
+     35.4919624,
+     139.2199991
+    ],
+    [
+     35.4919632,
+     139.2200405
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -2.32,
+      2.32
+     ],
+     [
+      -1.8800000000000001,
+      1.8800000000000001
+     ],
+     2.5249678632037016
+    ]
+   ],
+   "src": "route70_delivery_09:S5-0860-01"
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s5_7789_frame_hut",
+   "ll": [
+    35.4931253,
+    139.2200833
+   ],
+   "bearing": 290.4,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.4931451,
+     139.220067
+    ],
+    [
+     35.4931319,
+     139.2201113
+    ],
+    [
+     35.4931187,
+     139.2200552
+    ],
+    [
+     35.4931055,
+     139.2200995
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -1.56,
+      1.56
+     ],
+     [
+      -2.14,
+      2.14
+     ],
+     3.3348008874339445
+    ]
+   ],
+   "src": "route70_delivery_09:S5-0864-05"
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s5_7825_prefab",
+   "ll": [
+    35.4935828,
+    139.2203739
+   ],
+   "bearing": 295.5,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.4936173,
+     139.2203701
+    ],
+    [
+     35.4936025,
+     139.2204088
+    ],
+    [
+     35.4935631,
+     139.2203391
+    ],
+    [
+     35.4935483,
+     139.2203777
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -3.32,
+      3.32
+     ],
+     [
+      -1.935,
+      1.935
+     ],
+     2.924992378273376
+    ]
+   ],
+   "src": "route70_delivery_09:S5-0867-04,S5-0868-04"
+  },
+  {
+   "asset": "r70_buildings",
+   "name": "s5_10413_white_house",
+   "ll": [
+    35.5083877,
+    139.2312102
+   ],
+   "bearing": 273.6,
+   "z_from": "ground",
+   "z_at": [
+    [
+     35.5084287,
+     139.2311757
+    ],
+    [
+     35.5084252,
+     139.2312501
+    ],
+    [
+     35.5083501,
+     139.2311703
+    ],
+    [
+     35.5083466,
+     139.2312447
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -4.365,
+      4.365
+     ],
+     [
+      -3.38,
+      3.38
+     ],
+     3.86
+    ]
+   ],
+   "src": "route70_delivery_09:S5-0971-07"
+  }
+ ]
+}

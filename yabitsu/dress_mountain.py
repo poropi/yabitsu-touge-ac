@@ -9,7 +9,7 @@ import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
 from .crosssection import GUTTER_WIDTH, surface_height
-from .features import GUARDRAIL_OFFSET, SIDES, rows_of
+from .features import CURB_HEIGHT, GUARDRAIL_OFFSET, SIDES, rows_of
 from .meshgen import ribbon
 
 SECTIONS = ("s2", "s1", "s4", "s5")      # 内部の区間名（表示の S2・S3・S4・S5）
@@ -75,6 +75,8 @@ def wall_finish(note: str) -> str:
         return "rock_net"
     if "岩" in n or "崖" in n:
         return "rock"
+    if "ブロック" in n and "古い" in n:
+        return "block_aged"    # 目地が深く苔の付いた古い間知ブロック（Codex の r70_block は白い平らな板に見えた。2026-11-01）
     if "ブロック" in n:
         return "kenchi_moss" if "苔" in n else "block"
     if "コンクリ" in n or ("擁壁" in n and "石" not in n):
@@ -102,12 +104,115 @@ def guardrail_line(sec, f):
     rows = np.arange(sl.start, sl.stop)
     side = SIDES[f.side]
     hw = (sec.hw_left if side > 0 else sec.hw_right)[rows]
-    lat = hw + GUTTER_WIDTH + GUARDRAIL_OFFSET
+    lat = hw + GUTTER_WIDTH + GUARDRAIL_OFFSET + f.width_m   # 行の width_m：路肩の外の縁へ出す幅（features.guardrail_meshes と同じ）
     s = sec.s[rows]
     d = np.minimum(s - s[0], s[-1] - s)                     # 端からの距離
     t = np.clip(1 - d / FLARE_M, 0, 1)
     lat = lat + FLARE_OUT * t * t                            # 端は外へ曲げる
-    return rows, side, lat, sec.edge_z(side)[rows]
+    return rows, side, lat, sec.edge_z(side)[rows] + (CURB_HEIGHT if f.width_m > 0 else 0.0)
+
+
+R70_SECTIONS = ("s4", "s5")   # Codex の部品（data/processed/landmarks/r70_*）で作る区間（ヤビツ峠→宮ヶ瀬北原、2026-10-31）
+R70_RAIL_SPAN = 4.0           # r70_guardrail の w_beam：始端の支柱から +X へ 4 m
+
+
+def bend_on_rail(v, sec, rows, side, lat, ze, s_at):
+    """部品の頂点（+X＝つなぐ向き、−Y＝道の側、+Z＝上）を、ガードレールの基準線に沿って曲げて置く。
+    s_at(x)：部品の x を中心線の s へ。横は基準線（lat：中心からの距離）から外へ y、高さは基準線の路面の縁（ze）から z。"""
+    S = sec.s[rows]
+    s = s_at(v[:, 0])
+    k = np.clip(np.searchsorted(S, s) - 1, 0, len(rows) - 2)
+    t = (s - S[k]) / np.maximum(S[k + 1] - S[k], 1e-9)   # 両端の外（袖）は、端の 2 行をそのまま延ばす
+    lerp = lambda a: a[rows][k] * (1 - t) + a[rows][k + 1] * t
+    cx, cy = lerp(sec.x), lerp(sec.y)
+    h = np.unwrap(sec.heading[rows])
+    hh = h[k] * (1 - t) + h[k + 1] * t
+    la = lat[k] * (1 - t) + lat[k + 1] * t
+    z = ze[k] * (1 - t) + ze[k + 1] * t
+    off = side * (la + v[:, 1])                          # 外へ y（道の側は −Y）
+    return np.c_[cx - np.sin(hh) * off, cy + np.cos(hh) * off, z + v[:, 2]]
+
+
+def r70_rail_layout(length, span=R70_RAIL_SPAN):
+    """基準線の長さ → 区切りの数と、1 区切りの実際の長さ（4 m 前後にそろえ、端数は全体に配る）。"""
+    n = max(1, int(round(length / span)))
+    return n, length / n
+
+
+def r70_guardrail_meshes(sec, f, parts):
+    """Codex の W 形ガードレール（parts＝{"span": (v, f, uv), "end": (v, f, uv)}）を、基準線に沿って並べる。[(verts, faces, uvs, part)]。
+    part は 'span'（4 m 前後の区切りを、まとめて 1 つ）と 'end'（両端の袖）。進む向きの左の柵は +s へ、右の柵は −s へつなぐ（−Y が道の側になる）。"""
+    rows, side, lat, ze = guardrail_line(sec, f)
+    s0, s1 = float(sec.s[rows[0]]), float(sec.s[rows[-1]])
+    n, L = r70_rail_layout(s1 - s0)
+    sv, sf, su = parts["span"]
+    kx = L / R70_RAIL_SPAN
+    out, V, F, U = [], [], [], []
+    for j in range(n):
+        base = s0 + j * L if side > 0 else s1 - j * L
+        s_at = (lambda x, b=base: b + x * kx) if side > 0 else (lambda x, b=base: b - x * kx)
+        V.append(bend_on_rail(sv, sec, rows, side, lat, ze, s_at)); F.append(sf + sum(len(a) for a in V[:-1])); U.append(su)
+        if sum(len(a) for a in V) > 60000:
+            out.append((np.concatenate(V), np.concatenate(F), np.concatenate(U), "span")); V, F, U = [], [], []
+    if V:
+        out.append((np.concatenate(V), np.concatenate(F), np.concatenate(U), "span"))
+    ev, ef, eu = parts["end"]
+    for at_start in (True, False):          # 終わりの端は +X へ伸ばし、始まりの端は X を裏返して外へ伸ばす（面の向きも裏返す）
+        flip = at_start
+        v = ev * [(-1 if flip else 1), 1, 1]
+        fc = ef[:, ::-1] if flip else ef
+        b = (s0 if side > 0 else s1) if at_start else (s1 if side > 0 else s0)
+        s_at = (lambda x, b=b: b + x) if side > 0 else (lambda x, b=b: b - x)
+        out.append((bend_on_rail(v, sec, rows, side, lat, ze, s_at), fc, eu, "end"))
+    return out
+
+
+def rows_between(sec, s0, s1, pad=2.0):
+    """中心線の s0〜s1 を覆う行（両端に pad m の余り）。"""
+    i0 = max(0, int(np.searchsorted(sec.s, s0 - pad)) - 1)
+    i1 = min(sec.n, int(np.searchsorted(sec.s, s1 + pad)) + 1)
+    return np.arange(i0, i1)
+
+
+def r70_run_mesh(sec, s0, s1, side, lat, part, span, centered=True):
+    """Codex の欄干の区切り（part、+X へ span m ごと。centered＝原点が区切りの中央）を、中心線の s0〜s1、
+    中心から lat m の線に沿って並べる（side＝+1 左／−1 右、−Y が道の側）。高さは道の縁の路面から。(verts, faces, uvs)"""
+    rows = rows_between(sec, s0, s1)
+    latv = np.full(len(rows), float(lat))
+    ze = sec.edge_z(side)[rows]
+    pv, pf, pu = part
+    n, L = r70_rail_layout(s1 - s0, span)
+    kx, sh = L / span, (span / 2 if centered else 0.0)
+    V, F, U = [], [], []
+    for j in range(n):
+        base = s0 + j * L if side > 0 else s1 - j * L
+        s_at = (lambda x, b=base: b + (x + sh) * kx) if side > 0 else (lambda x, b=base: b - (x + sh) * kx)
+        V.append(bend_on_rail(pv, sec, rows, side, latv, ze, s_at)); F.append(pf + sum(len(a) for a in V[:-1])); U.append(pu)
+    return np.concatenate(V), np.concatenate(F), np.concatenate(U)
+
+
+def r70_post_mesh(sec, s, side, lat, part):
+    """1 本の部品（親柱・橋名板）を、中心線の s・中心から lat m の所に立てる（−Y が道の側）。"""
+    rows = rows_between(sec, s - 1.0, s + 1.0)
+    s_at = (lambda x: s + x) if side > 0 else (lambda x: s - x)
+    v = bend_on_rail(part[0], sec, rows, side, np.full(len(rows), float(lat)), sec.edge_z(side)[rows], s_at)
+    return v, part[1], part[2]
+
+
+def r70_pole_mesh(poles, part, sink=0.3):
+    """Codex のコンクリート電柱（r70_utility_pole、腕金は +X）を電柱の位置に立てる。腕金は電線（隣の柱を結ぶ向き）と直角。
+    根元は道の縁の高さから sink m 埋める（斜面で浮かないように。今の柱も 0.5 m 埋めている）。"""
+    pv, pf, pu = part
+    P = np.array([p[:2] for p in poles], float)
+    V, F, U = [], [], []
+    for i, (x, y, z) in enumerate(poles):
+        a, b = P[max(i - 1, 0)], P[min(i + 1, len(P) - 1)]
+        t = b - a
+        t = t / np.linalg.norm(t) if np.linalg.norm(t) > 1e-6 else np.array([1.0, 0.0])
+        ux = np.array([-t[1], t[0]]); uy = np.array([-ux[1], ux[0]])
+        V.append(np.c_[x + pv[:, 0] * ux[0] + pv[:, 1] * uy[0], y + pv[:, 0] * ux[1] + pv[:, 1] * uy[1], z - sink + pv[:, 2]])
+        F.append(pf + sum(len(q) for q in V[:-1])); U.append(pu)
+    return np.concatenate(V), np.concatenate(F), np.concatenate(U)
 
 
 def guardrail_meshes(sec, f):
@@ -264,3 +369,111 @@ def leaf_meshes(sec, s_from, s_to, lane=True):
             uv = np.c_[(u / np.maximum(u[:, -1:], 1e-6)).ravel(), uv[:, 1]]   # 横は縁から縁で 0〜1
             out.append((v, f, uv, "lane"))
     return out
+
+
+def r70_whole_bridge_verts(sec, i, pts, deck_z=0.7):
+    """Codex の橋の全体の部品の頂点 pts（+Y が道の進む向き、路面が Z＝deck_z）を、中心線の行 i の所に置いた世界の座標。
+    高さは部品の Y（道に沿った長さ）の所の路面に合わせる（水平のまま置くと、赤いアーチ橋は 100 m で路面が 2.8 m 上がるので、峠側の端で床の
+    横桁が路面から 0.9 m 出て、宮ヶ瀬側の端で床が 1.9 m 沈んだ。2026-11-01 にゲームで見つかった）。"""
+    fwd = np.array([np.cos(sec.heading[i]), np.sin(sec.heading[i])]); ux = np.array([fwd[1], -fwd[0]])
+    zr = np.interp(sec.s[i] + pts[:, 1], sec.s, sec.z)
+    return np.c_[sec.x[i] + pts[:, 0] * ux[0] + pts[:, 1] * fwd[0], sec.y[i] + pts[:, 0] * ux[1] + pts[:, 1] * fwd[1], zr - deck_z + pts[:, 2]]
+
+
+def r70_cover_scale(part, pts_xz, margin=0.03, s_max=2.5):
+    """Codex の部品（v, f, uv）を正面（x・z、底の真ん中を原点）から見た外形（口もふさいだ外まわり＝凸包）から、点 pts_xz（今の坑口のアーチの縁など）が
+    はみ出さない、いちばん小さい倍率（1 以上、縦横同じ）。覆えなければ s_max。margin：外形の縁からの余裕（m）。
+    縁は隠さず口の内側の裏打ちとして残す（Codex の口が今の縁の内側より広い坑口があり、縁を隠すと口の内側にすき間が開く）。"""
+    from shapely import contains_xy
+    from shapely.geometry import MultiPoint
+    v = np.asarray(part[0], float)
+    hull = MultiPoint(v[:, [0, 2]]).convex_hull
+    p = np.asarray(pts_xz, float).copy()
+    p[:, 1] = np.maximum(p[:, 1], 2 * margin)          # 路面の上の足元（z＝0）は外形の底の線の上なので、少し上で調べる
+    for k in np.arange(1.0, s_max + 1e-9, 0.01):
+        if np.all(contains_xy(hull.buffer(-margin / k), p[:, 0] / k, p[:, 1] / k)):
+            return float(round(k, 2))
+    return s_max
+
+
+PLATE_PX = (6, 770)   # Codex の坑口の絵で名板の札の字が入る四角（px、u・v とも。v＝0 が上）
+
+
+def _plate_faces(f, uv, size_px=1024):
+    u = uv[:, 0] * size_px; w = uv[:, 1] * size_px
+    inn = (u >= PLATE_PX[0]) & (u <= PLATE_PX[1]) & (w >= PLATE_PX[0]) & (w <= PLATE_PX[1])
+    return np.flatnonzero(inn[f].all(1))
+
+
+def r70_respace_plate(v, f, uv, size_m, pitch_m):
+    """Codex の坑口の名板の札（絵の名板の四角に uv が入る面）を、1 枚ずつ size_m 角・中心を pitch_m おきに並べ直した頂点。
+    札の中心の高さと、並び全体の真ん中は変えない。ほかの頂点はそのまま（吹風トンネル出口の写真 R70-0992_b では札が約 0.55 m 角・0.81 m おき、
+    Codex の部品は 0.46 m・0.64 m おきで、札がほとんどくっついて見えた。2026-11-01）。"""
+    v = np.array(v, float)
+    fi = _plate_faces(f, uv)
+    groups = []                                   # 頂点を共有する面のまとまり＝札 1 枚
+    for t in fi:
+        s = set(f[t].tolist())
+        hit = [g for g in groups if g & s]
+        for g in hit:
+            groups.remove(g); s |= g
+        groups.append(s)
+    tiles = sorted((np.array(sorted(g)) for g in groups), key=lambda ix: v[ix, 0].mean())
+    if not tiles:
+        return v
+    cx0 = np.mean([v[ix, 0].mean() for ix in tiles])
+    for j, ix in enumerate(tiles):
+        c = np.array([v[ix, 0].mean(), v[ix, 2].mean()])
+        k = size_m / max(np.ptp(v[ix, 0]), 1e-9)
+        cn = cx0 + (j - (len(tiles) - 1) / 2) * pitch_m
+        v[ix, 0] = cn + (v[ix, 0] - c[0]) * k
+        v[ix, 2] = c[1] + (v[ix, 2] - c[1]) * k
+    return v
+
+
+PLATE_TILE = np.array([0.65, 0.75, 0.91])   # 写真 R70-0992_b：札の地 (93,107,130)・字 (41,52,68)・札の下の壁 (143,143,143) の比
+PLATE_INK = np.array([0.29, 0.36, 0.48])
+
+
+def _brush_font(px):
+    """筆文字に近い教科書体（macOS のダウンロード済みのフォント）。無ければヒラギノ明朝。"""
+    from glob import glob
+    from PIL import ImageFont
+    for p in sorted(glob("/System/Library/AssetsV2/com_apple_MobileAsset_Font*/*/AssetData/Kyokasho.ttc")) + \
+            ["/System/Library/PrivateFrameworks/FontServices.framework/Versions/A/Resources/Fonts/Subsets/Kyokasho.ttc",
+             "/System/Library/Fonts/ヒラギノ明朝 ProN.ttc"]:
+        try:
+            return ImageFont.truetype(p, px, index=1 if p.endswith("Kyokasho.ttc") else 0)
+        except OSError:
+            continue
+    return ImageFont.load_default()
+
+
+def r70_plate_texture(img, text, cells, face_rgb):
+    """坑口の絵 img の名板の札の四角 cells（[(x0, y0, x1, y1) px]、左の札から）を、地 face_rgb×PLATE_TILE・黒っぽい筆文字 face_rgb×PLATE_INK に描き直す。"""
+    out = img.convert("RGB").copy(); d = ImageDraw.Draw(out)
+    tile = tuple(int(round(c)) for c in np.asarray(face_rgb, float) * PLATE_TILE)
+    ink = tuple(int(round(c)) for c in np.asarray(face_rgb, float) * PLATE_INK)
+    for ch, (x0, y0, x1, y1) in zip(text, cells):
+        d.rectangle((x0, y0, x1 - 1, y1 - 1), fill=tile)
+        font = _brush_font(int((y1 - y0) * 0.78))
+        bb = d.textbbox((0, 0), ch, font=font)
+        d.text(((x0 + x1 - (bb[2] - bb[0])) / 2 - bb[0], (y0 + y1 - (bb[3] - bb[1])) / 2 - bb[1]), ch, fill=ink, font=font)
+    return out
+
+
+def r70_portal_setback(q, face_y, wall_out, gap=0.03):
+    """坑口の部品の頂点 q（外が −Y、縁の真ん中が原点）を Y に沿ってずらし、正面（y＝face_y）を今の坑口の壁の正面（外へ wall_out m）の gap m 手前に置く。
+    吹風トンネル出口では Codex の坑口が壁より約 2.7 m 手前に出て、写真の 1 枚の平らな壁と違って張り出して見えた（2026-11-01）。"""
+    q = np.array(q, float)
+    q[:, 1] += (-face_y) - (wall_out + gap)
+    return q
+
+
+def r70_wall_normal(wall_xy, out_hint):
+    """坑口の壁の頂点（x, y）の並びの向き（いちばん長い向き）に直角な、外向きの単位ベクトル（out_hint と同じ側）。
+    カーブしたトンネルでは、両端を結ぶ向きが坑口の壁・道の向きと 10° ほどずれ、Codex の坑口が斜めに置かれた（吹風トンネル出口、2026-11-01）。"""
+    p = np.asarray(wall_xy, float); p = p - p.mean(0)
+    lat = np.linalg.svd(p, full_matrices=False)[2][0]
+    o = np.array([lat[1], -lat[0]])
+    return o if o @ np.asarray(out_hint, float) >= 0 else -o

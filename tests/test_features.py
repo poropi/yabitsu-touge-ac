@@ -247,3 +247,14 @@ def test_set_back_shelf_takes_the_row_material_and_keeps_it_through_cuts(tmp_pat
     assembly.add_features(m, _straight(), feats)
     mats = {n: e["material"] for n, e in m.meshes.items() if n.startswith("1GRASS_track_shelf_")}
     assert sorted(mats.values()) == ["gravel_grey", "gravel_grey", "ground"]
+
+
+def test_guardrail_moves_out_only_when_row_has_width():
+    """手すりの行に width_m を書いたときだけ、その幅だけ外（路肩の外の縁）へ出して縁石の高さだけ上げる。書いていない手すりは道の縁のまま
+    （S3 の歩道と重なる手すり 6 か所を動かさない。吹風トンネル入口の手前の広い路肩、2026-11-01）。"""
+    sec = _straight()
+    plain = ft.guardrail_meshes(sec, ft.Feature(10, 20, "L", "guardrail", 0, ""))[0][0]
+    moved = ft.guardrail_meshes(sec, ft.Feature(10, 20, "L", "guardrail", 0, "", 2.7))[0][0]
+    lat = lambda v: np.abs(v[:, 1] - sec.y[0]) if np.ptp(sec.y) < 1e-6 else np.abs(v[:, 0] - sec.x[0])
+    assert np.allclose(lat(moved) - lat(plain), 2.7)
+    assert np.allclose(moved[:, 2] - plain[:, 2], ft.CURB_HEIGHT)

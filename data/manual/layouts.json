@@ -93,7 +93,16 @@
    35.4157755,
    139.2284235
   ],
-  "pits": "nanohanadai_lot"
+  "pits": "nanohanadai_lot",
+  "start_in_lot": {
+   "note": "菜の花台の駐車場の中（白線の駐車枠と山側の縁石の間の通路）から、出口（ヘアピン）を向いて出る。計測の開始ゲートは出口の先の道のまま（2026-10-30 ユーザーの指示）",
+   "spec": "s1_start_lot.json",
+   "pad": "nanohanadai_lot",
+   "a": -6.0,
+   "b": 5.5,
+   "spacing": 8.0,
+   "stagger": 1.2
+  }
  },
  {
   "name": "s3_up",
@@ -116,7 +125,16 @@
    35.42764245,
    139.21958691
   ],
-  "pits": "nanohanadai_lot"
+  "pits": "nanohanadai_lot",
+  "start_in_lot": {
+   "note": "菜の花台の駐車場の中（白線の駐車枠と山側の縁石の間の通路）から、出口（ヘアピン）を向いて出る。計測の開始ゲートは出口の先の道のまま（2026-10-30 ユーザーの指示）",
+   "spec": "s1_start_lot.json",
+   "pad": "nanohanadai_lot",
+   "a": -6.0,
+   "b": 5.5,
+   "spacing": 8.0,
+   "stagger": 1.2
+  }
  },
  {
   "name": "s3_down",

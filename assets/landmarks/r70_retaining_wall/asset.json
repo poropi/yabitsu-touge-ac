@@ -1,0 +1,996 @@
+{
+  "asset_id": "r70_retaining_wall",
+  "source": "r70_retaining_wall.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 800,
+  "parts": [
+    {
+      "name": "stone",
+      "meaning": "不揃いな自然石積み",
+      "triangles": 258,
+      "vertices": 468,
+      "dimensions_m": [
+        4.0,
+        0.74,
+        1.0
+      ],
+      "bounds_m": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          4.0,
+          0.74,
+          1.0
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stone.png"
+      ],
+      "components": [
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 0,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 32,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 64,
+          "triangle_count": 60
+        },
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 124,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 156,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 188,
+          "triangle_count": 60
+        },
+        {
+          "name": "壁の厚みと天端",
+          "triangle_start": 248,
+          "triangle_count": 10
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "基本壁は幅4m・高さ1m・法勾配1:0.4。高さの拡大で石/網目も伸びるため、表面UVを実寸へ補正するか1m区画を重ねる。",
+        "水抜き2穴と天端は形状。法枠は1m格子、突出0.16mを立体化。",
+        "石肌・苔・雨だれは写真を貼らず自作の周期模様。現場の石一個ずつの輪郭とは異なる。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0369-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0370_f.jpg",
+          "url": "https://www.google.com/maps/@35.4328033,139.2106301,3a,90y,29.4h,88t/data=!3m4!1e1!3m2!1snsh61UEM_pXqhQ83kmah4w!2e0?hl=ja",
+          "description": "道の左に続く高い擁壁。黒〜濃灰色の割石の千鳥積み、高さ約4〜6 m、勾配約1:0.4、路面の縁から約0.5 m。0372で高さが低くなる。"
+        },
+        {
+          "oid": "S4-0384-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_f.jpg",
+          "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,339.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+          "description": "道の右の自然石の石積み。暗灰色の不揃いな石、高さ約1.5〜2.5 m、足元にコンクリートの側溝。0385が最も大きい。0386では途切れる。"
+        },
+        {
+          "oid": "S4-0408-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0408_f.jpg",
+          "url": "https://www.google.com/maps/@35.4399084,139.2112503,3a,90y,47.1h,88t/data=!3m4!1e1!3m2!1ssrTxmjqTR1AvdlBuUOB3WA!2e0?hl=ja",
+          "description": "自然石（約 30〜50 cm 角）を積んだ高さ約 4〜6 m の石積み擁壁、全面に苔、道の右縁の側溝の外から立ち上がる。上部は杉林。傾斜の急な法面"
+        },
+        {
+          "oid": "S4-0416-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0418_b.jpg",
+          "url": "https://www.google.com/maps/@35.4416663,139.2121444,3a,90y,182.8h,88t/data=!3m4!1e1!3m2!1sGw4-UPPAvr4BcQyLdw0FTg!2e0?hl=ja",
+          "description": "自然石〜割り石を積んだ苔むす石積み擁壁。0416 では高さ約 1 m と低いが、0417 から急に高くなり約 6〜8 m、上は杉林。0418 では石が整い（約 40 cm 角の谷積み）、水抜き穴が点在。道の右縁に接する。道の縁に側溝はなし"
+        }
+      ],
+      "repeat_length_m": 4.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          4.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S4-0369-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0370_f.jpg",
+        "url": "https://www.google.com/maps/@35.4328033,139.2106301,3a,90y,29.4h,88t/data=!3m4!1e1!3m2!1snsh61UEM_pXqhQ83kmah4w!2e0?hl=ja",
+        "description": "道の左に続く高い擁壁。黒〜濃灰色の割石の千鳥積み、高さ約4〜6 m、勾配約1:0.4、路面の縁から約0.5 m。0372で高さが低くなる。"
+      },
+      "preview_views": {
+        "front": "r70_retaining_wall_stone_front.png",
+        "left": "r70_retaining_wall_stone_left.png",
+        "right": "r70_retaining_wall_stone_right.png",
+        "back_estimated": "r70_retaining_wall_stone_back_estimated.png",
+        "top": "r70_retaining_wall_stone_top.png",
+        "persp": "r70_retaining_wall_stone_persp.png",
+        "reference": "r70_retaining_wall_stone_reference.png"
+      }
+    },
+    {
+      "name": "block",
+      "meaning": "斜め谷積みの間知ブロック",
+      "triangles": 258,
+      "vertices": 468,
+      "dimensions_m": [
+        4.0,
+        0.74,
+        1.0
+      ],
+      "bounds_m": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          4.0,
+          0.74,
+          1.0
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "block.png"
+      ],
+      "components": [
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 0,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 32,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 64,
+          "triangle_count": 60
+        },
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 124,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 156,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 188,
+          "triangle_count": 60
+        },
+        {
+          "name": "壁の厚みと天端",
+          "triangle_start": 248,
+          "triangle_count": 10
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "基本壁は幅4m・高さ1m・法勾配1:0.4。高さの拡大で石/網目も伸びるため、表面UVを実寸へ補正するか1m区画を重ねる。",
+        "水抜き2穴と天端は形状。法枠は1m格子、突出0.16mを立体化。",
+        "石肌・苔・雨だれは写真を貼らず自作の周期模様。現場の石一個ずつの輪郭とは異なる。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0391-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0392_f.jpg",
+          "url": "https://www.google.com/maps/@35.4368596,139.2120715,3a,90y,330.6h,88t/data=!3m4!1e1!3m2!1skoc61Qxp6zDrSGxdR1HvBg!2e0?hl=ja",
+          "description": "灰黒色のコンクリート／石ブロックを斜めの市松状に積んだ高さ約 5〜8 m の急な擁壁、道の右縁から直接立ち上がる。ブロックは約 40×40 cm、所々に水抜き穴と白い析出（エフロレッセンス）。上部は草木。進行方向では左側の谷側と対"
+        },
+        {
+          "oid": "S4-0421-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0425_f.jpg",
+          "url": "https://www.google.com/maps/@35.4430679,139.2128004,3a,90y,357.6h,88t/data=!3m4!1e1!3m2!1sOJn8rOHA3uIOeJSRzuvt1A!2e0?hl=ja",
+          "description": "約 40×30 cm の灰黒色コンクリートブロックを斜めの市松模様に積んだ高さ約 4〜8 m の擁壁、道の右縁から直接立ち上がる。目地は白、水抜き穴が点在、上端は笠コンクリートで草や杉が茂る。0423・0425 では途中に段差（低い部分）が見える。路肩は幅約 0.5 m の舗装"
+        },
+        {
+          "oid": "S4-0443-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0444_f.jpg",
+          "url": "https://www.google.com/maps/@35.4450833,139.2128375,3a,90y,176.0h,88t/data=!3m4!1e1!3m2!1sC2o3E8bmEM8fAdX0_74FqA!2e0?hl=ja",
+          "description": "約 1×0.6 m の大きな灰色コンクリートブロックの横積み擁壁、高さ約 6〜8 m、表面は石肌の凹凸模様、苔が点在。0443 で低い石積みから段階的に高くなる。右の下側の端部は小さな石張りに変わる。道の左縁の外"
+        },
+        {
+          "oid": "S4-0446-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0447_f.jpg",
+          "url": "https://www.google.com/maps/@35.4451288,139.2125143,3a,90y,357.3h,88t/data=!3m4!1e1!3m2!1sUjDBYtF0_HgGY1o1QNS1qg!2e0?hl=ja",
+          "description": "灰黒色の石（約 40×30 cm）を斜めの市松状に積み、白い析出の筋が出る高さ約 4〜8 m の擁壁、道の右縁から立ち上がる。0446 の上部は苔と草。路肩は狭い舗装"
+        }
+      ],
+      "repeat_length_m": 4.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          4.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S4-0391-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0392_f.jpg",
+        "url": "https://www.google.com/maps/@35.4368596,139.2120715,3a,90y,330.6h,88t/data=!3m4!1e1!3m2!1skoc61Qxp6zDrSGxdR1HvBg!2e0?hl=ja",
+        "description": "灰黒色のコンクリート／石ブロックを斜めの市松状に積んだ高さ約 5〜8 m の急な擁壁、道の右縁から直接立ち上がる。ブロックは約 40×40 cm、所々に水抜き穴と白い析出（エフロレッセンス）。上部は草木。進行方向では左側の谷側と対"
+      },
+      "preview_views": {
+        "front": "r70_retaining_wall_block_front.png",
+        "left": "r70_retaining_wall_block_left.png",
+        "right": "r70_retaining_wall_block_right.png",
+        "back_estimated": "r70_retaining_wall_block_back_estimated.png",
+        "top": "r70_retaining_wall_block_top.png",
+        "persp": "r70_retaining_wall_block_persp.png",
+        "reference": "r70_retaining_wall_block_reference.png"
+      }
+    },
+    {
+      "name": "shotcrete",
+      "meaning": "吹付けコンクリート法面",
+      "triangles": 258,
+      "vertices": 468,
+      "dimensions_m": [
+        4.0,
+        0.74,
+        1.0
+      ],
+      "bounds_m": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          4.0,
+          0.74,
+          1.0
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "shotcrete.png"
+      ],
+      "components": [
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 0,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 32,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 64,
+          "triangle_count": 60
+        },
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 124,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 156,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 188,
+          "triangle_count": 60
+        },
+        {
+          "name": "壁の厚みと天端",
+          "triangle_start": 248,
+          "triangle_count": 10
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "基本壁は幅4m・高さ1m・法勾配1:0.4。高さの拡大で石/網目も伸びるため、表面UVを実寸へ補正するか1m区画を重ねる。",
+        "水抜き2穴と天端は形状。法枠は1m格子、突出0.16mを立体化。",
+        "石肌・苔・雨だれは写真を貼らず自作の周期模様。現場の石一個ずつの輪郭とは異なる。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0683-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0683_f.jpg",
+          "url": "https://www.google.com/maps/@35.4814688,139.2106004,3a,90y,23.7h,88t/data=!3m4!1e1!3m2!1snBsmko_PJzmGCN7EqP7Vag!2e0?hl=ja",
+          "description": "道の左の高い法面にコンクリート吹付けとひし形金網、斜めの水抜き線。高さ数m。足元に低いコンクリート縁/側溝。路面に白い外側線"
+        },
+        {
+          "oid": "S5-0688-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0688_b.jpg",
+          "url": "https://www.google.com/maps/@35.4821315,139.2110329,3a,90y,181.8h,88t/data=!3m4!1e1!3m2!1sTG8K5bp1dU0-B8boAZUrCw!2e0?hl=ja",
+          "description": "道の左の高い法面。灰色のコンクリート吹き付けの上に落石防止の金網が張られる。道の縁に沿って続き、下端に細い側溝"
+        },
+        {
+          "oid": "S5-0704-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0704_f.jpg",
+          "url": "https://www.google.com/maps/@35.4844625,139.209455,3a,90y,328.4h,88t/data=!3m4!1e1!3m2!1sZcQp_eWZIM8DsSufuU6zBw!2e0?hl=ja",
+          "description": "道の左の高い法面。灰色のコンクリート吹き付けに落石防止の金網が張られ、コケで汚れる。下端に小さな白い板（標示）が 1 枚付く。法面の肩に金網フェンスが見える"
+        },
+        {
+          "oid": "S5-0817-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0817_f.jpg",
+          "url": "https://www.google.com/maps/@35.4867138,139.2172451,3a,90y,86.0h,88t/data=!3m4!1e1!3m2!1sRBWnsE9vVvafmFHwN9qJCQ!2e0?hl=ja",
+          "description": "左の山側が灰色のモルタル吹付け法面、高さ約8m以上、緑のしみあり。下は細い道路脇の溝"
+        }
+      ],
+      "repeat_length_m": 4.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          4.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0683-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0683_f.jpg",
+        "url": "https://www.google.com/maps/@35.4814688,139.2106004,3a,90y,23.7h,88t/data=!3m4!1e1!3m2!1snBsmko_PJzmGCN7EqP7Vag!2e0?hl=ja",
+        "description": "道の左の高い法面にコンクリート吹付けとひし形金網、斜めの水抜き線。高さ数m。足元に低いコンクリート縁/側溝。路面に白い外側線"
+      },
+      "preview_views": {
+        "front": "r70_retaining_wall_shotcrete_front.png",
+        "left": "r70_retaining_wall_shotcrete_left.png",
+        "right": "r70_retaining_wall_shotcrete_right.png",
+        "back_estimated": "r70_retaining_wall_shotcrete_back_estimated.png",
+        "top": "r70_retaining_wall_shotcrete_top.png",
+        "persp": "r70_retaining_wall_shotcrete_persp.png",
+        "reference": "r70_retaining_wall_shotcrete_reference.png"
+      }
+    },
+    {
+      "name": "concrete",
+      "meaning": "雨だれ付きの平らなコンクリート壁",
+      "triangles": 258,
+      "vertices": 468,
+      "dimensions_m": [
+        4.0,
+        0.74,
+        1.0
+      ],
+      "bounds_m": [
+        [
+          0.0,
+          0.0,
+          0.0
+        ],
+        [
+          4.0,
+          0.74,
+          1.0
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "concrete.png"
+      ],
+      "components": [
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 0,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 32,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 64,
+          "triangle_count": 60
+        },
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 124,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 156,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 188,
+          "triangle_count": 60
+        },
+        {
+          "name": "壁の厚みと天端",
+          "triangle_start": 248,
+          "triangle_count": 10
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "基本壁は幅4m・高さ1m・法勾配1:0.4。高さの拡大で石/網目も伸びるため、表面UVを実寸へ補正するか1m区画を重ねる。",
+        "水抜き2穴と天端は形状。法枠は1m格子、突出0.16mを立体化。",
+        "石肌・苔・雨だれは写真を貼らず自作の周期模様。現場の石一個ずつの輪郭とは異なる。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0884-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0884_f.jpg",
+          "url": "https://www.google.com/maps/@35.4968196,139.2222652,3a,90y,22.9h,88t/data=!3m4!1e1!3m2!1sFWpDlr2ppyn-t705RrzdHA!2e0?hl=ja",
+          "description": "高さ約0.8 m、苔むしたコンクリートの腰壁、道の縁沿い。上に金網"
+        },
+        {
+          "oid": "S5-0979-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0979_f.jpg",
+          "url": "https://www.google.com/maps/@35.5100093,139.2312385,3a,90y,5.6h,88t/data=!3m4!1e1!3m2!1sq8d9MtlOXCuUJa0DYjuPEQ!2e0?hl=ja",
+          "description": "橋を過ぎた左側の石張りブロック風擁壁、高さ約1.5〜2m、上に白い笠木。足元に側溝グレーチング。トンネル手前まで続く"
+        },
+        {
+          "oid": "S4-0339-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0339_b.jpg",
+          "url": "https://www.google.com/maps/@35.4316647,139.2120421,3a,90y,54.9h,88t/data=!3m4!1e1!3m2!1sOQ_oXCA_OBU0ESN54d3rmA!2e0?hl=ja",
+          "description": "道の左側、ヘアピンの外側にあたる位置の擁壁。手前（峠側）の端に石積み面（約1.2 m）、続いて高さ約2〜3 mの茶色い汚れの付いた無地のコンクリート面。上に電柱が立つ"
+        },
+        {
+          "oid": "S4-0359-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0360_f.jpg",
+          "url": "https://www.google.com/maps/@35.431013,139.2090892,3a,90y,47.6h,88t/data=!3m4!1e1!3m2!1sG504u0KH-wn-ro5WbAbG0A!2e0?hl=ja",
+          "description": "0359Fでは遠くに灰色の斜面（コンクリートの吹付けか擁壁）が見え、0360から手前に出てくる。灰色の方形の石を千鳥に積んだ擁壁、水抜き穴が点在。高さ約4 m、勾配約1:0.4、路面の縁から約1 m。0361〜0362は苔が少なく明るい。"
+        }
+      ],
+      "repeat_length_m": 4.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          4.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0884-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0884_f.jpg",
+        "url": "https://www.google.com/maps/@35.4968196,139.2222652,3a,90y,22.9h,88t/data=!3m4!1e1!3m2!1sFWpDlr2ppyn-t705RrzdHA!2e0?hl=ja",
+        "description": "高さ約0.8 m、苔むしたコンクリートの腰壁、道の縁沿い。上に金網"
+      },
+      "preview_views": {
+        "front": "r70_retaining_wall_concrete_front.png",
+        "left": "r70_retaining_wall_concrete_left.png",
+        "right": "r70_retaining_wall_concrete_right.png",
+        "back_estimated": "r70_retaining_wall_concrete_back_estimated.png",
+        "top": "r70_retaining_wall_concrete_top.png",
+        "persp": "r70_retaining_wall_concrete_persp.png",
+        "reference": "r70_retaining_wall_concrete_reference.png"
+      }
+    },
+    {
+      "name": "slope_frame",
+      "meaning": "突出するコンクリート格子法枠",
+      "triangles": 474,
+      "vertices": 852,
+      "dimensions_m": [
+        4.07,
+        0.86428,
+        1.0
+      ],
+      "bounds_m": [
+        [
+          -0.07,
+          -0.124278,
+          0.0
+        ],
+        [
+          4.0,
+          0.74,
+          1.0
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "slope_frame.png"
+      ],
+      "components": [
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 0,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 32,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 64,
+          "triangle_count": 60
+        },
+        {
+          "name": "水抜き穴を避けた壁の面",
+          "triangle_start": 124,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜きの暗い奥",
+          "triangle_start": 156,
+          "triangle_count": 32
+        },
+        {
+          "name": "水抜き穴の奥底",
+          "triangle_start": 188,
+          "triangle_count": 60
+        },
+        {
+          "name": "壁の厚みと天端",
+          "triangle_start": 248,
+          "triangle_count": 10
+        },
+        {
+          "name": "縦のコンクリート法枠",
+          "triangle_start": 258,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦のコンクリート法枠",
+          "triangle_start": 270,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦のコンクリート法枠",
+          "triangle_start": 282,
+          "triangle_count": 12
+        },
+        {
+          "name": "縦のコンクリート法枠",
+          "triangle_start": 294,
+          "triangle_count": 12
+        },
+        {
+          "name": "横のコンクリート法枠",
+          "triangle_start": 306,
+          "triangle_count": 12
+        },
+        {
+          "name": "横のコンクリート法枠",
+          "triangle_start": 318,
+          "triangle_count": 12
+        },
+        {
+          "name": "交点のアンカー頭",
+          "triangle_start": 330,
+          "triangle_count": 36
+        },
+        {
+          "name": "交点のアンカー頭",
+          "triangle_start": 366,
+          "triangle_count": 36
+        },
+        {
+          "name": "交点のアンカー頭",
+          "triangle_start": 402,
+          "triangle_count": 36
+        },
+        {
+          "name": "交点のアンカー頭",
+          "triangle_start": 438,
+          "triangle_count": 36
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "基本壁は幅4m・高さ1m・法勾配1:0.4。高さの拡大で石/網目も伸びるため、表面UVを実寸へ補正するか1m区画を重ねる。",
+        "水抜き2穴と天端は形状。法枠は1m格子、突出0.16mを立体化。",
+        "石肌・苔・雨だれは写真を貼らず自作の周期模様。現場の石一個ずつの輪郭とは異なる。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0570-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0570_f.jpg",
+          "url": "https://www.google.com/maps/@35.4676063,139.2157959,3a,90y,47.7h,88t/data=!3m4!1e1!3m2!1sOQfSLaNfz5156CyAmjKIAQ!2e0?hl=ja",
+          "description": "進行方向左の法面を覆うコンクリート格子枠（法枠）、枠の中は金網と植生。高さ約3〜4m、枠は約1m角。道の縁に接する。下端に小さな白い標識板か杭が1つ"
+        },
+        {
+          "oid": "S5-0680-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0680_f.jpg",
+          "url": "https://www.google.com/maps/@35.4808546,139.2109002,3a,90y,343.3h,88t/data=!3m4!1e1!3m2!1sHAXYg5TDZOmRsyDo0Suc7w!2e0?hl=ja",
+          "description": "道の左の急斜面を覆う新しい白いコンクリートの格子状法枠（枠の中に吹き付け）、上に金網。高さ数m、下に新しいコンクリート側溝と路面は新しい黒い舗装。後方側の端には低い白いコンクリートの壁"
+        },
+        {
+          "oid": "S5-0793-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0793_b.jpg",
+          "url": "https://www.google.com/maps/@35.4843842,139.212728,3a,90y,270.2h,88t/data=!3m4!1e1!3m2!1sI1WSAEpRPDMCHlBLiZOF9w!2e0?hl=ja",
+          "description": "山側（左）の斜面を覆う白っぽいコンクリートの格子状の枠（法枠）。枠は約 1.5 m 角、中は吹き付け面でくぼむ。交点に丸いアンカー頭。道の縁すぐ。高さ 5 m 以上。"
+        },
+        {
+          "oid": "S5-1014-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1014_f.jpg",
+          "url": "https://www.google.com/maps/@35.5172406,139.2317353,3a,90y,302.2h,88t/data=!3m4!1e1!3m2!1svmx8D0wHR_FoFWbjgfd8IA!2e0?hl=ja",
+          "description": "灰緑色の大きな吹付擁壁、高さ約5m、道の右縁から一面。小さな水抜き穴が並ぶ。足元に舗装された段"
+        }
+      ],
+      "repeat_length_m": 4.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          4.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0570-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0570_f.jpg",
+        "url": "https://www.google.com/maps/@35.4676063,139.2157959,3a,90y,47.7h,88t/data=!3m4!1e1!3m2!1sOQfSLaNfz5156CyAmjKIAQ!2e0?hl=ja",
+        "description": "進行方向左の法面を覆うコンクリート格子枠（法枠）、枠の中は金網と植生。高さ約3〜4m、枠は約1m角。道の縁に接する。下端に小さな白い標識板か杭が1つ"
+      },
+      "preview_views": {
+        "front": "r70_retaining_wall_slope_frame_front.png",
+        "left": "r70_retaining_wall_slope_frame_left.png",
+        "right": "r70_retaining_wall_slope_frame_right.png",
+        "back_estimated": "r70_retaining_wall_slope_frame_back_estimated.png",
+        "top": "r70_retaining_wall_slope_frame_top.png",
+        "persp": "r70_retaining_wall_slope_frame_persp.png",
+        "reference": "r70_retaining_wall_slope_frame_reference.png"
+      }
+    },
+    {
+      "name": "wood_lagging",
+      "meaning": "H鋼の支柱と厚い横板の土留め壁",
+      "triangles": 120,
+      "vertices": 240,
+      "dimensions_m": [
+        4.14,
+        0.245,
+        1.0
+      ],
+      "bounds_m": [
+        [
+          -0.14,
+          -0.1225,
+          0.0
+        ],
+        [
+          4.0,
+          0.1225,
+          1.0
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "wood_lagging.png"
+      ],
+      "components": [
+        {
+          "name": "H鋼フランジ",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "H鋼フランジ",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "H鋼ウェブ",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "H鋼フランジ",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "H鋼フランジ",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "H鋼ウェブ",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "厚い横板",
+          "triangle_start": 72,
+          "triangle_count": 12
+        },
+        {
+          "name": "厚い横板",
+          "triangle_start": 84,
+          "triangle_count": 12
+        },
+        {
+          "name": "厚い横板",
+          "triangle_start": 96,
+          "triangle_count": 12
+        },
+        {
+          "name": "厚い横板",
+          "triangle_start": 108,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "4m幅・1m高。H鋼支柱は始端と中間の2m間隔。高さ方向へ増す場合は支柱を連続化する。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0784-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_f.jpg",
+          "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,93.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+          "description": "錆びた H 鋼の柱（約0.3m、間隔約2m）に厚い横板（約0.25m幅）を重ねた壁、高さ約3m以上"
+        },
+        {
+          "oid": "S5-0911-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0911_b.jpg",
+          "url": "https://www.google.com/maps/@35.498826,139.2282247,3a,90y,261.7h,88t/data=!3m4!1e1!3m2!1snBEhQRWrR00Yh6n5nl988w!2e0?hl=ja",
+          "description": "道の左（進む向き）の法面下に立つ木製の板壁、高さ約1.2m、長さ約8m、茶色の板を細い鋼の杭で留める"
+        }
+      ],
+      "repeat_length_m": 4.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          4.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0784-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_f.jpg",
+        "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,93.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+        "description": "錆びた H 鋼の柱（約0.3m、間隔約2m）に厚い横板（約0.25m幅）を重ねた壁、高さ約3m以上"
+      },
+      "preview_views": {
+        "front": "r70_retaining_wall_wood_lagging_front.png",
+        "left": "r70_retaining_wall_wood_lagging_left.png",
+        "right": "r70_retaining_wall_wood_lagging_right.png",
+        "back_estimated": "r70_retaining_wall_wood_lagging_back_estimated.png",
+        "top": "r70_retaining_wall_wood_lagging_top.png",
+        "persp": "r70_retaining_wall_wood_lagging_persp.png",
+        "reference": "r70_retaining_wall_wood_lagging_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "concrete参照の0979は石張りに見えるためblockも候補。0359〜0362の方形石はstone/block寄りで無地壁へ一律に割り当てない。",
+    "wood柵の横板土留めはwood_laggingと共用。"
+  ],
+  "references": {
+    "stone": [
+      {
+        "oid": "S4-0369-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0370_f.jpg",
+        "url": "https://www.google.com/maps/@35.4328033,139.2106301,3a,90y,29.4h,88t/data=!3m4!1e1!3m2!1snsh61UEM_pXqhQ83kmah4w!2e0?hl=ja",
+        "description": "道の左に続く高い擁壁。黒〜濃灰色の割石の千鳥積み、高さ約4〜6 m、勾配約1:0.4、路面の縁から約0.5 m。0372で高さが低くなる。"
+      },
+      {
+        "oid": "S4-0384-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_f.jpg",
+        "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,339.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+        "description": "道の右の自然石の石積み。暗灰色の不揃いな石、高さ約1.5〜2.5 m、足元にコンクリートの側溝。0385が最も大きい。0386では途切れる。"
+      },
+      {
+        "oid": "S4-0408-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0408_f.jpg",
+        "url": "https://www.google.com/maps/@35.4399084,139.2112503,3a,90y,47.1h,88t/data=!3m4!1e1!3m2!1ssrTxmjqTR1AvdlBuUOB3WA!2e0?hl=ja",
+        "description": "自然石（約 30〜50 cm 角）を積んだ高さ約 4〜6 m の石積み擁壁、全面に苔、道の右縁の側溝の外から立ち上がる。上部は杉林。傾斜の急な法面"
+      },
+      {
+        "oid": "S4-0416-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0418_b.jpg",
+        "url": "https://www.google.com/maps/@35.4416663,139.2121444,3a,90y,182.8h,88t/data=!3m4!1e1!3m2!1sGw4-UPPAvr4BcQyLdw0FTg!2e0?hl=ja",
+        "description": "自然石〜割り石を積んだ苔むす石積み擁壁。0416 では高さ約 1 m と低いが、0417 から急に高くなり約 6〜8 m、上は杉林。0418 では石が整い（約 40 cm 角の谷積み）、水抜き穴が点在。道の右縁に接する。道の縁に側溝はなし"
+      }
+    ],
+    "block": [
+      {
+        "oid": "S4-0391-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0392_f.jpg",
+        "url": "https://www.google.com/maps/@35.4368596,139.2120715,3a,90y,330.6h,88t/data=!3m4!1e1!3m2!1skoc61Qxp6zDrSGxdR1HvBg!2e0?hl=ja",
+        "description": "灰黒色のコンクリート／石ブロックを斜めの市松状に積んだ高さ約 5〜8 m の急な擁壁、道の右縁から直接立ち上がる。ブロックは約 40×40 cm、所々に水抜き穴と白い析出（エフロレッセンス）。上部は草木。進行方向では左側の谷側と対"
+      },
+      {
+        "oid": "S4-0421-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0425_f.jpg",
+        "url": "https://www.google.com/maps/@35.4430679,139.2128004,3a,90y,357.6h,88t/data=!3m4!1e1!3m2!1sOJn8rOHA3uIOeJSRzuvt1A!2e0?hl=ja",
+        "description": "約 40×30 cm の灰黒色コンクリートブロックを斜めの市松模様に積んだ高さ約 4〜8 m の擁壁、道の右縁から直接立ち上がる。目地は白、水抜き穴が点在、上端は笠コンクリートで草や杉が茂る。0423・0425 では途中に段差（低い部分）が見える。路肩は幅約 0.5 m の舗装"
+      },
+      {
+        "oid": "S4-0443-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0444_f.jpg",
+        "url": "https://www.google.com/maps/@35.4450833,139.2128375,3a,90y,176.0h,88t/data=!3m4!1e1!3m2!1sC2o3E8bmEM8fAdX0_74FqA!2e0?hl=ja",
+        "description": "約 1×0.6 m の大きな灰色コンクリートブロックの横積み擁壁、高さ約 6〜8 m、表面は石肌の凹凸模様、苔が点在。0443 で低い石積みから段階的に高くなる。右の下側の端部は小さな石張りに変わる。道の左縁の外"
+      },
+      {
+        "oid": "S4-0446-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0447_f.jpg",
+        "url": "https://www.google.com/maps/@35.4451288,139.2125143,3a,90y,357.3h,88t/data=!3m4!1e1!3m2!1sUjDBYtF0_HgGY1o1QNS1qg!2e0?hl=ja",
+        "description": "灰黒色の石（約 40×30 cm）を斜めの市松状に積み、白い析出の筋が出る高さ約 4〜8 m の擁壁、道の右縁から立ち上がる。0446 の上部は苔と草。路肩は狭い舗装"
+      }
+    ],
+    "shotcrete": [
+      {
+        "oid": "S5-0683-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0683_f.jpg",
+        "url": "https://www.google.com/maps/@35.4814688,139.2106004,3a,90y,23.7h,88t/data=!3m4!1e1!3m2!1snBsmko_PJzmGCN7EqP7Vag!2e0?hl=ja",
+        "description": "道の左の高い法面にコンクリート吹付けとひし形金網、斜めの水抜き線。高さ数m。足元に低いコンクリート縁/側溝。路面に白い外側線"
+      },
+      {
+        "oid": "S5-0688-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0688_b.jpg",
+        "url": "https://www.google.com/maps/@35.4821315,139.2110329,3a,90y,181.8h,88t/data=!3m4!1e1!3m2!1sTG8K5bp1dU0-B8boAZUrCw!2e0?hl=ja",
+        "description": "道の左の高い法面。灰色のコンクリート吹き付けの上に落石防止の金網が張られる。道の縁に沿って続き、下端に細い側溝"
+      },
+      {
+        "oid": "S5-0704-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0704_f.jpg",
+        "url": "https://www.google.com/maps/@35.4844625,139.209455,3a,90y,328.4h,88t/data=!3m4!1e1!3m2!1sZcQp_eWZIM8DsSufuU6zBw!2e0?hl=ja",
+        "description": "道の左の高い法面。灰色のコンクリート吹き付けに落石防止の金網が張られ、コケで汚れる。下端に小さな白い板（標示）が 1 枚付く。法面の肩に金網フェンスが見える"
+      },
+      {
+        "oid": "S5-0817-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0817_f.jpg",
+        "url": "https://www.google.com/maps/@35.4867138,139.2172451,3a,90y,86.0h,88t/data=!3m4!1e1!3m2!1sRBWnsE9vVvafmFHwN9qJCQ!2e0?hl=ja",
+        "description": "左の山側が灰色のモルタル吹付け法面、高さ約8m以上、緑のしみあり。下は細い道路脇の溝"
+      }
+    ],
+    "concrete": [
+      {
+        "oid": "S5-0884-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0884_f.jpg",
+        "url": "https://www.google.com/maps/@35.4968196,139.2222652,3a,90y,22.9h,88t/data=!3m4!1e1!3m2!1sFWpDlr2ppyn-t705RrzdHA!2e0?hl=ja",
+        "description": "高さ約0.8 m、苔むしたコンクリートの腰壁、道の縁沿い。上に金網"
+      },
+      {
+        "oid": "S5-0979-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0979_f.jpg",
+        "url": "https://www.google.com/maps/@35.5100093,139.2312385,3a,90y,5.6h,88t/data=!3m4!1e1!3m2!1sq8d9MtlOXCuUJa0DYjuPEQ!2e0?hl=ja",
+        "description": "橋を過ぎた左側の石張りブロック風擁壁、高さ約1.5〜2m、上に白い笠木。足元に側溝グレーチング。トンネル手前まで続く"
+      },
+      {
+        "oid": "S4-0339-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0339_b.jpg",
+        "url": "https://www.google.com/maps/@35.4316647,139.2120421,3a,90y,54.9h,88t/data=!3m4!1e1!3m2!1sOQ_oXCA_OBU0ESN54d3rmA!2e0?hl=ja",
+        "description": "道の左側、ヘアピンの外側にあたる位置の擁壁。手前（峠側）の端に石積み面（約1.2 m）、続いて高さ約2〜3 mの茶色い汚れの付いた無地のコンクリート面。上に電柱が立つ"
+      },
+      {
+        "oid": "S4-0359-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0360_f.jpg",
+        "url": "https://www.google.com/maps/@35.431013,139.2090892,3a,90y,47.6h,88t/data=!3m4!1e1!3m2!1sG504u0KH-wn-ro5WbAbG0A!2e0?hl=ja",
+        "description": "0359Fでは遠くに灰色の斜面（コンクリートの吹付けか擁壁）が見え、0360から手前に出てくる。灰色の方形の石を千鳥に積んだ擁壁、水抜き穴が点在。高さ約4 m、勾配約1:0.4、路面の縁から約1 m。0361〜0362は苔が少なく明るい。"
+      }
+    ],
+    "slope_frame": [
+      {
+        "oid": "S5-0570-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0570_f.jpg",
+        "url": "https://www.google.com/maps/@35.4676063,139.2157959,3a,90y,47.7h,88t/data=!3m4!1e1!3m2!1sOQfSLaNfz5156CyAmjKIAQ!2e0?hl=ja",
+        "description": "進行方向左の法面を覆うコンクリート格子枠（法枠）、枠の中は金網と植生。高さ約3〜4m、枠は約1m角。道の縁に接する。下端に小さな白い標識板か杭が1つ"
+      },
+      {
+        "oid": "S5-0680-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0680_f.jpg",
+        "url": "https://www.google.com/maps/@35.4808546,139.2109002,3a,90y,343.3h,88t/data=!3m4!1e1!3m2!1sHAXYg5TDZOmRsyDo0Suc7w!2e0?hl=ja",
+        "description": "道の左の急斜面を覆う新しい白いコンクリートの格子状法枠（枠の中に吹き付け）、上に金網。高さ数m、下に新しいコンクリート側溝と路面は新しい黒い舗装。後方側の端には低い白いコンクリートの壁"
+      },
+      {
+        "oid": "S5-0793-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0793_b.jpg",
+        "url": "https://www.google.com/maps/@35.4843842,139.212728,3a,90y,270.2h,88t/data=!3m4!1e1!3m2!1sI1WSAEpRPDMCHlBLiZOF9w!2e0?hl=ja",
+        "description": "山側（左）の斜面を覆う白っぽいコンクリートの格子状の枠（法枠）。枠は約 1.5 m 角、中は吹き付け面でくぼむ。交点に丸いアンカー頭。道の縁すぐ。高さ 5 m 以上。"
+      },
+      {
+        "oid": "S5-1014-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1014_f.jpg",
+        "url": "https://www.google.com/maps/@35.5172406,139.2317353,3a,90y,302.2h,88t/data=!3m4!1e1!3m2!1svmx8D0wHR_FoFWbjgfd8IA!2e0?hl=ja",
+        "description": "灰緑色の大きな吹付擁壁、高さ約5m、道の右縁から一面。小さな水抜き穴が並ぶ。足元に舗装された段"
+      }
+    ],
+    "wood_lagging": [
+      {
+        "oid": "S5-0784-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0784_f.jpg",
+        "url": "https://www.google.com/maps/@35.4853942,139.2114069,3a,90y,93.9h,88t/data=!3m4!1e1!3m2!1sqX0r1bHQ4-3zqwdVh-9xnw!2e0?hl=ja",
+        "description": "錆びた H 鋼の柱（約0.3m、間隔約2m）に厚い横板（約0.25m幅）を重ねた壁、高さ約3m以上"
+      },
+      {
+        "oid": "S5-0911-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0911_b.jpg",
+        "url": "https://www.google.com/maps/@35.498826,139.2282247,3a,90y,261.7h,88t/data=!3m4!1e1!3m2!1snBEhQRWrR00Yh6n5nl988w!2e0?hl=ja",
+        "description": "道の左（進む向き）の法面下に立つ木製の板壁、高さ約1.2m、長さ約8m、茶色の板を細い鋼の杭で留める"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "stone",
+    "image": "R70-0385_f.jpg",
+    "crop_pixels": [
+      970,
+      480,
+      1600,
+      1000
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

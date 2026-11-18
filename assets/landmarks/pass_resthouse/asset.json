@@ -1,0 +1,326 @@
+{
+  "part_info": {
+    "walls": {
+      "meaning": "主屋9.0×6.3m、前面の張出し・茶横板壁と裏妻。FL=1.0m。開口部を壁で塞がない。",
+      "front": "-Y"
+    },
+    "roof": {
+      "meaning": "公式軸9×6.3m、出寸各900mmの大切妻。幅10.8×奥行8.1、棟7.1m、壁位置軒高4.05m。",
+      "front": "-Y"
+    },
+    "front_glazing": {
+      "meaning": "中央引戸と左右の大きいガラス・欄間・三角高窓、黒い方立。窓は自作の不透明反射近似。",
+      "front": "-Y"
+    },
+    "deck": {
+      "meaning": "平面図の南面デッキと東側L字張出し。板厚と梁を分離。床上端1.0m。",
+      "front": "-Y"
+    },
+    "foundation": {
+      "meaning": "床下の灰色梁/束と奥壁。外周を全面巨大箱にしない開口付き基礎。",
+      "front": "-Y"
+    },
+    "rails": {
+      "meaning": "竣工写真の斜め格子手すり。上桟/下桟/柱と両方向の角材。図面の縦格子から変更。",
+      "front": "-Y"
+    },
+    "stairs": {
+      "meaning": "南中央と東北側の2階段。踏面、側桁、斜め手すりを分離。",
+      "front": "-Y"
+    },
+    "fittings": {
+      "meaning": "東側の引戸/窓/カウンター/雨戸箱、前面の横長庇、雨樋/縦樋と壁灯。",
+      "front": "-Y"
+    }
+  },
+  "resolution": 2048,
+  "generator": "blender_scripts/build_pass_resthouse.py",
+  "refs": [
+    "work07/reference_resthouse_elevation.png",
+    "work07/reference_resthouse_plan.png",
+    "work07/reference_resthouse_210329095329_3.jpg",
+    "work07/reference_resthouse_210329091500_2.jpg",
+    "codex07/gsat21.png"
+  ],
+  "front_azimuth_deg": 197,
+  "roof_footprint_m": [
+    10.8,
+    8.1
+  ],
+  "dimension_basis": "秦野市公式 https://www.city.hadano.kanagawa.jp/material/files/group/2/020507_bucyokaigi_jiansyo_all.pdf のPDF13頁資料1-4/A-20立面図、14頁資料1-5/A-18平面図。2020年3月設計寸法: 軸9.000×6.300m、左右軒各0.900m、屋根10.800×8.100m。GL→FL1.000m、FL→軒高3.050m、軒高→棟3.050m、GL→棟7.100m。屋根軒先は壁位置軒高から勾配延長で下がる。正面197度は北矢印から読取、ローカルには焼込まない。",
+  "approximations": [
+    "公式竣工写真 https://www.city.hadano.kanagawa.jp/material/images/group/51/210329095329_3.jpg と 210329091500_2.jpg を形状参照。手すりは施工前図の縦格子を採らずactualphotoの斜め格子を角材化。格子幅/密度は写真比率の近似。",
+    "近接SVはcodex07のshop/mid/toilet/lanes/south全40方向とlotn4方向で高台の植生に隠れている。https://tanzawamon.jp/yabitsutouge-resthouse/ と https://www.city.hadano.kanagawa.jp/kanko/spot-shisetsu/2/1343.html を探し、歩行近接panoidは取得できず公式写真を優先した。",
+    "デッキの東L字張出しと二方向階段は平面図を参照、床下外周梁/束と開口は竣工写真を優先。地面の起伏/背面基礎の埋まりは未測定なので水平GLからの束で近似。",
+    "三角高窓/正面引戸/東側引戸と窓・カウンターは竣工写真で補完。ガラスはゲーム用Diffuse COLORベイクのため自作色面/抽象反射による不透明近似で透過や実景反射はない。",
+    "裏側と西面の小窓、内部、屋根裏の接合、壁灯形状、樋の取回しは推定。人物/自転車ラック/周辺地面は含めない。",
+    "外壁は木目調窯業系サイディングを茶色横板目地と手続き材質で再現。写真画素/完成予想CG画素は素材に転用していない。"
+  ],
+  "reference_views": {
+    "reference_official": [
+      1,
+      -2,
+      0.55
+    ],
+    "reference_side": [
+      2,
+      -1,
+      0.5
+    ]
+  },
+  "asset_id": "pass_resthouse",
+  "source": "pass_resthouse.blend",
+  "parts": [
+    {
+      "name": "walls",
+      "triangles": 1453,
+      "vertices": 2907,
+      "dimensions_m": [
+        9.206,
+        6.783,
+        5.96
+      ],
+      "bounds_m": [
+        [
+          -4.603000164031982,
+          -3.3914999961853027,
+          0.0
+        ],
+        [
+          4.603000164031982,
+          3.3914999961853027,
+          5.960000157356262
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.1385,
+        1.0
+      ],
+      "meaning": "主屋9.0×6.3m、前面の張出し・茶横板壁と裏妻。FL=1.0m。開口部を壁で塞がない。",
+      "front": "-Y"
+    },
+    {
+      "name": "roof",
+      "triangles": 400,
+      "vertices": 800,
+      "dimensions_m": [
+        10.8,
+        8.1,
+        3.775
+      ],
+      "bounds_m": [
+        [
+          -5.400000095367432,
+          -4.050000190734863,
+          0.0
+        ],
+        [
+          5.400000095367432,
+          4.050000190734863,
+          3.7749998569488525
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        3.325
+      ],
+      "meaning": "公式軸9×6.3m、出寸各900mmの大切妻。幅10.8×奥行8.1、棟7.1m、壁位置軒高4.05m。",
+      "front": "-Y"
+    },
+    {
+      "name": "front_glazing",
+      "triangles": 316,
+      "vertices": 632,
+      "dimensions_m": [
+        8.3375,
+        6.93,
+        5.8727
+      ],
+      "bounds_m": [
+        [
+          -4.168749928474426,
+          -3.4649999141693115,
+          0.0
+        ],
+        [
+          4.168749928474426,
+          3.4649999141693115,
+          5.872681140899658
+        ]
+      ],
+      "assembly_offset_m": [
+        -0.49125,
+        -0.1425,
+        1.0625
+      ],
+      "meaning": "中央引戸と左右の大きいガラス・欄間・三角高窓、黒い方立。窓は自作の不透明反射近似。",
+      "front": "-Y"
+    },
+    {
+      "name": "deck",
+      "triangles": 636,
+      "vertices": 1272,
+      "dimensions_m": [
+        12.75,
+        8.1,
+        0.18
+      ],
+      "bounds_m": [
+        [
+          -6.375000238418579,
+          -4.050000190734863,
+          0.0
+        ],
+        [
+          6.375000238418579,
+          4.050000190734863,
+          0.18000000715255737
+        ]
+      ],
+      "assembly_offset_m": [
+        1.725,
+        -0.9,
+        0.82
+      ],
+      "meaning": "平面図の南面デッキと東側L字張出し。板厚と梁を分離。床上端1.0m。",
+      "front": "-Y"
+    },
+    {
+      "name": "foundation",
+      "triangles": 324,
+      "vertices": 648,
+      "dimensions_m": [
+        13.05,
+        8.4,
+        0.935
+      ],
+      "bounds_m": [
+        [
+          -6.525000095367432,
+          -4.200000047683716,
+          0.0
+        ],
+        [
+          6.525000095367432,
+          4.200000047683716,
+          0.935000479221344
+        ]
+      ],
+      "assembly_offset_m": [
+        1.725,
+        -0.9,
+        0.0
+      ],
+      "meaning": "床下の灰色梁/束と奥壁。外周を全面巨大箱にしない開口付き基礎。",
+      "front": "-Y"
+    },
+    {
+      "name": "rails",
+      "triangles": 2976,
+      "vertices": 5970,
+      "dimensions_m": [
+        12.84,
+        8.19,
+        1.11
+      ],
+      "bounds_m": [
+        [
+          -6.420000314712524,
+          -4.0950000286102295,
+          0.0
+        ],
+        [
+          6.420000314712524,
+          4.0950000286102295,
+          1.1100006103515625
+        ]
+      ],
+      "assembly_offset_m": [
+        1.725,
+        -0.9,
+        0.99
+      ],
+      "meaning": "竣工写真の斜め格子手すり。上桟/下桟/柱と両方向の角材。図面の縦格子から変更。",
+      "front": "-Y"
+    },
+    {
+      "name": "stairs",
+      "triangles": 432,
+      "vertices": 864,
+      "dimensions_m": [
+        10.9742,
+        10.0742,
+        1.9598
+      ],
+      "bounds_m": [
+        [
+          -5.487115025520325,
+          -5.037115573883057,
+          0.0
+        ],
+        [
+          5.487115025520325,
+          5.037115573883057,
+          1.959769457578659
+        ]
+      ],
+      "assembly_offset_m": [
+        4.457115,
+        -1.757115,
+        0.043846
+      ],
+      "meaning": "南中央と東北側の2階段。踏面、側桁、斜め手すりを分離。",
+      "front": "-Y"
+    },
+    {
+      "name": "fittings",
+      "triangles": 780,
+      "vertices": 1593,
+      "dimensions_m": [
+        10.876,
+        8.13,
+        3.479
+      ],
+      "bounds_m": [
+        [
+          -5.438000679016113,
+          -4.065000057220459,
+          0.0
+        ],
+        [
+          5.438000679016113,
+          4.065000057220459,
+          3.478985846042633
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.035,
+        0.721014
+      ],
+      "meaning": "東側の引戸/窓/カウンター/雨戸箱、前面の横長庇、雨樋/縦樋と壁灯。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

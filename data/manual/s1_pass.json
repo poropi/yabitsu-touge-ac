@@ -99,7 +99,8 @@
  "island_fence": {
   "inset": 0.35,
   "spacing": 1.5,
-  "height": 0.35
+  "height": 0.35,
+  "replaced": "pass_road_items"
  },
  "sidewalk": {
   "note": "わき道の東の縁の歩道（ベンチ・バス停が並ぶ。奥は野面石の石積み）。わき道の外形の外側 2.5 m",
@@ -304,237 +305,57 @@
  "flats": [
   {
    "name": "shop_lot",
-   "note": "峠の売店の野面石の台（写真では道より 0.7 m ほど高い）",
+   "note": "峠の売店の野面石の台（写真では道より 0.7 m ほど高い）（2026-10-31 売店の向き 65° の長方形に作り直し：Codex の売店の幅＋左右 0.4 m、正面の前 1.2 m）",
    "dz": 0.65,
    "edge": "stone_nozura",
    "points": [
     [
-     35.4280891,
-     139.2189889
+     35.42803174,
+     139.21903497
     ],
     [
-     35.4280844,
-     139.2189923
+     35.42810766,
+     139.21899102
     ],
     [
-     35.4280892,
-     139.2190057
+     35.42808148,
+     139.21892355
     ],
     [
-     35.4280829,
-     139.2190091
+     35.42800557,
+     139.2189675
     ],
     [
-     35.4280829,
-     139.2190091
-    ],
-    [
-     35.4280743,
-     139.2190138
-    ],
-    [
-     35.4280742,
-     139.2190139
-    ],
-    [
-     35.4280657,
-     139.2190187
-    ],
-    [
-     35.4280656,
-     139.2190188
-    ],
-    [
-     35.4280572,
-     139.2190237
-    ],
-    [
-     35.4280571,
-     139.2190238
-    ],
-    [
-     35.4280486,
-     139.2190289
-    ],
-    [
-     35.4280485,
-     139.2190289
-    ],
-    [
-     35.4280401,
-     139.2190342
-    ],
-    [
-     35.4280399,
-     139.2190343
-    ],
-    [
-     35.4280315,
-     139.2190397
-    ],
-    [
-     35.4280314,
-     139.2190398
-    ],
-    [
-     35.428023,
-     139.2190455
-    ],
-    [
-     35.4280228,
-     139.2190456
-    ],
-    [
-     35.4280145,
-     139.2190514
-    ],
-    [
-     35.4280143,
-     139.2190516
-    ],
-    [
-     35.428006,
-     139.2190577
-    ],
-    [
-     35.4280058,
-     139.2190578
-    ],
-    [
-     35.4280048,
-     139.2190586
-    ],
-    [
-     35.4280013,
-     139.2190514
-    ],
-    [
-     35.4279972,
-     139.2190543
-    ],
-    [
-     35.4279582,
-     139.2189717
-    ],
-    [
-     35.42805,
-     139.2189063
-    ],
-    [
-     35.4280891,
-     139.2189889
+     35.42803174,
+     139.21903497
     ]
    ]
   },
   {
    "name": "shop_step",
-   "note": "売店の台の前の石の段（1 段分）",
+   "note": "売店の台の前の石の段（1 段分）（2026-10-31 主屋の前、台の前の 0.8 m）",
    "dz": 0.33,
    "edge": "stone_nozura",
    "points": [
     [
-     35.4280929,
-     139.2190158
+     35.42803809,
+     139.21904105
     ],
     [
-     35.4280442,
-     139.219044
+     35.42808614,
+     139.21901322
     ],
     [
-     35.4280095,
-     139.219068
+     35.42808306,
+     139.21900526
     ],
     [
-     35.4280048,
-     139.2190586
+     35.428035,
+     139.21903309
     ],
     [
-     35.4280058,
-     139.2190578
-    ],
-    [
-     35.428006,
-     139.2190577
-    ],
-    [
-     35.4280143,
-     139.2190516
-    ],
-    [
-     35.4280145,
-     139.2190514
-    ],
-    [
-     35.4280228,
-     139.2190456
-    ],
-    [
-     35.428023,
-     139.2190455
-    ],
-    [
-     35.4280314,
-     139.2190398
-    ],
-    [
-     35.4280315,
-     139.2190397
-    ],
-    [
-     35.4280399,
-     139.2190343
-    ],
-    [
-     35.4280401,
-     139.2190342
-    ],
-    [
-     35.4280485,
-     139.2190289
-    ],
-    [
-     35.4280486,
-     139.2190289
-    ],
-    [
-     35.4280571,
-     139.2190238
-    ],
-    [
-     35.4280572,
-     139.2190237
-    ],
-    [
-     35.4280656,
-     139.2190188
-    ],
-    [
-     35.4280657,
-     139.2190187
-    ],
-    [
-     35.4280742,
-     139.2190139
-    ],
-    [
-     35.4280743,
-     139.2190138
-    ],
-    [
-     35.4280829,
-     139.2190091
-    ],
-    [
-     35.4280829,
-     139.2190091
-    ],
-    [
-     35.4280892,
-     139.2190057
-    ],
-    [
-     35.4280929,
-     139.2190158
+     35.42803809,
+     139.21904105
     ]
    ]
   }
@@ -557,7 +378,8 @@
    "wall": "siding_white",
    "roof": "roof_red",
    "base_h": 0.5,
-   "uv_m": 2.0
+   "uv_m": 2.0,
+   "replaced": "pass_toilet"
   },
   {
    "note": "トイレの棟（紺の屋根、白い壁。南の正面は白壁と焦げ茶の板・掲示板・入口の絵。Street View 012°・072°）",
@@ -576,7 +398,8 @@
    "wall": "wall_white",
    "roof": "roof_blue",
    "base_h": 0.6,
-   "uv_m": 2.0
+   "uv_m": 2.0,
+   "replaced": "pass_toilet"
   }
  ],
  "parking": {
@@ -959,5 +782,1853 @@
     ]
    ]
   ]
- }
+ },
+ "landmarks": [
+  {
+   "asset": "pass_toilet",
+   "name": "walls",
+   "ll": [
+    35.42809386,
+    139.21929168
+   ],
+   "bearing": 168.0,
+   "z_at": [
+    [
+     35.42803409,
+     139.21926378
+    ],
+    [
+     35.42813447,
+     139.21923691
+    ],
+    [
+     35.42804914,
+     139.21934769
+    ],
+    [
+     35.42814951,
+     139.21932082
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -3.9,
+      3.9
+     ],
+     [
+      -5.47,
+      5.94
+     ],
+     2.8
+    ]
+   ],
+   "note": "公衆トイレ。正面（掲示板と腰掛け）が広場の北の縁。toilet 000・315 の方位と前の柱の間隔、航空写真の向き 166°"
+  },
+  {
+   "asset": "pass_toilet",
+   "name": "metal_roof",
+   "ll": [
+    35.4280918,
+    139.2192923
+   ],
+   "bearing": 168.0,
+   "dz": 0.18,
+   "z_at": [
+    [
+     35.42803409,
+     139.21926378
+    ],
+    [
+     35.42813447,
+     139.21923691
+    ],
+    [
+     35.42804914,
+     139.21934769
+    ],
+    [
+     35.42814951,
+     139.21932082
+    ]
+   ]
+  },
+  {
+   "asset": "pass_toilet",
+   "name": "wood_trusses",
+   "ll": [
+    35.4280918,
+    139.2192923
+   ],
+   "bearing": 168.0,
+   "dz": 2.805,
+   "z_at": [
+    [
+     35.42803409,
+     139.21926378
+    ],
+    [
+     35.42813447,
+     139.21923691
+    ],
+    [
+     35.42804914,
+     139.21934769
+    ],
+    [
+     35.42814951,
+     139.21932082
+    ]
+   ]
+  },
+  {
+   "asset": "pass_toilet",
+   "name": "front_boards",
+   "ll": [
+    35.42804872,
+    139.21930383
+   ],
+   "bearing": 168.0,
+   "dz": 0.715,
+   "z_at": [
+    [
+     35.42803409,
+     139.21926378
+    ],
+    [
+     35.42813447,
+     139.21923691
+    ],
+    [
+     35.42804914,
+     139.21934769
+    ],
+    [
+     35.42814951,
+     139.21932082
+    ]
+   ]
+  },
+  {
+   "asset": "pass_toilet",
+   "name": "built_in_bench",
+   "ll": [
+    35.42804704,
+    139.21930428
+   ],
+   "bearing": 168.0,
+   "z_at": [
+    [
+     35.42803409,
+     139.21926378
+    ],
+    [
+     35.42813447,
+     139.21923691
+    ],
+    [
+     35.42804914,
+     139.21934769
+    ],
+    [
+     35.42814951,
+     139.21932082
+    ]
+   ]
+  },
+  {
+   "asset": "pass_toilet",
+   "name": "entrance_marks",
+   "ll": [
+    35.4280406,
+    139.219306
+   ],
+   "bearing": 168.0,
+   "dz": 2.04,
+   "z_at": [
+    [
+     35.42803409,
+     139.21926378
+    ],
+    [
+     35.42813447,
+     139.21923691
+    ],
+    [
+     35.42804914,
+     139.21934769
+    ],
+    [
+     35.42814951,
+     139.21932082
+    ]
+   ]
+  },
+  {
+   "asset": "pass_toilet",
+   "name": "west_clerestory",
+   "ll": [
+    35.42809338,
+    139.21928568
+   ],
+   "bearing": 168.0,
+   "dz": 4.32,
+   "z_at": [
+    [
+     35.42803409,
+     139.21926378
+    ],
+    [
+     35.42813447,
+     139.21923691
+    ],
+    [
+     35.42804914,
+     139.21934769
+    ],
+    [
+     35.42814951,
+     139.21932082
+    ]
+   ]
+  },
+  {
+   "asset": "pass_toilet",
+   "name": "rear_shed",
+   "ll": [
+    35.42806887,
+    139.21935199
+   ],
+   "bearing": 168.0,
+   "z_at": [
+    [
+     35.42803409,
+     139.21926378
+    ],
+    [
+     35.42813447,
+     139.21923691
+    ],
+    [
+     35.42804914,
+     139.21934769
+    ],
+    [
+     35.42814951,
+     139.21932082
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -0.73,
+      0.73
+     ],
+     [
+      -0.95,
+      0.95
+     ],
+     2.3
+    ]
+   ]
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "small_roof_notice_post",
+   "ll": [
+    35.42803501,
+    139.2193075
+   ],
+   "bearing": 168.0,
+   "note": "トイレの正面の小屋根付きの掲示の柱（toilet 000）"
+  },
+  {
+   "asset": "pass_shop",
+   "name": "shop_body",
+   "ll": [
+    35.42804546,
+    139.21898419
+   ],
+   "bearing": 65.0,
+   "z_at": [
+    [
+     35.42803089,
+     139.21902121
+    ],
+    [
+     35.42801313,
+     139.21897543
+    ],
+    [
+     35.42807813,
+     139.21899385
+    ],
+    [
+     35.42806038,
+     139.21894808
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -2.95,
+      2.95
+     ],
+     [
+      -2.3,
+      2.3
+     ],
+     3.5
+    ]
+   ],
+   "note": "ヤビツ峠売店。台と石段はコースの shop_lot・shop_step（野面石）"
+  },
+  {
+   "asset": "pass_shop",
+   "name": "shop_annex",
+   "ll": [
+    35.42807897,
+    139.21896504
+   ],
+   "bearing": 65.0,
+   "z_at": [
+    [
+     35.42803089,
+     139.21902121
+    ],
+    [
+     35.42801313,
+     139.21897543
+    ],
+    [
+     35.42807813,
+     139.21899385
+    ],
+    [
+     35.42806038,
+     139.21894808
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -1.47,
+      1.47
+     ],
+     [
+      -2.16,
+      2.16
+     ],
+     3.0
+    ]
+   ]
+  },
+  {
+   "asset": "pass_shop",
+   "name": "shop_sign",
+   "ll": [
+    35.42805432,
+    139.21900705
+   ],
+   "bearing": 65.0,
+   "dz": 3.945,
+   "z_at": [
+    [
+     35.42803089,
+     139.21902121
+    ],
+    [
+     35.42801313,
+     139.21897543
+    ],
+    [
+     35.42807813,
+     139.21899385
+    ],
+    [
+     35.42806038,
+     139.21894808
+    ]
+   ]
+  },
+  {
+   "asset": "pass_vending",
+   "name": "vending_a",
+   "ll": [
+    35.42808142,
+    139.21898294
+   ],
+   "bearing": 65.0,
+   "z_at": [
+    [
+     35.42803089,
+     139.21902121
+    ],
+    [
+     35.42801313,
+     139.21897543
+    ],
+    [
+     35.42807813,
+     139.21899385
+    ],
+    [
+     35.42806038,
+     139.21894808
+    ]
+   ],
+   "collide": [
+    [
+     [
+      -0.5,
+      0.5
+     ],
+     [
+      -0.43,
+      0.43
+     ],
+     1.85
+    ]
+   ],
+   "note": "売店の右の小屋（自販機の区画）の中の自動販売機 1 台（shop 225・270）"
+  },
+  {
+   "asset": "pass_bus_stop",
+   "name": "bus_tall_timetable",
+   "ll": [
+    35.4279421,
+    139.2194168
+   ],
+   "bearing": 250.0,
+   "note": "登山口の右のバスの時刻表（前のバス停の標柱の位置。toilet 090・lanes 045 の交点と 1.6 m）"
+  },
+  {
+   "asset": "pass_benches",
+   "name": "bench_box_long",
+   "ll": [
+    35.4278905,
+    139.2194403
+   ],
+   "bearing": 255.0,
+   "note": "歩道の箱形のベンチ（前のベンチの位置）"
+  },
+  {
+   "asset": "pass_benches",
+   "name": "bench_box_short",
+   "ll": [
+    35.4279087,
+    139.219432
+   ],
+   "bearing": 255.0
+  },
+  {
+   "asset": "pass_benches",
+   "name": "bench_box_long",
+   "ll": [
+    35.4279269,
+    139.2194237
+   ],
+   "bearing": 255.0
+  },
+  {
+   "asset": "pass_benches",
+   "name": "bench_box_short",
+   "ll": [
+    35.4279451,
+    139.2194153
+   ],
+   "bearing": 255.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4279834,
+    139.2192045
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4279958,
+    139.2191911
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4280084,
+    139.2191781
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4280214,
+    139.2191655
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4280348,
+    139.2191537
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4280486,
+    139.2191426
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4279803,
+    139.2192182
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4279921,
+    139.219239
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4281083,
+    139.2191044
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4281255,
+    139.219095
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4281429,
+    139.2190863
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4281604,
+    139.2190779
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.428178,
+    139.2190699
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "orange_pole",
+   "ll": [
+    35.4281958,
+    139.2190623
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "tree_tripod",
+   "ll": [
+    35.4279313,
+    139.2193224
+   ],
+   "bearing": 0.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "tree_tripod",
+   "ll": [
+    35.4279148,
+    139.2192862
+   ],
+   "bearing": 30.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "tree_tripod",
+   "ll": [
+    35.4278746,
+    139.2193559
+   ],
+   "bearing": 60.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "tree_tripod",
+   "ll": [
+    35.4279365,
+    139.2192926
+   ],
+   "bearing": 90.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "tree_tripod",
+   "ll": [
+    35.4278933,
+    139.2193062
+   ],
+   "bearing": 120.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "tree_tripod",
+   "ll": [
+    35.4279125,
+    139.219349
+   ],
+   "bearing": 150.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "tree_tripod",
+   "ll": [
+    35.4279255,
+    139.219263
+   ],
+   "bearing": 180.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "tree_tripod",
+   "ll": [
+    35.4278772,
+    139.2193294
+   ],
+   "bearing": 210.0
+  },
+  {
+   "asset": "pass_bike_rack",
+   "name": "cycle_rack_A",
+   "ll": [
+    35.42817095,
+    139.21896915
+   ],
+   "bearing": 74.1
+  },
+  {
+   "asset": "pass_bike_rack",
+   "name": "cycle_rack_A",
+   "ll": [
+    35.42814875,
+    139.21897755
+   ],
+   "bearing": 72.5
+  },
+  {
+   "asset": "pass_barriers",
+   "name": "barrier_A_long",
+   "ll": [
+    35.42808945,
+    139.21899855
+   ],
+   "bearing": 66.9
+  },
+  {
+   "asset": "pass_utility_pole",
+   "name": "pole_shop",
+   "ll": [
+    35.42811948,
+    139.21897728
+   ],
+   "bearing": 60.4,
+   "collide": [
+    [
+     [
+      -0.2,
+      0.2
+     ],
+     [
+      -0.2,
+      0.2
+     ],
+     9.0
+    ]
+   ],
+   "note": "売店の右の小屋の北の電柱（前の灰色の柱の位置）"
+  },
+  {
+   "asset": "pass_utility_pole",
+   "name": "pole_opposite_red",
+   "ll": [
+    35.4279514,
+    139.2189574
+   ],
+   "bearing": 60.4,
+   "collide": [
+    [
+     [
+      -0.12,
+      0.12
+     ],
+     [
+      -0.12,
+      0.12
+     ],
+     8.0
+    ]
+   ],
+   "note": "売店の裏手の赤褐色の細い柱（前の赤白の柱の位置。mid 180 の上）"
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "electric_cabinet_small",
+   "ll": [
+    35.42811658,
+    139.21896918
+   ],
+   "bearing": 336.0
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "electric_cabinet_small",
+   "ll": [
+    35.42811338,
+    139.21896008
+   ],
+   "bearing": 336.0
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "electric_cabinet_large",
+   "ll": [
+    35.42810978,
+    139.21894998
+   ],
+   "bearing": 336.0
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "equipment_fence",
+   "ll": [
+    35.42812514,
+    139.21896311
+   ],
+   "bearing": 337.5
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "equipment_fence",
+   "ll": [
+    35.42812067,
+    139.21895016
+   ],
+   "bearing": 337.5
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "equipment_fence",
+   "ll": [
+    35.42811619,
+    139.21893721
+   ],
+   "bearing": 337.5
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "equipment_fence",
+   "ll": [
+    35.42811172,
+    139.21892426
+   ],
+   "bearing": 337.5
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "white_cylinder",
+   "ll": [
+    35.4282505,
+    139.2189493
+   ],
+   "bearing": 60.0,
+   "note": "擁壁の前の赤白の帯の白い円筒（前の緩衝ドラムの位置。lotn 270）"
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42787723,
+    139.21931362
+   ],
+   "bearing": 223.4
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42788669,
+    139.21930125
+   ],
+   "bearing": 223.4
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42789615,
+    139.21928887
+   ],
+   "bearing": 223.4
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42790561,
+    139.2192765
+   ],
+   "bearing": 223.4
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42791507,
+    139.21926413
+   ],
+   "bearing": 223.4
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.4279259,
+    139.21925714
+   ],
+   "bearing": 264.3
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42793691,
+    139.21926228
+   ],
+   "bearing": 315.1
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.4279453,
+    139.2192754
+   ],
+   "bearing": 329.6
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42795097,
+    139.21929061
+   ],
+   "bearing": 342.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42795422,
+    139.21930685
+   ],
+   "bearing": 351.3
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.427952,
+    139.21932231
+   ],
+   "bearing": 29.3
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42794392,
+    139.21933567
+   ],
+   "bearing": 44.2
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42793353,
+    139.21934666
+   ],
+   "bearing": 54.8
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.4279214,
+    139.21935405
+   ],
+   "bearing": 72.9
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42790808,
+    139.21935836
+   ],
+   "bearing": 78.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42789455,
+    139.21936198
+   ],
+   "bearing": 78.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42788088,
+    139.21936447
+   ],
+   "bearing": 85.8
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42786707,
+    139.21936569
+   ],
+   "bearing": 86.7
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.4278543,
+    139.2193633
+   ],
+   "bearing": 112.7
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42785195,
+    139.21935344
+   ],
+   "bearing": 212.1
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42785972,
+    139.21933984
+   ],
+   "bearing": 218.3
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "island_rope_fence",
+   "ll": [
+    35.42786824,
+    139.21932648
+   ],
+   "bearing": 218.3
+  },
+  {
+   "asset": "pass_info_boards",
+   "name": "large_white",
+   "ll": [
+    35.42800735,
+    139.2193999
+   ],
+   "bearing": 230.2,
+   "note": "登山口の大きな白い案内板（toilet 000・045・090、lanes 045）"
+  },
+  {
+   "asset": "pass_info_boards",
+   "name": "small_weathered",
+   "ll": [
+    35.42801545,
+    139.21939653
+   ],
+   "bearing": 230.2
+  },
+  {
+   "asset": "pass_bike_rack",
+   "name": "cycle_rack_A",
+   "ll": [
+    35.42802348,
+    139.21939634
+   ],
+   "bearing": 221.0,
+   "note": "大きな案内板の左の木の台（toilet 000・045）"
+  },
+  {
+   "asset": "pass_benches",
+   "name": "bench_low_plank",
+   "ll": [
+    35.42799368,
+    139.21938765
+   ],
+   "bearing": 298.8
+  },
+  {
+   "asset": "pass_benches",
+   "name": "bench_low_plank",
+   "ll": [
+    35.42797489,
+    139.21939849
+   ],
+   "bearing": 308.7
+  },
+  {
+   "asset": "pass_benches",
+   "name": "bench_low_plank",
+   "ll": [
+    35.4279294,
+    139.2194219
+   ],
+   "bearing": 255.0,
+   "note": "時刻表の前の低い板のベンチ（lanes 000・045 の俯角）"
+  },
+  {
+   "asset": "pass_trail_posts",
+   "name": "trail_brown_directions",
+   "ll": [
+    35.42796842,
+    139.21941832
+   ],
+   "bearing": 305.5,
+   "note": "登山口の茶色の方向板と、下の青白の注意板"
+  },
+  {
+   "asset": "pass_trail_posts",
+   "name": "trail_blue_notice",
+   "ll": [
+    35.42796883,
+    139.2194176
+   ],
+   "bearing": 305.5,
+   "dz": 0.55
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "manhole",
+   "ll": [
+    35.42800492,
+    139.21936826
+   ],
+   "bearing": 0.0,
+   "note": "広場のマンホール（toilet 000・045）"
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "white_stepping_stone",
+   "ll": [
+    35.42803669,
+    139.21933722
+   ],
+   "bearing": 160.0,
+   "note": "トイレの右へ続く白い踏み石（toilet 000・045）"
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "white_stepping_stone",
+   "ll": [
+    35.42803495,
+    139.21934386
+   ],
+   "bearing": 167.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "white_stepping_stone",
+   "ll": [
+    35.42803286,
+    139.21935025
+   ],
+   "bearing": 174.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "white_stepping_stone",
+   "ll": [
+    35.42803042,
+    139.21935638
+   ],
+   "bearing": 181.0
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "white_stepping_stone",
+   "ll": [
+    35.42802765,
+    139.21936222
+   ],
+   "bearing": 188.0
+  },
+  {
+   "asset": "pass_info_boards",
+   "name": "parking_notice",
+   "ll": [
+    35.42801147,
+    139.2192518
+   ],
+   "bearing": 132.8,
+   "note": "駐車場の前の白い利用案内板（toilet 000・315）"
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "green_column",
+   "ll": [
+    35.42803152,
+    139.21923567
+   ],
+   "bearing": 0.0,
+   "note": "駐車場の前の濃い緑の円筒（toilet 315）"
+  },
+  {
+   "asset": "pass_bus_stop",
+   "name": "bus_round_blank",
+   "ll": [
+    35.42799441,
+    139.21919612
+   ],
+   "bearing": 222.9,
+   "note": "トイレ前の角地の丸い板の標識（toilet 315 の青い丸）"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42796271,
+    139.21944819
+   ],
+   "bearing": 349.5,
+   "z_from": "ground",
+   "note": "登山口の木の階段 22 段（見えている上まで 7.3 m）"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42795988,
+    139.21944885
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42795705,
+    139.21944951
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42795421,
+    139.21945018
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42795138,
+    139.21945084
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42794855,
+    139.2194515
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42794571,
+    139.21945217
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42794288,
+    139.21945283
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42794005,
+    139.21945349
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42793722,
+    139.21945416
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42793438,
+    139.21945482
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42793155,
+    139.21945548
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42792872,
+    139.21945615
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42792588,
+    139.21945681
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42792305,
+    139.21945747
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42792022,
+    139.21945813
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42791739,
+    139.2194588
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42791455,
+    139.21945946
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42791172,
+    139.21946012
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42790889,
+    139.21946079
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42790605,
+    139.21946145
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "timber_step",
+   "ll": [
+    35.42790322,
+    139.21946211
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "rail_left",
+   "ll": [
+    35.42796026,
+    139.21945773
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "rail_left",
+   "ll": [
+    35.42794893,
+    139.21946038
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "rail_left",
+   "ll": [
+    35.4279376,
+    139.21946304
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "rail_left",
+   "ll": [
+    35.42792627,
+    139.21946569
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_stairs",
+   "name": "rail_left",
+   "ll": [
+    35.42791494,
+    139.21946834
+   ],
+   "bearing": 349.5,
+   "z_from": "ground"
+  },
+  {
+   "asset": "pass_trail_posts",
+   "name": "trail_green_notice",
+   "ll": [
+    35.42795988,
+    139.2194354
+   ],
+   "bearing": 259.5,
+   "note": "登山口の右の緑の小さな板（toilet 090）"
+  },
+  {
+   "asset": "pass_brown_signs",
+   "name": "south_tall_sign",
+   "ll": [
+    35.42766636,
+    139.21962066
+   ],
+   "bearing": 224.1,
+   "note": "南の石段の下の茶色の看板（south 090・135）"
+  },
+  {
+   "asset": "pass_brown_signs",
+   "name": "south_wide_sign",
+   "ll": [
+    35.42765885,
+    139.21963166
+   ],
+   "bearing": 214.1
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "camera_standing",
+   "ll": [
+    35.42820257,
+    139.21895161
+   ],
+   "bearing": 69.7,
+   "note": "北の入口の西の「カメラ作動中」の立て札（lotn 270）"
+  },
+  {
+   "asset": "pass_brown_signs",
+   "name": "lotn_small_sign",
+   "ll": [
+    35.42829468,
+    139.21903382
+   ],
+   "bearing": 250.3,
+   "note": "北の入口のガードレールの奥の小さな看板と木の柵（lotn 045）"
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "wood_fence",
+   "ll": [
+    35.428296,
+    139.21903792
+   ],
+   "bearing": 250.3
+  },
+  {
+   "asset": "pass_utility_pole",
+   "name": "pole_north",
+   "ll": [
+    35.42831694,
+    139.21900811
+   ],
+   "bearing": 194.2,
+   "collide": [
+    [
+     [
+      -0.2,
+      0.2
+     ],
+     [
+      -0.2,
+      0.2
+     ],
+     9.0
+    ]
+   ],
+   "note": "北の入口の電柱（lotn 045）"
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "guardrail",
+   "ll": [
+    35.42826668,
+    139.21902471
+   ],
+   "bearing": 244.5,
+   "collide": [
+    [
+     [
+      -1.12,
+      1.12
+     ],
+     [
+      -0.08,
+      0.08
+     ],
+     0.86
+    ]
+   ],
+   "note": "北の入口の白いガードレール 4 区間（lotn 045）"
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "guardrail",
+   "ll": [
+    35.42828563,
+    139.21901627
+   ],
+   "bearing": 256.9,
+   "collide": [
+    [
+     [
+      -1.12,
+      1.12
+     ],
+     [
+      -0.08,
+      0.08
+     ],
+     0.86
+    ]
+   ]
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "guardrail",
+   "ll": [
+    35.42830428,
+    139.21900707
+   ],
+   "bearing": 253.0,
+   "collide": [
+    [
+     [
+      -1.12,
+      1.12
+     ],
+     [
+      -0.08,
+      0.08
+     ],
+     0.86
+    ]
+   ]
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "guardrail",
+   "ll": [
+    35.42832254,
+    139.21899709
+   ],
+   "bearing": 249.2,
+   "collide": [
+    [
+     [
+      -1.12,
+      1.12
+     ],
+     [
+      -0.08,
+      0.08
+     ],
+     0.86
+    ]
+   ]
+  },
+  {
+   "asset": "pass_road_items",
+   "name": "camera_pole_board",
+   "ll": [
+    35.42796461,
+    139.21910012
+   ],
+   "bearing": 22.8,
+   "note": "道の西の柱の「監視カメラ作動中」（mid 180）"
+  },
+  {
+   "asset": "pass_site_equipment",
+   "name": "opposite_yellow_notice",
+   "ll": [
+    35.42795443,
+    139.21909605
+   ],
+   "bearing": 89.8,
+   "note": "道の向こうの黄色の縦の注意板（toilet 315）"
+  },
+  {
+   "asset": "pass_resthouse",
+   "name": "foundation",
+   "ll": [
+    35.42784242,
+    139.21969596
+   ],
+   "bearing": 197.0,
+   "z_at": [
+    [
+     35.42783716,
+     139.21962134
+    ],
+    [
+     35.42789589,
+     139.21964279
+    ],
+    [
+     35.42781341,
+     139.21971841
+    ],
+    [
+     35.42787214,
+     139.21973986
+    ]
+   ],
+   "note": "ヤビツ峠レストハウス 丹沢MON（前の丘の上の箱の位置、正面 197°）"
+  },
+  {
+   "asset": "pass_resthouse",
+   "name": "deck",
+   "ll": [
+    35.42784242,
+    139.21969596
+   ],
+   "bearing": 197.0,
+   "dz": 0.82,
+   "z_at": [
+    [
+     35.42783716,
+     139.21962134
+    ],
+    [
+     35.42789589,
+     139.21964279
+    ],
+    [
+     35.42781341,
+     139.21971841
+    ],
+    [
+     35.42787214,
+     139.21973986
+    ]
+   ]
+  },
+  {
+   "asset": "pass_resthouse",
+   "name": "walls",
+   "ll": [
+    35.42785345,
+    139.21968016
+   ],
+   "bearing": 197.0,
+   "dz": 1.0,
+   "z_at": [
+    [
+     35.42783716,
+     139.21962134
+    ],
+    [
+     35.42789589,
+     139.21964279
+    ],
+    [
+     35.42781341,
+     139.21971841
+    ],
+    [
+     35.42787214,
+     139.21973986
+    ]
+   ]
+  },
+  {
+   "asset": "pass_resthouse",
+   "name": "front_glazing",
+   "ll": [
+    35.42785469,
+    139.21967497
+   ],
+   "bearing": 197.0,
+   "dz": 1.062,
+   "z_at": [
+    [
+     35.42783716,
+     139.21962134
+    ],
+    [
+     35.42789589,
+     139.21964279
+    ],
+    [
+     35.42781341,
+     139.21971841
+    ],
+    [
+     35.42787214,
+     139.21973986
+    ]
+   ]
+  },
+  {
+   "asset": "pass_resthouse",
+   "name": "roof",
+   "ll": [
+    35.42785465,
+    139.2196806
+   ],
+   "bearing": 197.0,
+   "dz": 3.325,
+   "z_at": [
+    [
+     35.42783716,
+     139.21962134
+    ],
+    [
+     35.42789589,
+     139.21964279
+    ],
+    [
+     35.42781341,
+     139.21971841
+    ],
+    [
+     35.42787214,
+     139.21973986
+    ]
+   ]
+  },
+  {
+   "asset": "pass_resthouse",
+   "name": "rails",
+   "ll": [
+    35.42784242,
+    139.21969596
+   ],
+   "bearing": 197.0,
+   "dz": 0.99,
+   "z_at": [
+    [
+     35.42783716,
+     139.21962134
+    ],
+    [
+     35.42789589,
+     139.21964279
+    ],
+    [
+     35.42781341,
+     139.21971841
+    ],
+    [
+     35.42787214,
+     139.21973986
+    ]
+   ]
+  },
+  {
+   "asset": "pass_resthouse",
+   "name": "stairs",
+   "ll": [
+    35.42782797,
+    139.21972209
+   ],
+   "bearing": 197.0,
+   "dz": 0.044,
+   "z_at": [
+    [
+     35.42783716,
+     139.21962134
+    ],
+    [
+     35.42789589,
+     139.21964279
+    ],
+    [
+     35.42781341,
+     139.21971841
+    ],
+    [
+     35.42787214,
+     139.21973986
+    ]
+   ]
+  },
+  {
+   "asset": "pass_resthouse",
+   "name": "fittings",
+   "ll": [
+    35.42785435,
+    139.21968049
+   ],
+   "bearing": 197.0,
+   "dz": 0.721,
+   "z_at": [
+    [
+     35.42783716,
+     139.21962134
+    ],
+    [
+     35.42789589,
+     139.21964279
+    ],
+    [
+     35.42781341,
+     139.21971841
+    ],
+    [
+     35.42787214,
+     139.21973986
+    ]
+   ]
+  }
+ ],
+ "landmarks_note": "Codex の部品（依頼 07、data/processed/landmarks/pass_*）。export/compare/pass/work/gen_pass_landmarks.py が書く。置かなかった物：pass_lodge（トイレと同じ棟）、island_sign（島の木の看板の裏の取り違え）、vending_b（自動販売機は 1 台だけ）、barrier_A_short（売店の前の台の上の 2 台は写真に無い）、u1_black_direction（2014 年の写真だけ）、trail_white_post・rail_right・wood_rail_left・wood_rail_right（写真で確かめられない推定の部品）、bus_round_blank_dark（同じ丸い標識の色違い）、shop_stone_base・shop_steps（コースの台と石段 shop_lot・shop_step を使う）"
 }

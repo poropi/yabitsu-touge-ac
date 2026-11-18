@@ -1,0 +1,983 @@
+{
+  "asset_id": "r70_pylon",
+  "source": "r70_pylon.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 3000,
+  "parts": [
+    {
+      "name": "tower",
+      "meaning": "遠景用の格子送電鉄塔。格子も立体の鋼材。",
+      "triangles": 2352,
+      "vertices": 4536,
+      "dimensions_m": [
+        13.96,
+        8.37912,
+        39.06212
+      ],
+      "bounds_m": [
+        [
+          -6.98,
+          -4.189558,
+          0.0
+        ],
+        [
+          6.98,
+          4.189558,
+          39.062123
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "tower.png"
+      ],
+      "components": [
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 72,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 84,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 96,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 108,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 120,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 132,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 144,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 156,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 168,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 180,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 192,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 204,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 216,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 228,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 240,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 252,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 264,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 276,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 288,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 300,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 312,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 324,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 336,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 348,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 360,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 372,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 384,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 396,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 408,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 420,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 432,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 444,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 456,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 468,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 480,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 492,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 504,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 516,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 528,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 540,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 552,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 564,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 576,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 588,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 600,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 612,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 624,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 636,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 648,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 660,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 672,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 684,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 696,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 708,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 720,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 732,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 744,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 756,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 768,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 780,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 792,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 804,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 816,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 828,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 840,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 852,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 864,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 876,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 888,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 900,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 912,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 924,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 936,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 948,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 960,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 972,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 984,
+          "triangle_count": 12
+        },
+        {
+          "name": "四隅の主柱",
+          "triangle_start": 996,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 1008,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 1020,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 1032,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 1044,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 1056,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 1068,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 1080,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 1092,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 1104,
+          "triangle_count": 12
+        },
+        {
+          "name": "水平材",
+          "triangle_start": 1116,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材A",
+          "triangle_start": 1128,
+          "triangle_count": 12
+        },
+        {
+          "name": "交差斜材B",
+          "triangle_start": 1140,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1152,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1164,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1176,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1188,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の先端",
+          "triangle_start": 1200,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1212,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1232,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1252,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1272,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1292,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1312,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1332,
+          "triangle_count": 20
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1352,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1364,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1376,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1388,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の先端",
+          "triangle_start": 1400,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1412,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1432,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1452,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1472,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1492,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1512,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1532,
+          "triangle_count": 20
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1552,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1564,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1576,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1588,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の先端",
+          "triangle_start": 1600,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1612,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1632,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1652,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1672,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1692,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1712,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1732,
+          "triangle_count": 20
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1752,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1764,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1776,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1788,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の先端",
+          "triangle_start": 1800,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1812,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1832,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1852,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1872,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1892,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1912,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 1932,
+          "triangle_count": 20
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1952,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1964,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 1976,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 1988,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の先端",
+          "triangle_start": 2000,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2012,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2032,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2052,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2072,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2092,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2112,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2132,
+          "triangle_count": 20
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 2152,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 2164,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の下弦",
+          "triangle_start": 2176,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の斜弦",
+          "triangle_start": 2188,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕の先端",
+          "triangle_start": 2200,
+          "triangle_count": 12
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2212,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2232,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2252,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2272,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2292,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2312,
+          "triangle_count": 20
+        },
+        {
+          "name": "吊下げ碍子",
+          "triangle_start": 2332,
+          "triangle_count": 20
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "高さ39mは依頼目安40mに基づく推定。写真では基礎・全段格子を解像できず、腕の長さ・回線配置は近似。送電線は制作しない。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0299-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0302_f.jpg",
+          "url": "https://www.google.com/maps/@35.4288757,139.2181443,3a,90y,269.9h,88t/data=!3m4!1e1!3m2!1sMrzToqo5dGiyV5KAQMkbCg!2e0?hl=ja",
+          "description": "遠くの送電鉄塔（格子の鉄塔）。山腹に立ち、電線が道を横切る。高さ約40 m（推測）。道から約100 m以上離れる"
+        },
+        {
+          "oid": "S5-0809-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0812_f.jpg",
+          "url": "https://www.google.com/maps/@35.486134,139.2161734,3a,90y,122.1h,88t/data=!3m4!1e1!3m2!1svDtxKl6wUwMyVLa1S9PysA!2e0?hl=ja",
+          "description": "遠方の山の斜面に送電鉄塔2基（大きな1基は右上）、道から約150m以上"
+        },
+        {
+          "oid": "S5-0750-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0750_f.jpg",
+          "url": "https://www.google.com/maps/@35.4839492,139.2052254,3a,90y,42.6h,88t/data=!3m4!1e1!3m2!1sw3xKXd45VdSVWEPqKh_YlA!2e0?hl=ja",
+          "description": "谷の先の稜線近くに見える送電鉄塔。道からかなり遠い（数百m）"
+        },
+        {
+          "oid": "S5-0819-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0819_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866012,139.217761,3a,90y,122.5h,88t/data=!3m4!1e1!3m2!1sEgIYkLl_AmLDyQizx3aBuA!2e0?hl=ja",
+          "description": "遠方の尾根に送電鉄塔"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0299-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0302_f.jpg",
+        "url": "https://www.google.com/maps/@35.4288757,139.2181443,3a,90y,269.9h,88t/data=!3m4!1e1!3m2!1sMrzToqo5dGiyV5KAQMkbCg!2e0?hl=ja",
+        "description": "遠くの送電鉄塔（格子の鉄塔）。山腹に立ち、電線が道を横切る。高さ約40 m（推測）。道から約100 m以上離れる"
+      },
+      "preview_views": {
+        "front": "r70_pylon_tower_front.png",
+        "left": "r70_pylon_tower_left.png",
+        "right": "r70_pylon_tower_right.png",
+        "back_estimated": "r70_pylon_tower_back_estimated.png",
+        "top": "r70_pylon_tower_top.png",
+        "persp": "r70_pylon_tower_persp.png",
+        "reference": "r70_pylon_tower_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [],
+  "references": {
+    "tower": [
+      {
+        "oid": "S4-0299-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0302_f.jpg",
+        "url": "https://www.google.com/maps/@35.4288757,139.2181443,3a,90y,269.9h,88t/data=!3m4!1e1!3m2!1sMrzToqo5dGiyV5KAQMkbCg!2e0?hl=ja",
+        "description": "遠くの送電鉄塔（格子の鉄塔）。山腹に立ち、電線が道を横切る。高さ約40 m（推測）。道から約100 m以上離れる"
+      },
+      {
+        "oid": "S5-0809-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0812_f.jpg",
+        "url": "https://www.google.com/maps/@35.486134,139.2161734,3a,90y,122.1h,88t/data=!3m4!1e1!3m2!1svDtxKl6wUwMyVLa1S9PysA!2e0?hl=ja",
+        "description": "遠方の山の斜面に送電鉄塔2基（大きな1基は右上）、道から約150m以上"
+      },
+      {
+        "oid": "S5-0750-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0750_f.jpg",
+        "url": "https://www.google.com/maps/@35.4839492,139.2052254,3a,90y,42.6h,88t/data=!3m4!1e1!3m2!1sw3xKXd45VdSVWEPqKh_YlA!2e0?hl=ja",
+        "description": "谷の先の稜線近くに見える送電鉄塔。道からかなり遠い（数百m）"
+      },
+      {
+        "oid": "S5-0819-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0819_f.jpg",
+        "url": "https://www.google.com/maps/@35.4866012,139.217761,3a,90y,122.5h,88t/data=!3m4!1e1!3m2!1sEgIYkLl_AmLDyQizx3aBuA!2e0?hl=ja",
+        "description": "遠方の尾根に送電鉄塔"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "tower",
+    "image": "R70-0302_f.jpg",
+    "crop_pixels": [
+      650,
+      0,
+      930,
+      310
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

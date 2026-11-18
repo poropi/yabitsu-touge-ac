@@ -243,7 +243,7 @@ class Site:
             out.append(("1ROAD_s1_pass_sidewalk", *self._draped(self.polys["sidewalk"], h, z_fn=self.surface_z), "pavers", True))
             if h > 0:   # 0 なら段差なし（わき道と同じ高さでつながる）
                 out.append(("s1_pass_sidewalk_curb", *self._curb(self.polys["sidewalk"], h), "concrete", True))
-        if fc := sp.get("island_fence"):   # 島の縁の内側に木の杭を並べ、杭の頭の少し下にロープを渡す
+        if (fc := sp.get("island_fence")) and not fc.get("replaced"):   # 島の縁の内側に木の杭を並べ、杭の頭の少し下にロープを渡す（replaced：Codex の部品）
             ring = self.polys["island"].buffer(-fc["inset"]).exterior
             n = max(int(ring.length // fc["spacing"]), 3)
             pts = [np.array(ring.interpolate(k / n, normalized=True).coords[0]) for k in range(n)]
@@ -260,6 +260,8 @@ class Site:
             out += [(f"1ROAD_s1_pass_{n}", *site.draped(g, flat, 0.0, 2.0), "concrete", True),
                     (f"s1_pass_{n}_edge", *self._curb(g, 0.9, lambda x, y, zf=zf: np.full(np.shape(x), zf - 0.9), uv_m=1.5), edge, True)]
         for k, sh in enumerate(sp.get("buildings") or [sp["shelter"]]):   # トイレの棟（切妻。長い辺 size[0] の向きが axis_deg）
+            if sh.get("replaced"):   # Codex の部品（landmarks）に替えた棟は作らない（地形を削る台は _park_pads が残す）
+                continue
             tag = "shelter" if k == 0 else f"shelter{k}"
             c = _xy(sh["center"])[0]; f = Frame(c, sh["axis_deg"])
             L, W = sh["size"]; a, b = (-L / 2, L / 2), (-W / 2, W / 2)

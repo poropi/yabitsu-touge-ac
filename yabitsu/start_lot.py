@@ -61,13 +61,109 @@ def lot_polygon(spec, sec):
     o = np.asarray(spec["origin"], float)
     s_c = float(sec.s[int(np.argmin(np.hypot(sec.x - o[0], sec.y - o[1])))])
     road = road_formation(sec, s_min=s_c - LOT_ROAD_RANGE_M, s_max=s_c + LOT_ROAD_RANGE_M)
-    poly = frame(spec).rect(spec["lot"]["a"], spec["lot"]["b"]).difference(road)
+    f = frame(spec)
+    poly = f.rect(spec["lot"]["a"], spec["lot"]["b"])
+    for pts in spec.get("lot_extra", []):   # 航空写真の舗装の広がり（北東の扇形・南西の端）：a・b の多角形
+        pts = np.asarray(pts, float)
+        poly = poly.union(Polygon(f.xy(pts[:, 0], pts[:, 1])).buffer(0))
+    poly = poly.difference(road)
     if poly.geom_type != "Polygon":
         poly = max(poly.geoms, key=lambda g: g.area)
     return poly
 
 
 LOT_NAME = "nanohanadai_lot"
+LOT_JOIN_M = 4.0    # 入口：舗装を道路（側溝の外の縁）の高さから、この幅で駐車場の高さへ寄せる
+LOT_GAP_M = 0.8     # 入口：舗装と側溝の間のすき間（この幅まで）を舗装で埋める
+LOT_JOIN_CELL = 0.5
+
+
+def mouths(pads, sec, reach=0.8):
+    """駐車場が本線の側溝に接している区間 [(side, s0, s1)]。この側は側溝の V 字のくぼみを作らず、路面を縁の高さのまま
+    延ばす（assembly.add_road の mouths）。2026-10-30 舗装を寄せたあとも、入口に側溝のくぼみ（0.12 m）が段差として残っていた。"""
+    import shapely
+    out = []
+    for p in pads:
+        if p.get("kind") != "lot":
+            continue
+        edge = Polygon(p["polygon"]).buffer(reach)
+        for side in (1, -1):
+            # 側溝の帯（区間ごとの四角）が駐車場にかかる区間。中心の点だけで見ると、ヘアピンの内側で隣の区間の帯が
+            # 斜めに入口へ入り込むのを拾えない（2026-10-30、S1 の 4〜4.5 m に V 字が残った）
+            hw = sec.hw_left if side > 0 else sec.hw_right
+            nn = np.c_[-np.sin(sec.heading), np.cos(sec.heading)] * side
+            a = np.c_[sec.x, sec.y] + nn * hw[:, None]; b = a + nn * GUTTER_WIDTH
+            quads = shapely.polygons(np.stack([a[:-1], a[1:], b[1:], b[:-1]], 1))
+            hit = np.flatnonzero(shapely.intersects(quads, edge))
+            if len(hit):
+                out.append((side, float(sec.s[hit.min()]), float(sec.s[hit.max() + 1])))
+    return out
+
+
+def lot_surface(spec, pad, sec=None):
+    """駐車場の舗装の面（頂点・三角形・UV）。sec があれば、道路と接する所を段差なくつなぐ（2026-10-30 ゲームで道路から
+    駐車場へ入ると段差で衝撃が出た：舗装は平らな 562.27、道路の縁は 562.31〜562.80、間に 0.2〜0.4 m のすき間）。
+    すき間を埋め、道路から LOT_JOIN_M の間は、道路の縁の高さ（一番近い所）から駐車場の高さへ一次で寄せる。"""
+    import shapely
+    from scipy.spatial import cKDTree
+    from shapely.geometry import box as _box
+    from .crosssection import surface_height
+    z = pad["z"]; poly = Polygon(pad["polygon"]).buffer(0)
+    if sec is None:
+        return pad_mesh(pad["polygon"], z)
+    o = np.asarray(spec["origin"], float)
+    s_c = float(sec.s[int(np.argmin(np.hypot(sec.x - o[0], sec.y - o[1])))])
+    road = road_formation(sec, s_min=s_c - LOT_ROAD_RANGE_M, s_max=s_c + LOT_ROAD_RANGE_M)
+    gap = poly.buffer(LOT_GAP_M).intersection(road.buffer(LOT_GAP_M)).difference(road)
+    full = poly.union(gap).buffer(0)
+    if full.geom_type != "Polygon":
+        full = max(full.geoms, key=lambda g: g.area)
+    join = full.intersection(road.buffer(LOT_JOIN_M))
+    m = (sec.s >= s_c - LOT_ROAD_RANGE_M) & (sec.s <= s_c + LOT_ROAD_RANGE_M)
+    edges = []                                   # 道路の両側の、側溝の外の縁（高さは路面の縁）
+    for side, hw in ((1, sec.hw_left[m]), (-1, sec.hw_right[m])):
+        nx, ny = -np.sin(sec.heading[m]), np.cos(sec.heading[m])
+        w = side * (hw + GUTTER_WIDTH)
+        edges.append(np.c_[sec.x[m] + w * nx, sec.y[m] + w * ny,
+                           surface_height(side * hw, sec.z[m], sec.slope[m], sec.crown[m])])
+    edges = np.concatenate(edges)
+    tree = cKDTree(edges[:, :2])
+
+    def zf(xy):
+        d = shapely.distance(road, shapely.points(xy))
+        _, j = tree.query(xy)
+        w = np.clip(1.0 - d / LOT_JOIN_M, 0.0, 1.0)
+        return z + (edges[j, 2] - z) * w
+
+    def tris(g):
+        out = []
+        for part in getattr(g, "geoms", [g]):
+            if part.geom_type == "Polygon" and part.area > 1e-6:
+                out += [np.asarray(t.exterior.coords)[:3] for t in shapely.constrained_delaunay_triangles(part).geoms]
+        return out
+
+    flat = tris(full.difference(join.buffer(1e-9)))
+    slope = []
+    if not join.is_empty:
+        x0, y0, x1, y1 = join.bounds; c = LOT_JOIN_CELL
+        for gx in np.arange(x0, x1, c):
+            for gy in np.arange(y0, y1, c):
+                cell = _box(gx, gy, gx + c, gy + c)
+                if cell.intersects(join):
+                    slope += tris(cell.intersection(join))
+    verts, faces = [], []
+    for group, is_slope in ((flat, False), (slope, True)):
+        if not group:
+            continue
+        t = np.asarray(group, float)
+        ccw = (t[:, 1, 0] - t[:, 0, 0]) * (t[:, 2, 1] - t[:, 0, 1]) - (t[:, 1, 1] - t[:, 0, 1]) * (t[:, 2, 0] - t[:, 0, 0]) >= 0
+        t[~ccw] = t[~ccw][:, ::-1]
+        p = t.reshape(-1, 2)
+        zz = zf(p) if is_slope else np.full(len(p), z)
+        b = sum(len(v_) for v_ in verts)
+        verts.append(np.c_[p, zz]); faces.append(np.arange(len(p)).reshape(-1, 3) + b)
+    v = np.concatenate(verts)
+    return v, np.concatenate(faces).astype(np.int32), v[:, :2] / 4.0
 
 
 def apply(pads, spec, sec):
@@ -86,17 +182,36 @@ def flat_pads(spec, pad):
     """建物と石碑のまわりの平らな地面。地形を削るときと、木をどけるときに使う（路面は張らない）。
     地形は「駐車場の高さ−0.3m」まで下げられるので、そのぶん持ち上げて地面が舗装とほぼ同じ高さになるようにする。"""
     f = frame(spec)
-    polys = [f.rect(r["a"], r["b"]) for r in spec.get("flats", [])]
-    if "tower" in spec:
+    # flats の 1 つ：{"a", "b"}（長方形）か {"points"}（a・b の多角形）。"dz"：駐車場からの高さ、"ramp"：{"a": [a0, a1], "dz": [d0, d1]}
+    # （a に沿って高さが変わる斜面）、"sink"：上に舗装を張る所（格子の角を面より下げる＝kind "pass"）
+    polys = [(_poly(f, r), r) for r in spec.get("flats", [])]
+    if "tower" in spec and "tower" not in set(spec.get("replaced", [])):
         t = spec["tower"]
-        polys.append(Polygon(_ring(f.xy(t["a"], t["b"]), t["plaza_r"], 16)))
+        polys.append((Polygon(_ring(f.xy(t["a"], t["b"]), t["plaza_r"], 16)), {}))
     if "path" in spec:
         pa = spec["path"]
-        polys.append(LineString(f.xy(*np.asarray(pa["points"], float).T)).buffer(pa["width"] / 2 + 1.0))
-    out = [{"name": "flat", "role": "flat", "polygon": np.asarray(p.exterior.coords).tolist(), "z": pad["z"] + 0.25}
-           for p in polys]
+        polys.append((LineString(f.xy(*np.asarray(pa["points"], float).T)).buffer(pa["width"] / 2 + 1.0), {}))
+    # 駐車場の縁から 0.5 m は空ける（平らな地面が駐車場に接すると、舗装の下の地形の三角形が舗装より上へ出る）
+    if "polygon" in pad and len(pad["polygon"]) >= 4:
+        keep = Polygon(pad["polygon"]).buffer(0.5)
+        polys = [(g, r) for p, r in polys for g in getattr(p.difference(keep), "geoms", [p.difference(keep)]) if g.area > 0.5]
+    out = []
+    for p, r in polys:
+        e = {"name": "flat", "role": "flat", "polygon": np.asarray(p.exterior.coords).tolist(), "z": pad["z"] + 0.25 + r.get("dz", 0.0)}
+        if "ramp" in r:
+            (a0, a1), (d0, d1) = r["ramp"]["a"], r["ramp"]["dz"]; gr = (d1 - d0) / (a1 - a0)
+            c = f.xy(a0, 0.0); e["z"] = pad["z"] + 0.25 + max(d0, d1)
+            e["plane"] = [float(c[0]), float(c[1]), float(pad["z"] + 0.25 + d0), float(gr * f.u[0]), float(gr * f.u[1])]
+        if r.get("sink"):
+            e["kind"] = "pass"
+        out.append(e)
     from . import site
-    if "shelter" in spec:               # 東屋の小高い所
+    if "shelter" in spec and "hill" in spec["shelter"]:   # 東屋の島の丘：上の平らな面（地形＝駐車場＋dz）。まわりは道の縁へ地形の決まりの傾きで下る
+        from .terrain import UNDER_DEPTH       # （2026-10-30 写真で東屋の床は約 565.6 m。今までの小さな盛り土では島が北の道より低かった）
+        hl = spec["shelter"]["hill"]
+        out.append({"name": "shelter_hill", "role": "flat", "polygon": np.asarray(_poly(f, hl).exterior.coords).tolist(),
+                    "z": pad["z"] + hl["dz"] + UNDER_DEPTH})
+    elif "shelter" in spec:             # 東屋の小高い所
         sh = spec["shelter"]; c = site.ll_to_xy([sh["center_ll"]])[0]
         out.append({"name": "shelter_mound", "role": "flat", "polygon": np.asarray(Polygon(_ring(c, max(sh["size"]) * 0.75, 16)).exterior.coords).tolist(),
                     "z": pad["z"] + sh["mound"]})
@@ -107,6 +222,22 @@ def flat_pads(spec, pad):
         out.append({"name": "hill_stairs", "role": "flat", "polygon": np.asarray(poly.exterior.coords).tolist(), "z": hs["z0"],
                     "plane": [float(p0[0]), float(p0[1]), float(hs["z0"] - 0.02), float(g[0]), float(g[1])]})
     return out
+
+
+def _poly(f, r):
+    """flats・paved の 1 つの形：points（a・b の多角形）か、a・b の長方形。"""
+    return Polygon(f.xy(*np.asarray(r["points"], float).T)).buffer(0) if "points" in r else f.rect(r["a"], r["b"])
+
+
+def _ramp_dz(r, a):
+    """paved・flats の高さ（駐車場から）：dz か、ramp（a0→a1 で d0→d1、外は端の値）。"""
+    if "ramp" in r:
+        (a0, a1), (d0, d1) = r["ramp"]["a"], r["ramp"]["dz"]
+        lo, hi = (a0, d0), (a1, d1)
+        if a0 > a1:
+            lo, hi = hi, lo
+        return np.interp(a, [lo[0], hi[0]], [lo[1], hi[1]])
+    return np.full(np.shape(a), r.get("dz", 0.0))
 
 
 def flats_for(spec_path, pads):
@@ -299,12 +430,12 @@ def hill_stairs_meshes(spec):
             ("s1_hill_handrails", *_merge(rails), "railing", True)]
 
 
-def meshes(spec, pad):
-    """(名前, 頂点, 面, UV, 材質, 描画するか) の並び。"""
+def meshes(spec, pad, sec=None):
+    """(名前, 頂点, 面, UV, 材質, 描画するか) の並び。sec があれば舗装を道路と段差なくつなぐ（lot_surface）。"""
     f = frame(spec); z = pad["z"]
     out = []
 
-    v, faces, _ = pad_mesh(pad["polygon"], z)
+    v, faces, _ = lot_surface(spec, pad, sec)
     a, b = f.ab(v[:, :2])
     out.append(("1ROAD_s1_lot", v, faces, np.c_[a, b] / 4.0, "pavers", True))
 
@@ -326,14 +457,29 @@ def meshes(spec, pad):
     out.append(("s1_lot_fence_bars", v, faces, uv, "railing_bars", True))
     out.append(("1WALL_s1_lot_fence", *_quad(f, [fe["a"][0], fe["a"][1], fe["a"][1], fe["a"][0]], [fb] * 4,
                                               [z - 0.3] * 2 + [z + 1.2] * 2, 2.0), "railing", False))
+    if "return_b" in fe:                # 南西の端で山側へ直角に折り返す柵（a = fe["a"][0] の線、b は fb → return_b）
+        a0, rb = fe["a"][0], fe["return_b"]
+        posts = [box(f, (a0 - 0.04, a0 + 0.04), (b_ - 0.04, b_ + 0.04), z - 0.3, z + fh)
+                 for b_ in np.arange(fb + fe["post_every"], rb + 1e-9, fe["post_every"])] + \
+                [box(f, (a0 - 0.04, a0 + 0.04), (rb - 0.08, rb), z - 0.3, z + fh)]
+        rails = [box(f, (a0 - RAIL_T, a0 + RAIL_T), (fb, rb), z + zz, z + zz + 0.06) for zz in (0.08, fh - 0.06)]
+        out.append(("s1_lot_fence_return", *_merge(posts + rails), "railing", True))
+        v, faces, uv = _quad(f, [a0] * 4, [fb, rb, rb, fb], [z + 0.14] * 2 + [z + fh - 0.06] * 2, 0.5)
+        uv[:, 1] = [0, 0, 1, 1]
+        out.append(("s1_lot_fence_return_bars", v, faces, uv, "railing_bars", True))
+        out.append(("1WALL_s1_lot_fence_return", *_quad(f, [a0] * 4, [fb, rb, rb, fb], [z - 0.3] * 2 + [z + 1.2] * 2, 2.0),
+                    "railing", False))
 
     bl = spec["blocks"]; L, W, H = bl["size"]
     blocks = [box(f, (a_ - L / 2, a_ + L / 2), (bl["b"] - W / 2, bl["b"] + W / 2), z - 0.2, z + H, 1.0)
               for a_ in np.arange(bl["a"][0], bl["a"][1] + 1e-9, bl["every"])]
-    out.append(("1WALL_s1_lot_blocks", *_merge(blocks), "concrete", True))
+    out.append(("1WALL_s1_lot_blocks", *_merge(blocks), "concrete", "blocks" not in set(spec.get("replaced", []))))
 
+    rep = set(spec.get("replaced", []))   # Codex の部品（landmarks）に替えた物は、手で測った簡単な形を作らない
     mo = spec["monument"]; L, W, H = mo["size"]
-    if mo.get("shape") == "rough":     # 自然石の石碑（上へすぼまる）と、正面の黒い銘板
+    if "monument" in rep:
+        pass
+    elif mo.get("shape") == "rough":     # 自然石の石碑（上へすぼまる）と、正面の黒い銘板
         from .asama_area import _slab
         out.append(("1WALL_s1_monument", *_slab(f, mo["a"], mo["b"], L, W, z - 0.3, H + 0.3), "stone", True))
         pw, ph = mo["plaque"]
@@ -345,11 +491,14 @@ def meshes(spec, pad):
                                               z - 0.3, z + H, 1.0), "stone", True))
 
     bu = spec["building"]
+    if "building" in rep:
+        bu = dict(bu, truss=False)
     walls = box(f, bu["a"], bu["b"], z - 0.3, z + bu["wall_h"], 2.0)
-    out.append(("1WALL_s1_building", *walls, "wall_white", True))
-    out.append(("s1_building_gables", *_gable_ends(f, bu["a"], bu["b"], z + bu["wall_h"], bu["roof_h"]), "wall_white", True))
-    out.append(("s1_building_roof", *_gable_roof(f, bu["a"], bu["b"], z + bu["wall_h"], bu["roof_h"], bu["eaves"]),
-                "roof", True))
+    out.append(("1WALL_s1_building", *walls, "wall_white", "building" not in rep))   # 替えたときも当たり判定は残す
+    if "building" not in rep:
+        out.append(("s1_building_gables", *_gable_ends(f, bu["a"], bu["b"], z + bu["wall_h"], bu["roof_h"]), "wall_white", True))
+        out.append(("s1_building_roof", *_gable_roof(f, bu["a"], bu["b"], z + bu["wall_h"], bu["roof_h"], bu["eaves"]),
+                    "roof", True))
 
     if bu.get("truss"):                 # 妻の木の筋かい（X 字）と軒の下の横木
         a0, a1 = bu["a"]; b0, b1 = bu["b"]; zt = z + bu["wall_h"]
@@ -367,13 +516,34 @@ def meshes(spec, pad):
         out += shelter_meshes(spec, z)
     if "hill_stairs" in spec:
         out += hill_stairs_meshes(spec)
-    if "tower" in spec:
+    if "tower" in spec and "tower" not in rep:   # Codex の展望台（landmarks の nanohanadai_tower）に替えたときは作らない
         out += tower_meshes(spec, z)
     if "path" in spec:
-        out.append(("1ROAD_s1_path", *path_mesh(spec, z), "tiles", True))
-    if "bollards" in spec:
+        out.append(("1ROAD_s1_path", *path_mesh(spec, z), spec["path"].get("material", "tiles"), True))
+    for k, r in enumerate(spec.get("paved", [])):   # 敷石の道・広場（展望台の南の遊歩道など）：長方形か points の多角形、高さは dz・ramp
+        g = _poly(f, r)
+        if "ramp" in r:
+            g = g.segmentize(1.0)
+        v, faces, _ = pad_mesh(np.asarray(g.exterior.coords), z)
+        a_, b_ = f.ab(v[:, :2])
+        v = v.copy(); v[:, 2] = z + _ramp_dz(r, a_)
+        out.append((f"1ROAD_s1_paved_{k}", v, faces, np.c_[a_, b_] / 2.0, r.get("material", "tiles"), True))
+    for k, w in enumerate(spec.get("white_walls", [])):   # 白い低い壁：points の折れ線、高さは h[0] → h[1] へ 0.8 m ごとに段で下がる
+        pts = np.asarray(w["points"], float); t = w.get("t", 0.25); h0, h1 = w["h"]
+        seg = np.linalg.norm(np.diff(pts, axis=0), axis=1); total = seg.sum(); parts = []; s0 = 0.0
+        for (p, q), L in zip(zip(pts[:-1], pts[1:]), seg):
+            g = Frame(f.xy(*p), spec["axis_deg"] + math.degrees(math.atan2(q[1] - p[1], q[0] - p[0])))
+            for u0 in np.arange(0.0, L, 0.8):
+                u1 = min(u0 + 0.8, L); h = h0 + (h1 - h0) * (s0 + u1) / total
+                parts.append(box(g, (u0, u1), (-t / 2, t / 2), z - 0.2, z + h, 1.0))
+            s0 += L
+        out.append((f"1WALL_s1_white_wall_{k}", *_merge(parts), "wall_white", True))
+    if "bollards" in spec and "bollards" not in rep:
         bo = spec["bollards"]
         posts = [box(Frame(f.xy(bo["a"], b_), spec["axis_deg"]), (-0.075, 0.075), (-0.075, 0.075), z - 0.3, z + bo["height"], 0.5)
                  for b_ in bo["b"]]
         out.append(("1WALL_s1_bollards", *_merge(posts), "wood", True))
+    if spec.get("landmarks"):   # Codex の部品（石碑・トイレ・看板・ミラー・車止め・歩道の物）
+        from . import landmarks
+        out += landmarks.place(spec["landmarks"], f, z, "s1_lm")
     return out

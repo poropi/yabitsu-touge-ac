@@ -1,0 +1,316 @@
+{
+  "title": "依頼09 橋名・正式寸法の根拠",
+  "created": "2026-10-31",
+  "scope": "調査と参照切り出しのみ。モデルは変更しない。",
+  "evidence_image": "export/compare/route70/work09/r70_bridge_names_evidence.jpg",
+  "sources": [
+    {
+      "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+      "publisher": "神奈川県",
+      "title": "橋梁 定期点検結果等一覧",
+      "as_of": "2025-03-31",
+      "pages_used_1based": [
+        4,
+        9,
+        10
+      ],
+      "visual_pdf_review": "web screenshotはCache missで失敗。本文テキストと行・ページ情報を確認。"
+    },
+    {
+      "url": "https://www.town.kiyokawa.kanagawa.jp/material/files/group/5/r3toukeiyouran.pdf",
+      "publisher": "清川村",
+      "title": "統計要覧2021年（令和3年版）",
+      "data_provider": "県厚木土木事務所",
+      "pages_used_1based": [
+        53,
+        54
+      ],
+      "printed_pages": [
+        33,
+        34
+      ],
+      "as_of": "2022-03-31",
+      "visual_pdf_review": "web screenshotはCache missで失敗。本文テキストと表見出し・行・ページ情報を確認。"
+    },
+    {
+      "url": "https://www.nakanihon.co.jp/gijyutsu/Shimada/BridgeData/f14KN.pdf",
+      "publisher": "中日本建設コンサルタント公開",
+      "title": "藤井橋梁データ 神奈川県",
+      "pages_used_1based": [
+        1,
+        25
+      ],
+      "status": "編集資料。管理者の一次資料ではないので確定寸法の根拠に格上げしない。"
+    }
+  ],
+  "bridges": [
+    {
+      "source_oids": [
+        "S5-0970-01",
+        "S5-0975-02",
+        "S5-0975-03",
+        "S5-0979-01"
+      ],
+      "photo": [
+        "R70-0975_f.jpg",
+        "R70-0978_b.jpg",
+        "R70-0979_b.jpg",
+        "R70-0980_b.jpg"
+      ],
+      "identification": "釜田川橋",
+      "identification_status": "写真と一次資料からの同定、有力。銘板全文の写真単独判読は未達。",
+      "photo_reading": {
+        "left_plaque": "釜田川橋らしい4字",
+        "right_plaque": "かまたがわはしらしい仮名",
+        "fully_legible": false,
+        "reason": "漢字側の元画像ROIは54×23px。拡大しても細画が潰れ、正式名を知らずに全字を読む根拠としては弱い。"
+      },
+      "texture_lettering_recommendation": "文字は無地。正式名称を写真の判読結果として転記しない。",
+      "official": {
+        "bridge_length_m": 99,
+        "width_m": 8.8,
+        "construction_year": 1988,
+        "sources": [
+          {
+            "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+            "pdf_page_1based": 10,
+            "row_number": 587,
+            "columns": [
+              "施設名",
+              "県道７０号（秦野清川）",
+              "建設年次",
+              "橋長"
+            ]
+          },
+          {
+            "url": "https://www.town.kiyokawa.kanagawa.jp/material/files/group/5/r3toukeiyouran.pdf",
+            "pdf_page_1based": 53,
+            "printed_page": 33,
+            "columns": [
+              "延長(橋長)",
+              "幅員",
+              "橋梁上部構造"
+            ],
+            "data_provider": "県厚木土木事務所",
+            "as_of": "2022-03-31"
+          }
+        ]
+      },
+      "arch_span": {
+        "m": 82,
+        "status": "管理者の一次資料では未確認。下記編集資料の数値。モデル採用時は推定値として区別。",
+        "source": {
+          "url": "https://www.nakanihon.co.jp/gijyutsu/Shimada/BridgeData/f14KN.pdf",
+          "pdf_page_1based": 25,
+          "entry": "fuji44087",
+          "description": "1988年新架、L99、b8.3、鋼中路ローゼ、l82、出典番号464。"
+        }
+      },
+      "length_scope": "管理者の表は橋長99m。アーチリブの範囲や側径間の内訳は表に記載なし。99mをアーチ単体の支間とは呼ばない。",
+      "width_conflict": "村の一次資料は幅員8.8m、編集資料はb8.3m。測定対象の違いは未確認。採用するなら一次資料8.8mを根拠にし、断面の内訳は推定。",
+      "rejected_candidate": {
+        "name": "大門橋",
+        "bridge_length_m": 91,
+        "reason": "同じ県道70号に別行で掲載される別橋。赤アーチ写真に大門橋を直接結び付ける根拠がない。91mへの置換はしない。"
+      }
+    },
+    {
+      "source_oids": [
+        "S5-1014-01"
+      ],
+      "photo": [
+        "R70-1014_b.jpg",
+        "R70-1012_f.jpg",
+        "R70-1013_b.jpg",
+        "R70-1014_f.jpg",
+        "R70-1015_b.jpg",
+        "R70-1016_b.jpg"
+      ],
+      "identification": "熊野橋の可能性が高い",
+      "identification_status": "部分文字と沿道順からの候補。写真だけの全文判読は未達。",
+      "photo_reading": {
+        "visible": "末尾の野橋は読める。先頭字左端は画面外。横野橋と確定できない。",
+        "fully_legible": false
+      },
+      "texture_lettering_recommendation": "無地。別写真でも欠けた先頭字を確認できなかったので熊野橋の字は復元しない。",
+      "official": {
+        "candidate_bridge_length_m": 48,
+        "candidate_width_m": 9.0,
+        "sources": [
+          {
+            "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+            "pdf_page_1based": 10,
+            "row_number": 598
+          },
+          {
+            "url": "https://www.town.kiyokawa.kanagawa.jp/material/files/group/5/r3toukeiyouran.pdf",
+            "pdf_page_1based": 54,
+            "printed_page": 34,
+            "data_provider": "県厚木土木事務所"
+          }
+        ]
+      },
+      "correspondence_reason": "約50m続く茶色高欄という記録、北原直前の位置、見える末尾2字が熊野橋の候補と整合。正式一覧にこの区間の横野橋の掲載は見つからなかったが、それだけで不存在とは断定しない。"
+    },
+    {
+      "source_oids": [
+        "S4-0358-01"
+      ],
+      "photo": [
+        "R70-0358_f.jpg",
+        "R70-0359_b.jpg"
+      ],
+      "identification": null,
+      "identification_status": "未特定",
+      "photo_reading": {
+        "visible": "擬木の丸太風横桟と太い支柱。橋名板の文字は見えない。",
+        "fully_legible": false
+      },
+      "official": null,
+      "texture_lettering_recommendation": "橋名を創作しない。",
+      "reason": "護摩屋敷の水近傍という位置だけでは管理者橋梁一覧との1対1対応を決められない。"
+    },
+    {
+      "source_oids": [
+        "S4-0363-01"
+      ],
+      "photo": [
+        "R70-0362_f.jpg",
+        "R70-0363_f.jpg",
+        "R70-0364_f.jpg",
+        "R70-0365_b.jpg"
+      ],
+      "identification": "護摩屋敷橋の候補",
+      "identification_status": "場所と依頼記述からの候補。銘板の全文は今回の残存写真で未判読。",
+      "photo_reading": {
+        "visible": "黒い縦格子欄干とグルービング路面。0363bは残存画像なし。",
+        "fully_legible": false
+      },
+      "official": {
+        "candidate_bridge_length_m": 11,
+        "construction_year": 2011,
+        "source": {
+          "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+          "pdf_page_1based": 4,
+          "row_number": 245
+        }
+      },
+      "texture_lettering_recommendation": "無地。20mという依頼文は推測、正式橋長11mと候補対応を分けて記載。"
+    },
+    {
+      "source_oids": [
+        "S4-0373-01"
+      ],
+      "photo": [
+        "R70-0372_b.jpg",
+        "R70-0373_f.jpg",
+        "R70-0374_b.jpg"
+      ],
+      "identification": null,
+      "identification_status": "未特定",
+      "photo_reading": {
+        "visible": "淡い木色の角材笠木と縦桟。名板の文字を判別できない。",
+        "fully_legible": false
+      },
+      "official": null,
+      "reason": "県一覧には護摩屋敷橋と門戸口橋の間に旭橋２（7m）があるが、0366と0373のどちらに当たるか写真だけでは特定できない。",
+      "texture_lettering_recommendation": "旭橋と断定せず無地。"
+    }
+  ],
+  "other_official_lengths": [
+    {
+      "name": "門戸口橋",
+      "length_m": 13,
+      "row_number": 247,
+      "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+      "pdf_page_1based": 4,
+      "source_oid": "S4-0381-06",
+      "photo_match_status": "依頼文の名称に対応する正式橋長。銘板文字の写真判読結果とは別。"
+    },
+    {
+      "name": "桧沢橋",
+      "length_m": 7,
+      "row_number": 248,
+      "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+      "pdf_page_1based": 4,
+      "source_oid": "S4-0404-01",
+      "photo_match_status": "依頼文の名称に対応する正式橋長。銘板文字の写真判読結果とは別。"
+    },
+    {
+      "name": "常世橋",
+      "length_m": 10,
+      "row_number": 249,
+      "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+      "pdf_page_1based": 4,
+      "source_oid": "S4-0415-01",
+      "photo_match_status": "依頼文の名称に対応する正式橋長。銘板文字の写真判読結果とは別。"
+    },
+    {
+      "name": "清滝橋",
+      "length_m": 8,
+      "row_number": 253,
+      "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+      "pdf_page_1based": 4,
+      "source_oid": "S4-0467-02",
+      "photo_match_status": "依頼文の名称に対応する正式橋長。銘板文字の写真判読結果とは別。"
+    },
+    {
+      "name": "地獄沢橋",
+      "length_m": 13,
+      "row_number": 254,
+      "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+      "pdf_page_1based": 4,
+      "source_oid": "S4-0488-02",
+      "photo_match_status": "依頼文の名称に対応する正式橋長。銘板文字の写真判読結果とは別。"
+    },
+    {
+      "name": "青宇治橋",
+      "length_m": 20,
+      "width_m": 7.5,
+      "url": "https://www.town.kiyokawa.kanagawa.jp/material/files/group/5/r3toukeiyouran.pdf",
+      "pdf_page_1based": 53,
+      "printed_page": 33,
+      "county_source": {
+        "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+        "pdf_page_1based": 10,
+        "row_number": 586
+      },
+      "source_oid": "S5-0769-02",
+      "width_scope": "幅員7.5mは橋全体についての資料値。写真の狭い車道幅4mと同一の測定量と見なさない。"
+    },
+    {
+      "name": "塩水橋",
+      "length_m": 18,
+      "width_m": 6.0,
+      "url": "https://www.town.kiyokawa.kanagawa.jp/material/files/group/5/r3toukeiyouran.pdf",
+      "pdf_page_1based": 53,
+      "printed_page": 33,
+      "county_source": {
+        "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+        "pdf_page_1based": 10,
+        "row_number": 585
+      },
+      "source_oid": "S5-0737-01"
+    },
+    {
+      "name": "札掛橋",
+      "length_m": 21,
+      "width_m": 6.0,
+      "url": "https://www.town.kiyokawa.kanagawa.jp/material/files/group/5/r3toukeiyouran.pdf",
+      "pdf_page_1based": 53,
+      "printed_page": 33,
+      "county_source": {
+        "url": "https://www.pref.kanagawa.jp/documents/114236/kyouryou_tenkenkekka.pdf",
+        "pdf_page_1based": 9,
+        "row_number": 583
+      },
+      "source_oid": "S4-0543-01"
+    }
+  ],
+  "unresolved": [
+    "赤アーチの支間82mは編集資料にのみ確認。管理者資料の橋長99mから側径間を差し引く根拠は未確認。",
+    "熊野橋の写真の先頭字が欠け、別の残存写真でも全文判読できなかった。",
+    "0358と0373の正式名称は一次資料一覧と画像との1対1対応を確定できなかった。",
+    "webのPDF screenshotがCache missで失敗したため、資料の文字抽出結果で表を確認した。"
+  ]
+}

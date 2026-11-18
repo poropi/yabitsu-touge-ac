@@ -101,6 +101,7 @@ CENTRE_STYLES = {"white_dashed": ("line_white", (5.0, 5.0)), "white_solid": ("li
                  "orange_solid": ("line_orange", None), "orange_flanked": ("line_orange", None),
                  "orange_median": ("line_orange", None)}
 MEDIAN_W, MEDIAN_H = 0.6, 0.12   # orange_median：中央の盛り上がった帯（宮ヶ瀬湖ぞい）の幅・高さ。両側にオレンジの実線
+CENTRE_LIFT = 0.008   # 中央線は路面の色（赤い滑り止めなど、LIFT 0.005）より上に出す。同じ高さだと重なる所でちらつく（菜の花台のヘアピン、2026-10-30）
 FLANK_OFFSET, FLANK_DASH = 0.9, (2.0, 2.0)   # orange_flanked：オレンジの実線の両側の、白い破線（減速を促す線）
 
 
@@ -153,7 +154,7 @@ def add_centrelines(m, sec, rows, s_min=0.0, gaps=()):
             parts = [mg.compact(*mg.line(sec, sl, np.full(n, sgn * (MEDIAN_W / 2 + 0.12)))) for sgn in (1, -1)]
             m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}", *_merge(parts), mat)
             continue
-        v, f, uv = mg.compact(*mg.line(sec, sl, np.zeros(i1 - i0 + 1), dash=dash))
+        v, f, uv = mg.compact(*mg.line(sec, sl, np.zeros(i1 - i0 + 1), dash=dash, lift=CENTRE_LIFT))
         if len(f):
             m.add_mesh(GROUP, f"LINES_track_centre_{k:03d}", v, f, uv, mat)
         if style == "orange_flanked":
@@ -223,7 +224,7 @@ def add_features(m, sec, feats):
             m.add_mesh(GROUP, f"1WALL_track_fence_{k:03d}", *ft.parapet_mesh(sec, f2, off[f.side]), "railing_bars")
         elif f.type == "sidewalk":
             top, sides = ft.sidewalk_mesh(sec, f)
-            m.add_mesh(GROUP, f"1ROAD_track_sidewalk_{k:03d}", *top, "concrete")
+            m.add_mesh(GROUP, f"1ROAD_track_sidewalk_{k:03d}", *top, f.material or "concrete")   # 行の material（黒っぽい舗装の路肩は asphalt）
             m.add_mesh(GROUP, f"track_sidewalk_{k:03d}_curb", *sides, "concrete")
         elif f.type == "hedge":
             m.add_mesh(GROUP, f"1WALL_track_hedge_{k:03d}", *ft.hedge_mesh(sec, f, off[f.side]), "hedge")
@@ -250,10 +251,10 @@ def add_pads(m, pads):
         m.add_mesh(GROUP, f"1ROAD_s1_pad_{k:02d}", *mg.pad_mesh(p["polygon"], p["z"]), p.get("material", "asphalt"))   # 砂利の広場は gravel_grey（仕上げで貼り替えない）
 
 
-def add_start_lot(m, spec, pads):
+def add_start_lot(m, spec, pads, sec=None):
     for p in pads:
         if p.get("kind") == "lot":
-            for name, v, f, uv, mat, rend in lot_mod.meshes(spec, p):
+            for name, v, f, uv, mat, rend in lot_mod.meshes(spec, p, sec):
                 m.add_mesh(GROUP, name, v, f, uv, mat, renderable=rend)
 
 

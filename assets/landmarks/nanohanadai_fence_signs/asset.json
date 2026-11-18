@@ -1,0 +1,132 @@
+{
+  "source_visibility": "独立部品は重なりを避けるため制作元では最初の部品以外をviewport非表示。各コレクションの目を切替えて確認。NPZは全バリエーションを個別の原点で出力。",
+  "dimension_basis": "写真の既知物体との比率から推定。現地実測ではない。",
+  "refs": [
+    "sv_mid2_090.png",
+    "sv_mid2_135.png",
+    "sv_mid2_180.png"
+  ],
+  "approximations": [
+    "文字は解像度不足で判読できず、文字を創作せず短い線と色面で近似。絵柄は色と斜線を簡略化した自作図。",
+    "吊下げ位置は配置担当側で調整するため各板の下辺中央が原点。フェンス自体は含めない。"
+  ],
+  "preview_offsets": {
+    "yellow_sign": [
+      0.0,
+      0,
+      0
+    ],
+    "red_white_sign": [
+      1.25,
+      0,
+      0
+    ]
+  },
+  "reference_views": {
+    "reference": [
+      1,
+      -2,
+      0.55
+    ]
+  },
+  "references": [
+    {
+      "image": "export/compare/nanohanadai/sv_mid2_090.png",
+      "panoid": "P7jvxAJ_IJlvRcEGVeXJSA",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 90,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4104211,139.2095236,3a,90y,90h,85.87t/data=!3m6!1e1!3m4!1sP7jvxAJ_IJlvRcEGVeXJSA!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_mid2_135.png",
+      "panoid": "P7jvxAJ_IJlvRcEGVeXJSA",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 135,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4104211,139.2095236,3a,90y,135h,85.87t/data=!3m6!1e1!3m4!1sP7jvxAJ_IJlvRcEGVeXJSA!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_mid2_180.png",
+      "panoid": "P7jvxAJ_IJlvRcEGVeXJSA",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 180,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4104211,139.2095236,3a,90y,180h,85.87t/data=!3m6!1e1!3m4!1sP7jvxAJ_IJlvRcEGVeXJSA!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    }
+  ],
+  "generator": "blender_scripts/build_nanohanadai_small.py",
+  "asset_id": "nanohanadai_fence_signs",
+  "source": "nanohanadai_fence_signs.blend",
+  "parts": [
+    {
+      "name": "yellow_sign",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        0.45,
+        0.05,
+        0.55
+      ],
+      "bounds_m": [
+        [
+          -0.22499999403953552,
+          -0.007000001147389412,
+          0.0
+        ],
+        [
+          0.22499999403953552,
+          0.0429999977350235,
+          0.550000011920929
+        ]
+      ]
+    },
+    {
+      "name": "red_white_sign",
+      "triangles": 38,
+      "vertices": 76,
+      "dimensions_m": [
+        0.9,
+        0.05,
+        0.45
+      ],
+      "bounds_m": [
+        [
+          -0.44999998807907104,
+          -0.007000001147389412,
+          0.0
+        ],
+        [
+          0.44999998807907104,
+          0.0429999977350235,
+          0.44999998807907104
+        ]
+      ]
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各部品の根元中央"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderで再読込する際は1-v。配置側でも明示的に反転する。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

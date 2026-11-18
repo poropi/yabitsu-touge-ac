@@ -1,0 +1,170 @@
+{
+  "source_visibility": "独立部品は重なりを避けるため制作元では最初の部品以外をviewport非表示。各コレクションの目を切替えて確認。NPZは全バリエーションを個別の原点で出力。",
+  "dimension_basis": "写真の既知物体との比率から推定。現地実測ではない。",
+  "refs": [
+    "sv_mid_000.png",
+    "sv_mid_315.png",
+    "sv_ne_000.png",
+    "sv_ne_315.png"
+  ],
+  "approximations": [
+    "車止めの二種類は写真に見える長さ/摩耗差による変種。規格寸法の異なる製品と確定したものではない。",
+    "木箱は写真で横並び2箱と判断、内部構造と背面は推定。"
+  ],
+  "preview_offsets": {
+    "curb_a": [
+      0.0,
+      0,
+      0
+    ],
+    "curb_b": [
+      1.2,
+      0,
+      0
+    ],
+    "wood_box_bench": [
+      3,
+      0,
+      0
+    ]
+  },
+  "reference_views": {
+    "reference": [
+      1,
+      -2,
+      0.55
+    ]
+  },
+  "references": [
+    {
+      "image": "export/compare/nanohanadai/sv_mid_000.png",
+      "panoid": "MC9FOu1heTQ47rJo-eqsKA",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 0,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4103796,139.2093967,3a,90y,0h,85.87t/data=!3m6!1e1!3m4!1sMC9FOu1heTQ47rJo-eqsKA!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_mid_315.png",
+      "panoid": "MC9FOu1heTQ47rJo-eqsKA",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 315,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4103796,139.2093967,3a,90y,315h,85.87t/data=!3m6!1e1!3m4!1sMC9FOu1heTQ47rJo-eqsKA!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_ne_000.png",
+      "panoid": "1UbJBI3qyKnEo7x_lS6j3w",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 0,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4105395,139.209692,3a,90y,0h,85.87t/data=!3m6!1e1!3m4!1s1UbJBI3qyKnEo7x_lS6j3w!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    },
+    {
+      "image": "export/compare/nanohanadai/sv_ne_315.png",
+      "panoid": "1UbJBI3qyKnEo7x_lS6j3w",
+      "date": "2020-11",
+      "fov_vertical_deg": 90,
+      "heading_label_deg": 315,
+      "pitch_down_deg": 4.13,
+      "url": "https://www.google.com/maps/@35.4105395,139.209692,3a,90y,315h,85.87t/data=!3m6!1e1!3m4!1s1UbJBI3qyKnEo7x_lS6j3w!2e0!7i16384!8i8192",
+      "note": "Google Street View。比較参照のみ。"
+    }
+  ],
+  "generator": "blender_scripts/build_nanohanadai_small.py",
+  "asset_id": "nanohanadai_curb_block",
+  "source": "nanohanadai_curb_block.blend",
+  "parts": [
+    {
+      "name": "curb_a",
+      "triangles": 136,
+      "vertices": 290,
+      "dimensions_m": [
+        0.9217,
+        0.4119,
+        0.2894
+      ],
+      "bounds_m": [
+        [
+          -0.46044012904167175,
+          -0.20470242202281952,
+          -0.0008660554885864258
+        ],
+        [
+          0.46126532554626465,
+          0.20724506676197052,
+          0.2885779142379761
+        ]
+      ]
+    },
+    {
+      "name": "curb_b",
+      "triangles": 136,
+      "vertices": 290,
+      "dimensions_m": [
+        0.6642,
+        0.411,
+        0.2621
+      ],
+      "bounds_m": [
+        [
+          -0.3348239064216614,
+          -0.20548009872436523,
+          -0.003117583692073822
+        ],
+        [
+          0.3294160068035126,
+          0.20547883212566376,
+          0.25894373655319214
+        ]
+      ]
+    },
+    {
+      "name": "wood_box_bench",
+      "triangles": 992,
+      "vertices": 2064,
+      "dimensions_m": [
+        1.22,
+        0.542,
+        0.4
+      ],
+      "bounds_m": [
+        [
+          -0.6100000143051147,
+          -0.2709999978542328,
+          0.0
+        ],
+        [
+          0.6100000143051147,
+          0.2709999978542328,
+          0.4000000059604645
+        ]
+      ]
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各部品の根元中央"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderで再読込する際は1-v。配置側でも明示的に反転する。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

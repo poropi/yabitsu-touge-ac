@@ -1,0 +1,562 @@
+{
+  "asset_id": "r70_delineator",
+  "source": "r70_delineator.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 300,
+  "parts": [
+    {
+      "name": "pole",
+      "meaning": "白反射帯2本の樹脂ポール",
+      "triangles": 176,
+      "vertices": 288,
+      "dimensions_m": [
+        0.23,
+        0.23,
+        1.0
+      ],
+      "bounds_m": [
+        [
+          -0.115,
+          -0.115,
+          0.0
+        ],
+        [
+          0.115,
+          0.115,
+          1.0
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "pole.png"
+      ],
+      "components": [
+        {
+          "name": "柔軟ポールの広い根元",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "柔軟オレンジポール",
+          "triangle_start": 44,
+          "triangle_count": 44
+        },
+        {
+          "name": "白反射帯",
+          "triangle_start": 88,
+          "triangle_count": 44
+        },
+        {
+          "name": "白反射帯",
+          "triangle_start": 132,
+          "triangle_count": 44
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0720-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0720_f.jpg",
+          "url": "https://www.google.com/maps/@35.4845312,139.2067365,3a,90y,201.0h,88t/data=!3m4!1e1!3m2!1sOfY7SGrzamLZWYXG3I3NEg!2e0?hl=ja",
+          "description": "道の左、広がった路肩の端に並ぶオレンジ色の細いポール（約 1 m）3 本。柔らかい樹脂製"
+        },
+        {
+          "oid": "S5-0723-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0723_f.jpg",
+          "url": "https://www.google.com/maps/@35.484019,139.2061611,3a,90y,223.6h,88t/data=!3m4!1e1!3m2!1sWXrPHIzLKN84uwTOWa6bHw!2e0?hl=ja",
+          "description": "道の左の縁に並ぶオレンジ色の細い樹脂ポール（高さ約 1 m、白の反射帯 1〜2 本）。約 4〜5 m 間隔で奥へ続く"
+        },
+        {
+          "oid": "S5-0730-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0730_f.jpg",
+          "url": "https://www.google.com/maps/@35.4827049,139.2050724,3a,90y,185.4h,88t/data=!3m4!1e1!3m2!1sgPmPQQmjCpdZFgiC6pxn5w!2e0?hl=ja",
+          "description": "オレンジ色の細い棒状ポール 3〜4 本、道の左縁のカーブ内側、高さ約 1 m、間隔約 3 m"
+        },
+        {
+          "oid": "S5-0778-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_f.jpg",
+          "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,124.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+          "description": "黄色い角柱（約0.15m角、高さ約1.5m）、擁壁際に斜めに立つ。もう1本が遠方にも"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0720-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0720_f.jpg",
+        "url": "https://www.google.com/maps/@35.4845312,139.2067365,3a,90y,201.0h,88t/data=!3m4!1e1!3m2!1sOfY7SGrzamLZWYXG3I3NEg!2e0?hl=ja",
+        "description": "道の左、広がった路肩の端に並ぶオレンジ色の細いポール（約 1 m）3 本。柔らかい樹脂製"
+      },
+      "preview_views": {
+        "front": "r70_delineator_pole_front.png",
+        "left": "r70_delineator_pole_left.png",
+        "right": "r70_delineator_pole_right.png",
+        "back_estimated": "r70_delineator_pole_back_estimated.png",
+        "top": "r70_delineator_pole_top.png",
+        "persp": "r70_delineator_pole_persp.png",
+        "reference": "r70_delineator_pole_reference.png"
+      }
+    },
+    {
+      "name": "pole_yellow_square",
+      "meaning": "黄色角形の標識杭（樹脂ポールとは別形状）",
+      "triangles": 12,
+      "vertices": 24,
+      "dimensions_m": [
+        0.15,
+        0.15,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.075,
+          -0.075,
+          0.0
+        ],
+        [
+          0.075,
+          0.075,
+          1.5
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "pole_yellow_square.png"
+      ],
+      "components": [
+        {
+          "name": "黄色い角杭",
+          "triangle_start": 0,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0720-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0720_f.jpg",
+          "url": "https://www.google.com/maps/@35.4845312,139.2067365,3a,90y,201.0h,88t/data=!3m4!1e1!3m2!1sOfY7SGrzamLZWYXG3I3NEg!2e0?hl=ja",
+          "description": "道の左、広がった路肩の端に並ぶオレンジ色の細いポール（約 1 m）3 本。柔らかい樹脂製"
+        },
+        {
+          "oid": "S5-0723-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0723_f.jpg",
+          "url": "https://www.google.com/maps/@35.484019,139.2061611,3a,90y,223.6h,88t/data=!3m4!1e1!3m2!1sWXrPHIzLKN84uwTOWa6bHw!2e0?hl=ja",
+          "description": "道の左の縁に並ぶオレンジ色の細い樹脂ポール（高さ約 1 m、白の反射帯 1〜2 本）。約 4〜5 m 間隔で奥へ続く"
+        },
+        {
+          "oid": "S5-0730-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0730_f.jpg",
+          "url": "https://www.google.com/maps/@35.4827049,139.2050724,3a,90y,185.4h,88t/data=!3m4!1e1!3m2!1sgPmPQQmjCpdZFgiC6pxn5w!2e0?hl=ja",
+          "description": "オレンジ色の細い棒状ポール 3〜4 本、道の左縁のカーブ内側、高さ約 1 m、間隔約 3 m"
+        },
+        {
+          "oid": "S5-0778-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_f.jpg",
+          "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,124.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+          "description": "黄色い角柱（約0.15m角、高さ約1.5m）、擁壁際に斜めに立つ。もう1本が遠方にも"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0720-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0720_f.jpg",
+        "url": "https://www.google.com/maps/@35.4845312,139.2067365,3a,90y,201.0h,88t/data=!3m4!1e1!3m2!1sOfY7SGrzamLZWYXG3I3NEg!2e0?hl=ja",
+        "description": "道の左、広がった路肩の端に並ぶオレンジ色の細いポール（約 1 m）3 本。柔らかい樹脂製"
+      },
+      "preview_views": {
+        "front": "r70_delineator_pole_yellow_square_front.png",
+        "left": "r70_delineator_pole_yellow_square_left.png",
+        "right": "r70_delineator_pole_yellow_square_right.png",
+        "back_estimated": "r70_delineator_pole_yellow_square_back_estimated.png",
+        "top": "r70_delineator_pole_yellow_square_top.png",
+        "persp": "r70_delineator_pole_yellow_square_persp.png",
+        "reference": "r70_delineator_pole_yellow_square_reference.png"
+      }
+    },
+    {
+      "name": "rail_reflector",
+      "meaning": "ガードレールに後付けする丸反射体",
+      "triangles": 148,
+      "vertices": 240,
+      "dimensions_m": [
+        0.126,
+        0.062,
+        0.233
+      ],
+      "bounds_m": [
+        [
+          -0.063,
+          -0.018,
+          0.0
+        ],
+        [
+          0.063,
+          0.044,
+          0.233
+        ]
+      ],
+      "origin": "取付脚の根元中央。支柱上面へ設置。",
+      "front": "-Y",
+      "textures": [
+        "rail_reflector.png"
+      ],
+      "components": [
+        {
+          "name": "反射板の取付脚",
+          "triangle_start": 0,
+          "triangle_count": 28
+        },
+        {
+          "name": "反射板の白縁",
+          "triangle_start": 28,
+          "triangle_count": 60
+        },
+        {
+          "name": "橙反射板",
+          "triangle_start": 88,
+          "triangle_count": 60
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0311-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0311_f.jpg",
+          "url": "https://www.google.com/maps/@35.4300871,139.2162823,3a,90y,315.3h,88t/data=!3m4!1e1!3m2!1si0vnlbXIeDxqSysRn0Vv0Q!2e0?hl=ja",
+          "description": "ガードレールの支柱の頭やビームに付くオレンジ色の丸い反射体。点在し、約10〜20 m間隔"
+        },
+        {
+          "oid": "S5-0800-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0800_f.jpg",
+          "url": "https://www.google.com/maps/@35.4855682,139.2138683,3a,90y,20.9h,88t/data=!3m4!1e1!3m2!1sscfqJDQtDP7-oaQmuKNDmg!2e0?hl=ja",
+          "description": "ガードレールの支柱の上に付く橙色の丸い反射板、直径約 0.1 m。"
+        },
+        {
+          "oid": "S5-0912-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0912_f.jpg",
+          "url": "https://www.google.com/maps/@35.4990151,139.2284075,3a,90y,27.9h,88t/data=!3m4!1e1!3m2!1spUAkqUl9tgvw-Jq3Ra2tmg!2e0?hl=ja",
+          "description": "ガードレールの支柱に付けた橙色の丸い反射板"
+        },
+        {
+          "oid": "S5-0913-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0913_f.jpg",
+          "url": "https://www.google.com/maps/@35.4991925,139.2285863,3a,90y,62.2h,88t/data=!3m4!1e1!3m2!1sFyunK2BzcZ_LtedioAkXiQ!2e0?hl=ja",
+          "description": "ガードレールの支柱に付いた橙色の丸い反射板、カーブ外側"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0311-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0311_f.jpg",
+        "url": "https://www.google.com/maps/@35.4300871,139.2162823,3a,90y,315.3h,88t/data=!3m4!1e1!3m2!1si0vnlbXIeDxqSysRn0Vv0Q!2e0?hl=ja",
+        "description": "ガードレールの支柱の頭やビームに付くオレンジ色の丸い反射体。点在し、約10〜20 m間隔"
+      },
+      "preview_views": {
+        "front": "r70_delineator_rail_reflector_front.png",
+        "left": "r70_delineator_rail_reflector_left.png",
+        "right": "r70_delineator_rail_reflector_right.png",
+        "back_estimated": "r70_delineator_rail_reflector_back_estimated.png",
+        "top": "r70_delineator_rail_reflector_top.png",
+        "persp": "r70_delineator_rail_reflector_persp.png",
+        "reference": "r70_delineator_rail_reflector_reference.png"
+      }
+    },
+    {
+      "name": "chevron",
+      "meaning": "赤地白矢羽根の角板と細い柱",
+      "triangles": 66,
+      "vertices": 124,
+      "dimensions_m": [
+        0.6,
+        0.098,
+        1.55
+      ],
+      "bounds_m": [
+        [
+          -0.3,
+          -0.073,
+          0.0
+        ],
+        [
+          0.3,
+          0.025,
+          1.55
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "chevron.png"
+      ],
+      "components": [
+        {
+          "name": "板の厚み",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "差替用の表面",
+          "triangle_start": 12,
+          "triangle_count": 2
+        },
+        {
+          "name": "支柱",
+          "triangle_start": 14,
+          "triangle_count": 28
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 42,
+          "triangle_count": 12
+        },
+        {
+          "name": "裏面取付桟",
+          "triangle_start": 54,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "写真の右向きに合わせた汎用角板。左右反転は画像差替で指定可能。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0383-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0383_b.jpg",
+          "url": "https://www.google.com/maps/@35.4350168,139.2122075,3a,90y,172.4h,88t/data=!3m4!1e1!3m2!1sRTNElktAMsUJ7W1O-MAXyw!2e0?hl=ja",
+          "description": "右の草の斜面に並ぶ赤地に白い矢印（シェブロン）の板。最も手前の板は幅約0.6 m・高さ約0.6 m（白枠）、柱は灰色の細い管で高さ約1.2 m。奥に5〜6枚が約5 m間隔で並ぶ。0383F・0384Fでは裏の灰色の柱だけ見える。"
+        },
+        {
+          "oid": "S4-0319-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0319_f.jpg",
+          "url": "https://www.google.com/maps/@35.4313551,139.2147734,3a,90y,276.1h,88t/data=!3m4!1e1!3m2!1sjyd4POe23wqB7zUO900UBg!2e0?hl=ja",
+          "description": "ガードレールの板に付く赤白の矢羽根（細長い矢印の反射板）。約0.3 m。2枚並ぶ"
+        },
+        {
+          "oid": "S5-0932-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0932_b.jpg",
+          "url": "https://www.google.com/maps/@35.5004889,139.2316839,3a,90y,157.0h,88t/data=!3m4!1e1!3m2!1sdCjv6Hz_ctq4lYCU3coa2w!2e0?hl=ja",
+          "description": "道の右（谷側）、ガードレールの外側の細い柱に付く赤い矢羽根板（右向きの赤いV字、白縁）、約0.4×0.6m、高さ約1.5m。ガードレール外側に2枚（手前が大、奥に小さい物）。後方の画像で見える"
+        },
+        {
+          "oid": "S4-0362-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0362_f.jpg",
+          "url": "https://www.google.com/maps/@35.4312561,139.2094001,3a,90y,14.1h,88t/data=!3m4!1e1!3m2!1sFZ_MVrdPV1g8IGuJz1vOcw!2e0?hl=ja",
+          "description": "右端に見える赤橙の板（矢羽根か矢印）。細い柱。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0383-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0383_b.jpg",
+        "url": "https://www.google.com/maps/@35.4350168,139.2122075,3a,90y,172.4h,88t/data=!3m4!1e1!3m2!1sRTNElktAMsUJ7W1O-MAXyw!2e0?hl=ja",
+        "description": "右の草の斜面に並ぶ赤地に白い矢印（シェブロン）の板。最も手前の板は幅約0.6 m・高さ約0.6 m（白枠）、柱は灰色の細い管で高さ約1.2 m。奥に5〜6枚が約5 m間隔で並ぶ。0383F・0384Fでは裏の灰色の柱だけ見える。"
+      },
+      "preview_views": {
+        "front": "r70_delineator_chevron_front.png",
+        "left": "r70_delineator_chevron_left.png",
+        "right": "r70_delineator_chevron_right.png",
+        "back_estimated": "r70_delineator_chevron_back_estimated.png",
+        "top": "r70_delineator_chevron_top.png",
+        "persp": "r70_delineator_chevron_persp.png",
+        "reference": "r70_delineator_chevron_reference.png"
+      }
+    },
+    {
+      "name": "chevron_rail",
+      "meaning": "ガードレールへ直接付ける小さな横長矢羽根",
+      "triangles": 14,
+      "vertices": 28,
+      "dimensions_m": [
+        0.3,
+        0.0205,
+        0.16
+      ],
+      "bounds_m": [
+        [
+          -0.15,
+          -0.0105,
+          0.0
+        ],
+        [
+          0.15,
+          0.01,
+          0.16
+        ]
+      ],
+      "origin": "板の下辺中央。柱なし。",
+      "front": "-Y",
+      "textures": [
+        "chevron_rail.png"
+      ],
+      "components": [
+        {
+          "name": "ビーム取付板",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "矢羽根印刷",
+          "triangle_start": 12,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0383-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0383_b.jpg",
+          "url": "https://www.google.com/maps/@35.4350168,139.2122075,3a,90y,172.4h,88t/data=!3m4!1e1!3m2!1sRTNElktAMsUJ7W1O-MAXyw!2e0?hl=ja",
+          "description": "右の草の斜面に並ぶ赤地に白い矢印（シェブロン）の板。最も手前の板は幅約0.6 m・高さ約0.6 m（白枠）、柱は灰色の細い管で高さ約1.2 m。奥に5〜6枚が約5 m間隔で並ぶ。0383F・0384Fでは裏の灰色の柱だけ見える。"
+        },
+        {
+          "oid": "S4-0319-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0319_f.jpg",
+          "url": "https://www.google.com/maps/@35.4313551,139.2147734,3a,90y,276.1h,88t/data=!3m4!1e1!3m2!1sjyd4POe23wqB7zUO900UBg!2e0?hl=ja",
+          "description": "ガードレールの板に付く赤白の矢羽根（細長い矢印の反射板）。約0.3 m。2枚並ぶ"
+        },
+        {
+          "oid": "S5-0932-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0932_b.jpg",
+          "url": "https://www.google.com/maps/@35.5004889,139.2316839,3a,90y,157.0h,88t/data=!3m4!1e1!3m2!1sdCjv6Hz_ctq4lYCU3coa2w!2e0?hl=ja",
+          "description": "道の右（谷側）、ガードレールの外側の細い柱に付く赤い矢羽根板（右向きの赤いV字、白縁）、約0.4×0.6m、高さ約1.5m。ガードレール外側に2枚（手前が大、奥に小さい物）。後方の画像で見える"
+        },
+        {
+          "oid": "S4-0362-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0362_f.jpg",
+          "url": "https://www.google.com/maps/@35.4312561,139.2094001,3a,90y,14.1h,88t/data=!3m4!1e1!3m2!1sFZ_MVrdPV1g8IGuJz1vOcw!2e0?hl=ja",
+          "description": "右端に見える赤橙の板（矢羽根か矢印）。細い柱。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0383-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0383_b.jpg",
+        "url": "https://www.google.com/maps/@35.4350168,139.2122075,3a,90y,172.4h,88t/data=!3m4!1e1!3m2!1sRTNElktAMsUJ7W1O-MAXyw!2e0?hl=ja",
+        "description": "右の草の斜面に並ぶ赤地に白い矢印（シェブロン）の板。最も手前の板は幅約0.6 m・高さ約0.6 m（白枠）、柱は灰色の細い管で高さ約1.2 m。奥に5〜6枚が約5 m間隔で並ぶ。0383F・0384Fでは裏の灰色の柱だけ見える。"
+      },
+      "preview_views": {
+        "front": "r70_delineator_chevron_rail_front.png",
+        "left": "r70_delineator_chevron_rail_left.png",
+        "right": "r70_delineator_chevron_rail_right.png",
+        "back_estimated": "r70_delineator_chevron_rail_back_estimated.png",
+        "top": "r70_delineator_chevron_rail_top.png",
+        "persp": "r70_delineator_chevron_rail_persp.png",
+        "reference": "r70_delineator_chevron_rail_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [],
+  "references": {
+    "pole": [
+      {
+        "oid": "S5-0720-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0720_f.jpg",
+        "url": "https://www.google.com/maps/@35.4845312,139.2067365,3a,90y,201.0h,88t/data=!3m4!1e1!3m2!1sOfY7SGrzamLZWYXG3I3NEg!2e0?hl=ja",
+        "description": "道の左、広がった路肩の端に並ぶオレンジ色の細いポール（約 1 m）3 本。柔らかい樹脂製"
+      },
+      {
+        "oid": "S5-0723-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0723_f.jpg",
+        "url": "https://www.google.com/maps/@35.484019,139.2061611,3a,90y,223.6h,88t/data=!3m4!1e1!3m2!1sWXrPHIzLKN84uwTOWa6bHw!2e0?hl=ja",
+        "description": "道の左の縁に並ぶオレンジ色の細い樹脂ポール（高さ約 1 m、白の反射帯 1〜2 本）。約 4〜5 m 間隔で奥へ続く"
+      },
+      {
+        "oid": "S5-0730-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0730_f.jpg",
+        "url": "https://www.google.com/maps/@35.4827049,139.2050724,3a,90y,185.4h,88t/data=!3m4!1e1!3m2!1sgPmPQQmjCpdZFgiC6pxn5w!2e0?hl=ja",
+        "description": "オレンジ色の細い棒状ポール 3〜4 本、道の左縁のカーブ内側、高さ約 1 m、間隔約 3 m"
+      },
+      {
+        "oid": "S5-0778-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0778_f.jpg",
+        "url": "https://www.google.com/maps/@35.4860668,139.2104805,3a,90y,124.7h,88t/data=!3m4!1e1!3m2!1s197rOpEcp7a_RTDrT4fpqg!2e0?hl=ja",
+        "description": "黄色い角柱（約0.15m角、高さ約1.5m）、擁壁際に斜めに立つ。もう1本が遠方にも"
+      }
+    ],
+    "rail_reflector": [
+      {
+        "oid": "S4-0311-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0311_f.jpg",
+        "url": "https://www.google.com/maps/@35.4300871,139.2162823,3a,90y,315.3h,88t/data=!3m4!1e1!3m2!1si0vnlbXIeDxqSysRn0Vv0Q!2e0?hl=ja",
+        "description": "ガードレールの支柱の頭やビームに付くオレンジ色の丸い反射体。点在し、約10〜20 m間隔"
+      },
+      {
+        "oid": "S5-0800-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0800_f.jpg",
+        "url": "https://www.google.com/maps/@35.4855682,139.2138683,3a,90y,20.9h,88t/data=!3m4!1e1!3m2!1sscfqJDQtDP7-oaQmuKNDmg!2e0?hl=ja",
+        "description": "ガードレールの支柱の上に付く橙色の丸い反射板、直径約 0.1 m。"
+      },
+      {
+        "oid": "S5-0912-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0912_f.jpg",
+        "url": "https://www.google.com/maps/@35.4990151,139.2284075,3a,90y,27.9h,88t/data=!3m4!1e1!3m2!1spUAkqUl9tgvw-Jq3Ra2tmg!2e0?hl=ja",
+        "description": "ガードレールの支柱に付けた橙色の丸い反射板"
+      },
+      {
+        "oid": "S5-0913-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0913_f.jpg",
+        "url": "https://www.google.com/maps/@35.4991925,139.2285863,3a,90y,62.2h,88t/data=!3m4!1e1!3m2!1sFyunK2BzcZ_LtedioAkXiQ!2e0?hl=ja",
+        "description": "ガードレールの支柱に付いた橙色の丸い反射板、カーブ外側"
+      }
+    ],
+    "chevron": [
+      {
+        "oid": "S4-0383-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0383_b.jpg",
+        "url": "https://www.google.com/maps/@35.4350168,139.2122075,3a,90y,172.4h,88t/data=!3m4!1e1!3m2!1sRTNElktAMsUJ7W1O-MAXyw!2e0?hl=ja",
+        "description": "右の草の斜面に並ぶ赤地に白い矢印（シェブロン）の板。最も手前の板は幅約0.6 m・高さ約0.6 m（白枠）、柱は灰色の細い管で高さ約1.2 m。奥に5〜6枚が約5 m間隔で並ぶ。0383F・0384Fでは裏の灰色の柱だけ見える。"
+      },
+      {
+        "oid": "S4-0319-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0319_f.jpg",
+        "url": "https://www.google.com/maps/@35.4313551,139.2147734,3a,90y,276.1h,88t/data=!3m4!1e1!3m2!1sjyd4POe23wqB7zUO900UBg!2e0?hl=ja",
+        "description": "ガードレールの板に付く赤白の矢羽根（細長い矢印の反射板）。約0.3 m。2枚並ぶ"
+      },
+      {
+        "oid": "S5-0932-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0932_b.jpg",
+        "url": "https://www.google.com/maps/@35.5004889,139.2316839,3a,90y,157.0h,88t/data=!3m4!1e1!3m2!1sdCjv6Hz_ctq4lYCU3coa2w!2e0?hl=ja",
+        "description": "道の右（谷側）、ガードレールの外側の細い柱に付く赤い矢羽根板（右向きの赤いV字、白縁）、約0.4×0.6m、高さ約1.5m。ガードレール外側に2枚（手前が大、奥に小さい物）。後方の画像で見える"
+      },
+      {
+        "oid": "S4-0362-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0362_f.jpg",
+        "url": "https://www.google.com/maps/@35.4312561,139.2094001,3a,90y,14.1h,88t/data=!3m4!1e1!3m2!1sFZ_MVrdPV1g8IGuJz1vOcw!2e0?hl=ja",
+        "description": "右端に見える赤橙の板（矢羽根か矢印）。細い柱。"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "pole",
+    "image": "R70-0723_f.jpg",
+    "crop_pixels": [
+      130,
+      530,
+      480,
+      920
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

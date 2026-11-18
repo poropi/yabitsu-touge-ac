@@ -1,0 +1,1454 @@
+{
+  "asset_id": "r70_utility_pole",
+  "source": "r70_utility_pole.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 2000,
+  "parts": [
+    {
+      "name": "concrete",
+      "meaning": "テーパー付きコンクリート電柱",
+      "triangles": 1104,
+      "vertices": 1944,
+      "dimensions_m": [
+        1.65,
+        0.4,
+        10.0
+      ],
+      "bounds_m": [
+        [
+          -0.825,
+          -0.2,
+          0.0
+        ],
+        [
+          0.825,
+          0.2,
+          10.0
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "concrete.png"
+      ],
+      "components": [
+        {
+          "name": "柱本体",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "腕金",
+          "triangle_start": 44,
+          "triangle_count": 12
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 56,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 76,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 104,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 132,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 160,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 180,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 208,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 236,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 264,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 284,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 312,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 340,
+          "triangle_count": 28
+        },
+        {
+          "name": "腕金の斜材",
+          "triangle_start": 368,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕金",
+          "triangle_start": 380,
+          "triangle_count": 12
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 392,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 412,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 440,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 468,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 496,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 516,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 544,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 572,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 600,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 620,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 648,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 676,
+          "triangle_count": 28
+        },
+        {
+          "name": "腕金の斜材",
+          "triangle_start": 704,
+          "triangle_count": 12
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 716,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 732,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 748,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 764,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 780,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 796,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 812,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 828,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 844,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 860,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 876,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 892,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 908,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 924,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 940,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 956,
+          "triangle_count": 16
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 972,
+          "triangle_count": 44
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 1016,
+          "triangle_count": 44
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 1060,
+          "triangle_count": 44
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "電線・支線は依頼範囲外。腕金の本数と金具の細部、埋設長を除いた高さは推定。",
+        "傾きは設置時に指定するため原型は直立。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0340-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0340_f.jpg",
+          "url": "https://www.google.com/maps/@35.4315011,139.2117097,3a,90y,227.6h,88t/data=!3m4!1e1!3m2!1sAa1shafHw0VU89TMpwi6yQ!2e0?hl=ja",
+          "description": "道の右側、ガードレールのすぐ外側に立つ太いコンクリート電柱。道路側へ大きく傾いている。高さ約10 m"
+        },
+        {
+          "oid": "S4-0380-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+          "description": "建物の手前、道の右に立つ太い電柱。腕金が複数、高さ約10 m。奥に送電鉄塔が小さく見える。"
+        },
+        {
+          "oid": "S4-0382-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "店の前の道端に立つ電柱。高さ約10 m、電線が複数。"
+        },
+        {
+          "oid": "S4-0385-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_b.jpg",
+          "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,159.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+          "description": "0385Bの右に立つ太いコンクリート電柱。腕金が複数、高さ約11 m、電線が多数。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0340-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0340_f.jpg",
+        "url": "https://www.google.com/maps/@35.4315011,139.2117097,3a,90y,227.6h,88t/data=!3m4!1e1!3m2!1sAa1shafHw0VU89TMpwi6yQ!2e0?hl=ja",
+        "description": "道の右側、ガードレールのすぐ外側に立つ太いコンクリート電柱。道路側へ大きく傾いている。高さ約10 m"
+      },
+      "preview_views": {
+        "front": "r70_utility_pole_concrete_front.png",
+        "left": "r70_utility_pole_concrete_left.png",
+        "right": "r70_utility_pole_concrete_right.png",
+        "back_estimated": "r70_utility_pole_concrete_back_estimated.png",
+        "top": "r70_utility_pole_concrete_top.png",
+        "persp": "r70_utility_pole_concrete_persp.png",
+        "reference": "r70_utility_pole_concrete_reference.png"
+      }
+    },
+    {
+      "name": "concrete_transformer",
+      "meaning": "円筒変圧器付きコンクリート電柱",
+      "triangles": 1404,
+      "vertices": 2448,
+      "dimensions_m": [
+        1.65,
+        0.92,
+        10.0
+      ],
+      "bounds_m": [
+        [
+          -0.825,
+          -0.72,
+          0.0
+        ],
+        [
+          0.825,
+          0.2,
+          10.0
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "concrete_transformer.png"
+      ],
+      "components": [
+        {
+          "name": "柱本体",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "腕金",
+          "triangle_start": 44,
+          "triangle_count": 12
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 56,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 76,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 104,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 132,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 160,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 180,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 208,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 236,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 264,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 284,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 312,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 340,
+          "triangle_count": 28
+        },
+        {
+          "name": "腕金の斜材",
+          "triangle_start": 368,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕金",
+          "triangle_start": 380,
+          "triangle_count": 12
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 392,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 412,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 440,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 468,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 496,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 516,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 544,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 572,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 600,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 620,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 648,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 676,
+          "triangle_count": 28
+        },
+        {
+          "name": "腕金の斜材",
+          "triangle_start": 704,
+          "triangle_count": 12
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 716,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 732,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 748,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 764,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 780,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 796,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 812,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 828,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 844,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 860,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 876,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 892,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 908,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 924,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 940,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 956,
+          "triangle_count": 16
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 972,
+          "triangle_count": 44
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 1016,
+          "triangle_count": 44
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 1060,
+          "triangle_count": 44
+        },
+        {
+          "name": "機器支持棚",
+          "triangle_start": 1104,
+          "triangle_count": 12
+        },
+        {
+          "name": "円筒変圧器",
+          "triangle_start": 1116,
+          "triangle_count": 60
+        },
+        {
+          "name": "上蓋",
+          "triangle_start": 1176,
+          "triangle_count": 60
+        },
+        {
+          "name": "変圧器ブッシング",
+          "triangle_start": 1236,
+          "triangle_count": 28
+        },
+        {
+          "name": "変圧器ブッシング",
+          "triangle_start": 1264,
+          "triangle_count": 28
+        },
+        {
+          "name": "変圧器ブッシング",
+          "triangle_start": 1292,
+          "triangle_count": 28
+        },
+        {
+          "name": "変圧器ブッシング",
+          "triangle_start": 1320,
+          "triangle_count": 28
+        },
+        {
+          "name": "変圧器ブッシング",
+          "triangle_start": 1348,
+          "triangle_count": 28
+        },
+        {
+          "name": "変圧器ブッシング",
+          "triangle_start": 1376,
+          "triangle_count": 28
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "電線・支線は依頼範囲外。腕金の本数と金具の細部、埋設長を除いた高さは推定。",
+        "傾きは設置時に指定するため原型は直立。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0299-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0300_b.jpg",
+          "url": "https://www.google.com/maps/@35.4287771,139.2186469,3a,90y,136.8h,88t/data=!3m4!1e1!3m2!1sGekoq_cdY0bWEyKEZpB_-w!2e0?hl=ja",
+          "description": "道の右側の電柱。高さ約10 m、コンクリート柱、上部に円筒形の変圧器、腕金に碍子。電線が左上から奥へ。0299Fでは近い"
+        },
+        {
+          "oid": "S4-0305-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0305_f.jpg",
+          "url": "https://www.google.com/maps/@35.4292233,139.2175081,3a,90y,314.2h,88t/data=!3m4!1e1!3m2!1saLe2Mmsahi3ZWFIgSJL9Ow!2e0?hl=ja",
+          "description": "道の右側の近い電柱。コンクリート、太い、上部に円筒形の変圧器、碍子。電線は腕金から左右へ"
+        },
+        {
+          "oid": "S5-1004-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1004_f.jpg",
+          "url": "https://www.google.com/maps/@35.5153395,139.2330592,3a,90y,357.6h,88t/data=!3m4!1e1!3m2!1stajN1-ut8FUqUZTEemZdhw!2e0?hl=ja",
+          "description": "左の電柱、高さ約10m、上部に灰色の機器箱、電線が数本、斜めの支え柱"
+        },
+        {
+          "oid": "S4-0459-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0460_b.jpg",
+          "url": "https://www.google.com/maps/@35.4477154,139.2122431,3a,90y,235.7h,88t/data=!3m4!1e1!3m2!1s1YB7pGcUb-teuTEd9YY5aw!2e0?hl=ja",
+          "description": "柱 2 本が並び、上部に腕木と変圧器らしい物、高さ約 9 m。0459〜0461 の木材置き場の脇、道の右の縁から約 5 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0299-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0300_b.jpg",
+        "url": "https://www.google.com/maps/@35.4287771,139.2186469,3a,90y,136.8h,88t/data=!3m4!1e1!3m2!1sGekoq_cdY0bWEyKEZpB_-w!2e0?hl=ja",
+        "description": "道の右側の電柱。高さ約10 m、コンクリート柱、上部に円筒形の変圧器、腕金に碍子。電線が左上から奥へ。0299Fでは近い"
+      },
+      "preview_views": {
+        "front": "r70_utility_pole_concrete_transformer_front.png",
+        "left": "r70_utility_pole_concrete_transformer_left.png",
+        "right": "r70_utility_pole_concrete_transformer_right.png",
+        "back_estimated": "r70_utility_pole_concrete_transformer_back_estimated.png",
+        "top": "r70_utility_pole_concrete_transformer_top.png",
+        "persp": "r70_utility_pole_concrete_transformer_persp.png",
+        "reference": "r70_utility_pole_concrete_transformer_reference.png"
+      }
+    },
+    {
+      "name": "wood",
+      "meaning": "木製電話柱風の腕金・碍子・足場付き柱",
+      "triangles": 1072,
+      "vertices": 1884,
+      "dimensions_m": [
+        1.65,
+        0.29,
+        9.0
+      ],
+      "bounds_m": [
+        [
+          -0.825,
+          -0.145,
+          0.0
+        ],
+        [
+          0.825,
+          0.145,
+          9.0
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "wood.png"
+      ],
+      "components": [
+        {
+          "name": "柱本体",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "腕金",
+          "triangle_start": 44,
+          "triangle_count": 12
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 56,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 76,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 104,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 132,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 160,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 180,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 208,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 236,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 264,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 284,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 312,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 340,
+          "triangle_count": 28
+        },
+        {
+          "name": "腕金の斜材",
+          "triangle_start": 368,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕金",
+          "triangle_start": 380,
+          "triangle_count": 12
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 392,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 412,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 440,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 468,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 496,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 516,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 544,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 572,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 600,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 620,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 648,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 676,
+          "triangle_count": 28
+        },
+        {
+          "name": "腕金の斜材",
+          "triangle_start": 704,
+          "triangle_count": 12
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 716,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 732,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 748,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 764,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 780,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 796,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 812,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 828,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 844,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 860,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 876,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 892,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 908,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 924,
+          "triangle_count": 16
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 940,
+          "triangle_count": 44
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 984,
+          "triangle_count": 44
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 1028,
+          "triangle_count": 44
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "電線・支線は依頼範囲外。腕金の本数と金具の細部、埋設長を除いた高さは推定。",
+        "傾きは設置時に指定するため原型は直立。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0806-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0806_f.jpg",
+          "url": "https://www.google.com/maps/@35.4865855,139.2148366,3a,90y,39.9h,88t/data=!3m4!1e1!3m2!1spDvMWrBEF9owAA_-MA9I-Q!2e0?hl=ja",
+          "description": "灰色〜茶色の電柱、上部に腕金と電線、道の右の谷側、フェンスのすぐ外。高さ約 9 m。"
+        },
+        {
+          "oid": "S5-0904-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0904_f.jpg",
+          "url": "https://www.google.com/maps/@35.4985882,139.2264939,3a,90y,60.7h,88t/data=!3m4!1e1!3m2!1sVU-3r0QHqIsNpdB8FcYa7Q!2e0?hl=ja",
+          "description": "カーブミラーを付けた太い木柱、高さ約9m、頭に腕金と電線2〜3本、斜めの電線が道をまたぐ。カーブの右の山際"
+        },
+        {
+          "oid": "S4-0356-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+          "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+          "description": "茶色い木製に見える電柱。高さ約10 m、地上約3 mに電気の小箱、地上近くに灰色の大きな箱。左の速度標識のすぐ脇。"
+        },
+        {
+          "oid": "S4-0364-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0364_f.jpg",
+          "url": "https://www.google.com/maps/@35.4316936,139.2095323,3a,90y,28.1h,88t/data=!3m4!1e1!3m2!1sCBln6e9rQwczd4I9d1g1PQ!2e0?hl=ja",
+          "description": "橋の先、道の左に立つ茶色の木製の電柱。高さ約9 m。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0806-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0806_f.jpg",
+        "url": "https://www.google.com/maps/@35.4865855,139.2148366,3a,90y,39.9h,88t/data=!3m4!1e1!3m2!1spDvMWrBEF9owAA_-MA9I-Q!2e0?hl=ja",
+        "description": "灰色〜茶色の電柱、上部に腕金と電線、道の右の谷側、フェンスのすぐ外。高さ約 9 m。"
+      },
+      "preview_views": {
+        "front": "r70_utility_pole_wood_front.png",
+        "left": "r70_utility_pole_wood_left.png",
+        "right": "r70_utility_pole_wood_right.png",
+        "back_estimated": "r70_utility_pole_wood_back_estimated.png",
+        "top": "r70_utility_pole_wood_top.png",
+        "persp": "r70_utility_pole_wood_persp.png",
+        "reference": "r70_utility_pole_wood_reference.png"
+      }
+    },
+    {
+      "name": "steel_green",
+      "meaning": "緑塗装鋼管柱",
+      "triangles": 1040,
+      "vertices": 1824,
+      "dimensions_m": [
+        1.65,
+        0.2,
+        8.0
+      ],
+      "bounds_m": [
+        [
+          -0.825,
+          -0.1,
+          0.0
+        ],
+        [
+          0.825,
+          0.1,
+          8.0
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "steel_green.png"
+      ],
+      "components": [
+        {
+          "name": "柱本体",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "腕金",
+          "triangle_start": 44,
+          "triangle_count": 12
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 56,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 76,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 104,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 132,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 160,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 180,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 208,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 236,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 264,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 284,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 312,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 340,
+          "triangle_count": 28
+        },
+        {
+          "name": "腕金の斜材",
+          "triangle_start": 368,
+          "triangle_count": 12
+        },
+        {
+          "name": "腕金",
+          "triangle_start": 380,
+          "triangle_count": 12
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 392,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 412,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 440,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 468,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 496,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 516,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 544,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 572,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子の心棒",
+          "triangle_start": 600,
+          "triangle_count": 20
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 620,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 648,
+          "triangle_count": 28
+        },
+        {
+          "name": "碍子ひだ",
+          "triangle_start": 676,
+          "triangle_count": 28
+        },
+        {
+          "name": "腕金の斜材",
+          "triangle_start": 704,
+          "triangle_count": 12
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 716,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 732,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 748,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 764,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 780,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 796,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 812,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 828,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 844,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 860,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 876,
+          "triangle_count": 16
+        },
+        {
+          "name": "足場ボルト",
+          "triangle_start": 892,
+          "triangle_count": 16
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 908,
+          "triangle_count": 44
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 952,
+          "triangle_count": 44
+        },
+        {
+          "name": "締付バンド",
+          "triangle_start": 996,
+          "triangle_count": 44
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "電線・支線は依頼範囲外。腕金の本数と金具の細部、埋設長を除いた高さは推定。",
+        "傾きは設置時に指定するため原型は直立。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0583-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0583_b.jpg",
+          "url": "https://www.google.com/maps/@35.4695965,139.2177247,3a,90y,168.1h,88t/data=!3m4!1e1!3m2!1sDb8JDwo62OIONAcUoozIJw!2e0?hl=ja",
+          "description": "緑がかった細い柱、高さ約8m、上部に架線の金具。土手の際、道の縁から約1.5m、カーブミラーのすぐ近く"
+        },
+        {
+          "oid": "S5-0617-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0618_b.jpg",
+          "url": "https://www.google.com/maps/@35.4730615,139.2127058,3a,90y,22.4h,88t/data=!3m4!1e1!3m2!1srravkkA_iGePVEk8o_Rcow!2e0?hl=ja",
+          "description": "石積み擁壁の上に並んで立つ緑色（塗装の鋼管か電柱）の細い柱 2 本、直径約 0.2 m、高さ約 8 m、間隔約 2 m。金網フェンスの内側。上は画面外"
+        },
+        {
+          "oid": "S5-0649-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0649_f.jpg",
+          "url": "https://www.google.com/maps/@35.4754878,139.2110354,3a,90y,349.5h,88t/data=!3m4!1e1!3m2!1snRbqWzbh2YeOWZRESzmRrQ!2e0?hl=ja",
+          "description": "緑色に塗られた細い柱（鋼管柱か）、上部に腕金と電線。ガードレールの外、カーブの先"
+        },
+        {
+          "oid": "S5-0613-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0613_f.jpg",
+          "url": "https://www.google.com/maps/@35.4730105,139.2136049,3a,90y,352.1h,88t/data=!3m4!1e1!3m2!1seZagF4CpSsktfk5u_3peRQ!2e0?hl=ja",
+          "description": "石張り擁壁の上に立つ緑色（苔か塗装）の太い柱状の物、直径約 0.4 m、上は画面外。電線らしい線が上に見える。電柱か支柱か不明"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0583-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0583_b.jpg",
+        "url": "https://www.google.com/maps/@35.4695965,139.2177247,3a,90y,168.1h,88t/data=!3m4!1e1!3m2!1sDb8JDwo62OIONAcUoozIJw!2e0?hl=ja",
+        "description": "緑がかった細い柱、高さ約8m、上部に架線の金具。土手の際、道の縁から約1.5m、カーブミラーのすぐ近く"
+      },
+      "preview_views": {
+        "front": "r70_utility_pole_steel_green_front.png",
+        "left": "r70_utility_pole_steel_green_left.png",
+        "right": "r70_utility_pole_steel_green_right.png",
+        "back_estimated": "r70_utility_pole_steel_green_back_estimated.png",
+        "top": "r70_utility_pole_steel_green_top.png",
+        "persp": "r70_utility_pole_steel_green_persp.png",
+        "reference": "r70_utility_pole_steel_green_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "thin_concreteの参照4例から独立した電話専用コンクリート柱を確認できないため、重複型を作らずconcreteを流用。",
+    "wood参照は材質確証に乏しい。木柱の幹色・径は推定。制御箱はmiscの独立部品。"
+  ],
+  "references": {
+    "concrete": [
+      {
+        "oid": "S4-0340-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0340_f.jpg",
+        "url": "https://www.google.com/maps/@35.4315011,139.2117097,3a,90y,227.6h,88t/data=!3m4!1e1!3m2!1sAa1shafHw0VU89TMpwi6yQ!2e0?hl=ja",
+        "description": "道の右側、ガードレールのすぐ外側に立つ太いコンクリート電柱。道路側へ大きく傾いている。高さ約10 m"
+      },
+      {
+        "oid": "S4-0380-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+        "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja",
+        "description": "建物の手前、道の右に立つ太い電柱。腕金が複数、高さ約10 m。奥に送電鉄塔が小さく見える。"
+      },
+      {
+        "oid": "S4-0382-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+        "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+        "description": "店の前の道端に立つ電柱。高さ約10 m、電線が複数。"
+      },
+      {
+        "oid": "S4-0385-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0385_b.jpg",
+        "url": "https://www.google.com/maps/@35.4353928,139.2120236,3a,90y,159.7h,88t/data=!3m4!1e1!3m2!1s5yXtLRGs0tSwEN5wfQ51zQ!2e0?hl=ja",
+        "description": "0385Bの右に立つ太いコンクリート電柱。腕金が複数、高さ約11 m、電線が多数。"
+      }
+    ],
+    "concrete_transformer": [
+      {
+        "oid": "S4-0299-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0300_b.jpg",
+        "url": "https://www.google.com/maps/@35.4287771,139.2186469,3a,90y,136.8h,88t/data=!3m4!1e1!3m2!1sGekoq_cdY0bWEyKEZpB_-w!2e0?hl=ja",
+        "description": "道の右側の電柱。高さ約10 m、コンクリート柱、上部に円筒形の変圧器、腕金に碍子。電線が左上から奥へ。0299Fでは近い"
+      },
+      {
+        "oid": "S4-0305-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0305_f.jpg",
+        "url": "https://www.google.com/maps/@35.4292233,139.2175081,3a,90y,314.2h,88t/data=!3m4!1e1!3m2!1saLe2Mmsahi3ZWFIgSJL9Ow!2e0?hl=ja",
+        "description": "道の右側の近い電柱。コンクリート、太い、上部に円筒形の変圧器、碍子。電線は腕金から左右へ"
+      },
+      {
+        "oid": "S5-1004-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1004_f.jpg",
+        "url": "https://www.google.com/maps/@35.5153395,139.2330592,3a,90y,357.6h,88t/data=!3m4!1e1!3m2!1stajN1-ut8FUqUZTEemZdhw!2e0?hl=ja",
+        "description": "左の電柱、高さ約10m、上部に灰色の機器箱、電線が数本、斜めの支え柱"
+      },
+      {
+        "oid": "S4-0459-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0460_b.jpg",
+        "url": "https://www.google.com/maps/@35.4477154,139.2122431,3a,90y,235.7h,88t/data=!3m4!1e1!3m2!1s1YB7pGcUb-teuTEd9YY5aw!2e0?hl=ja",
+        "description": "柱 2 本が並び、上部に腕木と変圧器らしい物、高さ約 9 m。0459〜0461 の木材置き場の脇、道の右の縁から約 5 m"
+      }
+    ],
+    "thin_concrete": [
+      {
+        "oid": "S5-0568-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0569_b.jpg",
+        "url": "https://www.google.com/maps/@35.4674036,139.2156225,3a,90y,208.6h,88t/data=!3m4!1e1!3m2!1sAbRK6HYoP6Jm31NtWS0A5g!2e0?hl=ja",
+        "description": "灰色の木柱状（コンクリート柱）の電柱、太さ約0.25m、高さ約9m。左の法面下、道の縁から約1.5m。架線あり、支線は見えない"
+      },
+      {
+        "oid": "S5-0588-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0588_f.jpg",
+        "url": "https://www.google.com/maps/@35.47056,139.2172753,3a,90y,1.0h,88t/data=!3m4!1e1!3m2!1sEdY6EYAQeajVpV5TvjvB8g!2e0?hl=ja",
+        "description": "道の右の木立の中に立つ細い電柱（木製か細いコンクリート）、高さ約 9 m、上に腕金と電線 2〜3 本が右奥へ伸びる。道の縁から約 3 m、ガードレールの外"
+      },
+      {
+        "oid": "S5-0793-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0794_b.jpg",
+        "url": "https://www.google.com/maps/@35.4845156,139.2129591,3a,90y,234.8h,88t/data=!3m4!1e1!3m2!1sotaUelkWktppejpMcKQf3g!2e0?hl=ja",
+        "description": "細く灰色の電柱 1 本、上に電線が走る。山側の擁壁の上方か道の左。"
+      },
+      {
+        "oid": "S5-0794-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0795_f.jpg",
+        "url": "https://www.google.com/maps/@35.4846413,139.2130935,3a,90y,44.1h,88t/data=!3m4!1e1!3m2!1s8Ai_J7MZKr4DKq7E6lAcaw!2e0?hl=ja",
+        "description": "灰色の細い電柱 1 本、上に電線。道の左端の木の間、擁壁の終わりのすぐ先。"
+      }
+    ],
+    "wood": [
+      {
+        "oid": "S5-0806-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0806_f.jpg",
+        "url": "https://www.google.com/maps/@35.4865855,139.2148366,3a,90y,39.9h,88t/data=!3m4!1e1!3m2!1spDvMWrBEF9owAA_-MA9I-Q!2e0?hl=ja",
+        "description": "灰色〜茶色の電柱、上部に腕金と電線、道の右の谷側、フェンスのすぐ外。高さ約 9 m。"
+      },
+      {
+        "oid": "S5-0904-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0904_f.jpg",
+        "url": "https://www.google.com/maps/@35.4985882,139.2264939,3a,90y,60.7h,88t/data=!3m4!1e1!3m2!1sVU-3r0QHqIsNpdB8FcYa7Q!2e0?hl=ja",
+        "description": "カーブミラーを付けた太い木柱、高さ約9m、頭に腕金と電線2〜3本、斜めの電線が道をまたぐ。カーブの右の山際"
+      },
+      {
+        "oid": "S4-0356-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+        "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+        "description": "茶色い木製に見える電柱。高さ約10 m、地上約3 mに電気の小箱、地上近くに灰色の大きな箱。左の速度標識のすぐ脇。"
+      },
+      {
+        "oid": "S4-0364-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0364_f.jpg",
+        "url": "https://www.google.com/maps/@35.4316936,139.2095323,3a,90y,28.1h,88t/data=!3m4!1e1!3m2!1sCBln6e9rQwczd4I9d1g1PQ!2e0?hl=ja",
+        "description": "橋の先、道の左に立つ茶色の木製の電柱。高さ約9 m。"
+      }
+    ],
+    "steel_green": [
+      {
+        "oid": "S5-0583-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0583_b.jpg",
+        "url": "https://www.google.com/maps/@35.4695965,139.2177247,3a,90y,168.1h,88t/data=!3m4!1e1!3m2!1sDb8JDwo62OIONAcUoozIJw!2e0?hl=ja",
+        "description": "緑がかった細い柱、高さ約8m、上部に架線の金具。土手の際、道の縁から約1.5m、カーブミラーのすぐ近く"
+      },
+      {
+        "oid": "S5-0617-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0618_b.jpg",
+        "url": "https://www.google.com/maps/@35.4730615,139.2127058,3a,90y,22.4h,88t/data=!3m4!1e1!3m2!1srravkkA_iGePVEk8o_Rcow!2e0?hl=ja",
+        "description": "石積み擁壁の上に並んで立つ緑色（塗装の鋼管か電柱）の細い柱 2 本、直径約 0.2 m、高さ約 8 m、間隔約 2 m。金網フェンスの内側。上は画面外"
+      },
+      {
+        "oid": "S5-0649-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0649_f.jpg",
+        "url": "https://www.google.com/maps/@35.4754878,139.2110354,3a,90y,349.5h,88t/data=!3m4!1e1!3m2!1snRbqWzbh2YeOWZRESzmRrQ!2e0?hl=ja",
+        "description": "緑色に塗られた細い柱（鋼管柱か）、上部に腕金と電線。ガードレールの外、カーブの先"
+      },
+      {
+        "oid": "S5-0613-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0613_f.jpg",
+        "url": "https://www.google.com/maps/@35.4730105,139.2136049,3a,90y,352.1h,88t/data=!3m4!1e1!3m2!1seZagF4CpSsktfk5u_3peRQ!2e0?hl=ja",
+        "description": "石張り擁壁の上に立つ緑色（苔か塗装）の太い柱状の物、直径約 0.4 m、上は画面外。電線らしい線が上に見える。電柱か支柱か不明"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "concrete_transformer",
+    "image": "R70-0300_b.jpg",
+    "crop_pixels": [
+      740,
+      180,
+      880,
+      540
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

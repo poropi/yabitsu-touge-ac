@@ -1,0 +1,164 @@
+{
+  "part_info": {
+    "bus_round_blank": {
+      "meaning": "円形道路標識/丸板の推定単体。正面未確認につき無地灰色。バス停と断定しない。",
+      "front": "-Y"
+    },
+    "bus_round_blank_dark": {
+      "meaning": "円形道路標識/丸板の推定単体。正面未確認につき無地灰色。バス停と断定しない。",
+      "front": "-Y"
+    },
+    "bus_tall_timetable": {
+      "meaning": "登山口右の実在する縦長丸頭バス時刻表。地名以外は未判読。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "bus_round_blank": [
+      0.0,
+      0.0,
+      0
+    ],
+    "bus_round_blank_dark": [
+      2.8,
+      0.0,
+      0
+    ],
+    "bus_tall_timetable": [
+      5.6,
+      0.0,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 1024,
+  "refs": [
+    "codex07/sv_toilet_090.png",
+    "codex07/sv_toilet_135.png",
+    "codex07/sv_lanes_225.png",
+    "codex07/sv_lanes_270.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "青い買い物袋の丸印はGoogle Maps POIであり実物を制作しない。丸板2種はユーザー指定の無地灰variantとして提供し正面未確認を明記。",
+    "実物バス停は縦長丸頭。細かい時刻/路線情報は線のみ。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_bus_stop",
+  "source": "pass_bus_stop.blend",
+  "parts": [
+    {
+      "name": "bus_round_blank",
+      "triangles": 112,
+      "vertices": 192,
+      "dimensions_m": [
+        0.56,
+        0.0755,
+        2.13
+      ],
+      "bounds_m": [
+        [
+          -0.2800000011920929,
+          -0.0377500057220459,
+          0.0
+        ],
+        [
+          0.2800000011920929,
+          0.0377500057220459,
+          2.130000114440918
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "円形道路標識/丸板の推定単体。正面未確認につき無地灰色。バス停と断定しない。",
+      "front": "-Y"
+    },
+    {
+      "name": "bus_round_blank_dark",
+      "triangles": 112,
+      "vertices": 192,
+      "dimensions_m": [
+        0.56,
+        0.0755,
+        2.13
+      ],
+      "bounds_m": [
+        [
+          -0.2800000011920929,
+          -0.0377500057220459,
+          0.0
+        ],
+        [
+          0.2800000011920929,
+          0.0377500057220459,
+          2.130000114440918
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "円形道路標識/丸板の推定単体。正面未確認につき無地灰色。バス停と断定しない。",
+      "front": "-Y"
+    },
+    {
+      "name": "bus_tall_timetable",
+      "triangles": 94,
+      "vertices": 160,
+      "dimensions_m": [
+        0.34,
+        0.34,
+        2.1
+      ],
+      "bounds_m": [
+        [
+          -0.17000000178813934,
+          -0.17000000178813934,
+          0.0
+        ],
+        [
+          0.17000000178813934,
+          0.17000000178813934,
+          2.0999999046325684
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "登山口右の実在する縦長丸頭バス時刻表。地名以外は未判読。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

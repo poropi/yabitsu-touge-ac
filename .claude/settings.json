@@ -19,6 +19,11 @@
             "type": "command",
             "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/heavy_run_guard.py\"",
             "timeout": 10
+          },
+          {
+            "type": "command",
+            "command": "python3 \"$CLAUDE_PROJECT_DIR/.claude/hooks/check_all_guard.py\"",
+            "timeout": 10
           }
         ]
       }

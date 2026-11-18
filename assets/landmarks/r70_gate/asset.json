@@ -1,0 +1,747 @@
+{
+  "asset_id": "r70_gate",
+  "source": "r70_gate.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 800,
+  "parts": [
+    {
+      "name": "bollard",
+      "meaning": "低いコンクリート台と長さ3mの白赤斜め縞車止めバー",
+      "triangles": 156,
+      "vertices": 264,
+      "dimensions_m": [
+        3.36,
+        0.4,
+        0.875
+      ],
+      "bounds_m": [
+        [
+          -1.68,
+          -0.2,
+          0.0
+        ],
+        [
+          1.68,
+          0.2,
+          0.875
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "bollard.png"
+      ],
+      "components": [
+        {
+          "name": "低いコンクリート台",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い端の縦柱",
+          "triangle_start": 12,
+          "triangle_count": 36
+        },
+        {
+          "name": "低いコンクリート台",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い端の縦柱",
+          "triangle_start": 60,
+          "triangle_count": 36
+        },
+        {
+          "name": "斜めの赤白塗りの横棒",
+          "triangle_start": 96,
+          "triangle_count": 32
+        },
+        {
+          "name": "横棒の端面",
+          "triangle_start": 128,
+          "triangle_count": 28
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0902-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "左の砂利広場の入口を塞ぐ、白と赤の斜めの縞の横棒（長さ約3m、太さ約0.15m）、足元は低いコンクリートの台。左奥にも黒いパイプの柵の続きがある"
+        },
+        {
+          "oid": "S5-0749-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0749_b.jpg",
+          "url": "https://www.google.com/maps/@35.4837886,139.2050731,3a,90y,211.2h,88t/data=!3m4!1e1!3m2!1sA6uFaFUMXZ-uXGbTedAvDg!2e0?hl=ja",
+          "description": "フェンスの前に置かれた赤白塗りのコンクリート製ブロック（長さ約2m高さ約0.7m）"
+        },
+        {
+          "oid": "S5-0878-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0878_f.jpg",
+          "url": "https://www.google.com/maps/@35.4955906,139.2214055,3a,90y,25.6h,88t/data=!3m4!1e1!3m2!1sbudyBveOww6Ug7oP2Ah43g!2e0?hl=ja",
+          "description": "白と赤の斜め塗りのパイプ柵、高さ約0.8 m、法面の肩に並ぶ"
+        },
+        {
+          "oid": "S5-0881-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0881_f.jpg",
+          "url": "https://www.google.com/maps/@35.496188,139.2218512,3a,90y,27.4h,88t/data=!3m4!1e1!3m2!1skOKyTqSsYnlxDLjwZiezfw!2e0?hl=ja",
+          "description": "橙（さび）色の鋼管、逆U字の支柱に横パイプ2段、高さ約0.8 m、砂利の待避所の縁"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0902-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+        "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+        "description": "左の砂利広場の入口を塞ぐ、白と赤の斜めの縞の横棒（長さ約3m、太さ約0.15m）、足元は低いコンクリートの台。左奥にも黒いパイプの柵の続きがある"
+      },
+      "preview_views": {
+        "front": "r70_gate_bollard_front.png",
+        "left": "r70_gate_bollard_left.png",
+        "right": "r70_gate_bollard_right.png",
+        "back_estimated": "r70_gate_bollard_back_estimated.png",
+        "top": "r70_gate_bollard_top.png",
+        "persp": "r70_gate_bollard_persp.png",
+        "reference": "r70_gate_bollard_reference.png"
+      }
+    },
+    {
+      "name": "bollard_block",
+      "meaning": "赤白塗装のコンクリート車止め",
+      "triangles": 60,
+      "vertices": 120,
+      "dimensions_m": [
+        2.0,
+        0.426,
+        0.7
+      ],
+      "bounds_m": [
+        [
+          -1.0,
+          -0.216,
+          0.0
+        ],
+        [
+          1.0,
+          0.21,
+          0.7
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "bollard_block.png"
+      ],
+      "components": [
+        {
+          "name": "赤白のコンクリートブロック",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "赤い塗り分け",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "赤い塗り分け",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "赤い塗り分け",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "赤い塗り分け",
+          "triangle_start": 48,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0902-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "左の砂利広場の入口を塞ぐ、白と赤の斜めの縞の横棒（長さ約3m、太さ約0.15m）、足元は低いコンクリートの台。左奥にも黒いパイプの柵の続きがある"
+        },
+        {
+          "oid": "S5-0749-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0749_b.jpg",
+          "url": "https://www.google.com/maps/@35.4837886,139.2050731,3a,90y,211.2h,88t/data=!3m4!1e1!3m2!1sA6uFaFUMXZ-uXGbTedAvDg!2e0?hl=ja",
+          "description": "フェンスの前に置かれた赤白塗りのコンクリート製ブロック（長さ約2m高さ約0.7m）"
+        },
+        {
+          "oid": "S5-0878-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0878_f.jpg",
+          "url": "https://www.google.com/maps/@35.4955906,139.2214055,3a,90y,25.6h,88t/data=!3m4!1e1!3m2!1sbudyBveOww6Ug7oP2Ah43g!2e0?hl=ja",
+          "description": "白と赤の斜め塗りのパイプ柵、高さ約0.8 m、法面の肩に並ぶ"
+        },
+        {
+          "oid": "S5-0881-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0881_f.jpg",
+          "url": "https://www.google.com/maps/@35.496188,139.2218512,3a,90y,27.4h,88t/data=!3m4!1e1!3m2!1skOKyTqSsYnlxDLjwZiezfw!2e0?hl=ja",
+          "description": "橙（さび）色の鋼管、逆U字の支柱に横パイプ2段、高さ約0.8 m、砂利の待避所の縁"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0749-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0749_b.jpg",
+        "url": "https://www.google.com/maps/@35.4837886,139.2050731,3a,90y,211.2h,88t/data=!3m4!1e1!3m2!1sA6uFaFUMXZ-uXGbTedAvDg!2e0?hl=ja",
+        "description": "フェンスの前に置かれた赤白塗りのコンクリート製ブロック（長さ約2m高さ約0.7m）"
+      },
+      "preview_views": {
+        "front": "r70_gate_bollard_block_front.png",
+        "left": "r70_gate_bollard_block_left.png",
+        "right": "r70_gate_bollard_block_right.png",
+        "back_estimated": "r70_gate_bollard_block_back_estimated.png",
+        "top": "r70_gate_bollard_block_top.png",
+        "persp": "r70_gate_bollard_block_persp.png",
+        "reference": "r70_gate_bollard_block_reference.png"
+      }
+    },
+    {
+      "name": "bollard_u",
+      "meaning": "白赤の逆U字車止めと下横管",
+      "triangles": 208,
+      "vertices": 348,
+      "dimensions_m": [
+        2.09,
+        0.0856,
+        0.845
+      ],
+      "bounds_m": [
+        [
+          -1.045,
+          -0.042798,
+          0.0
+        ],
+        [
+          1.045,
+          0.042798,
+          0.845
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "bollard_u.png",
+        "bollard_u_rust.png"
+      ],
+      "components": [
+        {
+          "name": "逆U字の鋼管",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "逆U字の鋼管",
+          "triangle_start": 36,
+          "triangle_count": 36
+        },
+        {
+          "name": "逆U字の鋼管",
+          "triangle_start": 72,
+          "triangle_count": 36
+        },
+        {
+          "name": "逆U字の鋼管",
+          "triangle_start": 108,
+          "triangle_count": 36
+        },
+        {
+          "name": "逆U字の鋼管",
+          "triangle_start": 144,
+          "triangle_count": 36
+        },
+        {
+          "name": "下段横管",
+          "triangle_start": 180,
+          "triangle_count": 28
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0902-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+          "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+          "description": "左の砂利広場の入口を塞ぐ、白と赤の斜めの縞の横棒（長さ約3m、太さ約0.15m）、足元は低いコンクリートの台。左奥にも黒いパイプの柵の続きがある"
+        },
+        {
+          "oid": "S5-0749-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0749_b.jpg",
+          "url": "https://www.google.com/maps/@35.4837886,139.2050731,3a,90y,211.2h,88t/data=!3m4!1e1!3m2!1sA6uFaFUMXZ-uXGbTedAvDg!2e0?hl=ja",
+          "description": "フェンスの前に置かれた赤白塗りのコンクリート製ブロック（長さ約2m高さ約0.7m）"
+        },
+        {
+          "oid": "S5-0878-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0878_f.jpg",
+          "url": "https://www.google.com/maps/@35.4955906,139.2214055,3a,90y,25.6h,88t/data=!3m4!1e1!3m2!1sbudyBveOww6Ug7oP2Ah43g!2e0?hl=ja",
+          "description": "白と赤の斜め塗りのパイプ柵、高さ約0.8 m、法面の肩に並ぶ"
+        },
+        {
+          "oid": "S5-0881-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0881_f.jpg",
+          "url": "https://www.google.com/maps/@35.496188,139.2218512,3a,90y,27.4h,88t/data=!3m4!1e1!3m2!1skOKyTqSsYnlxDLjwZiezfw!2e0?hl=ja",
+          "description": "橙（さび）色の鋼管、逆U字の支柱に横パイプ2段、高さ約0.8 m、砂利の待避所の縁"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0878-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0878_f.jpg",
+        "url": "https://www.google.com/maps/@35.4955906,139.2214055,3a,90y,25.6h,88t/data=!3m4!1e1!3m2!1sbudyBveOww6Ug7oP2Ah43g!2e0?hl=ja",
+        "description": "白と赤の斜め塗りのパイプ柵、高さ約0.8 m、法面の肩に並ぶ"
+      },
+      "preview_views": {
+        "front": "r70_gate_bollard_u_front.png",
+        "left": "r70_gate_bollard_u_left.png",
+        "right": "r70_gate_bollard_u_right.png",
+        "back_estimated": "r70_gate_bollard_u_back_estimated.png",
+        "top": "r70_gate_bollard_u_top.png",
+        "persp": "r70_gate_bollard_u_persp.png",
+        "reference": "r70_gate_bollard_u_reference.png"
+      }
+    },
+    {
+      "name": "gate",
+      "meaning": "灰色の金網両開き門・4m幅",
+      "triangles": 338,
+      "vertices": 580,
+      "dimensions_m": [
+        4.09,
+        0.0856,
+        1.6
+      ],
+      "bounds_m": [
+        [
+          -2.045,
+          -0.042798,
+          0.0
+        ],
+        [
+          2.045,
+          0.042798,
+          1.6
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "gate.png"
+      ],
+      "components": [
+        {
+          "name": "門柱",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "門柱",
+          "triangle_start": 36,
+          "triangle_count": 36
+        },
+        {
+          "name": "門扉の横枠",
+          "triangle_start": 72,
+          "triangle_count": 28
+        },
+        {
+          "name": "門扉の横枠",
+          "triangle_start": 100,
+          "triangle_count": 28
+        },
+        {
+          "name": "門扉の縦枠",
+          "triangle_start": 128,
+          "triangle_count": 28
+        },
+        {
+          "name": "門扉の縦枠",
+          "triangle_start": 156,
+          "triangle_count": 28
+        },
+        {
+          "name": "門扉の斜材",
+          "triangle_start": 184,
+          "triangle_count": 20
+        },
+        {
+          "name": "門扉の横枠",
+          "triangle_start": 204,
+          "triangle_count": 28
+        },
+        {
+          "name": "門扉の横枠",
+          "triangle_start": 232,
+          "triangle_count": 28
+        },
+        {
+          "name": "門扉の縦枠",
+          "triangle_start": 260,
+          "triangle_count": 28
+        },
+        {
+          "name": "門扉の縦枠",
+          "triangle_start": 288,
+          "triangle_count": 28
+        },
+        {
+          "name": "門扉の斜材",
+          "triangle_start": 316,
+          "triangle_count": 20
+        },
+        {
+          "name": "両開き門の金網",
+          "triangle_start": 336,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "門の奥の低解像度写真からの原型。留め金とヒンジの細部は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0459-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_f.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,48.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い X 脚の木製バリケードと横木の柵、長さ約 6 m、高さ約 1 m。広場の入口側"
+        },
+        {
+          "oid": "S4-0486-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0487_b.jpg",
+          "url": "https://www.google.com/maps/@35.4527193,139.2127131,3a,90y,134.6h,88t/data=!3m4!1e1!3m2!1suH6AFo0_lA7rlDTlNA_wtA!2e0?hl=ja",
+          "description": "灰色の金網のような門扉と柵（幅約 4 m、高さ約 1.5 m）、白い札が付く。分かれ道の奥約 30 m、道の右の林"
+        },
+        {
+          "oid": "S5-0738-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_b.jpg",
+          "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,164.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+          "description": "橋の向こう側、緑（青緑）塗りの金網の扉つき枠、高さ約 2.5 m、幅約 1.5 m、電柱のすぐ脇"
+        },
+        {
+          "oid": "S5-0866-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0866_b.jpg",
+          "url": "https://www.google.com/maps/@35.4932388,139.2200392,3a,90y,201.4h,88t/data=!3m4!1e1!3m2!1skt7IPWU8FgRuyKqEL3Cm1g!2e0?hl=ja",
+          "description": "フェンスの途中にある小さな出入口。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0486-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0487_b.jpg",
+        "url": "https://www.google.com/maps/@35.4527193,139.2127131,3a,90y,134.6h,88t/data=!3m4!1e1!3m2!1suH6AFo0_lA7rlDTlNA_wtA!2e0?hl=ja",
+        "description": "灰色の金網のような門扉と柵（幅約 4 m、高さ約 1.5 m）、白い札が付く。分かれ道の奥約 30 m、道の右の林"
+      },
+      "preview_views": {
+        "front": "r70_gate_gate_front.png",
+        "left": "r70_gate_gate_left.png",
+        "right": "r70_gate_gate_right.png",
+        "back_estimated": "r70_gate_gate_back_estimated.png",
+        "top": "r70_gate_gate_top.png",
+        "persp": "r70_gate_gate_persp.png",
+        "reference": "r70_gate_gate_reference.png"
+      }
+    },
+    {
+      "name": "gate_green",
+      "meaning": "緑色の片開き金網ゲート・1.5m幅",
+      "triangles": 158,
+      "vertices": 268,
+      "dimensions_m": [
+        1.57,
+        0.06657,
+        2.528
+      ],
+      "bounds_m": [
+        [
+          -0.785,
+          -0.033287,
+          0.0
+        ],
+        [
+          0.785,
+          0.033287,
+          2.528
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "gate_green.png"
+      ],
+      "components": [
+        {
+          "name": "緑の門柱",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "緑の門柱",
+          "triangle_start": 36,
+          "triangle_count": 36
+        },
+        {
+          "name": "扉枠の上下",
+          "triangle_start": 72,
+          "triangle_count": 28
+        },
+        {
+          "name": "扉枠の上下",
+          "triangle_start": 100,
+          "triangle_count": 28
+        },
+        {
+          "name": "斜めの補強",
+          "triangle_start": 128,
+          "triangle_count": 28
+        },
+        {
+          "name": "緑色の透過網",
+          "triangle_start": 156,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0459-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_f.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,48.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い X 脚の木製バリケードと横木の柵、長さ約 6 m、高さ約 1 m。広場の入口側"
+        },
+        {
+          "oid": "S4-0486-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0487_b.jpg",
+          "url": "https://www.google.com/maps/@35.4527193,139.2127131,3a,90y,134.6h,88t/data=!3m4!1e1!3m2!1suH6AFo0_lA7rlDTlNA_wtA!2e0?hl=ja",
+          "description": "灰色の金網のような門扉と柵（幅約 4 m、高さ約 1.5 m）、白い札が付く。分かれ道の奥約 30 m、道の右の林"
+        },
+        {
+          "oid": "S5-0738-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_b.jpg",
+          "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,164.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+          "description": "橋の向こう側、緑（青緑）塗りの金網の扉つき枠、高さ約 2.5 m、幅約 1.5 m、電柱のすぐ脇"
+        },
+        {
+          "oid": "S5-0866-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0866_b.jpg",
+          "url": "https://www.google.com/maps/@35.4932388,139.2200392,3a,90y,201.4h,88t/data=!3m4!1e1!3m2!1skt7IPWU8FgRuyKqEL3Cm1g!2e0?hl=ja",
+          "description": "フェンスの途中にある小さな出入口。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0738-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_b.jpg",
+        "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,164.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+        "description": "橋の向こう側、緑（青緑）塗りの金網の扉つき枠、高さ約 2.5 m、幅約 1.5 m、電柱のすぐ脇"
+      },
+      "preview_views": {
+        "front": "r70_gate_gate_green_front.png",
+        "left": "r70_gate_gate_green_left.png",
+        "right": "r70_gate_gate_green_right.png",
+        "back_estimated": "r70_gate_gate_green_back_estimated.png",
+        "top": "r70_gate_gate_green_top.png",
+        "persp": "r70_gate_gate_green_persp.png",
+        "reference": "r70_gate_gate_green_reference.png"
+      }
+    },
+    {
+      "name": "gate_wood_x",
+      "meaning": "広場入口の黄色いX脚木柵・原型3m",
+      "triangles": 72,
+      "vertices": 144,
+      "dimensions_m": [
+        3.3,
+        0.75735,
+        1.04014
+      ],
+      "bounds_m": [
+        [
+          -1.65,
+          -0.378673,
+          0.0
+        ],
+        [
+          1.65,
+          0.378673,
+          1.040142
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "gate_wood_x.png"
+      ],
+      "components": [
+        {
+          "name": "黄色いX脚",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "黄色いX脚",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "黄色いX脚",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "黄色いX脚",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "黄色い長い横木",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "黄色い長い横木",
+          "triangle_start": 60,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "写真の長さ約6mは原型を2区間並べる。X脚の開きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0459-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_f.jpg",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,48.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+          "description": "黄色い X 脚の木製バリケードと横木の柵、長さ約 6 m、高さ約 1 m。広場の入口側"
+        },
+        {
+          "oid": "S4-0486-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0487_b.jpg",
+          "url": "https://www.google.com/maps/@35.4527193,139.2127131,3a,90y,134.6h,88t/data=!3m4!1e1!3m2!1suH6AFo0_lA7rlDTlNA_wtA!2e0?hl=ja",
+          "description": "灰色の金網のような門扉と柵（幅約 4 m、高さ約 1.5 m）、白い札が付く。分かれ道の奥約 30 m、道の右の林"
+        },
+        {
+          "oid": "S5-0738-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_b.jpg",
+          "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,164.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+          "description": "橋の向こう側、緑（青緑）塗りの金網の扉つき枠、高さ約 2.5 m、幅約 1.5 m、電柱のすぐ脇"
+        },
+        {
+          "oid": "S5-0866-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0866_b.jpg",
+          "url": "https://www.google.com/maps/@35.4932388,139.2200392,3a,90y,201.4h,88t/data=!3m4!1e1!3m2!1skt7IPWU8FgRuyKqEL3Cm1g!2e0?hl=ja",
+          "description": "フェンスの途中にある小さな出入口。"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0459-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_f.jpg",
+        "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,48.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+        "description": "黄色い X 脚の木製バリケードと横木の柵、長さ約 6 m、高さ約 1 m。広場の入口側"
+      },
+      "preview_views": {
+        "front": "r70_gate_gate_wood_x_front.png",
+        "left": "r70_gate_gate_wood_x_left.png",
+        "right": "r70_gate_gate_wood_x_right.png",
+        "back_estimated": "r70_gate_gate_wood_x_back_estimated.png",
+        "top": "r70_gate_gate_wood_x_top.png",
+        "persp": "r70_gate_gate_wood_x_persp.png",
+        "reference": "r70_gate_gate_wood_x_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [],
+  "references": {
+    "bollard": [
+      {
+        "oid": "S5-0902-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0902_f.jpg",
+        "url": "https://www.google.com/maps/@35.498438,139.2258779,3a,90y,63.6h,88t/data=!3m4!1e1!3m2!1s9sj-caRlbk5ZJrOHrSwYRg!2e0?hl=ja",
+        "description": "左の砂利広場の入口を塞ぐ、白と赤の斜めの縞の横棒（長さ約3m、太さ約0.15m）、足元は低いコンクリートの台。左奥にも黒いパイプの柵の続きがある"
+      },
+      {
+        "oid": "S5-0749-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0749_b.jpg",
+        "url": "https://www.google.com/maps/@35.4837886,139.2050731,3a,90y,211.2h,88t/data=!3m4!1e1!3m2!1sA6uFaFUMXZ-uXGbTedAvDg!2e0?hl=ja",
+        "description": "フェンスの前に置かれた赤白塗りのコンクリート製ブロック（長さ約2m高さ約0.7m）"
+      },
+      {
+        "oid": "S5-0878-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0878_f.jpg",
+        "url": "https://www.google.com/maps/@35.4955906,139.2214055,3a,90y,25.6h,88t/data=!3m4!1e1!3m2!1sbudyBveOww6Ug7oP2Ah43g!2e0?hl=ja",
+        "description": "白と赤の斜め塗りのパイプ柵、高さ約0.8 m、法面の肩に並ぶ"
+      },
+      {
+        "oid": "S5-0881-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0881_f.jpg",
+        "url": "https://www.google.com/maps/@35.496188,139.2218512,3a,90y,27.4h,88t/data=!3m4!1e1!3m2!1skOKyTqSsYnlxDLjwZiezfw!2e0?hl=ja",
+        "description": "橙（さび）色の鋼管、逆U字の支柱に横パイプ2段、高さ約0.8 m、砂利の待避所の縁"
+      }
+    ],
+    "gate": [
+      {
+        "oid": "S4-0459-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_f.jpg",
+        "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,48.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja",
+        "description": "黄色い X 脚の木製バリケードと横木の柵、長さ約 6 m、高さ約 1 m。広場の入口側"
+      },
+      {
+        "oid": "S4-0486-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0487_b.jpg",
+        "url": "https://www.google.com/maps/@35.4527193,139.2127131,3a,90y,134.6h,88t/data=!3m4!1e1!3m2!1suH6AFo0_lA7rlDTlNA_wtA!2e0?hl=ja",
+        "description": "灰色の金網のような門扉と柵（幅約 4 m、高さ約 1.5 m）、白い札が付く。分かれ道の奥約 30 m、道の右の林"
+      },
+      {
+        "oid": "S5-0738-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_b.jpg",
+        "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,164.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+        "description": "橋の向こう側、緑（青緑）塗りの金網の扉つき枠、高さ約 2.5 m、幅約 1.5 m、電柱のすぐ脇"
+      },
+      {
+        "oid": "S5-0866-06",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0866_b.jpg",
+        "url": "https://www.google.com/maps/@35.4932388,139.2200392,3a,90y,201.4h,88t/data=!3m4!1e1!3m2!1skt7IPWU8FgRuyKqEL3Cm1g!2e0?hl=ja",
+        "description": "フェンスの途中にある小さな出入口。"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "bollard",
+    "image": "R70-0902_f.jpg",
+    "crop_pixels": [
+      80,
+      500,
+      670,
+      810
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

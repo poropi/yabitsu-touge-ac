@@ -228,7 +228,8 @@ def fence_runs(feats_csv, rows):
     return runs + dress
 
 
-LOT_RAIL = (3.0, 31.0)      # 菜の花台の出口のヘアピン：外側（谷側＝左）の白いガードレール。階段の手前まで（ストリートビュー lot_a_0・lot_c_0）
+LOT_RAIL = (8.7, 31.0)      # 菜の花台の出口のヘアピン：外側（谷側＝左）の白いガードレール。階段の手前まで（ストリートビュー lot_a_0・lot_c_0）。
+                            # 南西の端は石碑の右（road_270・road_315 で方位 288°。石碑・看板・ドラムで方位のずれを補正、2026-10-30）。3.0 からだと石碑の前を横切っていた
 
 
 def lot_props(sec, m: Manifest, tex: Path):
@@ -244,20 +245,22 @@ def lot_props(sec, m: Manifest, tex: Path):
     n = np.array([-np.sin(sec.heading[i]), np.cos(sec.heading[i])]); t = np.array([np.cos(sec.heading[i]), np.sin(sec.heading[i])])
     edge = np.array([sec.x[i], sec.y[i]]) + n * (sec.hw_left[i] + 0.9)
     ze = float(sec.edge_z(1)[i])
-    parts = [dress_parts.barrel_mesh((*(edge - t * (1.0 + 0.7 * k)), ze)) for k in range(2)]
-    from yabitsu.start_lot import _merge
-    m.add_mesh(GROUP, "dress_lot_barrels", *_merge(parts), "dress_barrel")
-    m.add_mesh(GROUP, "1WALL_dress_lot_barrels", *_merge(parts), "dress_barrel", renderable=False)
-    pano = np.array([float(v) for v in geo.to_local(35.4105931, 139.2097993)])
-    mp = edge + n * 0.4 + t * 1.5
-    face = float(np.degrees(np.arctan2(*(pano - mp))) % 360)
-    pole, disc = dress_parts.mirror_meshes((*mp, ze), face)
-    m.add_mesh(GROUP, "dress_lot_mirror_pole", *pole, "dress_orange")
-    m.add_mesh(GROUP, "dress_lot_mirror", *disc, "dress_mirror")
-    # 駐車場の谷側の青緑の柵を、出口のヘアピンまで延ばす（ストリートビュー lot_a_90）。オレンジの標識の柱と白い小さな柱
     from yabitsu import start_lot
-    from yabitsu.start_lot import box as _box, Frame
+    from yabitsu.start_lot import _merge, box as _box, Frame
     spec = start_lot.load_spec(config.DATA_MANUAL / "s1_start_lot.json"); fr = start_lot.frame(spec)
+    rep = set(spec.get("replaced", []))   # Codex の部品（s1_start_lot.json の landmarks）に替えた物は作らない
+    if "dress_barrels" not in rep:
+        parts = [dress_parts.barrel_mesh((*(edge - t * (1.0 + 0.7 * k)), ze)) for k in range(2)]
+        m.add_mesh(GROUP, "dress_lot_barrels", *_merge(parts), "dress_barrel")
+        m.add_mesh(GROUP, "1WALL_dress_lot_barrels", *_merge(parts), "dress_barrel", renderable=False)
+    if "dress_mirror" not in rep:
+        pano = np.array([float(v) for v in geo.to_local(35.4105931, 139.2097993)])
+        mp = edge + n * 0.4 + t * 1.5
+        face = float(np.degrees(np.arctan2(*(pano - mp))) % 360)
+        pole, disc = dress_parts.mirror_meshes((*mp, ze), face)
+        m.add_mesh(GROUP, "dress_lot_mirror_pole", *pole, "dress_orange")
+        m.add_mesh(GROUP, "dress_lot_mirror", *disc, "dress_mirror")
+    # 駐車場の谷側の青緑の柵を、出口のヘアピンまで延ばす（ストリートビュー lot_a_90）。オレンジの標識の柱と白い小さな柱
     pads = json.loads((config.DATA_PROCESSED / "track_pads.json").read_text(encoding="utf-8"))
     zl = [p_ for p_ in pads if p_.get("kind") == "lot"][0]["z"]
     fe = spec["fence"]; fb, fh = fe["b"], fe["height"]; a0, a1 = fe["a"][1], fe["a"][1] + 5.5
@@ -270,13 +273,18 @@ def lot_props(sec, m: Manifest, tex: Path):
     g = Frame(pole_xy, spec["axis_deg"])
     pole = dress_parts.barrel_mesh((*pole_xy, zl), r=0.05, h=3.2, sides=8)
     signs = [_box(g, (-0.35, 0.35), (-0.02, 0.02), zl + zz, zl + zz + 0.45, 1.0) for zz in (1.4, 2.0)]
-    m.add_mesh(GROUP, "dress_lot_signpole", *pole, "dress_orange")
-    m.add_mesh(GROUP, "dress_lot_signs", *_merge(signs), "dress_sign_white")
+    if "dress_signpole" not in rep:
+        m.add_mesh(GROUP, "dress_lot_signpole", *pole, "dress_orange")
+        m.add_mesh(GROUP, "dress_lot_signs", *_merge(signs), "dress_sign_white")
     m.add_mesh(GROUP, "dress_lot_whitepost", *dress_parts.barrel_mesh((*post_xy, zl), r=0.09, h=0.9, sides=10), "dress_white")
-    # トイレへの道の、駐車場の側の白い低い壁（ストリートビュー lot_b_270）
-    wall_parts = [_box(fr, (-57.0, -44.0), (9.45, 9.75), zl - 0.6, zl + 0.55, 1.0),
-                  _box(fr, (-44.0, -43.7), (9.45, 10.8), zl - 0.6, zl + 0.55, 1.0)]
-    m.add_mesh(GROUP, "1WALL_dress_lot_toilet_wall", *_merge(wall_parts), "dress_white")
+    # トイレへの道の、駐車場の側の白い低い壁（ストリートビュー lot_b_270）。Codex のトイレ（スロープの白い段の壁）に替えたときは、
+    # スロープの北東の端（a −47.3）から先の、灰色のコンクリートの低い縁と L 字の端だけ（ストリートビュー mid_270）
+    a_w, mat_w, h_w = ((-47.3, "dress_concrete", 0.4) if "dress_toilet_wall" in rep else (-57.0, "dress_white", 0.55))
+    tw = spec.get("toilet_wall", {"a": [a_w, -44.0], "b": [9.45, 9.75], "end_b": 10.8})   # 灰色の縁（a の範囲・b の幅）と、北東の端の L 字
+    a_e = tw["a"][1]
+    wall_parts = [_box(fr, tuple(tw["a"]), tuple(tw["b"]), zl - 0.6, zl + h_w, 1.0),
+                  _box(fr, (a_e, a_e + 0.3), (tw["b"][0], tw["end_b"]), zl - 0.6, zl + h_w, 1.0)]
+    m.add_mesh(GROUP, "1WALL_dress_lot_toilet_wall", *_merge(wall_parts), mat_w)
     # S2 の終わりの右の石積み（4060〜4165）は、ヘアピンの島の縁まで回り込んでいた。写真（lot_a_90）の島は低い縁石と茂み。
     # 4140 までを描き直し、もとの壁は表示だけ消す
     from yabitsu.features import Feature, retaining_wall_mesh
@@ -399,6 +407,7 @@ def main():
     m.add_material("dress_teal", color=(0.30, 0.62, 0.55), two_sided=True)       # 駐車場の青緑の柵
     m.add_material("dress_sign_white", color=(0.93, 0.93, 0.92))
     m.add_material("dress_mirror", color=(0.75, 0.78, 0.80), two_sided=True)
+    m.add_material("dress_concrete", color=(0.60, 0.60, 0.57))   # 菜の花台のトイレの前の灰色の低い縁
     bimg, _ = dress_tex.load("block_wall"); bimg.convert("RGB").save(tex / "block_wall.png")
     kimg, _ = dress_tex.load("kenchi"); kimg.convert("RGB").save(tex / "kenchi.png")
     m.add_material("dress_kenchi_wall", texture="textures/kenchi.png")

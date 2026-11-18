@@ -99,12 +99,12 @@ def test_tunnel_portal_faces_out_once_with_rim_and_style_materials():
     for tag, s, sgn in (("a", 30.0, -1.0), ("b", 60.0, 1.0)):
         ms = {m[0]: m for m in tunnel._portal(sec, t, tag, s, sgn, FLAT, "大洞", "stone")}
         name, v, f, uv, mat, rend = ms[f"tunnel_1_portal_{tag}"]
-        assert mat == "kenchi_moss"
+        assert mat == tunnel.PORTAL_STYLES["stone"][0] == "rock_moss"   # 間知石の菱形の絵は白い金網に、苔のコンクリートは白く見えた（2026-11-01）
         nr = face_normals(v, f); vert = abs(nr[:, 2]) < 0.5
         assert (nr[vert, 0] * sgn > 0.99).all()                       # 縦の面は全部、外（s0 の a は -x、s1 の b は +x）を向く
         rim = ms[f"tunnel_1_rim_{tag}"]
         out = (rim[1][:, 0] - s) * sgn                                 # 外へ出た量（a は -x、b は +x が外）
-        assert rim[4] == "concrete_moss" and out.min() >= -1e-6 and out.max() == pytest.approx(tunnel.RIM_D)
+        assert rim[4] == "tunnel_wall" and out.min() >= -1e-6 and out.max() == pytest.approx(tunnel.RIM_D)
 
 
 def test_kenchi_texture_has_dark_joints_and_moss():

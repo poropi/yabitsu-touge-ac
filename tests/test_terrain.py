@@ -360,3 +360,45 @@ def test_terrain_mesh_z_follows_the_mesh_triangles():
     f = tr.terrain_mesh_z(near, mid)
     assert f(np.array([1.5]), np.array([0.5]))[0] == pytest.approx(0.0 + 0.75 * 0 + 0.25 * 4.0)   # fx>=fy：z00+fx(z01-z00)+fy(z11-z01)
     assert tr.terrain_z(near, mid)(np.array([1.5]), np.array([0.5]))[0] == pytest.approx(0.75 * 0.25 * 4.0)   # 双一次とは違う
+
+
+def test_terrain_stays_behind_a_leaning_wall():
+    """擁壁の行：地形は壁の面（側溝の外の縁で路面の 0.3 m 下から、高さ 1 m ごとに 0.3 m 奥へ傾く）より、どの距離でも下（＝奥）にある。
+    2026-11-01 まで地形は道の縁の高さから 1:3 で削っていて、壁の下 2.7 m ほどは地形が壁より手前に出た（小トンネル出口の右の茶色い縞）。"""
+    from yabitsu import features as ft
+    sec = _straight()
+    feats = [ft.Feature(50, 150, "L", "retaining_wall", 5.0, "")]
+    cl, cr = ft.cut_slopes(sec, feats)
+    dl, dr = ft.cut_drops(sec, feats)
+    e = np.linspace(0.05, 1.5, 30)                       # 側溝の外の縁からの距離（壁の高さ 5 m までの幅）
+    X, Y = _pts(sec, 3.0 + cs.GUTTER_WIDTH + e)
+    Z, _ = tr.carve(X, Y, np.full_like(X, 300.0), sec, cut_left=cl, cut_right=cr, cut_drop_left=dl, cut_drop_right=dr)
+    z_edge = cs.surface_height(3.0, 100.0, sec.slope[100], sec.crown[100])
+    wall = z_edge - 0.3 + e / ft.WALL_LEAN
+    assert (Z[0] < wall - 0.15).all()
+    # 壁のない行はこれまでどおり道の縁の高さから削る
+    X2, Y2 = _pts(sec, 3.0 + cs.GUTTER_WIDTH + e, s=10.0)
+    Z2, _ = tr.carve(X2, Y2, np.full_like(X2, 300.0), sec, cut_left=cl, cut_right=cr, cut_drop_left=dl, cut_drop_right=dr)
+    z_edge2 = cs.surface_height(3.0, sec.z[10], sec.slope[10], sec.crown[10])
+    assert Z2[0] == pytest.approx(z_edge2 + tr.CUT_SLOPE * e)
+
+
+def test_steep_quads_get_side_projected_uv():
+    """45° より急な四角は、真上からの UV だと絵が縦に伸びて縞になる（2026-11-01、トンネルの坑口の切り土）。
+    急な四角だけ頂点を分けて横から当てる UV にする。形（頂点の位置と面の数）は変えない。"""
+    xs = np.arange(0.0, 11.0, 1.0); ys = np.arange(0.0, 11.0, 1.0)
+    X, Y = np.meshgrid(xs, ys)
+    Z = np.where(X > 5, 3.0 * (X - 5), 0.0)            # x=5 から先は 1:3 の切り土（約 72°）
+    keep = np.ones((10, 10), bool)
+    (v, f, uv), = tr.grid_mesh_chunks(xs, ys, Z, keep, block=100, uv_scale=8.0)
+    assert len(f) == 100
+    from yabitsu.meshgen import face_normals
+    n = face_normals(v, f); steep = np.abs(n[:, 2]) < 0.7
+    assert steep.sum() == 50 and (~steep).sum() == 50
+    for q, is_steep in zip(f, steep):
+        p = v[q]; t = uv[q] * 8.0
+        area3d = np.linalg.norm(np.cross(p[2] - p[0], p[1] - p[0]))
+        a_, b_ = t[2] - t[0], t[1] - t[0]; areauv = abs(a_[0] * b_[1] - a_[1] * b_[0])
+        assert 0.6 < areauv / area3d < 1.0 + 1e-9    # 真上からだと急な面は 1/3.2 しかない
+    # 頂点の位置は今までと同じ（平らな面の頂点はそのまま、急な面の頂点は同じ位置に複製）
+    assert {tuple(p) for p in v.round(6)} == {tuple(p) for p in np.c_[X.ravel(), Y.ravel(), Z.ravel()].round(6)}

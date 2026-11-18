@@ -1,0 +1,1937 @@
+{
+  "asset_id": "r70_misc",
+  "source": "r70_misc.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 1500,
+  "parts": [
+    {
+      "name": "stake",
+      "meaning": "高さ0.8m角杭・黄帽子",
+      "triangles": 24,
+      "vertices": 48,
+      "dimensions_m": [
+        0.115,
+        0.115,
+        0.8
+      ],
+      "bounds_m": [
+        [
+          -0.0575,
+          -0.0575,
+          0.0
+        ],
+        [
+          0.0575,
+          0.0575,
+          0.8
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stake.png",
+        "stake_white.png",
+        "stake_yellow.png",
+        "stake_red.png"
+      ],
+      "components": [
+        {
+          "name": "角形の標柱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "上部の黄色い帽子",
+          "triangle_start": 12,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0381-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_f.jpg",
+          "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,80.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+          "description": "橋のたもとの草の中に立つオレンジ色の太めの杭、高さ約0.8 m。"
+        },
+        {
+          "oid": "S4-0382-10",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_f.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,63.1h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "オレンジ色の太い杭、上部に黄色。高さ約0.8 m。"
+        },
+        {
+          "oid": "S4-0322-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0325_f.jpg",
+          "url": "https://www.google.com/maps/@35.4310034,139.213759,3a,90y,353.2h,88t/data=!3m4!1e1!3m2!1sx2lSf2bJ4kmN4q5EFr3Lgw!2e0?hl=ja",
+          "description": "道の左側の山側の細い柱。白〜灰色、高さ約2 m、先端は何もない。1本か複数本か不明。0325Fでは画面左端に太めの灰色の柱が近く写る"
+        },
+        {
+          "oid": "S4-0345-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0345_b.jpg",
+          "url": "https://www.google.com/maps/@35.4305743,139.2119865,3a,90y,68.5h,88t/data=!3m4!1e1!3m2!1siUS4auqgjGSn06APbsf1xA!2e0?hl=ja",
+          "description": "赤白縞の端部の近くに立つ細い白い棒。高さ約1.5 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0381-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_f.jpg",
+        "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,80.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+        "description": "橋のたもとの草の中に立つオレンジ色の太めの杭、高さ約0.8 m。"
+      },
+      "preview_views": {
+        "front": "r70_misc_stake_front.png",
+        "left": "r70_misc_stake_left.png",
+        "right": "r70_misc_stake_right.png",
+        "back_estimated": "r70_misc_stake_back_estimated.png",
+        "top": "r70_misc_stake_top.png",
+        "persp": "r70_misc_stake_persp.png",
+        "reference": "r70_misc_stake_reference.png"
+      }
+    },
+    {
+      "name": "stake_thin",
+      "meaning": "先端に物の付かない細い白標柱",
+      "triangles": 28,
+      "vertices": 48,
+      "dimensions_m": [
+        0.05,
+        0.05,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.025,
+          -0.025,
+          0.0
+        ],
+        [
+          0.025,
+          0.025,
+          1.5
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stake_thin.png",
+        "stake_thin_orange.png"
+      ],
+      "components": [
+        {
+          "name": "細い無地の標柱",
+          "triangle_start": 0,
+          "triangle_count": 28
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0381-05",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_f.jpg",
+          "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,80.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+          "description": "橋のたもとの草の中に立つオレンジ色の太めの杭、高さ約0.8 m。"
+        },
+        {
+          "oid": "S4-0382-10",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_f.jpg",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,63.1h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+          "description": "オレンジ色の太い杭、上部に黄色。高さ約0.8 m。"
+        },
+        {
+          "oid": "S4-0322-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0325_f.jpg",
+          "url": "https://www.google.com/maps/@35.4310034,139.213759,3a,90y,353.2h,88t/data=!3m4!1e1!3m2!1sx2lSf2bJ4kmN4q5EFr3Lgw!2e0?hl=ja",
+          "description": "道の左側の山側の細い柱。白〜灰色、高さ約2 m、先端は何もない。1本か複数本か不明。0325Fでは画面左端に太めの灰色の柱が近く写る"
+        },
+        {
+          "oid": "S4-0345-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0345_b.jpg",
+          "url": "https://www.google.com/maps/@35.4305743,139.2119865,3a,90y,68.5h,88t/data=!3m4!1e1!3m2!1siUS4auqgjGSn06APbsf1xA!2e0?hl=ja",
+          "description": "赤白縞の端部の近くに立つ細い白い棒。高さ約1.5 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0381-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_f.jpg",
+        "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,80.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+        "description": "橋のたもとの草の中に立つオレンジ色の太めの杭、高さ約0.8 m。"
+      },
+      "preview_views": {
+        "front": "r70_misc_stake_thin_front.png",
+        "left": "r70_misc_stake_thin_left.png",
+        "right": "r70_misc_stake_thin_right.png",
+        "back_estimated": "r70_misc_stake_thin_back_estimated.png",
+        "top": "r70_misc_stake_thin_top.png",
+        "persp": "r70_misc_stake_thin_persp.png",
+        "reference": "r70_misc_stake_thin_reference.png"
+      }
+    },
+    {
+      "name": "equipment_box",
+      "meaning": "灰色の機器箱3枚扉",
+      "triangles": 252,
+      "vertices": 504,
+      "dimensions_m": [
+        1.48,
+        0.53,
+        1.3575
+      ],
+      "bounds_m": [
+        [
+          -0.74,
+          -0.265,
+          0.0
+        ],
+        [
+          0.74,
+          0.265,
+          1.3575
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "equipment_box.png"
+      ],
+      "components": [
+        {
+          "name": "基礎",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "機器筐体",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "薄い庇",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "扉の面",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "扉の取手",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 72,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 84,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 96,
+          "triangle_count": 12
+        },
+        {
+          "name": "扉の面",
+          "triangle_start": 108,
+          "triangle_count": 12
+        },
+        {
+          "name": "扉の取手",
+          "triangle_start": 120,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 132,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 144,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 156,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 168,
+          "triangle_count": 12
+        },
+        {
+          "name": "扉の面",
+          "triangle_start": 180,
+          "triangle_count": 12
+        },
+        {
+          "name": "扉の取手",
+          "triangle_start": 192,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 204,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 216,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 228,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 240,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "扉の分割は写真の見える範囲から、鍵・換気口・奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0357-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+          "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+          "description": "灰色の金属の箱（扉3枚）、幅約1.4 m・高さ約1.2 m。電柱の根元、速度標識のそば。ガードレールのすぐ外。"
+        },
+        {
+          "oid": "S5-0940-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0940_b.jpg",
+          "url": "https://www.google.com/maps/@35.5020321,139.2307045,3a,90y,135.1h,88t/data=!3m4!1e1!3m2!1s2gNyZIiPvEV6k1gV0WMA1w!2e0?hl=ja",
+          "description": "灰色の鋼管柱の根元に置かれた灰色の金属箱（約0.8×0.5×1.2m）と、立てかけた板。擁壁の前の路肩外"
+        },
+        {
+          "oid": "S5-0963-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0963_b.jpg",
+          "url": "https://www.google.com/maps/@35.5064135,139.2307749,3a,90y,212.1h,88t/data=!3m4!1e1!3m2!1sgowjeXWFTzFVjMZL6XNJKQ!2e0?hl=ja",
+          "description": "電柱状の細い柱の根元にある灰色の金属箱、高さ約0.7 m。"
+        },
+        {
+          "oid": "S5-1004-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1004_b.jpg",
+          "url": "https://www.google.com/maps/@35.5153395,139.2330592,3a,90y,177.6h,88t/data=!3m4!1e1!3m2!1stajN1-ut8FUqUZTEemZdhw!2e0?hl=ja",
+          "description": "右側の路肩外に立つ細い灰色の柱、途中に灰色の四角い箱（約0.3m）が付く。高さ約8m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0357-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+        "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+        "description": "灰色の金属の箱（扉3枚）、幅約1.4 m・高さ約1.2 m。電柱の根元、速度標識のそば。ガードレールのすぐ外。"
+      },
+      "preview_views": {
+        "front": "r70_misc_equipment_box_front.png",
+        "left": "r70_misc_equipment_box_left.png",
+        "right": "r70_misc_equipment_box_right.png",
+        "back_estimated": "r70_misc_equipment_box_back_estimated.png",
+        "top": "r70_misc_equipment_box_top.png",
+        "persp": "r70_misc_equipment_box_persp.png",
+        "reference": "r70_misc_equipment_box_reference.png"
+      }
+    },
+    {
+      "name": "equipment_box_small",
+      "meaning": "灰色の機器箱1枚扉",
+      "triangles": 108,
+      "vertices": 216,
+      "dimensions_m": [
+        0.83,
+        0.53,
+        1.2575
+      ],
+      "bounds_m": [
+        [
+          -0.415,
+          -0.265,
+          0.0
+        ],
+        [
+          0.415,
+          0.265,
+          1.2575
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "equipment_box_small.png"
+      ],
+      "components": [
+        {
+          "name": "基礎",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "機器筐体",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "薄い庇",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "扉の面",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "扉の取手",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 72,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 84,
+          "triangle_count": 12
+        },
+        {
+          "name": "通気スリット",
+          "triangle_start": 96,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "扉の分割は写真の見える範囲から、鍵・換気口・奥行きは推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0357-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+          "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+          "description": "灰色の金属の箱（扉3枚）、幅約1.4 m・高さ約1.2 m。電柱の根元、速度標識のそば。ガードレールのすぐ外。"
+        },
+        {
+          "oid": "S5-0940-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0940_b.jpg",
+          "url": "https://www.google.com/maps/@35.5020321,139.2307045,3a,90y,135.1h,88t/data=!3m4!1e1!3m2!1s2gNyZIiPvEV6k1gV0WMA1w!2e0?hl=ja",
+          "description": "灰色の鋼管柱の根元に置かれた灰色の金属箱（約0.8×0.5×1.2m）と、立てかけた板。擁壁の前の路肩外"
+        },
+        {
+          "oid": "S5-0963-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0963_b.jpg",
+          "url": "https://www.google.com/maps/@35.5064135,139.2307749,3a,90y,212.1h,88t/data=!3m4!1e1!3m2!1sgowjeXWFTzFVjMZL6XNJKQ!2e0?hl=ja",
+          "description": "電柱状の細い柱の根元にある灰色の金属箱、高さ約0.7 m。"
+        },
+        {
+          "oid": "S5-1004-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1004_b.jpg",
+          "url": "https://www.google.com/maps/@35.5153395,139.2330592,3a,90y,177.6h,88t/data=!3m4!1e1!3m2!1stajN1-ut8FUqUZTEemZdhw!2e0?hl=ja",
+          "description": "右側の路肩外に立つ細い灰色の柱、途中に灰色の四角い箱（約0.3m）が付く。高さ約8m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0940-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0940_b.jpg",
+        "url": "https://www.google.com/maps/@35.5020321,139.2307045,3a,90y,135.1h,88t/data=!3m4!1e1!3m2!1s2gNyZIiPvEV6k1gV0WMA1w!2e0?hl=ja",
+        "description": "灰色の鋼管柱の根元に置かれた灰色の金属箱（約0.8×0.5×1.2m）と、立てかけた板。擁壁の前の路肩外"
+      },
+      "preview_views": {
+        "front": "r70_misc_equipment_box_small_front.png",
+        "left": "r70_misc_equipment_box_small_left.png",
+        "right": "r70_misc_equipment_box_small_right.png",
+        "back_estimated": "r70_misc_equipment_box_small_back_estimated.png",
+        "top": "r70_misc_equipment_box_small_top.png",
+        "persp": "r70_misc_equipment_box_small_persp.png",
+        "reference": "r70_misc_equipment_box_small_reference.png"
+      }
+    },
+    {
+      "name": "equipment_box_pole",
+      "meaning": "電柱へ付く0.3mの小型箱（柱なし）",
+      "triangles": 24,
+      "vertices": 48,
+      "dimensions_m": [
+        0.3,
+        0.232,
+        0.3
+      ],
+      "bounds_m": [
+        [
+          -0.15,
+          -0.122,
+          0.0
+        ],
+        [
+          0.15,
+          0.11,
+          0.3
+        ]
+      ],
+      "origin": "箱の下辺中央。任意の柱へ取り付ける。",
+      "front": "-Y",
+      "textures": [
+        "equipment_box_pole.png"
+      ],
+      "components": [
+        {
+          "name": "柱に付く小型機器箱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "小型箱の扉",
+          "triangle_start": 12,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S4-0357-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+          "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+          "description": "灰色の金属の箱（扉3枚）、幅約1.4 m・高さ約1.2 m。電柱の根元、速度標識のそば。ガードレールのすぐ外。"
+        },
+        {
+          "oid": "S5-0940-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0940_b.jpg",
+          "url": "https://www.google.com/maps/@35.5020321,139.2307045,3a,90y,135.1h,88t/data=!3m4!1e1!3m2!1s2gNyZIiPvEV6k1gV0WMA1w!2e0?hl=ja",
+          "description": "灰色の鋼管柱の根元に置かれた灰色の金属箱（約0.8×0.5×1.2m）と、立てかけた板。擁壁の前の路肩外"
+        },
+        {
+          "oid": "S5-0963-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0963_b.jpg",
+          "url": "https://www.google.com/maps/@35.5064135,139.2307749,3a,90y,212.1h,88t/data=!3m4!1e1!3m2!1sgowjeXWFTzFVjMZL6XNJKQ!2e0?hl=ja",
+          "description": "電柱状の細い柱の根元にある灰色の金属箱、高さ約0.7 m。"
+        },
+        {
+          "oid": "S5-1004-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1004_b.jpg",
+          "url": "https://www.google.com/maps/@35.5153395,139.2330592,3a,90y,177.6h,88t/data=!3m4!1e1!3m2!1stajN1-ut8FUqUZTEemZdhw!2e0?hl=ja",
+          "description": "右側の路肩外に立つ細い灰色の柱、途中に灰色の四角い箱（約0.3m）が付く。高さ約8m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-1004-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1004_b.jpg",
+        "url": "https://www.google.com/maps/@35.5153395,139.2330592,3a,90y,177.6h,88t/data=!3m4!1e1!3m2!1stajN1-ut8FUqUZTEemZdhw!2e0?hl=ja",
+        "description": "右側の路肩外に立つ細い灰色の柱、途中に灰色の四角い箱（約0.3m）が付く。高さ約8m"
+      },
+      "preview_views": {
+        "front": "r70_misc_equipment_box_pole_front.png",
+        "left": "r70_misc_equipment_box_pole_left.png",
+        "right": "r70_misc_equipment_box_pole_right.png",
+        "back_estimated": "r70_misc_equipment_box_pole_back_estimated.png",
+        "top": "r70_misc_equipment_box_pole_top.png",
+        "persp": "r70_misc_equipment_box_pole_persp.png",
+        "reference": "r70_misc_equipment_box_pole_reference.png"
+      }
+    },
+    {
+      "name": "log_pile",
+      "meaning": "杉丸太12本の小山・長さ約3.5m",
+      "triangles": 864,
+      "vertices": 1440,
+      "dimensions_m": [
+        3.47405,
+        1.43581,
+        0.79
+      ],
+      "bounds_m": [
+        [
+          -1.740026,
+          -0.717903,
+          0.0
+        ],
+        [
+          1.734026,
+          0.717903,
+          0.79
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "log_pile.png"
+      ],
+      "components": [
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 36,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 72,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 108,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 144,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 180,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 216,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 252,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 288,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 324,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 360,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 396,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 432,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 468,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 504,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 540,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 576,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 612,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 648,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 684,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 720,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 756,
+          "triangle_count": 36
+        },
+        {
+          "name": "積まれた丸太",
+          "triangle_start": 792,
+          "triangle_count": 36
+        },
+        {
+          "name": "明るい切口",
+          "triangle_start": 828,
+          "triangle_count": 36
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "写真全体の置場約8mは原型を並べる。木材の本数と各丸太の位置は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0457-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0460_b.jpg",
+          "url": "https://www.google.com/maps/@35.4477154,139.2122431,3a,90y,235.7h,88t/data=!3m4!1e1!3m2!1s1YB7pGcUb-teuTEd9YY5aw!2e0?hl=ja",
+          "description": "杉丸太と板材が積まれた山、高さ約 1.5 m、幅約 8 m。0457〜0461 に続く広場の縁"
+        },
+        {
+          "oid": "S5-0864-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0864_b.jpg",
+          "url": "https://www.google.com/maps/@35.4927507,139.2198214,3a,90y,180.0h,88t/data=!3m4!1e1!3m2!1siDK7gQ1rBaAyuw7boksZQQ!2e0?hl=ja",
+          "description": "後方の山側、道の左に積まれた木片・板の山。"
+        },
+        {
+          "oid": "S5-1019-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1019_f.jpg",
+          "url": "https://www.google.com/maps/@35.5180873,139.2311664,3a,90y,352.8h,88t/data=!3m4!1e1!3m2!1sQmVPieHnV9xNve2npLn90A!2e0?hl=ja",
+          "description": "右の歩道の外に丸太や切り株が散らばる"
+        },
+        {
+          "oid": "S4-0486-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0486_f.jpg",
+          "url": "https://www.google.com/maps/@35.4525841,139.2128197,3a,90y,356.6h,88t/data=!3m4!1e1!3m2!1sjh_Jncw2idBJG_S1CrwzGQ!2e0?hl=ja",
+          "description": "直径約 0.5 m の丸い切り株状の石か丸太が 3 個、草地に置かれる。高さ約 0.3 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0457-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0460_b.jpg",
+        "url": "https://www.google.com/maps/@35.4477154,139.2122431,3a,90y,235.7h,88t/data=!3m4!1e1!3m2!1s1YB7pGcUb-teuTEd9YY5aw!2e0?hl=ja",
+        "description": "杉丸太と板材が積まれた山、高さ約 1.5 m、幅約 8 m。0457〜0461 に続く広場の縁"
+      },
+      "preview_views": {
+        "front": "r70_misc_log_pile_front.png",
+        "left": "r70_misc_log_pile_left.png",
+        "right": "r70_misc_log_pile_right.png",
+        "back_estimated": "r70_misc_log_pile_back_estimated.png",
+        "top": "r70_misc_log_pile_top.png",
+        "persp": "r70_misc_log_pile_persp.png",
+        "reference": "r70_misc_log_pile_reference.png"
+      }
+    },
+    {
+      "name": "log_pile_scrap",
+      "meaning": "伐採材・板材の小山",
+      "triangles": 264,
+      "vertices": 528,
+      "dimensions_m": [
+        3.02373,
+        2.38807,
+        0.44641
+      ],
+      "bounds_m": [
+        [
+          -1.683588,
+          -1.182922,
+          0.0
+        ],
+        [
+          1.340142,
+          1.205149,
+          0.446415
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "log_pile_scrap.png"
+      ],
+      "components": [
+        {
+          "name": "廃材の板",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 72,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 84,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 96,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 108,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 120,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 132,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 144,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 156,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 168,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 180,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 192,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 204,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 216,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 228,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 240,
+          "triangle_count": 12
+        },
+        {
+          "name": "廃材の板",
+          "triangle_start": 252,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "個々の廃材の形・積順は写真から確定できず推定。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0457-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0460_b.jpg",
+          "url": "https://www.google.com/maps/@35.4477154,139.2122431,3a,90y,235.7h,88t/data=!3m4!1e1!3m2!1s1YB7pGcUb-teuTEd9YY5aw!2e0?hl=ja",
+          "description": "杉丸太と板材が積まれた山、高さ約 1.5 m、幅約 8 m。0457〜0461 に続く広場の縁"
+        },
+        {
+          "oid": "S5-0864-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0864_b.jpg",
+          "url": "https://www.google.com/maps/@35.4927507,139.2198214,3a,90y,180.0h,88t/data=!3m4!1e1!3m2!1siDK7gQ1rBaAyuw7boksZQQ!2e0?hl=ja",
+          "description": "後方の山側、道の左に積まれた木片・板の山。"
+        },
+        {
+          "oid": "S5-1019-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1019_f.jpg",
+          "url": "https://www.google.com/maps/@35.5180873,139.2311664,3a,90y,352.8h,88t/data=!3m4!1e1!3m2!1sQmVPieHnV9xNve2npLn90A!2e0?hl=ja",
+          "description": "右の歩道の外に丸太や切り株が散らばる"
+        },
+        {
+          "oid": "S4-0486-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0486_f.jpg",
+          "url": "https://www.google.com/maps/@35.4525841,139.2128197,3a,90y,356.6h,88t/data=!3m4!1e1!3m2!1sjh_Jncw2idBJG_S1CrwzGQ!2e0?hl=ja",
+          "description": "直径約 0.5 m の丸い切り株状の石か丸太が 3 個、草地に置かれる。高さ約 0.3 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0864-07",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0864_b.jpg",
+        "url": "https://www.google.com/maps/@35.4927507,139.2198214,3a,90y,180.0h,88t/data=!3m4!1e1!3m2!1siDK7gQ1rBaAyuw7boksZQQ!2e0?hl=ja",
+        "description": "後方の山側、道の左に積まれた木片・板の山。"
+      },
+      "preview_views": {
+        "front": "r70_misc_log_pile_scrap_front.png",
+        "left": "r70_misc_log_pile_scrap_left.png",
+        "right": "r70_misc_log_pile_scrap_right.png",
+        "back_estimated": "r70_misc_log_pile_scrap_back_estimated.png",
+        "top": "r70_misc_log_pile_scrap_top.png",
+        "persp": "r70_misc_log_pile_scrap_persp.png",
+        "reference": "r70_misc_log_pile_scrap_reference.png"
+      }
+    },
+    {
+      "name": "log_stool",
+      "meaning": "高さ0.3m・直径0.5mの切株状腰掛け1個",
+      "triangles": 120,
+      "vertices": 192,
+      "dimensions_m": [
+        0.5,
+        0.5,
+        0.304
+      ],
+      "bounds_m": [
+        [
+          -0.25,
+          -0.25,
+          0.0
+        ],
+        [
+          0.25,
+          0.25,
+          0.304
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "log_stool.png"
+      ],
+      "components": [
+        {
+          "name": "切株状の丸太腰掛け",
+          "triangle_start": 0,
+          "triangle_count": 60
+        },
+        {
+          "name": "切口",
+          "triangle_start": 60,
+          "triangle_count": 60
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "参照では石か木か不確か。木製とした推定型。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0457-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0460_b.jpg",
+          "url": "https://www.google.com/maps/@35.4477154,139.2122431,3a,90y,235.7h,88t/data=!3m4!1e1!3m2!1s1YB7pGcUb-teuTEd9YY5aw!2e0?hl=ja",
+          "description": "杉丸太と板材が積まれた山、高さ約 1.5 m、幅約 8 m。0457〜0461 に続く広場の縁"
+        },
+        {
+          "oid": "S5-0864-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0864_b.jpg",
+          "url": "https://www.google.com/maps/@35.4927507,139.2198214,3a,90y,180.0h,88t/data=!3m4!1e1!3m2!1siDK7gQ1rBaAyuw7boksZQQ!2e0?hl=ja",
+          "description": "後方の山側、道の左に積まれた木片・板の山。"
+        },
+        {
+          "oid": "S5-1019-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1019_f.jpg",
+          "url": "https://www.google.com/maps/@35.5180873,139.2311664,3a,90y,352.8h,88t/data=!3m4!1e1!3m2!1sQmVPieHnV9xNve2npLn90A!2e0?hl=ja",
+          "description": "右の歩道の外に丸太や切り株が散らばる"
+        },
+        {
+          "oid": "S4-0486-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0486_f.jpg",
+          "url": "https://www.google.com/maps/@35.4525841,139.2128197,3a,90y,356.6h,88t/data=!3m4!1e1!3m2!1sjh_Jncw2idBJG_S1CrwzGQ!2e0?hl=ja",
+          "description": "直径約 0.5 m の丸い切り株状の石か丸太が 3 個、草地に置かれる。高さ約 0.3 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0486-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0486_f.jpg",
+        "url": "https://www.google.com/maps/@35.4525841,139.2128197,3a,90y,356.6h,88t/data=!3m4!1e1!3m2!1sjh_Jncw2idBJG_S1CrwzGQ!2e0?hl=ja",
+        "description": "直径約 0.5 m の丸い切り株状の石か丸太が 3 個、草地に置かれる。高さ約 0.3 m"
+      },
+      "preview_views": {
+        "front": "r70_misc_log_stool_front.png",
+        "left": "r70_misc_log_stool_left.png",
+        "right": "r70_misc_log_stool_right.png",
+        "back_estimated": "r70_misc_log_stool_back_estimated.png",
+        "top": "r70_misc_log_stool_top.png",
+        "persp": "r70_misc_log_stool_persp.png",
+        "reference": "r70_misc_log_stool_reference.png"
+      }
+    },
+    {
+      "name": "stone_steps",
+      "meaning": "幅1.5m・8段の階段",
+      "triangles": 96,
+      "vertices": 192,
+      "dimensions_m": [
+        1.5,
+        2.4,
+        1.28
+      ],
+      "bounds_m": [
+        [
+          -0.75,
+          0.0,
+          0.0
+        ],
+        [
+          0.75,
+          2.4,
+          1.28
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stone_steps.png"
+      ],
+      "components": [
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 72,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 84,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "正面は最下段へ向く-Y。踏面0.30m/蹴上げ0.16mは写真比率の推定。石段の苔・石目の細部は簡略化。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0598-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0598_b.jpg",
+          "url": "https://www.google.com/maps/@35.4725971,139.2166545,3a,90y,86.3h,88t/data=!3m4!1e1!3m2!1sOR5PFIXtQQilcYefZik2zA!2e0?hl=ja",
+          "description": "道の左の擁壁の上に斜めに登る苔むした石の段（幅約 1 m）。擁壁の肩から斜面へ。進む向きでは後ろ側"
+        },
+        {
+          "oid": "S5-0776-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0776_f.jpg",
+          "url": "https://www.google.com/maps/@35.4862701,139.2099432,3a,90y,108.7h,88t/data=!3m4!1e1!3m2!1skx5tt9yeMJ_8TiDgisZAJQ!2e0?hl=ja",
+          "description": "擁壁の切れ目から山側へ上る石段、幅約1.5m、約8段、苔むす"
+        },
+        {
+          "oid": "S5-0799-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0799_b.jpg",
+          "url": "https://www.google.com/maps/@35.4853438,139.2137877,3a,90y,201.1h,88t/data=!3m4!1e1!3m2!1sSbmK5vlGUQXFB-WtpuE4IA!2e0?hl=ja",
+          "description": "道の左（山側）の白いコンクリート壁の脇に、斜面へ上がる 4〜5 段のコンクリート階段。幅約 1 m。"
+        },
+        {
+          "oid": "S5-0809-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0809_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866076,139.2156432,3a,90y,96.4h,88t/data=!3m4!1e1!3m2!1sjZvc02pVOKx_gXfsVWQzZw!2e0?hl=ja",
+          "description": "左の斜面を上がるコンクリ階段に青灰色の金属手すり、長さ約8m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0598-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0598_b.jpg",
+        "url": "https://www.google.com/maps/@35.4725971,139.2166545,3a,90y,86.3h,88t/data=!3m4!1e1!3m2!1sOR5PFIXtQQilcYefZik2zA!2e0?hl=ja",
+        "description": "道の左の擁壁の上に斜めに登る苔むした石の段（幅約 1 m）。擁壁の肩から斜面へ。進む向きでは後ろ側"
+      },
+      "preview_views": {
+        "front": "r70_misc_stone_steps_front.png",
+        "left": "r70_misc_stone_steps_left.png",
+        "right": "r70_misc_stone_steps_right.png",
+        "back_estimated": "r70_misc_stone_steps_back_estimated.png",
+        "top": "r70_misc_stone_steps_top.png",
+        "persp": "r70_misc_stone_steps_persp.png",
+        "reference": "r70_misc_stone_steps_reference.png"
+      }
+    },
+    {
+      "name": "concrete_steps",
+      "meaning": "幅1m・5段の階段",
+      "triangles": 60,
+      "vertices": 120,
+      "dimensions_m": [
+        1.0,
+        1.5,
+        0.8
+      ],
+      "bounds_m": [
+        [
+          -0.5,
+          0.0,
+          0.0
+        ],
+        [
+          0.5,
+          1.5,
+          0.8
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "concrete_steps.png"
+      ],
+      "components": [
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "階段の踏面と蹴上げ",
+          "triangle_start": 48,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "正面は最下段へ向く-Y。踏面0.30m/蹴上げ0.16mは写真比率の推定。石段の苔・石目の細部は簡略化。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0598-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0598_b.jpg",
+          "url": "https://www.google.com/maps/@35.4725971,139.2166545,3a,90y,86.3h,88t/data=!3m4!1e1!3m2!1sOR5PFIXtQQilcYefZik2zA!2e0?hl=ja",
+          "description": "道の左の擁壁の上に斜めに登る苔むした石の段（幅約 1 m）。擁壁の肩から斜面へ。進む向きでは後ろ側"
+        },
+        {
+          "oid": "S5-0776-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0776_f.jpg",
+          "url": "https://www.google.com/maps/@35.4862701,139.2099432,3a,90y,108.7h,88t/data=!3m4!1e1!3m2!1skx5tt9yeMJ_8TiDgisZAJQ!2e0?hl=ja",
+          "description": "擁壁の切れ目から山側へ上る石段、幅約1.5m、約8段、苔むす"
+        },
+        {
+          "oid": "S5-0799-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0799_b.jpg",
+          "url": "https://www.google.com/maps/@35.4853438,139.2137877,3a,90y,201.1h,88t/data=!3m4!1e1!3m2!1sSbmK5vlGUQXFB-WtpuE4IA!2e0?hl=ja",
+          "description": "道の左（山側）の白いコンクリート壁の脇に、斜面へ上がる 4〜5 段のコンクリート階段。幅約 1 m。"
+        },
+        {
+          "oid": "S5-0809-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0809_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866076,139.2156432,3a,90y,96.4h,88t/data=!3m4!1e1!3m2!1sjZvc02pVOKx_gXfsVWQzZw!2e0?hl=ja",
+          "description": "左の斜面を上がるコンクリ階段に青灰色の金属手すり、長さ約8m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0799-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0799_b.jpg",
+        "url": "https://www.google.com/maps/@35.4853438,139.2137877,3a,90y,201.1h,88t/data=!3m4!1e1!3m2!1sSbmK5vlGUQXFB-WtpuE4IA!2e0?hl=ja",
+        "description": "道の左（山側）の白いコンクリート壁の脇に、斜面へ上がる 4〜5 段のコンクリート階段。幅約 1 m。"
+      },
+      "preview_views": {
+        "front": "r70_misc_concrete_steps_front.png",
+        "left": "r70_misc_concrete_steps_left.png",
+        "right": "r70_misc_concrete_steps_right.png",
+        "back_estimated": "r70_misc_concrete_steps_back_estimated.png",
+        "top": "r70_misc_concrete_steps_top.png",
+        "persp": "r70_misc_concrete_steps_persp.png",
+        "reference": "r70_misc_concrete_steps_reference.png"
+      }
+    },
+    {
+      "name": "stairs_rail",
+      "meaning": "階段脇の勾配手すり1区間",
+      "triangles": 112,
+      "vertices": 192,
+      "dimensions_m": [
+        0.05,
+        2.62357,
+        2.22205
+      ],
+      "bounds_m": [
+        [
+          -0.025,
+          -0.111787,
+          0.0
+        ],
+        [
+          0.025,
+          2.511787,
+          2.222047
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "stairs_rail.png"
+      ],
+      "components": [
+        {
+          "name": "階段脇の支柱",
+          "triangle_start": 0,
+          "triangle_count": 28
+        },
+        {
+          "name": "階段脇の支柱",
+          "triangle_start": 28,
+          "triangle_count": 28
+        },
+        {
+          "name": "階段脇の支柱",
+          "triangle_start": 56,
+          "triangle_count": 28
+        },
+        {
+          "name": "斜めの上手すり",
+          "triangle_start": 84,
+          "triangle_count": 28
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "手すり延長約8mは区間を連結。端部と勾配の細部は推定。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0598-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0598_b.jpg",
+          "url": "https://www.google.com/maps/@35.4725971,139.2166545,3a,90y,86.3h,88t/data=!3m4!1e1!3m2!1sOR5PFIXtQQilcYefZik2zA!2e0?hl=ja",
+          "description": "道の左の擁壁の上に斜めに登る苔むした石の段（幅約 1 m）。擁壁の肩から斜面へ。進む向きでは後ろ側"
+        },
+        {
+          "oid": "S5-0776-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0776_f.jpg",
+          "url": "https://www.google.com/maps/@35.4862701,139.2099432,3a,90y,108.7h,88t/data=!3m4!1e1!3m2!1skx5tt9yeMJ_8TiDgisZAJQ!2e0?hl=ja",
+          "description": "擁壁の切れ目から山側へ上る石段、幅約1.5m、約8段、苔むす"
+        },
+        {
+          "oid": "S5-0799-03",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0799_b.jpg",
+          "url": "https://www.google.com/maps/@35.4853438,139.2137877,3a,90y,201.1h,88t/data=!3m4!1e1!3m2!1sSbmK5vlGUQXFB-WtpuE4IA!2e0?hl=ja",
+          "description": "道の左（山側）の白いコンクリート壁の脇に、斜面へ上がる 4〜5 段のコンクリート階段。幅約 1 m。"
+        },
+        {
+          "oid": "S5-0809-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0809_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866076,139.2156432,3a,90y,96.4h,88t/data=!3m4!1e1!3m2!1sjZvc02pVOKx_gXfsVWQzZw!2e0?hl=ja",
+          "description": "左の斜面を上がるコンクリ階段に青灰色の金属手すり、長さ約8m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-0809-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0809_f.jpg",
+        "url": "https://www.google.com/maps/@35.4866076,139.2156432,3a,90y,96.4h,88t/data=!3m4!1e1!3m2!1sjZvc02pVOKx_gXfsVWQzZw!2e0?hl=ja",
+        "description": "左の斜面を上がるコンクリ階段に青灰色の金属手すり、長さ約8m"
+      },
+      "preview_views": {
+        "front": "r70_misc_stairs_rail_front.png",
+        "left": "r70_misc_stairs_rail_left.png",
+        "right": "r70_misc_stairs_rail_right.png",
+        "back_estimated": "r70_misc_stairs_rail_back_estimated.png",
+        "top": "r70_misc_stairs_rail_top.png",
+        "persp": "r70_misc_stairs_rail_persp.png",
+        "reference": "r70_misc_stairs_rail_reference.png"
+      }
+    },
+    {
+      "name": "vending",
+      "meaning": "北原手前の赤い飲料自販機・商品窓と決済部を立体化",
+      "triangles": 1240,
+      "vertices": 2624,
+      "dimensions_m": [
+        1.001,
+        0.774,
+        1.8
+      ],
+      "bounds_m": [
+        [
+          -0.5,
+          -0.414,
+          0.0
+        ],
+        [
+          0.501,
+          0.36,
+          1.8
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "vending.png"
+      ],
+      "components": [
+        {
+          "name": "赤い筐体",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "黒い脚",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "黒い脚",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "商品窓の奥",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "決済部",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "取出口の凹み",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "取出口のふた",
+          "triangle_start": 72,
+          "triangle_count": 12
+        },
+        {
+          "name": "白い商品棚",
+          "triangle_start": 84,
+          "triangle_count": 12
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 96,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 124,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 156,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 184,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 216,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 244,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 276,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 304,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 336,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 364,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 396,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 424,
+          "triangle_count": 32
+        },
+        {
+          "name": "白い商品棚",
+          "triangle_start": 456,
+          "triangle_count": 12
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 468,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 496,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 528,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 556,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 588,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 616,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 648,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 676,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 708,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 736,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 768,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 796,
+          "triangle_count": 32
+        },
+        {
+          "name": "白い商品棚",
+          "triangle_start": 828,
+          "triangle_count": 12
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 840,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 868,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 900,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 928,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 960,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 988,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 1020,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 1048,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 1080,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 1108,
+          "triangle_count": 32
+        },
+        {
+          "name": "飲料の見本",
+          "triangle_start": 1140,
+          "triangle_count": 28
+        },
+        {
+          "name": "飲料の肩",
+          "triangle_start": 1168,
+          "triangle_count": 32
+        },
+        {
+          "name": "小さな決済スロット",
+          "triangle_start": 1200,
+          "triangle_count": 12
+        },
+        {
+          "name": "小さな決済スロット",
+          "triangle_start": 1212,
+          "triangle_count": 12
+        },
+        {
+          "name": "小さな決済スロット",
+          "triangle_start": 1224,
+          "triangle_count": 12
+        },
+        {
+          "name": "下部ブランド表示",
+          "triangle_start": 1236,
+          "triangle_count": 2
+        },
+        {
+          "name": "側面の縦ブランド面",
+          "triangle_start": 1238,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "pass_vendingは変更せず新規制作。商品ラベルとロゴ書体は近似。銘柄の細字・商品価格は未判読のため省略。"
+      ],
+      "references": [
+        {
+          "oid": "S5-1020-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1020_f.jpg",
+          "url": "https://www.google.com/maps/@35.518341,139.2311223,3a,90y,353.0h,88t/data=!3m4!1e1!3m2!1sDyUYOW8AhycymN5xwSJNKQ!2e0?hl=ja",
+          "description": "赤い飲料自販機1台、高さ約1.8m、幅約1m、前面を道へ向ける、砂利の駐車場の奥"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-1020-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1020_f.jpg",
+        "url": "https://www.google.com/maps/@35.518341,139.2311223,3a,90y,353.0h,88t/data=!3m4!1e1!3m2!1sDyUYOW8AhycymN5xwSJNKQ!2e0?hl=ja",
+        "description": "赤い飲料自販機1台、高さ約1.8m、幅約1m、前面を道へ向ける、砂利の駐車場の奥"
+      },
+      "preview_views": {
+        "front": "r70_misc_vending_front.png",
+        "left": "r70_misc_vending_left.png",
+        "right": "r70_misc_vending_right.png",
+        "back_estimated": "r70_misc_vending_back_estimated.png",
+        "top": "r70_misc_vending_top.png",
+        "persp": "r70_misc_vending_persp.png",
+        "reference": "r70_misc_vending_reference.png"
+      }
+    },
+    {
+      "name": "signal",
+      "meaning": "横型3灯信号と宮ヶ瀬北原の交差点名板",
+      "triangles": 622,
+      "vertices": 1024,
+      "dimensions_m": [
+        2.19,
+        0.45,
+        5.54
+      ],
+      "bounds_m": [
+        [
+          -0.09,
+          -0.36,
+          0.0
+        ],
+        [
+          2.1,
+          0.09,
+          5.54
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "signal.png"
+      ],
+      "components": [
+        {
+          "name": "信号の鋼管柱",
+          "triangle_start": 0,
+          "triangle_count": 44
+        },
+        {
+          "name": "張出し横腕",
+          "triangle_start": 44,
+          "triangle_count": 36
+        },
+        {
+          "name": "横型信号筐体",
+          "triangle_start": 80,
+          "triangle_count": 12
+        },
+        {
+          "name": "灯の黒い縁",
+          "triangle_start": 92,
+          "triangle_count": 76
+        },
+        {
+          "name": "3色のレンズ",
+          "triangle_start": 168,
+          "triangle_count": 76
+        },
+        {
+          "name": "上半分の信号庇",
+          "triangle_start": 244,
+          "triangle_count": 20
+        },
+        {
+          "name": "灯の黒い縁",
+          "triangle_start": 264,
+          "triangle_count": 76
+        },
+        {
+          "name": "3色のレンズ",
+          "triangle_start": 340,
+          "triangle_count": 76
+        },
+        {
+          "name": "上半分の信号庇",
+          "triangle_start": 416,
+          "triangle_count": 20
+        },
+        {
+          "name": "灯の黒い縁",
+          "triangle_start": 436,
+          "triangle_count": 76
+        },
+        {
+          "name": "3色のレンズ",
+          "triangle_start": 512,
+          "triangle_count": 76
+        },
+        {
+          "name": "上半分の信号庇",
+          "triangle_start": 588,
+          "triangle_count": 20
+        },
+        {
+          "name": "交差点名板",
+          "triangle_start": 608,
+          "triangle_count": 12
+        },
+        {
+          "name": "宮ヶ瀬北原の印刷面",
+          "triangle_start": 620,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "写真では交差点名板は白地に青字。依頼の青地という記述より写真を優先した。",
+        "柱高さ・腕長・裏面金具は推定。静的3色レンズ、交通制御・発光・配線は含まない。"
+      ],
+      "references": [
+        {
+          "oid": "S5-1022-08",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_b.jpg",
+          "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,157.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja",
+          "description": "道の右角の柱に車両用信号灯（3色）と青地の名板。名板は斜めの長方形、約1.2m×0.4m"
+        },
+        {
+          "oid": "S5-1021-07",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1021_f.jpg",
+          "url": "https://www.google.com/maps/@35.5186002,139.2310768,3a,90y,347.0h,88t/data=!3m4!1e1!3m2!1sizYB7sUWYbsTH5b657df2Q!2e0?hl=ja",
+          "description": "交差点の先に信号機が複数並ぶ"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S5-1022-08",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_b.jpg",
+        "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,157.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja",
+        "description": "道の右角の柱に車両用信号灯（3色）と青地の名板。名板は斜めの長方形、約1.2m×0.4m"
+      },
+      "preview_views": {
+        "front": "r70_misc_signal_front.png",
+        "left": "r70_misc_signal_left.png",
+        "right": "r70_misc_signal_right.png",
+        "back_estimated": "r70_misc_signal_back_estimated.png",
+        "top": "r70_misc_signal_top.png",
+        "persp": "r70_misc_signal_persp.png",
+        "reference": "r70_misc_signal_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [],
+  "references": {
+    "stake": [
+      {
+        "oid": "S4-0381-05",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_f.jpg",
+        "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,80.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja",
+        "description": "橋のたもとの草の中に立つオレンジ色の太めの杭、高さ約0.8 m。"
+      },
+      {
+        "oid": "S4-0382-10",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_f.jpg",
+        "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,63.1h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja",
+        "description": "オレンジ色の太い杭、上部に黄色。高さ約0.8 m。"
+      },
+      {
+        "oid": "S4-0322-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0325_f.jpg",
+        "url": "https://www.google.com/maps/@35.4310034,139.213759,3a,90y,353.2h,88t/data=!3m4!1e1!3m2!1sx2lSf2bJ4kmN4q5EFr3Lgw!2e0?hl=ja",
+        "description": "道の左側の山側の細い柱。白〜灰色、高さ約2 m、先端は何もない。1本か複数本か不明。0325Fでは画面左端に太めの灰色の柱が近く写る"
+      },
+      {
+        "oid": "S4-0345-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0345_b.jpg",
+        "url": "https://www.google.com/maps/@35.4305743,139.2119865,3a,90y,68.5h,88t/data=!3m4!1e1!3m2!1siUS4auqgjGSn06APbsf1xA!2e0?hl=ja",
+        "description": "赤白縞の端部の近くに立つ細い白い棒。高さ約1.5 m"
+      }
+    ],
+    "equipment_box": [
+      {
+        "oid": "S4-0357-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0357_f.jpg",
+        "url": "https://www.google.com/maps/@35.4304311,139.2091916,3a,90y,303.6h,88t/data=!3m4!1e1!3m2!1sHyvcKPOGKcss3ytf_0G6xw!2e0?hl=ja",
+        "description": "灰色の金属の箱（扉3枚）、幅約1.4 m・高さ約1.2 m。電柱の根元、速度標識のそば。ガードレールのすぐ外。"
+      },
+      {
+        "oid": "S5-0940-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0940_b.jpg",
+        "url": "https://www.google.com/maps/@35.5020321,139.2307045,3a,90y,135.1h,88t/data=!3m4!1e1!3m2!1s2gNyZIiPvEV6k1gV0WMA1w!2e0?hl=ja",
+        "description": "灰色の鋼管柱の根元に置かれた灰色の金属箱（約0.8×0.5×1.2m）と、立てかけた板。擁壁の前の路肩外"
+      },
+      {
+        "oid": "S5-0963-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0963_b.jpg",
+        "url": "https://www.google.com/maps/@35.5064135,139.2307749,3a,90y,212.1h,88t/data=!3m4!1e1!3m2!1sgowjeXWFTzFVjMZL6XNJKQ!2e0?hl=ja",
+        "description": "電柱状の細い柱の根元にある灰色の金属箱、高さ約0.7 m。"
+      },
+      {
+        "oid": "S5-1004-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1004_b.jpg",
+        "url": "https://www.google.com/maps/@35.5153395,139.2330592,3a,90y,177.6h,88t/data=!3m4!1e1!3m2!1stajN1-ut8FUqUZTEemZdhw!2e0?hl=ja",
+        "description": "右側の路肩外に立つ細い灰色の柱、途中に灰色の四角い箱（約0.3m）が付く。高さ約8m"
+      }
+    ],
+    "log_pile": [
+      {
+        "oid": "S4-0457-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0460_b.jpg",
+        "url": "https://www.google.com/maps/@35.4477154,139.2122431,3a,90y,235.7h,88t/data=!3m4!1e1!3m2!1s1YB7pGcUb-teuTEd9YY5aw!2e0?hl=ja",
+        "description": "杉丸太と板材が積まれた山、高さ約 1.5 m、幅約 8 m。0457〜0461 に続く広場の縁"
+      },
+      {
+        "oid": "S5-0864-07",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0864_b.jpg",
+        "url": "https://www.google.com/maps/@35.4927507,139.2198214,3a,90y,180.0h,88t/data=!3m4!1e1!3m2!1siDK7gQ1rBaAyuw7boksZQQ!2e0?hl=ja",
+        "description": "後方の山側、道の左に積まれた木片・板の山。"
+      },
+      {
+        "oid": "S5-1019-06",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1019_f.jpg",
+        "url": "https://www.google.com/maps/@35.5180873,139.2311664,3a,90y,352.8h,88t/data=!3m4!1e1!3m2!1sQmVPieHnV9xNve2npLn90A!2e0?hl=ja",
+        "description": "右の歩道の外に丸太や切り株が散らばる"
+      },
+      {
+        "oid": "S4-0486-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0486_f.jpg",
+        "url": "https://www.google.com/maps/@35.4525841,139.2128197,3a,90y,356.6h,88t/data=!3m4!1e1!3m2!1sjh_Jncw2idBJG_S1CrwzGQ!2e0?hl=ja",
+        "description": "直径約 0.5 m の丸い切り株状の石か丸太が 3 個、草地に置かれる。高さ約 0.3 m"
+      }
+    ],
+    "stone_steps": [
+      {
+        "oid": "S5-0598-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0598_b.jpg",
+        "url": "https://www.google.com/maps/@35.4725971,139.2166545,3a,90y,86.3h,88t/data=!3m4!1e1!3m2!1sOR5PFIXtQQilcYefZik2zA!2e0?hl=ja",
+        "description": "道の左の擁壁の上に斜めに登る苔むした石の段（幅約 1 m）。擁壁の肩から斜面へ。進む向きでは後ろ側"
+      },
+      {
+        "oid": "S5-0776-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0776_f.jpg",
+        "url": "https://www.google.com/maps/@35.4862701,139.2099432,3a,90y,108.7h,88t/data=!3m4!1e1!3m2!1skx5tt9yeMJ_8TiDgisZAJQ!2e0?hl=ja",
+        "description": "擁壁の切れ目から山側へ上る石段、幅約1.5m、約8段、苔むす"
+      },
+      {
+        "oid": "S5-0799-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0799_b.jpg",
+        "url": "https://www.google.com/maps/@35.4853438,139.2137877,3a,90y,201.1h,88t/data=!3m4!1e1!3m2!1sSbmK5vlGUQXFB-WtpuE4IA!2e0?hl=ja",
+        "description": "道の左（山側）の白いコンクリート壁の脇に、斜面へ上がる 4〜5 段のコンクリート階段。幅約 1 m。"
+      },
+      {
+        "oid": "S5-0809-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0809_f.jpg",
+        "url": "https://www.google.com/maps/@35.4866076,139.2156432,3a,90y,96.4h,88t/data=!3m4!1e1!3m2!1sjZvc02pVOKx_gXfsVWQzZw!2e0?hl=ja",
+        "description": "左の斜面を上がるコンクリ階段に青灰色の金属手すり、長さ約8m"
+      }
+    ],
+    "vending": [
+      {
+        "oid": "S5-1020-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1020_f.jpg",
+        "url": "https://www.google.com/maps/@35.518341,139.2311223,3a,90y,353.0h,88t/data=!3m4!1e1!3m2!1sDyUYOW8AhycymN5xwSJNKQ!2e0?hl=ja",
+        "description": "赤い飲料自販機1台、高さ約1.8m、幅約1m、前面を道へ向ける、砂利の駐車場の奥"
+      }
+    ],
+    "signal": [
+      {
+        "oid": "S5-1022-08",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_b.jpg",
+        "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,157.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja",
+        "description": "道の右角の柱に車両用信号灯（3色）と青地の名板。名板は斜めの長方形、約1.2m×0.4m"
+      },
+      {
+        "oid": "S5-1021-07",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1021_f.jpg",
+        "url": "https://www.google.com/maps/@35.5186002,139.2310768,3a,90y,347.0h,88t/data=!3m4!1e1!3m2!1sizYB7sUWYbsTH5b657df2Q!2e0?hl=ja",
+        "description": "交差点の先に信号機が複数並ぶ"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "vending",
+    "image": "R70-1020_f.jpg",
+    "crop_pixels": [
+      1160,
+      410,
+      1400,
+      650
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

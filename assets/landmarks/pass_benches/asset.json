@@ -1,0 +1,163 @@
+{
+  "part_info": {
+    "bench_low_plank": {
+      "meaning": "低い板ベンチ。長手5枚板と2つの短脚。推奨3基。",
+      "front": "-Y"
+    },
+    "bench_box_short": {
+      "meaning": "背なし箱形腰掛け。短型。内部構造は推定。",
+      "front": "-Y"
+    },
+    "bench_box_long": {
+      "meaning": "背なし箱形腰掛け。長型。内部構造は推定。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "bench_low_plank": [
+      0.0,
+      0.0,
+      0
+    ],
+    "bench_box_short": [
+      2.8,
+      0.0,
+      0
+    ],
+    "bench_box_long": [
+      5.6,
+      0.0,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 512,
+  "refs": [
+    "codex07/sv_toilet_045.png",
+    "codex07/sv_toilet_090.png",
+    "codex07/sv_lanes_000.png",
+    "codex07/sv_lanes_045.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "箱形2種は木板側面と太い暗色端枠を分離。背面/内部は推定。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_benches",
+  "source": "pass_benches.blend",
+  "parts": [
+    {
+      "name": "bench_low_plank",
+      "triangles": 108,
+      "vertices": 216,
+      "dimensions_m": [
+        1.95,
+        0.54,
+        0.325
+      ],
+      "bounds_m": [
+        [
+          -0.9750000238418579,
+          -0.27000001072883606,
+          0.0
+        ],
+        [
+          0.9750000238418579,
+          0.27000001072883606,
+          0.32500001788139343
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "低い板ベンチ。長手5枚板と2つの短脚。推奨3基。",
+      "front": "-Y"
+    },
+    {
+      "name": "bench_box_short",
+      "triangles": 300,
+      "vertices": 600,
+      "dimensions_m": [
+        0.92,
+        0.59,
+        0.4405
+      ],
+      "bounds_m": [
+        [
+          -0.46000000834465027,
+          -0.29499998688697815,
+          0.0
+        ],
+        [
+          0.46000000834465027,
+          0.29499998688697815,
+          0.44050002098083496
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "背なし箱形腰掛け。短型。内部構造は推定。",
+      "front": "-Y"
+    },
+    {
+      "name": "bench_box_long",
+      "triangles": 348,
+      "vertices": 696,
+      "dimensions_m": [
+        1.2,
+        0.59,
+        0.4405
+      ],
+      "bounds_m": [
+        [
+          -0.6000000238418579,
+          -0.29499998688697815,
+          0.0
+        ],
+        [
+          0.6000000238418579,
+          0.29499998688697815,
+          0.44050002098083496
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "背なし箱形腰掛け。長型。内部構造は推定。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

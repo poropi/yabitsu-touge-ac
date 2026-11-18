@@ -124,6 +124,14 @@ def test_real_layouts_start_on_the_road_and_finish_ahead():
                                     "s4_up", "s4_down", "s5_up", "s5_down", "full_kitahara_up", "full_kitahara_down"}
     for l in ls:
         objs = _by(lay.layout_objects(sec, pads, l, bounds))
+        if l.start_in_lot:   # 菜の花台から出るレイアウト（S2 下り・S3 上り）は駐車場の中から出る（2026-10-30 ユーザーの指示）
+            from shapely.geometry import Point, Polygon
+            lot = Polygon([p for p in pads if p["name"] == l.start_in_lot["pad"]][0]["polygon"]).buffer(-1.0)
+            for name in [f"AC_START_{i}" for i in range(4)] + ["AC_HOTLAP_START_0"]:
+                assert lot.contains(Point(objs[name].location[:2])), (l.name, name)
+            at = lambda pt: lay.point_s(sec, pt, bounds, l.section)
+            assert (at(l.finish) - at(l.timing_start)) * l.direction > 1000, l.name
+            continue
         for i in range(4):
             d = objs[f"AC_START_{i}"]
             k = int(np.argmin(np.hypot(sec.x - d.location[0], sec.y - d.location[1])))
@@ -216,3 +224,20 @@ def test_every_layout_loads_the_s3_dress_kn5():
     for name in ("s3_up", "full_kitahara_down", "s1_up"):
         files = lay.kn5_files(name)
         assert "yabitsu_s3_dress.kn5" in files and files[-1] == f"{name}_objects.kn5"
+
+
+def test_start_in_lot_places_grid_and_hotlap_in_the_lot_facing_the_exit(tmp_path):
+    """start_in_lot：スタートの並びとホットラップの開始位置を、駐車場の座標（a・b）で駐車場の中に置く。向きは +a（出口）。"""
+    import json
+    spec = tmp_path / "lot.json"
+    spec.write_text(json.dumps({"origin": [30.0, 20.0], "axis_deg": 90.0}), encoding="utf-8")
+    sil = {"spec": str(spec), "pad": "lot", "a": -2.0, "b": 0.0, "spacing": 6.0, "stagger": 1.0}
+    l = lay.Layout("t", "test", "s1", 1, _ll(40.0, 0), _ll(5.0, 0), _ll(50.0, 0), _ll(900.0, 0), "lot", sil)
+    sec = _straight(1001)
+    d = _by(lay.layout_objects(sec, [LOT], l, BOUNDS))
+    assert set(d) == NAMES
+    for i in range(4):   # +a は北（axis 90°）。a = −2 − 6i、b = ±1（左右交互）
+        x, y, z = d[f"AC_START_{i}"].location
+        assert x == pytest.approx(30.0 - (1.0 if i % 2 == 0 else -1.0)) and y == pytest.approx(20.0 - 2.0 - 6.0 * i)
+        assert z == pytest.approx(100.0 + lay.DUMMY_Z_OFFSET) and d[f"AC_START_{i}"].heading == pytest.approx(math.pi / 2)
+    assert d["AC_HOTLAP_START_0"].location[:2] == pytest.approx((30.0, 18.0))

@@ -1,0 +1,205 @@
+{
+  "part_info": {
+    "south_tall_sign": {
+      "meaning": "南側階段脇の茶色大板。ヤビツ峠・レストハウス、左上矢印。",
+      "front": "-Y"
+    },
+    "south_wide_sign": {
+      "meaning": "南側の横長ハイキングコース板。先頭地名・距離未判読。",
+      "front": "-Y"
+    },
+    "lotn_small_sign": {
+      "meaning": "北入口ガードレール奥の2本丸太柱と小横板。文字は未判読。",
+      "front": "-Y"
+    },
+    "u1_black_direction": {
+      "meaning": "2014年u1の黒い左右二段方向標。上段のみ文字判読。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "south_tall_sign": [
+      0.0,
+      0.0,
+      0
+    ],
+    "south_wide_sign": [
+      2.8,
+      0.0,
+      0
+    ],
+    "lotn_small_sign": [
+      5.6,
+      0.0,
+      0
+    ],
+    "u1_black_direction": [
+      0.0,
+      2.2,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 1024,
+  "refs": [
+    "codex07/sv_south_090.png",
+    "codex07/sv_south_180.png",
+    "codex07/sv_lotn_000.png",
+    "codex07/sv_lotn_045.png",
+    "codex07/sv_u1_000.png",
+    "codex07/sv_u1_315.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "南の下部アイコン/小字、北入口本文、u1下段の行先は未判読。文字は創作せず線。",
+    "u1は2014年写真。2025年の残存未確認。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "stair_assembly": null,
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_brown_signs",
+  "source": "pass_brown_signs.blend",
+  "parts": [
+    {
+      "name": "south_tall_sign",
+      "triangles": 62,
+      "vertices": 124,
+      "dimensions_m": [
+        0.95,
+        0.108,
+        1.46
+      ],
+      "bounds_m": [
+        [
+          -0.4749999940395355,
+          -0.053999997675418854,
+          0.0
+        ],
+        [
+          0.4749999940395355,
+          0.053999997675418854,
+          1.4600000381469727
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "南側階段脇の茶色大板。ヤビツ峠・レストハウス、左上矢印。",
+      "front": "-Y"
+    },
+    {
+      "name": "south_wide_sign",
+      "triangles": 46,
+      "vertices": 94,
+      "dimensions_m": [
+        1.515,
+        0.0935,
+        1.31
+      ],
+      "bounds_m": [
+        [
+          -0.7574999928474426,
+          -0.04674999974668026,
+          0.0
+        ],
+        [
+          0.7574999928474426,
+          0.04674999974668026,
+          1.309999942779541
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "南側の横長ハイキングコース板。先頭地名・距離未判読。",
+      "front": "-Y"
+    },
+    {
+      "name": "lotn_small_sign",
+      "triangles": 70,
+      "vertices": 124,
+      "dimensions_m": [
+        1.01,
+        0.126,
+        0.88
+      ],
+      "bounds_m": [
+        [
+          -0.5049999952316284,
+          -0.06299999728798866,
+          0.0
+        ],
+        [
+          0.5049999952316284,
+          0.06299999728798866,
+          0.8799999952316284
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        -0.0,
+        0.0
+      ],
+      "meaning": "北入口ガードレール奥の2本丸太柱と小横板。文字は未判読。",
+      "front": "-Y"
+    },
+    {
+      "name": "u1_black_direction",
+      "triangles": 92,
+      "vertices": 164,
+      "dimensions_m": [
+        1.14,
+        0.103,
+        1.9675
+      ],
+      "bounds_m": [
+        [
+          -0.5699999928474426,
+          -0.051500000059604645,
+          0.0
+        ],
+        [
+          0.5699999928474426,
+          0.051500000059604645,
+          1.96750009059906
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "2014年u1の黒い左右二段方向標。上段のみ文字判読。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

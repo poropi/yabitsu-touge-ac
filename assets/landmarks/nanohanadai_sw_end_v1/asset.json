@@ -1,0 +1,106 @@
+{
+  "generator": "blender_scripts/build_nanohanadai_sw_end_v1.py",
+  "origin": "共通原点は駐車場座標 a=-66,b=0 の路面。+X=+a、+Y=+b、正面-Y=谷側、+Z上。",
+  "dimension_basis": "sw135/180の足元を高さ2.5m・縦90度・下向き4.13度で逆投影。航空写真gsat20の奥の帯へa=-85で接続。形状と高さは写真からの推定で測量値ではない。",
+  "approximations": [
+    "敷石寸法60x45cm、目地4cm、地覆高さ0.15〜0.55mは推定。",
+    "駐車場全体は既存の平面のまま。フェンス終端の地覆の傾斜で近景の高低差を近似。",
+    "航空写真の折返し先端より約4m谷側へ寄る。航空写真とSVで完全な同時復元には至っていない。"
+  ],
+  "refs": [
+    "sv_sw_135.png",
+    "sv_sw_180.png",
+    "sv_sw_000.png",
+    "gsat20.png",
+    "gsat21.png"
+  ],
+  "asset_id": "nanohanadai_sw_end_v1",
+  "source": "nanohanadai_sw_end_v1.blend",
+  "parts": [
+    {
+      "name": "flagstones",
+      "triangles": 1141,
+      "vertices": 3423,
+      "dimensions_m": [
+        23.0,
+        13.121,
+        0.057
+      ],
+      "bounds_m": [
+        [
+          -19.0,
+          -2.450000047683716,
+          0.003000000026077032
+        ],
+        [
+          4.0,
+          10.671002388000488,
+          0.05999999865889549
+        ]
+      ]
+    },
+    {
+      "name": "fence_return",
+      "triangles": 1524,
+      "vertices": 2782,
+      "dimensions_m": [
+        5.3345,
+        1.2343,
+        2.3238
+      ],
+      "bounds_m": [
+        [
+          2.707390785217285,
+          -2.7799999713897705,
+          -0.6499999761581421
+        ],
+        [
+          8.04184627532959,
+          -1.5456513166427612,
+          1.6737555265426636
+        ]
+      ]
+    },
+    {
+      "name": "edge_curb",
+      "triangles": 36,
+      "vertices": 72,
+      "dimensions_m": [
+        23.0285,
+        3.4254,
+        0.12
+      ],
+      "bounds_m": [
+        [
+          -19.028459548950195,
+          -2.5899999141693115,
+          -0.03999999910593033
+        ],
+        [
+          4.0,
+          0.8353815078735352,
+          0.07999999821186066
+        ]
+      ]
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "共通原点は駐車場座標 a=-66,b=0 の路面。+X=+a、+Y=+b、正面-Y=谷側、+Z上。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderで再読込する際は1-v。配置側でも明示的に反転する。",
+    "f": "triangles"
+  },
+  "game_status": "NPZ/PNG出力済み、s1_start_lot.jsonへ配置済み。コース全体の組立、KN5、ゲーム導入は未実施。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html"
+}

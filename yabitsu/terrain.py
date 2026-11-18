@@ -54,8 +54,9 @@ def road_frame(sec, X, Y):
 
 
 def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_left=None, side_extra_right=None, channels=(),
-          keep_rows=None, no_fill_rows=None, lake=None):
-    """side_extra_*（行ごとの歩道の幅）があれば、そのぶん道の範囲を外へ広げる（歩道の下に地形がかぶらない）。"""
+          keep_rows=None, no_fill_rows=None, lake=None, cut_drop_left=None, cut_drop_right=None):
+    """cut_drop_*（行ごと）があれば、切り土の斜面をそれだけ下げる（擁壁の裏：features.cut_drops）。
+    side_extra_*（行ごとの歩道の幅）があれば、そのぶん道の範囲を外へ広げる（歩道の下に地形がかぶらない）。"""
     shape = np.shape(X)
     f = road_frame(sec, X, Y)
     idx, lat, along = f["idx"], f["lat"], f["along"]
@@ -70,16 +71,19 @@ def carve(X, Y, Z_nat, sec, pads=(), cut_left=None, cut_right=None, side_extra_l
     cl_ = np.full(sec.n, CUT_SLOPE) if cut_left is None else np.asarray(cut_left)
     cr_ = np.full(sec.n, CUT_SLOPE) if cut_right is None else np.asarray(cut_right)
     cut = np.where(left, cl_[idx], cr_[idx])
-    z = np.clip(np.ravel(Z_nat), z_edge - FILL_SLOPE * e, z_edge + cut * e)
+    dl_ = np.zeros(sec.n) if cut_drop_left is None else np.asarray(cut_drop_left, float)
+    dr_ = np.zeros(sec.n) if cut_drop_right is None else np.asarray(cut_drop_right, float)
+    z_cut = z_edge - np.where(left, dl_[idx], dr_[idx])   # 切り土の斜面の足元の高さ
+    z = np.clip(np.ravel(Z_nat), z_edge - FILL_SLOPE * e, z_cut + cut * e)
     # 道の下は、外側の切り土の斜面を内側へ延長した高さにする。境目をまたぐ三角形が同じ斜面上に乗り、
     # 側溝や路面の上に地形がはみ出さない
     e_in = np.maximum(form - np.abs(lat), 0)
-    z_under = np.minimum(surface_height(np.clip(lat, -hw, hw), zc, sl, cr) - UNDER_DEPTH, z_edge - cut * e_in)
+    z_under = np.minimum(surface_height(np.clip(lat, -hw, hw), zc, sl, cr) - UNDER_DEPTH, z_cut - cut * e_in)
     z = np.where(e == 0, z_under, z)
     if no_fill_rows is not None and np.any(no_fill_rows):   # 大きな橋（S5）の下：谷を盛らない（元の地形より上げない）。分かれ道などの土台（pads）はこのあとで盛る
         nf = np.asarray(no_fill_rows, bool)[idx]
         z[nf] = np.minimum(z[nf], np.ravel(Z_nat)[nf])
-    road_cap = np.where(e == 0, z_under, z_edge + cut * e)   # 道の路面・切り土の斜面より上には地形を出さない（道から ROAD_CAP_M まで）
+    road_cap = np.where(e == 0, z_under, z_cut + cut * e)   # 道の路面・切り土の斜面より上には地形を出さない（道から ROAD_CAP_M まで）
     e_road = e.copy()
     if pads:
         xr, yr = np.ravel(X), np.ravel(Y)
@@ -155,12 +159,25 @@ def _sink_pass_cells(z, xs, ys, pads):
     return z
 
 
+STEEP_UV_NZ = 0.7071   # これより法線の上向きが小さい（45° より急な）四角は横から UV を当てる
+
+
 def grid_mesh_chunks(xs, ys, Z, face_keep, block=100, uv_scale=8.0):
     X, Y = np.meshgrid(xs, ys)
     verts = np.c_[X.ravel(), Y.ravel(), Z.ravel()]
     uvs = verts[:, :2] / uv_scale
     i = np.arange(X.size).reshape(X.shape)
     faces = np.stack([i[:-1, :-1], i[:-1, 1:], i[1:, 1:], i[1:, :-1]], -1)
+    # 45° より急な四角は、頂点を複製して横から当てる UV にする（真上からだと絵が縦に伸びて縞になった。2026-11-01）。
+    # 法線の水平の向きが x 寄りなら (y, z)、y 寄りなら (x, z)。形は変えない
+    n = np.cross(verts[faces[..., 2]] - verts[faces[..., 0]], verts[faces[..., 3]] - verts[faces[..., 1]])
+    steep = np.abs(n[..., 2]) < STEEP_UV_NZ * np.linalg.norm(n, axis=-1)
+    if steep.any():
+        N = len(verts)
+        side_x = steep & (np.abs(n[..., 0]) >= np.abs(n[..., 1]))
+        faces = np.where(side_x[..., None], faces + N, np.where(steep[..., None], faces + 2 * N, faces))
+        uvs = np.concatenate([uvs, verts[:, [1, 2]] / uv_scale, verts[:, [0, 2]] / uv_scale])
+        verts = np.concatenate([verts, verts, verts])
     ry, rx = np.meshgrid(np.arange(Z.shape[0] - 1) // block, np.arange(Z.shape[1] - 1) // block, indexing="ij")
     keep = np.asarray(face_keep, bool)
     out = []
@@ -215,7 +232,7 @@ def tunnel_holes(sec, xs, ys, Z, bore_rows):
 
 
 def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.from_local, extra=(), side_extra=(None, None),
-               town=None, channels=(), keep_rows=None, no_fill_rows=None, lake=None, bore_rows=None):
+               town=None, channels=(), keep_rows=None, no_fill_rows=None, lake=None, bore_rows=None, cut_drop=(None, None)):
     """town = (町の地面 TownGround, 町の範囲の円, 舗装された所の多角形) なら、円の中は町の地面（舗装の下は UNDER_DEPTH 下げる）、
     円の外 TOWN_BLEND_M の間で今までの地形へなめらかに移す。"""
     towns = [] if town is None else (list(town) if isinstance(town, list) else [town])
@@ -225,7 +242,7 @@ def build_near(sec, sampler, pads, cut_left=None, cut_right=None, unproject=geo.
     X, Y = np.meshgrid(xs, ys)
     D = _with_extra(road_frame(sec, X, Y)["dist"].reshape(X.shape), X, Y, extra, EXTRA_NEAR, NEAR_BAND)
     Z, E = carve(X, Y, _sample(sampler, unproject, X, Y), sec, pads, cut_left, cut_right, *side_extra, channels=channels,
-                 keep_rows=keep_rows, no_fill_rows=no_fill_rows, lake=lake)
+                 keep_rows=keep_rows, no_fill_rows=no_fill_rows, lake=lake, cut_drop_left=cut_drop[0], cut_drop_right=cut_drop[1])
     if towns:   # 本線の帯（路面＋側溝）の下。町の地面へ移す帯の中でも、ここは削った高さより上にしない
         f = road_frame(sec, X, Y); idx = f["idx"]
         hw = np.where(f["lat"] >= 0, sec.hw_left[idx], sec.hw_right[idx])

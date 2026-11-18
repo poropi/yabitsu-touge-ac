@@ -1,0 +1,1474 @@
+{
+  "title": "依頼09 建物の写真読み取り",
+  "created": "2026-10-31",
+  "scope": "写真の読取のみ。モデル生成・配置はしない。",
+  "observed_request_records": 20,
+  "inventory_building_records_in_scope": 22,
+  "recommended_unique_building_count": 19,
+  "recommended_count_status": "目視と撮影順からの推定。重複候補は配置時に二重配置しない。",
+  "all_measurements": "写真比率と依頼文の目安からの推定値。現地実測値・標準寸法ではない。",
+  "images_opened": [
+    "export/compare/route70/work09/r70_buildings_reference_00.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_01.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_02.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_03.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_04.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_05.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_06.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_07.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_08.jpg",
+    "export/compare/route70/work09/r70_buildings_reference_09.jpg"
+  ],
+  "google_ui_exclusions": [
+    "S4-0381のピンクのベッド印はGoogleの宿泊POIであり実物の看板ではない。",
+    "写真各所の青いバッグ印・Google地図ボタン・下部の地名は建物要素ではない。"
+  ],
+  "buildings": [
+    {
+      "model_name": "s4_0021_brown",
+      "source_oids": [
+        "S4-0298-05"
+      ],
+      "title": "峠側遠景の茶色い建物",
+      "section": "s4",
+      "section_s_m": 21,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        5.5,
+        5.0,
+        6.0
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "low",
+      "roof": "遠景で不明、庇2段と勾配屋根の推定",
+      "stories": 2,
+      "visible_features": [
+        "中央奥の道右側、擁壁上に茶色い縦長の建物",
+        "庇・張出しが2段、下部は白灰色の縦面",
+        "上部の茶色い水平帯と暗い開口"
+      ],
+      "estimated_or_hidden": [
+        "全体平面、背面、屋根の全輪郭、入口は未確認"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0298_b.jpg": [
+          900,
+          390,
+          1010,
+          580
+        ]
+      },
+      "notes": [
+        "既存pass_resthouseとの同一性は未確定。写真の遠景は単純な小屋より縦長に見える。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0298_b.jpg",
+          "camera": {
+            "pano": "7Ykm47CuD4F3PRNxaEgSyw",
+            "lat": 35.4284116,
+            "lon": 139.2188832,
+            "heading_deg": 146.3,
+            "date": "2025年7月"
+          },
+          "point": "R70-0298",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4284116,139.2188832,3a,90y,146.3h,88t/data=!3m4!1e1!3m2!1s7Ykm47CuD4F3PRNxaEgSyw!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_1550_water_hut",
+      "source_oids": [
+        "S4-0358-02",
+        "S4-0360-03"
+      ],
+      "title": "護摩屋敷付近の白い小屋",
+      "section": "s4",
+      "section_s_m": 1545,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        5.0,
+        4.0,
+        3.3
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "切妻",
+      "stories": 1,
+      "visible_features": [
+        "0359の右端に白い無窓の妻壁、灰青色の切妻屋根と木色の軒裏",
+        "0360中央奥に白い短辺と暗い板張りの長辺、入口に茶橙色の縦面",
+        "小屋脇にコンクリート階段"
+      ],
+      "estimated_or_hidden": [
+        "裏面、屋根奥、入口詳細、東側の窓は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0359_b.jpg": [
+          1450,
+          300,
+          1600,
+          530
+        ],
+        "R70-0360_b.jpg": [
+          620,
+          400,
+          770,
+          510
+        ]
+      },
+      "notes": [
+        "0358と0360は撮影点が約25m移動した同一小屋を反対側から見た可能性が高い。重複配置しない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0358_f.jpg",
+          "camera": {
+            "pano": "TCCprfMzXgzi7fVlFQmz5w",
+            "lat": 35.4306424,
+            "lon": 139.2090517,
+            "heading_deg": 340.7,
+            "date": "2025年7月"
+          },
+          "point": "R70-0358",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4308062,139.2089695,3a,90y,166.1h,88t/data=!3m4!1e1!3m2!1sqSUUP4YVGuA_9HFKgfXcag!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0359_b.jpg",
+          "camera": {
+            "pano": "qSUUP4YVGuA_9HFKgfXcag",
+            "lat": 35.4308062,
+            "lon": 139.2089695,
+            "heading_deg": 166.1,
+            "date": "2025年7月"
+          },
+          "point": "R70-0359",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4308062,139.2089695,3a,90y,166.1h,88t/data=!3m4!1e1!3m2!1sqSUUP4YVGuA_9HFKgfXcag!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0360_b.jpg",
+          "camera": {
+            "pano": "G504u0KH-wn-ro5WbAbG0A",
+            "lat": 35.431013,
+            "lon": 139.2090892,
+            "heading_deg": 227.6,
+            "date": "2025年7月"
+          },
+          "point": "R70-0360",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.431013,139.2090892,3a,90y,227.6h,88t/data=!3m4!1e1!3m2!1sG504u0KH-wn-ro5WbAbG0A!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_1995_low_hut",
+      "source_oids": [
+        "S4-0377-04"
+      ],
+      "title": "木立奥の横長低層棟",
+      "section": "s4",
+      "section_s_m": 1995,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        10.0,
+        5.0,
+        2.7
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "low",
+      "roof": "浅い片流れ＋奥の小切妻推定",
+      "stories": 1,
+      "visible_features": [
+        "画面右下、杉の幹の間に濃灰の長い壁",
+        "屋根は淡い灰色の浅い勾配、手前に下がる面",
+        "奥に小さな切妻状張出し"
+      ],
+      "estimated_or_hidden": [
+        "窓扉は幹と影で判別できない",
+        "背面と奥行き、奥の張出し接続は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0377_f.jpg": [
+          1120,
+          530,
+          1600,
+          680
+        ]
+      },
+      "notes": [],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0377_f.jpg",
+          "camera": {
+            "pano": "Ldp-yUn_Y_wki8QCC1WlDw",
+            "lat": 35.4340044,
+            "lon": 139.211588,
+            "heading_deg": 22.5,
+            "date": "2025年7月"
+          },
+          "point": "R70-0377",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4340044,139.211588,3a,90y,22.5h,88t/data=!3m4!1e1!3m2!1sLdp-yUn_Y_wki8QCC1WlDw!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_2080_brick_white",
+      "source_oids": [
+        "S4-0380-01",
+        "S4-0381-01"
+      ],
+      "title": "煉瓦風側壁と白い玄関面の棟",
+      "section": "s4",
+      "section_s_m": 2070,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        8.0,
+        10.0,
+        4.2
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "high",
+      "roof": "片流れ",
+      "stories": 1,
+      "visible_features": [
+        "0380では道側の長辺が煉瓦風タイル、2枚の縦長大窓と白い枠",
+        "側面壁に装飾枠付の横長案内板、足元に低い煉瓦縁",
+        "0381では短辺が白塗り、中央寄りにアルミ引違いガラス戸、上に横長楕円窓",
+        "玄関上の実物看板は白地の横長長方形",
+        "屋根は暗灰色の薄い片流れ、軒は短い"
+      ],
+      "estimated_or_hidden": [
+        "背面と奥側短辺の開口、屋根の正確な勾配、看板細字は推定または省略"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0380_f.jpg": [
+          1000,
+          190,
+          1600,
+          900
+        ],
+        "R70-0381_b.jpg": [
+          0,
+          150,
+          640,
+          670
+        ]
+      },
+      "notes": [
+        "0380と0381は同一棟の煉瓦風側面と白い玄関面である可能性が高い。1棟として作り分け面を持たせる。",
+        "玄関上のピンク円は白いベッド記号のGoogleマップPOIアイコンで実物ではない。モデル化しない。丸い実窓はその上に別にある。",
+        "看板の題字はこの画素数では確実に読めないため創作しない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_f.jpg",
+          "camera": {
+            "pano": "W_-XgFv7kWHe7PjlADKCUA",
+            "lat": 35.4346802,
+            "lon": 139.2116127,
+            "heading_deg": 55.7,
+            "date": "2025年7月"
+          },
+          "point": "R70-0380",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0380_b.jpg",
+          "camera": {
+            "pano": "W_-XgFv7kWHe7PjlADKCUA",
+            "lat": 35.4346802,
+            "lon": 139.2116127,
+            "heading_deg": 235.7,
+            "date": "2025年7月"
+          },
+          "point": "R70-0380",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4346802,139.2116127,3a,90y,55.7h,88t/data=!3m4!1e1!3m2!1sW_-XgFv7kWHe7PjlADKCUA!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_b.jpg",
+          "camera": {
+            "pano": "FwGqLMjsgOhR_bnQC5qV0Q",
+            "lat": 35.4347442,
+            "lon": 139.2118438,
+            "heading_deg": 260.3,
+            "date": "2025年7月"
+          },
+          "point": "R70-0381",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4347442,139.2118438,3a,90y,260.3h,88t/data=!3m4!1e1!3m2!1sFwGqLMjsgOhR_bnQC5qV0Q!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_2120_cafe",
+      "source_oids": [
+        "S4-0382-01"
+      ],
+      "title": "白い切妻の喫茶店",
+      "section": "s4",
+      "section_s_m": 2120,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        8.0,
+        10.5,
+        6.7
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "high",
+      "roof": "切妻・妻入り",
+      "stories": 2,
+      "visible_features": [
+        "道左の妻面が大きな白い切妻、上下階を黒い細い帯で区切る",
+        "白い縦板張りと濃茶の破風",
+        "上部に横長の窓2つ、窓下に茶色の小さな花台状の帯",
+        "1階は左右の大きな窓と中央入口、前に浅い暗色の波形裾の庇",
+        "低い植木鉢・花壇が前面に並ぶが建物本体と別"
+      ],
+      "estimated_or_hidden": [
+        "背面、道から見えない側面、店内は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0382_b.jpg": [
+          0,
+          80,
+          630,
+          760
+        ]
+      },
+      "notes": [
+        "依頼文の幅12mは斜め投影の全体か奥行き方向を含む可能性。正面幅は8m、奥行き10.5m程度を推奨。",
+        "看板にきまぐれ喫茶の文字があるが細字・装飾は読めない。店ロゴを創作しない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0381_f.jpg",
+          "camera": {
+            "pano": "FwGqLMjsgOhR_bnQC5qV0Q",
+            "lat": 35.4347442,
+            "lon": 139.2118438,
+            "heading_deg": 80.3,
+            "date": "2025年7月"
+          },
+          "point": "R70-0381",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0382_b.jpg",
+          "camera": {
+            "pano": "cpxT78m56nuX93tia93TUg",
+            "lat": 35.4347996,
+            "lon": 139.2121558,
+            "heading_deg": 243.2,
+            "date": "2025年7月"
+          },
+          "point": "R70-0382",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0383_b.jpg",
+          "camera": {
+            "pano": "RTNElktAMsUJ7W1O-MAXyw",
+            "lat": 35.4350168,
+            "lon": 139.2122075,
+            "heading_deg": 172.4,
+            "date": "2025年7月"
+          },
+          "point": "R70-0383",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4347996,139.2121558,3a,90y,243.2h,88t/data=!3m4!1e1!3m2!1scpxT78m56nuX93tia93TUg!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_2744_tin",
+      "source_oids": [
+        "S4-0407-01"
+      ],
+      "title": "森縁の灰トタン小屋",
+      "section": "s4",
+      "section_s_m": 2744,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        3.0,
+        2.0,
+        2.25
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "low",
+      "roof": "低い切妻ないし片流れ、推定",
+      "stories": 1,
+      "visible_features": [
+        "画面左の草奥、幅の低い灰色の波板壁",
+        "屋根は暗灰～赤茶の薄い勾配屋根",
+        "手前側に灰色の閉じた矩形面がある"
+      ],
+      "estimated_or_hidden": [
+        "戸と窓の輪郭は不明",
+        "背面と屋根勾配方向は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0407_b.jpg": [
+          210,
+          350,
+          510,
+          530
+        ]
+      },
+      "notes": [],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0407_b.jpg",
+          "camera": {
+            "pano": "l15yuqSK8Z_TGJczNtYoCA",
+            "lat": 35.4396916,
+            "lon": 139.2111076,
+            "heading_deg": 195.5,
+            "date": "2025年7月"
+          },
+          "point": "R70-0407",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4396916,139.2111076,3a,90y,195.5h,88t/data=!3m4!1e1!3m2!1sl15yuqSK8Z_TGJczNtYoCA!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_2919_notice_hut",
+      "source_oids": [
+        "S4-0413-01"
+      ],
+      "title": "貼紙の古い木造平屋",
+      "section": "s4",
+      "section_s_m": 2919,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        8.0,
+        5.0,
+        3.6
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "低い切妻・露出妻梁",
+      "stories": 1,
+      "visible_features": [
+        "0414b左側、白灰色の縦板壁と柱梁の濃茶フレーム",
+        "写真では切妻の三角骨組みが見え、単純な片流れとは異なる",
+        "屋根は黒茶の波板、軒下は暗い",
+        "正面上部に横長白い貼紙と縦長黄色い貼紙"
+      ],
+      "estimated_or_hidden": [
+        "背面、反対側の開口は不明",
+        "貼紙の文字は判読不能なので無地・色面のみ"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0414_b.jpg": [
+          0,
+          250,
+          510,
+          610
+        ]
+      },
+      "notes": [
+        "依頼文は片流れだが実画像では三角形の妻骨組みが確認できる。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0414_b.jpg",
+          "camera": {
+            "pano": "lHER597rHgU7xdnTHh13yQ",
+            "lat": 35.4407591,
+            "lon": 139.2123151,
+            "heading_deg": 183.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0414",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_2919_school",
+      "source_oids": [
+        "S4-0413-02"
+      ],
+      "title": "板壁と窓2列の古い2階棟",
+      "section": "s4",
+      "section_s_m": 2919,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        15.0,
+        6.0,
+        6.5
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "浅い切妻（屋根形推定）",
+      "stories": 2,
+      "visible_features": [
+        "0413f・0414fの右側、杉の幹の奥に長い板張り壁",
+        "上下2段の横長窓列、細い縦枠と横枠",
+        "壁は灰褐色～緑褐色、細い横板継目",
+        "手前に白灰の不規則石積み、屋根は樹冠でほぼ隠れる"
+      ],
+      "estimated_or_hidden": [
+        "屋根の大半・背面・両妻面は推定",
+        "窓枚数は木の幹で隠れるため近似"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0414_f.jpg": [
+          1100,
+          220,
+          1600,
+          650
+        ],
+        "R70-0413_f.jpg": [
+          1060,
+          160,
+          1600,
+          600
+        ]
+      },
+      "notes": [],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0413_f.jpg",
+          "camera": {
+            "pano": "14xZ73tk1f6NAOfdd0B4Lw",
+            "lat": 35.4405633,
+            "lon": 139.2122709,
+            "heading_deg": 21.8,
+            "date": "2025年7月"
+          },
+          "point": "R70-0413",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,3.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0414_f.jpg",
+          "camera": {
+            "pano": "lHER597rHgU7xdnTHh13yQ",
+            "lat": 35.4407591,
+            "lon": 139.2123151,
+            "heading_deg": 3.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0414",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,3.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_2919_shed_a",
+      "source_oids": [
+        "S4-0413-03"
+      ],
+      "title": "灰波板・木の両開き戸の小屋",
+      "section": "s4",
+      "section_s_m": 2919,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        4.4,
+        5.0,
+        2.9
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "切妻",
+      "stories": 1,
+      "visible_features": [
+        "0414b右手前に大きな灰色横波板壁",
+        "長辺に木色の両開き戸、上に濃茶のレール状横材",
+        "暗紫灰の切妻屋根、妻上部に隙間と木の柱梁"
+      ],
+      "estimated_or_hidden": [
+        "裏面・床・戸の細部は推定",
+        "棟間の接続関係は植生で不明"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0414_b.jpg": [
+          1050,
+          390,
+          1600,
+          680
+        ]
+      },
+      "notes": [
+        "同群は少なくとも2つの灰色切妻と1つの茶色錆屋根を識別できるため3個体を推奨。4棟目は独立棟と断定できない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0413_f.jpg",
+          "camera": {
+            "pano": "14xZ73tk1f6NAOfdd0B4Lw",
+            "lat": 35.4405633,
+            "lon": 139.2122709,
+            "heading_deg": 21.8,
+            "date": "2025年7月"
+          },
+          "point": "R70-0413",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0414_f.jpg",
+          "camera": {
+            "pano": "lHER597rHgU7xdnTHh13yQ",
+            "lat": 35.4407591,
+            "lon": 139.2123151,
+            "heading_deg": 3.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0414",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0414_b.jpg",
+          "camera": {
+            "pano": "lHER597rHgU7xdnTHh13yQ",
+            "lat": 35.4407591,
+            "lon": 139.2123151,
+            "heading_deg": 183.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0414",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_2919_shed_b",
+      "source_oids": [
+        "S4-0413-03"
+      ],
+      "title": "灰紫色の縦板小屋",
+      "section": "s4",
+      "section_s_m": 2919,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        3.2,
+        3.5,
+        2.8
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "切妻",
+      "stories": 1,
+      "visible_features": [
+        "0414bの手前小屋の奥、独立した低い切妻",
+        "灰紫色の縦板壁と暗い縦長戸",
+        "棟の方向は近い小屋と平行"
+      ],
+      "estimated_or_hidden": [
+        "裏面・床・戸の細部は推定",
+        "棟間の接続関係は植生で不明"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0414_b.jpg": [
+          970,
+          400,
+          1250,
+          670
+        ]
+      },
+      "notes": [
+        "同群は少なくとも2つの灰色切妻と1つの茶色錆屋根を識別できるため3個体を推奨。4棟目は独立棟と断定できない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0413_f.jpg",
+          "camera": {
+            "pano": "14xZ73tk1f6NAOfdd0B4Lw",
+            "lat": 35.4405633,
+            "lon": 139.2122709,
+            "heading_deg": 21.8,
+            "date": "2025年7月"
+          },
+          "point": "R70-0413",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0414_f.jpg",
+          "camera": {
+            "pano": "lHER597rHgU7xdnTHh13yQ",
+            "lat": 35.4407591,
+            "lon": 139.2123151,
+            "heading_deg": 3.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0414",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0414_b.jpg",
+          "camera": {
+            "pano": "lHER597rHgU7xdnTHh13yQ",
+            "lat": 35.4407591,
+            "lon": 139.2123151,
+            "heading_deg": 183.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0414",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_2919_shed_c",
+      "source_oids": [
+        "S4-0413-03"
+      ],
+      "title": "錆屋根の茶板小屋",
+      "section": "s4",
+      "section_s_m": 2919,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        4.8,
+        3.5,
+        3.0
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "切妻＋片流れ庇",
+      "stories": 1,
+      "visible_features": [
+        "0414f左に茶色の縦板壁と大きな錆トタン屋根",
+        "手前に低い付け足しの片流れ庇",
+        "杉と藪で側面を隠される"
+      ],
+      "estimated_or_hidden": [
+        "裏面・床・戸の細部は推定",
+        "棟間の接続関係は植生で不明"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0414_f.jpg": [
+          0,
+          330,
+          600,
+          740
+        ]
+      },
+      "notes": [
+        "同群は少なくとも2つの灰色切妻と1つの茶色錆屋根を識別できるため3個体を推奨。4棟目は独立棟と断定できない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0413_f.jpg",
+          "camera": {
+            "pano": "14xZ73tk1f6NAOfdd0B4Lw",
+            "lat": 35.4405633,
+            "lon": 139.2122709,
+            "heading_deg": 21.8,
+            "date": "2025年7月"
+          },
+          "point": "R70-0413",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0414_f.jpg",
+          "camera": {
+            "pano": "lHER597rHgU7xdnTHh13yQ",
+            "lat": 35.4407591,
+            "lon": 139.2123151,
+            "heading_deg": 3.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0414",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0414_b.jpg",
+          "camera": {
+            "pano": "lHER597rHgU7xdnTHh13yQ",
+            "lat": 35.4407591,
+            "lon": 139.2123151,
+            "heading_deg": 183.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0414",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4407591,139.2123151,3a,90y,183.9h,88t/data=!3m4!1e1!3m2!1slHER597rHgU7xdnTHh13yQ!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s4_4044_aframe",
+      "source_oids": [
+        "S4-0459-03"
+      ],
+      "title": "広場のA字小屋",
+      "section": "s4",
+      "section_s_m": 4044,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        3.5,
+        3.0,
+        3.0
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "Aフレーム",
+      "stories": 1,
+      "visible_features": [
+        "04159ではなく0459fの右奥に白灰色のA字屋根",
+        "屋根斜面がほぼ地面まで届く、低い茶赤の裾帯",
+        "正面は薄灰の三角面、中央に細い縦長戸状の面"
+      ],
+      "estimated_or_hidden": [
+        "背面、入口段差、側面窓は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0459_f.jpg": [
+          1350,
+          420,
+          1540,
+          550
+        ]
+      },
+      "notes": [],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0459_f.jpg",
+          "camera": {
+            "pano": "I1Qp5nricJeKvvMdjlOolA",
+            "lat": 35.4475424,
+            "lon": 139.211969,
+            "heading_deg": 48.0,
+            "date": "2025年7月"
+          },
+          "point": "R70-0459",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4475424,139.211969,3a,90y,48.0h,88t/data=!3m4!1e1!3m2!1sI1Qp5nricJeKvvMdjlOolA!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s5_7639_green_hut",
+      "source_oids": [
+        "S5-0860-01"
+      ],
+      "title": "谷側の緑屋根小屋",
+      "section": "s5",
+      "section_s_m": 7639,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        4.0,
+        3.0,
+        2.5
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "low",
+      "roof": "緩い切妻または片流れ（推定）",
+      "stories": 1,
+      "visible_features": [
+        "道路下右側、杉の根元の先に青緑の波板屋根",
+        "薄い屋根のすぐ下に赤茶の板壁",
+        "建物全体は樹木で大半が隠れる"
+      ],
+      "estimated_or_hidden": [
+        "屋根の奥側、壁のほぼ全周、窓と入口は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0860_f.jpg": [
+          1100,
+          620,
+          1410,
+          810
+        ]
+      },
+      "notes": [],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0860_f.jpg",
+          "camera": {
+            "pano": "GOAMLRotfnVR743kc5898Q",
+            "lat": 35.4918697,
+            "lon": 139.2199303,
+            "heading_deg": 357.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0860",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4918697,139.2199303,3a,90y,357.9h,88t/data=!3m4!1e1!3m2!1sGOAMLRotfnVR743kc5898Q!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s5_7789_frame_hut",
+      "source_oids": [
+        "S5-0864-05"
+      ],
+      "title": "白パネルと切妻骨組みの小屋",
+      "section": "s5",
+      "section_s_m": 7789,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        3.0,
+        4.0,
+        3.3
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "切妻・上部フレーム露出",
+      "stories": 1,
+      "visible_features": [
+        "0864f奥右、0866b左のフェンス奥に同じ小屋",
+        "白い大きなパネルを黒い細い柱梁で区切る",
+        "短辺上部に小さい暗い横長窓",
+        "切妻上部の三角フレームと横桟が見え、屋根の一部が欠けたように見える"
+      ],
+      "estimated_or_hidden": [
+        "奥の壁、屋根材の有無、内部と戸は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0866_b.jpg": [
+          390,
+          300,
+          580,
+          540
+        ],
+        "R70-0864_f.jpg": [
+          1070,
+          420,
+          1150,
+          500
+        ]
+      },
+      "notes": [
+        "白い矩形は支柱の看板に見えやすいが、拡大で奥行きの側壁と切妻骨組みを確認した。独立した建物。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0864_f.jpg",
+          "camera": {
+            "pano": "iDK7gQ1rBaAyuw7boksZQQ",
+            "lat": 35.4927507,
+            "lon": 139.2198214,
+            "heading_deg": 360.0,
+            "date": "2025年7月"
+          },
+          "point": "R70-0864",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4932388,139.2200392,3a,90y,201.4h,88t/data=!3m4!1e1!3m2!1skt7IPWU8FgRuyKqEL3Cm1g!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0866_b.jpg",
+          "camera": {
+            "pano": "kt7IPWU8FgRuyKqEL3Cm1g",
+            "lat": 35.4932388,
+            "lon": 139.2200392,
+            "heading_deg": 201.4,
+            "date": "2025年7月"
+          },
+          "point": "R70-0866",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4932388,139.2200392,3a,90y,201.4h,88t/data=!3m4!1e1!3m2!1skt7IPWU8FgRuyKqEL3Cm1g!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s5_7825_prefab",
+      "source_oids": [
+        "S5-0867-04",
+        "S5-0868-04"
+      ],
+      "title": "フェンス内の白プレハブ",
+      "section": "s5",
+      "section_s_m": 7814,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        6.0,
+        3.0,
+        2.9
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "high",
+      "roof": "ごく浅い片流れ/陸屋根",
+      "stories": 1,
+      "visible_features": [
+        "0867fの右奥の長い白い平屋は0868bで左手前の白コンテナに近づく",
+        "平らに近い白い屋根と細い軒、アイボリーのパネル壁",
+        "道路側に大きい暗い横長窓と白い枠",
+        "外壁上部にエアコン配管が曲がり、下に室外機らしき箱"
+      ],
+      "estimated_or_hidden": [
+        "背面、反対側の戸の位置、室外機細部は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0867_f.jpg": [
+          890,
+          440,
+          1140,
+          570
+        ],
+        "R70-0868_b.jpg": [
+          0,
+          350,
+          420,
+          800
+        ]
+      },
+      "notes": [
+        "0867と0868は同じフェンス内の1棟を前進して反対に見た可能性が高い。二重配置しない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0867_f.jpg",
+          "camera": {
+            "pano": "oKOcqZvpKCska9tK31HmaA",
+            "lat": 35.4933466,
+            "lon": 139.220105,
+            "heading_deg": 25.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-0867",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.4933466,139.220105,3a,90y,25.9h,88t/data=!3m4!1e1!3m2!1soKOcqZvpKCska9tK31HmaA!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0868_b.jpg",
+          "camera": {
+            "pano": "GDgU6i6Qif-6ygDXwBDBYw",
+            "lat": 35.4935669,
+            "lon": 139.2202313,
+            "heading_deg": 207.6,
+            "date": "2025年7月"
+          },
+          "point": "R70-0868",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4935669,139.2202313,3a,90y,207.6h,88t/data=!3m4!1e1!3m2!1sGDgU6i6Qif-6ygDXwBDBYw!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0869_b.jpg",
+          "camera": {
+            "pano": "tFfag0lN3qR_oM3MOq62og",
+            "lat": 35.4937914,
+            "lon": 139.2203535,
+            "heading_deg": 205.2,
+            "date": "2025年7月"
+          },
+          "point": "R70-0869",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.4935669,139.2202313,3a,90y,207.6h,88t/data=!3m4!1e1!3m2!1sGDgU6i6Qif-6ygDXwBDBYw!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s5_10413_white_house",
+      "source_oids": [
+        "S5-0971-07"
+      ],
+      "title": "敷地内の白い平屋",
+      "section": "s5",
+      "section_s_m": 10413,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        8.0,
+        6.0,
+        3.8
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "切妻",
+      "stories": 1,
+      "visible_features": [
+        "右の門扉奥に白い壁の平屋、薄灰の切妻屋根",
+        "深い濃茶色の軒、軒下に黒い窓・開口",
+        "基礎または腰壁に煉瓦色の帯が見える"
+      ],
+      "estimated_or_hidden": [
+        "庭木と車に隠れる入口と壁下部、背面、両側面は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-0971_f.jpg": [
+          960,
+          470,
+          1230,
+          630
+        ]
+      },
+      "notes": [],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0971_f.jpg",
+          "camera": {
+            "pano": "DnYTr4d8vKR44knvrL2d-w",
+            "lat": 35.5082382,
+            "lon": 139.2310693,
+            "heading_deg": 5.5,
+            "date": "2025年7月"
+          },
+          "point": "R70-0971",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.5082382,139.2310693,3a,90y,5.5h,88t/data=!3m4!1e1!3m2!1sDnYTr4d8vKR44knvrL2d-w!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0972_b.jpg",
+          "camera": {
+            "pano": "RDyrZgr849nF9CcY_1Lt1A",
+            "lat": 35.5084421,
+            "lon": 139.231088,
+            "heading_deg": 184.5,
+            "date": "2025年7月"
+          },
+          "point": "R70-0972",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.5082382,139.2310693,3a,90y,5.5h,88t/data=!3m4!1e1!3m2!1sDnYTr4d8vKR44knvrL2d-w!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s5_11637_green_kiosk",
+      "source_oids": [
+        "S5-1020-03"
+      ],
+      "title": "三六木工前の緑灰小屋",
+      "section": "s5",
+      "section_s_m": 11637,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        3.0,
+        2.5,
+        2.8
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "high",
+      "roof": "浅い片流れ",
+      "stories": 1,
+      "visible_features": [
+        "1020fの右、自販機のすぐ後ろに緑灰色の矩形小屋",
+        "浅い片流れの屋根、前面に大きなガラス窓と細い枠",
+        "下部は緑灰の腰板、隣に2階棟の外階段"
+      ],
+      "estimated_or_hidden": [
+        "自販機に隠れる前面左部、入口・背面・側面は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-1020_f.jpg": [
+          1280,
+          400,
+          1450,
+          580
+        ]
+      },
+      "notes": [
+        "自販機は別オブジェクトなので建物に組み込まない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1020_f.jpg",
+          "camera": {
+            "pano": "DyUYOW8AhycymN5xwSJNKQ",
+            "lat": 35.518341,
+            "lon": 139.2311223,
+            "heading_deg": 353.0,
+            "date": "2025年7月"
+          },
+          "point": "R70-1020",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.518341,139.2311223,3a,90y,353.0h,88t/data=!3m4!1e1!3m2!1sDyUYOW8AhycymN5xwSJNKQ!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s5_11637_mokko_office",
+      "source_oids": [
+        "S5-1018-06",
+        "S5-1020-04",
+        "S5-1021-10"
+      ],
+      "title": "三六木工の2階事務所棟",
+      "section": "s5",
+      "section_s_m": 11587,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        7.0,
+        8.0,
+        6.7
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "浅い片流れないし陸屋根、上に帯看板",
+      "stories": 2,
+      "visible_features": [
+        "1018f右上には白い側壁、上階の横引き窓、赤茶の短い屋根端",
+        "1020f右端に白い2階壁と外階段、上部は赤茶の帯看板",
+        "1021b左の同じ敷地に白い縦板の2階棟、上下各1組の横引き窓",
+        "上部看板は「三六」の2字は判読できる。全看板は木とフレームで隠れる",
+        "道路側の外階段は暗灰色の鉄製、踊り場と手すりを持つ"
+      ],
+      "estimated_or_hidden": [
+        "東背面、階段上の入口、屋根全体、看板の隠れた文字は推定・省略"
+      ],
+      "photo_roi_xyxy": {
+        "R70-1018_f.jpg": [
+          970,
+          350,
+          1130,
+          500
+        ],
+        "R70-1020_f.jpg": [
+          1450,
+          100,
+          1600,
+          600
+        ],
+        "R70-1021_b.jpg": [
+          335,
+          320,
+          570,
+          520
+        ]
+      },
+      "notes": [
+        "1018・1020-04・1021-10の2階部分は同じ事務所を南面、西面、北面から見た可能性が高い。3棟にはしない。",
+        "この統合は撮影順と同じ白壁・褐色上部帯・上下横窓からの推定。敷地奥の独立性は航空写真なしでは確定できない。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1018_f.jpg",
+          "camera": {
+            "pano": "SdjBnjEo_QtbEdvdiyvFgQ",
+            "lat": 35.5178881,
+            "lon": 139.2312036,
+            "heading_deg": 351.9,
+            "date": "2025年7月"
+          },
+          "point": "R70-1018",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.5178881,139.2312036,3a,90y,351.9h,88t/data=!3m4!1e1!3m2!1sSdjBnjEo_QtbEdvdiyvFgQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1020_f.jpg",
+          "camera": {
+            "pano": "DyUYOW8AhycymN5xwSJNKQ",
+            "lat": 35.518341,
+            "lon": 139.2311223,
+            "heading_deg": 353.0,
+            "date": "2025年7月"
+          },
+          "point": "R70-1020",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.518341,139.2311223,3a,90y,353.0h,88t/data=!3m4!1e1!3m2!1sDyUYOW8AhycymN5xwSJNKQ!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1021_b.jpg",
+          "camera": {
+            "pano": "izYB7sUWYbsTH5b657df2Q",
+            "lat": 35.5186002,
+            "lon": 139.2310768,
+            "heading_deg": 167.0,
+            "date": "2025年7月"
+          },
+          "point": "R70-1021",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.5186002,139.2310768,3a,90y,167.0h,88t/data=!3m4!1e1!3m2!1sizYB7sUWYbsTH5b657df2Q!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1021_b.jpg",
+          "camera": {
+            "pano": "izYB7sUWYbsTH5b657df2Q",
+            "lat": 35.5186002,
+            "lon": 139.2310768,
+            "heading_deg": 167.0,
+            "date": "2025年7月"
+          },
+          "point": "R70-1021",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.5186002,139.2310768,3a,90y,167.0h,88t/data=!3m4!1e1!3m2!1sizYB7sUWYbsTH5b657df2Q!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_b.jpg",
+          "camera": {
+            "pano": "zJBIY_NbuNIrzHNpZ9cz4Q",
+            "lat": 35.5187849,
+            "lon": 139.2309265,
+            "heading_deg": 157.4,
+            "date": "2025年7月"
+          },
+          "point": "R70-1022",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,157.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja"
+        }
+      ]
+    },
+    {
+      "model_name": "s5_11662_mokko_warehouse",
+      "source_oids": [
+        "S5-1019-05",
+        "S5-1021-10"
+      ],
+      "title": "三六木工の平屋倉庫",
+      "section": "s5",
+      "section_s_m": 11612,
+      "count": 1,
+      "estimated_dimensions_xyz_m": [
+        12.0,
+        6.0,
+        3.8
+      ],
+      "dimension_basis": "依頼文の幅等の目安と写真の軒・戸・壁の比率からの推定。現地実測・標準寸法の採用ではない。奥行きは見えない範囲を含む推定。",
+      "confidence": "medium",
+      "roof": "低い切妻または片流れ（勾配方向推定）",
+      "stories": 1,
+      "visible_features": [
+        "1019f右端の葉の奥に黄白色の低い壁と小さな黄色面",
+        "1021b左の長い低層倉庫は灰褐の横板壁、赤錆色の波板屋根",
+        "上部に白枠の小さな横長窓、下部に青いシートが沿う",
+        "倉庫左に大きい開口状の暗部"
+      ],
+      "estimated_or_hidden": [
+        "反対側、屋根の半分、扉の全体、シート下の構造は推定"
+      ],
+      "photo_roi_xyxy": {
+        "R70-1019_f.jpg": [
+          1410,
+          430,
+          1600,
+          530
+        ],
+        "R70-1021_b.jpg": [
+          0,
+          350,
+          335,
+          500
+        ]
+      },
+      "notes": [
+        "1019の黄白平屋は同じ敷地南側から見たこの倉庫の端と考えて統合する案。独立した棟の可能性は残るため配置時は対応関係を再確認する。"
+      ],
+      "references": [
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1019_f.jpg",
+          "camera": {
+            "pano": "QmVPieHnV9xNve2npLn90A",
+            "lat": 35.5180873,
+            "lon": 139.2311664,
+            "heading_deg": 352.8,
+            "date": "2025年7月"
+          },
+          "point": "R70-1019",
+          "view": "f",
+          "url": "https://www.google.com/maps/@35.5180873,139.2311664,3a,90y,352.8h,88t/data=!3m4!1e1!3m2!1sQmVPieHnV9xNve2npLn90A!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1021_b.jpg",
+          "camera": {
+            "pano": "izYB7sUWYbsTH5b657df2Q",
+            "lat": 35.5186002,
+            "lon": 139.2310768,
+            "heading_deg": 167.0,
+            "date": "2025年7月"
+          },
+          "point": "R70-1021",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.5186002,139.2310768,3a,90y,167.0h,88t/data=!3m4!1e1!3m2!1sizYB7sUWYbsTH5b657df2Q!2e0?hl=ja"
+        },
+        {
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1022_b.jpg",
+          "camera": {
+            "pano": "zJBIY_NbuNIrzHNpZ9cz4Q",
+            "lat": 35.5187849,
+            "lon": 139.2309265,
+            "heading_deg": 157.4,
+            "date": "2025年7月"
+          },
+          "point": "R70-1022",
+          "view": "b",
+          "url": "https://www.google.com/maps/@35.5187849,139.2309265,3a,90y,157.4h,88t/data=!3m4!1e1!3m2!1szJBIY_NbuNIrzHNpZ9cz4Q!2e0?hl=ja"
+        }
+      ]
+    }
+  ],
+  "coverage": {
+    "S4-0298-05": [
+      "s4_0021_brown"
+    ],
+    "S4-0358-02": [
+      "s4_1550_water_hut"
+    ],
+    "S4-0360-03": [
+      "s4_1550_water_hut"
+    ],
+    "S4-0377-04": [
+      "s4_1995_low_hut"
+    ],
+    "S4-0380-01": [
+      "s4_2080_brick_white"
+    ],
+    "S4-0381-01": [
+      "s4_2080_brick_white"
+    ],
+    "S4-0382-01": [
+      "s4_2120_cafe"
+    ],
+    "S4-0407-01": [
+      "s4_2744_tin"
+    ],
+    "S4-0413-01": [
+      "s4_2919_notice_hut"
+    ],
+    "S4-0413-02": [
+      "s4_2919_school"
+    ],
+    "S4-0413-03": [
+      "s4_2919_shed_a",
+      "s4_2919_shed_b",
+      "s4_2919_shed_c"
+    ],
+    "S4-0459-03": [
+      "s4_4044_aframe"
+    ],
+    "S5-0860-01": [
+      "s5_7639_green_hut"
+    ],
+    "S5-0864-05": [
+      "s5_7789_frame_hut"
+    ],
+    "S5-0867-04": [
+      "s5_7825_prefab"
+    ],
+    "S5-0868-04": [
+      "s5_7825_prefab"
+    ],
+    "S5-0971-07": [
+      "s5_10413_white_house"
+    ],
+    "S5-1018-06": [
+      "s5_11637_mokko_office"
+    ],
+    "S5-1019-05": [
+      "s5_11662_mokko_warehouse"
+    ],
+    "S5-1020-03": [
+      "s5_11637_green_kiosk"
+    ],
+    "S5-1020-04": [
+      "s5_11637_mokko_office"
+    ],
+    "S5-1021-10": [
+      "s5_11637_mokko_office",
+      "s5_11662_mokko_warehouse"
+    ]
+  },
+  "limitations": [
+    "追加ブラウザ操作・航空写真での屋根輪郭照合はこの調査では未実施。",
+    "0298の遠景建物と既存pass_*の同一性は未確定。",
+    "小屋群の第4棟、1019の平屋の独立性、1018と事務所の同一性は未確定。"
+  ]
+}

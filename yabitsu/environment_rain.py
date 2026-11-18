@@ -48,7 +48,7 @@ def build(out_dir=None):
             raise FileNotFoundError(f'雨設定の前に {path} を生成してください')
     materials = {name for _, m in manifests.values() for name in m['materials']}
     paint = materials & PAINT | {n for n in materials if n.startswith('mt_mark_')}
-    soaking = materials & {'asphalt', 'concrete_circles', 'visual_concrete_circles', 'dress_patch'}
+    soaking = materials & {'asphalt', 'concrete_circles', 'concrete_plain', 'visual_concrete_circles', 'visual_concrete_plain', 'dress_patch'}
     rough = materials & {'ground', 'ground_far', 'visual_ground_far', 'horizon', 'tree', 'hedge',
                          'gravel', 'riverbed', 'wood', 'wood_bars', 'mt_leaves_edge', 'mt_leaves_lane',
                          'parking_trousers', 'parking_skin', 'parking_hair', 'parking_rubber'}

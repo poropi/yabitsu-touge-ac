@@ -6,3 +6,4 @@ data/processed/
 export/
 blender/*.blend1
 *.kn5
+.claude/hooks/.check_all_state.json

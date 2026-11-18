@@ -1,0 +1,1077 @@
+{
+  "asset_id": "r70_fence",
+  "source": "r70_fence.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 600,
+  "parts": [
+    {
+      "name": "wire_mesh",
+      "meaning": "菱形金網と始端支柱・上部有刺線",
+      "triangles": 198,
+      "vertices": 364,
+      "dimensions_m": [
+        2.532,
+        0.06087,
+        2.18
+      ],
+      "bounds_m": [
+        [
+          -0.032,
+          -0.030434,
+          0.0
+        ],
+        [
+          2.5,
+          0.030434,
+          2.18
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "wire_mesh.png"
+      ],
+      "components": [
+        {
+          "name": "鋼管支柱",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "上下の支持横管",
+          "triangle_start": 36,
+          "triangle_count": 28
+        },
+        {
+          "name": "上下の支持横管",
+          "triangle_start": 64,
+          "triangle_count": 28
+        },
+        {
+          "name": "菱形の透過金網",
+          "triangle_start": 92,
+          "triangle_count": 2
+        },
+        {
+          "name": "上端の有刺線",
+          "triangle_start": 94,
+          "triangle_count": 16
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 110,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 122,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 134,
+          "triangle_count": 12
+        },
+        {
+          "name": "上端の有刺線",
+          "triangle_start": 146,
+          "triangle_count": 16
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 162,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 174,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 186,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "網目は約50mmの菱形を自作RGBAへ描画。材質はalpha test/両面描画を指定すること。柱間隔2.5m。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0541-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0541_f.jpg",
+          "url": "https://www.google.com/maps/@35.4627619,139.2152645,3a,90y,41.4h,88t/data=!3m4!1e1!3m2!1sqUaIos7-6GmDjtOa2GnMDg!2e0?hl=ja",
+          "description": "擁壁の上端に続く、灰色のコンクリート角柱（約2.5 m 間隔、高さ約2 m）と金網と数段の鉄線。前の木柱フェンスとは柱が違う"
+        },
+        {
+          "oid": "S5-0590-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0591_b.jpg",
+          "url": "https://www.google.com/maps/@35.4711527,139.2171039,3a,90y,163.5h,88t/data=!3m4!1e1!3m2!1sUFOCPILMLAOvtinjKjvwGQ!2e0?hl=ja",
+          "description": "谷側のガードレールの上に立つオレンジ色の金網フェンス（高さ約 1.2 m、細い柱）。下のガードレールの外面は黒とオレンジの斜め縞。0590 の奥に茶色い短い柵として見え、0591 で全体が見える"
+        },
+        {
+          "oid": "S5-0771-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+          "description": "緑塗装の支柱＋菱形金網、高さ約2m、上部に有刺線。路肩の外。白い小さな注意札が数枚付く"
+        },
+        {
+          "oid": "S5-0840-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0844_b.jpg",
+          "url": "https://www.google.com/maps/@35.4887437,139.2216363,3a,90y,146.9h,88t/data=!3m4!1e1!3m2!1sZLz3q4g02meSX4GUhwSjzg!2e0?hl=ja",
+          "description": "ガードレールの外側に立つ緑色の金網（高さ約1.8m）。鋼管の柱が約3m間隔。谷側の転落・立入防止。前後に続く"
+        }
+      ],
+      "repeat_length_m": 2.5,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.5,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0771-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+        "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+        "description": "緑塗装の支柱＋菱形金網、高さ約2m、上部に有刺線。路肩の外。白い小さな注意札が数枚付く"
+      },
+      "preview_views": {
+        "front": "r70_fence_wire_mesh_front.png",
+        "left": "r70_fence_wire_mesh_left.png",
+        "right": "r70_fence_wire_mesh_right.png",
+        "back_estimated": "r70_fence_wire_mesh_back_estimated.png",
+        "top": "r70_fence_wire_mesh_top.png",
+        "persp": "r70_fence_wire_mesh_persp.png",
+        "reference": "r70_fence_wire_mesh_reference.png"
+      }
+    },
+    {
+      "name": "wire_mesh_concrete",
+      "meaning": "菱形金網と始端支柱・上部有刺線",
+      "triangles": 174,
+      "vertices": 328,
+      "dimensions_m": [
+        2.56,
+        0.12,
+        2.17672
+      ],
+      "bounds_m": [
+        [
+          -0.06,
+          -0.06,
+          0.0
+        ],
+        [
+          2.5,
+          0.06,
+          2.17672
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "wire_mesh_concrete.png"
+      ],
+      "components": [
+        {
+          "name": "コンクリート角柱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "上下の支持横管",
+          "triangle_start": 12,
+          "triangle_count": 28
+        },
+        {
+          "name": "上下の支持横管",
+          "triangle_start": 40,
+          "triangle_count": 28
+        },
+        {
+          "name": "菱形の透過金網",
+          "triangle_start": 68,
+          "triangle_count": 2
+        },
+        {
+          "name": "上端の有刺線",
+          "triangle_start": 70,
+          "triangle_count": 16
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 86,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 98,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 110,
+          "triangle_count": 12
+        },
+        {
+          "name": "上端の有刺線",
+          "triangle_start": 122,
+          "triangle_count": 16
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 138,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 150,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 162,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "網目は約50mmの菱形を自作RGBAへ描画。材質はalpha test/両面描画を指定すること。柱間隔2.5m。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0541-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0541_f.jpg",
+          "url": "https://www.google.com/maps/@35.4627619,139.2152645,3a,90y,41.4h,88t/data=!3m4!1e1!3m2!1sqUaIos7-6GmDjtOa2GnMDg!2e0?hl=ja",
+          "description": "擁壁の上端に続く、灰色のコンクリート角柱（約2.5 m 間隔、高さ約2 m）と金網と数段の鉄線。前の木柱フェンスとは柱が違う"
+        },
+        {
+          "oid": "S5-0590-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0591_b.jpg",
+          "url": "https://www.google.com/maps/@35.4711527,139.2171039,3a,90y,163.5h,88t/data=!3m4!1e1!3m2!1sUFOCPILMLAOvtinjKjvwGQ!2e0?hl=ja",
+          "description": "谷側のガードレールの上に立つオレンジ色の金網フェンス（高さ約 1.2 m、細い柱）。下のガードレールの外面は黒とオレンジの斜め縞。0590 の奥に茶色い短い柵として見え、0591 で全体が見える"
+        },
+        {
+          "oid": "S5-0771-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+          "description": "緑塗装の支柱＋菱形金網、高さ約2m、上部に有刺線。路肩の外。白い小さな注意札が数枚付く"
+        },
+        {
+          "oid": "S5-0840-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0844_b.jpg",
+          "url": "https://www.google.com/maps/@35.4887437,139.2216363,3a,90y,146.9h,88t/data=!3m4!1e1!3m2!1sZLz3q4g02meSX4GUhwSjzg!2e0?hl=ja",
+          "description": "ガードレールの外側に立つ緑色の金網（高さ約1.8m）。鋼管の柱が約3m間隔。谷側の転落・立入防止。前後に続く"
+        }
+      ],
+      "repeat_length_m": 2.5,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.5,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S4-0541-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0541_f.jpg",
+        "url": "https://www.google.com/maps/@35.4627619,139.2152645,3a,90y,41.4h,88t/data=!3m4!1e1!3m2!1sqUaIos7-6GmDjtOa2GnMDg!2e0?hl=ja",
+        "description": "擁壁の上端に続く、灰色のコンクリート角柱（約2.5 m 間隔、高さ約2 m）と金網と数段の鉄線。前の木柱フェンスとは柱が違う"
+      },
+      "preview_views": {
+        "front": "r70_fence_wire_mesh_concrete_front.png",
+        "left": "r70_fence_wire_mesh_concrete_left.png",
+        "right": "r70_fence_wire_mesh_concrete_right.png",
+        "back_estimated": "r70_fence_wire_mesh_concrete_back_estimated.png",
+        "top": "r70_fence_wire_mesh_concrete_top.png",
+        "persp": "r70_fence_wire_mesh_concrete_persp.png",
+        "reference": "r70_fence_wire_mesh_concrete_reference.png"
+      }
+    },
+    {
+      "name": "wire_mesh_orange",
+      "meaning": "菱形金網と始端支柱・上部有刺線",
+      "triangles": 198,
+      "vertices": 364,
+      "dimensions_m": [
+        2.532,
+        0.06087,
+        1.38
+      ],
+      "bounds_m": [
+        [
+          -0.032,
+          -0.030434,
+          0.0
+        ],
+        [
+          2.5,
+          0.030434,
+          1.38
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "wire_mesh_orange.png"
+      ],
+      "components": [
+        {
+          "name": "鋼管支柱",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "上下の支持横管",
+          "triangle_start": 36,
+          "triangle_count": 28
+        },
+        {
+          "name": "上下の支持横管",
+          "triangle_start": 64,
+          "triangle_count": 28
+        },
+        {
+          "name": "菱形の透過金網",
+          "triangle_start": 92,
+          "triangle_count": 2
+        },
+        {
+          "name": "上端の有刺線",
+          "triangle_start": 94,
+          "triangle_count": 16
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 110,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 122,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 134,
+          "triangle_count": 12
+        },
+        {
+          "name": "上端の有刺線",
+          "triangle_start": 146,
+          "triangle_count": 16
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 162,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 174,
+          "triangle_count": 12
+        },
+        {
+          "name": "短い有刺の形",
+          "triangle_start": 186,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "網目は約50mmの菱形を自作RGBAへ描画。材質はalpha test/両面描画を指定すること。柱間隔2.5m。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0541-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0541_f.jpg",
+          "url": "https://www.google.com/maps/@35.4627619,139.2152645,3a,90y,41.4h,88t/data=!3m4!1e1!3m2!1sqUaIos7-6GmDjtOa2GnMDg!2e0?hl=ja",
+          "description": "擁壁の上端に続く、灰色のコンクリート角柱（約2.5 m 間隔、高さ約2 m）と金網と数段の鉄線。前の木柱フェンスとは柱が違う"
+        },
+        {
+          "oid": "S5-0590-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0591_b.jpg",
+          "url": "https://www.google.com/maps/@35.4711527,139.2171039,3a,90y,163.5h,88t/data=!3m4!1e1!3m2!1sUFOCPILMLAOvtinjKjvwGQ!2e0?hl=ja",
+          "description": "谷側のガードレールの上に立つオレンジ色の金網フェンス（高さ約 1.2 m、細い柱）。下のガードレールの外面は黒とオレンジの斜め縞。0590 の奥に茶色い短い柵として見え、0591 で全体が見える"
+        },
+        {
+          "oid": "S5-0771-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+          "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+          "description": "緑塗装の支柱＋菱形金網、高さ約2m、上部に有刺線。路肩の外。白い小さな注意札が数枚付く"
+        },
+        {
+          "oid": "S5-0840-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0844_b.jpg",
+          "url": "https://www.google.com/maps/@35.4887437,139.2216363,3a,90y,146.9h,88t/data=!3m4!1e1!3m2!1sZLz3q4g02meSX4GUhwSjzg!2e0?hl=ja",
+          "description": "ガードレールの外側に立つ緑色の金網（高さ約1.8m）。鋼管の柱が約3m間隔。谷側の転落・立入防止。前後に続く"
+        }
+      ],
+      "repeat_length_m": 2.5,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.5,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0590-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0591_b.jpg",
+        "url": "https://www.google.com/maps/@35.4711527,139.2171039,3a,90y,163.5h,88t/data=!3m4!1e1!3m2!1sUFOCPILMLAOvtinjKjvwGQ!2e0?hl=ja",
+        "description": "谷側のガードレールの上に立つオレンジ色の金網フェンス（高さ約 1.2 m、細い柱）。下のガードレールの外面は黒とオレンジの斜め縞。0590 の奥に茶色い短い柵として見え、0591 で全体が見える"
+      },
+      "preview_views": {
+        "front": "r70_fence_wire_mesh_orange_front.png",
+        "left": "r70_fence_wire_mesh_orange_left.png",
+        "right": "r70_fence_wire_mesh_orange_right.png",
+        "back_estimated": "r70_fence_wire_mesh_orange_back_estimated.png",
+        "top": "r70_fence_wire_mesh_orange_top.png",
+        "persp": "r70_fence_wire_mesh_orange_persp.png",
+        "reference": "r70_fence_wire_mesh_orange_reference.png"
+      }
+    },
+    {
+      "name": "rockfall_net",
+      "meaning": "斜面に張る菱形金網・支持ワイヤー・始端柱",
+      "triangles": 98,
+      "vertices": 172,
+      "dimensions_m": [
+        3.04707,
+        1.41938,
+        3.03122
+      ],
+      "bounds_m": [
+        [
+          -0.04,
+          -0.034692,
+          0.0
+        ],
+        [
+          3.007071,
+          1.384692,
+          3.031222
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "rockfall_net.png"
+      ],
+      "components": [
+        {
+          "name": "上下ワイヤー",
+          "triangle_start": 0,
+          "triangle_count": 20
+        },
+        {
+          "name": "上下ワイヤー",
+          "triangle_start": 20,
+          "triangle_count": 20
+        },
+        {
+          "name": "法面の支柱",
+          "triangle_start": 40,
+          "triangle_count": 36
+        },
+        {
+          "name": "斜め支持ワイヤー",
+          "triangle_start": 76,
+          "triangle_count": 20
+        },
+        {
+          "name": "斜面に張る透過網",
+          "triangle_start": 96,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "原型は高さ3m・後退1.35mの斜面。地形への変形が必要。写真の高さ3〜5mに合わせて配置側で調整。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0563-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0566_f.jpg",
+          "url": "https://www.google.com/maps/@35.4670151,139.2152247,3a,90y,96.5h,88t/data=!3m4!1e1!3m2!1s_Gcsj8UhsitWdsw9bCEbFA!2e0?hl=ja",
+          "description": "岩肌の切り通しの法面に張られた高い金網（菱形網）、鋼管の支柱が間隔約3 m、高さ約5 m以上、道の左縁から約1 m"
+        },
+        {
+          "oid": "S5-0568-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0568_f.jpg",
+          "url": "https://www.google.com/maps/@35.4671779,139.2155438,3a,90y,352.9h,88t/data=!3m4!1e1!3m2!1sC6TR3MHKC1etziWYQthARg!2e0?hl=ja",
+          "description": "進行方向左の切土法面に張られたひし形金網。支柱つき、高さ約3m、道の縁から1〜3m。下に小さな側溝"
+        },
+        {
+          "oid": "S5-0679-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0679_f.jpg",
+          "url": "https://www.google.com/maps/@35.4806351,139.2110092,3a,90y,355.9h,88t/data=!3m4!1e1!3m2!1sIiVeNvF0AmDGC65L5rX7yQ!2e0?hl=ja",
+          "description": "道の左の岩盤と法面を覆うひし形金網（落石防止網）、斜めに張った支持ワイヤーが見える。道に沿って続く"
+        },
+        {
+          "oid": "S5-0738-06",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_f.jpg",
+          "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,344.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+          "description": "左の法面に張られた金網（チェーンリンク）と一部ワイヤー網、高さ約 2 m、柱は木と鉄"
+        }
+      ],
+      "repeat_length_m": 3.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          3.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0563-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0566_f.jpg",
+        "url": "https://www.google.com/maps/@35.4670151,139.2152247,3a,90y,96.5h,88t/data=!3m4!1e1!3m2!1s_Gcsj8UhsitWdsw9bCEbFA!2e0?hl=ja",
+        "description": "岩肌の切り通しの法面に張られた高い金網（菱形網）、鋼管の支柱が間隔約3 m、高さ約5 m以上、道の左縁から約1 m"
+      },
+      "preview_views": {
+        "front": "r70_fence_rockfall_net_front.png",
+        "left": "r70_fence_rockfall_net_left.png",
+        "right": "r70_fence_rockfall_net_right.png",
+        "back_estimated": "r70_fence_rockfall_net_back_estimated.png",
+        "top": "r70_fence_rockfall_net_top.png",
+        "persp": "r70_fence_rockfall_net_persp.png",
+        "reference": "r70_fence_rockfall_net_reference.png"
+      }
+    },
+    {
+      "name": "steel_vertical",
+      "meaning": "黒い縦格子の転落防止柵",
+      "triangles": 192,
+      "vertices": 384,
+      "dimensions_m": [
+        2.035,
+        0.07,
+        1.1
+      ],
+      "bounds_m": [
+        [
+          -0.035,
+          -0.035,
+          0.0
+        ],
+        [
+          2.0,
+          0.035,
+          1.1
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "steel_vertical.png"
+      ],
+      "components": [
+        {
+          "name": "始端角柱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "上下の横桟",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "上下の横桟",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 48,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 60,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 72,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 84,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 96,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 108,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 120,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 132,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 144,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 156,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 168,
+          "triangle_count": 12
+        },
+        {
+          "name": "細い縦格子",
+          "triangle_start": 180,
+          "triangle_count": 12
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-1009-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1009_f.jpg",
+          "url": "https://www.google.com/maps/@35.5163962,139.2326689,3a,90y,342.0h,88t/data=!3m4!1e1!3m2!1shygvRNmcLJgG6CvCCmsDBw!2e0?hl=ja",
+          "description": "ガードレールの裏に立つ黒い縦格子の柵、高さ約1.1m"
+        },
+        {
+          "oid": "S5-1015-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-1015_f.jpg",
+          "url": "https://www.google.com/maps/@35.5173516,139.231523,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1sIhu6EeL_zPbZ8iIC05aoQw!2e0?hl=ja",
+          "description": "ガードレールの裏に立つ黒い縦格子の柵、高さ約1.1m"
+        },
+        {
+          "oid": "S5-0846-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0846_b.jpg",
+          "url": "https://www.google.com/maps/@35.4892119,139.2214384,3a,90y,171.5h,88t/data=!3m4!1e1!3m2!1suVPiiwC9LkZRE1A9f4GEGA!2e0?hl=ja",
+          "description": "谷側の駐車スペース際に続く、細い鋼管の横棒 2〜3 段の柵（高さ約1m）。柱は細く約2m間隔。色はベージュ〜くすんだ白。端に札の付いた柱"
+        },
+        {
+          "oid": "S5-0947-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0947_f.jpg",
+          "url": "https://www.google.com/maps/@35.5033285,139.2298102,3a,90y,346.7h,88t/data=!3m4!1e1!3m2!1sBQVBOGB7eTTz5z0gj04s1g!2e0?hl=ja",
+          "description": "道の右の谷側に続く黒〜緑の鋼管の縦格子手すり（高さ約1.1m、支柱間隔約2m）。路肩の外。前方の橋へ続く"
+        }
+      ],
+      "repeat_length_m": 2.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-1009-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1009_f.jpg",
+        "url": "https://www.google.com/maps/@35.5163962,139.2326689,3a,90y,342.0h,88t/data=!3m4!1e1!3m2!1shygvRNmcLJgG6CvCCmsDBw!2e0?hl=ja",
+        "description": "ガードレールの裏に立つ黒い縦格子の柵、高さ約1.1m"
+      },
+      "preview_views": {
+        "front": "r70_fence_steel_vertical_front.png",
+        "left": "r70_fence_steel_vertical_left.png",
+        "right": "r70_fence_steel_vertical_right.png",
+        "back_estimated": "r70_fence_steel_vertical_back_estimated.png",
+        "top": "r70_fence_steel_vertical_top.png",
+        "persp": "r70_fence_steel_vertical_persp.png",
+        "reference": "r70_fence_steel_vertical_reference.png"
+      }
+    },
+    {
+      "name": "wood",
+      "meaning": "丸太の柱と横木2段の木柵",
+      "triangles": 108,
+      "vertices": 180,
+      "dimensions_m": [
+        2.09,
+        0.17119,
+        1.05
+      ],
+      "bounds_m": [
+        [
+          -0.09,
+          -0.085595,
+          0.0
+        ],
+        [
+          2.0,
+          0.085595,
+          1.05
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "wood.png"
+      ],
+      "components": [
+        {
+          "name": "丸太支柱",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "丸太横木",
+          "triangle_start": 36,
+          "triangle_count": 36
+        },
+        {
+          "name": "丸太横木",
+          "triangle_start": 72,
+          "triangle_count": 36
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "丸太径0.18/0.13m、支柱間隔2mは写真比率の推定。木目の微細凹凸を簡略化。"
+      ],
+      "references": [
+        {
+          "oid": "S5-0652-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0652_f.jpg",
+          "url": "https://www.google.com/maps/@35.475885,139.2103972,3a,90y,309.3h,88t/data=!3m4!1e1!3m2!1sw-k7lGnHUWWy4-N1sIaeCg!2e0?hl=ja",
+          "description": "太い丸太の支柱＋横木2段の木柵、道の右縁、高さ約1m。ガードレールの代わりに続く"
+        },
+        {
+          "oid": "S5-0655-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0655_f.jpg",
+          "url": "https://www.google.com/maps/@35.4764631,139.2102865,3a,90y,29.7h,88t/data=!3m4!1e1!3m2!1sM-76T-mv9H3LuAyXEk5D4Q!2e0?hl=ja",
+          "description": "トンネル出口のすぐ先、道の右縁に続く丸太の支柱＋横木の低い木柵。高さ約1m。トンネルの翼壁（石積み）の横から始まる"
+        },
+        {
+          "oid": "S5-0755-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0755_f.jpg",
+          "url": "https://www.google.com/maps/@35.4847224,139.206241,3a,90y,51.1h,88t/data=!3m4!1e1!3m2!1sXQL8NuJvLHZ4Fgr9wvCZpw!2e0?hl=ja",
+          "description": "石積みの上に立つ太い角材の杭（高さ約1.5m、間隔約2m）と金網。土留め・落石防止用"
+        },
+        {
+          "oid": "S5-0899-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0900_b.jpg",
+          "url": "https://www.google.com/maps/@35.4981394,139.2255178,3a,90y,264.9h,88t/data=!3m4!1e1!3m2!1sGLlE1WQYOoPN8yZrD2y2jg!2e0?hl=ja",
+          "description": "石積み擁壁の上に載る土留めの柵。丸太の杭（約2m間隔）に板（長さ約2m、幅約0.25m）を横に渡し、高さ約0.8〜1m。斜面の土を押さえる"
+        }
+      ],
+      "repeat_length_m": 2.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0652-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0652_f.jpg",
+        "url": "https://www.google.com/maps/@35.475885,139.2103972,3a,90y,309.3h,88t/data=!3m4!1e1!3m2!1sw-k7lGnHUWWy4-N1sIaeCg!2e0?hl=ja",
+        "description": "太い丸太の支柱＋横木2段の木柵、道の右縁、高さ約1m。ガードレールの代わりに続く"
+      },
+      "preview_views": {
+        "front": "r70_fence_wood_front.png",
+        "left": "r70_fence_wood_left.png",
+        "right": "r70_fence_wood_right.png",
+        "back_estimated": "r70_fence_wood_back_estimated.png",
+        "top": "r70_fence_wood_top.png",
+        "persp": "r70_fence_wood_persp.png",
+        "reference": "r70_fence_wood_reference.png"
+      }
+    },
+    {
+      "name": "wood_mesh",
+      "meaning": "木杭と落石止め金網",
+      "triangles": 14,
+      "vertices": 28,
+      "dimensions_m": [
+        2.065,
+        0.13,
+        1.5
+      ],
+      "bounds_m": [
+        [
+          -0.065,
+          -0.065,
+          0.0
+        ],
+        [
+          2.0,
+          0.065,
+          1.5
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "wood_mesh.png"
+      ],
+      "components": [
+        {
+          "name": "木杭",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "木杭間の網",
+          "triangle_start": 12,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0652-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0652_f.jpg",
+          "url": "https://www.google.com/maps/@35.475885,139.2103972,3a,90y,309.3h,88t/data=!3m4!1e1!3m2!1sw-k7lGnHUWWy4-N1sIaeCg!2e0?hl=ja",
+          "description": "太い丸太の支柱＋横木2段の木柵、道の右縁、高さ約1m。ガードレールの代わりに続く"
+        },
+        {
+          "oid": "S5-0655-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0655_f.jpg",
+          "url": "https://www.google.com/maps/@35.4764631,139.2102865,3a,90y,29.7h,88t/data=!3m4!1e1!3m2!1sM-76T-mv9H3LuAyXEk5D4Q!2e0?hl=ja",
+          "description": "トンネル出口のすぐ先、道の右縁に続く丸太の支柱＋横木の低い木柵。高さ約1m。トンネルの翼壁（石積み）の横から始まる"
+        },
+        {
+          "oid": "S5-0755-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0755_f.jpg",
+          "url": "https://www.google.com/maps/@35.4847224,139.206241,3a,90y,51.1h,88t/data=!3m4!1e1!3m2!1sXQL8NuJvLHZ4Fgr9wvCZpw!2e0?hl=ja",
+          "description": "石積みの上に立つ太い角材の杭（高さ約1.5m、間隔約2m）と金網。土留め・落石防止用"
+        },
+        {
+          "oid": "S5-0899-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0900_b.jpg",
+          "url": "https://www.google.com/maps/@35.4981394,139.2255178,3a,90y,264.9h,88t/data=!3m4!1e1!3m2!1sGLlE1WQYOoPN8yZrD2y2jg!2e0?hl=ja",
+          "description": "石積み擁壁の上に載る土留めの柵。丸太の杭（約2m間隔）に板（長さ約2m、幅約0.25m）を横に渡し、高さ約0.8〜1m。斜面の土を押さえる"
+        }
+      ],
+      "repeat_length_m": 2.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0755-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0755_f.jpg",
+        "url": "https://www.google.com/maps/@35.4847224,139.206241,3a,90y,51.1h,88t/data=!3m4!1e1!3m2!1sXQL8NuJvLHZ4Fgr9wvCZpw!2e0?hl=ja",
+        "description": "石積みの上に立つ太い角材の杭（高さ約1.5m、間隔約2m）と金網。土留め・落石防止用"
+      },
+      "preview_views": {
+        "front": "r70_fence_wood_mesh_front.png",
+        "left": "r70_fence_wood_mesh_left.png",
+        "right": "r70_fence_wood_mesh_right.png",
+        "back_estimated": "r70_fence_wood_mesh_back_estimated.png",
+        "top": "r70_fence_wood_mesh_top.png",
+        "persp": "r70_fence_wood_mesh_persp.png",
+        "reference": "r70_fence_wood_mesh_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "woodの横板土留めはr70_retaining_wall.wood_laggingへ統合。横管柵の例はguardrail.pipe。"
+  ],
+  "references": {
+    "wire_mesh": [
+      {
+        "oid": "S4-0541-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0541_f.jpg",
+        "url": "https://www.google.com/maps/@35.4627619,139.2152645,3a,90y,41.4h,88t/data=!3m4!1e1!3m2!1sqUaIos7-6GmDjtOa2GnMDg!2e0?hl=ja",
+        "description": "擁壁の上端に続く、灰色のコンクリート角柱（約2.5 m 間隔、高さ約2 m）と金網と数段の鉄線。前の木柱フェンスとは柱が違う"
+      },
+      {
+        "oid": "S5-0590-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0591_b.jpg",
+        "url": "https://www.google.com/maps/@35.4711527,139.2171039,3a,90y,163.5h,88t/data=!3m4!1e1!3m2!1sUFOCPILMLAOvtinjKjvwGQ!2e0?hl=ja",
+        "description": "谷側のガードレールの上に立つオレンジ色の金網フェンス（高さ約 1.2 m、細い柱）。下のガードレールの外面は黒とオレンジの斜め縞。0590 の奥に茶色い短い柵として見え、0591 で全体が見える"
+      },
+      {
+        "oid": "S5-0771-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0771_f.jpg",
+        "url": "https://www.google.com/maps/@35.4866859,139.2086836,3a,90y,112.3h,88t/data=!3m4!1e1!3m2!1sAmkkccMLPGWckNcS7XjbRQ!2e0?hl=ja",
+        "description": "緑塗装の支柱＋菱形金網、高さ約2m、上部に有刺線。路肩の外。白い小さな注意札が数枚付く"
+      },
+      {
+        "oid": "S5-0840-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0844_b.jpg",
+        "url": "https://www.google.com/maps/@35.4887437,139.2216363,3a,90y,146.9h,88t/data=!3m4!1e1!3m2!1sZLz3q4g02meSX4GUhwSjzg!2e0?hl=ja",
+        "description": "ガードレールの外側に立つ緑色の金網（高さ約1.8m）。鋼管の柱が約3m間隔。谷側の転落・立入防止。前後に続く"
+      }
+    ],
+    "rockfall_net": [
+      {
+        "oid": "S5-0563-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0566_f.jpg",
+        "url": "https://www.google.com/maps/@35.4670151,139.2152247,3a,90y,96.5h,88t/data=!3m4!1e1!3m2!1s_Gcsj8UhsitWdsw9bCEbFA!2e0?hl=ja",
+        "description": "岩肌の切り通しの法面に張られた高い金網（菱形網）、鋼管の支柱が間隔約3 m、高さ約5 m以上、道の左縁から約1 m"
+      },
+      {
+        "oid": "S5-0568-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0568_f.jpg",
+        "url": "https://www.google.com/maps/@35.4671779,139.2155438,3a,90y,352.9h,88t/data=!3m4!1e1!3m2!1sC6TR3MHKC1etziWYQthARg!2e0?hl=ja",
+        "description": "進行方向左の切土法面に張られたひし形金網。支柱つき、高さ約3m、道の縁から1〜3m。下に小さな側溝"
+      },
+      {
+        "oid": "S5-0679-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0679_f.jpg",
+        "url": "https://www.google.com/maps/@35.4806351,139.2110092,3a,90y,355.9h,88t/data=!3m4!1e1!3m2!1sIiVeNvF0AmDGC65L5rX7yQ!2e0?hl=ja",
+        "description": "道の左の岩盤と法面を覆うひし形金網（落石防止網）、斜めに張った支持ワイヤーが見える。道に沿って続く"
+      },
+      {
+        "oid": "S5-0738-06",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0738_f.jpg",
+        "url": "https://www.google.com/maps/@35.4814328,139.2042275,3a,90y,344.3h,88t/data=!3m4!1e1!3m2!1syZzf6E0V4LEysnr7_oQZnA!2e0?hl=ja",
+        "description": "左の法面に張られた金網（チェーンリンク）と一部ワイヤー網、高さ約 2 m、柱は木と鉄"
+      }
+    ],
+    "steel_vertical": [
+      {
+        "oid": "S5-1009-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1009_f.jpg",
+        "url": "https://www.google.com/maps/@35.5163962,139.2326689,3a,90y,342.0h,88t/data=!3m4!1e1!3m2!1shygvRNmcLJgG6CvCCmsDBw!2e0?hl=ja",
+        "description": "ガードレールの裏に立つ黒い縦格子の柵、高さ約1.1m"
+      },
+      {
+        "oid": "S5-1015-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-1015_f.jpg",
+        "url": "https://www.google.com/maps/@35.5173516,139.231523,3a,90y,304.7h,88t/data=!3m4!1e1!3m2!1sIhu6EeL_zPbZ8iIC05aoQw!2e0?hl=ja",
+        "description": "ガードレールの裏に立つ黒い縦格子の柵、高さ約1.1m"
+      },
+      {
+        "oid": "S5-0846-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0846_b.jpg",
+        "url": "https://www.google.com/maps/@35.4892119,139.2214384,3a,90y,171.5h,88t/data=!3m4!1e1!3m2!1suVPiiwC9LkZRE1A9f4GEGA!2e0?hl=ja",
+        "description": "谷側の駐車スペース際に続く、細い鋼管の横棒 2〜3 段の柵（高さ約1m）。柱は細く約2m間隔。色はベージュ〜くすんだ白。端に札の付いた柱"
+      },
+      {
+        "oid": "S5-0947-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0947_f.jpg",
+        "url": "https://www.google.com/maps/@35.5033285,139.2298102,3a,90y,346.7h,88t/data=!3m4!1e1!3m2!1sBQVBOGB7eTTz5z0gj04s1g!2e0?hl=ja",
+        "description": "道の右の谷側に続く黒〜緑の鋼管の縦格子手すり（高さ約1.1m、支柱間隔約2m）。路肩の外。前方の橋へ続く"
+      }
+    ],
+    "wood": [
+      {
+        "oid": "S5-0652-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0652_f.jpg",
+        "url": "https://www.google.com/maps/@35.475885,139.2103972,3a,90y,309.3h,88t/data=!3m4!1e1!3m2!1sw-k7lGnHUWWy4-N1sIaeCg!2e0?hl=ja",
+        "description": "太い丸太の支柱＋横木2段の木柵、道の右縁、高さ約1m。ガードレールの代わりに続く"
+      },
+      {
+        "oid": "S5-0655-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0655_f.jpg",
+        "url": "https://www.google.com/maps/@35.4764631,139.2102865,3a,90y,29.7h,88t/data=!3m4!1e1!3m2!1sM-76T-mv9H3LuAyXEk5D4Q!2e0?hl=ja",
+        "description": "トンネル出口のすぐ先、道の右縁に続く丸太の支柱＋横木の低い木柵。高さ約1m。トンネルの翼壁（石積み）の横から始まる"
+      },
+      {
+        "oid": "S5-0755-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0755_f.jpg",
+        "url": "https://www.google.com/maps/@35.4847224,139.206241,3a,90y,51.1h,88t/data=!3m4!1e1!3m2!1sXQL8NuJvLHZ4Fgr9wvCZpw!2e0?hl=ja",
+        "description": "石積みの上に立つ太い角材の杭（高さ約1.5m、間隔約2m）と金網。土留め・落石防止用"
+      },
+      {
+        "oid": "S5-0899-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0900_b.jpg",
+        "url": "https://www.google.com/maps/@35.4981394,139.2255178,3a,90y,264.9h,88t/data=!3m4!1e1!3m2!1sGLlE1WQYOoPN8yZrD2y2jg!2e0?hl=ja",
+        "description": "石積み擁壁の上に載る土留めの柵。丸太の杭（約2m間隔）に板（長さ約2m、幅約0.25m）を横に渡し、高さ約0.8〜1m。斜面の土を押さえる"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "wire_mesh_concrete",
+    "image": "R70-0541_f.jpg",
+    "crop_pixels": [
+      950,
+      70,
+      1600,
+      430
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

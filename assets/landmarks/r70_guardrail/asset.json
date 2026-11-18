@@ -1,0 +1,816 @@
+{
+  "asset_id": "r70_guardrail",
+  "source": "r70_guardrail.blend",
+  "generator": "blender_scripts/build_route70_assets.py",
+  "source_image_usage": "参照写真は比較専用。配布画像はすべて自作。",
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "部品別のorigin参照。単体支持部根元/反復物始端支柱根元"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderでは1-vで読込。"
+  },
+  "texture_method": "自作画像と手続き色を1024x1024アトラスへ直接ラスタライズ。照明を焼き込まない。",
+  "game_status": "単体NPZ/PNGのみ。配置/KN5/インストールは範囲外。",
+  "triangle_limit_per_part": 800,
+  "parts": [
+    {
+      "name": "w_beam",
+      "meaning": "W波形ガードレールの4mスパン＋始端支柱1本",
+      "triangles": 144,
+      "vertices": 264,
+      "dimensions_m": [
+        4.075,
+        0.24,
+        0.8245
+      ],
+      "bounds_m": [
+        [
+          -0.075,
+          -0.183,
+          0.0
+        ],
+        [
+          4.0,
+          0.057,
+          0.8245
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "w_beam.png",
+        "w_beam_cream.png",
+        "w_beam_rust.png"
+      ],
+      "components": [
+        {
+          "name": "W波形ビームの表裏",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "W波形ビームの表裏",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "端の折返し",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "端の折返し",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "丸鋼管支柱",
+          "triangle_start": 48,
+          "triangle_count": 44
+        },
+        {
+          "name": "支柱とビームの間隔金具",
+          "triangle_start": 92,
+          "triangle_count": 12
+        },
+        {
+          "name": "取付ボルト",
+          "triangle_start": 104,
+          "triangle_count": 20
+        },
+        {
+          "name": "取付ボルト",
+          "triangle_start": 124,
+          "triangle_count": 20
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "板幅0.32m、ビーム上端0.82m、柱径0.114mは写真目安。",
+        "標準原型4mは要件の1支柱1スパン。写真の約2m間隔用はw_beam_2m。袖端の赤札・球は代表例から近似。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0382-13",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+          "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+          "description": "橋の先から左側に続くWビーム。色はベージュ〜白、支柱約2 m間隔、錆が出る。0384Bに赤い字の「No.2」の書き込み。0387まで切れ目なく続く。0381の白いガードレールとは橋で分かれる。"
+        },
+        {
+          "oid": "S4-0388-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0388_f.jpg",
+          "url": "https://www.google.com/maps/@35.4360164,139.2117514,3a,90y,8.8h,88t/data=!3m4!1e1!3m2!1s0hNZJjBTwX9sDFLnxeX6iQ!2e0?hl=ja",
+          "description": "白灰色に色あせた波形ビーム（W 型）1 段、細い鋼管の柱が約 2 m おき。道の左縁（谷側）に沿う。木々に隠れ所々さび・汚れ。前の区間から続いているかもしれない"
+        },
+        {
+          "oid": "S4-0417-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0418_f.jpg",
+          "url": "https://www.google.com/maps/@35.4416663,139.2121444,3a,90y,2.8h,88t/data=!3m4!1e1!3m2!1sGw4-UPPAvr4BcQyLdw0FTg!2e0?hl=ja",
+          "description": "白灰色の W 型ビーム 1 段、細い鋼管の柱が約 2 m おき。道の左縁（谷側）に沿って連続、0417 の前方で始まる。谷は杉の林"
+        },
+        {
+          "oid": "S4-0420-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0425_f.jpg",
+          "url": "https://www.google.com/maps/@35.4430679,139.2128004,3a,90y,357.6h,88t/data=!3m4!1e1!3m2!1sOJn8rOHA3uIOeJSRzuvt1A!2e0?hl=ja",
+          "description": "白灰色の W 型ビーム 1 段、鋼管の柱が約 2 m おき、きれいな亜鉛めっき色。道の左縁に沿い、0421 で橋の先から始まり 0426 まで続く。0425〜0426 で何度か途切れ、端部は白い端板つき。0431 の先、橋の手前で端となる"
+        }
+      ],
+      "repeat_length_m": 4.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          4.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S4-0382-13",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+        "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+        "description": "橋の先から左側に続くWビーム。色はベージュ〜白、支柱約2 m間隔、錆が出る。0384Bに赤い字の「No.2」の書き込み。0387まで切れ目なく続く。0381の白いガードレールとは橋で分かれる。"
+      },
+      "preview_views": {
+        "front": "r70_guardrail_w_beam_front.png",
+        "left": "r70_guardrail_w_beam_left.png",
+        "right": "r70_guardrail_w_beam_right.png",
+        "back_estimated": "r70_guardrail_w_beam_back_estimated.png",
+        "top": "r70_guardrail_w_beam_top.png",
+        "persp": "r70_guardrail_w_beam_persp.png",
+        "reference": "r70_guardrail_w_beam_reference.png"
+      }
+    },
+    {
+      "name": "w_beam_2m",
+      "meaning": "W波形ガードレールの2mスパン＋始端支柱1本",
+      "triangles": 144,
+      "vertices": 264,
+      "dimensions_m": [
+        2.075,
+        0.24,
+        0.8245
+      ],
+      "bounds_m": [
+        [
+          -0.075,
+          -0.183,
+          0.0
+        ],
+        [
+          2.0,
+          0.057,
+          0.8245
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "w_beam_2m.png",
+        "w_beam_2m_cream.png",
+        "w_beam_2m_rust.png"
+      ],
+      "components": [
+        {
+          "name": "W波形ビームの表裏",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "W波形ビームの表裏",
+          "triangle_start": 12,
+          "triangle_count": 12
+        },
+        {
+          "name": "端の折返し",
+          "triangle_start": 24,
+          "triangle_count": 12
+        },
+        {
+          "name": "端の折返し",
+          "triangle_start": 36,
+          "triangle_count": 12
+        },
+        {
+          "name": "丸鋼管支柱",
+          "triangle_start": 48,
+          "triangle_count": 44
+        },
+        {
+          "name": "支柱とビームの間隔金具",
+          "triangle_start": 92,
+          "triangle_count": 12
+        },
+        {
+          "name": "取付ボルト",
+          "triangle_start": 104,
+          "triangle_count": 20
+        },
+        {
+          "name": "取付ボルト",
+          "triangle_start": 124,
+          "triangle_count": 20
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "板幅0.32m、ビーム上端0.82m、柱径0.114mは写真目安。",
+        "標準原型4mは要件の1支柱1スパン。写真の約2m間隔用はw_beam_2m。袖端の赤札・球は代表例から近似。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0382-13",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+          "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+          "description": "橋の先から左側に続くWビーム。色はベージュ〜白、支柱約2 m間隔、錆が出る。0384Bに赤い字の「No.2」の書き込み。0387まで切れ目なく続く。0381の白いガードレールとは橋で分かれる。"
+        },
+        {
+          "oid": "S4-0388-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0388_f.jpg",
+          "url": "https://www.google.com/maps/@35.4360164,139.2117514,3a,90y,8.8h,88t/data=!3m4!1e1!3m2!1s0hNZJjBTwX9sDFLnxeX6iQ!2e0?hl=ja",
+          "description": "白灰色に色あせた波形ビーム（W 型）1 段、細い鋼管の柱が約 2 m おき。道の左縁（谷側）に沿う。木々に隠れ所々さび・汚れ。前の区間から続いているかもしれない"
+        },
+        {
+          "oid": "S4-0417-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0418_f.jpg",
+          "url": "https://www.google.com/maps/@35.4416663,139.2121444,3a,90y,2.8h,88t/data=!3m4!1e1!3m2!1sGw4-UPPAvr4BcQyLdw0FTg!2e0?hl=ja",
+          "description": "白灰色の W 型ビーム 1 段、細い鋼管の柱が約 2 m おき。道の左縁（谷側）に沿って連続、0417 の前方で始まる。谷は杉の林"
+        },
+        {
+          "oid": "S4-0420-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0425_f.jpg",
+          "url": "https://www.google.com/maps/@35.4430679,139.2128004,3a,90y,357.6h,88t/data=!3m4!1e1!3m2!1sOJn8rOHA3uIOeJSRzuvt1A!2e0?hl=ja",
+          "description": "白灰色の W 型ビーム 1 段、鋼管の柱が約 2 m おき、きれいな亜鉛めっき色。道の左縁に沿い、0421 で橋の先から始まり 0426 まで続く。0425〜0426 で何度か途切れ、端部は白い端板つき。0431 の先、橋の手前で端となる"
+        }
+      ],
+      "repeat_length_m": 2.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S4-0382-13",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+        "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+        "description": "橋の先から左側に続くWビーム。色はベージュ〜白、支柱約2 m間隔、錆が出る。0384Bに赤い字の「No.2」の書き込み。0387まで切れ目なく続く。0381の白いガードレールとは橋で分かれる。"
+      },
+      "preview_views": {
+        "front": "r70_guardrail_w_beam_2m_front.png",
+        "left": "r70_guardrail_w_beam_2m_left.png",
+        "right": "r70_guardrail_w_beam_2m_right.png",
+        "back_estimated": "r70_guardrail_w_beam_2m_back_estimated.png",
+        "top": "r70_guardrail_w_beam_2m_top.png",
+        "persp": "r70_guardrail_w_beam_2m_persp.png",
+        "reference": "r70_guardrail_w_beam_2m_reference.png"
+      }
+    },
+    {
+      "name": "w_beam_end",
+      "meaning": "W波形ガードレールの外へ巻いた袖端",
+      "triangles": 276,
+      "vertices": 544,
+      "dimensions_m": [
+        0.735,
+        0.3546,
+        0.895
+      ],
+      "bounds_m": [
+        [
+          -0.075,
+          -0.183,
+          0.0
+        ],
+        [
+          0.66,
+          0.171599,
+          0.895
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "w_beam_end.png",
+        "w_beam_end_cream.png",
+        "w_beam_end_rust.png"
+      ],
+      "components": [
+        {
+          "name": "W波形ビームの表裏",
+          "triangle_start": 0,
+          "triangle_count": 48
+        },
+        {
+          "name": "W波形ビームの表裏",
+          "triangle_start": 48,
+          "triangle_count": 48
+        },
+        {
+          "name": "端の折返し",
+          "triangle_start": 96,
+          "triangle_count": 12
+        },
+        {
+          "name": "端の折返し",
+          "triangle_start": 108,
+          "triangle_count": 12
+        },
+        {
+          "name": "丸鋼管支柱",
+          "triangle_start": 120,
+          "triangle_count": 44
+        },
+        {
+          "name": "支柱とビームの間隔金具",
+          "triangle_start": 164,
+          "triangle_count": 12
+        },
+        {
+          "name": "取付ボルト",
+          "triangle_start": 176,
+          "triangle_count": 20
+        },
+        {
+          "name": "取付ボルト",
+          "triangle_start": 196,
+          "triangle_count": 20
+        },
+        {
+          "name": "袖端の赤い注意プレート",
+          "triangle_start": 216,
+          "triangle_count": 12
+        },
+        {
+          "name": "端の白い反射球",
+          "triangle_start": 228,
+          "triangle_count": 48
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [
+        "板幅0.32m、ビーム上端0.82m、柱径0.114mは写真目安。",
+        "標準原型4mは要件の1支柱1スパン。写真の約2m間隔用はw_beam_2m。袖端の赤札・球は代表例から近似。"
+      ],
+      "references": [
+        {
+          "oid": "S4-0382-13",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+          "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+          "description": "橋の先から左側に続くWビーム。色はベージュ〜白、支柱約2 m間隔、錆が出る。0384Bに赤い字の「No.2」の書き込み。0387まで切れ目なく続く。0381の白いガードレールとは橋で分かれる。"
+        },
+        {
+          "oid": "S4-0388-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0388_f.jpg",
+          "url": "https://www.google.com/maps/@35.4360164,139.2117514,3a,90y,8.8h,88t/data=!3m4!1e1!3m2!1s0hNZJjBTwX9sDFLnxeX6iQ!2e0?hl=ja",
+          "description": "白灰色に色あせた波形ビーム（W 型）1 段、細い鋼管の柱が約 2 m おき。道の左縁（谷側）に沿う。木々に隠れ所々さび・汚れ。前の区間から続いているかもしれない"
+        },
+        {
+          "oid": "S4-0417-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0418_f.jpg",
+          "url": "https://www.google.com/maps/@35.4416663,139.2121444,3a,90y,2.8h,88t/data=!3m4!1e1!3m2!1sGw4-UPPAvr4BcQyLdw0FTg!2e0?hl=ja",
+          "description": "白灰色の W 型ビーム 1 段、細い鋼管の柱が約 2 m おき。道の左縁（谷側）に沿って連続、0417 の前方で始まる。谷は杉の林"
+        },
+        {
+          "oid": "S4-0420-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0425_f.jpg",
+          "url": "https://www.google.com/maps/@35.4430679,139.2128004,3a,90y,357.6h,88t/data=!3m4!1e1!3m2!1sOJn8rOHA3uIOeJSRzuvt1A!2e0?hl=ja",
+          "description": "白灰色の W 型ビーム 1 段、鋼管の柱が約 2 m おき、きれいな亜鉛めっき色。道の左縁に沿い、0421 で橋の先から始まり 0426 まで続く。0425〜0426 で何度か途切れ、端部は白い端板つき。0431 の先、橋の手前で端となる"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0382-13",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+        "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+        "description": "橋の先から左側に続くWビーム。色はベージュ〜白、支柱約2 m間隔、錆が出る。0384Bに赤い字の「No.2」の書き込み。0387まで切れ目なく続く。0381の白いガードレールとは橋で分かれる。"
+      },
+      "preview_views": {
+        "front": "r70_guardrail_w_beam_end_front.png",
+        "left": "r70_guardrail_w_beam_end_left.png",
+        "right": "r70_guardrail_w_beam_end_right.png",
+        "back_estimated": "r70_guardrail_w_beam_end_back_estimated.png",
+        "top": "r70_guardrail_w_beam_end_top.png",
+        "persp": "r70_guardrail_w_beam_end_persp.png",
+        "reference": "r70_guardrail_w_beam_end_reference.png"
+      }
+    },
+    {
+      "name": "pipe",
+      "meaning": "3段ガードパイプ",
+      "triangles": 120,
+      "vertices": 204,
+      "dimensions_m": [
+        2.05,
+        0.11829,
+        1.04
+      ],
+      "bounds_m": [
+        [
+          -0.05,
+          -0.068287,
+          0.0
+        ],
+        [
+          2.0,
+          0.05,
+          1.04
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "pipe.png",
+        "pipe_cream.png",
+        "pipe_rust.png",
+        "pipe_black.png"
+      ],
+      "components": [
+        {
+          "name": "角形支柱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "横管",
+          "triangle_start": 12,
+          "triangle_count": 36
+        },
+        {
+          "name": "横管",
+          "triangle_start": 48,
+          "triangle_count": 36
+        },
+        {
+          "name": "横管",
+          "triangle_start": 84,
+          "triangle_count": 36
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0967-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0967_f.jpg",
+          "url": "https://www.google.com/maps/@35.5073303,139.2309835,3a,90y,4.5h,88t/data=!3m4!1e1!3m2!1sxp2gP2c5H2p2rz_L9AlnOQ!2e0?hl=ja",
+          "description": "橋の左側に続く管の防護柵、白い角柱の支柱に横管 2〜3 本、上の管はさびて赤茶。高さ約1 m。"
+        },
+        {
+          "oid": "S5-0980-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0981_f.jpg",
+          "url": "https://www.google.com/maps/@35.510424,139.2312777,3a,90y,6.8h,88t/data=!3m4!1e1!3m2!1sRR6Xs7wcCKyp5mvKCOKwoA!2e0?hl=ja",
+          "description": "右の路肩の外に続く白い鋼製ガードパイプ（横桁＋支柱）で、上半分に金網（落下防止）が付く。トンネル手前まで"
+        },
+        {
+          "oid": "S4-0509-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0509_f.jpg",
+          "url": "https://www.google.com/maps/@35.4563447,139.2133455,3a,90y,347.1h,88t/data=!3m4!1e1!3m2!1sz89opBOaecNp3_LxWY92Cg!2e0?hl=ja",
+          "description": "細い鋼管の横木2段と低い柱。端の柱は赤白の塗り分けで曲がった形。道の左縁、斜面側。林の中で途切れ途切れに続く"
+        },
+        {
+          "oid": "S4-0543-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0543_f.jpg",
+          "url": "https://www.google.com/maps/@35.463137,139.215485,3a,90y,329.4h,88t/data=!3m4!1e1!3m2!1sEOqNBN7uyC9_STRfuK0RiQ!2e0?hl=ja",
+          "description": "橋の手前左に続く黒い横管2〜3段のガードパイプ。支柱は角パイプ、高さ約1 m"
+        }
+      ],
+      "repeat_length_m": 2.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0967-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0967_f.jpg",
+        "url": "https://www.google.com/maps/@35.5073303,139.2309835,3a,90y,4.5h,88t/data=!3m4!1e1!3m2!1sxp2gP2c5H2p2rz_L9AlnOQ!2e0?hl=ja",
+        "description": "橋の左側に続く管の防護柵、白い角柱の支柱に横管 2〜3 本、上の管はさびて赤茶。高さ約1 m。"
+      },
+      "preview_views": {
+        "front": "r70_guardrail_pipe_front.png",
+        "left": "r70_guardrail_pipe_left.png",
+        "right": "r70_guardrail_pipe_right.png",
+        "back_estimated": "r70_guardrail_pipe_back_estimated.png",
+        "top": "r70_guardrail_pipe_top.png",
+        "persp": "r70_guardrail_pipe_persp.png",
+        "reference": "r70_guardrail_pipe_reference.png"
+      }
+    },
+    {
+      "name": "pipe_mesh",
+      "meaning": "3段ガードパイプ＋菱形金網",
+      "triangles": 122,
+      "vertices": 208,
+      "dimensions_m": [
+        2.05,
+        0.11829,
+        1.04
+      ],
+      "bounds_m": [
+        [
+          -0.05,
+          -0.068287,
+          0.0
+        ],
+        [
+          2.0,
+          0.05,
+          1.04
+        ]
+      ],
+      "origin": "始端支柱の根元 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "pipe_mesh.png",
+        "pipe_mesh_cream.png",
+        "pipe_mesh_rust.png",
+        "pipe_mesh_black.png"
+      ],
+      "components": [
+        {
+          "name": "角形支柱",
+          "triangle_start": 0,
+          "triangle_count": 12
+        },
+        {
+          "name": "横管",
+          "triangle_start": 12,
+          "triangle_count": 36
+        },
+        {
+          "name": "横管",
+          "triangle_start": 48,
+          "triangle_count": 36
+        },
+        {
+          "name": "横管",
+          "triangle_start": 84,
+          "triangle_count": 36
+        },
+        {
+          "name": "上半分の金網",
+          "triangle_start": 120,
+          "triangle_count": 2
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0967-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0967_f.jpg",
+          "url": "https://www.google.com/maps/@35.5073303,139.2309835,3a,90y,4.5h,88t/data=!3m4!1e1!3m2!1sxp2gP2c5H2p2rz_L9AlnOQ!2e0?hl=ja",
+          "description": "橋の左側に続く管の防護柵、白い角柱の支柱に横管 2〜3 本、上の管はさびて赤茶。高さ約1 m。"
+        },
+        {
+          "oid": "S5-0980-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0981_f.jpg",
+          "url": "https://www.google.com/maps/@35.510424,139.2312777,3a,90y,6.8h,88t/data=!3m4!1e1!3m2!1sRR6Xs7wcCKyp5mvKCOKwoA!2e0?hl=ja",
+          "description": "右の路肩の外に続く白い鋼製ガードパイプ（横桁＋支柱）で、上半分に金網（落下防止）が付く。トンネル手前まで"
+        },
+        {
+          "oid": "S4-0509-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0509_f.jpg",
+          "url": "https://www.google.com/maps/@35.4563447,139.2133455,3a,90y,347.1h,88t/data=!3m4!1e1!3m2!1sz89opBOaecNp3_LxWY92Cg!2e0?hl=ja",
+          "description": "細い鋼管の横木2段と低い柱。端の柱は赤白の塗り分けで曲がった形。道の左縁、斜面側。林の中で途切れ途切れに続く"
+        },
+        {
+          "oid": "S4-0543-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0543_f.jpg",
+          "url": "https://www.google.com/maps/@35.463137,139.215485,3a,90y,329.4h,88t/data=!3m4!1e1!3m2!1sEOqNBN7uyC9_STRfuK0RiQ!2e0?hl=ja",
+          "description": "橋の手前左に続く黒い横管2〜3段のガードパイプ。支柱は角パイプ、高さ約1 m"
+        }
+      ],
+      "repeat_length_m": 2.0,
+      "connect_direction": "+X",
+      "connect_points_m": [
+        [
+          0,
+          0,
+          0
+        ],
+        [
+          2.0,
+          0,
+          0
+        ]
+      ],
+      "direct_reference": {
+        "oid": "S5-0980-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0981_f.jpg",
+        "url": "https://www.google.com/maps/@35.510424,139.2312777,3a,90y,6.8h,88t/data=!3m4!1e1!3m2!1sRR6Xs7wcCKyp5mvKCOKwoA!2e0?hl=ja",
+        "description": "右の路肩の外に続く白い鋼製ガードパイプ（横桁＋支柱）で、上半分に金網（落下防止）が付く。トンネル手前まで"
+      },
+      "preview_views": {
+        "front": "r70_guardrail_pipe_mesh_front.png",
+        "left": "r70_guardrail_pipe_mesh_left.png",
+        "right": "r70_guardrail_pipe_mesh_right.png",
+        "back_estimated": "r70_guardrail_pipe_mesh_back_estimated.png",
+        "top": "r70_guardrail_pipe_mesh_top.png",
+        "persp": "r70_guardrail_pipe_mesh_persp.png",
+        "reference": "r70_guardrail_pipe_mesh_reference.png"
+      }
+    },
+    {
+      "name": "pipe_end",
+      "meaning": "ガードパイプの短い端部",
+      "triangles": 120,
+      "vertices": 204,
+      "dimensions_m": [
+        0.36107,
+        0.18076,
+        1.035
+      ],
+      "bounds_m": [
+        [
+          -0.05,
+          -0.047553,
+          0.0
+        ],
+        [
+          0.311068,
+          0.133204,
+          1.035
+        ]
+      ],
+      "origin": "支持部の根元中央 (0,0,0)",
+      "front": "-Y",
+      "textures": [
+        "pipe_end.png",
+        "pipe_end_cream.png",
+        "pipe_end_rust.png"
+      ],
+      "components": [
+        {
+          "name": "端部支柱",
+          "triangle_start": 0,
+          "triangle_count": 36
+        },
+        {
+          "name": "丸めた終端の短管",
+          "triangle_start": 36,
+          "triangle_count": 28
+        },
+        {
+          "name": "丸めた終端の短管",
+          "triangle_start": 64,
+          "triangle_count": 28
+        },
+        {
+          "name": "丸めた終端の短管",
+          "triangle_start": 92,
+          "triangle_count": 28
+        }
+      ],
+      "dimension_basis": "指定写真の物の比率と依頼文の目安寸法を用いた推定。現地実測ではない。",
+      "approximations": [],
+      "references": [
+        {
+          "oid": "S5-0967-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0967_f.jpg",
+          "url": "https://www.google.com/maps/@35.5073303,139.2309835,3a,90y,4.5h,88t/data=!3m4!1e1!3m2!1sxp2gP2c5H2p2rz_L9AlnOQ!2e0?hl=ja",
+          "description": "橋の左側に続く管の防護柵、白い角柱の支柱に横管 2〜3 本、上の管はさびて赤茶。高さ約1 m。"
+        },
+        {
+          "oid": "S5-0980-02",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0981_f.jpg",
+          "url": "https://www.google.com/maps/@35.510424,139.2312777,3a,90y,6.8h,88t/data=!3m4!1e1!3m2!1sRR6Xs7wcCKyp5mvKCOKwoA!2e0?hl=ja",
+          "description": "右の路肩の外に続く白い鋼製ガードパイプ（横桁＋支柱）で、上半分に金網（落下防止）が付く。トンネル手前まで"
+        },
+        {
+          "oid": "S4-0509-01",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0509_f.jpg",
+          "url": "https://www.google.com/maps/@35.4563447,139.2133455,3a,90y,347.1h,88t/data=!3m4!1e1!3m2!1sz89opBOaecNp3_LxWY92Cg!2e0?hl=ja",
+          "description": "細い鋼管の横木2段と低い柱。端の柱は赤白の塗り分けで曲がった形。道の左縁、斜面側。林の中で途切れ途切れに続く"
+        },
+        {
+          "oid": "S4-0543-04",
+          "image": "export/compare/route70_inventory_20261030/images/sv/R70-0543_f.jpg",
+          "url": "https://www.google.com/maps/@35.463137,139.215485,3a,90y,329.4h,88t/data=!3m4!1e1!3m2!1sEOqNBN7uyC9_STRfuK0RiQ!2e0?hl=ja",
+          "description": "橋の手前左に続く黒い横管2〜3段のガードパイプ。支柱は角パイプ、高さ約1 m"
+        }
+      ],
+      "direct_reference": {
+        "oid": "S4-0509-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0509_f.jpg",
+        "url": "https://www.google.com/maps/@35.4563447,139.2133455,3a,90y,347.1h,88t/data=!3m4!1e1!3m2!1sz89opBOaecNp3_LxWY92Cg!2e0?hl=ja",
+        "description": "細い鋼管の横木2段と低い柱。端の柱は赤白の塗り分けで曲がった形。道の左縁、斜面側。林の中で途切れ途切れに続く"
+      },
+      "preview_views": {
+        "front": "r70_guardrail_pipe_end_front.png",
+        "left": "r70_guardrail_pipe_end_left.png",
+        "right": "r70_guardrail_pipe_end_right.png",
+        "back_estimated": "r70_guardrail_pipe_end_back_estimated.png",
+        "top": "r70_guardrail_pipe_end_top.png",
+        "persp": "r70_guardrail_pipe_end_persp.png",
+        "reference": "r70_guardrail_pipe_end_reference.png"
+      }
+    }
+  ],
+  "approximations": [],
+  "reclassified": [
+    "pseudo_woodの提示写真は黄白の金属Wビーム。擬木原型は作らずw_beam_cream.pngへ統合。"
+  ],
+  "references": {
+    "w_beam": [
+      {
+        "oid": "S4-0382-13",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0386_f.jpg",
+        "url": "https://www.google.com/maps/@35.4356247,139.2119231,3a,90y,339.1h,88t/data=!3m4!1e1!3m2!1sfg3a6n68X81Ik_CwIw5ySw!2e0?hl=ja",
+        "description": "橋の先から左側に続くWビーム。色はベージュ〜白、支柱約2 m間隔、錆が出る。0384Bに赤い字の「No.2」の書き込み。0387まで切れ目なく続く。0381の白いガードレールとは橋で分かれる。"
+      },
+      {
+        "oid": "S4-0388-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0388_f.jpg",
+        "url": "https://www.google.com/maps/@35.4360164,139.2117514,3a,90y,8.8h,88t/data=!3m4!1e1!3m2!1s0hNZJjBTwX9sDFLnxeX6iQ!2e0?hl=ja",
+        "description": "白灰色に色あせた波形ビーム（W 型）1 段、細い鋼管の柱が約 2 m おき。道の左縁（谷側）に沿う。木々に隠れ所々さび・汚れ。前の区間から続いているかもしれない"
+      },
+      {
+        "oid": "S4-0417-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0418_f.jpg",
+        "url": "https://www.google.com/maps/@35.4416663,139.2121444,3a,90y,2.8h,88t/data=!3m4!1e1!3m2!1sGw4-UPPAvr4BcQyLdw0FTg!2e0?hl=ja",
+        "description": "白灰色の W 型ビーム 1 段、細い鋼管の柱が約 2 m おき。道の左縁（谷側）に沿って連続、0417 の前方で始まる。谷は杉の林"
+      },
+      {
+        "oid": "S4-0420-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0425_f.jpg",
+        "url": "https://www.google.com/maps/@35.4430679,139.2128004,3a,90y,357.6h,88t/data=!3m4!1e1!3m2!1sOJn8rOHA3uIOeJSRzuvt1A!2e0?hl=ja",
+        "description": "白灰色の W 型ビーム 1 段、鋼管の柱が約 2 m おき、きれいな亜鉛めっき色。道の左縁に沿い、0421 で橋の先から始まり 0426 まで続く。0425〜0426 で何度か途切れ、端部は白い端板つき。0431 の先、橋の手前で端となる"
+      }
+    ],
+    "pipe": [
+      {
+        "oid": "S5-0967-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0967_f.jpg",
+        "url": "https://www.google.com/maps/@35.5073303,139.2309835,3a,90y,4.5h,88t/data=!3m4!1e1!3m2!1sxp2gP2c5H2p2rz_L9AlnOQ!2e0?hl=ja",
+        "description": "橋の左側に続く管の防護柵、白い角柱の支柱に横管 2〜3 本、上の管はさびて赤茶。高さ約1 m。"
+      },
+      {
+        "oid": "S5-0980-02",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0981_f.jpg",
+        "url": "https://www.google.com/maps/@35.510424,139.2312777,3a,90y,6.8h,88t/data=!3m4!1e1!3m2!1sRR6Xs7wcCKyp5mvKCOKwoA!2e0?hl=ja",
+        "description": "右の路肩の外に続く白い鋼製ガードパイプ（横桁＋支柱）で、上半分に金網（落下防止）が付く。トンネル手前まで"
+      },
+      {
+        "oid": "S4-0509-01",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0509_f.jpg",
+        "url": "https://www.google.com/maps/@35.4563447,139.2133455,3a,90y,347.1h,88t/data=!3m4!1e1!3m2!1sz89opBOaecNp3_LxWY92Cg!2e0?hl=ja",
+        "description": "細い鋼管の横木2段と低い柱。端の柱は赤白の塗り分けで曲がった形。道の左縁、斜面側。林の中で途切れ途切れに続く"
+      },
+      {
+        "oid": "S4-0543-04",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0543_f.jpg",
+        "url": "https://www.google.com/maps/@35.463137,139.215485,3a,90y,329.4h,88t/data=!3m4!1e1!3m2!1sEOqNBN7uyC9_STRfuK0RiQ!2e0?hl=ja",
+        "description": "橋の手前左に続く黒い横管2〜3段のガードパイプ。支柱は角パイプ、高さ約1 m"
+      }
+    ],
+    "pseudo_wood": [
+      {
+        "oid": "S5-0846-03",
+        "image": "export/compare/route70_inventory_20261030/images/sv/R70-0847_b.jpg",
+        "url": "https://www.google.com/maps/@35.4893779,139.2214205,3a,90y,163.0h,88t/data=!3m4!1e1!3m2!1snWto02PHylYCor5tXF5o8g!2e0?hl=ja",
+        "description": "右の谷側に続く、丸太を模したような白っぽい低い防護柵（高さ約0.7m）。ワゴン車の横に写る"
+      }
+    ]
+  },
+  "source_visibility": "各部品は同じローカル原点。最初のコレクション以外は非表示。部品を選んで表示切替する。",
+  "source_meshes": "印刷面/支柱/金具を命名した独立オブジェクト。NPZと同一三角形。",
+  "comparison_reference": {
+    "part": "w_beam_2m",
+    "image": "R70-0386_f.jpg",
+    "crop_pixels": [
+      0,
+      500,
+      780,
+      1000
+    ],
+    "camera_match": "同じ面が見える向きの近似。写真測量による校正はしていない。"
+  }
+}

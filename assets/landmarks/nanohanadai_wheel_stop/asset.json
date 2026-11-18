@@ -1,0 +1,74 @@
+{
+  "generator": "blender_scripts/build_nanohanadai_wheel_stop.py",
+  "origin": "底面の中央 (0,0,0)。+X長辺、正面−Y、+Z上。",
+  "dimension_basis": "sv_mid2_135: 中央4本の端点x309–431,488–628,702–861,965–1148px。7本の中心x48,205,370,558,782,1056,1382pxへ1次元射影モデルを当て、等間隔の枠幅2.5mで正規化。長さ/枠ピッチ0.623〜0.677、長さ1.56〜1.69m（平均1.64m）から1.65mを採用。前後幅0.24m・高0.12mは上面と側面の写真比率。透視/陰のため長さ±0.15m、幅±0.05m、高±0.03m程度の推定。",
+  "material_interpretation": "写真の不規則な粒状面、灰色の摩耗縁、反射帯・成形リブが見えないことから黒ずんだコンクリートとして制作。写真だけではゴム製を完全には排除できない。",
+  "approximations": [
+    "裏面・底面は写真では見えず平らなコンクリートとして推定。",
+    "浅溝2本は写真の上面の暗い筋を近似したもので正確な断面・本数は未確定。",
+    "個体ごとの欠けや落葉は複製配置を妨げるため共通の摩耗粒へ近似。両端を丸く低下させた14角断面で作成。"
+  ],
+  "refs": [
+    "sv_mid2_135.png",
+    "sv_mid_135.png",
+    "sv_mid_090.png"
+  ],
+  "reference_metadata": {
+    "date": "2020-11",
+    "vertical_fov_deg": 90,
+    "pitch_down_deg": 4.13,
+    "mid2_panoid": "P7jvxAJ_IJlvRcEGVeXJSA",
+    "mid_panoid": "MC9FOu1heTQ47rJo-eqsKA"
+  },
+  "reference_urls": [
+    "https://www.google.com/maps/@35.4104211,139.2095236,3a,90y,135h,85.87t/data=!3m6!1e1!3m4!1sP7jvxAJ_IJlvRcEGVeXJSA!2e0!7i16384!8i8192",
+    "https://www.google.com/maps/@35.4103796,139.2093967,3a,90y,135h,85.87t/data=!3m6!1e1!3m4!1sMC9FOu1heTQ47rJo-eqsKA!2e0!7i16384!8i8192",
+    "https://www.google.com/maps/@35.4103796,139.2093967,3a,90y,90h,85.87t/data=!3m6!1e1!3m4!1sMC9FOu1heTQ47rJo-eqsKA!2e0!7i16384!8i8192"
+  ],
+  "asset_id": "nanohanadai_wheel_stop",
+  "source": "nanohanadai_wheel_stop.blend",
+  "parts": [
+    {
+      "name": "wheel_stop",
+      "triangles": 220,
+      "vertices": 528,
+      "dimensions_m": [
+        1.65,
+        0.24,
+        0.12
+      ],
+      "bounds_m": [
+        [
+          -0.824999988079071,
+          -0.11999999731779099,
+          0.0
+        ],
+        [
+          0.824999988079071,
+          0.11999999731779099,
+          0.11999999731779099
+        ]
+      ]
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "底面の中央 (0,0,0)。+X長辺、正面−Y、+Z上。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blenderで再読込する際は1-v。配置側でも明示的に反転する。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html",
+  "source_baked_color": "wheel_stop_color.png"
+}

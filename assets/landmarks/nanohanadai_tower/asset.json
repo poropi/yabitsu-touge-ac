@@ -1,0 +1,247 @@
+{
+  "asset_id": "nanohanadai_tower",
+  "generator": "blender_scripts/build_nanohanadai_tower.py",
+  "source": "nanohanadai_tower.blend",
+  "source_texture": "tower_atlas.png",
+  "polygon_sides": 12,
+  "stair_paths": 2,
+  "parts": [
+    {
+      "name": "frame",
+      "triangles": 2424,
+      "vertices": 4608,
+      "dimensions_m": [
+        6.918797969818115,
+        6.918797969818115,
+        9.300000190734863
+      ],
+      "bounds_m": [
+        [
+          -3.4593989849090576,
+          -3.4593989849090576,
+          0.0
+        ],
+        [
+          3.4593989849090576,
+          3.4593989849090576,
+          9.300000190734863
+        ]
+      ]
+    },
+    {
+      "name": "stairs",
+      "triangles": 8040,
+      "vertices": 16080,
+      "dimensions_m": [
+        5.713515758514404,
+        5.945816993713379,
+        10.653452694416046
+      ],
+      "bounds_m": [
+        [
+          -2.856757879257202,
+          -2.9729084968566895,
+          -0.2534530758857727
+        ],
+        [
+          2.856757879257202,
+          2.9729084968566895,
+          10.399999618530273
+        ]
+      ]
+    },
+    {
+      "name": "deck",
+      "triangles": 4224,
+      "vertices": 8448,
+      "dimensions_m": [
+        7.139437198638916,
+        7.139437198638916,
+        2.9099998474121094
+      ],
+      "bounds_m": [
+        [
+          -3.569718599319458,
+          -3.569718599319458,
+          8.989999771118164
+        ],
+        [
+          3.569718599319458,
+          3.569718599319458,
+          11.899999618530273
+        ]
+      ]
+    },
+    {
+      "name": "roof",
+      "triangles": 3288,
+      "vertices": 6676,
+      "dimensions_m": [
+        7.964207649230957,
+        7.964207649230957,
+        1.3969783782958984
+      ],
+      "bounds_m": [
+        [
+          -3.9821038246154785,
+          -3.9821038246154785,
+          11.619999885559082
+        ],
+        [
+          3.9821038246154785,
+          3.9821038246154785,
+          13.01697826385498
+        ]
+      ]
+    },
+    {
+      "name": "base",
+      "triangles": 3484,
+      "vertices": 8036,
+      "dimensions_m": [
+        8.16860055923462,
+        9.879519939422607,
+        1.1350000351667404
+      ],
+      "bounds_m": [
+        [
+          -4.084274768829346,
+          -5.7904534339904785,
+          -1.090000033378601
+        ],
+        [
+          4.084325790405273,
+          4.089066505432129,
+          0.04500000178813934
+        ]
+      ]
+    }
+  ],
+  "total_triangles": 21460,
+  "coordinates": {
+    "unit": "m",
+    "x": "east true",
+    "y": "north true",
+    "z": "up",
+    "origin": "塔中心直下の台上面"
+  },
+  "direction": {
+    "roof_vertex_azimuth_deg": 90,
+    "flat_face_normals_azimuth_deg": [
+      15,
+      45,
+      75,
+      105,
+      135,
+      165,
+      195,
+      225,
+      255,
+      285,
+      315,
+      345
+    ],
+    "approach_steps_azimuth_deg": 165,
+    "entrance_first_tread_azimuth_deg": 150,
+    "exit_first_tread_azimuth_deg": 330
+  },
+  "dimensions_m": {
+    "roof_diameter": 7.8,
+    "deck_outer_diameter": 6.84,
+    "post_base_center_diameter": 6.2,
+    "post_deck_center_diameter": 4.6,
+    "deck_floor": 9.3,
+    "rail_main_top": 10.4,
+    "rail_thin_upper_top": 10.7475,
+    "eave": 11.9,
+    "roof_crown": 13.0,
+    "base_radius": 4.0
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "v": "m +Z up",
+    "f": "triangles",
+    "uv": "v=0 at image top; Blender reload uses 1-v"
+  },
+  "textures": {
+    "size": [
+      2048,
+      2048
+    ],
+    "alpha": false,
+    "source": "数式で自作した16区画の色画像、写真画素を流用せず、照明を含まない",
+    "parts_share_same_image": true
+  },
+  "refs": [
+    "export/compare/nanohanadai/tower/ref_yakei_nanohanadai4.jpg",
+    "export/compare/nanohanadai/tower/tw_0rX1Rg_045.png",
+    "export/compare/nanohanadai/tower/tw_0rXDBQ_345.png",
+    "export/compare/nanohanadai/tower/tw_4_znQE_015.png",
+    "export/compare/nanohanadai/tower/tw_IfLggE_000.png",
+    "export/compare/nanohanadai/tower/tw_q6-KBA_090.png",
+    "export/compare/nanohanadai/tower/tw_z8nbWA_270.png",
+    "export/compare/nanohanadai/tower/aerial_tower_north_up.png"
+  ],
+  "primary_reference": "https://www.kubodera-architect.co.jp/works/index/27",
+  "reference_metadata": {
+    "yakei": {
+      "date": "2010-01",
+      "url": "https://yakei.jp/photo/1280/nanohanadai4-1280.jpg",
+      "view": "南西から見上げ"
+    },
+    "0rX1Rg": {
+      "panoid": "CIHM0ogKEICAgICc0rX1Rg",
+      "date": "2019-12",
+      "heading": 45,
+      "tilt": 105
+    },
+    "0rXDBQ": {
+      "panoid": "CIHM0ogKEICAgICc0rXDBQ",
+      "date": "2019-12",
+      "heading": 345,
+      "tilt": 95
+    },
+    "4_znQE": {
+      "panoid": "CIHM0ogKEICAgIDqi4_znQE",
+      "date": "2014-05",
+      "heading": 15,
+      "tilt": 100
+    },
+    "IfLggE": {
+      "panoid": "CIHM0ogKEICAgICnzIfLggE",
+      "date": "2024-09"
+    },
+    "q6-KBA": {
+      "panoid": "CIHM0ogKEICAgICCq6-KBA",
+      "date": "2020-09"
+    },
+    "z8nbWA": {
+      "panoid": "CIHM0ogKEICAgID4z8nbWA",
+      "date": "2016-07"
+    }
+  },
+  "dimension_basis": "設計者の全高13m。北上航空写真の屋根約190px×約0.041m/px=約7.8m。人物、手すり、柱の写真射影は別の採寸図で照合。各高さ、部材断面、48段/系統は推定。",
+  "approximations": [
+    "階段の段数は全経路を写真で数えられず48段/系統を採用。",
+    "アプローチSSE165°は航空写真の南南東の道から推定、初段150°と別系統330°の割り当ては経路の仮定。",
+    "柱の継手、基礎の地中部、金属屋根の留め板、採光部の詳細は簡略化。",
+    "野面石の個別輪郭と木材の風化の位置は自作模様で近似。",
+    "木材の光沢と金属反射はPNGの色以外は配置側の材質設定が必要。"
+  ],
+  "game_status": "NPZとPNGまで。コース配置、KN5、ゲーム導入は依頼範囲外。",
+  "measurement_records": [
+    "export/compare/nanohanadai/nanohanadai_tower_measurements.json",
+    "export/compare/nanohanadai/nanohanadai_tower_aerial_measurements.json"
+  ],
+  "parts_meaning": {
+    "frame": "下へ広がる柱、横梁、X筋かい、腕木、留め金",
+    "stairs": "二重らせんの2系統各48段、ささら、各6踊り場、板の手すり",
+    "deck": "環状床、縦格子と上の横桟、外周柱、吹抜けの手すり",
+    "roof": "十二角の金属屋根、裏板、垂木、軒、継ぎ目、採光部と金物",
+    "base": "コンクリート台、野面石の低い壁、南南東の石段、柱脚の台"
+  }
+}

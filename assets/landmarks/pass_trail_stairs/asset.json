@@ -1,0 +1,257 @@
+{
+  "part_info": {
+    "timber_step": {
+      "meaning": "土踏面と丸太蹴上げ1段。推奨8〜11段、全上部段数未確認。",
+      "front": "-Y"
+    },
+    "rail_left": {
+      "meaning": "写真で確認できる左側の金属手すり1区間。",
+      "front": "-Y"
+    },
+    "rail_right": {
+      "meaning": "組合せ用の推定手すり1区間。右側連続金属手すりと木製は写真未確認。",
+      "front": "-Y"
+    },
+    "wood_rail_left": {
+      "meaning": "組合せ用の推定手すり1区間。右側連続金属手すりと木製は写真未確認。",
+      "front": "-Y"
+    },
+    "wood_rail_right": {
+      "meaning": "組合せ用の推定手すり1区間。右側連続金属手すりと木製は写真未確認。",
+      "front": "-Y"
+    }
+  },
+  "preview_offsets": {
+    "timber_step": [
+      0.0,
+      0.0,
+      0
+    ],
+    "rail_left": [
+      2.8,
+      0.0,
+      0
+    ],
+    "rail_right": [
+      5.6,
+      0.0,
+      0
+    ],
+    "wood_rail_left": [
+      0.0,
+      2.2,
+      0
+    ],
+    "wood_rail_right": [
+      2.8,
+      2.2,
+      0
+    ]
+  },
+  "generator": "blender_scripts/build_pass_props.py",
+  "resolution": 512,
+  "refs": [
+    "codex07/sv_toilet_090.png",
+    "codex07/sv_toilet_135.png",
+    "codex07/sv_lanes_045.png",
+    "codex07/sv_u2_225.png"
+  ],
+  "dimension_basis": "export/compare/pass/work07/props_inventory.jsonの写真比率推定。現地実測ではない。小物±20〜30%、階段全体/電柱±40%。",
+  "approximations": [
+    "蹴上げ0.16m/踏面0.32mを推定。段1個と手すり1区間を納品し巨大階段一体化を避ける。",
+    "写真は左側黒金属手すり。右側/木製手すりはユーザー要件に合わせた推定の別部品。"
+  ],
+  "reference_views": {
+    "reference_props": [
+      1,
+      -2,
+      0.8
+    ]
+  },
+  "assembly_notes": "各部品は根元中央。preview_offsetsは確認用の展示位置。配置座標ではない。",
+  "asset_id": "pass_trail_stairs",
+  "source": "pass_trail_stairs.blend",
+  "parts": [
+    {
+      "name": "timber_step",
+      "triangles": 96,
+      "vertices": 168,
+      "dimensions_m": [
+        1.77,
+        0.415,
+        0.17
+      ],
+      "bounds_m": [
+        [
+          -0.8849999904632568,
+          -0.20750004053115845,
+          0.0
+        ],
+        [
+          0.8849999904632568,
+          0.20750004053115845,
+          0.1700000762939453
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "土踏面と丸太蹴上げ1段。推奨8〜11段、全上部段数未確認。",
+      "front": "-Y"
+    },
+    {
+      "name": "rail_left",
+      "triangles": 112,
+      "vertices": 202,
+      "dimensions_m": [
+        0.05,
+        1.4206,
+        1.5606
+      ],
+      "bounds_m": [
+        [
+          -0.02500000037252903,
+          -0.7102859020233154,
+          0.0
+        ],
+        [
+          0.02500000037252903,
+          0.7102859020233154,
+          1.5605716705322266
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "写真で確認できる左側の金属手すり1区間。",
+      "front": "-Y"
+    },
+    {
+      "name": "rail_right",
+      "triangles": 112,
+      "vertices": 202,
+      "dimensions_m": [
+        0.05,
+        1.4206,
+        1.5606
+      ],
+      "bounds_m": [
+        [
+          -0.02500000037252903,
+          -0.7102859020233154,
+          0.0
+        ],
+        [
+          0.02500000037252903,
+          0.7102859020233154,
+          1.5605716705322266
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "組合せ用の推定手すり1区間。右側連続金属手すりと木製は写真未確認。",
+      "front": "-Y"
+    },
+    {
+      "name": "wood_rail_left",
+      "triangles": 112,
+      "vertices": 202,
+      "dimensions_m": [
+        0.05,
+        1.4206,
+        1.5606
+      ],
+      "bounds_m": [
+        [
+          -0.02500000037252903,
+          -0.7102859020233154,
+          0.0
+        ],
+        [
+          0.02500000037252903,
+          0.7102859020233154,
+          1.5605716705322266
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "組合せ用の推定手すり1区間。右側連続金属手すりと木製は写真未確認。",
+      "front": "-Y"
+    },
+    {
+      "name": "wood_rail_right",
+      "triangles": 112,
+      "vertices": 202,
+      "dimensions_m": [
+        0.05,
+        1.4206,
+        1.5606
+      ],
+      "bounds_m": [
+        [
+          -0.02500000037252903,
+          -0.7102859020233154,
+          0.0
+        ],
+        [
+          0.02500000037252903,
+          0.7102859020233154,
+          1.5605716705322266
+        ]
+      ],
+      "assembly_offset_m": [
+        0.0,
+        0.0,
+        0.0
+      ],
+      "meaning": "組合せ用の推定手すり1区間。右側連続金属手すりと木製は写真未確認。",
+      "front": "-Y"
+    }
+  ],
+  "coordinates": {
+    "unit": "m",
+    "up": "+Z",
+    "front": "-Y",
+    "origin": "各NPZのXY外接矩形中央・最下点。建物の組立はassembly_offset_mを加算。制作元は共通組立座標。"
+  },
+  "npz": {
+    "keys": [
+      "v",
+      "f",
+      "uv"
+    ],
+    "uv": "v=0画像上端。Blender再読込時は1-v。",
+    "f": "triangles"
+  },
+  "game_status": "色焼付済みNPZ/PNG。配置・KN5・インストールは依頼範囲外。",
+  "source_image_usage": "写真は比較専用。自作画像/手続き材質のみ使用。",
+  "bake": "Cycles Diffuse COLORのみ。直接光/間接光は焼かない。",
+  "bake_docs": "https://docs.blender.org/manual/en/latest/render/cycles/baking.html",
+  "stair_assembly": {
+    "step_advance_y_m": 0.32,
+    "step_rise_z_m": 0.16,
+    "clear_width_m": 1.6,
+    "visible_lower_step_count": [
+      8,
+      11
+    ],
+    "total_step_count": "上部は未確定",
+    "rail_post_spacing_m": 1.28,
+    "rail_segment_advance_y_m": 1.28,
+    "rail_segment_rise_z_m": 0.64,
+    "rail_left_x_m": -0.8,
+    "rail_right_x_m": 0.8,
+    "uphill_direction": "+Y",
+    "origin_note": "各部品は根元の外接矩形中央。左/右の横位置は配置時に加える。手すり1区間は段4個分。"
+  }
+}
