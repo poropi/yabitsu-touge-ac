@@ -61,11 +61,13 @@ class Building:
                    list(d.get("signs", [])), d.get("canopy"), d.get("lot"), d.get("name", ""), d.get("cladding"), d.get("kit"))
 
 
-def load(path):
-    """建物の json（buildings.py の形）を読む。gone=true（地図にはあるが、もう無い建物）は作らない。"""
+def load(path, *, clearance_only=False):
+    """建物を読む。clearance_only は、非表示にしても樹木の除外に使う輪郭だけを返す。"""
     import json
-    from pathlib import Path
-    return [Building.from_spec(d) for d in json.loads(Path(path).read_text(encoding="utf-8")) if not d.get("gone")]
+    records = json.loads(Path(path).read_text(encoding="utf-8"))
+    if clearance_only:
+        return [Building.from_spec(d) for d in records if d.get("gone") and d.get("keep_tree_clear")]
+    return [Building.from_spec(d) for d in records if not d.get("gone")]
 
 
 def facade_mat(b):

@@ -70,6 +70,16 @@ def test_server_error_raises(tmp_path):
         c.get_bytes("dem5a_png", 15, 1, 2, "png")
 
 
+def test_offline_build_reads_cache_without_fetching_missing_tiles(tmp_path, monkeypatch):
+    monkeypatch.setenv("YABITSU_GSI_OFFLINE", "1")
+    cache = gsi.TileCache(tmp_path, fetch=lambda url: pytest.fail("オフラインで取得を呼んだ"))
+    tile = cache.path("dem5a_png", 15, 1, 2, "png")
+    tile.parent.mkdir(parents=True)
+    tile.write_bytes(b"saved")
+    assert cache.get_bytes("dem5a_png", 15, 1, 2, "png") == b"saved"
+    assert cache.get_bytes("dem5a_png", 15, 1, 3, "png") is None
+
+
 class _Const:
     def __init__(self, v): self.v = v
     def sample(self, lat, lon): return np.full(np.shape(np.atleast_1d(lat)), self.v, float)

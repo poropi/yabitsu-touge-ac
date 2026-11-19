@@ -22,7 +22,8 @@ def surface_height(lat, z_c, slope, crown):
 
 def parse_width_rows(rows):
     return [{"s_from": float(r["s_from"]), "s_to": float(r["s_to"]), "width_m": float(r["width_m"]),
-             "lanes": int(r["lanes"]) if r.get("lanes") not in (None, "") else None}
+             "lanes": int(r["lanes"]) if r.get("lanes") not in (None, "") else None,
+             **({"taper_m": float(r["taper_m"])} if r.get("taper_m") else {})}
             for r in rows if r.get("s_from") not in (None, "")]
 
 
@@ -54,6 +55,25 @@ def apply_bays(s, hw_left, hw_right, bays):
     return hl, hr
 
 
+def smoothstep(t):
+    t = np.clip(t, 0, 1)
+    return t * t * (3 - 2 * t)
+
+
+def width_tapers(rows):
+    """幅員表のすりつけ。開始断面は直前の行の幅、終了断面は指定幅。"""
+    previous = None
+    for row in rows:
+        length = row.get("taper_m", 0)
+        if length:
+            start = row["s_from"]
+            end = start + length
+            if previous is None or previous["s_to"] != start or not start < end <= row["s_to"]:
+                raise ValueError(f"すりつけは前の幅員区間に接し、指定区間内で終わる必要があります：{row}")
+            yield start, end, previous["width_m"], row["width_m"]
+        previous = row
+
+
 def widths(s, lanes, rows):
     lanes = np.asarray(lanes).astype(np.int32).copy()
     w = np.array([DEFAULT_WIDTH_BY_LANES.get(int(l), 6.0) for l in lanes])
@@ -62,7 +82,35 @@ def widths(s, lanes, rows):
         w[m] = r["width_m"]
         if r.get("lanes"):
             lanes[m] = r["lanes"]
+    for a, b, initial, final in width_tapers(rows):
+        m = (s >= a) & (s < b)
+        w[m] = initial + (final - initial) * smoothstep((s[m] - a) / (b - a))
     return w, lanes
+
+
+def update_width_tapers(sec, rows, bays, *, restore_step=False):
+    """保存済みの断面へ、幅員表に指定したすりつけだけを反映する。"""
+    for a, b, initial, final in width_tapers(rows):
+        mask = (sec.s >= a) & (sec.s < b)
+        stations = sec.s[mask]
+        width = (np.full_like(stations, final) if restore_step else
+                 initial + (final - initial) * smoothstep((stations - a) / (b - a)))
+        sec.hw_left[mask], sec.hw_right[mask] = apply_bays(stations, width / 2, width / 2, bays)
+    return sec
+
+
+def width_taper_areas(sec, rows, *, along=5., across=3.):
+    """すりつけの前後 along m と、左右の舗装端から across m の帯。"""
+    for start, stop, _, _ in width_tapers(rows):
+        a, b = max(sec.s[0], start - along), min(sec.s[-1], stop + along)
+        s = np.r_[a, sec.s[(a < sec.s) & (sec.s < b)], b]
+        x, y, heading, left, right = [
+            np.interp(s, sec.s, values)
+            for values in (sec.x, sec.y, np.unwrap(sec.heading), sec.hw_left, sec.hw_right)]
+        normal = np.c_[-np.sin(heading), np.cos(heading)]
+        center = np.c_[x, y]
+        yield a, b, Polygon(np.r_[center + normal * (left + across)[:, None],
+                                  (center - normal * (right + across)[:, None])[::-1]])
 
 
 def cross_slope(curvature, lanes, step, max_slope=0.06, k_full=1 / 40, min_slope=0.02, smooth_m=15.0):

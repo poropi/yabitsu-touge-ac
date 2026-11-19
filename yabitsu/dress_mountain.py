@@ -8,7 +8,7 @@
 import numpy as np
 from PIL import Image, ImageDraw, ImageFilter
 
-from .crosssection import GUTTER_WIDTH, surface_height
+from .crosssection import GUTTER_WIDTH, smoothstep, surface_height
 from .features import CURB_HEIGHT, GUARDRAIL_OFFSET, SIDES, rows_of
 from .meshgen import ribbon
 
@@ -98,7 +98,12 @@ FLARE_M, FLARE_OUT = 1.6, 0.30   # 端の曲げ：最後の 1.6 m で外へ 30 c
 CHUNK_ROWS = 2500              # 1 メッシュの行数の上限（頂点 65535 まで）
 
 
-def guardrail_line(sec, f):
+def guardrail_join_offset(s, bridge_end):
+    """Cの白い格子と波板の間の12 cmを、橋の先の5 mで戻す。"""
+    return -.12 * (1 - smoothstep((s - bridge_end) / 5.))
+
+
+def guardrail_line(sec, f, *, joined_row=None):
     """ガードレールの基準線（今の当たり判定と同じ横の位置）。(rows, side, lat, ze)"""
     sl = rows_of(sec, f)
     rows = np.arange(sl.start, sl.stop)
@@ -106,9 +111,12 @@ def guardrail_line(sec, f):
     hw = (sec.hw_left if side > 0 else sec.hw_right)[rows]
     lat = hw + GUTTER_WIDTH + GUARDRAIL_OFFSET + f.width_m   # 行の width_m：路肩の外の縁へ出す幅（features.guardrail_meshes と同じ）
     s = sec.s[rows]
-    d = np.minimum(s - s[0], s[-1] - s)                     # 端からの距離
+    d = np.minimum(np.where(rows[0] == joined_row, np.inf, s - s[0]),
+                   np.where(rows[-1] == joined_row, np.inf, s[-1] - s))
     t = np.clip(1 - d / FLARE_M, 0, 1)
     lat = lat + FLARE_OUT * t * t                            # 端は外へ曲げる
+    if joined_row is not None:
+        lat += guardrail_join_offset(s, sec.s[joined_row - 1])
     return rows, side, lat, sec.edge_z(side)[rows] + (CURB_HEIGHT if f.width_m > 0 else 0.0)
 
 
@@ -139,10 +147,28 @@ def r70_rail_layout(length, span=R70_RAIL_SPAN):
     return n, length / n
 
 
-def r70_guardrail_meshes(sec, f, parts, span_m=R70_RAIL_SPAN, line_feature=None):
+def r70_end_joint(part):
+    """折り返しの長手方向の厚みを接合断面までに収める。"""
+    v, faces, uv = part
+    v = v.copy()
+    v[abs(v[:, 0]) < .003, 0] = 0.0
+    return v, faces, uv
+
+
+def r70_cut_end(sec, original, row, part, *, join=False):
+    """元の線に合わせ、切り口に終端の袖を置く。"""
+    rows, side, lat, ze = guardrail_line(sec, original)
+    v, f, uv = r70_end_joint(part) if join else part
+    offset = v[:, 0] * side
+    shift = 0.0 if join else offset.max()
+    return bend_on_rail(v, sec, rows, side, lat, ze, lambda x: sec.s[row] + x * side - shift), f, uv
+
+
+def r70_guardrail_meshes(sec, f, parts, span_m=R70_RAIL_SPAN, line_feature=None, fit_post=None,
+                         joined_terminals=False, joined_row=None):
     """Codex の W 形ガードレール（parts＝{"span": (v, f, uv), "end": (v, f, uv)}）を、基準線に沿って並べる。[(verts, faces, uvs, part)]。
     part は 'span'（4 m 前後の区切りを、まとめて 1 つ）と 'end'（両端の袖）。進む向きの左の柵は +s へ、右の柵は −s へつなぐ（−Y が道の側になる）。"""
-    rows, side, lat, ze = guardrail_line(sec, line_feature if line_feature is not None else f)
+    rows, side, lat, ze = guardrail_line(sec, line_feature if line_feature is not None else f, joined_row=joined_row)
     if line_feature is None:
         s0, s1 = float(sec.s[rows[0]]), float(sec.s[rows[-1]])
     else:
@@ -162,12 +188,19 @@ def r70_guardrail_meshes(sec, f, parts, span_m=R70_RAIL_SPAN, line_feature=None)
             a = min(0.0, sv[:, 0].min()) if j == 0 and first in outside else 0.0
             b = max(span_m, sv[:, 0].max()) if j == n - 1 and last in outside else span_m
             s_at = lambda x, start=base, u=a, scale=L / (b - a): start + side * (x - u) * scale
-        V.append(bend_on_rail(sv, sec, rows, side, lat, ze, s_at)); F.append(sf + sum(len(a) for a in V[:-1])); U.append(su)
+        v = bend_on_rail(sv, sec, rows, side, lat, ze, s_at)
+        if fit_post is not None:
+            fit_post(v, sv[:, 2] == sv[:, 2].min())
+        faces = sf
+        if joined_terminals and j == 0:
+            # 始端の袖が同じ支柱と金具を持つので、最初の本体区間には波板だけを残す。
+            faces = sf[sv[sf, 0].max(axis=1) > span_m / 2]
+        V.append(v); F.append(faces + sum(len(a) for a in V[:-1])); U.append(su)
         if sum(len(a) for a in V) > 60000:
             out.append((np.concatenate(V), np.concatenate(F), np.concatenate(U), "span")); V, F, U = [], [], []
     if V:
         out.append((np.concatenate(V), np.concatenate(F), np.concatenate(U), "span"))
-    ev, ef, eu = parts["end"]
+    ev, ef, eu = r70_end_joint(parts["end"]) if joined_terminals else parts["end"]
     for at_start in (True, False):          # 終わりの端は +X へ伸ばし、始まりの端は X を裏返して外へ伸ばす（面の向きも裏返す）
         flip = at_start
         v = ev * [(-1 if flip else 1), 1, 1]
@@ -179,7 +212,10 @@ def r70_guardrail_meshes(sec, f, parts, span_m=R70_RAIL_SPAN, line_feature=None)
             delta = side * v[:, 0]
             b -= delta.min() if b == outside[0] else delta.max()
         s_at = (lambda x, b=b: b + x) if side > 0 else (lambda x, b=b: b - x)
-        out.append((bend_on_rail(v, sec, rows, side, lat, ze, s_at), fc, eu, "end"))
+        bent = bend_on_rail(v, sec, rows, side, lat, ze, s_at)
+        if fit_post is not None:
+            fit_post(bent, ev[:, 2] == ev[:, 2].min())
+        out.append((bent, fc, eu, "end"))
     return out
 
 
@@ -194,7 +230,7 @@ def r70_run_mesh(sec, s0, s1, side, lat, part, span, centered=True):
     """Codex の欄干の区切り（part、+X へ span m ごと。centered＝原点が区切りの中央）を、中心線の s0〜s1、
     中心から lat m の線に沿って並べる（side＝+1 左／−1 右、−Y が道の側）。高さは道の縁の路面から。(verts, faces, uvs)"""
     rows = rows_between(sec, s0, s1)
-    latv = np.full(len(rows), float(lat))
+    latv = np.full(len(rows), lat) if np.isscalar(lat) else lat[rows]
     ze = sec.edge_z(side)[rows]
     pv, pf, pu = part
     n, L = r70_rail_layout(s1 - s0, span)
@@ -211,7 +247,8 @@ def r70_post_mesh(sec, s, side, lat, part):
     """1 本の部品（親柱・橋名板）を、中心線の s・中心から lat m の所に立てる（−Y が道の側）。"""
     rows = rows_between(sec, s - 1.0, s + 1.0)
     s_at = (lambda x: s + x) if side > 0 else (lambda x: s - x)
-    v = bend_on_rail(part[0], sec, rows, side, np.full(len(rows), float(lat)), sec.edge_z(side)[rows], s_at)
+    latv = np.full(len(rows), lat) if np.isscalar(lat) else lat[rows]
+    v = bend_on_rail(part[0], sec, rows, side, latv, sec.edge_z(side)[rows], s_at)
     return v, part[1], part[2]
 
 
@@ -261,10 +298,10 @@ def guardrail_meshes(sec, f):
     return out
 
 
-def cylinder(p, r, h, sides=10):
+def cylinder(p, r, h, sides=10, *, phase=0.):
     """縦の円柱（ふた付き）。p は下の中心。"""
     a = np.linspace(0, 2 * np.pi, sides + 1)
-    ring = np.c_[np.cos(a) * r, np.sin(a) * r]
+    ring = np.c_[np.cos(a + phase) * r, np.sin(a + phase) * r]
     bot = np.c_[ring + p[:2], np.full(len(a), p[2])]
     top = np.c_[ring + p[:2], np.full(len(a), p[2] + h)]
     v = np.r_[bot, top, [[p[0], p[1], p[2] + h]]]

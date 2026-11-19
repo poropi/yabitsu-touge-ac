@@ -21,7 +21,7 @@ class Manifest:
     def add_material(self, name, texture=None, color=None, alpha=False, two_sided=False):
         self.materials[name] = {"texture": texture, "color": color, "alpha": alpha, "two_sided": two_sided}
 
-    def add_mesh(self, group, name, verts, faces, uvs, material, renderable=True):
+    def add_mesh(self, group, name, verts, faces, uvs, material, renderable=True, *, normals=None, removed_faces=None):
         verts = np.asarray(verts, np.float64); faces = np.asarray(faces, np.int32); uvs = np.asarray(uvs, np.float32)
         if name in self.meshes:
             raise ValueError(f"名前が重複しています: {name}")
@@ -30,7 +30,15 @@ class Manifest:
         if len(faces) == 0:
             raise ValueError(f"{name}: 面がありません")
         rel = f"meshes/{name}.npz"
-        np.savez_compressed(self.root / rel, verts=verts, faces=faces, uvs=uvs)
+        arrays = {"verts": verts, "faces": faces, "uvs": uvs}
+        if removed_faces is not None:
+            arrays["valley_removed_faces"] = np.asarray(removed_faces, np.int32)
+        if normals is not None:
+            normals = np.asarray(normals, np.float64)
+            if normals.shape != verts.shape or not np.isfinite(normals).all():
+                raise ValueError(f"{name}: 法線の配列が不正です")
+            arrays["normals"] = normals
+        np.savez_compressed(self.root / rel, **arrays)
         self.meshes[name] = {"file": rel, "material": material, "renderable": bool(renderable),
                              "verts": int(len(verts)), "faces": int(len(faces))}
         self._group(group)["meshes"].append(name)

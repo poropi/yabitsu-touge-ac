@@ -1,12 +1,15 @@
+import argparse
 import json
+from pathlib import Path
 
 import numpy as np
 import shapely
 from shapely.geometry import LineString
 
 from yabitsu import (assembly, buildings, config, features, fubuki, gsi, layouts, minoge_area, motorway, nagoki, overpasses, pass_area,
-                     pavements, scenery, side_roads, start_lot, terrain, textures, town_objects, track, trees)
-from yabitsu.crosssection import Section
+                     pavements, scenery, side_roads, small_bridges, start_lot, terrain, textures, town_objects, track, trees,
+                     valleys, valley_fit, water)
+from yabitsu.crosssection import Section, parse_width_rows, width_tapers
 from yabitsu.manifest import Manifest
 
 P = config.DATA_PROCESSED
@@ -40,10 +43,52 @@ def _nanohanadai_area(sec):
     return out
 
 
+def valley_water_parts(sec, bounds, near, ground, dug, streams, road):
+    """組み立てと部分検証で同じ水面・川原を作る。"""
+    rows = valleys.load()
+    levels = water.valley_surface_levels(sec, bounds, rows, streams, ground, near=near)
+    normals = {}
+    items = water.meshes(streams, road, levels, ground, near=near, changed_area=dug.polygon, before_ground=dug.old.height,
+                         frozen_normals=normals)
+    rivers = [i for i, stream in enumerate(streams) if stream.osm_id in (water.A_CREEK, 90334744)]
+    old = water.meshes([streams[i] for i in rivers], road) if not dug.polygon.is_empty else []
+    names = tuple(f"water_{i:03d}_" for i in rivers)
+    new = [item for item in items if item[0].startswith(names)]
+    surfaces = tuple(valley_fit.water_surfaces(
+        valley_fit.Mesh(n, v, f, mat, visible) for n, v, f, _, mat, visible in part) for part in (old, new))
+    return items, normals, surfaces
+
+
+def card_adjustments(cards, dug, rows, surfaces):
+    """木を配置した順序で、根元の補正と除外を返す。"""
+    heights = np.full(len(cards), np.nan)
+    remove = np.zeros(len(cards), bool)
+    inside = np.flatnonzero(dug.covers(cards[:, :2]))
+    points = cards[inside, :2]
+    if len(points):
+        heights[inside] = dug.height(points)
+        if dug.bed is not None:
+            bed, wet = dug.tree_exclusions(points, surfaces[1])
+            remove[inside] = bed | wet
+        else:
+            remove[inside] = (valleys.tree_bottom(rows, *points.T)
+                              | valleys.newly_wet(dug, *surfaces, points))
+    return heights, remove
+
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--before-near", type=Path, help="谷を掘る前の近景 NPZ")
+    args = parser.parse_args()
+    near_path = P / "track_terrain_near.npz"
+    with np.load(near_path) as data:
+        near = dict(data)
+    before = valleys.before_for_build(args.before_near, near_path, near)
+    dug = valleys.changed_ground(before, near)
     sec = Section.load_json(P / "track_section.json")
     m = Manifest(config.TRACK_BUILD_DIR)
     textures.register_materials(m)
+    small_bridges.add_valley_materials(m)
     tw = nagoki.load_town(sec)
     others = nagoki.other_towns(sec)   # 宮ヶ瀬北原など（町の範囲は多角形で作る）
     sps = nagoki.load_splits(sec)   # 島をはさんで2本に分かれる所（地図の線どおり）
@@ -62,20 +107,27 @@ def main():
     from yabitsu import tunnel
     tns = tunnel.from_osm(side_roads.load_elements(), sec)
     bounds = track.load_bounds()
+    tapers = tuple(width_tapers(parse_width_rows(track.load_section_rows("widths", bounds))))
+    bridge_spans = small_bridges.spans(sec, bounds, small_bridges.load())
     paving = pavements.load_rows(assembly._cut_rows(
         track.load_section_rows("pavements", bounds), [z.main_skip for z in sps]))
+    far = dict(np.load(P / "track_terrain_far.npz"))
+    mid = dict(np.load(P / "track_terrain_mid.npz"))
+    ground_source = near if "valley_faces" in near else before
+    ground = terrain.terrain_z(ground_source, mid)
+    ground_mesh = terrain.terrain_mesh_z(near, mid)
+    prop_ground = ground_mesh if ground_source is near else terrain.terrain_mesh_z(before, mid)
     assembly.add_road(m, sec, skip=[tw.main_skip] + [k.main_skip for _, k in others] + [z.main_skip for z in sps],   # 町の範囲と分かれる所は多角形で作る
                       mouths=[mo for x in sites for mo in x.mouths()]   # 峠・寺山・護摩屋敷のわき道の入口と浅間神社の駐車場の前は側溝をくぼませない
                       + start_lot.mouths(json.loads((P / "track_pads.json").read_text(encoding="utf-8")), sec),   # 菜の花台の駐車場の入口も
                       no_lines=[r for x in (tera_site, goma_site) if x for r in x.no_lines()],   # 寺山富士見橋のまわりは路肩の白線が無い
                       dry=[(t.s0, t.s1) for t in tns],   # トンネルの中は水たまりを作らない材質
-                      paving=paving)
-    near = dict(np.load(P / "track_terrain_near.npz")); far = dict(np.load(P / "track_terrain_far.npz"))
-    mid = dict(np.load(P / "track_terrain_mid.npz"))
+                      paving=paving, dug=dug if "valley_faces" in near else None, deck_spans=[bridge_spans[k] for k in small_bridges.SUPPORT_SPANS if k in bridge_spans],
+                      ground_z=ground_mesh, width_tapers=tapers)
     add_far_photo(m, far)
-    assembly.add_terrain(m, near, far, mid, far_photo=True)
-    ground = terrain.terrain_z(near, mid)   # 景色の建物・道は、できあがった地形の上に置く
-    ground_mesh = terrain.terrain_mesh_z(near, mid)   # 地面に立てる小物は、メッシュの三角形どおりの高さ（急な斜面で浮かない）
+    assembly.add_terrain(m, near, far, mid, far_photo=True, before_near=before if not dug.polygon.is_empty else None)
+    assembly.add_meshes(m, small_bridges.support_meshes(sec, bridge_spans, ground_mesh,
+                                                      graded_shoulder="valley_gravel" in near))
     assembly.add_centrelines(m, sec, track.load_section_rows("centrelines", bounds), s_min=tw.main_skip[1],
                              gaps=[z.main_skip for z in sps] + [k.main_skip for _, k in others])
     from yabitsu import crosssection as cs
@@ -85,7 +137,9 @@ def main():
     from yabitsu import bridge_parts
     brs = bridge_parts.load(config.DATA_MANUAL / "s5_bridges.json")
     feats, brs = fubuki.kamatagawa_parts(feats, brs, bounds["s5"][0])
-    assembly.add_features(m, sec, feats, right_walk_joins=fubuki.walk_joins(bounds["s5"][0]))   # 分かれ道の入口で切った壁・ガードレール
+    assembly.add_features(m, sec, feats, right_walk_joins=fubuki.walk_joins(bounds["s5"][0]),
+                          bridge_spans=bridge_spans, ground_z=ground_mesh, dug=dug if "valley_faces" in near else None,
+                          width_tapers=tapers, graded_shoulder="valley_gravel" in near)
     for name, v, faces, uv, mat in fubuki.wall_cap_meshes(sec, feats, bounds["s5"][0], ground_mesh):
         m.add_mesh(assembly.GROUP, name, v, faces, uv, mat)
     for name, v, f, uv, mat in pavements.meshes(sec, paving):
@@ -94,11 +148,19 @@ def main():
     lot_spec = config.DATA_MANUAL / "s1_start_lot.json"
     # 駐車場や広場には、木の板（幅 最大7m）がかぶらないよう少し広めに空ける
     blds = nagoki.load_buildings()
-    track_blds = buildings.load(config.DATA_MANUAL / "track_buildings.json")   # gone=true（もう無い建物）は作らない
+    track_buildings_path = config.DATA_MANUAL / "track_buildings.json"
+    track_blds = buildings.load(track_buildings_path)   # gone=true（もう無い建物）は作らない
+    tree_clearance = buildings.load(track_buildings_path, clearance_only=True)
     for j, _ in others:   # ほかの交差点の町の中の建物は、町の建物リスト（1棟ずつ確かめたもの）で作る
         track_blds = [b for b in track_blds if not nagoki.circle(j).contains(b.footprint.centroid)]
-    assembly.add_trees(m, trees.scatter(near, pads + start_lot.flats_for(lot_spec, pads), pad_clear_m=5.0,
-                                        avoid=nagoki.tree_free_areas(sec, bounds, blds + track_blds)))
+    streams, falls, springs = water.load(sec)
+    form_all = start_lot.road_formation(sec, 0.0, float(sec.s[-1]))
+    river_meshes, river_normals, water_surfaces = valley_water_parts(
+        sec, bounds, near, ground_mesh, dug, streams, water.road_area(sec, form_all, stubs))
+    cards = trees.scatter(before, pads + start_lot.flats_for(lot_spec, pads), pad_clear_m=5.0,
+                          avoid=nagoki.tree_free_areas(sec, bounds, blds + track_blds + tree_clearance))
+    heights, remove = card_adjustments(cards, dug, valleys.load(), water_surfaces)
+    assembly.add_trees(m, cards, heights=heights, remove=remove)
     assembly.add_pads(m, pads)
     _lot = start_lot.load_spec(lot_spec)
     if _lot.get("landmarks"):   # 菜の花台の Codex の部品の画像（data/processed/landmarks → textures）
@@ -172,10 +234,8 @@ def main():
             _tx.sign_texture(txt, "#E9E6DC", "#1C1C1C", 512, 112, border="#555555").save(pth)
             m.add_material(f"tunnel_plate_{tn.osm_id}", texture=f"textures/{pth.name}")
     assembly.add_meshes(m, tunnel.meshes(sec, tns, tspec, ground, near=near))
-    from yabitsu import water   # S4 の川・沢（水面・川原）、堰・砂防ダム、湧き水の水くみ場
-    streams, falls, springs = water.load(sec)
-    form_all = start_lot.road_formation(sec, 0.0, float(sec.s[-1]))
-    assembly.add_meshes(m, water.meshes(streams, water.road_area(sec, form_all, stubs)))
+    for name, v, f, uv, mat, visible in river_meshes:
+        m.add_mesh(assembly.GROUP, name, v, f, uv, mat, renderable=visible, normals=river_normals.get(name))
     wspec = json.loads((config.DATA_MANUAL / "s5_water.json").read_text(encoding="utf-8"))   # S5 の滝（ストリートビュー・OSM）
     assembly.add_meshes(m, water.feature_meshes(water.manual_falls(wspec.get("falls", []), sec, ground), [], prefix="s5_water"))
     lake_poly, lake_level = water.load_lake()   # 宮ヶ瀬湖の湖面（見える湖の全体）
@@ -256,7 +316,7 @@ def main():
     assembly.add_meshes(m, town_objects.signal_meshes(ro["signals"], road_z, prefix="s3_signal"))
     assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(ro["objects"], sec), road_z, prefix="s3_obj"))   # 路面の中のバス停は道の外へ
     def flats_or_ground(x, y):   # 峠の面（台・歩道・植え込み・駐車場など）の上はその面の高さ、それ以外は地形の高さ
-        z = np.asarray(ground_mesh(x, y), float).copy()
+        z = np.asarray(prop_ground(x, y), float).copy()
         if pass_site:
             pz = pass_site.top_z(x, y).reshape(np.shape(z))
             z = np.where(np.isfinite(pz), pz, z)
@@ -276,7 +336,7 @@ def main():
             if _png:
                 _lm.copy_texture(_png, _td / f"{_mat}.png")   # 1 辺 1024 まで（kn5 は無圧縮）
                 m.add_material(_mat, texture=f"textures/{_mat}.png", alpha=_alpha)
-        assembly.add_meshes(m, _lm.place_ll(pass_site.spec["landmarks"], flats_or_ground, "s1_pass_lm", ground_fn=ground_mesh))
+        assembly.add_meshes(m, _lm.place_ll(pass_site.spec["landmarks"], flats_or_ground, "s1_pass_lm", ground_fn=prop_ground))
     r70_path = config.DATA_MANUAL / "s45_route70.json"   # 県道 70 号（S4・S5）の Codex の部品（data/processed/landmarks/r70_*）。ミラー・標識・看板など
     if r70_path.exists():
         from yabitsu import landmarks as _lm
@@ -286,14 +346,19 @@ def main():
             if _png:
                 _lm.copy_texture(_png, _td / f"{_mat}.png")
                 m.add_material(_mat, texture=f"textures/{_mat}.png", alpha=_alpha)
-        assembly.add_meshes(m, _lm.place_ll(r70, road_z, "r70_lm", ground_fn=ground_mesh))   # z を書いた物は縁の路面の高さ。split で s4・s5 の kn5 へ
+        r70_meshes = _lm.place_ll(r70, road_z, "r70_lm", ground_fn=prop_ground)
+        for name, verts, _, _, _, _ in r70_meshes:
+            if name.endswith("_post") or "_twin_post" in name:
+                valleys.lower_exposed_feet(verts, verts[:, 2] <= verts[:, 2].min() + .02, dug)
+        assembly.add_meshes(m, r70_meshes)
     for sn in ("s1", "s4", "s5"):   # S1（峠）・S4・S5 の標識・看板・ベンチなど（data/manual/sN_objects.json）
         so = json.loads((config.DATA_MANUAL / f"{sn}_objects.json").read_text(encoding="utf-8"))
         so["objects"] = [o for o in so["objects"] if not o.get("replaced_by")]          # Codex の部品に替えた物（峠の landmarks）は作らない
         so["pole_signs"] = [o for o in so.get("pole_signs", []) if not o.get("replaced_by")]
         on_road = [o for o in so["objects"] if o.get("z_from") != "ground"]
         on_ground = [o for o in so["objects"] if o.get("z_from") == "ground"]   # 台の上など、地形の高さに立てる物（売店の自動販売機）
-        assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(on_road, sec), pass_or_road_z if sn == "s1" else road_z,
+        assembly.add_meshes(m, town_objects.object_meshes(town_objects.off_road(on_road, sec),
+                                                          pass_or_road_z if sn == "s1" else road_z,
                                                           prefix=f"{sn}_obj"))
         if on_ground:
             assembly.add_meshes(m, town_objects.object_meshes(on_ground, flats_or_ground, prefix=f"{sn}_objg"))

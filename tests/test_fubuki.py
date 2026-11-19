@@ -567,11 +567,14 @@ def test_fubuki_stone_retexture_reaches_each_wall_and_cap(tmp_path, monkeypatch)
     bounds["s4"] = (-10000, -1)
     manifest = Manifest(tmp_path)
     names = {}
+    bridge_wall = set()
     for k, f in enumerate(feats):
         name = f"1WALL_s1_retaining_{k:03d}"
         manifest.add_mesh("s5", name, *features.retaining_wall_mesh(sec, f), "concrete")
         if 10300 <= f.s_from < 10684:
             names[name] = "mt_wall_fubuki_kenchi"
+        if (f.s_from, f.s_to, f.side) == (8961, 8980, "L"):
+            bridge_wall.add(name)
     for name, v, faces, uv, mat in fubuki.wall_cap_meshes(sec, feats, 0, lambda x, y: x * 0 + 103):
         manifest.add_mesh("s5", name, v, faces, uv, mat)
         names[name] = "mt_wall_fubuki_kenchi"
@@ -580,7 +583,9 @@ def test_fubuki_stone_retexture_reaches_each_wall_and_cap(tmp_path, monkeypatch)
     monkeypatch.setattr(dress, "S3_DRESS", tmp_path / "s3")
     assign = dress.retex_assign(sec, {"x": sec.x, "y": sec.y, "s": sec.s}, bounds, feats, dress.table_rows())
     assert {name: assign.get(name) for name in names} == names
+    assert len(bridge_wall) == 1
     assert {name for name, key in assign.items() if key == "mt_wall_fubuki_kenchi"} == set(names)
+    assert {assign[n] for n in bridge_wall} == {"mt_wall_valley_kenchi"}
     assert dress.RETEX["mt_wall_fubuki_kenchi"][0] == "kenchi_moss"
 
 
@@ -846,12 +851,15 @@ def test_fubuki_clear_warns_only_when_it_removes_planted_shrubs(tmp_path, monkey
     assert "shrub_" in forest_list.read_text()
 
     monkeypatch.setattr(sys, "argv", ["clear_fubuki_trees", str(forest), "--apply"])
+    np.save(forest / "trees_before_valleys.npy", np.load(current))
     clear.main()
     np.testing.assert_array_equal(np.load(current), trees[1:])
     assert "shrub_" not in forest_list.read_text()
     output = capsys.readouterr().out
     assert f"低木 {added} 本" in output
+    assert "谷の補正も消えます" in output
+    assert "align_valley_trees" in output
     assert f".venv/bin/python -m scripts.plant_fubuki_shrubs '{forest}' --apply" in output
 
     clear.main()
-    assert "plant_fubuki_shrubs" not in capsys.readouterr().out
+    assert ".venv/bin/python -m scripts.plant_fubuki_shrubs" not in capsys.readouterr().out

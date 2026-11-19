@@ -76,6 +76,27 @@ def _normals(pos, tris):
     return np.where(ln > 1e-12, n / np.maximum(ln, 1e-12), [0.0, 1.0, 0.0])
 
 
+def vertex_normals(mesh, pos, tris):
+    """明示法線がある場合、座標系は書き出し後と同じ AC 座標。"""
+    return mesh["normals"] if "normals" in mesh else _normals(pos, tris)
+
+
+def retain_grid_normals(verts, faces, before):
+    """移動していない格子点は控えの法線を保つ。"""
+    c = np.searchsorted(before["xs"], verts[:, 0])
+    r = np.searchsorted(before["ys"], verts[:, 1])
+    old_z = before["Z"][r, c]
+    unchanged = old_z == verts[:, 2]
+    if unchanged.all():
+        return None
+    old_v = verts.copy()
+    old_v[:, 2] = old_z
+    tris = _triangles(faces)
+    normals = _normals(verts @ C.T, tris)
+    normals[unchanged] = _normals(old_v @ C.T, tris)[unchanged]
+    return normals
+
+
 def _tangents(pos, uv, nrm, tris):
     a, b, c = (tris[:, k] for k in range(3))
     e1, e2 = pos[b] - pos[a], pos[c] - pos[a]
@@ -159,7 +180,7 @@ def write_from_manifest(manifest_path, group, out_path) -> Path:
         pos = d["verts"] @ C.T
         uv = np.c_[d["uvs"][:, 0], 1.0 - d["uvs"][:, 1]]
         tris = _triangles(d["faces"])
-        nrm = _normals(pos, tris); tan = _tangents(pos, uv, nrm, tris)
+        nrm = vertex_normals(d, pos, tris); tan = _tangents(pos, uv, nrm, tris)
         mid = mat_names.index(info["material"])
         children.append((name, pos, nrm, uv, tan, tris, mid, info["renderable"]))
         if spec.get("two_sided"):

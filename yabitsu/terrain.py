@@ -317,10 +317,17 @@ def terrain_z(near, mid):
     fd = RegularGridInterpolator((near["ys"], near["xs"]), near["D"], bounds_error=False, fill_value=np.inf)
     fm = RegularGridInterpolator((mid["ys"], mid["xs"]), mid["Z"] + MID_DROP, bounds_error=False, fill_value=np.nan)
 
+    from .valley_fit import Surfaces
+    fine = Surfaces(near["valley_vertices"][near["valley_faces"]]) if "valley_faces" in near else None
+
     def z(x, y):
         q = np.c_[np.ravel(y), np.ravel(x)]
         zn, dn, zm = fn(q), fd(q), fm(q)
-        return np.where((dn <= NEAR_BAND - 2.0) & ~np.isnan(zn), zn, zm).reshape(np.shape(x))
+        out = np.where((dn <= NEAR_BAND - 2.0) & ~np.isnan(zn), zn, zm)
+        if fine is not None:
+            drawn = fine.height(q[:, ::-1])
+            out = np.where(np.isfinite(drawn), drawn, out)
+        return out.reshape(np.shape(x))
     return z
 
 
@@ -330,7 +337,9 @@ def terrain_mesh_z(near, mid):
     from scipy.interpolate import RegularGridInterpolator
     xs, ys, Z = near["xs"], near["ys"], near["Z"]
     fd = RegularGridInterpolator((ys, xs), near["D"], bounds_error=False, fill_value=np.inf)
-    rough = terrain_z(near, mid)
+    rough = terrain_z({k:near[k] for k in ("xs","ys","Z","D")}, mid)
+    from .valley_fit import Surfaces
+    fine = Surfaces(near["valley_vertices"][near["valley_faces"]]) if "valley_faces" in near else None
 
     def z(x, y):
         xf, yf = np.ravel(np.asarray(x, float)), np.ravel(np.asarray(y, float))
@@ -340,7 +349,11 @@ def terrain_mesh_z(near, mid):
         z00, z01, z10, z11 = Z[r, c], Z[r, c + 1], Z[r + 1, c], Z[r + 1, c + 1]
         zt = np.where(fx >= fy, z00 + fx * (z01 - z00) + fy * (z11 - z01), z00 + fy * (z10 - z00) + fx * (z11 - z10))
         ok = (fx >= 0) & (fx <= 1) & (fy >= 0) & (fy <= 1) & (fd(np.c_[yf, xf]) <= NEAR_BAND - 2.0) & np.isfinite(zt)
-        return np.where(ok, zt, np.ravel(rough(xf, yf))).reshape(np.shape(x))
+        result = np.where(ok, zt, np.ravel(rough(xf, yf)))
+        if fine is not None:
+            patch = fine.height(np.c_[xf, yf])
+            result = np.where(np.isfinite(patch), patch, result)
+        return result.reshape(np.shape(x))
     return z
 
 
@@ -377,3 +390,76 @@ def road_clear_count(sec, near, stubs=(), margin=0.1, skip_rows=None):
             if np.isfinite(z) and z > st.z_at(p.x, p.y) - BRANCH_MARGIN:   # 分かれ道は土台の継ぎ目で数cm 寄るので、路面より上に出る所だけ
                 bad += 1
     return bad
+
+
+def near_edit_window(near, area):
+    """変更候補を切り出し、近景の補間範囲を外れる面に触る頂点を除外する。"""
+    xs, ys = near["xs"], near["ys"]
+    a, b, c, d = area.bounds
+    # 前後1頂点を含め、更新候補を持つ全ての四角を検査する。
+    ix = slice(max(np.searchsorted(xs, a) - 1, 0), min(np.searchsorted(xs, c, side="right") + 1, len(xs)))
+    iy = slice(max(np.searchsorted(ys, b) - 1, 0), min(np.searchsorted(ys, d, side="right") + 1, len(ys)))
+    x, y = np.meshgrid(xs[ix], ys[iy])
+    if min(x.shape) < 3:
+        return x, y, near["Z"][iy, ix], np.zeros_like(x, dtype=bool)
+    dist = near["D"][iy, ix]
+    faces = ~near["H"][iy.start:iy.stop - 1, ix.start:ix.stop - 1].copy()
+    for corner in (dist[:-1, :-1], dist[:-1, 1:], dist[1:, :-1], dist[1:, 1:]):
+        faces &= corner <= NEAR_BAND - 2
+    good = np.zeros_like(x, dtype=bool)
+    good[1:-1, 1:-1] = faces[:-1, :-1] & faces[1:, :-1] & faces[:-1, 1:] & faces[1:, 1:]
+    return x, y, near["Z"][iy, ix], good
+
+
+def protect_grid_triangles(good, x, y, area):
+    """保護範囲に面積を持って掛かる三角形の3頂点を残す（メッシュと同じ対角線）。"""
+    if area.is_empty or not good.any():
+        return
+    r, c = np.indices((x.shape[0] - 1, x.shape[1] - 1))
+    xy = np.stack((x, y), axis=-1)
+    for dr, dc in (((0, 0, 1), (0, 1, 1)), ((0, 1, 1), (0, 1, 0))):
+        ri = r[..., None] + dr
+        ci = c[..., None] + dc
+        candidates = good[ri, ci].any(axis=-1)
+        ri, ci = ri[candidates], ci[candidates]
+        triangles = shapely.polygons(xy[ri, ci])
+        hit = shapely.intersects(area, triangles)
+        overlaps = shapely.area(shapely.intersection(area, triangles[hit])) > 1e-9
+        good[ri[hit][overlaps], ci[hit][overlaps]] = False
+
+
+def apply_valleys(sec, near, rows, bounds, sampler, *, bridge_spans=(), side_extra=(None, None),
+                  pads=(), keep_rows=None):
+    """道路整形後に近景の Z だけ下げる。橋の前後・土台・範囲外に掛かる四角も維持する。"""
+    from . import valleys
+
+    if not rows:
+        return {}
+    spans = valleys.bridge_intervals(sec, bridge_spans)
+    halo = np.hypot(np.diff(near["xs"]).max(), np.diff(near["ys"]).max())
+    changed = {}
+    for row in rows:
+        valley = row if isinstance(row, valleys.Valley) else valleys.Valley.from_row(row)
+        site = valleys.site_area(sec, bounds, valley.section, valley.center_m)
+        strip = shapely.LineString(valley.line).buffer(valley.reach_m)
+        active = site.intersection(strip)
+        if active.is_empty:
+            changed[valley.id] = 0
+            continue
+        x, y, z, good = near_edit_window(near, active.buffer(halo))
+        good &= shapely.contains_xy(site.buffer(-halo), x, y)
+        good &= shapely.contains_xy(strip, x, y)
+        # 並走する本流の流路は取り付け道路の帯でせき止めない。
+        approach = 0. if valley.water is not None else halo + .1
+        road, openings = valleys.road_areas(sec, active, side_extra, spans, halo, approach_extra=approach)
+        opened = good & shapely.contains_xy(openings, x, y)
+        protect_grid_triangles(good, x, y, road)
+        good |= opened & ~shapely.intersects_xy(road, x, y)
+        protect_grid_triangles(good, x, y, valleys.protected_area(sec, active, pads, keep_rows))
+        cap = valley.ceiling(x[good], y[good], sampler, halo).astype(z.dtype)
+        before = z[good]
+        lower = before > cap
+        idx = np.flatnonzero(good)[lower]
+        z.flat[idx] = cap[lower]
+        changed[valley.id] = len(idx)
+    return changed

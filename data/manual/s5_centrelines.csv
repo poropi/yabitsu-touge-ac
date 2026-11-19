@@ -1,3 +1,3 @@
-s_from,s_to,style,note
-8960,9570,orange_median,中央に盛り上がった帯と両側のオレンジの実線（ストリートビュー s=9000〜9550）
-9570,11687,orange_solid,オレンジの実線（s=9600〜11650）
+s_from,s_to,style,note,taper_m
+8990,9570,orange_median,カーブ出口で白い帯が立ち上がり両側に黄橙の実線（R70-0913_f・0915_b・0916_b）,15
+9570,11687,orange_solid,オレンジの実線（s=9600〜11650）,

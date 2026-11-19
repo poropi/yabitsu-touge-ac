@@ -1,5 +1,6 @@
 import io
 import math
+import os
 import time
 from pathlib import Path
 
@@ -34,8 +35,9 @@ def _http_get(url):
 
 
 class TileCache:
-    def __init__(self, root=DATA_RAW / "gsi", fetch=None, delay=0.05):
+    def __init__(self, root=DATA_RAW / "gsi", fetch=None, delay=0.05, offline=False):
         self.root, self.fetch, self.delay = Path(root), fetch or _http_get, delay
+        self.offline = offline or os.environ.get("YABITSU_GSI_OFFLINE") == "1"
 
     def path(self, layer, z, x, y, ext):
         return self.root / layer / str(z) / str(x) / f"{y}.{ext}"
@@ -45,7 +47,7 @@ class TileCache:
         missing = p.with_name(p.name + ".missing")
         if p.exists():
             return p.read_bytes()
-        if missing.exists():
+        if self.offline or missing.exists():
             return None
         url = GSI_URL.format(layer=layer, z=z, x=x, y=y, ext=ext)
         status, content = self.fetch(url)

@@ -12,6 +12,11 @@ import numpy as np
 from yabitsu import config, features, forest_ac, fubuki, terrain, track
 from yabitsu.crosssection import Section
 
+VALLEY_TREE_ORDER = (
+    "吹風の補正前の木を復元すると谷の補正も消えます。実行順は "
+    "clear_fubuki_trees → plant_fubuki_shrubs → align_valley_trees です。"
+)
+
 
 def _roadside_shrub_positions(trees, sec, s5):
     """橋から坑口の付近で、復元によって消える低木を見分ける。"""
@@ -25,7 +30,7 @@ def _roadside_shrub_positions(trees, sec, s5):
 
 
 def main():
-    parser = argparse.ArgumentParser(description=__doc__)
+    parser = argparse.ArgumentParser(description=__doc__, epilog=VALLEY_TREE_ORDER)
     parser.add_argument("forest_dir", type=Path, help="trees.npy のある既存の森のディレクトリ")
     parser.add_argument("--apply", action="store_true", help="バックアップを作り、trees.npy と CSP の一覧を書き出す")
     args = parser.parse_args()
@@ -42,6 +47,9 @@ def main():
     print(f"{source}: {len(trees) - keep.sum()} 本除外、{keep.sum()} 本残る")
     if args.apply:
         from scripts.forest_build import old_tree_meshes
+
+        if backup.exists() and current.with_name("trees_before_valleys.npy").exists():
+            print(VALLEY_TREE_ORDER)
 
         filtered = trees[keep].view(np.recarray)
         with (np.load(config.DATA_PROCESSED / "track_terrain_near.npz") as near,

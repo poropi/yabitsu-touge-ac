@@ -1,4 +1,7 @@
+import argparse
 import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import numpy as np
 
@@ -126,4 +129,19 @@ def main():
 
 
 if __name__ == "__main__":
-    main()
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--width-tapers-only", action="store_true", help="保存済み断面のすりつけだけを更新する")
+    parser.add_argument("--output", type=Path, default=P / "track_section.json")
+    args = parser.parse_args()
+    if args.width_tapers_only:
+        sec = cs.Section.load_json(P / "track_section.json")
+        bounds = track.load_bounds()
+        rows = cs.parse_width_rows(track.load_section_rows("widths", bounds))
+        bays = cs.parse_bay_rows(track.load_section_rows("busbays", bounds))
+        cs.update_width_tapers(sec, rows, bays)
+        with TemporaryDirectory(dir=args.output.parent) as directory:
+            temporary = Path(directory) / args.output.name
+            sec.save_json(temporary)
+            temporary.replace(args.output)
+    else:
+        main()

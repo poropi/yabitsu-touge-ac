@@ -9,7 +9,7 @@ from .config import SectionDef  # noqa: F401  （ほかのモジュールは tra
 from .osm import Route
 
 JOIN_TOL_M = 1.0
-S_KEYS = ("s_from", "s_to", "s_m", "s_center")
+S_KEYS = ("s_from", "s_to", "s_m", "s_center", "layout_s_to")
 
 
 def join_routes(routes):

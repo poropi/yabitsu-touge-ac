@@ -69,7 +69,7 @@ def road_surface(sec, sl, n_lat=5):
     return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl])
 
 
-def gutter(sec, sl, side, skip=None):
+def gutter(sec, sl, side, skip=None, skirt_depth=None):
     """skip（区間ごと）が真の所は作らない（わき道の入口：mouth_strip で路面を続ける）。"""
     hw = _cols(sec, sl, sec.hw_left if side > 0 else sec.hw_right)
     z_edge = surface_height(side * hw, _cols(sec, sl, sec.z), _cols(sec, sl, sec.slope), _cols(sec, sl, sec.crown))
@@ -79,7 +79,10 @@ def gutter(sec, sl, side, skip=None):
     if side < 0:
         lat, z = lat[:, ::-1], z[:, ::-1]
     mask = None if skip is None else np.repeat(~np.asarray(skip, bool)[:, None], 3, 1)
-    return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], u_scale=1.0, face_mask=mask)
+    v, f, uv = ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], u_scale=1.0, face_mask=mask)
+    if skirt_depth is not None:
+        v[3 if side > 0 else 0::4, 2] = z_edge[:, 0] - skirt_depth
+    return v, f, uv
 
 
 def mouth_strip(sec, sl, side, rows):
@@ -96,8 +99,9 @@ LINE_LIFT = 0.005
 
 
 def line(sec, sl, center_lat, width=0.15, lift=LINE_LIFT, dash=None, row_mask=None):
-    lat = np.asarray(center_lat, float)[:, None] + np.array([-width / 2, width / 2])[None, :]
-    z = surface_height(lat, _cols(sec, sl, sec.z), _cols(sec, sl, sec.slope), _cols(sec, sl, sec.crown)) + lift
+    lat = np.asarray(center_lat, float)[:, None] + np.asarray(width, float).reshape(-1, 1) * np.array([-.5, .5])
+    z = (surface_height(lat, _cols(sec, sl, sec.z), _cols(sec, sl, sec.slope), _cols(sec, sl, sec.crown))
+         + np.asarray(lift, float).reshape(-1, 1))
     s = sec.s[sl]
     mask = np.ones(len(s) - 1, bool)
     if dash is not None:

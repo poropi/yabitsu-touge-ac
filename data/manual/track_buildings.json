@@ -107948,7 +107948,10 @@
 "signs": [],
 "canopy": null,
 "lot": null,
-"checked": false,
+"checked": true,
+"gone": true,
+"keep_tree_clear": true,
+"note": "S4 1720 m。R70-0364_f・0365_f・0366_b と保存空中写真を照合。杉林の手前に出る白い2階建てを除外。木の配置を維持するため除外輪郭は残す。",
 "source": "overture"
 },
 {

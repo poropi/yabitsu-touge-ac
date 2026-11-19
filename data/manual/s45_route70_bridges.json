@@ -24,15 +24,16 @@
    "note": "縦格子は両側。長さ20m前後の依頼値から推定24m／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
   },
   {
-   "place": "S4 1720m",
+   "place": "S4 1721–1728m",
    "section": "s4",
-   "s": 1720.0,
+   "s_from": 1721,
+   "s_to": 1728,
    "left": "concrete_two_2m",
    "right": "concrete_two_2m",
    "post": "square_09",
-   "length_m": 8.0,
-   "plate": null,
-   "note": "手前に白い注意板。橋外のガードレールは別／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+   "height_m": 0.9,
+   "tint": {"rgb": [0.37, 0.35, 0.32], "moss": true},
+   "note": "R70-0366_f/b。苔のある角柱と2段の横桟。"
   },
   {
    "place": "S4 1895m",
@@ -179,15 +180,16 @@
    "note": "写真は3段の白横桁。見える複数スパンから推定／正式名に対応する管理者資料の橋長を欄干部の目安に採用。橋外の取付ガードレールを含まない。"
   },
   {
-   "place": "S4 6367m",
+   "place": "S4 6351–6358m",
    "section": "s4",
-   "s": 6367.0,
+   "s_from": 6351,
+   "s_to": 6358,
    "left": "wood_clad_2m",
    "right": "wood_clad_2m",
-   "post": "square_09",
-   "length_m": 10.0,
-   "plate": null,
-   "note": "横材に茶色化粧板／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+   "post": null,
+   "height_m": 0.97,
+   "tint": {"rgb": [0.30, 0.26, 0.24]},
+   "note": "R70-0551_f・R70-0552_b。両側は焦げ茶の角形3段。"
   },
   {
    "place": "S5 43m",
@@ -275,15 +277,16 @@
    "note": "BACK右側は角横桁、左側は縦格子／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
   },
   {
-   "place": "S5 8938m",
+   "place": "S5 8953–8960m",
    "section": "s5",
-   "s": 8938.0,
-   "left": "steel_white_two_2m",
-   "right": "steel_white_two_2m",
+   "s_from": 8953,
+   "s_to": 8960,
+   "left": "steel_white_lattice_2m",
+   "right": "steel_white_lattice_2m",
    "post": null,
-   "length_m": 6.0,
-   "plate": null,
-   "note": "遠景の薄い鋼製欄干／依頼文の橋長の目安と写真の支柱数。25mの地点番号差は橋長ではない。"
+   "height_m": 0.95,
+   "tint": {"rgb": [1.02, 1.03, 1.04], "chalk": true},
+   "note": "R70-0912_f・R70-0913_b。橋は半幅が広がる手前の断面まで。右の塗色は未確認のため左と同じ灰白。"
   },
   {
    "place": "S5 9813m",

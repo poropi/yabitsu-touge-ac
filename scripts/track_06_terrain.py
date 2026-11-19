@@ -1,9 +1,12 @@
+import argparse
 import json
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 import numpy as np
 
-from yabitsu import config, features, fubuki, gsi, nagoki, start_lot, terrain, track
-from yabitsu.crosssection import Section
+from yabitsu import config, features, fubuki, gsi, nagoki, small_bridges, start_lot, terrain, track, valleys
+from yabitsu.crosssection import Section, parse_bay_rows, parse_width_rows, update_width_tapers
 
 P = config.DATA_PROCESSED
 
@@ -16,6 +19,8 @@ TERRAIN_AS_BEFORE = [("s5", 10675.0, 10684.0, "L"), ("s5", 10607.0, 10684.0, "R"
 # 歩道の下の地形だけを、歩道の面より WALK_BELOW 下まで下げる範囲（前の地形が高い点だけ。道路・側溝の下と歩道の外は前のまま）
 WALK_FLOOR = [("s5", 10607.0, 10684.0, "R"), ("s5", 10480.0, 10507.0, "R")]
 WALK_BELOW = 0.3
+WALL_SITE = ("s4", 6354)
+OLD_WALLS = ((6240, 6280, 2.0), (6280, 6340, 4.0), (6340, 6380, 1.0))
 
 
 def terrain_features(feats, bounds):
@@ -150,31 +155,122 @@ def clear_fubuki_wall_face(sec, near, feats, bounds):
         terrain.edit_roadside_grid(sec, near, start, wall.s_to, 14.0, cut)
 
 
+def old_s4_wall_features(feats, bounds):
+    """全体再生成でもS4の切盛りは従来の条件を使う。左擁壁の高さは組み立て時に地形へ合わせる。"""
+    shift = bounds[WALL_SITE[0]][0]
+    fixed_ranges = ((6240, 6280), (6280, 6330), (6379, 6422))
+    return [f for f in feats if not (f.side == "L" and f.type == "retaining_wall"
+                                    and any(shift + a <= f.s_from < f.s_to <= shift + b for a, b in fixed_ranges))] + [
+        features.Feature(shift + a, shift + b, "R", "retaining_wall", h, "") for a, b, h in OLD_WALLS
+    ]
+
+
+def update_valley_ground(sec, near, rows, bounds, sampler, feats, *, pads, keep_rows):
+    if not rows:
+        return
+    walks = features.sidewalk_offsets(sec, feats)
+    spans = small_bridges.spans(sec, bounds, small_bridges.load())
+    counts = terrain.apply_valleys(sec, near, rows, bounds, sampler, bridge_spans=spans.values(),
+                                   side_extra=walks, pads=pads, keep_rows=keep_rows)
+    for name, n in counts.items():
+        print(f"{name}: 谷筋で下げた点 {n}")
+
+
+def same_arrays(a, b):
+    return (a.keys() == b.keys() and all(
+        a[k].dtype == b[k].dtype and a[k].shape == b[k].shape
+        and np.array_equal(a[k].ravel().view(np.uint8), b[k].ravel().view(np.uint8))
+        for k in a))
+
+
+def apply_before_near(before_path, near_path, excavate, *, previous_sha256=None):
+    """控え、適用済み出力のどちらかと一致する場合だけ先へ進む。"""
+    with np.load(before_path) as saved, np.load(near_path) as current:
+        near = dict(saved)
+        actual = dict(current)
+    error = "--before-near の控えが現在の近景の全配列と一致しません"
+    if not same_arrays({k: v for k, v in near.items() if k != "Z"},
+                       {k: v for k, v in actual.items() if k != "Z" and k not in valleys.SURFACE_KEYS}):
+        raise ValueError(error)
+    original = same_arrays(near, actual)
+    if previous_sha256 and not original:
+        import hashlib
+        with near_path.open("rb") as src:
+            original = hashlib.file_digest(src, "sha256").hexdigest() == previous_sha256
+    excavate(near)
+    if same_arrays(near, actual):
+        print("近景は適用済みです。書き込みはありません")
+        return
+    if not original:
+        raise ValueError(error)
+    with TemporaryDirectory(dir=near_path.parent) as tmp:
+        out = Path(tmp) / near_path.name
+        np.savez_compressed(out, **near)
+        with np.load(near_path) as current:
+            if not same_arrays(actual, dict(current)):
+                raise ValueError("現在の近景が処理開始時の全配列と一致しません")
+        out.replace(near_path)
+
+
 def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--before-near", type=Path,
+                        help="指定した元の近景に局所修正だけを適用する。中・遠景は再生成しない。")
+    parser.add_argument("--previous-sha256", help="置換を許可する旧版の近景ファイルのSHA-256")
+    args = parser.parse_args()
+    near_path = P / "track_terrain_near.npz"
+    if args.before_near and args.before_near.resolve() == near_path.resolve():
+        parser.error("--before-near には現在の出力とは別の控えを指定してください")
+    rows = valleys.load()
     sec = Section.load_json(P / "track_section.json")
     pads = json.loads((P / "track_pads.json").read_text(encoding="utf-8"))
     flats = start_lot.flats_for(config.DATA_MANUAL / "s1_start_lot.json", pads)
     pads = pads + flats
     extra = [p["polygon"] for p in flats]  # 展望台の広場など、道から離れた場所にも細かい地形を張る
-    from yabitsu import motorway, overpasses, side_roads
+    from yabitsu import motorway, overpasses, side_roads, tunnel
+    sampler = gsi.default_sampler(gsi.TileCache(offline=True)) if args.before_near else gsi.default_sampler()
+    bounds = track.load_bounds()
+    feats = features.load_features_rows(track.load_section_rows("features", bounds))
+    _, feats = nagoki.track_stubs(sec, pads, feats, sampler=sampler)   # 分かれ道の入口では壁の裏の切り土もしない
+    feats_all = feats
+    corrected = terrain_features(feats, bounds)
+    tuns = tunnel.from_osm(side_roads.load_elements(), sec)
+    keep = tunnel.carve_mask(sec.s, tuns)
+
+    delta = {}
+    # 谷筋は依頼38の断面で作り、側溝の外はすりつけ後の幅で作る。
+    valley_sec = sec
+    if args.before_near:
+        valley_sec = Section.load_json(P / "track_section.json")
+        update_width_tapers(valley_sec, parse_width_rows(track.load_section_rows("widths", bounds)),
+                            parse_bay_rows(track.load_section_rows("busbays", bounds)), restore_step=True)
+
+    def excavate(grid):
+        original = grid["Z"].copy()
+        from yabitsu import valley_surface
+        spans = small_bridges.spans(sec, bounds, small_bridges.load())
+        grid.update(valley_surface.build(valley_sec, grid, rows, bounds, spans, pads=pads, keep_rows=keep,
+                                         shoulder_section=sec))
+        delta.update(valleys.ground_delta(original, grid))
+
+    if args.before_near:
+        try:
+            apply_before_near(args.before_near, near_path, excavate, previous_sha256=args.previous_sha256)
+        except ValueError as error:
+            parser.error(str(error))
+        valleys.save_ground_delta(near_path, delta)
+        return
     for x in motorway.from_osm(side_roads.load_elements(), sec, gsi.default_sampler(), overpasses.load_overrides()):
         extra.append(np.asarray(x.footprint().buffer(15.0).exterior.coords).tolist())   # 新東名のまわりも細かい地形に
-    feats = features.load_features_rows(track.load_section_rows("features", track.load_bounds()))
-    _, feats = nagoki.track_stubs(sec, pads, feats)   # 分かれ道の入口では壁の裏の切り土もしない
-    bounds = track.load_bounds()
-    feats_all, feats = feats, terrain_features(feats, bounds)   # 地形は延ばした擁壁・足した歩道を無いものとして作る
+    feats = old_s4_wall_features(corrected, bounds)
     cut_left, cut_right = features.cut_slopes(sec, feats)
     cut_drop = features.cut_drops(sec, feats)   # 擁壁の裏は地形を下げてから削る（壁の下で地形が手前に出ない）
-    sampler = gsi.default_sampler()
     tw = nagoki.load_town(sec)   # 町の範囲：地形は町の地面に合わせる（舗装の下は少し下げる）
     paved = tw.drivable().union(tw.carriageway).union(tw.sidewalk)
     others = nagoki.other_towns(sec)   # 宮ヶ瀬北原など
     from yabitsu import water   # S4 の川・沢：谷の底に溝を彫る（本線の路面の下は彫らない。橋の下は彫る）
     streams, _, _ = water.load(sec, sampler)
     chans = water.channels(sec, streams, start_lot.road_formation(sec, 0.0, float(sec.s[-1])))
-    from yabitsu import tunnel   # トンネル：道の上の山を削らない
-    tuns = tunnel.from_osm(side_roads.load_elements(), sec)
-    keep = tunnel.carve_mask(sec.s, tuns)
     bore = tunnel.row_mask(sec.s, tuns, margin_m=terrain.BORE_MARGIN_M)   # 筒の中に入る地形の面は描かない
     from yabitsu import bridge_parts   # S5 の橋の下は谷を盛らない（湖・深い谷の上の大きな橋）
     no_fill = bridge_parts.no_fill_mask(sec, s_from=float(track.load_bounds()["s5"][0]))
@@ -188,7 +284,9 @@ def main():
     shape_fubuki_gate(sec, near, feats_all, bounds, pads)
     raise_fubuki_slope(sec, near, feats_all, bounds)
     clear_fubuki_wall_face(sec, near, feats_all, bounds)
-    np.savez_compressed(P / "track_terrain_near.npz", **near)
+    excavate(near)
+    np.savez_compressed(near_path, **near)
+    valleys.save_ground_delta(near_path, delta)
     mid = terrain.build_mid(sec, sampler, pads, channels=chans, keep_rows=keep, no_fill_rows=no_fill, lake=lake)   # 道から 200m まで
     np.savez_compressed(P / "track_terrain_mid.npz", **mid)
     far = terrain.build_far(sec, sampler, extra=extra + [np.asarray(nagoki.circle(j).exterior.coords).tolist()

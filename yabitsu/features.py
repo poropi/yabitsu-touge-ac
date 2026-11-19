@@ -1,5 +1,5 @@
 import csv
-from dataclasses import dataclass
+from dataclasses import dataclass, replace
 from pathlib import Path
 
 import numpy as np
@@ -34,14 +34,18 @@ class Feature:
     note: str
     width_m: float = 0.0  # 歩道の幅、道の上を渡る橋が道の外へ張り出す長さ
     material: str = ""    # 擁壁を道から離して立てた所の手前の面の材質（空なら草地 ground。砂利の路肩は gravel_grey）
+    layout_s_to: float = 0.0  # 短縮前のガードレール終端。残す区間の支柱の並びを維持する。
 
 
 def load_features_rows(rows):
     """表の行（区間の表を通しの距離へずらしたもの、または CSV をそのまま読んだもの）を Feature に。"""
     num = lambda v: float(v) if v not in (None, "") else 0.0
+    # 部品番号は既存行の順番から付く。追補行は全区間の既存行の後に置く。
+    ordered = sorted(rows, key=lambda r: r.get("build_last") == "1")
     return [Feature(float(r["s_from"]), float(r["s_to"]), str(r["side"]).strip(), str(r["type"]).strip(),
-                    num(r.get("height_m")), r.get("note") or "", num(r.get("width_m")), (r.get("material") or "").strip())
-            for r in rows if r.get("s_from") not in (None, "")]
+                    num(r.get("height_m")), r.get("note") or "", num(r.get("width_m")),
+                    (r.get("material") or "").strip(), num(r.get("layout_s_to")))
+            for r in ordered if r.get("s_from") not in (None, "")]
 
 
 def load_features_csv(path):
@@ -76,7 +80,7 @@ def cut_at(feats, gaps):
                             nxt.append((g1, b))
                 pieces = nxt
         cut = pieces != [(f.s_from, f.s_to)]
-        out += [Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m, f.material) for a, b in pieces
+        out += [replace(f, s_from=a, s_to=b) for a, b in pieces
                 if b - a >= (MIN_PIECE_M if cut else 0.0)]
     return out
 
@@ -105,7 +109,7 @@ def cut_off(feats, sec, paved):
                 j += 1
             a = f.s_from if k == 0 else float(s[k]); b = f.s_to if j == len(idx) - 1 else float(s[j])
             if b - a >= MIN_PIECE_M:
-                out.append(Feature(a, b, f.side, f.type, f.height_m, f.note, f.width_m, f.material))
+                out.append(replace(f, s_from=a, s_to=b))
             k = j + 1
     return out
 
@@ -190,11 +194,11 @@ def shelf_mesh(sec, f, offset):
     return ribbon(sec.x[sl], sec.y[sl], sec.heading[sl], lat, z, sec.s[sl], u_scale=1.0)
 
 
-def guardrail_meshes(sec, f):
+def guardrail_meshes(sec, f, *, lateral_adjustment=0.):
     """ガードレール：側溝の外側の縁＋GUARDRAIL_OFFSET。行の width_m があれば、その幅だけ外（路肩の外の縁）へ出し、縁石の高さだけ上げる
     （書いた行だけ。歩道と重なるほかの手すりは道の縁のまま。吹風トンネル入口の手前の広い路肩、2026-11-01）。"""
     sl, side, hw, ze = _side_arrays(sec, f)
-    L = hw + GUTTER_WIDTH + GUARDRAIL_OFFSET + f.width_m
+    L = hw + GUTTER_WIDTH + GUARDRAIL_OFFSET + f.width_m + lateral_adjustment
     ze = ze + (CURB_HEIGHT if f.width_m > 0 else 0.0)
     visual = wall_ribbon(sec, sl, side, L, L, ze + 0.55, ze + 0.85)
     collision = wall_ribbon(sec, sl, side, L, L, ze - 0.3, ze + 1.2)
@@ -271,10 +275,35 @@ def overpass_meshes(sec, f):
     return deck, compact(v, fc, uv)
 
 
-def retaining_wall_mesh(sec, f, offset=None):
+def retaining_wall_mesh(sec, f, offset=None, ground_z=None, *, crest_offset=None):
     sl, side, hw, ze = _side_arrays(sec, f, offset)
     L0 = hw + GUTTER_WIDTH
-    return wall_ribbon(sec, sl, side, L0, L0 + WALL_LEAN * f.height_m, ze - WALL_BASE_DROP, ze + f.height_m)
+    height = f.height_m
+    top = L0 + WALL_LEAN * np.maximum(height, 0.)
+    if ground_z is not None:
+        # 天端を固定した横位置に置き、その30cm裏の地面へ高さを合わせる。
+        top = L0 + .70
+        lat = side * (top + .30)
+        x = sec.x[sl] - lat * np.sin(sec.heading[sl])
+        y = sec.y[sl] + lat * np.cos(sec.heading[sl])
+        height = np.maximum(ground_z(x, y) - ze, 0.)
+    bottom = ze - WALL_BASE_DROP
+    if ground_z is not None:
+        # 左右の入力を修正した擁壁では、天端と足元をその側の地面に合わせる。
+        x = sec.x[sl] - side * L0 * np.sin(sec.heading[sl])
+        y = sec.y[sl] + side * L0 * np.cos(sec.heading[sl])
+        t = np.linspace(0., 1., 9)
+        xx = x[:-1, None] + t * np.diff(x)[:, None]
+        yy = y[:-1, None] + t * np.diff(y)[:, None]
+        low = ground_z(xx, yy).min(axis=1)
+        zz = np.minimum(np.r_[low, np.inf], np.r_[np.inf, low]) if len(low) else ground_z(x, y)
+        bottom = np.minimum(bottom, zz - .60)
+    top_z = ze + height
+    if crest_offset is not None:
+        # すりつけで壁の足元を道へ寄せても、山側に接する天端は保持する。
+        top = top + crest_offset
+        top_z = top_z + crest_offset * (side * sec.slope[sl] - sec.crown[sl])
+    return wall_ribbon(sec, sl, side, L0, top, bottom, top_z)
 
 
 def _runs(mask, s, min_len, max_gap):

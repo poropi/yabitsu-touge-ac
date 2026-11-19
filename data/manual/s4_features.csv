@@ -1,4 +1,4 @@
-s_from,s_to,side,type,height_m,width_m,note,material
+s_from,s_to,side,type,height_m,width_m,note,material,layout_s_to,build_last
 4.5,15,L,retaining_wall,4.5,1.5,間知ブロックの擁壁。道の縁から草地 1.5 m 離れて立つ（Street View 駐車場 250°・320°、2026-10-25）。南の端は s1_objects.json の擁壁
 15,35,L,retaining_wall,4.5,1.0,（同上）草地は北へ細くなる（width_m は行の真ん中の値、間は直線で補う）
 35,55,L,retaining_wall,4.5,0.4,（同上）
@@ -122,9 +122,11 @@ s_from,s_to,side,type,height_m,width_m,note,material
 5940,5990,R,retaining_wall,5.0,,上に柵のあるブロック擁壁（s=5950）
 5990,6080,R,retaining_wall,2.0,,上に金網のある低いブロック擁壁（s=6000・6050）
 6080,6130,R,retaining_wall,5.0,,上に金網のある高いブロック擁壁（s=6100）
-6171.3,6420,L,guardrail,,,藤熊川側のガードレール（ストリートビュー s=2150〜6400）
-6240,6280,R,retaining_wall,2.0,,石積み（s=6250）
-6280,6340,R,retaining_wall,4.0,,ブロック擁壁（s=6300）
-6340,6380,R,retaining_wall,1.0,,低い擁壁（s=6350）
+6171.3,6237,L,guardrail,,,札掛橋側から続く既存レール。短縮前の支柱位置は維持（R70-0547_f）,,6420
+6240,6280,L,retaining_wall,2.0,,山側の石積み（R70-0547_f・0548_f）
+6280,6330,L,retaining_wall,4.0,,山側の高い間知石。橋の左の平場に入る手前で終わる（R70-0549_f〜0551_f）
+6237,6422,R,guardrail,,,藤熊川側の波形レール。小橋では木調欄干に切り替わる（R70-0547_f〜0555_f）
 4726,4744.2,R,guardrail,,,地獄沢橋の南東の北東の古い白いガードレール（写真 A135）。地獄沢橋のまわり（ストリートビュー panoid 8jzR3JiEoAkgt4Mo4ymSPQ 2025-07、OSM、2026-10-27）,
 4753.3,4766,R,guardrail,,,地獄沢橋の北西の北東のガードレール（写真 A315）。地獄沢橋のまわり（ストリートビュー panoid 8jzR3JiEoAkgt4Mo4ymSPQ 2025-07、OSM、2026-10-27）,
+6336,6373,L,guardrail,,,橋の両端に白い波形レール。橋上は木調欄干（R70-0551_f・0552_b）,,,1
+6379,6422,L,retaining_wall,3.0,,山側の金網付き切土。高さは見当（R70-0553_f・0554_f）,,,1

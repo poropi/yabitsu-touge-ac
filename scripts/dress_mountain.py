@@ -10,14 +10,16 @@ import argparse
 import csv
 import json
 import shutil
+from dataclasses import replace
+from pathlib import Path
 
 import numpy as np
 import shapely
 from PIL import Image, ImageEnhance
 
 from yabitsu import (acdata, config, dress_lines, dress_mountain as dm, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5, landmarks, layouts,
-                     fubuki, geo, nagoki, side_roads, terrain, track, tunnel)
-from yabitsu.crosssection import Section
+                     fubuki, geo, nagoki, side_roads, small_bridges, terrain, track, tunnel, valleys)
+from yabitsu.crosssection import Section, parse_width_rows, width_taper_areas
 from yabitsu.manifest import Manifest
 
 MANIFEST = config.DATA_PROCESSED / "track"
@@ -34,6 +36,7 @@ RETEX = {
     "mt_line_white": ("paint_white", (1, 1), "line"), "mt_line_orange": ("paint_orange", (1, 1), "line"),
     "mt_wall_kenchi": ("kenchi", (2, 2), "wall"), "mt_wall_kenchi_moss": ("kenchi_moss", (2, 2), "wall"),
     "mt_wall_fubuki_kenchi": ("kenchi_moss", (2, 2), "wall"),
+    "mt_wall_valley_kenchi": ("kenchi_block", (2, 2), "wall"),
     "mt_wall_block": ("kenchi_block", (2, 2), "wall"), "mt_wall_concrete": ("concrete_wall", (2, 2), "wall"),
     "mt_wall_kitahara": ("kenchi_block", (2, 2), "wall"),
     "mt_wall_block_aged": ("kenchi_block", (2, 2), "wall"),   # 古びて茶色がかった間知ブロック（峠の駐車場の向かい）
@@ -221,7 +224,7 @@ def retex_assign(sec, cl, bounds, feats, rows):
     return assign
 
 
-def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex, feats=()):
+def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex, feats=(), *, before_near=None):
     """草地（mt_grass）に貼った地形の塊のうち、表の grass・green_ground のどちらの範囲にも入らない面（面の真ん中の s で判定）を
     別の形にして mt_terrain にする。残りの面は mt_grass のまま（今までと同じ見た目）。どちらも仕上げの kn5 に足し、元の塊は隠す（当たり判定は元のまま）。
     地形の塊は 300 m ほどあり、寺山富士見橋の草地の範囲に中心が入った塊は、護摩屋敷の水の斜面まで草地になっていた（2026-10-25）。
@@ -237,15 +240,26 @@ def split_grass_terrain(sec, cl, bounds, rows, assign, m: Manifest, tex, feats=(
         if assign.get(name) != "mt_grass" or not name.startswith(("1GRASS_s1_terrain", "1GRASS_track_mid")) or name in GRASS_MESHES:
             continue
         z = np.load(MANIFEST / e["file"]); v, f, uv = z["verts"], z["faces"], z["uvs"]
+        active = len(f)
+        if "valley_removed_faces" in z:
+            f = np.concatenate([f, z["valley_removed_faces"]])
         s = cl["s"][tree.query(v[f].mean(1)[:, :2])[1]]
         g = np.array([inside(x, near) for x in s])
         if g.all():
             continue
         for tag, keep, key in (("grass", g, "mt_grass"), ("terrain", ~g, "mt_terrain")):
-            if keep.any():
+            if keep[:active].any():
+                original_faces = f[keep]
+                keep = keep.copy()
+                keep[active:] = False
                 used = np.unique(f[keep]); remap = np.full(len(v), -1); remap[used] = np.arange(len(used))
                 nm = f"mtsplit_{name[len('1GRASS_'):]}_{tag}"
-                m.add_mesh(GROUP, nm, v[used], remap[f[keep]], uv[used], "mt_split_ground")
+                vv, ff = v[used], remap[f[keep]]
+                normals = (kn5.retain_grid_normals(vv, ff, before_near)
+                           if before_near is not None and name.startswith("1GRASS_s1_terrain") else None)
+                if len(f) > active:
+                    normals = kn5._normals(v @ kn5.C.T, kn5._triangles(original_faces))[used]
+                m.add_mesh(GROUP, nm, vv, ff, uv[used], "mt_split_ground", normals=normals)
                 assign[nm] = key
         del assign[name]; hide.append(name)
     if hide:   # 絵は貼り替えで決まる（この材質の絵は使われない）
@@ -286,7 +300,7 @@ def write_retex_textures(keys, ext_dir):
             img = Image.open(config.DATA_PROCESSED / "landmarks" / "r70_retaining_wall" / f"{base[4:]}_surface.png")
         else:
             img, _ = dress_tex.load(base)
-        if base in dress_retex.ENLARGE:
+        if base in dress_retex.ENLARGE and key != "mt_wall_valley_kenchi":
             img = dress_retex.enlarge(img.convert("RGB"), dress_retex.ENLARGE[base])
         comp = dress_retex.compose(img.convert("RGB"), base_m, u_m, v_m, rot)
         if TONE.get(key, 1.0) != 1.0:
@@ -328,16 +342,62 @@ def rail_pieces(f, rails):
     return out
 
 
-def build_parts(sec, bounds, feats, rows, m: Manifest):
+def build_parts(sec, bounds, feats, rows, m: Manifest, bridge_spans=None, ground_z=None, *, dug=None, taper_area=None):
     """ガードレール（波形の板と支柱）と落ち葉。隠す古いガードレールの名前を返す。"""
     hide, nb = [], 0
     rails = ranges(bounds, rows, "rail")
+    bridge_spans = bridge_spans or {}
+    def fit_post(v, low):
+        valleys.lower_exposed_feet(v, low, dug)
+
+    def fit_taper_post(v, low):
+        fit_post(v, low)
+        foot = v[low, :2]
+        if shapely.intersects_xy(taper_area, *foot.T).any():
+            floor = ground_z(*foot.T)
+            v[low, 2] = np.minimum(v[low, 2], floor.min() - .15)
+
+    def fit_new_left_post(v, low):
+        feet = v[low, :2]
+        ground = ground_z(*feet.T)
+        below = np.isfinite(ground)
+        ids = np.flatnonzero(low)[below]
+        v[ids, 2] = np.minimum(v[ids, 2], ground[below] - .12)
+
+    def add_cut_posts(k, bridge, piece, joined_at=None):
+        i0, i1 = bridge_spans[bridge]
+        piece_rows = features.rows_of(sec, piece)
+        side = "left" if piece.side == "L" else "right"
+        on_support = bridge in small_bridges.SUPPORT_SPANS and ground_z is not None
+        river_support = bridge == 16 and k == small_bridges.RIVER_RAIL
+        post_ground = ground_z if on_support and not river_support else None
+        setback = .08 if on_support or river_support else 0.0
+        # 既存波板と同一平面に寄りすぎる切り口の支柱は、波板の背面へ寄せる。
+        outset = .05 if bridge == 16 and k in (281, 394) else 0.0
+        if piece_rows.start < i0 < piece_rows.stop:
+            start_outset = .08 if bridge == 25 and k == 366 else outset
+            m.add_mesh(GROUP, f"mt_smallspan_{bridge:02d}_{side}_start_post",
+                       *small_bridges.w_beam_cut_post(sec, i0, piece, post_ground, -setback, outset=start_outset),
+                       "mt_post")
+        if piece_rows.start <= i1 < piece_rows.stop - 1 or i1 == joined_at:
+            # 新しいWビームの谷側の折り返しに、支柱の道路側を接する。
+            aligned = bridge == 25 and joined_at is not None and taper_area is not None
+            end_outset = -.096 if aligned else outset
+            end_setback = .10 if aligned else setback
+            m.add_mesh(GROUP, f"mt_smallspan_{bridge:02d}_{side}_end_post",
+                       *small_bridges.w_beam_cut_post(sec, i1, piece, post_ground, end_setback,
+                                                     outset=end_outset, align_to_rail=aligned), "mt_post")
+
+    # 左支柱の位置は修正後の394番から取り、組み立て順は旧278番の位置を維持する。
+    revised_river_rails = len(feats) > 394 and feats[278].layout_s_to > feats[278].s_to
+    former_left_slot = 16 in bridge_spans and revised_river_rails
     for k, f in enumerate(feats):
         if f.type != "guardrail":
             continue
         sm = (f.s_from + f.s_to) / 2
         if not any(bounds[x][0] <= sm <= bounds[x][1] for x in dm.SECTIONS):
             continue
+        bridge_gaps = small_bridges.rail_gaps(sec, f, bridge_spans)
         for j, (a, b, kind) in enumerate(rail_pieces(f, rails)):
             if kind == "white_bar":              # 白い縦格子の柵（S3 の仕上げと同じ形・画像）
                 v, fc, uv = dress_parts.fence_mesh(sec, a, b, f.side, "white_bar", np.zeros(sec.n))
@@ -350,19 +410,62 @@ def build_parts(sec, bounds, feats, rows, m: Manifest):
                 span, end = r70_part("r70_guardrail", kind), r70_part("r70_guardrail", "pipe_end")
                 if span is not None and end is not None:
                     for q, (v, fc, uv, part) in enumerate(dm.r70_guardrail_meshes(
-                            sec, piece, {"span": span, "end": end}, span_m=2.0, line_feature=f)):
+                            sec, piece, {"span": span, "end": end}, span_m=2.0, line_feature=f,
+                            fit_post=fit_post if ground_z is not None else None)):
                         mat = f"mt_r70_rail_{kind}" if part == "span" else "mt_r70_rail_pipe_end"
                         m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_pipe_{part}_{q}", v, fc, uv, mat)
                     continue
             span, end = r70_part("r70_guardrail", "w_beam"), r70_part("r70_guardrail", "w_beam_end")
             if in_r70 and span is not None and end is not None:   # S4・S5：Codex の W 形ガードレールを基準線に沿って並べる
                 tone = "rust" if kind == "wbeam_aged" else "white"
-                for q, (v, fc, uv, part) in enumerate(dm.r70_guardrail_meshes(sec, piece, {"span": span, "end": end})):
-                    m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_r70{part}_{q}", v, fc, uv, f"mt_r70_rail_{part}_{tone}")
+                join = small_bridges.right_rail_join(sec, piece, bridge_spans)
+                piece_rows = features.rows_of(sec, piece)
+                joined = join is not None and piece_rows.start == join + 1
+                layout_piece = piece
+                layout_gaps = bridge_gaps
+                cropped = f.layout_s_to > f.s_to and b == f.s_to
+                if cropped:
+                    # 旧全長で置いてからこの端で切る。残す側の波板や支柱の間隔を変えない。
+                    layout_piece = replace(piece, s_to=f.layout_s_to)
+                    first_omitted = piece_rows.stop - 1
+                    last_omitted = min(int(np.searchsorted(sec.s, f.layout_s_to + 5.0)), sec.n - 1)
+                    layout_gaps = [*bridge_gaps, (first_omitted, last_omitted)]
+                fit = (fit_new_left_post if ground_z is not None and revised_river_rails and k == 394 else
+                       fit_post if dug is not None and k != small_bridges.RIVER_RAIL else None)
+                if joined and taper_area is not None:
+                    fit = fit_taper_post
+                for q, (v, fc, uv, part) in enumerate(dm.r70_guardrail_meshes(
+                        sec, layout_piece, {"span": span, "end": end},
+                        fit_post=fit,
+                        joined_row=join + 1 if joined and small_bridges.tapered_rail_join(sec, join) else None,
+                        joined_terminals=revised_river_rails and k in (small_bridges.RIVER_RAIL, 394))):
+                    if part == "end" and join is not None:
+                        origin = np.array([sec.x[join], sec.y[join]])
+                        axis = np.array([np.cos(sec.heading[join]), np.sin(sec.heading[join])])
+                        if np.max(np.abs((v[:, :2] - origin) @ axis)) < 2.0:
+                            continue  # 継ぎ目の内側に向く旧袖を、連続する波板に置き換える
+                    surface = dug if fit is fit_post and dug.bed is not None else None
+                    v, fc, uv = small_bridges.cut_guardrail(sec, (v, fc, uv), layout_gaps, foot_surface=surface)
+                    if len(fc):
+                        m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_r70{part}_{q}", v, fc, uv, f"mt_r70_rail_{part}_{tone}")
+                if cropped:
+                    m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_r70_cut_end",
+                               *dm.r70_cut_end(sec, layout_piece, first_omitted, end, join=k == 278 and revised_river_rails),
+                               f"mt_r70_rail_end_{tone}")
+                    if k == 278 and former_left_slot:
+                        add_cut_posts(394, 16, feats[394])
+                if joined:
+                    m.add_mesh(GROUP, "mt_smallspan_25_right_join", *small_bridges.w_beam_join(sec, join, piece, span),
+                               f"mt_r70_rail_span_{tone}")
+                for bridge in bridge_spans:
+                    if not (bridge == 16 and k == 394 and former_left_slot):
+                        add_cut_posts(k, bridge, piece, join if joined else None)
                 continue
             mat = "mt_guardrail_aged" if kind == "wbeam_aged" else "mt_guardrail"
             for q, (v, fc, uv, part) in enumerate(dm.guardrail_meshes(sec, piece)):
-                m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_{part}_{q}", v, fc, uv, mat if part == "beam" else "mt_post")
+                v, fc, uv = small_bridges.cut_guardrail(sec, (v, fc, uv), bridge_gaps)
+                if len(fc):
+                    m.add_mesh(GROUP, f"mt_rail_{k:03d}_{j}_{part}_{q}", v, fc, uv, mat if part == "beam" else "mt_post")
         hide += [f"GUARDRAIL_s1_{k:03d}", f"GUARDRAIL_s1_{k:03d}_back"]
         nb += 1
     # 落ち葉：山道の範囲から、町・分かれ道・トンネルと表の no_leaves を除く
@@ -379,7 +482,7 @@ def build_parts(sec, bounds, feats, rows, m: Manifest):
     return hide
 
 
-def add_poles(sec, bounds, m: Manifest):
+def add_poles(sec, bounds, m: Manifest, *, dug=None):
     """電柱と電線（data/manual/mountain_poles.csv。s は区間の起点から）。並べ方は S3 の町と同じ（dress_parts.utility_poles）。"""
     keep = forest_ground.load_keepout(MANIFEST, {"road": 0.3, "wall": 0.2, "building": 1.0, "bridge": 1.0,
                                                  "water": 0.5, "tunnel": 2.0, "other": 0.3})
@@ -395,6 +498,10 @@ def add_poles(sec, bounds, m: Manifest):
         part = r70_part("r70_utility_pole", "concrete") if r["section"] in dm.R70_SECTIONS else None
         if part is not None:      # S4・S5：Codex のコンクリート電柱（腕金・碍子つき）
             v, f, uv = dm.r70_pole_mesh(poles, part)
+            if dug is not None:
+                low = part[0][:, 2] == part[0][:, 2].min()
+                for pv in v.reshape(len(poles), len(part[0]), 3):
+                    valleys.lower_exposed_feet(pv, low, dug)
             m.add_mesh(GROUP, f"mt_poles_{k:03d}", v, f, uv, "mt_r70_pole")
         else:
             v, f, uv = dress_parts.pole_mesh(poles)
@@ -414,14 +521,14 @@ def add_r70_structures(sec, bounds, m: Manifest, tex):
     """S4・S5 の橋の欄干・親柱・橋名板と、青宇治橋・赤いアーチ橋の全体、トンネルの坑口を Codex の部品にする
     （data/manual/s45_route70_bridges.json。export/compare/route70/route70_delivery_09.md の割り当て表）。
     近くの今の欄干（bridge_*_rail_L/R、1WALL_track_fence_*）・親柱・坑口の見た目を隠す名前を返す。当たり判定（1WALL_bridge_*_rail・
-    トンネルの内壁）は今のまま残す。今の欄干が見つからない橋は置かない（当たり判定の無い欄干を作らない）。"""
+    トンネルの内壁）は今のまま残す。明示区間の小橋は本体で専用の衝突壁を作るので、既存欄干の探索を省く。"""
     import re
     from scipy.spatial import cKDTree
     from yabitsu import landmarks
-    sp = config.DATA_MANUAL / "s45_route70_bridges.json"
-    if not sp.exists():
+    spec = small_bridges.load()
+    if not (spec["bridges"] or spec["tunnels"]):
         return []
-    spec = json.loads(sp.read_text(encoding="utf-8"))
+    bridge_spans = small_bridges.spans(sec, bounds, spec)
     meshes = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))["meshes"]
     tree = cKDTree(np.c_[sec.x, sec.y])
     lo, hi = float(bounds["s4"][0]), float(bounds["s5"][1])
@@ -465,6 +572,15 @@ def add_r70_structures(sec, bounds, m: Manifest, tex):
             if tint is not None:   # 橋ごとの色（同じ部品を使うほかの橋は変えない）
                 im_ = Image.open(tex / f"{key}.png"); a_ = np.asarray(im_.convert("RGBA"), float)
                 a_[..., :3] *= np.asarray(tint["rgb"], float)
+                if tint.get("moss") or tint.get("chalk"):
+                    from yabitsu.textures import periodic_noise
+                    noise = periodic_noise(len(a_), 19, np.random.default_rng(1724))
+                    if tint.get("moss"):
+                        stain = np.clip((noise-.32)*1.2,0,.55)[...,None]
+                        a_[...,:3] = a_[...,:3]*(1-stain) + stain*[46,49,34]
+                    else:
+                        # Aged white paint in shade, with slight residual grime.
+                        a_[...,:3] = a_[...,:3]*(.90+.10*noise[...,None]) + 5
                 if tint.get("brown_dark"):   # 茶色の手すり（赤が青より 25 以上強い所）をさらに暗く
                     br = a_[..., 0] - a_[..., 2] > 25
                     a_[br, :3] *= tint["brown_dark"]
@@ -485,6 +601,34 @@ def add_r70_structures(sec, bounds, m: Manifest, tex):
                     for t in ("hinokisawa", "tokoyo", "jigokuzawa", "kiyotaki", "yoshida", "aouji") if t in (it.get("tex") or it["name"])}
     for k, b in enumerate(spec["bridges"]):
         if b.get("skip"):
+            continue
+        if k in bridge_spans:
+            i, j = bridge_spans[k]
+            s0, s1 = sec.s[[i, j]]
+            tint = b.get("tint")
+            tag = f"_b{k:02d}" if tint else ""
+            if k in (2,25):
+                tag += "_valley38"
+            sill_mat = "mt_r70_small_bridge_sill"
+            if sill_mat not in m.materials:
+                m.add_material(sill_mat, color=(0.32, 0.31, 0.28))
+            for label, sd, hw in (("left", 1, sec.hw_left), ("right", -1, sec.hw_right)):
+                name = f"mt_r70_bridge_{k:02d}_{label}"
+                lat = hw + small_bridges.RAIL_OFFSET
+                part = b[label]
+                pv, pf, uv = landmarks.load("r70_bridges", part)
+                pv = pv.copy()
+                pv[:, 2] *= b["height_m"] / pv[:, 2].max()
+                m.add_mesh(GROUP, name, *small_bridges.rail_mesh(sec, i, j, sd, (pv, pf, uv), 2.0),
+                           mat_for("r70_bridges", part, tint, tag))
+                m.add_mesh(GROUP, f"{name}_sill", *small_bridges.sill_mesh(sec, i, j, sd, supported=k in small_bridges.SUPPORT_SPANS), sill_mat)
+                if b.get("post"):
+                    post = landmarks.load("r70_bridges", b["post"])
+                    half_width = np.abs(post[0][:, 0]).max()
+                    for n, at in enumerate((s0 + half_width, s1 - half_width)):
+                        m.add_mesh(GROUP, f"{name}_post{n}", *dm.r70_post_mesh(sec, at, sd, lat, post),
+                                   mat_for("r70_bridges", b["post"], tint, tag))
+                n_rail += 1
             continue
         ps = float(bounds[b["section"]][0]) + b["s"]
         half = b["length_m"] / 2 + 30.0
@@ -700,15 +844,27 @@ def add_kitahara_details(m, tex):
 def main():
     ap = argparse.ArgumentParser()
     ap.add_argument("--no-install", action="store_true")
+    ap.add_argument("--before-near", type=Path, help="谷を掘る前の近景 NPZ")
     a = ap.parse_args()
+    near_path = config.DATA_PROCESSED / "track_terrain_near.npz"
+    with (np.load(near_path) as near_file,
+          np.load(config.DATA_PROCESSED / "track_terrain_mid.npz") as mid):
+        near = dict(near_file)
+        ground_mesh = terrain.terrain_mesh_z(near, mid)
+    before_near = valleys.before_for_build(a.before_near, near_path, near)
+    dug = valleys.changed_ground(before_near, near)
     sec = Section.load_json(config.DATA_PROCESSED / "track_section.json")
     cl = dict(np.load(config.DATA_PROCESSED / "track_centerline.npz"))
     bounds = track.load_bounds()
     feats = track_features(sec, bounds)
+    bridge_spans = small_bridges.spans(sec, bounds, small_bridges.load())
     man = json.loads((MANIFEST / "manifest.json").read_text(encoding="utf-8"))
     missing = [f"GUARDRAIL_s1_{k:03d}" for k, f in enumerate(feats) if f.type == "guardrail" and f"GUARDRAIL_s1_{k:03d}" not in man["meshes"]]
     if missing:
         raise SystemExit(f"組み立て後に features が変わっています（番号が合いません）: {missing[:5]}")
+    if any(small_bridges.wall_name(k, side) not in man["meshes"]
+           for k in bridge_spans for side in ("left", "right")):
+        raise SystemExit("小橋の衝突壁がありません（先に track_build_manifest を実行してください）")
     rows = table_rows()
 
     if OUT.exists():
@@ -728,7 +884,10 @@ def main():
     m.add_material("mt_post", color=(0.80, 0.81, 0.78))
     m.add_material("mt_leaves_edge", texture="textures/leaves_edge.png", alpha=True)
     m.add_material("mt_leaves_lane", texture="textures/leaves_lane.png", alpha=True)
-    hide = build_parts(sec, bounds, feats, rows, m)
+    taper_area = shapely.union_all([area for _, _, area in width_taper_areas(
+        sec, parse_width_rows(track.load_section_rows("widths", bounds)), along=0.)])
+    hide = build_parts(sec, bounds, feats, rows, m, bridge_spans=bridge_spans, ground_z=ground_mesh, dug=dug,
+                       taper_area=taper_area if not taper_area.is_empty else None)
     nmarks = add_road_marks(sec, bounds, m, tex)
     pole_img, _ = dress_tex.load("pole")
     # 山道の電柱は雨のしみのある古いコンクリートでくすんだ灰茶色（ストリートビュー 青山荘 B090 の日なたの柱 (78,70,55)）。
@@ -752,14 +911,14 @@ def main():
             landmarks.copy_texture(src, tex / f"{mat}.png")
             m.add_material(mat, texture=f"textures/{mat}.png", alpha=mat == "mt_r70_rail_pipe_mesh",
                            two_sided=mat.startswith("mt_r70_rail"))
-    npoles = add_poles(sec, bounds, m)
+    npoles = add_poles(sec, bounds, m, dug=dug)
     hide += add_r70_structures(sec, bounds, m, tex)
     add_fubuki_parts(sec, bounds, feats, m, tex)
     kita_hidden, kita_poles = add_kitahara_details(m, tex)
     hide += kita_hidden
     npoles += kita_poles
     assign = retex_assign(sec, cl, bounds, feats, rows)
-    split_hidden = split_grass_terrain(sec, cl, bounds, rows, assign, m, tex, feats)   # 草地の範囲の境をまたぐ地形の塊を分ける
+    split_hidden = split_grass_terrain(sec, cl, bounds, rows, assign, m, tex, feats, before_near=before_near)
     hide += split_hidden
     m.save()
     kn5_path = OUT / f"{GROUP}.kn5"
