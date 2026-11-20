@@ -8,7 +8,7 @@ from shapely.geometry import LineString
 
 from yabitsu import (assembly, buildings, config, features, fubuki, gsi, layouts, minoge_area, motorway, nagoki, overpasses, pass_area,
                      pavements, scenery, side_roads, small_bridges, start_lot, terrain, textures, town_objects, track, trees,
-                     valleys, valley_fit, water)
+                     valleys, valley_edits, valley_fit, water)
 from yabitsu.crosssection import Section, parse_width_rows, width_tapers
 from yabitsu.manifest import Manifest
 
@@ -43,17 +43,18 @@ def _nanohanadai_area(sec):
     return out
 
 
-def valley_water_parts(sec, bounds, near, ground, dug, streams, road):
+def valley_water_parts(sec, bounds, near, ground, dug, streams, road, *, replacements=None):
     """組み立てと部分検証で同じ水面・川原を作る。"""
     rows = valleys.load()
     levels = water.valley_surface_levels(sec, bounds, rows, streams, ground, near=near)
     normals = {}
     items = water.meshes(streams, road, levels, ground, near=near, changed_area=dug.polygon, before_ground=dug.old.height,
                          frozen_normals=normals)
+    fitted_water = valley_edits.replace_water(items, replacements)
     rivers = [i for i, stream in enumerate(streams) if stream.osm_id in (water.A_CREEK, 90334744)]
     old = water.meshes([streams[i] for i in rivers], road) if not dug.polygon.is_empty else []
     names = tuple(f"water_{i:03d}_" for i in rivers)
-    new = [item for item in items if item[0].startswith(names)]
+    new = [item for item in fitted_water if item[0].startswith(names)]
     surfaces = tuple(valley_fit.water_surfaces(
         valley_fit.Mesh(n, v, f, mat, visible) for n, v, f, _, mat, visible in part) for part in (old, new))
     return items, normals, surfaces
@@ -83,12 +84,16 @@ def main():
     near_path = P / "track_terrain_near.npz"
     with np.load(near_path) as data:
         near = dict(data)
+    edits = valley_edits.load()
+    valley_edits.check_applied(near, edits)
+    replacements = valley_edits.part_edits(edits)
     before = valleys.before_for_build(args.before_near, near_path, near)
     dug = valleys.changed_ground(before, near)
     sec = Section.load_json(P / "track_section.json")
     m = Manifest(config.TRACK_BUILD_DIR)
     textures.register_materials(m)
     small_bridges.add_valley_materials(m)
+    valley_edits.register_materials(m, edits)
     tw = nagoki.load_town(sec)
     others = nagoki.other_towns(sec)   # 宮ヶ瀬北原など（町の範囲は多角形で作る）
     sps = nagoki.load_splits(sec)   # 島をはさんで2本に分かれる所（地図の線どおり）
@@ -156,7 +161,8 @@ def main():
     streams, falls, springs = water.load(sec)
     form_all = start_lot.road_formation(sec, 0.0, float(sec.s[-1]))
     river_meshes, river_normals, water_surfaces = valley_water_parts(
-        sec, bounds, near, ground_mesh, dug, streams, water.road_area(sec, form_all, stubs))
+        sec, bounds, near, ground_mesh, dug, streams, water.road_area(sec, form_all, stubs),
+        replacements=replacements)
     cards = trees.scatter(before, pads + start_lot.flats_for(lot_spec, pads), pad_clear_m=5.0,
                           avoid=nagoki.tree_free_areas(sec, bounds, blds + track_blds + tree_clearance))
     heights, remove = card_adjustments(cards, dug, valleys.load(), water_surfaces)
@@ -414,9 +420,13 @@ def main():
     assembly.add_layout_objects(m, sec, pads, layouts.load_layouts(), bounds)
     # S4（峠の先）の部品は yabitsu_s4.kn5 へ（全部のレイアウトが読む）。メッシュの頂点の平均に一番近い本線の行で決める
     s4_0 = float(bounds["s4"][0]); tree = __import__("scipy.spatial", fromlist=["cKDTree"]).cKDTree(np.c_[sec.x, sec.y])
-    print("moved to", config.S4_GROUP, m.split_group(assembly.GROUP, config.S4_GROUP, lambda c: sec.s[tree.query(c)[1]] >= s4_0))
+    centers = valley_edits.terrain_centers(near)
+    print("moved to", config.S4_GROUP, m.split_group(assembly.GROUP, config.S4_GROUP,
+                                                   lambda c: sec.s[tree.query(c)[1]] >= s4_0, centers=centers))
     s5_0 = float(bounds["s5"][0])   # S5（札掛の先）の部品は yabitsu_s5.kn5 へ
-    print("moved to", config.S5_GROUP, m.split_group(config.S4_GROUP, config.S5_GROUP, lambda c: sec.s[tree.query(c)[1]] >= s5_0))
+    print("moved to", config.S5_GROUP, m.split_group(config.S4_GROUP, config.S5_GROUP,
+                                                   lambda c: sec.s[tree.query(c)[1]] >= s5_0, centers=centers))
+    valley_edits.replace_parts(m, edits, replacements=replacements)
     print(m.save()); print(m.summary())
 
 

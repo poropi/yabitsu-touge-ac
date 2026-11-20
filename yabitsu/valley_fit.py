@@ -1,5 +1,6 @@
 """谷周辺のメッシュと保存地形を照合する。距離の単位は m。"""
 import json
+from collections import defaultdict
 from hashlib import sha256
 from dataclasses import dataclass
 from pathlib import Path
@@ -22,10 +23,21 @@ class Mesh:
     uv: np.ndarray | None = None
     group: str = ""
     settings: dict | None = None
+    parent: str | None = None
 
     @property
     def triangles(self):
         return self.verts[kn5._triangles(self.faces)]
+
+    @property
+    def water_kind(self):
+        if self.material in ("water", "riverbed"):
+            return self.material
+        if self.material.startswith("valley_edit_"):
+            prefix = self.name.partition("_")[0]
+            if prefix in ("water", "riverbed"):
+                return prefix
+        return None
 
 
 @dataclass(frozen=True)
@@ -52,7 +64,11 @@ def issue_changes(before, after, *, old_meshes=(), old_ground=None):
 
     old_points, old_overlaps = {}, {}
     water_checks = {"water_float", "water_buried", "bed_over_cut"}
-    old_surfaces = {m.name: Surfaces(m.triangles) for m in old_meshes if m.material in ("water", "riverbed")}
+    old_water = defaultdict(list)
+    for m in old_meshes:
+        if m.water_kind:
+            old_water[m.parent or m.name].append(m.triangles)
+    old_surfaces = {name: Surfaces(np.concatenate(parts)) for name, parts in old_water.items()}
     for issue in before:
         if issue.category == "overlap":
             old_overlaps[issue.mesh, issue.other] = issue
@@ -174,7 +190,20 @@ def manifest_meshes(root):
             material = entry["material"]
             yield Mesh(name, mesh["verts"], mesh["faces"], material, entry["renderable"] and name not in hidden,
                        mesh["uvs"], groups[name], {"material": data["materials"].get(material),
-                                                  "retexture": retex.get(name)})
+                                                  "retexture": retex.get(name)},
+                       parent=entry.get("valley_edit_parent"))
+
+
+def part_triangles(root, entries, name):
+    """Load the original named part and its additional material meshes."""
+    mesh = []
+    for key, entry in entries.items():
+        if key == name or entry.get("valley_edit_parent") == name:
+            with np.load(root / entry["file"]) as data:
+                mesh.append(data["verts"][kn5._triangles(data["faces"])])
+    if not mesh:
+        raise KeyError(name)
+    return np.concatenate(mesh)
 
 
 def _outside_signature(mesh, area):
@@ -296,7 +325,7 @@ class Surfaces:
 
 
 def water_surfaces(meshes):
-    parts = [m.triangles for m in meshes if m.material == "water" and m.visible]
+    parts = [m.triangles for m in meshes if m.water_kind == "water" and m.visible]
     return Surfaces(np.concatenate(parts) if parts else np.empty((0, 3, 3)))
 
 
@@ -330,7 +359,7 @@ def _sample_triangles(tri):
 
 
 def _water_checks(mesh, tri, area, ground, old_ground, channels):
-    category = "water" if mesh.material == "water" else "riverbed"
+    category = mesh.water_kind
     problems = {"water_float": [], "water_buried": []}
     for ids, samples in _sample_triangles(tri):
         xy = samples[..., :2]
@@ -360,7 +389,7 @@ def _water_checks(mesh, tri, area, ground, old_ground, channels):
                 size = raised[at, worst]
                 hit = size >= limit
                 problems.setdefault("bed_over_cut", []).append((samples[at, worst][hit], size[hit]))
-    return [finding(key, mesh.name, np.concatenate([a for a, _ in p]), np.concatenate([b for _, b in p]))
+    return [finding(key, mesh.parent or mesh.name, np.concatenate([a for a, _ in p]), np.concatenate([b for _, b in p]))
             for key, p in problems.items() if any(len(a) for a, _ in p)]
 
 
@@ -394,17 +423,23 @@ def mesh_checks(meshes, area, ground, old_ground, *, openings=None, channels=(),
         if len(ids):
             local.append((mesh, tri[ids]))
 
-    supports = {mesh.name: tri for mesh, tri in local if _solid_support(mesh.name)}
+    parts = defaultdict(list)
+    for mesh, tri in local:
+        parts[mesh.parent or mesh.name].append((mesh, tri))
+    supports = {name: np.concatenate([tri for _, tri in fragments])
+                for name, fragments in parts.items() if _solid_support(name)}
     if supports:
         all_support = list(supports.values())
     else:
         all_support = [np.empty((0, 3, 3))]
     issues = []
-    for mesh, tri in local:
-        n = mesh.name
-        if mesh.material in ("water", "riverbed"):
-            issues.extend(_water_checks(mesh, tri, area, ground, old_ground, channels))
+    for n, fragments in parts.items():
+        mesh = fragments[0][0]
+        if mesh.water_kind:
+            for fragment, tri in fragments:
+                issues.extend(_water_checks(fragment, tri, area, ground, old_ground, channels))
             continue
+        tri = fragments[0][1] if len(fragments) == 1 else np.concatenate([t for _, t in fragments])
         if n.startswith("1ROAD_s1_gutter"):
             vertical = tri[abs(_normals(tri)[:, 2]) < 1e-7]
             points = _edge_points(_lower_edges(vertical)) if len(vertical) else np.empty((0, 3))
@@ -413,7 +448,7 @@ def mesh_checks(meshes, area, ground, old_ground, *, openings=None, channels=(),
             category, tolerance = "skirt", 1e-6
         elif _wall_foot(n):
             points = _edge_points(_lower_edges(tri))
-            if "_retaining_" in n:
+            if "_retaining_" in n and mesh.parent is None and len(fragments) == 1:
                 # 面の傾きで上下のXYが異なる擁壁。偶数頂点は足元の連続列。
                 bottom = mesh.verts[::2]
                 points = _edge_points(np.stack((bottom[:-1], bottom[1:]), axis=1))
@@ -533,7 +568,10 @@ def bridge_checks(meshes, sec, spans, ground):
     from .crosssection import GUTTER_WIDTH
     from .small_bridges import SUPPORT_SPANS
 
-    by_name = {m.name: m for m in meshes if m.visible}
+    by_name = defaultdict(list)
+    for m in meshes:
+        if m.visible:
+            by_name[m.parent or m.name].append(m)
     issues = []
     for k in SUPPORT_SPANS:
         if k not in spans:
@@ -543,7 +581,7 @@ def bridge_checks(meshes, sec, spans, ground):
         if name not in by_name:
             issues.append(Issue("deck_missing", name, (float(sec.x[i]), float(sec.y[i])), 0.))
             continue
-        tri = by_name[name].triangles
+        tri = np.concatenate([m.triangles for m in by_name[name]])
         normals = _normals(tri)
         underside = Surfaces(tri[normals[:, 2] < -.5])
         sl = slice(i, j + 1)
@@ -587,7 +625,7 @@ def bridge_checks(meshes, sec, spans, ground):
             if wall_name not in by_name:
                 issues.append(finding("abutment_missing", wall_name, points, points[:, 2]))
                 continue
-            wall = by_name[wall_name].triangles
+            wall = np.concatenate([m.triangles for m in by_name[wall_name]])
             base = _edge_points(_lower_edges(wall))
             margin = ground(*base[:, :2].T) - base[:, 2]
             bad = margin < .5
@@ -629,7 +667,7 @@ def water_join_checks(meshes, levels, ground):
         prefix = {A_CREEK: "water_022_", 90334744: "water_012_"}.get(osm_id)
         if prefix is None:
             continue
-        parts = [m for m in meshes if m.material == "water" and m.name.startswith(prefix)]
+        parts = [m for m in meshes if m.water_kind == "water" and m.name.startswith(prefix)]
         fresh = [m.triangles for m in parts if "_valley_" in m.name]
         if not fresh:
             continue
@@ -655,7 +693,7 @@ def water_join_checks(meshes, levels, ground):
 
 
 def tree_checks(trees, area, rows, ground, old_ground, meshes):
-    water = [m.triangles for m in meshes if m.material == "water" and m.visible]
+    water = [m.triangles for m in meshes if m.water_kind == "water" and m.visible]
     xy = np.c_[trees.x, trees.y]
     ids = np.flatnonzero(shapely.intersects_xy(area, *xy.T))
     points = np.c_[xy[ids], trees.z[ids]]

@@ -19,6 +19,7 @@ def test_scope_compares_removed_and_added_terrain_against_exact_mesh():
     fine = after["valley_vertices"][after["valley_faces"]]
     scope = Scope.__new__(Scope)
     scope.tapers = []
+    scope.edited_parts = {}
     scope.local = lambda xy: (np.zeros(xy.shape[:-1]), np.zeros(xy.shape[:-1]))
     scope.terrain_keys = [triangle_keys(fine), triangle_keys(fine)]
     for name, kind, removed in (("1GRASS_s1_terrain_123", "removed", True),

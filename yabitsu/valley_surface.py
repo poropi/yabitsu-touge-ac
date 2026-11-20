@@ -236,18 +236,31 @@ def keep_quads(verts, faces, near):
     return ~np.isin(ids, r * width + c)
 
 
-def mesh_parts(near):
-    v, f, bed = (near[k] for k in ("valley_vertices", "valley_faces", "valley_bed"))
-    # Smooth shading across UV and material seams. KN5 normals use game axes.
-    normals = kn5._normals(v @ kn5.C.T, f)
-    remainders = near.get("valley_coarse_remainder")
-    gravel = near.get("valley_gravel", np.zeros(len(f), bool))
+def face_blocks(near):
+    v, f = near["valley_vertices"], near["valley_faces"]
     blocks = np.arange(len(f)) // 16000
     if "valley_source_faces" in near:
         source = near["valley_source_faces"]
         origin_y = v[f[:, 0], 1]
         b = (source >= 0) & (origin_y >= 1500) & (origin_y < 6000)
         blocks[b] = source[b] // 16000
+    return blocks
+
+
+def mesh_parts(near):
+    v, f, bed = (near[k] for k in ("valley_vertices", "valley_faces", "valley_bed"))
+    # Smooth shading across UV and material seams. KN5 normals use game axes.
+    normals = near.get("valley_edit_normals")
+    if normals is None:
+        normals = kn5._normals(v @ kn5.C.T, f)
+    remainders = near.get("valley_coarse_remainder")
+    gravel = near.get("valley_gravel", np.zeros(len(f), bool))
+    blocks = near.get("valley_edit_blocks")
+    if blocks is None:
+        blocks = face_blocks(near)
+    edited_materials = near.get("valley_edit_materials")
+    edited_uv = near.get("valley_edit_uv")
+    edited_normals = near.get("valley_edit_corner_normals")
     for block in np.unique(blocks):
         batch = blocks == block
         local = f[batch]
@@ -263,23 +276,36 @@ def mesh_parts(near):
             for tag, kind, material in (("bed", river & ~shoulder, "gravel_dark"),
                                          ("bank", ~river & ~shoulder, "valley_forest_floor"),
                                          ("shoulder", shoulder, "gravel_grey")):
-                used = local[active & select & kind]
-                if not len(used):
+                indices = np.flatnonzero(batch)[active & select & kind]
+                if not len(indices):
                     continue
+                used = f[indices]
                 tri = v[used]
                 n = abs(np.cross(tri[:, 1] - tri[:, 0], tri[:, 2] - tri[:, 0]))
                 axis = np.argmax(n, axis=1)
                 planes = np.array([[1, 2], [0, 2], [0, 1]])[axis]
                 uv = np.take_along_axis(tri, planes[:, None, :], axis=2) / (5.0 if tag == "bank" else 2.8)
-                name = f"1GRASS_valley_{site}_{block:03d}_{tag}"
-                yield (
-                    name,
-                    tri.reshape(-1, 3),
-                    np.arange(used.size).reshape(-1, 3),
-                    uv.reshape(-1, 2),
-                    material,
-                    normals[used].reshape(-1, 3),
-                )
+                corner_normals = normals[used]
+                stem = f"1GRASS_valley_{site}_{block:03d}"
+                if edited_materials is None:
+                    yield (f"{stem}_{tag}", tri.reshape(-1, 3), np.arange(used.size).reshape(-1, 3),
+                           uv.reshape(-1, 2), material, corner_normals.reshape(-1, 3))
+                    continue
+                assigned = edited_materials[indices]
+                edited = assigned != ""
+                uv[edited] = edited_uv[indices[edited]]
+                if edited_normals is not None:
+                    explicit = np.isfinite(edited_normals[indices, 0, 0])
+                    corner_normals[explicit] = edited_normals[indices[explicit]]
+                assigned = np.where(edited, assigned, material)
+                for chosen in np.unique(assigned):
+                    selected = np.flatnonzero(assigned == chosen)
+                    key = stem if chosen == material else f"{stem}_edit_{chosen}"
+                    for packet, start in enumerate(range(0, len(selected), 16000)):
+                        j = selected[start:start + 16000]
+                        name = f"{key}_{tag}" if packet == 0 else f"{key}_{packet:02d}_{tag}"
+                        yield (name, tri[j].reshape(-1, 3), np.arange(len(j) * 3).reshape(-1, 3),
+                               uv[j].reshape(-1, 2), str(chosen), corner_normals[j].reshape(-1, 3))
 
 
 def relax_banks(vertices, faces, pinned, fidelity):

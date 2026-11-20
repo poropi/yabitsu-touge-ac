@@ -247,10 +247,11 @@ def main():
 
     def excavate(grid):
         original = grid["Z"].copy()
-        from yabitsu import valley_surface
+        from yabitsu import valley_edits, valley_surface
         spans = small_bridges.spans(sec, bounds, small_bridges.load())
         grid.update(valley_surface.build(valley_sec, grid, rows, bounds, spans, pads=pads, keep_rows=keep,
                                          shoulder_section=sec))
+        valley_edits.apply_terrain(grid, valley_edits.load())
         delta.update(valleys.ground_delta(original, grid))
 
     if args.before_near:

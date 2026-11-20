@@ -90,3 +90,30 @@ def test_new_image_cannot_reuse_a_stem_with_a_different_suffix(tmp_path):
         (root / "textures" / "kenchi.png").write_bytes(b"old")
     (after / "textures" / "KENCHI.dds").write_bytes(b"new")
     assert list(scope.overwritten_images(before, after)) == ["textures/KENCHI.dds"]
+
+
+@pytest.mark.parametrize("attribute", ["normal", "uv"])
+def test_dug_triangles_only_allow_attributes_where_edited(attribute):
+    import shapely
+    from scripts.check_valley_scope import Scope, triangle_keys
+
+    scope = Scope.__new__(Scope)
+    scope.round2 = False
+    scope.local = lambda xy: (xy[..., 0], xy[..., 1])
+    scope.taper_permits = lambda name, tri, what: np.zeros(len(tri), bool)
+    area = shapely.box(-2, -2, 7, 2)
+    scope.water_area = lambda name: area
+    v = np.array([[[0., 0., 0.], [1, 0, 0], [0, 1, 0]]])
+    xyz = np.concatenate((v, v + [4, 0, 0]))
+    tri = np.concatenate((xyz, np.zeros((2, 3, 5))), axis=2)
+    scope.terrain_keys = [triangle_keys(xyz)] * 2
+    scope.edited_terrain_keys = [triangle_keys(v)] * 2
+    scope.edited_parts = {}
+    assert scope.permits("1GRASS_valley_000_bed", tri, attribute).tolist() == [True, False]
+    assert scope.permits("water_012_valley_00", tri, attribute).tolist() == [False, False]
+    scope.edited_parts["water_012_valley_00"] = (np.zeros(2), 2.)
+    assert scope.permits("water_012_valley_00_edit_trial", tri, attribute).tolist() == [True, False]
+    scope.round2 = True
+    scope.taper_permits = lambda name, tri, what: np.ones(len(tri), bool)
+    assert scope.permits("1GRASS_valley_000_bed", tri, attribute).tolist() == [True, False]
+    assert scope.permits("water_022_valley_00", tri, attribute).tolist() == [False, False]

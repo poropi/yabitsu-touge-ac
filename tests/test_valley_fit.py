@@ -1,5 +1,6 @@
 """谷の点検が、測点間や集約メッシュ内の不具合も検出することを確かめる。"""
 import numpy as np
+import pytest
 import shapely
 from shapely.geometry import box
 
@@ -73,3 +74,21 @@ def test_tree_plan_uses_changed_triangles_and_does_not_fix_existing_float():
     wet[..., 2] = -.5
     plan = plan_forest_changes(trees, dug, [], (empty, valley_fit.Surfaces(wet)))
     assert [(c.index, c.new_ground, c.reason) for c in plan] == [(0, -1., "水面"), (2, -1., "水面")]
+
+
+def test_material_fragments_share_the_original_foot():
+    import shapely
+
+    # Match the two layers in XY so that only the lower slab is the foot.
+    top = np.array([[0., 0., 1.], [1., 0., 1.], [0., 1., 1.]])
+    face = np.array([[0, 1, 2]])
+    wall = "smallspan_16_rail_support_after"
+    ground = lambda x, y: np.zeros_like(x)
+    parts = [valley_fit.Mesh(wall, top, face),
+             valley_fit.Mesh(wall + "_edit_bottom", top - [0, 0, 1], face, parent=wall)]
+    area = shapely.box(-1, -1, 2, 2)
+    assert not valley_fit.mesh_checks(parts, area, ground, ground, overlaps=False)
+    parts[1].verts[:, 2] += .3
+    result = valley_fit.mesh_checks(parts, area, ground, ground, overlaps=False)
+    assert [(issue.category, issue.mesh) for issue in result] == [("foot", wall)]
+    assert result[0].amount == pytest.approx(.3)

@@ -12,7 +12,7 @@ from scipy.spatial import cKDTree
 
 from scripts.align_s5_8960_trees import _line, _patch_tile
 from scripts.check_valley_fit import npz
-from yabitsu import buildings, config, kn5, side_roads, small_bridges, start_lot, track, tunnel, valleys, valley_fit
+from yabitsu import buildings, config, kn5, side_roads, small_bridges, start_lot, track, tunnel, valleys, valley_edits, valley_fit
 from yabitsu.crosssection import GUTTER_WIDTH, Section, parse_width_rows, width_taper_areas
 from yabitsu.valleys import changed_ground
 
@@ -21,8 +21,9 @@ HOUSE = re.compile(r"(?:1WALL_)?bld_hk.*_cm3_1_hk_00")
 B_PARTS = re.compile(r"(?:GUARDRAIL_s1_|1WALL_s1_rail_)(?:278|281|394)|"
                      r"1WALL_s1_retaining_(?:279|280|281|395)|mt_rail_(?:278|281|394)_.+")
 BRIDGE = re.compile(r"(?:1WALL_track_smallspan_|mt_smallspan_|smallspan_|mt_r70_bridge_)(02|16|25)_.+")
-BANK = re.compile(r"(?:water|riverbed)_(?:012|022)_(?:\d+|valley_\d+)")
+BANK = re.compile(r"(?:water|riverbed)_(?:012|022)_(?:\d+|valley_\d+)(?:_edit_[A-Za-z0-9_.-]+)?")
 NEAR = ("1GRASS_s1_terrain_", "mtsplit_s1_terrain_", "1GRASS_valley_")
+MESH_PAYLOAD = ("file", "material", "verts", "faces", "valley_edit_source", "valley_edit_result", "valley_edit_parent")
 SKIRT = "1ROAD_s1_gutter"
 TAPER_PARTS = re.compile(r"1ROAD_s1_.+|LINES_s1_edge.+|(?:LINES_)?track_centre_021(?:_median)?|"
                          r"mt_leaves_.+|(?:GUARDRAIL_s1_|1WALL_s1_rail_)(?:366|368)|mt_rail_(?:366|368)_.+|"
@@ -73,7 +74,9 @@ def overwritten_images(before, after):
     stems = Counter(p.stem.casefold() for p in new)
     for path in sorted(new):
         if path in old:
-            if not filecmp.cmp(before / path, after / path, shallow=False):
+            dedicated = (path.parent == Path("textures") and path.suffix == ".png"
+                         and path.stem.startswith("valley_edit_") and stems[path.stem.casefold()] == 1)
+            if not dedicated and not filecmp.cmp(before / path, after / path, shallow=False):
                 yield path.as_posix()
         elif stems[path.stem.casefold()] > 1:
             yield path.as_posix()
@@ -93,8 +96,9 @@ def reorderings(old, new):
 
 
 class Scope:
-    def __init__(self, sec, bounds, before, after):
+    def __init__(self, sec, bounds, before, after, *, edits=(), sites_root=None, round2=False):
         self.sec, self.bounds = sec, bounds
+        self.round2 = round2
         self.road = cKDTree(np.c_[sec.x, sec.y])
         width_rows = parse_width_rows(track.load_section_rows("widths", bounds))
         self.tapers = list(width_taper_areas(sec, width_rows))
@@ -102,6 +106,24 @@ class Scope:
         self.surface_keys = after.keys()
         self.band = self.dug.polygon.buffer(3.)
         self.terrain_keys = [triangle_keys(m) for m in self.dug.triangles]
+        if "valley_faces" in before:
+            exact_before = before["valley_vertices"][before["valley_faces"]]
+            self.terrain_keys[0] = np.union1d(self.terrain_keys[0], triangle_keys(exact_before))
+        terrain, self.edited_parts = [[], []], {}
+        for edit in edits:
+            directory = sites_root / edit.site
+            meta = json_file(directory, "site.json", None)
+            if edit.metadata["terrain_changed"]:
+                for i, path in enumerate((directory / "source.npz", edit.path / "terrain.npz")):
+                    with np.load(path) as data:
+                        prefix = "terrain_" if i == 0 else ""
+                        v, f = data[prefix + "vertices"], data[prefix + "faces"]
+                        keep = data[prefix + "coarse_remainder"][:, 0] < 0
+                        terrain[i].append(triangle_keys(v[f[keep]]))
+            for part in edit.metadata["changed_parts"]:
+                self.edited_parts[part] = (np.asarray(meta["origin"][:2]), meta["radius"])
+        self.edited_terrain_keys = [np.concatenate(keys) if keys else np.empty(0, dtype="V72")
+                                    for keys in terrain]
         self.spans = small_bridges.spans(sec, bounds, small_bridges.load())
         rows = self.rows = valleys.load()
         self.water = None
@@ -176,9 +198,20 @@ class Scope:
 
     def permits(self, name, tri, what, *, removed=False):
         xy = tri[..., :2]
+        attribute = what in ("uv", "normal")
+        out = np.zeros(len(tri), bool)
+        parent = name.split("_edit_", 1)[0]
+        if parent in self.edited_parts and what in ("uv", "normal", "material", "position", "added", "removed"):
+            origin, radius = self.edited_parts[parent]
+            out |= (np.linalg.norm(xy - origin, axis=2) <= radius + 1e-7).all(axis=1)
+        if attribute and name.startswith(NEAR):
+            out |= np.isin(triangle_keys(tri[..., :3]), self.edited_terrain_keys[0 if removed else 1])
+        # Round 2 already includes the procedural taper, bridge and channel.
+        if attribute and self.round2:
+            return out
         center = xy.mean(axis=1)
         s, d = self.local(center)
-        out = self.taper_permits(name, tri, what)
+        out |= self.taper_permits(name, tri, what)
         config_only = what in ("material", "renderable", "settings")
         if what == "kn5":
             return out
@@ -272,8 +305,8 @@ class Scope:
             categories = []
             if ea["material"] != eb["material"] or props_a != props_b:
                 categories.append("material")
-            if {k: v for k, v in ea.items() if k not in ("file", "material", "verts", "faces")} != {
-                    k: v for k, v in eb.items() if k not in ("file", "material", "verts", "faces")}:
+            if {k: v for k, v in ea.items() if k not in MESH_PAYLOAD} != {
+                    k: v for k, v in eb.items() if k not in MESH_PAYLOAD}:
                 categories.append("renderable")
             if g0 != g1:
                 categories.append("kn5")
@@ -507,7 +540,29 @@ def forest_lists(root):
     return direct if direct.is_dir() else root / "forest_extension" / "trees"
 
 
-def forest_changes(scope, before, after):
+def forest_changes(scope, before, after, *, extra_trees=None):
+    if extra_trees is not None:
+        from scripts.add_extra_trees import list_files
+
+        for error in extra_trees.errors:
+            scope.issue("forest", "trees.npy", "extra_tree_csv", reason=error)
+        old, new = [np.load(p / "trees.npy", mmap_mode="r") for p in (before, after)]
+        expected = extra_trees.additions
+        if old.dtype != new.dtype or len(new) != len(old) + len(expected):
+            scope.issue("forest", "trees.npy", "extra_tree_rows")
+        else:
+            kind = f"V{old.dtype.itemsize}"
+            if (not np.array_equal(old.view(kind), new[:len(old)].view(kind))
+                    or not np.array_equal(np.asarray(expected).view(kind), new[len(old):].view(kind))):
+                scope.issue("forest", "trees.npy", "extra_tree_rows")
+        old_files, new_files = list_files(before), list_files(after)
+        for name in sorted(old_files.keys() | new_files.keys()):
+            left = (extra_trees.tiles[name] if name in extra_trees.tiles else old_files[name].read_bytes()
+                    if name in old_files else None)
+            right = new_files[name].read_bytes() if name in new_files else None
+            if left != right:
+                scope.issue("forest", name, "tree_text")
+        return
     old, new = [np.load(p / "trees.npy", mmap_mode="r").view(np.recarray) for p in (before, after)]
     if old.dtype != new.dtype:
         scope.issue("forest", "trees.npy", "dtype")
@@ -598,7 +653,10 @@ def forest_changes(scope, before, after):
 def check(args):
     before, after = npz(args.before_near), npz(args.after_near)
     sec = Section.load_json(args.section)
-    scope = Scope(sec, track.load_bounds(), before, after)
+    edits = valley_edits.load(args.edits) if getattr(args, "edits", None) is not None else ()
+    scope = Scope(sec, track.load_bounds(), before, after, edits=edits,
+                  sites_root=getattr(args, "sites_root", config.PROJECT_ROOT / "export/blender_sites"),
+                  round2=getattr(args, "round2", False))
     scope.water = tuple(valley_fit.river_surface(root) for root in (args.before_track, args.track))
     if "valley_cells" in after:
         from yabitsu.valley_surface import allowed_area
@@ -626,7 +684,14 @@ def check(args):
         scope.issue("near", item.mesh, item.category, item.xy or None, amount=item.amount)
     scope.manifests("track", args.before_track, args.track)
     scope.manifests("dress", args.before_dress, args.dress)
-    forest_changes(scope, args.before_forest, args.forest_dir)
+    extra_trees = None
+    if getattr(args, "extra_trees", None) is not None:
+        from scripts.add_extra_trees import prepare
+
+        extra_trees = prepare(args.before_forest, args.extra_trees, config.DATA_PROCESSED, args.buildings,
+                              section=args.section, near=args.after_near, mid=args.after_mid,
+                              mesh_roots=(args.track, args.dress))
+    forest_changes(scope, args.before_forest, args.forest_dir, extra_trees=extra_trees)
     return dict(terrain=stats, violations=len(scope.issues), counts=dict(sorted(scope.counts.items())),
                 allowed={g: sorted(n) for g, n in sorted(scope.allowed.items())}, issues=scope.issues)
 
@@ -640,6 +705,12 @@ def main():
     p.add_argument("--after-near", type=Path, default=config.DATA_PROCESSED / "track_terrain_near.npz")
     p.add_argument("--section", type=Path, default=config.DATA_PROCESSED / "track_section.json")
     p.add_argument("--forest-dir", required=True, type=Path)
+    p.add_argument("--extra-trees", type=Path, help="追植 CSV。森は追記分だけを許可する")
+    p.add_argument("--after-mid", type=Path, help="追植の計算に使う中景地形")
+    p.add_argument("--buildings", type=Path, default=config.DATA_MANUAL / "track_buildings.json")
+    p.add_argument("--edits", type=Path, help="検査する Blender 手直しのディレクトリ")
+    p.add_argument("--sites-root", type=Path, default=config.PROJECT_ROOT / "export/blender_sites")
+    p.add_argument("--round2", action="store_true", help="第2巡を基準に、手直し面だけの UV・法線変更を許可する")
     result = check(p.parse_args())
     print(json.dumps(result, ensure_ascii=False, indent=2))
     return bool(result["violations"])

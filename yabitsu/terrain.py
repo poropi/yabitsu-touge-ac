@@ -331,25 +331,49 @@ def terrain_z(near, mid):
     return z
 
 
-def terrain_mesh_z(near, mid):
+def terrain_mesh_z(near, mid, *, drawn_only=False):
     """terrain_z と同じだが、細かい地形の中はメッシュと同じ三角形で補間する（格子の四角は (r,c)→(r+1,c+1) の対角線で割る。
-    grid_mesh_chunks と kn5._triangles）。急な斜面では双一次の補間とメッシュが 0.3〜0.4 m ずれ、地面に立てた物が浮く。"""
-    from scipy.interpolate import RegularGridInterpolator
-    xs, ys, Z = near["xs"], near["ys"], near["Z"]
-    fd = RegularGridInterpolator((ys, xs), near["D"], bounds_error=False, fill_value=np.inf)
-    rough = terrain_z({k:near[k] for k in ("xs","ys","Z","D")}, mid)
+    grid_mesh_chunks と kn5._triangles）。急な斜面では双一次の補間とメッシュが 0.3〜0.4 m ずれ、地面に立てた物が浮く。
+    drawn_only は配置物の接地用。近景と中景の描かれる面だけを使う。"""
+    if not drawn_only:
+        from scipy.interpolate import RegularGridInterpolator
+        fd = RegularGridInterpolator((near["ys"], near["xs"]), near["D"], bounds_error=False, fill_value=np.inf)
+        rough = terrain_z({k:near[k] for k in ("xs","ys","Z","D")}, mid)
     from .valley_fit import Surfaces
     fine = Surfaces(near["valley_vertices"][near["valley_faces"]]) if "valley_faces" in near else None
 
-    def z(x, y):
-        xf, yf = np.ravel(np.asarray(x, float)), np.ravel(np.asarray(y, float))
+    def sample(grid, xf, yf):
+        xs, ys, Z = grid["xs"], grid["ys"], grid["Z"]
         c = np.clip(np.searchsorted(xs, xf, side="right") - 1, 0, len(xs) - 2)
         r = np.clip(np.searchsorted(ys, yf, side="right") - 1, 0, len(ys) - 2)
         fx = (xf - xs[c]) / (xs[c + 1] - xs[c]); fy = (yf - ys[r]) / (ys[r + 1] - ys[r])
         z00, z01, z10, z11 = Z[r, c], Z[r, c + 1], Z[r + 1, c], Z[r + 1, c + 1]
         zt = np.where(fx >= fy, z00 + fx * (z01 - z00) + fy * (z11 - z01), z00 + fy * (z10 - z00) + fx * (z11 - z10))
-        ok = (fx >= 0) & (fx <= 1) & (fy >= 0) & (fy <= 1) & (fd(np.c_[yf, xf]) <= NEAR_BAND - 2.0) & np.isfinite(zt)
-        result = np.where(ok, zt, np.ravel(rough(xf, yf)))
+        ok = (fx >= 0) & (fx <= 1) & (fy >= 0) & (fy <= 1) & np.isfinite(zt)
+        return r, c, zt, ok
+
+    def distance_corners(grid, r, c):
+        d = grid["D"]
+        return np.array([d[r, c], d[r, c + 1], d[r + 1, c], d[r + 1, c + 1]])
+
+    def z(x, y):
+        xf, yf = np.ravel(np.asarray(x, float)), np.ravel(np.asarray(y, float))
+        r, c, zt, ok = sample(near, xf, yf)
+        if drawn_only:
+            ok &= (distance_corners(near, r, c) <= NEAR_BAND).all(axis=0)
+            if "H" in near:
+                ok &= ~near["H"][r, c]
+            if "valley_cells" in near:
+                vr, vc = near["valley_cells"].T
+                width = len(near["xs"])
+                ok &= ~np.isin(r * width + c, vr * width + vc)
+            mr, mc, mz, mid_ok = sample(mid, xf, yf)
+            d = distance_corners(mid, mr, mc)
+            mid_ok &= ((NEAR_BAND - MID_OVERLAP <= d) & (d <= MID_BAND)).all(axis=0)
+            result = np.where(ok, zt, np.where(mid_ok, mz, np.nan))
+        else:
+            ok &= fd(np.c_[yf, xf]) <= NEAR_BAND - 2.0
+            result = np.where(ok, zt, np.ravel(rough(xf, yf)))
         if fine is not None:
             patch = fine.height(np.c_[xf, yf])
             result = np.where(np.isfinite(patch), patch, result)

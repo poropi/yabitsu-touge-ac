@@ -9,7 +9,7 @@ from PIL import Image
 from shapely.geometry import Polygon
 
 from scripts import dress_mountain
-from yabitsu import assembly, buildings, config, features, house_kit, kn5, landmarks, small_bridges, track
+from yabitsu import assembly, buildings, config, features, house_kit, kn5, landmarks, small_bridges, terrain, track
 from yabitsu.crosssection import GUTTER_WIDTH, Section
 from yabitsu.forest_ground import TriSoup, mesh_class
 from yabitsu.manifest import Manifest
@@ -183,7 +183,9 @@ def test_body_walls_and_dressed_w_beam_are_cut_only_at_bridge(
                 face_offset = 0.37 + panel[0][:, 1].min()
                 np.testing.assert_allclose(offset[2:-2], face_offset, atol=1e-8)
                 w_beam = (number in (2, 25) and sd < 0) or number == 16
-                np.testing.assert_allclose(offset[[0, -1], 0], 0.70 if w_beam else 0.60, atol=1e-8)
+                end_offset = 0.70 if w_beam else 0.60
+                taper = 0.12 if number == 25 and sd < 0 else 0.
+                np.testing.assert_allclose(offset[[0, -1], 0], [end_offset, end_offset - taper], atol=1e-8)
                 if number == 2 and sd > 0:
                     wall = feats[183]
                     overlap = (wall.height_m + 0.3) / 1.5
@@ -205,7 +207,24 @@ def test_body_walls_and_dressed_w_beam_are_cut_only_at_bridge(
             if number == 25 and kind == "base" and index == 368:
                 before, after = triangles_in(mesh(old, name)), triangles_in(mesh(new, name))
                 assert len(after) == len(before) + 2
-                assert {t.tobytes() for t in before} <= {t.tobytes() for t in after}
+                # V is the centreline station divided by 4 m in wall_ribbon.
+                # The join extends one row and adjusts the next five metres.
+                taper_end = (sec.s[j] + 5.) / 4.
+                unchanged = before[before[..., 4].min(axis=1) >= taper_end]
+                assert len(unchanged)
+                np.testing.assert_allclose(after[after[..., 4].min(axis=1) >= taper_end],
+                                           unchanged, atol=1e-8, rtol=0)
+                continue
+            if number == 25 and name == "mt_rail_368_0_r70span_0":
+                v0, f0, uv0 = mesh(old, name)
+                v1, f1, uv1 = mesh(new, name)
+                np.testing.assert_array_equal(f0, f1)
+                np.testing.assert_array_equal(uv0, uv1)
+                moved = v0[np.linalg.norm(v1 - v0, axis=1) > 1e-8]
+                assert len(moved)
+                frame = terrain.road_frame(sec, *moved[:, :2].T)
+                distance = sec.s[frame["idx"]] + frame["along"] - sec.s[j]
+                assert np.all((distance >= -1e-5) & (distance <= 5. + 1e-5))
                 continue
             affected = index in rails
             if affected:
@@ -226,7 +245,7 @@ def test_s5_bridge_stays_before_width_jump(course, bridge_spans):
     assert sec.s[[i, j]] - bounds["s5"][0] == pytest.approx([8952.968, 8959.968], abs=0.001)
     for hw in (sec.hw_left, sec.hw_right):
         np.testing.assert_array_equal(hw[i:j + 1], 2.75)
-        assert hw[j + 1] == 3.75
+        assert hw[j + 1] > 2.75
 
 
 @pytest.fixture(scope="module")

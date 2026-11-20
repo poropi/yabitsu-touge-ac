@@ -15,6 +15,7 @@ import shapely
 
 from . import config, geo
 from .crosssection import GUTTER_WIDTH
+from .valley_edits import EDIT_KEYS, SURFACE_KEYS as PROCEDURAL_SURFACE_KEYS
 
 SITE_REACH_M = 150.0
 SHOULDER_M = 0.75
@@ -328,8 +329,7 @@ def before_for_build(path, near_path, near):
     return {**near, "Z": z}
 
 # 近景の元の配列はそのまま保存し、描画・当たり判定に用いる置換表を併記する。
-SURFACE_KEYS = {"valley_cells", "valley_vertices", "valley_faces", "valley_bed",
-                "valley_coarse_remainder", "valley_gravel", "valley_source_faces"}
+SURFACE_KEYS = {*PROCEDURAL_SURFACE_KEYS, *EDIT_KEYS}
 
 
 def fine_topology(cells):
