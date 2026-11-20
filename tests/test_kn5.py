@@ -1,3 +1,4 @@
+import hashlib
 import io
 import math
 
@@ -50,6 +51,59 @@ def test_dds_has_full_mip_chain_and_original_pixels():
     back = Image.open(io.BytesIO(data)).convert("RGBA")
     assert back.size == (8, 4) and back.getpixel((3, 2)) == (10, 20, 30, 128)
     assert len(data) == 128 + 4 * (32 + 8 + 2 + 1)
+
+
+def test_dds_default_matches_legacy_bytes():
+    pixels = np.arange(9 * 5 * 4, dtype=np.uint8).reshape(5, 9, 4)
+    data = kn5.dds_bytes(Image.fromarray(pixels))
+    assert hashlib.sha256(data).hexdigest() == (
+        "be37c19d0369042559ed8b8a9235dcf76699a123d960750f36d5be95c1c6dac2"
+    )
+
+
+def _dds_square_mip(data, size, level):
+    offset = 128 + 4 * sum((size >> i) ** 2 for i in range(level))
+    width = size >> level
+    return np.frombuffer(data, np.uint8, 4 * width ** 2, offset).reshape(width, width, 4)
+
+
+def test_dds_coverage_preserves_cutout_mips_and_fills_rgb():
+    size = 2048
+    visible = np.random.default_rng(65).random((size, size)) < 0.47
+    pixels = np.full((size, size, 4), 255, dtype=np.uint8)
+    pixels[..., 3] = visible * 255
+    pixels[visible, :3] = (10, 80, 30)
+    image = Image.fromarray(pixels)
+    box = kn5.dds_bytes(image)
+    coverage = kn5.dds_bytes(image, alpha_ref=0.30)
+    assert np.array_equal(_dds_square_mip(box, size, 0), _dds_square_mip(coverage, size, 0))
+    original = visible.mean()
+    for level in (3, 5):
+        assert abs((_dds_square_mip(box, size, level)[..., 3] >= 77).mean() - original) > 0.30
+        mip = _dds_square_mip(coverage, size, level)
+        assert abs((mip[..., 3] >= 77).mean() - original) <= 0.05
+        assert np.all(mip[..., :3] == [30, 80, 10])
+
+
+def test_dds_coverage_scales_atlas_regions_independently():
+    size = 512
+    rates = np.repeat([0.25, 0.70], size // 2)
+    visible = np.random.default_rng(65).random((size, size)) < rates
+    pixels = np.zeros((size, size, 4), dtype=np.uint8)
+    pixels[..., 3] = visible * 255
+    image = Image.fromarray(pixels)
+    left = slice(0, size // 4)
+    right = slice(3 * size // 4, size)
+    expected = [visible[:, side].mean() for side in (left, right)]
+    for grid in (1, 8):
+        data = kn5.dds_bytes(image, alpha_ref=0.30, grid=grid)
+        mip = _dds_square_mip(data, size, 3)[..., 3] >= 77
+        measured = [mip[:, :16].mean(), mip[:, -16:].mean()]
+        error = np.abs(np.subtract(measured, expected))
+        if grid == 8:
+            assert max(error) <= 0.05
+        else:
+            assert max(error) > 0.15
 
 
 def test_header_root_and_textures(tmp_path):

@@ -650,6 +650,60 @@ def forest_changes(scope, before, after, *, extra_trees=None):
                     scope.issue("forest", name, "tree_text_scope", xy)
 
 
+def roadside_forest_changes(before, after, *, road, span, band=(1.5, 12.), exclusion=None, manual=None):
+    """試験区間の名前変更・末尾への追記だけを許す。タイルは全バイトを照合する。"""
+    from scripts import roadside_forest
+    from scripts.add_extra_trees import list_files
+
+    old, all_new = [np.load(p / "trees.npy", mmap_mode="r").view(np.recarray) for p in (before, after)]
+    if old.dtype.names != all_new.dtype.names or len(all_new) < len(old):
+        return ["trees.npy: 行が不足するか列が違います"]
+    new, added = all_new[:len(old)], all_new[len(old):]
+    if any(old.dtype[n] != all_new.dtype[n] or not np.array_equal(old[n], new[n])
+           for n in old.dtype.names if n != "pattern"):
+        return ["trees.npy: 既存の位置・向き・大きさ、または行順が違います"]
+    changed = old.pattern != new.pattern
+    issues = []
+    if not road.interval_mask(np.c_[old.x[changed], old.y[changed]], span).all():
+        issues.append("trees.npy: 試験区間外で名前が変更されています")
+    from yabitsu.roadside_cover import open_mask
+
+    roots = np.round(np.c_[added.x, added.y], 2)
+    if not np.isfinite(roots).all():
+        return ["trees.npy: 追植の座標に有限でない値があります"]
+    if not road.interval_mask(roots, span).all():
+        issues.append("trees.npy: 試験区間外に新しい行があります")
+    edge = road.edge_distance(roots)
+    if np.any((edge < band[0]) | (edge > band[1])):
+        issues.append("trees.npy: 舗装端からの植栽帯を超えた追植があります")
+    if exclusion is not None and (not open_mask(roots, exclusion).all() or road.locate(roots).bridge.any()):
+        issues.append("trees.npy: 保護範囲・橋・地物に追植があります")
+    if manual is not None and np.any(cKDTree(manual).query(roots)[0] < 1):
+        issues.append("trees.npy: 手植えした幹から1 m未満の追植があります")
+    if len(np.unique(roots, axis=0)) != len(roots):
+        issues.append("trees.npy: 追植位置に重複があります")
+    xy = np.c_[old.x[changed], old.y[changed]]
+    towards = road.locate(xy).towards
+    if (np.linalg.norm(towards, axis=1) > roadside_forest.PILOT_MODEL_REACH_M).any():
+        issues.append("trees.npy: 試験帯の横幅を超えて名前が変更されています")
+    expected = roadside_forest.pilot_patterns(old[changed], towards, rotate_by_name=True, manual_xy=manual)
+    if not np.array_equal(expected.pattern, new.pattern[changed]):
+        issues.append("trees.npy: 既存行がモデルの使い分けと一致しません")
+    try:
+        edits = dict(roadside_forest.touched_tiles(before, old, new, added))
+    except ValueError as exc:
+        return [*issues, str(exc)]
+    originals, actual = list_files(before), list_files(after)
+    for name in sorted(originals.keys() | actual.keys() | edits.keys()):
+        left = edits.get(name)
+        if left is None and name in originals:
+            left = originals[name].read_bytes()
+        right = actual[name].read_bytes() if name in actual else None
+        if left != right:
+            issues.append(f"{name}: 許可範囲の行以外にも差分があります")
+    return issues
+
+
 def check(args):
     before, after = npz(args.before_near), npz(args.after_near)
     sec = Section.load_json(args.section)
@@ -697,6 +751,26 @@ def check(args):
 
 
 def main():
+    import sys
+
+    if len(sys.argv) > 1 and sys.argv[1] == "roadside":
+        from scripts.roadside_forest import PILOT, barriers, inputs, manual_stems
+        from yabitsu.roadside_cover import Road
+
+        p = argparse.ArgumentParser(description=roadside_forest_changes.__doc__)
+        p.add_argument("before", type=Path)
+        p.add_argument("after", type=Path)
+        args = p.parse_args(sys.argv[2:])
+        sec, spec, bounds = inputs()
+        cfg = spec["roadside_cover"]
+        road = Road(sec)
+        exclusion, _ = barriers(road, spec, config.TRACK_BUILD_DIR)
+        manual = manual_stems(Section.load_json(config.DATA_PROCESSED / "track_section.json"), bounds)
+        issues = roadside_forest_changes(args.before, args.after, road=road,
+                                          span=tuple(bounds["s4"][0]+x for x in PILOT),
+                                          band=(cfg["min_edge_m"], cfg["max_edge_m"]), exclusion=exclusion, manual=manual)
+        print(json.dumps({"violations": len(issues), "issues": issues}, ensure_ascii=False, indent=2))
+        return bool(issues)
     p = argparse.ArgumentParser(description=__doc__)
     for key in ("track", "dress", "near", "forest"):
         p.add_argument(f"--before-{key}", required=True, type=Path)

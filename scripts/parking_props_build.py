@@ -18,7 +18,7 @@ def main():
         target = config.assert_writable(config.TRACK_DIR / path.name)
         shutil.copy2(path,target)
         for layout in layouts.load_layouts():
-            acdata.write_models_ini(config.TRACK_DIR / f"models_{layout.name}.ini",layouts.kn5_files(layout.name))
+            acdata.write_models_ini(config.TRACK_DIR / f"models_{layout.name}.ini",layouts.kn5_files(layout.name, track_dir=config.TRACK_DIR))
         print("ACへ配置:",target)
         ext = config.TRACK_DIR / "extension"
         shutil.copy2(path.parent / "extension" / "parked_cars.lua", config.assert_writable(ext / "parked_cars.lua"))

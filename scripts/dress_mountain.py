@@ -18,7 +18,7 @@ import shapely
 from PIL import Image, ImageEnhance
 
 from yabitsu import (acdata, config, dress_lines, dress_mountain as dm, dress_parts, dress_retex, dress_tex, ext_config, features, forest_ground, kn5, landmarks, layouts,
-                     fubuki, geo, nagoki, side_roads, small_bridges, terrain, track, tunnel, valleys)
+                     fubuki, geo, nagoki, roadside_vegetation, side_roads, small_bridges, terrain, track, tunnel, valleys)
 from yabitsu.crosssection import Section, parse_width_rows, width_taper_areas
 from yabitsu.manifest import Manifest
 
@@ -292,41 +292,67 @@ def split_fubuki_grass(sec, bounds, feats, ranges_, meshes, assign, m):
     return hide
 
 
+def retex_diffuse(key):
+    base, base_m, layout = RETEX[key]
+    u_m, v_m, rot = dress_retex.UV_LAYOUT[layout]
+    if base.startswith("r70:"):
+        img = Image.open(config.DATA_PROCESSED / "landmarks" / "r70_retaining_wall" / f"{base[4:]}_surface.png")
+    else:
+        img, _ = dress_tex.load(base)
+    if base in dress_retex.ENLARGE and key != "mt_wall_valley_kenchi":
+        img = dress_retex.enlarge(img.convert("RGB"), dress_retex.ENLARGE[base])
+    comp = dress_retex.compose(img.convert("RGB"), base_m, u_m, v_m, rot)
+    if TONE.get(key, 1.0) != 1.0:
+        comp = ImageEnhance.Brightness(comp).enhance(TONE[key])
+    if key == "mt_line_orange":       # Codex の色は実物（ストリートビュー）より鮮やか（S3 と同じ）
+        comp = ImageEnhance.Color(comp).enhance(0.75)
+    if key in SATURATION:
+        comp = ImageEnhance.Color(comp).enhance(SATURATION[key])
+    if key in CONTRAST:
+        comp = ImageEnhance.Contrast(comp).enhance(CONTRAST[key])
+    if key == "mt_wall_nozura":      # ヤビツ峠の石積みは苔で緑がかる（ストリートビュー 2026-10-23）
+        comp = Image.fromarray(np.clip(np.asarray(comp, float) * [0.92, 1.0, 0.86], 0, 255).astype(np.uint8))
+    if key == "mt_wall_block_aged":   # Street View 駐車場 250°・320° の壁 (141〜153, 127〜136, 106〜117)。ゲームの日なたで約 1.8 倍に明るく見える
+        comp = Image.fromarray(np.clip(np.asarray(comp, float) * [1.0, 0.93, 0.84], 0, 255).astype(np.uint8))
+    if key == "mt_wall_kitahara":
+        comp = Image.fromarray(np.clip(np.asarray(comp, float) * [0.92, 0.86, 0.73], 0, 255).astype(np.uint8))
+    if key == "mt_terrain":
+        comp = dm.mossy_ground(comp)
+    if key == "mt_grass":   # 夏の草地の濃い緑（寺山富士見橋のストリートビュー 270° の広場の草 (155,157,110) にゲームの撮影で合わせた、2026-10-25）
+        g = np.asarray(comp.convert("L"), float)[..., None] / 255.0
+        comp = Image.fromarray(np.clip((0.55 + 0.9 * g) * np.array([74, 92, 44], float), 0, 255).astype(np.uint8))
+    return comp
+
+
 def write_retex_textures(keys, ext_dir):
+    ground = json.loads((config.DATA_MANUAL / "forest.json").read_text(encoding="utf-8"))["roadside_vegetation"]["ground_diffuse"]
     for key in keys:
-        base, base_m, layout = RETEX[key]
-        u_m, v_m, rot = dress_retex.UV_LAYOUT[layout]
-        if base.startswith("r70:"):
-            img = Image.open(config.DATA_PROCESSED / "landmarks" / "r70_retaining_wall" / f"{base[4:]}_surface.png")
-        else:
-            img, _ = dress_tex.load(base)
-        if base in dress_retex.ENLARGE and key != "mt_wall_valley_kenchi":
-            img = dress_retex.enlarge(img.convert("RGB"), dress_retex.ENLARGE[base])
-        comp = dress_retex.compose(img.convert("RGB"), base_m, u_m, v_m, rot)
-        if TONE.get(key, 1.0) != 1.0:
-            comp = ImageEnhance.Brightness(comp).enhance(TONE[key])
-        if key == "mt_line_orange":       # Codex の色は実物（ストリートビュー）より鮮やか（S3 と同じ）
-            comp = ImageEnhance.Color(comp).enhance(0.75)
-        if key in SATURATION:
-            comp = ImageEnhance.Color(comp).enhance(SATURATION[key])
-        if key in CONTRAST:
-            comp = ImageEnhance.Contrast(comp).enhance(CONTRAST[key])
-        if key == "mt_wall_nozura":      # ヤビツ峠の石積みは苔で緑がかる（ストリートビュー 2026-10-23）
-            comp = Image.fromarray(np.clip(np.asarray(comp, float) * [0.92, 1.0, 0.86], 0, 255).astype(np.uint8))
-        if key == "mt_wall_block_aged":   # Street View 駐車場 250°・320° の壁 (141〜153, 127〜136, 106〜117)。ゲームの日なたで約 1.8 倍に明るく見える
-            comp = Image.fromarray(np.clip(np.asarray(comp, float) * [1.0, 0.93, 0.84], 0, 255).astype(np.uint8))
-        if key == "mt_wall_kitahara":
-            comp = Image.fromarray(np.clip(np.asarray(comp, float) * [0.92, 0.86, 0.73], 0, 255).astype(np.uint8))
-        if key == "mt_terrain":
-            comp = dm.mossy_ground(comp)
-        if key == "mt_grass":   # 夏の草地の濃い緑（寺山富士見橋のストリートビュー 270° の広場の草 (155,157,110) にゲームの撮影で合わせた、2026-10-25）
-            g = np.asarray(comp.convert("L"), float)[..., None] / 255.0
-            comp = Image.fromarray(np.clip((0.55 + 0.9 * g) * np.array([74, 92, 44], float), 0, 255).astype(np.uint8))
+        base = RETEX[key][0]
+        comp = retex_diffuse(key)
         lum = np.asarray(comp.convert("L"), float) / 255.0
         n = dress_tex.height_to_normal(lum, 1.0 if base.startswith("r70:") else dress_tex.TEXTURES[base].normal)
         nm = Image.fromarray(((n * 0.5 + 0.5) * 255).astype(np.uint8))
+        if key in ground["mean_rgb"]:
+            rgb = np.asarray(comp.convert("RGB"), np.float32)
+            target = np.array(ground["mean_rgb"][key], np.float32)
+            matched = rgb * (target / rgb.reshape(-1, 3).mean(axis=0))
+            toned = target + (matched - target) * ground["contrast"]
+            comp = Image.fromarray(np.rint(np.clip(toned, 0, 255)).astype(np.uint8))
         (ext_dir / f"dress_{key}.dds").write_bytes(kn5.dds_bytes(comp))
         (ext_dir / f"dress_{key}_nm.dds").write_bytes(kn5.dds_bytes(nm))
+
+
+def write_roadside_parts(track_dir, processed, mountain_finish):
+    from yabitsu.roadside_inputs import local_polygons
+
+    settings = json.loads((config.DATA_MANUAL / "forest.json").read_text(encoding="utf-8"))["roadside_vegetation"]
+    selected, excluded, _, sources = roadside_vegetation.grass_selection(
+        processed, mountain_finish, local_polygons("osm_forest_open.json"))
+    ext_config.write_part(track_dir, "grass_fx", roadside_vegetation.grass_ini(selected, sources, settings["grass_fx"]))
+    shader = "\n".join(["[SHADER_REPLACEMENT_...]",
+                        *(f"{key}={value}" for key, value in settings["valley_bank_shader"].items())])
+    ext_config.write_part(track_dir, "valley_bank_ground", shader)
+    return len(selected), len(excluded)
 
 
 def rail_pieces(f, rails):
@@ -926,11 +952,15 @@ def main():
     print(f"部品：{len(m.meshes)} メッシュ（路面の標示 {nmarks}、電柱 {npoles} 本）→ {kn5_path} {kn5_path.stat().st_size / 1e6:.1f} MB")
 
     ext = OUT / "extension"; ext.mkdir(parents=True, exist_ok=True)
-    write_retex_textures(sorted(set(assign.values())), ext)
+    write_retex_textures(sorted(set(assign.values()) | {"mt_terrain", "mt_grass"}), ext)
     (OUT / "retex.json").write_text(json.dumps(assign, ensure_ascii=False), encoding="utf-8")   # 確認描画用
     (OUT / "hidden.json").write_text(json.dumps(hide), encoding="utf-8")
     part = dress_retex.section_text(assign) + "\n[MESH_ADJUSTMENT_...]\nACTIVE=1\nMESHES=" + ",".join(hide) + "\nIS_RENDERABLE=0\n"
     (ext / "dress_mountain.ini").write_text(part, encoding="utf-8", newline="\n")
+    ext_config.write_part(OUT, "dress_mountain", part)
+    selected, excluded = write_roadside_parts(OUT, OUT.parent, part)
+    ext_config.assemble(OUT)
+    print(f"GrassFX：{selected} メッシュ、開地と重なる {excluded} メッシュを除外")
     kinds = {}
     for v in assign.values():
         kinds[v] = kinds.get(v, 0) + 1
@@ -942,10 +972,11 @@ def main():
     shutil.copy2(kn5_path, T / kn5_path.name)
     for f in ext.glob("dress_*.dds"):
         shutil.copy2(f, T / "extension" / f.name)
-    ext_config.write_part(T, "dress_mountain", part)
+    for name in ("dress_mountain", "grass_fx", "valley_bank_ground"):
+        ext_config.write_part(T, name, (ext / "parts" / f"{name}.ini").read_text(encoding="utf-8"))
     ext_config.assemble(T)
     for lay in layouts.load_layouts():
-        acdata.write_models_ini(T / f"models_{lay.name}.ini", layouts.kn5_files(lay.name))
+        acdata.write_models_ini(T / f"models_{lay.name}.ini", layouts.kn5_files(lay.name, track_dir=T))
     print("AC へ入れました：", T)
 
 

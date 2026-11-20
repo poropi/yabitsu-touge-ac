@@ -480,7 +480,7 @@ def main():
     ext_config.write_part(T, "dress_s3", part)
     ext_config.assemble(T)
     for lay in layouts.load_layouts():
-        acdata.write_models_ini(T / f"models_{lay.name}.ini", layouts.kn5_files(lay.name))
+        acdata.write_models_ini(T / f"models_{lay.name}.ini", layouts.kn5_files(lay.name, track_dir=T))
     print("AC へ入れました：", T)
 
 

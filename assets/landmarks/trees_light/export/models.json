@@ -1,0 +1,379 @@
+{
+  "units": "m",
+  "up": "+Z",
+  "origin": "地表の根元中心。最下端は z=-0.30 m。",
+  "height_definition": "地表から頂点の最大Z。地下0.30 mを含まない。幅はローカルX方向。",
+  "uv": "Blender bottom-left",
+  "material": {
+    "shader": "ksPerPixelAT",
+    "alpha_ref": 0.3,
+    "texture": "../trees_light.png",
+    "alternate": "../trees_light.png",
+    "add_backfaces": false,
+    "backface_culling": true
+  },
+  "placement": "舗装端から水平18 mと26 mの2列。地形高に合わせ、道沿いの間隔は12 mに±1 mのゆらぎを付ける。奥列を6 mずらし、板の幅方向を道路接線から交互に+32°、−32°振る。奥列は手前列と逆符号。",
+  "models": [
+    {
+      "name": "near_sugi_a",
+      "species": "sugi",
+      "distance": "near",
+      "height_m": 22.0,
+      "width_m": 6.674,
+      "depth_m": 7.081,
+      "triangles": 244,
+      "npz": "near_sugi_a.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "trunk",
+          "face_start": 0,
+          "face_end": 108
+        },
+        {
+          "name": "stub_1",
+          "face_start": 108,
+          "face_end": 134
+        },
+        {
+          "name": "stub_2",
+          "face_start": 134,
+          "face_end": 160
+        },
+        {
+          "name": "foliage",
+          "face_start": 160,
+          "face_end": 244
+        }
+      ],
+      "rules": "舗装端から15 m以内。+Xを路側へ向けて揺らし、0.8〜1.2倍。"
+    },
+    {
+      "name": "near_sugi_b",
+      "species": "sugi",
+      "distance": "near",
+      "height_m": 20.4,
+      "width_m": 6.168,
+      "depth_m": 6.498,
+      "triangles": 244,
+      "npz": "near_sugi_b.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "trunk",
+          "face_start": 0,
+          "face_end": 108
+        },
+        {
+          "name": "stub_1",
+          "face_start": 108,
+          "face_end": 134
+        },
+        {
+          "name": "stub_2",
+          "face_start": 134,
+          "face_end": 160
+        },
+        {
+          "name": "foliage",
+          "face_start": 160,
+          "face_end": 244
+        }
+      ],
+      "rules": "舗装端から15 m以内。+Xを路側へ向けて揺らし、0.8〜1.2倍。"
+    },
+    {
+      "name": "near_hinoki_a",
+      "species": "hinoki",
+      "distance": "near",
+      "height_m": 16.0,
+      "width_m": 6.437,
+      "depth_m": 6.363,
+      "triangles": 244,
+      "npz": "near_hinoki_a.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "trunk",
+          "face_start": 0,
+          "face_end": 108
+        },
+        {
+          "name": "stub_1",
+          "face_start": 108,
+          "face_end": 134
+        },
+        {
+          "name": "stub_2",
+          "face_start": 134,
+          "face_end": 160
+        },
+        {
+          "name": "foliage",
+          "face_start": 160,
+          "face_end": 244
+        }
+      ],
+      "rules": "舗装端から15 m以内。+Xを路側へ向けて揺らし、0.8〜1.2倍。"
+    },
+    {
+      "name": "near_hinoki_b",
+      "species": "hinoki",
+      "distance": "near",
+      "height_m": 17.3,
+      "width_m": 5.797,
+      "depth_m": 6.064,
+      "triangles": 244,
+      "npz": "near_hinoki_b.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "trunk",
+          "face_start": 0,
+          "face_end": 108
+        },
+        {
+          "name": "stub_1",
+          "face_start": 108,
+          "face_end": 134
+        },
+        {
+          "name": "stub_2",
+          "face_start": 134,
+          "face_end": 160
+        },
+        {
+          "name": "foliage",
+          "face_start": 160,
+          "face_end": 244
+        }
+      ],
+      "rules": "舗装端から15 m以内。+Xを路側へ向けて揺らし、0.8〜1.2倍。"
+    },
+    {
+      "name": "near_broadleaf_a",
+      "species": "broadleaf",
+      "distance": "near",
+      "height_m": 19.939,
+      "width_m": 14.887,
+      "depth_m": 10.893,
+      "triangles": 240,
+      "npz": "near_broadleaf_a.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "trunk",
+          "face_start": 0,
+          "face_end": 66
+        },
+        {
+          "name": "branch_1",
+          "face_start": 66,
+          "face_end": 92
+        },
+        {
+          "name": "branch_2",
+          "face_start": 92,
+          "face_end": 118
+        },
+        {
+          "name": "branch_3",
+          "face_start": 118,
+          "face_end": 144
+        },
+        {
+          "name": "foliage",
+          "face_start": 144,
+          "face_end": 240
+        }
+      ],
+      "rules": "舗装端から15 m以内。+Xを路側へ向けて揺らし、0.8〜1.2倍。"
+    },
+    {
+      "name": "near_broadleaf_b",
+      "species": "broadleaf",
+      "distance": "near",
+      "height_m": 18.825,
+      "width_m": 13.628,
+      "depth_m": 12.206,
+      "triangles": 240,
+      "npz": "near_broadleaf_b.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "trunk",
+          "face_start": 0,
+          "face_end": 66
+        },
+        {
+          "name": "branch_1",
+          "face_start": 66,
+          "face_end": 92
+        },
+        {
+          "name": "branch_2",
+          "face_start": 92,
+          "face_end": 118
+        },
+        {
+          "name": "branch_3",
+          "face_start": 118,
+          "face_end": 144
+        },
+        {
+          "name": "foliage",
+          "face_start": 144,
+          "face_end": 240
+        }
+      ],
+      "rules": "舗装端から15 m以内。+Xを路側へ向けて揺らし、0.8〜1.2倍。"
+    },
+    {
+      "name": "far_sugi_a",
+      "species": "sugi",
+      "distance": "far",
+      "height_m": 22.0,
+      "width_m": 12.0,
+      "depth_m": 0.0,
+      "triangles": 4,
+      "npz": "far_sugi_a.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "panel",
+          "face_start": 0,
+          "face_end": 4
+        }
+      ],
+      "rules": "舗装端から水平18 mと26 mの2列。地形高に合わせ、道沿いの間隔は12 mに±1 mのゆらぎを付ける。奥列を6 mずらし、板の幅方向を道路接線から交互に+32°、−32°振る。奥列は手前列と逆符号。",
+      "species_members": [
+        "sugi"
+      ]
+    },
+    {
+      "name": "far_hinoki_a",
+      "species": "hinoki",
+      "distance": "far",
+      "height_m": 17.0,
+      "width_m": 12.5,
+      "depth_m": 0.0,
+      "triangles": 4,
+      "npz": "far_hinoki_a.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "panel",
+          "face_start": 0,
+          "face_end": 4
+        }
+      ],
+      "rules": "舗装端から水平18 mと26 mの2列。地形高に合わせ、道沿いの間隔は12 mに±1 mのゆらぎを付ける。奥列を6 mずらし、板の幅方向を道路接線から交互に+32°、−32°振る。奥列は手前列と逆符号。",
+      "species_members": [
+        "hinoki"
+      ]
+    },
+    {
+      "name": "far_conifer_mix",
+      "species": "conifer",
+      "distance": "far",
+      "height_m": 21.0,
+      "width_m": 14.0,
+      "depth_m": 0.0,
+      "triangles": 4,
+      "npz": "far_conifer_mix.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "panel",
+          "face_start": 0,
+          "face_end": 4
+        }
+      ],
+      "rules": "舗装端から水平18 mと26 mの2列。地形高に合わせ、道沿いの間隔は12 mに±1 mのゆらぎを付ける。奥列を6 mずらし、板の幅方向を道路接線から交互に+32°、−32°振る。奥列は手前列と逆符号。",
+      "species_members": [
+        "sugi",
+        "hinoki"
+      ]
+    },
+    {
+      "name": "far_broadleaf_a",
+      "species": "broadleaf",
+      "distance": "far",
+      "height_m": 19.0,
+      "width_m": 13.0,
+      "depth_m": 0.0,
+      "triangles": 4,
+      "npz": "far_broadleaf_a.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "panel",
+          "face_start": 0,
+          "face_end": 4
+        }
+      ],
+      "rules": "舗装端から水平18 mと26 mの2列。地形高に合わせ、道沿いの間隔は12 mに±1 mのゆらぎを付ける。奥列を6 mずらし、板の幅方向を道路接線から交互に+32°、−32°振る。奥列は手前列と逆符号。",
+      "species_members": [
+        "broadleaf"
+      ]
+    },
+    {
+      "name": "far_broadleaf_b",
+      "species": "broadleaf",
+      "distance": "far",
+      "height_m": 20.0,
+      "width_m": 14.0,
+      "depth_m": 0.0,
+      "triangles": 4,
+      "npz": "far_broadleaf_b.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "panel",
+          "face_start": 0,
+          "face_end": 4
+        }
+      ],
+      "rules": "舗装端から水平18 mと26 mの2列。地形高に合わせ、道沿いの間隔は12 mに±1 mのゆらぎを付ける。奥列を6 mずらし、板の幅方向を道路接線から交互に+32°、−32°振る。奥列は手前列と逆符号。",
+      "species_members": [
+        "broadleaf"
+      ]
+    },
+    {
+      "name": "far_mixed_a",
+      "species": "mixed",
+      "distance": "far",
+      "height_m": 22.0,
+      "width_m": 14.0,
+      "depth_m": 0.0,
+      "triangles": 4,
+      "npz": "far_mixed_a.npz",
+      "texture": "../trees_light.png",
+      "texture_dark": "../trees_light.png",
+      "parts": [
+        {
+          "name": "panel",
+          "face_start": 0,
+          "face_end": 4
+        }
+      ],
+      "rules": "舗装端から水平18 mと26 mの2列。地形高に合わせ、道沿いの間隔は12 mに±1 mのゆらぎを付ける。奥列を6 mずらし、板の幅方向を道路接線から交互に+32°、−32°振る。奥列は手前列と逆符号。",
+      "species_members": [
+        "sugi",
+        "hinoki",
+        "broadleaf"
+      ]
+    }
+  ]
+}

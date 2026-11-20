@@ -215,7 +215,7 @@ def test_every_layout_loads_the_s4_kn5():
     for name in ("s1_up", "full_kitahara_down", "s4_up", "s5_up"):   # S5・宮ヶ瀬北原の kn5 も全部のレイアウトが読む
         files = lay.kn5_files(name)
         assert files[:5] == [f"{g}.kn5" for g in shared]
-        assert files[-1] == f"{name}_objects.kn5"
+        assert files[files.index(f"{name}_objects.kn5") - 1] == config.DRESS_KN5[-1]
     assert lay.kn5_groups(["s1_up"]) == shared + ["s1_up_objects"]
 
 
@@ -223,7 +223,7 @@ def test_every_layout_loads_the_s3_dress_kn5():
     """S3 の道路まわりの仕上げ（yabitsu_s3_dress.kn5）は全部のレイアウトが読む（置き物の kn5 より前）。"""
     for name in ("s3_up", "full_kitahara_down", "s1_up"):
         files = lay.kn5_files(name)
-        assert "yabitsu_s3_dress.kn5" in files and files[-1] == f"{name}_objects.kn5"
+        assert files.index("yabitsu_s3_dress.kn5") < files.index(f"{name}_objects.kn5")
 
 
 def test_start_in_lot_places_grid_and_hotlap_in_the_lot_facing_the_exit(tmp_path):

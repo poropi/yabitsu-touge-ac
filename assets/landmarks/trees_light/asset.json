@@ -1,0 +1,41 @@
+{
+  "name": "trees_light",
+  "units": "metres",
+  "up": "+Z",
+  "origin": "根元・地表、地下に0.30 m",
+  "source": "trees_light.blend",
+  "generator": "export/compare/trees_light/round2/work/build63.py",
+  "model_index": "export/models.json",
+  "textures": [
+    "trees_light.png"
+  ],
+  "default": "trees_light.png",
+  "dimensions": [
+    2048,
+    2048
+  ],
+  "layout": "左1024 pxが遠景6群。右に針葉樹40枝群、広葉樹2房、3樹種の樹皮。",
+  "attribution": "当リポジトリのCSP樹木ZIPのLOD0.mesh、各樹種のleaf.ddsとbark.ddsを使用。",
+  "reference_dimensions": "旧CSPのtree.iniと現地写真の樹形を参考にした推定寸法。個体の実測ではない。",
+  "references": [
+    "export/compare/route70/work/supervisor_41.fmEVx6/deliver/forest/extension/trees",
+    "export/compare/trees_light/round2_refs/ua_cap_r70_0366_f.jpg",
+    "export/compare/trees_light/round2_refs/ua_cap_s4_1700_up.jpg",
+    "export/compare/trees_light/round2_refs/ua_cap_s4_1760_down.jpg",
+    "export/compare/trees_light/round3_refs/r2_cap_s4_1760_down.jpg",
+    "export/compare/trees_light/round3_refs/r2_cap_r70_0366_f.jpg",
+    "export/compare/trees_light/round4_refs/game_near_sugi_crop.jpg",
+    "export/compare/trees_light/round4_refs/game_csp_sugi_crop.jpg"
+  ],
+  "limitations": "枝・葉の細部と樹冠の背後は推定。ゲームの光、画質設定、縮小時の見え方とFPSは未確認。",
+  "game_integration": false,
+  "triangle_count_includes_backfaces": true,
+  "model_count": 12,
+  "material_settings": {
+    "normals": "+Z",
+    "ksAmbient": 0.45,
+    "ksDiffuse": 0.35,
+    "alpha_ref": 0.3
+  },
+  "texture_revision": "依頼66。道ぎわのスギ・ヒノキの40区画を、元のleaf.ddsの葉色を使った3〜4本の房に更新。各21枚の葉板で共用。"
+}

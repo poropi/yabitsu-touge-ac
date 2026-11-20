@@ -147,7 +147,12 @@ def shared_groups():
     return [config.TRACK_GROUP, config.TOWN_GROUP, config.S4_GROUP, config.S5_GROUP, config.KITAHARA_GROUP]
 
 
-def kn5_files(layout_name):
+def kn5_files(layout_name, *, track_dir=None):
     """models_<レイアウト>.ini に書く kn5 の並び。"""
-    from . import config
-    return [f"{g}.kn5" for g in shared_groups()] + list(config.DRESS_KN5) + [f"{layout_name}_objects.kn5"]
+    from . import forest_light
+
+    files = [f"{g}.kn5" for g in shared_groups()] + list(config.DRESS_KN5) + [f"{layout_name}_objects.kn5"]
+    track_dir = config.TRACK_DIR if track_dir is None else track_dir
+    if (track_dir / forest_light.KN5_NAME).is_file():
+        files.append(forest_light.KN5_NAME)
+    return files

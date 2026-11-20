@@ -10,14 +10,19 @@ import shutil
 import subprocess
 import time
 from collections import Counter
+from contextlib import nullcontext
 from datetime import datetime
 from pathlib import Path
+from tempfile import TemporaryDirectory
+from types import SimpleNamespace
 
 import numpy as np
 import shapely
 from shapely.geometry import LineString, Polygon
 
-from yabitsu import config, ext_config, forest_ac, forest_ground, forest_place, forestmap, polyhaven, track, treemodels
+from yabitsu import (acdata, config, ext_config, forest_ac, forest_ground, forest_light, forest_place, forestmap,
+                     layouts, polyhaven, roadside_cover, roadside_inputs, roadside_vegetation, track, treemodels)
+from yabitsu.crosssection import Section
 
 CFG = config.PROJECT_ROOT / "data" / "manual" / "forest.json"
 MANIFEST = config.DATA_PROCESSED / "track"
@@ -131,6 +136,17 @@ def install(ext_src: Path, track_dir: Path):
     cfg = dst / "ext_config.ini"
     if cfg.exists() and not cfg.read_text(encoding="utf-8").startswith(forest_ac.MARK):
         raise RuntimeError(f"{cfg} はこのスクリプトが書いたものではありません")
+    light = ext_src / forest_light.KN5_NAME
+    installed_light = track_dir / light.name
+    use_light = light.is_file()
+    if use_light:
+        track_dir.mkdir(parents=True, exist_ok=True)
+        pending = installed_light.with_suffix(".kn5.tmp")
+        try:
+            shutil.copy2(light, pending)
+            pending.replace(installed_light)
+        finally:
+            pending.unlink(missing_ok=True)
     if (dst / "trees").exists():
         shutil.rmtree(dst / "trees")
     shutil.copytree(ext_src / "extension" / "trees", dst / "trees")
@@ -138,14 +154,112 @@ def install(ext_src: Path, track_dir: Path):
     shutil.copy2(ext_src / "extension" / "parts" / "forest.ini", dst / "parts" / "forest.ini")
     ext_config.assemble(track_dir)        # 森の部品だけを入れ替え、ほかの部品（S3 の仕上げ）は残す
     forest_ac.write_layout_off(track_dir, [l for l in NO_FOREST_LAYOUTS if (track_dir / l).exists()])
+    if not use_light:
+        installed_light.unlink(missing_ok=True)
+    for layout in layouts.load_layouts():
+        models_ini = track_dir / f"models_{layout.name}.ini"
+        if models_ini.is_file() and (use_light or f"FILE={light.name}" in models_ini.read_text(encoding="utf-8")):
+            acdata.write_models_ini(models_ini, layouts.kn5_files(layout.name, track_dir=track_dir))
+
+
+def finish_forest(out, lists, hidden_meshes, *, light=None, manifest=None):
+    """追記済みの森を配布用の CSP 一覧と、設定に応じて軽い木の KN5 にする。"""
+    if light is not None and light.enabled:
+        tree_dir = out / "extension/trees"
+        manifest = manifest if manifest is not None else MANIFEST / "manifest.json"
+        with TemporaryDirectory(dir=tree_dir.parent) as temp:
+            filtered = Path(temp)
+            result = forest_light.build(tree_dir, tree_dir, manifest, {light.texture: out / forest_light.KN5_NAME},
+                                        light, filtered_lists=filtered)
+            for tile in filtered.iterdir():
+                tile.replace(tree_dir / tile.name)
+        prefixes = tuple(f"{name}_" for name in light.tall_families)
+        for package in tree_dir.glob("*.zip"):
+            if package.name.startswith(prefixes) and package.name not in result["retained_packages"]:
+                package.unlink()
+    forest_ac.write_ext_config(out, lists, hidden_meshes)
+
+
+def publish_forest(out, lists, light, ground, t0, args):
+    tree_dir = out / "extension/trees"
+    # 描画は元の CSP モデルを使う。軽い木の生成で消える前に描画用の控えを取る。
+    preview = TemporaryDirectory(prefix=".render-trees-", dir=out) if args.render and light.enabled else nullcontext()
+    with preview as saved:
+        model_dir = Path(saved) if saved else tree_dir
+        if saved:
+            for package in tree_dir.glob("*.zip"):
+                shutil.copyfile(package, model_dir / package.name)
+        finish_forest(out, lists, old_tree_meshes(), light=light)
+        if not args.no_install:
+            install(out, config.TRACK_DIR)
+            log(t0, f"AC へ入れました：{config.TRACK_DIR / 'extension'}")
+        if args.render:
+            views = view_specs(args.area, ground)
+            (out / "views.json").write_text(json.dumps(views, ensure_ascii=False, indent=1),
+                                           encoding="utf-8", newline="\n")
+            subprocess.run([str(BLENDER), "-b", "--factory-startup", "--python-exit-code", "1", "--python",
+                            str(config.PROJECT_ROOT / "blender_scripts" / "render_forest.py"),
+                            "--", str(out), args.area, str(model_dir)], check=True, timeout=1800)
+            compare_top(out, views)
+            log(t0, f"確認画像：{out / 'views'}")
 
 
 def pass_island():
     """ヤビツ峠の分かれ道の島の形（data/manual/s1_pass.json から、コースと同じ作り方で）。"""
     from yabitsu import pass_area
-    from yabitsu.crosssection import Section
     sec = Section.load_json(config.DATA_PROCESSED / "track_section.json")
     return pass_area.build(pass_area.load(config.DATA_MANUAL / "s1_pass.json"), sec).polys["island"]
+
+
+def roadside_additions(trees, tree_dir, cfg, *, area=None, ground=None):
+    """合格時の植え方で、既存の森に追記する行とシダの ZIP を作る。"""
+    settings = cfg["roadside_vegetation"]
+    section = Section.load_json(MANIFEST.parent / "track_section.json")
+    bounds = track.load_bounds(MANIFEST.parent)
+    road = roadside_cover.Road(vars(section))
+    grid = road.grid(settings["max_edge_m"])
+    if area is not None:
+        grid = grid[shapely.intersects_xy(area, *grid.T)]
+    exclusion, _ = roadside_inputs.barriers(road, cfg, MANIFEST, cover=settings)
+    ground = roadside_inputs.ground_from_manifest(MANIFEST, base=ground)
+    manual = roadside_inputs.manual_stems(section, bounds)
+    reach = max(35.0, settings["max_edge_m"] + settings["forest_neighbor_m"] + 6.0)
+    old = trees[roadside_inputs.near_road(trees, road, reach)]
+
+    roadside_vegetation.fern_packages(tree_dir, tree_dir, settings["fern_height_factor"])
+    models = roadside_inputs.package_models(tree_dir)
+    # 配置時の枝の判定は承認時の寸法を使い、出力は既存のスギの名前と樹高に合わせる。
+    sugi = {name: SimpleNamespace(height=geometry["height"], crown_base=geometry["crown_base"],
+                                  crown_radius=np.float32(geometry["crown_radius"]))
+            for name, geometry in settings["sugi_placement_geometry"].items()}
+    variants = {"fern": ("fern_tall_a", "fern_tall_b"), "sugi": tuple(sugi)}
+    added = roadside_vegetation.place(grid, old, road, forestmap.ForestMap.load(MAP), ground, exclusion,
+                                      models | sugi, manual, cfg, bridge_station=bounds["s4"][0], variants=variants)
+    for name, geometry in sugi.items():
+        match = added.pattern == name
+        added.scale[match] = added.scale[match] * geometry.height / models[name].height
+    return added
+
+
+def extend_snapshot(source, out, package_dir, cfg, *, light=None):
+    """手植えなどを反映した森のスナップショットに、道ぎわの行を追記する。"""
+    from scripts.add_extra_trees import list_files
+
+    trees = np.load(source / "trees.npy", mmap_mode="r").view(np.recarray)
+    base_lists = list_files(source)
+    if not base_lists:
+        raise ValueError(f"{source}: 森のタイル一覧がありません")
+    ext = out / "extension"
+    tree_dir = ext / "trees"
+    tree_dir.mkdir(parents=True)
+    for package in package_dir.glob("*.zip"):
+        if not package.name.startswith("mt_"):
+            shutil.copyfile(package, tree_dir / package.name)
+    add = roadside_additions(trees, tree_dir, cfg)
+    lists = forest_ac.write_lists(add, ext, base_lists=base_lists)
+    finish_forest(out, lists, old_tree_meshes(), light=light)
+    np.save(out / "trees.npy", np.concatenate((trees, add)))
+    return len(add)
 
 
 def main():
@@ -154,13 +268,26 @@ def main():
     ap.add_argument("--no-install", action="store_true")
     ap.add_argument("--render", action="store_true")
     ap.add_argument("--refresh-map", action="store_true")
+    ap.add_argument("--base-forest", type=Path, help="追記前の trees.npy とタイル一覧を含む全域の森")
+    ap.add_argument("--tree-packages", type=Path, help="--base-forest 用の通常モデル ZIP。既定はその extension/trees")
     a = ap.parse_args()
+    if a.base_forest is not None and (a.area != "all" or a.render or a.refresh_map):
+        ap.error("--base-forest を使うときは --area all を指定してください（--render・--refresh-map は対象外）")
+    if a.tree_packages is not None and a.base_forest is None:
+        ap.error("--tree-packages には --base-forest が必要です")
     t0 = time.time()
     cfg = json.loads(CFG.read_text(encoding="utf-8"))
+    light = forest_light.load_settings()
     out = config.PROJECT_ROOT / "export" / "forest" / datetime.now().strftime("%Y%m%d_%H%M%S")
     ext = out / "extension"
-    out.mkdir(parents=True)
+    if a.base_forest is not None:
+        count = extend_snapshot(a.base_forest, out, a.tree_packages or a.base_forest / "extension/trees", cfg, light=light)
+        if not a.no_install:
+            install(out, config.TRACK_DIR)
+        log(t0, f"山の道ぎわに {count:,} 本・株を追加：{out}")
+        return
 
+    out.mkdir(parents=True)
     polyhaven.fetch(log=lambda m: log(t0, m))
     models = treemodels.write_all(ext / "trees")
     log(t0, f"木のモデル {len(models)} 種類")
@@ -242,25 +369,17 @@ def main():
     np.save(out / "removed_sight.npy", np.asarray(trees[~keep_sight]))
     trees = trees[keep_sight]
     log(t0, f"コースの視界をさえぎる木を {int((~keep_sight).sum()):,} 本取り除きました")
+    add = roadside_additions(trees, ext / "trees", cfg, area=area, ground=ground)
+    trees = np.concatenate((trees, add)).view(np.recarray)
+    log(t0, f"山の道ぎわに {len(add):,} 本・株を追加")
     counts = Counter(p.split("_")[0] for p in trees.pattern)
     log(t0, f"配置 {len(trees):,} 本 {dict(counts)}")
     np.save(out / "trees.npy", np.asarray(trees))
     lists = forest_ac.write_lists(trees, ext)
-    forest_ac.write_ext_config(out, lists, old_tree_meshes())
     (out / "summary.json").write_text(json.dumps({"area": a.area, "trees": len(trees), "by_species": counts,
                                                   "lists": len(lists), "seconds": round(time.time() - t0)},
                                                  ensure_ascii=False, indent=1), encoding="utf-8", newline="\n")
-    if not a.no_install:
-        install(out, config.TRACK_DIR)
-        log(t0, f"AC へ入れました：{config.TRACK_DIR / 'extension'}")
-    if a.render:
-        (out / "views.json").write_text(json.dumps(view_specs(a.area, ground), ensure_ascii=False, indent=1),
-                                         encoding="utf-8", newline="\n")
-        subprocess.run([str(BLENDER), "-b", "--factory-startup", "--python-exit-code", "1", "--python",
-                        str(config.PROJECT_ROOT / "blender_scripts" / "render_forest.py"), "--", str(out), a.area],
-                       check=True, timeout=1800)
-        compare_top(out, json.loads((out / "views.json").read_text(encoding="utf-8")))
-        log(t0, f"確認画像：{out / 'views'}")
+    publish_forest(out, lists, light, ground, t0, a)
     log(t0, f"完了：{out}")
 
 

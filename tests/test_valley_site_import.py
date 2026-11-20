@@ -1,3 +1,5 @@
+import os
+
 import numpy as np
 import pytest
 
@@ -195,6 +197,8 @@ bpy.ops.wm.save_as_mainfile(filepath={str(folder / "unbaked.blend")!r})
     return folder, source, relocated
 
 
+@pytest.mark.skipif(os.environ.get("YABITSU_RUN_BLENDER_TESTS") != "1",
+                    reason="Blender を使うため YABITSU_RUN_BLENDER_TESTS=1 が必要")
 def test_headless_import_preserves_arrays_and_rejects_changed_context(blend_site, tmp_path):
     from hashlib import sha256
     import json

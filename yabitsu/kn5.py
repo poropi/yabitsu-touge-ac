@@ -12,6 +12,7 @@ from pathlib import Path
 
 import numpy as np
 from PIL import Image
+from scipy.ndimage import distance_transform_edt
 
 from .acdata import blender_to_ac
 from .config import assert_writable
@@ -28,13 +29,72 @@ ALPHA_REF = 0.3
 
 # ---------- DDS（無圧縮 32bit BGRA、ミップマップ付き） ----------
 
-def dds_bytes(img: Image.Image) -> bytes:
+def _coverage_scale(alpha, coverage, cutoff):
+    values = np.sort(alpha.ravel())
+    split = max(np.searchsorted(values, 0, side="right"),
+                len(values) - round(coverage * len(values)))
+    if split == len(values):
+        return min(1., (cutoff - 0.001) / max(cutoff, values[-1]))
+    if split == 0:
+        return max(1., (cutoff + 0.001) / values[0])
+    below, above = values[split - 1:split + 1]
+    if below == above:
+        first = np.searchsorted(values, above, side="left")
+        last = np.searchsorted(values, above, side="right")
+        return (cutoff + (0.001 if split - first <= last - split else -0.001)) / above
+    return cutoff / ((float(below) + above) / 2)
+
+
+def _coverage_mips(img, alpha_ref, grid):
+    if not 0 < alpha_ref <= 1 or grid < 1:
+        raise ValueError("alpha_ref must be in (0, 1] and grid must be positive")
+    threshold = math.ceil(alpha_ref * 255)
+    cutoff = threshold - 0.5  # 8bit に丸めた後で閾値を通過する境界
+    source_alpha = img.getchannel("A")
+    visible = np.asarray(source_alpha) >= threshold
+    rgb = np.array(img.convert("RGB"))
+    if visible.any() and not visible.all():
+        transparent = ~visible
+        nearest = distance_transform_edt(transparent, return_distances=False, return_indices=True)
+        rgb[transparent] = rgb[nearest[0][transparent], nearest[1][transparent]]
+    color = Image.fromarray(rgb)
+    alpha = source_alpha.convert("F")
+    width, height = img.size
+    while alpha.size != (1, 1):
+        w, h = (max(1, alpha.width // 2), max(1, alpha.height // 2))
+        # 補正前の版から縮小し、補正や 8bit への丸めを累積させない。
+        color = color.resize((w, h), Image.BOX)
+        alpha = alpha.resize((w, h), Image.BOX)
+        raw = np.asarray(alpha)
+        cols, rows = min(grid, w), min(grid, h)
+        xs = np.linspace(0, w, cols + 1, dtype=int)
+        ys = np.linspace(0, h, rows + 1, dtype=int)
+        src_xs = np.linspace(0, width, cols + 1, dtype=int)
+        src_ys = np.linspace(0, height, rows + 1, dtype=int)
+        scales = np.empty((rows, cols), dtype=np.float32)
+        for y in range(rows):
+            for x in range(cols):
+                block = raw[ys[y]:ys[y + 1], xs[x]:xs[x + 1]]
+                target = visible[src_ys[y]:src_ys[y + 1], src_xs[x]:src_xs[x + 1]].mean()
+                scales[y, x] = _coverage_scale(block, target, cutoff)
+        smooth = np.asarray(Image.fromarray(scales).resize((w, h), Image.BILINEAR))
+        adjusted = np.clip(np.floor(raw * smooth + 0.5), 0, 255).astype(np.uint8)
+        mip = color.copy()
+        mip.putalpha(Image.fromarray(adjusted))
+        yield mip
+
+
+def dds_bytes(img: Image.Image, *, alpha_ref: float | None = None, grid: int = 8) -> bytes:
+    """alpha_ref 指定時は grid×grid の区画別にミップの被覆率を補正する。"""
     img = img.convert("RGBA")
     w, h = img.size
     levels = [img]
-    while levels[-1].size != (1, 1):
-        lw, lh = levels[-1].size
-        levels.append(levels[-1].resize((max(1, lw // 2), max(1, lh // 2)), Image.BOX))
+    if alpha_ref is None:
+        while levels[-1].size != (1, 1):
+            lw, lh = levels[-1].size
+            levels.append(levels[-1].resize((max(1, lw // 2), max(1, lh // 2)), Image.BOX))
+    else:
+        levels.extend(_coverage_mips(img, alpha_ref, grid))
     flags = 0x1 | 0x2 | 0x4 | 0x8 | 0x1000 | 0x20000  # CAPS HEIGHT WIDTH PITCH PIXELFORMAT MIPMAPCOUNT
     pixfmt = struct.pack("<8I", 32, 0x41, 0, 32, 0x00FF0000, 0x0000FF00, 0x000000FF, 0xFF000000)
     caps = 0x1000 | 0x400000 | 0x8  # TEXTURE MIPMAP COMPLEX
@@ -46,8 +106,8 @@ def dds_bytes(img: Image.Image) -> bytes:
 # ---------- 書き出し ----------
 
 class _Out:
-    def __init__(self):
-        self.b = io.BytesIO()
+    def __init__(self, stream=None):
+        self.b = io.BytesIO() if stream is None else stream
 
     def pack(self, fmt, *v):
         self.b.write(struct.pack("<" + fmt, *v))
@@ -114,9 +174,10 @@ def _tangents(pos, uv, nrm, tris):
     return np.where(ln > 1e-9, t / np.maximum(ln, 1e-9), fallback)
 
 
-def _write_mesh(o, name, pos, nrm, uv, tan, tris, material_id, renderable):
+def _write_mesh(o, name, pos, nrm, uv, tan, tris, material_id, renderable, *, cast_shadows=None):
     o.pack("i", NODE_MESH); o.string(name); o.pack("i?", 0, True)
-    o.pack("???", renderable, renderable, not renderable)  # 影を落とす / 見える / 透明（隠し壁は実例に合わせる）
+    shadows = renderable if cast_shadows is None else cast_shadows
+    o.pack("???", shadows, renderable, not renderable)  # 影を落とす / 見える / 透明（隠し壁は実例に合わせる）
     v = np.hstack([pos, nrm, uv, tan]).astype("<f4")
     o.pack("i", len(v)); o.raw(v.tobytes())
     idx = tris.astype("<u2").ravel()

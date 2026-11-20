@@ -1,5 +1,6 @@
 """森を AC（CSP の木の機能）用のファイルに書き出す：木の一覧 txt（1 km 四方ごと）と extension/ext_config.ini。"""
 from pathlib import Path
+import shutil
 
 import numpy as np
 
@@ -7,23 +8,35 @@ from . import csptree, ext_config
 from .ext_config import MARK  # noqa: F401（ほかのモジュールが forest_ac.MARK を使う）
 
 
-def write_lists(trees, ext_dir: Path, tile_m=1000.0) -> list:
-    """ext_dir/trees/forest_<i>_<j>.txt を書き、ext_config の LIST に書く相対パスを返す。"""
+def write_lists(trees, ext_dir: Path, tile_m=1000.0, *, base_lists=None) -> list:
+    """タイル一覧を作り、ext_config 用のパスを返す。既存タイルを渡したときは末尾に追記する。"""
     ext_dir = Path(ext_dir)
-    (ext_dir / "trees").mkdir(parents=True, exist_ok=True)
+    folder = ext_dir / "trees"
+    folder.mkdir(parents=True, exist_ok=True)
+    base_lists = {} if base_lists is None else base_lists
     ac = csptree.to_ac(np.c_[trees.x, trees.y, trees.z])
     i = np.floor(trees.x / tile_m).astype(int); j = np.floor(trees.y / tile_m).astype(int)
-    out = []
+    written = set()
     for key in sorted(set(zip(i.tolist(), j.tolist()))):
         sel = np.flatnonzero((i == key[0]) & (j == key[1]))
-        # ばらつきは各行の angle/size で指定済み。CSP が横幅や色を勝手に変えないよう、全部 1 倍・0 に固定する
-        lines = ["configure: angle variance = 0, 0", "configure: size variance = 1, 1", "configure: width variance = 1, 1",
-                 "configure: color variance = 0, 0, 0"]
-        lines += [csptree.tree_line(f"{trees.pattern[k]}.zip", *ac[k], trees.angle_deg[k], trees.scale[k]) for k in sel]
         name = f"forest_{key[0]}_{key[1]}.txt"
-        (ext_dir / "trees" / name).write_text("\n".join(lines) + "\n", encoding="utf-8", newline="\n")
-        out.append(f"trees\{name}")
-    return out
+        lines = [csptree.tree_line(f"{trees.pattern[k]}.zip", *ac[k], trees.angle_deg[k], trees.scale[k]) for k in sel]
+        if name in base_lists:
+            base = base_lists[name].read_bytes()
+            if not base.endswith(b"\n"):
+                raise ValueError(f"{name}: 末尾改行がなく元の行を保って追加できません")
+            newline = "\r\n" if b"\r\n" in base else "\n"
+            (folder / name).write_bytes(base + (newline.join(lines) + newline).encode("utf-8"))
+        else:
+            # ばらつきは各行の angle/size で指定済み。CSP が横幅や色を変えないようにする。
+            header = ["configure: angle variance = 0, 0", "configure: size variance = 1, 1",
+                      "configure: width variance = 1, 1", "configure: color variance = 0, 0, 0"]
+            (folder / name).write_text("\n".join(header + lines) + "\n", encoding="utf-8", newline="\n")
+        written.add(name)
+    for name in base_lists.keys() - written:
+        shutil.copyfile(base_lists[name], folder / name)
+    return [f"trees\\{name}" for name in sorted(written | base_lists.keys(),
+                                                 key=lambda n: tuple(map(int, Path(n).stem.split("_")[1:])))]
 
 
 def _check_ours(p: Path):

@@ -278,7 +278,7 @@ def _resample(cl, z, step):
     return np.c_[np.interp(ss, s, cl[:, 0]), np.interp(ss, s, cl[:, 1])], np.interp(ss, s, z)
 
 
-def sightline_keep(trees, models, cl, cl_z, cfg, include_shrubs=False) -> np.ndarray:
+def sightline_keep(trees, models, cl, cl_z, cfg, include_shrubs=False, *, check_trunks=False) -> np.ndarray:
     """True＝残す。下草（シダ・草）と、植えたばかりの細い若木（sapling）は調べない。低木（shrub）は include_shrubs のときだけ調べる
     （S5 のカーブの内側の低木で 20〜27 m 先しか見えなかった、2026-10-28）。"""
     from scipy.spatial import cKDTree
@@ -301,9 +301,11 @@ def sightline_keep(trees, models, cl, cl_z, cfg, include_shrubs=False) -> np.nda
     m = [models[p] for p in pats[cand]]
     H = np.array([x.height for x in m]) * sc
     zb = np.asarray(trees.z, float)[cand] + np.array([x.crown_base for x in m]) * H
-    zt = np.asarray(trees.z, float)[cand] + H
+    ground = np.asarray(trees.z, float)[cand]
+    zt = ground + H
     R = np.array([x.crown_radius for x in m]) * sc * cfg["crown_shrink"]
-    cone = np.char.startswith(pats[cand], "sugi") | np.char.startswith(pats[cand], "hinoki")
+    cone = (np.char.startswith(pats[cand], "sugi") | np.char.startswith(pats[cand], "hinoki")
+            | np.char.startswith(pats[cand], "mt_sugi") | np.char.startswith(pats[cand], "mt_hinoki"))
     hit = np.zeros(len(cand), bool)
     n = len(P)
     reach = int(np.ceil((R.max() + cfg["margin_m"] + max(map(abs, cfg["lateral_m"]))) / cfg["step_m"])) + 1
@@ -328,6 +330,9 @@ def sightline_keep(trees, models, cl, cl_z, cfg, include_shrubs=False) -> np.nda
                         f = np.clip((zt[ok] - h) / np.maximum(zt[ok] - zb[ok], 1e-6), 0, 1) ** 0.9
                         r = np.where(cone[ok], R[ok] * f, R[ok])
                         inside = (h >= zb[ok]) & (h <= zt[ok]) & (dd < r + cfg["margin_m"])
+                        if check_trunks:
+                            stem_r = 0.19 * sc[ok] + cfg["margin_m"]
+                            inside |= (h >= ground[ok]) & (h < zb[ok]) & (dd < stem_r)
                         idx = np.flatnonzero(ok)[inside]
                         hit[idx] = True
     keep[cand[hit]] = False

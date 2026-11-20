@@ -12,7 +12,7 @@ def main():
         ext_config.write_part(config.TRACK_DIR,'visual_updates',(p.parent/'extension/visual_updates.ini').read_text())
         ext_config.assemble(config.TRACK_DIR)
         for lay in layouts.load_layouts():
-            acdata.write_models_ini(config.TRACK_DIR/f'models_{lay.name}.ini',layouts.kn5_files(lay.name))
+            acdata.write_models_ini(config.TRACK_DIR/f'models_{lay.name}.ini',layouts.kn5_files(lay.name, track_dir=config.TRACK_DIR))
 
 
 if __name__=='__main__':main()

@@ -31,6 +31,75 @@
   "cell": 1.0,
   "coarse_cell": 4.0
  },
+ "roadside_cover": {
+  "seed": 56,
+  "min_edge_m": 1.5,
+  "max_edge_m": 12.0,
+  "min_slope_deg": 15.0,
+  "cover_radius_m": 1.5,
+  "plant_ground_radius_m": 1.15,
+  "ground_size": [1.25, 2.0],
+  "jitter_m": 0.24,
+  "manual_clear_m": 1.0,
+  "shrub_spacing_m": 2.5,
+  "young_spacing_m": 5.5,
+  "tall_min_edge_m": 3.0,
+  "forest_neighbor_m": 27.0,
+  "overhang_clear_m": 4.5,
+  "rail_clear_m": 0.5,
+  "ground_height_m": 0.95,
+  "grass_share": 0.1
+ },
+ "roadside_vegetation": {
+  "seed": 57,
+  "min_edge_m": 1.5,
+  "max_edge_m": 12.0,
+  "min_slope_deg": 15.0,
+  "jitter_m": 0.37,
+  "existing_clear_m": 0.25,
+  "manual_clear_m": 1.0,
+  "forest_neighbor_m": 27.0,
+  "overhang_clear_m": 4.5,
+  "rail_clear_m": 0.5,
+  "bridge_photo_span_m": [1726, 1746],
+  "max_scale": 2.0,
+  "plant_scale": [0.8, 1.15],
+  "sugi_scale": [0.95, 1.25],
+  "fern_height_factor": 1.6,
+  "plant_bands": [
+   {"kind": "shrub", "edge_m": [1.5, 5.0], "spacing_m": [1.2, 1.8], "height_m": [0.8, 2.0]},
+   {"kind": "fern", "edge_m": [1.5, 5.0], "spacing_m": [1.2, 1.8], "height_m": [0.6, 1.2], "span_m": 1.0},
+   {"kind": "shrub", "edge_m": [5.0, 12.0], "spacing_m": [1.5, 2.5], "height_m": [0.8, 2.0]},
+   {"kind": "fern", "edge_m": [5.0, 12.0], "spacing_m": [1.5, 2.5], "height_m": [0.6, 1.2], "span_m": 1.0},
+   {"kind": "sugi", "edge_m": [3.0, 6.0], "spacing_m": [3.5, 5.0]},
+   {"kind": "sapling", "edge_m": [5.0, 12.0], "spacing_m": [3.0, 5.0], "height_m": [2.5, 4.5]}
+  ],
+  "sugi_placement_geometry": {
+   "sugi_a": {"height": 18.0, "crown_base": 0.18539784848690033, "crown_radius": 4.565952777862549},
+   "sugi_b": {"height": 18.799999237060547, "crown_base": 0.19070957601070404, "crown_radius": 4.364286422729492}
+  },
+  "ground_diffuse": {
+   "mean_rgb": {"mt_terrain": [20, 31, 14], "mt_grass": [18, 31, 13]},
+   "contrast": 0.7
+  },
+  "valley_bank_shader": {
+   "ACTIVE": 1,
+   "MESHES": "1GRASS_valley_?bank?",
+   "RESOURCE_0": "txDiffuse",
+   "RESOURCE_FILE_0": "dress_mt_terrain.dds"
+  },
+  "grass_fx": {
+   "OCCLUDING_MESHES": "1ROAD_?,1WALL_?,lines_?,smallspan_?,water_?,riverbed_?",
+   "MASK_MAIN_THRESHOLD": -1,
+   "MASK_RED_THRESHOLD": 0,
+   "MASK_MIN_LUMINANCE": -1,
+   "MASK_MAX_LUMINANCE": 1,
+   "SHAPE_SIZE": 2.5,
+   "SHAPE_TIDY": 0,
+   "SHAPE_CUT": 0,
+   "SHAPE_WIDTH": 1.0
+  }
+ },
  "place": {
   "tiers": [
    {

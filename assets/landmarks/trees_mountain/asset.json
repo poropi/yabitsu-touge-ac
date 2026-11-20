@@ -1,0 +1,389 @@
+{
+  "asset_id": "trees_mountain",
+  "source": "trees_mountain.blend",
+  "generator": "blender_scripts/build_mountain_trees.py",
+  "units": "m",
+  "up": "+Z",
+  "origin": "根元中央、地下の根の端は Z=-0.30 m。低木は株群の中心。",
+  "collections": "<id>_LOD0 / <id>_LOD1。元の座標は全てローカル原点。別シーン Mountain tree library は LOD0 の展示専用インスタンスのみ。",
+  "road_facing": "+X（スギ道ぎわ、落葉広葉樹道ぎわ）",
+  "textures": {
+    "leaf_px": [
+      1024,
+      1024
+    ],
+    "bark_px": [
+      512,
+      512
+    ],
+    "authoring": "Pillowによる枝・葉の描画と数値合成の樹皮。全画像をblendに同梱。",
+    "alpha_test": 0.4,
+    "double_sided": "葉はBlenderで両面。幾何の裏面は二重計上しない。"
+  },
+  "dimension_method": "樹高は地上高。枝張りはLOD0のX・Y軸の大きい方（葉の透明余白を含む）。胸高径は生成時の樹幹直径。低木は胸高径を定義しづらく、記載値は主な茎の設定径。",
+  "references": "export/compare/route70_inventory_20261030/images/sv/ に保存済みの R70-0365_f,0366_f,0912_f,0364_f,0366_b,0363_f,0551_f,0552_b,0913_b。写真は観察用のみ。",
+  "basis": "スギの目標は依頼記載の長野県林業総合センター21〜40年生の樹高18〜27m・胸高径14〜28cm。ほかの寸法、枝張り、株間は写真の見かけから推定。写真で針葉樹の種の同定ができず、第3種は指定どおりヒノキ。",
+  "limits": "葉は枝葉の塊の板。個葉の立体、風揺れ、季節差、樹種同定、配置・ゲーム上の見え方は未検証。KN5/CSP変換とゲーム反映なし。",
+  "models": [
+    {
+      "id": "sugi_forest_A",
+      "name": "スギ・林内 A",
+      "seed": 55100,
+      "dbh_m": 0.23,
+      "bark": "bark_sugi.png",
+      "leaf": "leaf_sugi.png",
+      "triangles_lod0": 6464,
+      "leaf_triangles_lod0": 4208,
+      "height_m": 22.0,
+      "spread_m": 6.855,
+      "spread_xy_m": [
+        6.7,
+        6.855
+      ],
+      "bounds_m": [
+        [
+          -3.454847812652588,
+          -3.0379340648651123,
+          -0.30000001192092896
+        ],
+        [
+          3.2455615997314453,
+          3.816814422607422,
+          22.0
+        ]
+      ],
+      "triangles_lod1": 378,
+      "leaf_triangles_lod1": 124
+    },
+    {
+      "id": "sugi_forest_B",
+      "name": "スギ・林内 B",
+      "seed": 55263,
+      "dbh_m": 0.21,
+      "bark": "bark_sugi.png",
+      "leaf": "leaf_sugi.png",
+      "triangles_lod0": 6464,
+      "leaf_triangles_lod0": 4208,
+      "height_m": 23.1,
+      "spread_m": 7.966,
+      "spread_xy_m": [
+        7.966,
+        7.741
+      ],
+      "bounds_m": [
+        [
+          -3.800654172897339,
+          -3.909811019897461,
+          -0.30000001192092896
+        ],
+        [
+          4.165409088134766,
+          3.8316855430603027,
+          23.100000381469727
+        ]
+      ],
+      "triangles_lod1": 378,
+      "leaf_triangles_lod1": 124
+    },
+    {
+      "id": "sugi_edge_A",
+      "name": "スギ・道ぎわ A",
+      "seed": 55173,
+      "dbh_m": 0.26,
+      "bark": "bark_sugi.png",
+      "leaf": "leaf_sugi.png",
+      "triangles_lod0": 7248,
+      "leaf_triangles_lod0": 4688,
+      "height_m": 18.0,
+      "spread_m": 5.578,
+      "spread_xy_m": [
+        5.547,
+        5.578
+      ],
+      "bounds_m": [
+        [
+          -1.4358398914337158,
+          -2.768040657043457,
+          -0.30000001192092896
+        ],
+        [
+          4.110970973968506,
+          2.8102846145629883,
+          18.0
+        ]
+      ],
+      "triangles_lod1": 392,
+      "leaf_triangles_lod1": 130
+    },
+    {
+      "id": "sugi_edge_B",
+      "name": "スギ・道ぎわ B",
+      "seed": 55336,
+      "dbh_m": 0.28,
+      "bark": "bark_sugi.png",
+      "leaf": "leaf_sugi.png",
+      "triangles_lod0": 7076,
+      "leaf_triangles_lod0": 4568,
+      "height_m": 18.8,
+      "spread_m": 6.526,
+      "spread_xy_m": [
+        5.635,
+        6.526
+      ],
+      "bounds_m": [
+        [
+          -1.3057812452316284,
+          -3.534395217895508,
+          -0.30000001192092896
+        ],
+        [
+          4.329285144805908,
+          2.9916229248046875,
+          18.799999237060547
+        ]
+      ],
+      "triangles_lod1": 382,
+      "leaf_triangles_lod1": 128
+    },
+    {
+      "id": "hinoki_A",
+      "name": "ヒノキ A",
+      "seed": 55246,
+      "dbh_m": 0.28,
+      "bark": "bark_hinoki.png",
+      "leaf": "leaf_hinoki.png",
+      "triangles_lod0": 7520,
+      "leaf_triangles_lod0": 5424,
+      "height_m": 16.8,
+      "spread_m": 7.735,
+      "spread_xy_m": [
+        7.458,
+        7.735
+      ],
+      "bounds_m": [
+        [
+          -3.714442729949951,
+          -4.034766674041748,
+          -0.30000001192092896
+        ],
+        [
+          3.7430784702301025,
+          3.699921131134033,
+          16.799999237060547
+        ]
+      ],
+      "triangles_lod1": 334,
+      "leaf_triangles_lod1": 120
+    },
+    {
+      "id": "hinoki_B",
+      "name": "ヒノキ B",
+      "seed": 55409,
+      "dbh_m": 0.25,
+      "bark": "bark_hinoki.png",
+      "leaf": "leaf_hinoki.png",
+      "triangles_lod0": 7520,
+      "leaf_triangles_lod0": 5424,
+      "height_m": 17.6,
+      "spread_m": 7.68,
+      "spread_xy_m": [
+        6.813,
+        7.68
+      ],
+      "bounds_m": [
+        [
+          -3.206515312194824,
+          -3.567169427871704,
+          -0.30000001192092896
+        ],
+        [
+          3.606182813644409,
+          4.112549781799316,
+          17.600000381469727
+        ]
+      ],
+      "triangles_lod1": 334,
+      "leaf_triangles_lod1": 120
+    },
+    {
+      "id": "oak_A",
+      "name": "コナラ型・高木 A",
+      "seed": 55319,
+      "dbh_m": 0.38,
+      "bark": "bark_oak.png",
+      "leaf": "leaf_oak.png",
+      "triangles_lod0": 6786,
+      "leaf_triangles_lod0": 4200,
+      "height_m": 14.2,
+      "spread_m": 12.331,
+      "spread_xy_m": [
+        12.331,
+        12.305
+      ],
+      "bounds_m": [
+        [
+          -6.062335968017578,
+          -6.323603630065918,
+          -0.30000001192092896
+        ],
+        [
+          6.2684760093688965,
+          5.981722831726074,
+          14.199999809265137
+        ]
+      ],
+      "triangles_lod1": 784,
+      "leaf_triangles_lod1": 420
+    },
+    {
+      "id": "oak_B",
+      "name": "コナラ型・高木 B",
+      "seed": 55482,
+      "dbh_m": 0.43,
+      "bark": "bark_oak.png",
+      "leaf": "leaf_oak.png",
+      "triangles_lod0": 6786,
+      "leaf_triangles_lod0": 4200,
+      "height_m": 15.4,
+      "spread_m": 14.932,
+      "spread_xy_m": [
+        14.932,
+        13.191
+      ],
+      "bounds_m": [
+        [
+          -7.2039265632629395,
+          -6.476109027862549,
+          -0.30000001192092896
+        ],
+        [
+          7.728026866912842,
+          6.715091228485107,
+          15.399999618530273
+        ]
+      ],
+      "triangles_lod1": 784,
+      "leaf_triangles_lod1": 420
+    },
+    {
+      "id": "roadside_A",
+      "name": "落葉広葉樹・道ぎわ A",
+      "seed": 55392,
+      "dbh_m": 0.19,
+      "bark": "bark_oak.png",
+      "leaf": "leaf_oak.png",
+      "triangles_lod0": 5838,
+      "leaf_triangles_lod0": 3600,
+      "height_m": 7.3,
+      "spread_m": 8.249,
+      "spread_xy_m": [
+        8.249,
+        7.956
+      ],
+      "bounds_m": [
+        [
+          -3.1918485164642334,
+          -3.8315484523773193,
+          -0.30000001192092896
+        ],
+        [
+          5.056702613830566,
+          4.124536991119385,
+          7.300000190734863
+        ]
+      ],
+      "triangles_lod1": 680,
+      "leaf_triangles_lod1": 360
+    },
+    {
+      "id": "roadside_B",
+      "name": "落葉広葉樹・道ぎわ B",
+      "seed": 55555,
+      "dbh_m": 0.21,
+      "bark": "bark_oak.png",
+      "leaf": "leaf_oak.png",
+      "triangles_lod0": 5838,
+      "leaf_triangles_lod0": 3600,
+      "height_m": 8.3,
+      "spread_m": 9.357,
+      "spread_xy_m": [
+        9.357,
+        8.164
+      ],
+      "bounds_m": [
+        [
+          -3.3411664962768555,
+          -4.148347854614258,
+          -0.30000001192092896
+        ],
+        [
+          6.0156331062316895,
+          4.015247344970703,
+          8.300000190734863
+        ]
+      ],
+      "triangles_lod1": 680,
+      "leaf_triangles_lod1": 360
+    },
+    {
+      "id": "shrub_A",
+      "name": "低木と下草 A",
+      "seed": 55465,
+      "dbh_m": 0.026,
+      "bark": "bark_oak.png",
+      "leaf": "leaf_understory.png",
+      "triangles_lod0": 1814,
+      "leaf_triangles_lod0": 1464,
+      "height_m": 1.7,
+      "spread_m": 4.542,
+      "spread_xy_m": [
+        3.158,
+        4.542
+      ],
+      "bounds_m": [
+        [
+          -1.563820242881775,
+          -2.1708321571350098,
+          -0.30130258202552795
+        ],
+        [
+          1.5940920114517212,
+          2.3712222576141357,
+          1.7000000476837158
+        ]
+      ],
+      "triangles_lod1": 404,
+      "leaf_triangles_lod1": 264
+    },
+    {
+      "id": "shrub_B",
+      "name": "低木と下草 B",
+      "seed": 55628,
+      "dbh_m": 0.031,
+      "bark": "bark_oak.png",
+      "leaf": "leaf_understory.png",
+      "triangles_lod0": 1814,
+      "leaf_triangles_lod0": 1464,
+      "height_m": 2.2,
+      "spread_m": 5.548,
+      "spread_xy_m": [
+        5.548,
+        5.494
+      ],
+      "bounds_m": [
+        [
+          -2.6811301708221436,
+          -2.4546048641204834,
+          -0.3018950819969177
+        ],
+        [
+          2.8665785789489746,
+          3.0392956733703613,
+          2.200000047683716
+        ]
+      ],
+      "triangles_lod1": 404,
+      "leaf_triangles_lod1": 264
+    }
+  ]
+}

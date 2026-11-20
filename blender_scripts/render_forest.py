@@ -1,5 +1,5 @@
 """森の確認画像を描く（scripts.forest_build --render から呼ばれる）。
-使い方: blender -b --factory-startup --python blender_scripts/render_forest.py -- <出力フォルダ> <area>
+使い方: blender -b --factory-startup --python blender_scripts/render_forest.py -- <出力フォルダ> <area> [木の ZIP のフォルダ]
 出力フォルダの views.json（カメラ）・trees.npy（配置）・extension/trees/*.zip（木）と、manifest のメッシュ（コース）を使う。
 環境変数 SAVE_BLEND=<パス> のときは描かずに、最初のカメラの範囲の場面へ全部のカメラ（名前＝views の name）を置き、
 画像を詰めて .blend に保存する（Blender の画面で見せる用）。
@@ -17,7 +17,9 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 from yabitsu import csptree  # noqa: E402
 
-out = Path(sys.argv[sys.argv.index("--") + 1])
+args = sys.argv[sys.argv.index("--") + 1:]
+out = Path(args[0])
+model_dir = Path(args[2]) if len(args) > 2 else out / "extension/trees"
 views = json.loads((out / "views.json").read_text(encoding="utf-8"))
 SAMPLES = int(__import__("os").environ.get("RENDER_SAMPLES", "16"))
 trees = np.load(out / "trees.npy")
@@ -129,7 +131,7 @@ def tree_objects(lod):
     """木の種類ごとのメッシュ（実寸）を作る。表示しないコレクションに入れ、インスタンスの元にする。"""
     coll = bpy.data.collections.new("tree_src")
     objs = {}
-    for zp in sorted((out / "extension" / "trees").glob("*.zip")):
+    for zp in sorted(model_dir.glob("*.zip")):
         z = zipfile.ZipFile(zp)
         ini = z.read("tree.ini").decode()
         H = float(ini.split("HEIGHT=")[1].split()[0]); W = float(ini.split("WIDTH=")[1].split()[0])

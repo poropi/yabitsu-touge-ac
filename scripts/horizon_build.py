@@ -54,7 +54,7 @@ def main():
     T = config.TRACK_DIR
     shutil.copy2(kn5_path, T / kn5_path.name)
     for lay in layouts.load_layouts():
-        acdata.write_models_ini(T / f"models_{lay.name}.ini", layouts.kn5_files(lay.name))
+        acdata.write_models_ini(T / f"models_{lay.name}.ini", layouts.kn5_files(lay.name, track_dir=T))
     print("AC へ入れました：", T)
 
 

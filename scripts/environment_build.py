@@ -28,7 +28,7 @@ def main():
     environment_seasons.write_config(track)
     ext_config.assemble(track)
     for layout in layouts.load_layouts():
-        acdata.write_models_ini(track/f'models_{layout.name}.ini',layouts.kn5_files(layout.name))
+        acdata.write_models_ini(track/f'models_{layout.name}.ini',layouts.kn5_files(layout.name, track_dir=track))
         p=track/layout.name/'data/audio_sources.ini'
         p.parent.mkdir(parents=True,exist_ok=True)
         original=p.read_text() if p.exists() else ''
