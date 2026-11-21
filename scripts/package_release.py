@@ -1,7 +1,7 @@
 """配布用の zip（Assetto Corsa の MOD）を export/release/ に作る。
 入っているコース（config.TRACK_DIR）をそのまま content/tracks/yabitsu/ の形で入れ、どのレイアウトの ui_track.json にも
 version と author を書く（入っているコースのファイルは変えない）。zip のいちばん上に説明書 README.txt。
-使い方: uv run python -m scripts.package_release 0.0.3 [コースのフォルダ]"""
+使い方: uv run python -m scripts.package_release 0.0.4 [コースのフォルダ]"""
 import hashlib
 import json
 import sys
@@ -32,9 +32,11 @@ README = """ヤビツ峠（Yabitsu Touge）for Assetto Corsa  v{version}
   ・天気：Pure 2.57 で確かめました（なくても走れます）。
   ・Content Manager を使うと入れるのが簡単です。
   ・確かめた PC：Core i7-14700K / GeForce RTX 5070 / メモリ 64GB / Windows 11。
-    5120×1440 の全画面で、全線を走って平均 約 64 FPS・最低 約 48 FPS（町の区間がいちばん重い）。
+    5120×1440 の全画面・DLSS なしで、全線の決まった 17 か所で止めて測って、平均 約 67 FPS・最低 約 50 FPS。
+    DLSS Balanced（0.58）では、最初の 6km を走って平均 約 76 FPS・最低 約 61 FPS。
+    全線を走り通しての測定はまだしていません。
     これより弱い PC では、解像度・影・ワールドの細かさを下げてください。
-  ・ディスク：展開後 約 2.2GB。
+  ・ディスク：展開後 約 4.4GB。
 
 ■ 確かめたときの AC の設定
   ・画面：5120×1440 全画面、垂直同期 なし、アンチエイリアス 4x、異方性フィルタ 16x
@@ -47,16 +49,24 @@ README = """ヤビツ峠（Yabitsu Touge）for Assetto Corsa  v{version}
   全線（名古木→宮ヶ瀬北原）の上り・下り。
   どれも A 地点から B 地点まで走るコース（point to point）です。
 
-■ v0.0.2 からの変更
-  ・コース全体の家・店・工場・物置を、日本の家の部品（窓・ベランダ・軒・雨樋・室外機など）で建て直し
-  ・名古木のコンビニの店構えと看板、規格の大きさの電柱（腕木・変圧器・電線）、町の石積みの擁壁
-  ・ヤビツ峠のトイレと駐車場、寺山富士見橋・護摩屋敷の水・門戸口橋・きまぐれ喫茶・青山荘・塩水橋・トンネルをストリートビューに合わせて作り込み
-  ・山道の路面標示（30/40・急カーブ・ダイヤ）、すべり止めの赤・緑の舗装、S2〜S5 の電柱
-  ・遠くの地形に空中写真、地平線（菜の花台から秦野の町・丘・相模湾が見える）
-  ・夜（家の窓・街灯の明かり）・雨・環境音（蝉・鳥と小川）・季節
-  ・S5 で木やシダにさえぎられて先が見えにくかった所を整理
+■ v0.0.3 からの変更
+  ・浅間神社の駐車場（S2）を、空中写真とストリートビューから作り直し
+  ・ヤビツ峠の売店・トイレ・まわりの物、菜の花台の駐車場と展望台を作り込み
+  ・県道70号沿いの物（カーブミラー・電柱・km の標・標識・ガードレール・擁壁・側溝・ゲートなど）を、ストリートビューを見て作った部品に置き換え
+  ・トンネルの入口と、吹風トンネル入口のまわり（擁壁・草の斜面・れんがの門・赤いアーチ橋・柵・低木）
+  ・トンネルの中で路面が消えることがあった不具合を直した
+  ・小さな橋と谷（S4 1724m・S4 6354m・S5 8956m）：沢の谷を掘り直し、橋を作り込み
+  ・道ぎわの斜面を草と下草（全線で約 11 万株）で覆い、むき出しの土をなくした
+  ・山の高い木（約 100 万本）を、道ぎわは立体の木・奥は絵を貼った板の軽い作りに置き換え（DLSS なしで 約 40 → 約 67 FPS）
+  ・山の路面を写真に合わせて暗めの灰色に、遠くの山を夏の森の色に
 
 ■ わかっていること（v{version}）
+  ・S2 324m 付近の丸い模様の舗装が白いまま
+  ・S5 7899m 付近で、電線が運転席の高さを通る
+  ・S5 10149m 付近の欄干の陰影がおかしい
+  ・集落との境（S1 3159m・S4 73m 付近）の斜面が黄緑
+  ・道のそばの奥の森の板が平たく見える所がある（S4 5573m・S5 4399m 付近）
+  ・日なたの草が少し蛍光色ぎみ
   ・家の形・色、電線、庭の地面などは、まだストリートビューと違う所があります。
   ・菜の花台・ヤビツ峠の駐車の車は、作った PC の AC の車を使っているため、この zip には入っていません（車は表示されません）。
   ・分かれ道は工事中の柵でふさいであります（柵の向こうは走れません）。
@@ -71,11 +81,16 @@ README = """ヤビツ峠（Yabitsu Touge）for Assetto Corsa  v{version}
   ・建物・標識などの見た目は Google ストリートビューを見て確かめました（画像は入っていません）。
   Google・国土地理院・OpenStreetMap・Overture Maps・Kunos Simulazioni とは関係ありません。
 
-■ ライセンス
-  このコースは CC BY-NC 4.0（クリエイティブ・コモンズ 表示-非営利 4.0 国際）で配布します。
+■ ライセンス（自由に使ってください）
+  このコースとデータは、自由に使ってかまいません。走る・改造する・別のコースや MOD に組み込む・再配布する・
+  研究や学習に使う、どれも作者への連絡や許可は要りません。
+  ただし、作者（{author}）は著作権とライセンスを放棄していません（パブリックドメインや CC0 ではありません）。
+  CC BY-NC 4.0（クリエイティブ・コモンズ 表示-非営利 4.0 国際）で使えるようにしています。
   https://creativecommons.org/licenses/by-nc/4.0/deed.ja
-  作者（{author}）とリポジトリの URL を表示すれば、改造・再配布してかまいません。販売や有料での配布はできません。
-  上の出典の表示は、改造版・再配布でも残してください（地図データは ODbL、見物客の人物は MIT に従います）。
+  使うときは、次のことだけ守ってください。
+    ・作者（{author}）とリポジトリの URL を表示する
+    ・販売しない・有料で配布しない
+    ・上の出典の表示を、改造版・再配布でも残す（地図データは ODbL、見物客の人物は MIT に従います）
 
 ■ 作った人
   {author}  https://github.com/poropi/yabitsu-touge-ac
@@ -85,15 +100,18 @@ Yabitsu Touge for Assetto Corsa  v{version}
 Route 70 (Hadano-Kiyokawa line), Kanagawa, Japan: Nagoki - Yabitsu Pass - Miyagase-Kitahara, about 29.9 km,
 built from public map and elevation data. 12 point-to-point layouts.
 Requires Custom Shaders Patch (tested with CSP 0.3.0-preview619; Pure 2.57 weather tested, optional).
-Tested PC: i7-14700K / RTX 5070 / 64 GB, 5120x1440 fullscreen: about 64 FPS average, 48 FPS minimum over the full route.
+Tested PC: i7-14700K / RTX 5070 / 64 GB, 5120x1440 fullscreen without DLSS: about 67 FPS average, 50 FPS minimum
+(17 fixed spots along the route). With DLSS Balanced: about 76 FPS average, 61 FPS minimum over the first 6 km.
 Install: drop the zip into Content Manager, or copy the "content" folder into your assettocorsa folder
-(delete content/tracks/yabitsu first when updating). About 2.2 GB unpacked.
+(delete content/tracks/yabitsu first when updating). About 4.4 GB unpacked.
 Credits: GSI Japan (elevation tiles, seamless aerial photos, basic map vector tiles), (c) OpenStreetMap contributors (ODbL),
 Overture Maps Foundation buildings (ODbL), Poly Haven and ambientCG textures (CC0), Freesound recordings by cartoonrob and tomasloos (CC0).
 Spectators at Nanohanadai: Microsoft Rocketbox Avatar Library (MIT, Copyright (c) 2020 Microsoft, see LICENSE-Rocketbox.txt).
 Not affiliated with Google, GSI, OpenStreetMap, Overture Maps or Kunos Simulazioni.
-License: CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/). You may modify and share it with credit to {author}
-and this repository, but not sell it or distribute it for a fee. Keep the credits above (map data ODbL, spectators MIT).
+License: feel free to use this course and its data - drive it, modify it, build it into your own tracks or mods, share it,
+use it for research - no need to ask. The author ({author}) does NOT waive copyright or the license (this is not public domain
+or CC0): it is licensed under CC BY-NC 4.0 (https://creativecommons.org/licenses/by-nc/4.0/). Credit {author} and this
+repository, do not sell it or distribute it for a fee, and keep the credits above (map data ODbL, spectators MIT).
 """
 ROCKETBOX_LICENSE = config.PROJECT_ROOT / "assets" / "free" / "rocketbox" / "LICENSE.md"   # 見物客の人物（MIT）：表示を同梱する
 
